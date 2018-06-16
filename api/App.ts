@@ -10,7 +10,11 @@ class App {
   }
 
   private mountRoutes (): void {
-    this.express.use('/', routes);
+    const ngPort = process.env.NODE_ENV === 'dev' ? 4200 : 80;
+    this.express.use('/api/v1/', routes);
+    this.express.get('*', (req, res) => {
+      res.redirect(`http://localhost:${ngPort}`);
+    });
   }
 }
 
