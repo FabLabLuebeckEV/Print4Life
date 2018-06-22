@@ -16,5 +16,5 @@ app.listen(port, (err) => {
     return logger.error(err);
   }
 
-  return logger.info(`server is listening on ${port} and angular on ${ngPort}`);
+  return logger.info(`server is listening on ${port} and angular (if started) on ${ngPort}`);
 });

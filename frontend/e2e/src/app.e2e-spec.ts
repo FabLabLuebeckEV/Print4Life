@@ -1,5 +1,7 @@
 import { AppPage } from './app.po';
 
+import 'jasmine';
+
 describe('workspace-project App', () => {
   let page: AppPage;
 
@@ -9,6 +11,8 @@ describe('workspace-project App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to ng6!');
+    page.getParagraphText().then(result => {
+      expect(result).toEqual('Welcome to app!');
+    });
   });
 });
