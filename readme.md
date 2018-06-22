@@ -2,12 +2,18 @@
 
 ## TODO
 
-* hookup tests with jasmine or mocha for nodets
+* add [prettier](https://github.com/prettier/prettier) to support code-style formatting through IDE
 
 ## Requirements
 
 * Node > 8.9.4
 * MongoDB (or at least a server with it)
+
+## Features
+
+* skeleton for the MEAN framework using Typescript
+* using linters to support code-styling
+* test frameworks setup for unit-testing on back- and frontend but also end-to-end tests
 
 ## Use Node-Debugger with VSCode
 
