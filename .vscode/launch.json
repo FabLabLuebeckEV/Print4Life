@@ -14,7 +14,7 @@
             "type": "node",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "program": "${workspaceRoot}/src/index.ts",
+            "program": "${workspaceRoot}/apu/index.ts",
             "outFiles": [
                 "${workspaceRoot}/dist/index.js"
             ],

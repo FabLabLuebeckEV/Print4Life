@@ -4,9 +4,9 @@ import helloWorldRoute from './helloWorld.route';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.redirect('/api/v1/helloworld');
+  res.redirect('helloworld');
 });
 
-router.use('/api/v1/helloworld', helloWorldRoute);
+router.use('/helloworld', helloWorldRoute);
 
 export default router;

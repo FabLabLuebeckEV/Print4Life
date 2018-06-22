@@ -1,4 +1,4 @@
-import logger from '../logger';
+// import logger from '../logger';
 
 function helloWorld () {
   // logger.info('Got request for Hello World');
