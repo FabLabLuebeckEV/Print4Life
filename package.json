@@ -1,9 +1,10 @@
 {
-  "name": "nodets-skeleton",
-  "version": "1.0.0",
-  "description": "A NodeTS, Mongoose, Express Skeleton",
+  "name": "fablab-order-management",
+  "version": "0.0.1",
+  "description": "An order-management for the fablab connected to an IBM Watson IoT Platform to connect their machinery to this order and planning process",
   "scripts": {
-    "build": "ng build && tsc && npm run lint",
+    "deploy": "npm run build && npm run api-serve",
+    "build": "ng build --prod && tsc && npm run lint",
     "test": "npm run ng-test && npm run api-test",
     "serve": "concurrently --kill-others \"npm run api-serve\" \"npm run ng-serve\"",
     "dev": "concurrently --kill-others \"npm run api-dev\" \"npm run ng-dev\"",
@@ -19,9 +20,18 @@
     "ng-test": "ng test --watch=false"
   },
   "keywords": [],
-  "author": "Rene Kremer",
-  "license": "MIT",
-  "repository": "https://gitlab.com/hadesrofl/nodets-skeleton.git",
+  "contributors": [
+    {
+    "name": "Rene Kremer",
+    "email": "renejon90@googlemail.com"
+    },
+    {
+      "name": "Immo Traupe",
+      "email": "traupe@itm.uni-luebeck.de"
+    }
+  ],
+  "license": "NONE YET",
+  "repository": "https://git.itm.uni-luebeck.de/iot-fablab/order-management.git",
   "private": true,
   "dependencies": {
     "@angular/animations": "^6.0.3",

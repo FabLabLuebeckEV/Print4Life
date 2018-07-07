@@ -1,0 +1,44 @@
+image: node:latest
+  
+cache:
+  paths:
+  - node_modules/
+  
+stages:
+  - test
+  - deploy
+
+test:
+  stage: test
+  script:
+   - apt-get install wget -y
+   - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+   - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+   - apt-get update && apt-get -y install google-chrome-stable
+   - npm install
+   - npm run test
+   
+build:
+  stage: test
+  artifacts:
+    paths:
+    - ./
+  script:
+    - npm install
+    - npm run build
+    
+deploy:
+  stage: deploy
+  before_script:
+   - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
+   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+   - 'which rsync || (apt-get update -y && apt-get install rsync -y)'
+   - mkdir -p ~/.ssh
+   - eval $(ssh-agent -s)
+   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+   - ssh-add <(echo "$STAGING_PRIVATE_KEY" | base64 --decode)
+  script:
+   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "rm -rf /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && mkdir /home/$RUNNER_USERNAME/apps/$PROJECT_NAME"
+   - rsync -rav -e ssh --exclude='.git/' --exclude='.gitlab-ci.yml' --exclude='node_modules' --delete-excluded ./ $RUNNER_USERNAME@$SERVER_ADDRESS:/home/$RUNNER_USERNAME/apps/$PROJECT_NAME
+   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && npm run build && rm -rf /var/www/html/* && cp -r dist/* /var/www/html"
+   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /var/www/html && pm2 start npm --name \"$PROJECT_NAME\" -- run api-serve"
