@@ -29,6 +29,8 @@ build:
     
 deploy:
   stage: deploy
+  only:
+   - staging
   before_script:
    - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
