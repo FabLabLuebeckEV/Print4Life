@@ -13,9 +13,9 @@ describe('App', () => {
       expect(response.statusCode).toEqual(200);
     });
   });
-  // it('getPrinters', () => {
-  //   request.get(`${endpoint}machine/printer`, (error, response) => {
-  //     expect(response.statusCode).toEqual(200);
-  //   });
-  // });
+  it('getPrinters', () => {
+    request.get(`${endpoint}machine/printer`, (error, response) => {
+      expect(response.statusCode).toEqual(200);
+    });
+  });
 });
