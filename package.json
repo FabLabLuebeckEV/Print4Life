@@ -22,8 +22,8 @@
   "keywords": [],
   "contributors": [
     {
-    "name": "Rene Kremer",
-    "email": "renejon90@googlemail.com"
+      "name": "Rene Kremer",
+      "email": "renejon90@googlemail.com"
     },
     {
       "name": "Immo Traupe",
@@ -43,7 +43,9 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
+    "@ng-bootstrap/ng-bootstrap": "^2.2.0",
     "@types/node": "~8.9.4",
+    "bootstrap": "^4.1.1",
     "concurrently": "^3.6.0",
     "core-js": "^2.5.4",
     "express": "^4.15.3",
