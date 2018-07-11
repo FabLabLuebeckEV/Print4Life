@@ -20,7 +20,7 @@
     "dev": "concurrently --kill-others \"npm run api-dev\" \"npm run ng-dev\"",
     "lint": "ng lint && eslint api --fix --ext ts",
     "e2e": "ng e2e",
-    "api-serve-dev": "NODE_ENV='prod' node --inspect-brk=9229 dist",
+    "api-serve-dev": "NODE_ENV='dev' node --inspect-brk=9229 dist",
     "api-serve": "NODE_ENV='prod' node dist",
     "api-build": "tsc && npm run lint",
     "api-dev": "nodemon -e ts  --exec \"npm run api-build && npm run api-serve-dev\"",
