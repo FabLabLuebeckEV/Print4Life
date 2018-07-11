@@ -7,7 +7,7 @@ const dev = {
     }
   }
 };
-const production = {
+const prod = {
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -16,7 +16,7 @@ const production = {
   }
 };
 
-const configArr = { dev, production };
+const configArr = { dev, prod };
 
 const config = configArr[env];
 
