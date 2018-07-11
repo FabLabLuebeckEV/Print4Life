@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import app from './App';
 import logger from './logger';
-import config from './config/config';
+import config from './config';
 
 const port = process.env.PORT || 3000;
 const ngPort = process.env.NODE_ENV === 'dev' ? 4200 : 80;

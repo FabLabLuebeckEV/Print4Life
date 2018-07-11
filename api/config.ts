@@ -5,7 +5,9 @@ const dev = {
       host: 'mongodb://127.0.0.1:27017/',
       database: 'iot-fablab-test'
     }
-  }
+  },
+  baseUrlBackend: 'http://localhost:3000/api/v1/',
+  baseUrlFrontend: 'http://localhost:4200/'
 };
 const prod = {
   connections: {
@@ -13,10 +15,12 @@ const prod = {
       host: 'mongodb://127.0.0.1:27017/',
       database: 'iot-fablab-staging'
     }
-  }
+  },
+  baseUrlBackend: 'http://localhost:3000/api/v1/',
+  baseUrlFrontend: 'http://localhost:80/'
 };
 
-const configArr = { dev, prod };
+export const configArr = { dev, prod };
 
 const config = configArr[env];
 

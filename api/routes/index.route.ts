@@ -4,7 +4,7 @@ import machineRoute from './machine.route';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.redirect('helloworld');
+  res.send({ health: 'alive' });
 });
 
 router.use('/machine/', machineRoute);
