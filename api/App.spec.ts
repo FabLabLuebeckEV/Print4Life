@@ -1,7 +1,7 @@
+import 'jasmine';
+
 import * as request from 'request';
 import * as configs from './config';
-
-import 'jasmine';
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
 
@@ -11,9 +11,9 @@ describe('App', () => {
       expect(response.statusCode).toEqual(200);
     });
   });
-  // it('getPrinters', () => {
-  //   request.get(`${endpoint}machine/printer`, (error, response) => {
-  //     expect(response.statusCode).toEqual(200);
-  //   });
-  // });
+  it('getPrinters', () => {
+    request.get(`${endpoint}machine/printer`, (error, response) => {
+      expect(response.statusCode).toEqual(200);
+    });
+  });
 });
