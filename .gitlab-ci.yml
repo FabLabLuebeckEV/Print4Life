@@ -25,6 +25,7 @@ test:
    - cd db-seeds/scripts
    - bash import.sh $DATABASE_URL $DATABASE
    - cd ../../
+   - NODE_ENV=$NODE_ENV
    - npm install
    - npm run test
 build:

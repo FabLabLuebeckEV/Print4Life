@@ -24,7 +24,7 @@
     "api-serve": "NODE_ENV='prod' node dist",
     "api-build": "tsc && npm run lint",
     "api-dev": "nodemon -e ts  --exec \"npm run api-build && npm run api-serve-dev\"",
-    "api-test": "tsc && concurrently --kill-others --success last \"npm run api-serve\" \"wait-on http://localhost:3000/api/v1/ && jasmine-ts dist/**/*.spec.js\" || true ",
+    "api-test": "tsc && concurrently --kill-others --success last \"node dist\" \"wait-on http://localhost:3000/api/v1/ && jasmine-ts dist/**/*.spec.js\" || true ",
     "ng-serve": "ng serve --port 80",
     "ng-dev": "ng lint && ng serve --poll=2000",
     "ng-test": "ng test --watch=false"

@@ -1,6 +1,6 @@
 #!bin/sh
 
-# example (exectued in folder 'db-seeds/scripts'): bash export.sh localhost:27017/iot-fablab-test
+# example (exectued in folder 'db-seeds/scripts'): bash export.sh localhost:27017/iot-fablab-dev
 
 bash create-seeds.sh $1 fablabs
 
