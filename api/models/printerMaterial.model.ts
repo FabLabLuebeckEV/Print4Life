@@ -1,9 +1,6 @@
 import * as mongoose from 'mongoose';
 
 const attributes = {
-  id: {
-    type: Number
-  },
   material: {
     type: String,
     required: true
@@ -11,7 +8,11 @@ const attributes = {
   type: {
     type: String,
     required: true
-  }
+  },
+  // old db fields
+  id: {
+    type: Number
+  },
 };
 
 const printerMaterialSchema = mongoose.Schema(attributes);
