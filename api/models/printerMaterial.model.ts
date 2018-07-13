@@ -12,7 +12,7 @@ const attributes = {
   // old db fields
   id: {
     type: Number
-  },
+  }
 };
 
 const printerMaterialSchema = mongoose.Schema(attributes);

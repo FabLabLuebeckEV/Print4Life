@@ -4,16 +4,14 @@
 
 bash create-seeds.sh $1 fablabs
 
-bash create-seeds.sh $1 lasercuttercanlasertypes
+bash create-seeds.sh $1 lasercutterlasertypes
 
 bash create-seeds.sh $1 lasercutters
+
+bash create-seeds.sh $1 materials
 
 bash create-seeds.sh $1 millingmachines
 
 bash create-seeds.sh $1 othermachines
-
-bash create-seeds.sh $1 printercanmaterials
-
-bash create-seeds.sh $1 printermaterials
 
 bash create-seeds.sh $1 printers
