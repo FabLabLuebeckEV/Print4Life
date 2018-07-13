@@ -1,57 +1,46 @@
 import * as mongoose from 'mongoose';
+import machineFields from './machine.basic.model';
+import printerMaterialSchema from './printerMaterial.model';
 
-const printerSchema = mongoose.model(
-  'Printer', mongoose.Schema({
-    id: {
-      type: Number,
-      required: true
-    },
-    fid: {
-      type: Number,
-      required: true
-    },
-    deviceName: {
-      type: String,
-      required: true
-    },
-    manufacturer: {
-      type: String,
-      required: true
-    },
-    camSoftware: {
-      type: String
-    },
-    printVolumeX: {
-      type: Number
-    },
-    printVolumeY: {
-      type: Number
-    },
-    printVolumeZ: {
-      type: Number
-    },
-    printResolutionX: {
-      type: Number,
-    },
-    printResolutionY: {
-      type: Number,
-    },
-    printResolutionZ: {
-      type: Number,
-    },
-    nozzleDiameter: {
-      type: Number,
-    },
-    numberOfExtruders: {
-      type: Number
-    },
-    pictureURL: {
-      type: String
-    },
-    comment: {
-      type: String
-    }
-  })
-);
+const attributes = {
+  ...machineFields(),
+  materials: [printerMaterialSchema],
+  camSoftware: {
+    type: String
+  },
+  printVolumeX: {
+    type: Number
+  },
+  printVolumeY: {
+    type: Number
+  },
+  printVolumeZ: {
+    type: Number
+  },
+  printResolutionX: {
+    type: Number,
+  },
+  printResolutionY: {
+    type: Number,
+  },
+  printResolutionZ: {
+    type: Number,
+  },
+  nozzleDiameter: {
+    type: Number,
+  },
+  numberOfExtruders: {
+    type: Number
+  },
+  // old db fields
+  pictureURL: {
+    type: String
+  },
+  comment: {
+    type: String
+  }
+};
+
+const printerSchema = mongoose.Schema(attributes);
 
 export default printerSchema;

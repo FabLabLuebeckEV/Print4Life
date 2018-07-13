@@ -1,7 +1,6 @@
 import * as express from 'express';
 import machineCtrl from '../controllers/machine.controller';
 
-
 const router = express.Router();
 
 router.route('/printer').get((req, res) => {
@@ -9,6 +8,8 @@ router.route('/printer').get((req, res) => {
     res.json({ printers });
   }).catch((err) => {
     res.error(err);
+  }).catch((err) => {
+    res.status(500).send(err);
   });
 });
 
