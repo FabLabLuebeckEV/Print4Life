@@ -7,13 +7,11 @@ const machineFields = {
     type: String,
     required: true
   },
-  manufacturer: {
-    type: String,
-    required: true
-  },
   type: {
-    type: String,
-    required: true,
+    type: String
+  },
+  manufacturer: {
+    type: String
   },
   // old db fields
   id: {

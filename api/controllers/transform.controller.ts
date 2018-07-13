@@ -4,13 +4,43 @@ import logger from '../logger';
 import printerSchema from '../models/printer.model';
 import printerMaterialSchema from '../models/printerMaterial.model';
 import printerCanMaterialSchema from '../models/printerCanMaterial.model';
+import otherMachineSchema from '../models/other.machine.model';
 
+const oldPrinter = mongoose.model('Printer', printerSchema);
 const Printer = mongoose.model('Printer', printerSchema);
 const PrinterMaterial = mongoose.model('PrinterMaterial', printerMaterialSchema);
 const PrinterCanMaterial = mongoose.model('PrinterCanMaterial', printerCanMaterialSchema);
-
-const Machine = mongoose.model('Machine', printerSchema);
 const Material = mongoose.model('Material', printerMaterialSchema);
+
+const oldOther = mongoose.model('otherMachine', otherMachineSchema);
+const Other = mongoose.model('otherMachine', otherMachineSchema);
+
+function transformOthers () {
+  const props = Object.keys(otherMachineSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
+  return oldOther.find((err, oldOthers) => {
+    if (err) return err;
+    else if (oldOthers) {
+      const machines = [];
+      return Other.deleteMany({}, (err, deleted) => {
+        if (err) return err;
+        else if (deleted) {
+          oldOthers.forEach((oldOther) => {
+            if (oldOther.fid) {
+              oldOther.fablabId = oldOther.fid;
+            }
+            const newObject = { ..._getCleanObject(oldOther, props) };
+            const newMachine = new Other(newObject);
+            newMachine.save();
+            machines.push(newMachine);
+          });
+          return machines;
+        }
+        return [];
+      });
+    }
+    return [];
+  });
+}
 
 function transformPrinterMaterial () {
   return Material.deleteMany({ type: 'printerMaterial' }, (err, deleted) => {
@@ -36,21 +66,20 @@ function transformPrinterMaterial () {
 
 function transformPrinters () {
   const props = Object.keys(printerSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
-  return Machine.deleteMany({ type: 'printer' }, (err, deleted) => {
+  return oldPrinter.find((err, printers) => {
     if (err) return err;
-    else if (deleted) {
-      return Printer.find((err, printers) => {
+    else if (printers) {
+      Material.find((err, materials) => {
         if (err) return err;
-        else if (printers) {
-          Material.find((err, materials) => {
+        else if (materials) {
+          return PrinterCanMaterial.find((err, canMaterials) => {
             if (err) return err;
-            else if (materials) {
-              return PrinterCanMaterial.find((err, canMaterials) => {
+            else if (canMaterials) {
+              const machines = [];
+              return Printer.deleteMany({}, (err, deleted) => {
                 if (err) return err;
-                else if (canMaterials) {
-                  const machines = [];
+                else if (deleted) {
                   printers.forEach((printer) => {
-                    !printer.type ? printer.type = 'printer' : '';
                     if (printer.fid) {
                       printer.fablabId = printer.fid;
                     }
@@ -63,10 +92,10 @@ function transformPrinters () {
                         }
                       }
                     });
-                    const newObject = { type: 'printer', ..._getCleanObject(printer, props) };
-                    const newMachine = new Machine(newObject);
-                    newMachine.save();
-                    machines.push(newMachine);
+                    const newObject = { ..._getCleanObject(printer, props) };
+                    const newPrinter = new Printer(newObject);
+                    newPrinter.save();
+                    machines.push(newPrinter);
                   });
                   return machines;
                 }
@@ -92,22 +121,37 @@ function cleanDocuments () {
           material.id = undefined;
           material.save();
         });
+        return materials;
       }
       return [];
     }),
-    Machine.find((err, machines) => {
+    Printer.find((err, printers) => {
       if (err) return err;
-      else if (machines) {
-        machines.forEach((machine) => {
-          machine.id = undefined;
-          machine.pictureURL = undefined;
-          machine.fid = undefined;
-          machine.save();
+      else if (printers) {
+        printers.forEach((Printer) => {
+          Printer.id = undefined;
+          Printer.pictureURL = undefined;
+          Printer.fid = undefined;
+          Printer.save();
         });
-        return { machines };
+        return { printers };
       }
       return [];
-    })]);
+    }),
+    Other.find((err, others) => {
+      if (err) return err;
+      else if (others) {
+        others.forEach((other) => {
+          other.id = undefined;
+          other.pictureURL = undefined;
+          other.fid = undefined;
+          other.save();
+        });
+        return { others };
+      }
+      return [];
+    })
+  ]);
 }
 
 function _findMaterial (materials, id) {
@@ -135,4 +179,4 @@ function _getCleanObject (source, props) {
   return newObject;
 }
 
-export default { transformPrinterMaterial, transformPrinters, cleanDocuments };
+export default { transformPrinterMaterial, transformPrinters, cleanDocuments, transformOthers };
