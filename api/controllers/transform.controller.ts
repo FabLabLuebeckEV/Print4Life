@@ -26,6 +26,18 @@ const LaserCutter = mongoose.model('Lasercutter', laserCutterSchema);
 const LaserType = mongoose.model('Lasercutterlasertype', laserTypeSchema);
 const LasercutterCanLaserTypes = mongoose.model('LaserCutterCanLaserTypes', lasercutterCanLaserTypesSchema);
 
+/**
+ * @api {get} /api/v1/transform/milling Request to transform old milling machine db data to the current schema
+ * @apiName Transform Milling Machines
+ * @apiVersion 0.0.1
+ * @apiGroup Transform
+ *
+ * @apiSuccess {String} msg a short message that everything went well
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+*    {"msg":"Transformation of milling machines done"}
+ */
 function transformMillingMachine () {
   const props = Object.keys(millingMachineSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
   return oldMillingMachine.find((err, oldMillingMachines) => {
@@ -53,6 +65,18 @@ function transformMillingMachine () {
   }).catch((err) => { logger.error(err); });
 }
 
+/**
+ * @api {get} /api/v1/transform/other Request to transform old other machine db data to the current schema
+ * @apiName Transform Other Machines
+ * @apiVersion 0.0.1
+ * @apiGroup Transform
+ *
+ * @apiSuccess {String} msg a short message that everything went well
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+*    {"msg":"Transformation of other machines done"}
+ */
 function transformOthers () {
   const props = Object.keys(otherMachineSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
   return oldOther.find((err, oldOthers) => {
@@ -80,6 +104,9 @@ function transformOthers () {
   }).catch((err) => { logger.error(err); });
 }
 
+/**
+ * Function to transform laser types needed for the laser cutter
+ */
 function transformLaserTypes () {
   return LaserType.find((err, laserTypes) => {
     if (err) return logger.error(err);
@@ -102,6 +129,18 @@ function transformLaserTypes () {
   }).catch((err) => { logger.error(err); });
 }
 
+/**
+ * @api {get} /api/v1/transform/lasercutter Request to transform old laser cutter db data to the current schema
+ * @apiName Transform Laser Cutter
+ * @apiVersion 0.0.1
+ * @apiGroup Transform
+ *
+ * @apiSuccess {String} msg a short message that everything went well
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+*    {"msg":"Transformation of laser cutters done"}
+ */
 function transformLaserCutters () {
   const props = Object.keys(laserCutterSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
   return LaserCutter.find((err, laserCutters) => {
@@ -150,6 +189,9 @@ function transformLaserCutters () {
   }).catch((err) => { logger.error(err); });
 }
 
+/**
+ * Function to transform the printer material. Needed for the printers
+ */
 function transformPrinterMaterial () {
   return Material.deleteMany({ type: 'printerMaterial' }, (err, deleted) => {
     if (err) return err;
@@ -172,6 +214,18 @@ function transformPrinterMaterial () {
   }).catch((err) => { logger.error(err); });
 }
 
+/**
+ * @api {get} /api/v1/transform/printer Request to transform old printer db data to the current schema
+ * @apiName Transform Printers
+ * @apiVersion 0.0.1
+ * @apiGroup Transform
+ *
+ * @apiSuccess {String} msg a short message that everything went well
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+*    {"msg":"Transformation of printers done"}
+ */
 function transformPrinters () {
   const props = Object.keys(printerSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
   return oldPrinter.find((err, printers) => {
@@ -220,6 +274,38 @@ function transformPrinters () {
   }).catch((err) => { logger.error(err); });
 }
 
+/**
+ * @api {get} /api/v1/transform/cleanDocuments
+ * Request to clean the documents of the database of unneeded fields e.g. the old id and foreign ids
+ * @apiName Clean Documents of DB
+ * @apiVersion 0.0.1
+ * @apiGroup Transform
+ *
+ * @apiSuccess {Array} updated is an array containing the updated documents
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+*    {
+    "updated": [
+        [
+            {
+                "_id": "5b48b9c98f96232dd1646258",
+                "material": "PLA",
+                "id": 1,
+                "type": "printerMaterial",
+                "__v": 0
+            },
+            {
+                "_id": "5b48b9c98f96232dd164625c",
+                "material": "Other",
+                "id": 6,
+                "type": "printerMaterial",
+                "__v": 0
+            }
+        ]
+    ]
+}
+ */
 function cleanDocuments () {
   return Promise.all([
     Material.find((err, materials) => {
@@ -299,22 +385,29 @@ function cleanDocuments () {
   ]);
 }
 
-function _find (materials, id, schema) {
-  const filteredMaterials = materials.filter((elem) => elem.id === id);
-  let material;
-  filteredMaterials.length > 0 ? material = filteredMaterials[0] : material = undefined;
-  if (material) {
+/**
+ * Finds an element within an array and gets the cleaned object for that element
+{Array} array is the array containing the element
+{String} id is the id of the element
+{Object} schema is the schema containing the properties
+ */
+function _find (array, id, schema) {
+  const filteredArray = array.filter((elem) => elem.id === id);
+  let elem;
+  filteredArray.length > 0 ? elem = filteredArray[0] : elem = undefined;
+  if (elem) {
     const props = Object.keys(schema.paths)
       .filter((prop) => prop !== '_id' && prop !== '__v');
-    return _getCleanObject(material, props);
+    return _getCleanObject(elem, props);
   }
   return undefined;
 }
 
 /**
-  {Object} source is the original object of the db
-  {Array} props are the properties based on the schema of the source object
-  {Object} the source object without the database fields like '__v' and '_id'
+ * Removes mongo db fields which are not mentioned in the mongoose schema and returns the cleaned object
+{Object} source is the original object of the db
+{Array} props are the properties based on the schema of the source object
+{Object} the source object without the database fields like '__v' and '_id'
    */
 function _getCleanObject (source, props) {
   const newObject = {};
