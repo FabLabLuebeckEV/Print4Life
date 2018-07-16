@@ -1,0 +1,61 @@
+[{
+	"id" : "4",
+	"fid" : "2",
+	"deviceName" : "Helix",
+	"manufacturer" : "Epilog",
+	"camSoftware" : "",
+	"workspaceX" : "600",
+	"workspaceY" : "450",
+	"workspaceZ" : "350",
+	"maxResolution" : "",
+	"laserType" : "",
+	"laserPower" : "40",
+	"pictureURL" : "upload/59e723b7605af.jpg",
+	"comment" : ""
+}
+,{
+	"id" : "5",
+	"fid" : "2",
+	"deviceName" : "ILS12.150",
+	"manufacturer" : "UNIVERSAL",
+	"camSoftware" : "",
+	"workspaceX" : "1220",
+	"workspaceY" : "610",
+	"workspaceZ" : "250",
+	"maxResolution" : "",
+	"laserType" : "",
+	"laserPower" : "75",
+	"pictureURL" : "upload/59e723ff82d3d.jpg",
+	"comment" : ""
+}
+,{
+	"id" : "6",
+	"fid" : "4",
+	"deviceName" : "MARS-130",
+	"manufacturer" : "Thunderlaser",
+	"camSoftware" : "RD-Works",
+	"workspaceX" : "1500",
+	"workspaceY" : "900",
+	"workspaceZ" : "250",
+	"maxResolution" : "",
+	"laserType" : "",
+	"laserPower" : "100",
+	"pictureURL" : "upload/59e9a2d88744c.png",
+	"comment" : ""
+}
+,{
+	"id" : "7",
+	"fid" : "5",
+	"deviceName" : "MARS-130",
+	"manufacturer" : "Thunderlaser",
+	"camSoftware" : "RD-Works",
+	"workspaceX" : "1500",
+	"workspaceY" : "900",
+	"workspaceZ" : "250",
+	"maxResolution" : "",
+	"laserType" : "",
+	"laserPower" : "100",
+	"pictureURL" : "upload/59e9aa59325e3.png",
+	"comment" : ""
+}
+]

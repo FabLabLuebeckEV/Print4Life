@@ -10,19 +10,30 @@ stages:
 
 test:
   stage: test
+  variables: 
+    NODE_ENV: "test"
+    DATABASE_URL: "mongo:27017"
+    DATABASE: "iot-fablab"
+  services:
+    - mongo
   script:
+   - 'which mongoimport || (apt-get update -y && apt-get install mongodb -y)'
    - apt-get install wget -y
    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
    - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
    - apt-get update && apt-get -y install google-chrome-stable
+   - cd db-seeds/scripts
+   - bash import.sh $DATABASE_URL $DATABASE
+   - cd ../../
+   - NODE_ENV=$NODE_ENV
    - npm install
    - npm run test
-   
 build:
   stage: test
   artifacts:
     paths:
     - ./
+    expire_in: 1 week
   script:
     - npm install
     - npm run build
