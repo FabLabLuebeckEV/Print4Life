@@ -1,5 +1,6 @@
 [{
 	"fablabId" : 4,
+	"type" : "millingMachines",
 	"deviceName" : "High-Z S-400 CNC",
 	"manufacturer" : "TÜV Rheinland",
 	"camSoftware" : "",
@@ -12,6 +13,7 @@
 }
 ,{
 	"fablabId" : 2,
+	"type" : "millingMachines",
 	"deviceName" : "MDX-540",
 	"manufacturer" : "ROLAND",
 	"camSoftware" : "",
@@ -24,6 +26,7 @@
 }
 ,{
 	"fablabId" : 5,
+	"type" : "millingMachines",
 	"deviceName" : "PFU-S-2 1510-G",
 	"manufacturer" : "BZT",
 	"camSoftware" : "",
@@ -36,6 +39,7 @@
 }
 ,{
 	"fablabId" : 3,
+	"type" : "millingMachines",
 	"deviceName" : "High-Z S-720T",
 	"manufacturer" : "CNC-Step",
 	"camSoftware" : "",
@@ -48,6 +52,7 @@
 }
 ,{
 	"fablabId" : 2,
+	"type" : "millingMachines",
 	"deviceName" : "PRSALPHA",
 	"manufacturer" : "SHOPBOT",
 	"camSoftware" : "",

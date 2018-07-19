@@ -8,7 +8,8 @@ const machineFields = {
     required: true
   },
   type: {
-    type: String
+    type: String,
+    required: true
   },
   manufacturer: {
     type: String

@@ -58,8 +58,9 @@ const Printer = mongoose.model('Printer', printerSchema);
  */
 function getPrinters () {
   return Printer.find((err, printers) => {
-    if (err) return logger.error(err);
-    else if (printers) {
+    if (err) {
+      return logger.error(err);
+    } else if (printers) {
       return printers;
     }
     return [];

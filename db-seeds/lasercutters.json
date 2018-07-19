@@ -1,5 +1,6 @@
 [{
 	"fablabId" : 4,
+	"type" : "laserCutter",
 	"deviceName" : "MARS-130",
 	"manufacturer" : "Thunderlaser",
 	"laserTypes" : [ ],
@@ -12,6 +13,7 @@
 }
 ,{
 	"fablabId" : 2,
+	"type" : "laserCutter",
 	"deviceName" : "ILS12.150",
 	"manufacturer" : "UNIVERSAL",
 	"laserTypes" : [ ],
@@ -23,19 +25,8 @@
 	"comment" : ""
 }
 ,{
-	"fablabId" : 5,
-	"deviceName" : "MARS-130",
-	"manufacturer" : "Thunderlaser",
-	"laserTypes" : [ ],
-	"camSoftware" : "RD-Works",
-	"workspaceX" : 1500,
-	"workspaceY" : 900,
-	"workspaceZ" : 250,
-	"laserPower" : "100",
-	"comment" : ""
-}
-,{
 	"fablabId" : 2,
+	"type" : "laserCutter",
 	"deviceName" : "Helix",
 	"manufacturer" : "Epilog",
 	"laserTypes" : [ ],
@@ -44,6 +35,19 @@
 	"workspaceY" : 450,
 	"workspaceZ" : 350,
 	"laserPower" : "40",
+	"comment" : ""
+}
+,{
+	"fablabId" : 5,
+	"type" : "laserCutter",
+	"deviceName" : "MARS-130",
+	"manufacturer" : "Thunderlaser",
+	"laserTypes" : [ ],
+	"camSoftware" : "RD-Works",
+	"workspaceX" : 1500,
+	"workspaceY" : 900,
+	"workspaceZ" : 250,
+	"laserPower" : "100",
 	"comment" : ""
 }
 ]

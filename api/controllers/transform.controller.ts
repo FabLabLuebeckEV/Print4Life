@@ -41,17 +41,22 @@ const LasercutterCanLaserTypes = mongoose.model('LaserCutterCanLaserTypes', lase
 function transformMillingMachine () {
   const props = Object.keys(millingMachineSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
   return oldMillingMachine.find((err, oldMillingMachines) => {
-    if (err) return err;
-    else if (oldMillingMachines) {
+    if (err) {
+      return err;
+    } else if (oldMillingMachines) {
       const machines = [];
       return MillingMachine.deleteMany({}, (err, deleted) => {
-        if (err) return err;
-        else if (deleted) {
+        if (err) { return err; } else if (deleted) {
           oldMillingMachines.forEach((millingMachine) => {
             if (millingMachine.fid) {
               millingMachine.fablabId = millingMachine.fid;
             }
-            const newObject = { fablabId: millingMachine.fid, ..._getCleanObject(millingMachine, props) };
+            const newObject = {
+              fablabId: millingMachine.fid,
+              type: undefined,
+              ..._getCleanObject(millingMachine, props)
+            };
+            newObject.type = 'millingMachines';
             const newMachine = new MillingMachine(newObject);
             newMachine.save();
             machines.push(newMachine);
@@ -80,17 +85,20 @@ function transformMillingMachine () {
 function transformOthers () {
   const props = Object.keys(otherMachineSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
   return oldOther.find((err, oldOthers) => {
-    if (err) return err;
-    else if (oldOthers) {
+    if (err) { return err; } else if (oldOthers) {
       const machines = [];
       return Other.deleteMany({}, (err, deleted) => {
-        if (err) return err;
-        else if (deleted) {
+        if (err) { return err; } else if (deleted) {
           oldOthers.forEach((oldOther) => {
             if (oldOther.fid) {
               oldOther.fablabId = oldOther.fid;
             }
-            const newObject = { fablabId: oldOther.fid, ..._getCleanObject(oldOther, props) };
+            const newObject = {
+              fablabId: oldOther.fid,
+              type: undefined,
+              ..._getCleanObject(oldOther, props)
+            };
+            newObject.type = 'otherMachine';
             const newMachine = new Other(newObject);
             newMachine.save();
             machines.push(newMachine);
@@ -109,11 +117,9 @@ function transformOthers () {
  */
 function transformLaserTypes () {
   return LaserType.find((err, laserTypes) => {
-    if (err) return logger.error(err);
-    else if (laserTypes) {
+    if (err) { return logger.error(err); } else if (laserTypes) {
       return LaserType.deleteMany({}, (err, deleted) => {
-        if (err) return err;
-        else if (deleted) {
+        if (err) { return err; } else if (deleted) {
           const newLaserTypes = [];
           laserTypes.forEach((material) => {
             const newLaserType = new LaserType({ laserType: material.laserType, id: material.id });
@@ -144,18 +150,14 @@ function transformLaserTypes () {
 function transformLaserCutters () {
   const props = Object.keys(laserCutterSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
   return LaserCutter.find((err, laserCutters) => {
-    if (err) return err;
-    else if (laserCutters) {
+    if (err) { return err; } else if (laserCutters) {
       LaserType.find((err, laserTypes) => {
-        if (err) return err;
-        else if (laserTypes) {
+        if (err) { return err; } else if (laserTypes) {
           return LasercutterCanLaserTypes.find((err, canLaserTypes) => {
-            if (err) return err;
-            else if (canLaserTypes) {
+            if (err) { return err; } else if (canLaserTypes) {
               const machines = [];
               return LaserCutter.deleteMany({}, (err, deleted) => {
-                if (err) return err;
-                else if (deleted) {
+                if (err) { return err; } else if (deleted) {
                   laserCutters.forEach((laserCutter) => {
                     if (laserCutter.fid) {
                       laserCutter.fablabId = laserCutter.fid;
@@ -169,7 +171,12 @@ function transformLaserCutters () {
                         }
                       }
                     });
-                    const newObject = { fablabId: laserCutter.fid, ..._getCleanObject(laserCutter, props) };
+                    const newObject = {
+                      fablabId: laserCutter.fid,
+                      type: undefined,
+                      ..._getCleanObject(laserCutter, props)
+                    };
+                    newObject.type = 'laserCutter';
                     const newMachine = new LaserCutter(newObject);
                     newMachine.save();
                     machines.push(newMachine);
@@ -194,11 +201,9 @@ function transformLaserCutters () {
  */
 function transformPrinterMaterial () {
   return Material.deleteMany({ type: 'printerMaterial' }, (err, deleted) => {
-    if (err) return err;
-    else if (deleted) {
+    if (err) { return err; } else if (deleted) {
       return PrinterMaterial.find((err, materials) => {
-        if (err) return logger.error(err);
-        else if (materials) {
+        if (err) { return logger.error(err); } else if (materials) {
           const newMaterials = [];
           materials.forEach((material) => {
             const newMaterial = new Material({ material: material.material, id: material.id, type: 'printerMaterial' });
@@ -229,18 +234,14 @@ function transformPrinterMaterial () {
 function transformPrinters () {
   const props = Object.keys(printerSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
   return oldPrinter.find((err, printers) => {
-    if (err) return err;
-    else if (printers) {
+    if (err) { return err; } else if (printers) {
       Material.find((err, materials) => {
-        if (err) return err;
-        else if (materials) {
+        if (err) { return err; } else if (materials) {
           return PrinterCanMaterial.find((err, canMaterials) => {
-            if (err) return err;
-            else if (canMaterials) {
+            if (err) { return err; } else if (canMaterials) {
               const machines = [];
               return Printer.deleteMany({}, (err, deleted) => {
-                if (err) return err;
-                else if (deleted) {
+                if (err) { return err; } else if (deleted) {
                   printers.forEach((printer) => {
                     if (printer.fid) {
                       printer.fablabId = printer.fid;
@@ -254,7 +255,12 @@ function transformPrinters () {
                         }
                       }
                     });
-                    const newObject = { fablabId: printer.fid, ..._getCleanObject(printer, props) };
+                    const newObject = {
+                      fablabId: printer.fid,
+                      type: undefined,
+                      ..._getCleanObject(printer, props)
+                    };
+                    newObject.type = 'printer';
                     const newPrinter = new Printer(newObject);
                     newPrinter.save();
                     machines.push(newPrinter);
@@ -309,8 +315,7 @@ function transformPrinters () {
 function cleanDocuments () {
   return Promise.all([
     Material.find((err, materials) => {
-      if (err) return err;
-      else if (materials) {
+      if (err) { return err; } else if (materials) {
         materials.forEach((material) => {
           material.id = undefined;
           material.save();
@@ -320,8 +325,7 @@ function cleanDocuments () {
       return [];
     }).catch((err) => { logger.error(err); }),
     Printer.find((err, printers) => {
-      if (err) return err;
-      else if (printers) {
+      if (err) { return err; } else if (printers) {
         printers.forEach((Printer) => {
           Printer.id = undefined;
           Printer.pictureURL = undefined;
@@ -333,8 +337,7 @@ function cleanDocuments () {
       return [];
     }).catch((err) => { logger.error(err); }),
     MillingMachine.find((err, millingMachines) => {
-      if (err) return err;
-      else if (millingMachines) {
+      if (err) { return err; } else if (millingMachines) {
         millingMachines.forEach((millingMachine) => {
           millingMachine.id = undefined;
           millingMachine.pictureURL = undefined;
@@ -346,8 +349,7 @@ function cleanDocuments () {
       return [];
     }).catch((err) => { logger.error(err); }),
     LaserType.find((err, laserTypes) => {
-      if (err) return err;
-      else if (laserTypes) {
+      if (err) { return err; } else if (laserTypes) {
         laserTypes.forEach((laserType) => {
           laserType.id = undefined;
           laserType.save();
@@ -357,8 +359,7 @@ function cleanDocuments () {
       return [];
     }).catch((err) => { logger.error(err); }),
     LaserCutter.find((err, laserCutters) => {
-      if (err) return err;
-      else if (laserCutters) {
+      if (err) { return err; } else if (laserCutters) {
         laserCutters.forEach((laserCutter) => {
           laserCutter.id = undefined;
           laserCutter.pictureURL = undefined;
@@ -370,8 +371,7 @@ function cleanDocuments () {
       return [];
     }).catch((err) => { logger.error(err); }),
     Other.find((err, others) => {
-      if (err) return err;
-      else if (others) {
+      if (err) { return err; } else if (others) {
         others.forEach((other) => {
           other.id = undefined;
           other.pictureURL = undefined;

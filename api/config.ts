@@ -7,7 +7,14 @@ const dev = {
     }
   },
   baseUrlBackend: 'http://localhost:3000/api/v1/',
-  baseUrlFrontend: 'http://localhost:4200/'
+  baseUrlFrontend: 'http://localhost:4200',
+  cors: {
+    whitelist: [this.baseUrlFrontend],
+    corsOptions: {
+      origin: undefined,
+      credentials: true
+    }
+  }
 };
 
 const prod = {
@@ -18,7 +25,14 @@ const prod = {
     }
   },
   baseUrlBackend: 'http://localhost:3000/api/v1/',
-  baseUrlFrontend: 'http://localhost:80/'
+  baseUrlFrontend: 'http://localhost:80',
+  cors: {
+    whitelist: [this.baseUrlFrontend],
+    corsOptions: {
+      origin: undefined,
+      credentials: true
+    }
+  }
 };
 
 const test = {
@@ -29,7 +43,14 @@ const test = {
     }
   },
   baseUrlBackend: 'http://localhost:3000/api/v1/',
-  baseUrlFrontend: 'http://localhost:80/'
+  baseUrlFrontend: 'http://localhost:80',
+  cors: {
+    whitelist: [this.baseUrlFrontend],
+    corsOptions: {
+      origin: undefined,
+      credentials: true
+    }
+  }
 };
 
 export const configArr = { dev, prod, test };
