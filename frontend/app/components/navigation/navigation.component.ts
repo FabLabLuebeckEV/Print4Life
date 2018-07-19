@@ -6,10 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
+  title = 'Order Management';
+  dropdown =
+    {
+      name: 'Machines',
+      elements: [
+        { name: 'Get Machines', routerHref: 'machines' }
+      ]
+    };
 
   constructor() { }
 
   ngOnInit() {
   }
-
 }

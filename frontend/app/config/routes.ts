@@ -1,4 +1,4 @@
-import { MachineListComponent } from '../machine-list/machine-list.component';
+import { MachineListComponent } from '../machines/machine-list/machine-list.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { Routes } from '@angular/router';
 

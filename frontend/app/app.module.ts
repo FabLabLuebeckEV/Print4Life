@@ -3,14 +3,15 @@ import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CredentialsInterceptorService } from './credential.interceptor.service';
+import { CredentialsInterceptorService } from './services/credential.interceptor.service';
 
 import { AppComponent } from './app.component';
-import { DropdownComponent } from './dropdown/dropdown.component';
-import { NavigationComponent } from './navigation/navigation.component';
-import { MachineListComponent } from './machine-list/machine-list.component';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
+import { MachineListComponent } from './machines/machine-list/machine-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { appRoutes } from './config/routes';
+import { MachineService } from './services/machine.service';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import { appRoutes } from './config/routes';
         )
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: CredentialsInterceptorService, multi: true } // magic for cors
+        { provide: HTTP_INTERCEPTORS, useClass: CredentialsInterceptorService, multi: true }, // magic for cors
+        MachineService
     ],
     bootstrap: [AppComponent]
 })

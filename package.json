@@ -16,6 +16,7 @@
     "deploy": "npm run build && npm run api-serve",
     "build": "ng build --prod && tsc && npm run lint",
     "test": "npm run ng-test && npm run api-test",
+    "test-no-cors": "npm run ng-test && npm run api-test-no-cors",
     "serve": "concurrently --kill-others \"npm run api-serve\" \"npm run ng-serve\"",
     "dev": "concurrently --kill-others \"npm run api-dev\" \"npm run ng-dev\"",
     "lint": "ng lint && eslint api --fix --ext ts",
@@ -25,14 +26,14 @@
     "api-build": "tsc && npm run lint",
     "api-dev": "nodemon -e ts  --exec \"npm run api-build && npm run api-serve-dev\"",
     "api-test": "tsc && node dist/specs/global.spec.js || true ",
+    "api-test-no-cors": "tsc && NODE_ENV='testNoCors' node dist/specs/global.spec.js || true ",
     "api-test-dev": "tsc && node --inspect-brk=9229 dist/specs/global.spec.js",
     "ng-serve": "ng serve --port 80",
     "ng-dev": "ng lint && ng serve --poll=2000",
     "ng-test": "ng test --watch=false"
   },
   "keywords": [],
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Rene Kremer",
       "email": "renejon90@googlemail.com"
     },

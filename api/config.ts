@@ -9,7 +9,7 @@ const dev = {
   baseUrlBackend: 'http://localhost:3000/api/v1/',
   baseUrlFrontend: 'http://localhost:4200',
   cors: {
-    whitelist: [this.baseUrlFrontend],
+    whitelist: ['http://localhost:4200'],
     corsOptions: {
       origin: undefined,
       credentials: true
@@ -27,7 +27,7 @@ const prod = {
   baseUrlBackend: 'http://localhost:3000/api/v1/',
   baseUrlFrontend: 'http://localhost:80',
   cors: {
-    whitelist: [this.baseUrlFrontend],
+    whitelist: ['http://localhost:80'],
     corsOptions: {
       origin: undefined,
       credentials: true
@@ -45,7 +45,7 @@ const test = {
   baseUrlBackend: 'http://localhost:3000/api/v1/',
   baseUrlFrontend: 'http://localhost:80',
   cors: {
-    whitelist: [this.baseUrlFrontend],
+    whitelist: ['http://localhost:80'],
     corsOptions: {
       origin: undefined,
       credentials: true
@@ -53,7 +53,19 @@ const test = {
   }
 };
 
-export const configArr = { dev, prod, test };
+const testNoCors = {
+  connections: {
+    mongo: {
+      host: 'mongodb://127.0.0.1:27017/',
+      database: 'iot-fablab-dev'
+    }
+  },
+  baseUrlBackend: 'http://localhost:3000/api/v1/',
+  baseUrlFrontend: 'http://localhost:4200',
+  cors: undefined
+};
+
+export const configArr = { dev, prod, test, testNoCors };
 
 const config = configArr[env];
 

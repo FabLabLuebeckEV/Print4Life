@@ -1,6 +1,7 @@
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { NavigationComponent } from './navigation/navigation.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AppComponent', () => {
@@ -10,7 +11,7 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent, NavigationComponent
+        AppComponent, NavigationComponent, DropdownComponent
       ],
       imports: [RouterTestingModule]
     }).compileComponents();

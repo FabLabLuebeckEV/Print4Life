@@ -6,12 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  title = 'app';
-  dropdownMenu = [
-    { name: 'Tour of Heroes', href: 'https://angular.io/tutorial' },
-    { name: 'CLI Documentation', href: 'https://github.com/angular/angular-cli/wiki' },
-    { name: 'Angular blog', href: 'https://blog.angular.io/' }
-  ];
+  title = 'Fablab - Order Management';
+  dropdownMenu = {
+    name: 'Links',
+    elements: [
+      { name: 'Tour of Heroes', href: 'https://angular.io/tutorial' },
+      { name: 'CLI Documentation', href: 'https://github.com/angular/angular-cli/wiki' },
+      { name: 'Angular blog', href: 'https://blog.angular.io/' }
+    ]
+  };
 
   constructor() { }
 

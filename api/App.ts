@@ -21,14 +21,18 @@ class App {
   }
 
   private setCorsOptions (): void {
-    config.cors.corsOptions.origin = function (origin, callback) {
-      if (config.cors.whitelist.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    };
-    this.express.use(cors(config.cors.corsOptions));
+    if (config.cors) {
+      config.cors.corsOptions.origin = function (origin, callback) {
+        if (config.cors.whitelist.indexOf(origin) !== -1) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      };
+      this.express.use(cors(config.cors.corsOptions));
+    } else {
+      this.express.use(cors());
+    }
   }
 }
 

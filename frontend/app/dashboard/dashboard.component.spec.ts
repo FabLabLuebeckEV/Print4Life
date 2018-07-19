@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { DropdownComponent } from '../dropdown/dropdown.component';
-
+import { DropdownComponent } from '../components/dropdown/dropdown.component';
+import { RouterTestingModule } from '@angular/router/testing';
 import { DashboardComponent } from './dashboard.component';
 
 describe('DashboardComponent', () => {
@@ -9,7 +9,8 @@ describe('DashboardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DashboardComponent, DropdownComponent]
+      declarations: [DashboardComponent, DropdownComponent],
+      imports: [RouterTestingModule]
     })
       .compileComponents();
   }));
@@ -23,15 +24,15 @@ describe('DashboardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  it('should have as title \'app\'', async(() => {
+  it('should have as title \'Fablab - Order Management\'', async(() => {
     const fixture = TestBed.createComponent(DashboardComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app');
+    expect(app.title).toEqual('Fablab - Order Management');
   }));
   it('should render title in a h1 tag', async(() => {
     const fixture = TestBed.createComponent(DashboardComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
+    expect(compiled.querySelector('h1').textContent).toContain('Welcome to the Fablab - Order Management!');
   }));
 });
