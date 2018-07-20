@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 
 const attributes = {
-  id: {
-    type: Number
+  fid: {
+    type: String
   },
   name: {
     type: String,

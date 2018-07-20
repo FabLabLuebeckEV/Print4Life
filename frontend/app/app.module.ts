@@ -12,10 +12,12 @@ import { MachineListComponent } from './machines/machine-list/machine-list.compo
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { appRoutes } from './config/routes';
 import { MachineService } from './services/machine.service';
+import { CardComponent } from './components/card/card.component';
+import { FablabService } from './services/fablab.service';
 
 @NgModule({
     declarations: [
-        AppComponent, DropdownComponent, NavigationComponent, MachineListComponent, DashboardComponent
+        AppComponent, DropdownComponent, NavigationComponent, MachineListComponent, DashboardComponent, CardComponent
     ],
     imports: [
         BrowserModule,
@@ -28,7 +30,7 @@ import { MachineService } from './services/machine.service';
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: CredentialsInterceptorService, multi: true }, // magic for cors
-        MachineService
+        MachineService, FablabService
     ],
     bootstrap: [AppComponent]
 })

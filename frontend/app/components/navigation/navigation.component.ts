@@ -9,9 +9,9 @@ export class NavigationComponent implements OnInit {
   title = 'Order Management';
   dropdown =
     {
-      name: 'Machines',
+      name: 'Machine',
       elements: [
-        { name: 'Get Machines', routerHref: 'machines' }
+        { name: 'Get Machines', routerHref: 'machine' }
       ]
     };
 

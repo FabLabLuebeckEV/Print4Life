@@ -4,7 +4,7 @@ import { Routes } from '@angular/router';
 
 export let appRoutes: Routes = [
     {
-        path: 'machines',
+        path: 'machine',
         component: MachineListComponent
     },
     {

@@ -51,7 +51,7 @@ describe('Machine Controller', () => {
       expect(response.statusCode).toEqual(200);
       expect(machines).toBeDefined();
       expect(Object.keys(machines).length).toBeGreaterThan(0);
-      Object.keys(machines).forEach(machineType => {
+      Object.keys(machines).forEach((machineType) => {
         expect(machines[machineType]).toBeDefined();
         expect(machines[machineType].length).toBeGreaterThan(-1);
       });

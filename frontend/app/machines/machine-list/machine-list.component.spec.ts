@@ -1,4 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { CardComponent } from '../../components/card/card.component';
+
 import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
@@ -11,8 +14,8 @@ describe('MachineListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MachineListComponent],
-      imports: [HttpClientTestingModule]
+      declarations: [MachineListComponent, CardComponent],
+      imports: [HttpClientTestingModule, RouterTestingModule]
     })
       .compileComponents();
   }));

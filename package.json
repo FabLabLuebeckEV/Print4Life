@@ -24,7 +24,7 @@
     "api-serve-dev": "NODE_ENV='dev' node --inspect-brk=9229 dist",
     "api-serve": "NODE_ENV='prod' node dist",
     "api-build": "tsc && npm run lint",
-    "api-dev": "nodemon -e ts  --exec \"npm run api-build && npm run api-serve-dev\"",
+    "api-dev": "nodemon -e ts --exec \"npm run api-build && npm run api-serve-dev\"",
     "api-test": "tsc && node dist/specs/global.spec.js || false ",
     "api-test-local": "tsc && NODE_ENV='testLocal' node dist/specs/global.spec.js || false ",
     "api-test-dev": "tsc && NODE_ENV='testLocal' node --inspect-brk=9229 dist/specs/global.spec.js",

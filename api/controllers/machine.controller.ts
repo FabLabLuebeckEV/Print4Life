@@ -366,4 +366,5 @@ function _getMachineType (type) {
     return [];
   });
 }
+
 export default { getAllMachines, getPrinters, getLasercutters, getOtherMachines, getMillingMachines };
