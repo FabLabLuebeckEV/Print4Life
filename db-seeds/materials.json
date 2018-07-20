@@ -1,6 +1,6 @@
-[{ "material" : "PLA", "type" : "printerMaterial" }
-,{ "material" : "ABS", "type" : "printerMaterial" }
+[{ "material" : "Other", "type" : "printerMaterial" }
 ,{ "material" : "resin", "type" : "printerMaterial" }
-,{ "material" : "Other", "type" : "printerMaterial" }
+,{ "material" : "ABS", "type" : "printerMaterial" }
 ,{ "material" : "Plaster", "type" : "printerMaterial" }
+,{ "material" : "PLA", "type" : "printerMaterial" }
 ]
