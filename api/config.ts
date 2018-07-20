@@ -44,16 +44,10 @@ const test = {
   },
   baseUrlBackend: 'http://localhost:3000/api/v1/',
   baseUrlFrontend: 'http://localhost:80',
-  cors: {
-    whitelist: ['http://localhost:80'],
-    corsOptions: {
-      origin: undefined,
-      credentials: true
-    }
-  }
+  cors: undefined
 };
 
-const testNoCors = {
+const testLocal = {
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -65,7 +59,7 @@ const testNoCors = {
   cors: undefined
 };
 
-export const configArr = { dev, prod, test, testNoCors };
+export const configArr = { dev, prod, test, testLocal };
 
 const config = configArr[env];
 
