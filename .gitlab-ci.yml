@@ -5,8 +5,19 @@ cache:
   - node_modules/
   
 stages:
+  - build
   - test
   - deploy
+
+build:
+  stage: build
+  artifacts:
+    paths:
+    - ./
+    expire_in: 1 week
+  script:
+    - npm install
+    - npm run build
 
 test:
   stage: test
@@ -29,17 +40,7 @@ test:
    - npm install
    - npm run test
 
-build:
-  stage: test
-  artifacts:
-    paths:
-    - ./
-    expire_in: 1 week
-  script:
-    - npm install
-    - npm run build
-
-build_api_docs:
+test_build_api_docs:
   stage: test
   script:
     - npm install
