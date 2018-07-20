@@ -14,7 +14,8 @@ const dev = {
       origin: undefined,
       credentials: true
     }
-  }
+  },
+  // cors: undefined // if testing backend routes in dev mode without using the frontend
 };
 
 const prod = {

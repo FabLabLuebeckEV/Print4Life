@@ -27,9 +27,9 @@ const LaserType = mongoose.model('Lasercutterlasertype', laserTypeSchema);
 const LasercutterCanLaserTypes = mongoose.model('LaserCutterCanLaserTypes', lasercutterCanLaserTypesSchema);
 
 /**
- * @api {get} /api/v1/transform/milling Request to transform old milling machine db data to the current schema
+ * @api {get} /api/v1/transform/milling Transform old milling machine db data to the current schema
  * @apiName Transform Milling Machines
- * @apiVersion 0.0.1
+ * @apiVersion 1.0.0
  * @apiGroup Transform
  *
  * @apiSuccess {String} msg a short message that everything went well
@@ -56,7 +56,7 @@ function transformMillingMachine () {
               type: undefined,
               ..._getCleanObject(millingMachine, props)
             };
-            newObject.type = 'millingMachines';
+            newObject.type = 'millingMachine';
             const newMachine = new MillingMachine(newObject);
             newMachine.save();
             machines.push(newMachine);
@@ -71,9 +71,9 @@ function transformMillingMachine () {
 }
 
 /**
- * @api {get} /api/v1/transform/other Request to transform old other machine db data to the current schema
+ * @api {get} /api/v1/transform/other Transform old other machine db data to the current schema
  * @apiName Transform Other Machines
- * @apiVersion 0.0.1
+ * @apiVersion 1.0.0
  * @apiGroup Transform
  *
  * @apiSuccess {String} msg a short message that everything went well
@@ -136,9 +136,9 @@ function transformLaserTypes () {
 }
 
 /**
- * @api {get} /api/v1/transform/lasercutter Request to transform old laser cutter db data to the current schema
+ * @api {get} /api/v1/transform/lasercutter Transform old laser cutter db data to the current schema
  * @apiName Transform Laser Cutter
- * @apiVersion 0.0.1
+ * @apiVersion 1.0.0
  * @apiGroup Transform
  *
  * @apiSuccess {String} msg a short message that everything went well
@@ -176,7 +176,7 @@ function transformLaserCutters () {
                       type: undefined,
                       ..._getCleanObject(laserCutter, props)
                     };
-                    newObject.type = 'laserCutter';
+                    newObject.type = 'lasercutter';
                     const newMachine = new LaserCutter(newObject);
                     newMachine.save();
                     machines.push(newMachine);
@@ -220,9 +220,9 @@ function transformPrinterMaterial () {
 }
 
 /**
- * @api {get} /api/v1/transform/printer Request to transform old printer db data to the current schema
+ * @api {get} /api/v1/transform/printer Transform old printer db data to the current schema
  * @apiName Transform Printers
- * @apiVersion 0.0.1
+ * @apiVersion 1.0.0
  * @apiGroup Transform
  *
  * @apiSuccess {String} msg a short message that everything went well
@@ -282,9 +282,9 @@ function transformPrinters () {
 
 /**
  * @api {get} /api/v1/transform/cleanDocuments
- * Request to clean the documents of the database of unneeded fields e.g. the old id and foreign ids
+ * Clean the documents of the database of unneeded fields
  * @apiName Clean Documents of DB
- * @apiVersion 0.0.1
+ * @apiVersion 1.0.0
  * @apiGroup Transform
  *
  * @apiSuccess {Array} updated is an array containing the updated documents
@@ -387,9 +387,9 @@ function cleanDocuments () {
 
 /**
  * Finds an element within an array and gets the cleaned object for that element
-{Array} array is the array containing the element
-{String} id is the id of the element
-{Object} schema is the schema containing the properties
+ * array is the array containing the element
+ * id is the id of the element
+ * schema is the schema containing the properties
  */
 function _find (array, id, schema) {
   const filteredArray = array.filter((elem) => elem.id === id);
@@ -405,10 +405,11 @@ function _find (array, id, schema) {
 
 /**
  * Removes mongo db fields which are not mentioned in the mongoose schema and returns the cleaned object
-{Object} source is the original object of the db
-{Array} props are the properties based on the schema of the source object
-{Object} the source object without the database fields like '__v' and '_id'
-   */
+
+ * source is the original object of the db
+ * props are the properties based on the schema of the source object
+ * @returns the source object without the database fields like '__v' and '_id'
+ */
 function _getCleanObject (source, props) {
   const newObject = {};
   props.forEach((prop) => {

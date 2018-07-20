@@ -1,7 +1,7 @@
 {
   "apidoc": {
     "name": "fablab-order-management",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "An order-management for the fablab connected to an IBM Watson IoT Platform to connect their machinery to this order and planning process",
     "apidoc": {
       "title": "Fablab Order-Management API",
@@ -27,7 +27,7 @@
     "api-dev": "nodemon -e ts  --exec \"npm run api-build && npm run api-serve-dev\"",
     "api-test": "tsc && node dist/specs/global.spec.js || false ",
     "api-test-local": "tsc && NODE_ENV='testLocal' node dist/specs/global.spec.js || false ",
-    "api-test-dev": "tsc && node --inspect-brk=9229 dist/specs/global.spec.js",
+    "api-test-dev": "tsc && NODE_ENV='testLocal' node --inspect-brk=9229 dist/specs/global.spec.js",
     "ng-serve": "ng serve --port 80",
     "ng-dev": "ng lint && ng serve --poll=2000",
     "ng-test": "ng test --watch=false"
