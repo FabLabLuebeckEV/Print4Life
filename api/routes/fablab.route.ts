@@ -3,8 +3,8 @@ import fablabCtrl from '../controllers/fablab.controller';
 
 const router = express.Router();
 
-router.route('/').get((req, res) => {
-  fablabCtrl.getFablab(req.query.id).then((fablab) => {
+router.route('/:id').get((req, res) => {
+  fablabCtrl.getFablab(req.params.id).then((fablab) => {
     res.json({ fablab });
   }).catch((err) => {
     res.status(500).send(err);
