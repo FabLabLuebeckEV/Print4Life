@@ -26,6 +26,21 @@ const Fablab = mongoose.model('Fablab', fablabSchema);
         "password": "$2y$10$f3mwR3rlkbwd8w7AZUtza.jI4FmuB9qeWvsVNXzubzxZPVW3hAW82"
     }
 }
+ * @apiError 400 The request is malformed (most likely a wrong type of id is given)
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+ *     {
+ *       "error": "Id needs to be a positive number!"
+ *     }
+ *
+ *
+ * @apiError 404 The fablab by its id was not found (there is no entry for the given id)
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Fablab by id '9999' not found"
+ *     }
+ *
  */
 
 function getFablab (id) {
