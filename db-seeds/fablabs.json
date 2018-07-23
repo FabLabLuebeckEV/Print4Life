@@ -1,33 +1,33 @@
 [{
-	"id" : "1",
+	"fid" : "1",
 	"name" : "test",
 	"phone" : "1234",
 	"mail" : "test@test.de",
 	"password" : "$2y$10$sDebOY1Kx8LZNczsF3XjoOqdZHRJK0J80hc7SdEZ19hKDFmkx0owG"
 }
 ,{
-	"id" : "2",
+	"fid" : "2",
 	"name" : "FabLab EAL",
 	"phone" : "",
 	"mail" : "Micj@eal.dk",
 	"password" : "$2y$10$f3mwR3rlkbwd8w7AZUtza.jI4FmuB9qeWvsVNXzubzxZPVW3hAW82"
 }
 ,{
-	"id" : "3",
+	"fid" : "3",
 	"name" : "Fachhochschule Kiel",
 	"phone" : "",
 	"mail" : "robert.manzke@fh-kiel.de",
 	"password" : "$2y$10$ofN4ffEE/bJdbON8NoRp/OYYavyOcXAG7x4QEIbRERPBixEO1Te6e"
 }
 ,{
-	"id" : "4",
+	"fid" : "4",
 	"name" : "EASJ - Køge",
 	"phone" : "",
 	"mail" : "hemi@easj.dk",
 	"password" : "$2y$10$p2KUvWfGfbxazzgybVpNNO0P18BsRhRmS7x9W5IYM3Epx0ZT4ji1i"
 }
 ,{
-	"id" : "5",
+	"fid" : "5",
 	"name" : "FabLab Lübeck",
 	"phone" : "",
 	"mail" : "andersen@fablab-luebeck.de",
