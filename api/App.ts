@@ -4,6 +4,8 @@ import * as cors from 'cors';
 import routes from './routes/index.route';
 import config from './config';
 
+const bodyParser = require('body-parser');
+
 class App {
   public express;
 
@@ -14,6 +16,7 @@ class App {
   }
 
   private mountRoutes (): void {
+    this.express.use(bodyParser.json());
     this.express.use('/api/v1/', routes);
     this.express.get('*', (req, res) => {
       res.redirect(`${config.baseUrlFrontend}`);
