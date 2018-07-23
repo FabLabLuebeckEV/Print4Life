@@ -28,6 +28,7 @@ test:
    - NODE_ENV=$NODE_ENV
    - npm install
    - npm run test
+
 build:
   stage: test
   artifacts:
@@ -37,6 +38,12 @@ build:
   script:
     - npm install
     - npm run build
+
+build_api_docs:
+  stage: test
+  script:
+    - npm install
+    - npm run apidocs
     
 deploy:
   stage: deploy

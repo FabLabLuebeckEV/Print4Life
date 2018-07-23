@@ -1,5 +1,9 @@
+import * as mongoose from 'mongoose';
+
 import logger from '../logger';
-import Printer from '../models/printer.model';
+import printerSchema from '../models/printer.model';
+
+const Printer = mongoose.model('Printer', printerSchema);
 
 /**
  * @api {get} /api/v1/machine/printer Request the list of printers
@@ -61,4 +65,5 @@ function getPrinters () {
     return [];
   });
 }
+
 export default { getPrinters };

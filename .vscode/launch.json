@@ -3,6 +3,14 @@
     "configurations": [
         {
             "type": "node",
+            "request": "attach",
+            "name": "Attach to NPM",
+            "port": 9229,
+            "protocol": "inspector",
+            "sourceMaps": true
+        },
+        {
+            "type": "node",
             "request": "launch",
             "name": "Jasmin via NPM",
             "runtimeExecutable": "npm",
@@ -12,14 +20,6 @@
                 "debug"
             ],
             "port": 9229
-        },
-        {
-            "type": "node",
-            "request": "attach",
-            "name": "Attach to NPM",
-            "port": 9229,
-            "protocol": "inspector",
-            "sourceMaps": true
         },
         {
             "name": "Launch Program",
