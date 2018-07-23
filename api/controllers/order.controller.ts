@@ -39,31 +39,29 @@ const Order = mongoose.model('Order', orderSchema);
 function getOrders () {
   return Order.find((err, orders) => {
     if (err) {
-        return logger.error(err);
+      return logger.error(err);
     } else if (orders) {
-      return onvrdisplaypointerrestricted;
+      return orders;
     }
     return [];
   });
 }
 
 function getOrderById (id) {
-    const query = new Order.findOne({ _id: id});
-    return query.exec();
+  return Order.findOne({ _id: id });
 }
 
 function placeOrder (newOrder) {
-    const order = new Order(newOrder);
-    return order.save();
+  return Order(newOrder).save();
 }
 
 async function updateOrder (body) {
-    return Order.findOneAndUpdate({ _id: body._id }, body, {upsert: true} ).exec();
+  return Order.findOneAndUpdate({ _id: body._id }, body, { upsert: true }).exec();
 }
 
 export default {
-    getOrders,
-    placeOrder,
-    updateOrder,
-    getOrderById
- };
+  getOrders,
+  placeOrder,
+  updateOrder,
+  getOrderById
+};

@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import commentSchema from './comment.model';
 
 const attributes = {
-  comment: [commentSchema],
+  comments: [commentSchema],
   editor: {
     type: String,
   }, // TODO: add user model
@@ -15,14 +15,15 @@ const attributes = {
     contentType: String
   }],
   status: {
-    enum : ['new', 'assigned', 'production', 'shipment', 'archived', 'representive'],
+    enum: ['new', 'assigned', 'production', 'shipment', 'archived', 'representive'],
     type: String,
     default: 'new',
     required: true
   }, // TODO: add model
   token: {
     type: String,
-    unique: false
+    unique: true,
+    required: true
   }
 };
 
