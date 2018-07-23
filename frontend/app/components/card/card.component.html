@@ -1,0 +1,11 @@
+<div class="card spacing" style="width: 18rem;">
+  <img *ngIf="item.pictureUrl" class="card-img-top" [src]="item.pictureUrl" [alt]="item.pictureAltText">
+  <div class="card-body">
+    <h4 *ngIf="item.title" class="card-title">{{item.title}}</h4>
+    <h5 *ngIf="item.subtitle" class="card-subtitle mb-2 text-muted">{{item.subtitle}}</h5>
+    <h6 *ngIf="item.subtitle" class="card-subtitle mb-2 text-muted">{{item.subsubtitle}}</h6>
+    <p *ngIf="item.description" class="card-text">{{item.description}}</p>
+    <a *ngIf="item.editHref" [routerLink]="item.editHref" routerLinkActive="active" class="btn btn-primary spacing-right">Edit</a>
+    <a *ngIf="item.deleteHref" [routerLink]="item.deleteHref" routerLinkActive="active" class="btn btn-danger spacing-right">Delete</a>
+  </div>
+</div>

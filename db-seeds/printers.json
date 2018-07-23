@@ -1,5 +1,23 @@
 [{
 	"fablabId" : 2,
+	"type" : "printer",
+	"deviceName" : "Dimension Elite",
+	"manufacturer" : "Stratasys",
+	"materials" : [ ],
+	"camSoftware" : "",
+	"printVolumeX" : 203,
+	"printVolumeY" : 203,
+	"printVolumeZ" : 305,
+	"printResolutionX" : 0.1,
+	"printResolutionY" : 0.1,
+	"printResolutionZ" : 1.75,
+	"nozzleDiameter" : 0.4,
+	"numberOfExtruders" : 2,
+	"comment" : "Dissolvable support (acidbath)\n"
+}
+,{
+	"fablabId" : 2,
+	"type" : "printer",
 	"deviceName" : "Ultimaker 2+",
 	"manufacturer" : "Ultimaker",
 	"materials" : [ ],
@@ -15,23 +33,25 @@
 	"comment" : ""
 }
 ,{
-	"fablabId" : 3,
-	"deviceName" : "Form 2",
-	"manufacturer" : "Formlabs",
+	"fablabId" : 2,
+	"type" : "printer",
+	"deviceName" : "Zprinter 450",
+	"manufacturer" : "Zcorp",
 	"materials" : [ ],
 	"camSoftware" : "",
-	"printVolumeX" : 145,
-	"printVolumeY" : 145,
-	"printVolumeZ" : 175,
-	"printResolutionX" : null,
-	"printResolutionY" : null,
-	"printResolutionZ" : 0.025,
+	"printVolumeX" : 200,
+	"printVolumeY" : 200,
+	"printVolumeZ" : 180,
+	"printResolutionX" : 0.1,
+	"printResolutionY" : 0.1,
+	"printResolutionZ" : 1,
 	"nozzleDiameter" : null,
 	"numberOfExtruders" : 0,
-	"comment" : "SLA Printer"
+	"comment" : "Full Color printer"
 }
 ,{
 	"fablabId" : 3,
+	"type" : "printer",
 	"deviceName" : "MakerBot",
 	"manufacturer" : "Replicator",
 	"materials" : [ ],
@@ -48,86 +68,7 @@
 }
 ,{
 	"fablabId" : 2,
-	"deviceName" : "Dimension Elite",
-	"manufacturer" : "Stratasys",
-	"materials" : [ ],
-	"camSoftware" : "",
-	"printVolumeX" : 203,
-	"printVolumeY" : 203,
-	"printVolumeZ" : 305,
-	"printResolutionX" : 0.1,
-	"printResolutionY" : 0.1,
-	"printResolutionZ" : 1.75,
-	"nozzleDiameter" : 0.4,
-	"numberOfExtruders" : 2,
-	"comment" : "Dissolvable support (acidbath)\n"
-}
-,{
-	"fablabId" : 4,
-	"deviceName" : "Ultimaker 3",
-	"manufacturer" : "Ultimaker",
-	"materials" : [ ],
-	"camSoftware" : "Cura",
-	"printVolumeX" : 215,
-	"printVolumeY" : 215,
-	"printVolumeZ" : 200,
-	"printResolutionX" : 0.2,
-	"printResolutionY" : 0.2,
-	"printResolutionZ" : 0.2,
-	"nozzleDiameter" : 0.4,
-	"numberOfExtruders" : 1,
-	"comment" : ""
-}
-,{
-	"fablabId" : 5,
-	"deviceName" : "Form 1+",
-	"manufacturer" : "Formlabs",
-	"materials" : [ ],
-	"camSoftware" : "",
-	"printVolumeX" : 145,
-	"printVolumeY" : 145,
-	"printVolumeZ" : 175,
-	"printResolutionX" : null,
-	"printResolutionY" : null,
-	"printResolutionZ" : null,
-	"nozzleDiameter" : null,
-	"numberOfExtruders" : 0,
-	"comment" : ""
-}
-,{
-	"fablabId" : 2,
-	"deviceName" : "Zprinter 450",
-	"manufacturer" : "Zcorp",
-	"materials" : [ ],
-	"camSoftware" : "",
-	"printVolumeX" : 200,
-	"printVolumeY" : 200,
-	"printVolumeZ" : 180,
-	"printResolutionX" : 0.1,
-	"printResolutionY" : 0.1,
-	"printResolutionZ" : 1,
-	"nozzleDiameter" : null,
-	"numberOfExtruders" : 0,
-	"comment" : "Full Color printer"
-}
-,{
-	"fablabId" : 5,
-	"deviceName" : "RepRap",
-	"manufacturer" : "Kühling&Kühling",
-	"materials" : [ ],
-	"camSoftware" : "Slic3r",
-	"printVolumeX" : 200,
-	"printVolumeY" : 185,
-	"printVolumeZ" : 180,
-	"printResolutionX" : 0.1,
-	"printResolutionY" : 0.1,
-	"printResolutionZ" : 0.1,
-	"nozzleDiameter" : 0.4,
-	"numberOfExtruders" : 2,
-	"comment" : ""
-}
-,{
-	"fablabId" : 2,
+	"type" : "printer",
 	"deviceName" : "Ultimaker 2+",
 	"manufacturer" : "Ultimaker",
 	"materials" : [ ],
@@ -143,23 +84,42 @@
 	"comment" : ""
 }
 ,{
-	"fablabId" : 2,
-	"deviceName" : "Ultimaker 2+",
-	"manufacturer" : "Ultimaker",
+	"fablabId" : 3,
+	"type" : "printer",
+	"deviceName" : "X350",
+	"manufacturer" : "German RepRap",
 	"materials" : [ ],
-	"camSoftware" : "Cura",
-	"printVolumeX" : 210,
-	"printVolumeY" : 210,
-	"printVolumeZ" : 205,
+	"camSoftware" : "",
+	"printVolumeX" : 350,
+	"printVolumeY" : 200,
+	"printVolumeZ" : 210,
+	"printResolutionX" : null,
+	"printResolutionY" : null,
+	"printResolutionZ" : 0.2,
+	"nozzleDiameter" : 0.4,
+	"numberOfExtruders" : 2,
+	"comment" : "Prints ABS, PLA, PS, PVA, TPU93, Carbon20, Laywood, Laybrick, PP, Bendlay, Soft-PLA, SmartABS\n"
+}
+,{
+	"fablabId" : 5,
+	"type" : "printer",
+	"deviceName" : "RepRap",
+	"manufacturer" : "Kühling&Kühling",
+	"materials" : [ ],
+	"camSoftware" : "Slic3r",
+	"printVolumeX" : 200,
+	"printVolumeY" : 185,
+	"printVolumeZ" : 180,
 	"printResolutionX" : 0.1,
 	"printResolutionY" : 0.1,
-	"printResolutionZ" : 0.5,
-	"nozzleDiameter" : 0.8,
-	"numberOfExtruders" : 1,
+	"printResolutionZ" : 0.1,
+	"nozzleDiameter" : 0.4,
+	"numberOfExtruders" : 2,
 	"comment" : ""
 }
 ,{
 	"fablabId" : 4,
+	"type" : "printer",
 	"deviceName" : "Ultimaker 3 - extended",
 	"manufacturer" : "Ultimaker",
 	"materials" : [ ],
@@ -176,6 +136,75 @@
 }
 ,{
 	"fablabId" : 5,
+	"type" : "printer",
+	"deviceName" : "Form 1+",
+	"manufacturer" : "Formlabs",
+	"materials" : [ ],
+	"camSoftware" : "",
+	"printVolumeX" : 145,
+	"printVolumeY" : 145,
+	"printVolumeZ" : 175,
+	"printResolutionX" : null,
+	"printResolutionY" : null,
+	"printResolutionZ" : null,
+	"nozzleDiameter" : null,
+	"numberOfExtruders" : 0,
+	"comment" : ""
+}
+,{
+	"fablabId" : 2,
+	"type" : "printer",
+	"deviceName" : "Ultimaker 2+",
+	"manufacturer" : "Ultimaker",
+	"materials" : [ ],
+	"camSoftware" : "Cura",
+	"printVolumeX" : 210,
+	"printVolumeY" : 210,
+	"printVolumeZ" : 205,
+	"printResolutionX" : 0.1,
+	"printResolutionY" : 0.1,
+	"printResolutionZ" : 0.5,
+	"nozzleDiameter" : 0.8,
+	"numberOfExtruders" : 1,
+	"comment" : ""
+}
+,{
+	"fablabId" : 3,
+	"type" : "printer",
+	"deviceName" : "Form 2",
+	"manufacturer" : "Formlabs",
+	"materials" : [ ],
+	"camSoftware" : "",
+	"printVolumeX" : 145,
+	"printVolumeY" : 145,
+	"printVolumeZ" : 175,
+	"printResolutionX" : null,
+	"printResolutionY" : null,
+	"printResolutionZ" : 0.025,
+	"nozzleDiameter" : null,
+	"numberOfExtruders" : 0,
+	"comment" : "SLA Printer"
+}
+,{
+	"fablabId" : 4,
+	"type" : "printer",
+	"deviceName" : "Ultimaker 3",
+	"manufacturer" : "Ultimaker",
+	"materials" : [ ],
+	"camSoftware" : "Cura",
+	"printVolumeX" : 215,
+	"printVolumeY" : 215,
+	"printVolumeZ" : 200,
+	"printResolutionX" : 0.2,
+	"printResolutionY" : 0.2,
+	"printResolutionZ" : 0.2,
+	"nozzleDiameter" : 0.4,
+	"numberOfExtruders" : 1,
+	"comment" : ""
+}
+,{
+	"fablabId" : 5,
+	"type" : "printer",
 	"deviceName" : "Ultimaker Original +",
 	"manufacturer" : "Ultimaker",
 	"materials" : [ ],
@@ -189,21 +218,5 @@
 	"nozzleDiameter" : 0.5,
 	"numberOfExtruders" : 1,
 	"comment" : ""
-}
-,{
-	"fablabId" : 3,
-	"deviceName" : "X350",
-	"manufacturer" : "German RepRap",
-	"materials" : [ ],
-	"camSoftware" : "",
-	"printVolumeX" : 350,
-	"printVolumeY" : 200,
-	"printVolumeZ" : 210,
-	"printResolutionX" : null,
-	"printResolutionY" : null,
-	"printResolutionZ" : 0.2,
-	"nozzleDiameter" : 0.4,
-	"numberOfExtruders" : 2,
-	"comment" : "Prints ABS, PLA, PS, PVA, TPU93, Carbon20, Laywood, Laybrick, PP, Bendlay, Soft-PLA, SmartABS\n"
 }
 ]
