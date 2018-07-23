@@ -4,6 +4,17 @@
 
 * Node > 8.9.4
 * MongoDB (or at least a server with it)
+	* Locally:
+	```bash
+	docker run --rm -d \
+	--name order-mongo \
+	-e MONGO_INITDB_ROOT_USERNAME=mongoadmin \
+	-e MONGO_INITDB_ROOT_PASSWORD=veryInsecurePW \
+	-v /path/to/git/order-management/dev-mongo:/data/db \
+	mongo
+	```
+	* Server:
+	`ssh -L 27017:localhost:27017 remote-user@212.83.56.107`
 * Webserver (Nginx, Apache) for production
 
 ## Use Node-Debugger with VSCode
