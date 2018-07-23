@@ -25,7 +25,7 @@ describe('FablabService', () => {
     expect(FablabService).toBeTruthy();
   }));
 
-  it('gets a fablab', inject([FablabService, XHRBackend], (FablabService, mockBackend) => {
+  it('should get a fablab', inject([FablabService, XHRBackend], (FablabService, mockBackend) => {
     const mockResponse = {
       data: [
         {
