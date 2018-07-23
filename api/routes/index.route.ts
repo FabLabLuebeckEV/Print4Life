@@ -1,5 +1,6 @@
 import * as express from 'express';
 import machineRoute from './machine.route';
+import orderRoute from './order.route';
 import transformRoute from './transform.route';
 
 const router = express.Router();
@@ -9,6 +10,7 @@ router.get('/', (req, res) => {
 });
 
 router.use('/machine/', machineRoute);
+router.use('/orders/', orderRoute);
 router.use('/transform/', transformRoute);
 
 export default router;
