@@ -1,17 +1,12 @@
 import { TestBed, inject } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
+  HttpTestingController
 } from '@angular/common/http/testing';
-
-import {
-  Response,
-  ResponseOptions,
-  XHRBackend
-} from '@angular/http';
 
 import { MachineService } from './machine.service';
 
-import { MockBackend } from '@angular/http/testing';
+import { config } from '../config/config';
 
 const lasercutters = [{
   'id': '5b5368ad9f08d5319db21ff8',
@@ -127,50 +122,47 @@ const otherMachines = [{
   'comment': ''
 }];
 
+let machines = [];
+machines = machines.concat(lasercutters, printers, millingMachines, otherMachines);
+
 describe('MachineService', () => {
+  let httpTestingController: HttpTestingController;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [MachineService, { provide: XHRBackend, useClass: MockBackend }],
+      providers: [MachineService],
       imports: [HttpClientTestingModule]
     });
+    httpTestingController = TestBed.get(HttpTestingController);
+  });
+
+  afterEach(() => {
+    // After every test, assert that there are no more pending requests.
+    httpTestingController.verify();
   });
 
   it('should be created', inject([MachineService], (service: MachineService) => {
     expect(service).toBeTruthy();
   }));
 
-  it('should get all machines', inject([MachineService, XHRBackend], (MachineService, mockBackend) => {
+  it('should get all machines', inject([MachineService], (MachineService) => {
     const mockResponse = {
       data: []
     };
 
     mockResponse.data.concat(lasercutters, millingMachines, printers, otherMachines);
 
-    mockBackend.connections.subscribe((connection) => {
-      connection.mockRespond(new Response(new ResponseOptions({
-        body: JSON.stringify(mockResponse)
-      })));
-    });
-
     MachineService.getAllMachines().then((machines) => {
       expect(machines).toBeTruthy();
       expect(machines.length).toEqual(8);
-    });
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machine' + '/');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(machines);
   }));
 
-  it('should get all printers', inject([MachineService, XHRBackend], (MachineService, mockBackend) => {
-    const mockResponse = {
-      data: []
-    };
-
-    mockResponse.data.concat(printers);
-
-    mockBackend.connections.subscribe((connection) => {
-      connection.mockRespond(new Response(new ResponseOptions({
-        body: JSON.stringify(mockResponse)
-      })));
-    });
-
+  it('should get all printers', inject([MachineService], (MachineService) => {
     MachineService.getAllPrinters().then((printers) => {
       expect(printers).toBeTruthy();
       expect(printers.length).toEqual(2);
@@ -180,22 +172,15 @@ describe('MachineService', () => {
       expect(printers[1].id).toEqual('5b5368ad9f08d5319db21feb');
       expect(printers[1].deviceName).toEqual('MakerBot');
       expect(printers[1].manufacturer).toEqual('Replicator');
-    });
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machine' + '/printer');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(printers);
   }));
 
-  it('should get all lasercutters', inject([MachineService, XHRBackend], (MachineService, mockBackend) => {
-    const mockResponse = {
-      data: []
-    };
-
-    mockResponse.data.concat(lasercutters);
-
-    mockBackend.connections.subscribe((connection) => {
-      connection.mockRespond(new Response(new ResponseOptions({
-        body: JSON.stringify(mockResponse)
-      })));
-    });
-
+  it('should get all lasercutters', inject([MachineService], (MachineService) => {
     MachineService.getAllLasercutters().then((lasercutters) => {
       expect(lasercutters).toBeTruthy();
       expect(lasercutters.length).toEqual(2);
@@ -207,22 +192,15 @@ describe('MachineService', () => {
       expect(lasercutters[1].deviceName).toEqual('MARS-130');
       expect(lasercutters[1].manufacturer).toEqual('Thunderlaser');
       expect(lasercutters[1].type).toEqual('lasercutter');
-    });
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machine' + '/lasercutter');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(lasercutters);
   }));
 
-  it('should get all milling machines', inject([MachineService, XHRBackend], (MachineService, mockBackend) => {
-    const mockResponse = {
-      data: []
-    };
-
-    mockResponse.data.concat(millingMachines);
-
-    mockBackend.connections.subscribe((connection) => {
-      connection.mockRespond(new Response(new ResponseOptions({
-        body: JSON.stringify(mockResponse)
-      })));
-    });
-
+  it('should get all milling machines', inject([MachineService], (MachineService) => {
     MachineService.getAllMillingMachines().then((millingMachines) => {
       expect(millingMachines).toBeTruthy();
       expect(millingMachines.length).toEqual(2);
@@ -234,22 +212,15 @@ describe('MachineService', () => {
       expect(millingMachines[1].deviceName).toEqual('PRSALPHA');
       expect(millingMachines[1].manufacturer).toEqual('SHOPBOT');
       expect(millingMachines[1].type).toEqual('millingMachine');
-    });
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machine' + '/millingMachine');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(millingMachines);
   }));
 
-  it('should get all other machines', inject([MachineService, XHRBackend], (MachineService, mockBackend) => {
-    const mockResponse = {
-      data: []
-    };
-
-    mockResponse.data.concat(otherMachines);
-
-    mockBackend.connections.subscribe((connection) => {
-      connection.mockRespond(new Response(new ResponseOptions({
-        body: JSON.stringify(mockResponse)
-      })));
-    });
-
+  it('should get all other machines', inject([MachineService], (MachineService) => {
     MachineService.getAllOtherMachines().then((otherMachines) => {
       expect(otherMachines).toBeTruthy();
       expect(otherMachines.length).toEqual(2);
@@ -261,6 +232,11 @@ describe('MachineService', () => {
       expect(otherMachines[1].deviceName).toEqual('T-962A');
       expect(otherMachines[1].manufacturer).toEqual('puhui');
       expect(otherMachines[1].type).toEqual('otherMachine');
-    });
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machine' + '/otherMachine');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(otherMachines);
   }));
 });
