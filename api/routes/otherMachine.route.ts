@@ -11,4 +11,13 @@ router.route('/').get((req, res) => {
   });
 });
 
+router.route('/create').post((req, res) => {
+  otherMachineCtrl.create(req.body).then((otherMachine) => {
+    res.json({ otherMachine });
+  }).catch((err) => {
+    res.status(400).send({ err: 'Malformed request!', stack: err });
+  });
+});
+
+
 export default router;

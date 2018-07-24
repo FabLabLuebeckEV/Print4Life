@@ -58,8 +58,8 @@ import machineService from '../services/machine.service';
     ]
 }
  */
-function getAll() {
-    return machineService.getMachineType('lasercutter');
+function getAll () {
+  return machineService.getMachineType('lasercutter');
 }
 
 /**
@@ -153,8 +153,8 @@ function getAll() {
  *
  *
  */
-function create(params) {
-    return machineService.create('lasercutter', params);
+function create (params) {
+  return machineService.create('lasercutter', params);
 }
 
 export default { getAll, create };

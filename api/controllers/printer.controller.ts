@@ -65,8 +65,8 @@ import machineService from '../services/machine.service';
       ]
     }
  */
-function getAll() {
-    return machineService.getMachineType('printer');
+function getAll () {
+  return machineService.getMachineType('printer');
 }
 
 /**
@@ -174,8 +174,8 @@ function getAll() {
  *
  *
  */
-function create(params) {
-    return machineService.create('printer', params);
+function create (params) {
+  return machineService.create('printer', params);
 }
 
 // function getPrinterById (id) {

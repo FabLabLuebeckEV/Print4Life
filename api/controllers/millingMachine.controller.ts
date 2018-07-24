@@ -1,7 +1,7 @@
 import machineService from '../services/machine.service';
 
 /**
- * @api {get} /api/v1/machine/millingMachine Get milling machines
+ * @api {get} /api/v1/machines/millingMachines Get milling machines
  * @apiName GetMillingMachines
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines
@@ -45,12 +45,12 @@ import machineService from '../services/machine.service';
     ]
 }
  */
-function getAll() {
-    return machineService.getMachineType('millingMachine');
+function getAll () {
+  return machineService.getMachineType('millingMachine');
 }
 
 /**
- * @api {post} /api/v1/machines/lasercutters/create Create new Milling Machine
+ * @api {post} /api/v1/machines/millingMachines/create Create new Milling Machine
  * @apiName CreateNewMillingMachine
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines
@@ -134,8 +134,8 @@ function getAll() {
  *
  *
  */
-function create(params) {
-    return machineService.create('millingMachine', params);
+function create (params) {
+  return machineService.create('millingMachine', params);
 }
 
 export default { getAll, create };
