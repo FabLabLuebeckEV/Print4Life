@@ -69,17 +69,17 @@ function getAll() {
  * @apiGroup Lasercutters
  *
  *
- * @apiParam {String} {fablabId} id of the corresponding fablab (required)
- * @apiParam {String} {deviceName} name of the device (required)
- * @apiParam {String} {manufacturer} name of the manufacturer of the device
- * @apiParam {Array} {laserTypes} array of laserType objects
- * @apiParam {Number} {workspaceX} space of axis x
- * @apiParam {Number} {workspaceY} space volume of axis y
- * @apiParam {Number} {workspaceY} space volume of axis z
- * @apiParam {Number} {maxResoultion} resolution of lasercutter
- * @apiParam {String} {laserPower} power of the laser
- * @apiParam {String} {pictureUrl} url to a picture of this device
- * @apiParam {String} {comment} a comment about the device
+ * @apiParam {String} fablabId id of the corresponding fablab (required)
+ * @apiParam {String} deviceName name of the device (required)
+ * @apiParam {String} manufacturer name of the manufacturer of the device
+ * @apiParam {Array} laserTypes array of laserType objects
+ * @apiParam {Number} workspaceX space of axis x
+ * @apiParam {Number} workspaceY space volume of axis y
+ * @apiParam {Number} workspaceY space volume of axis z
+ * @apiParam {Number} maxResoultion resolution of lasercutter
+ * @apiParam {String} laserPower power of the laser
+ * @apiParam {String} pictureUrl url to a picture of this device
+ * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
 {

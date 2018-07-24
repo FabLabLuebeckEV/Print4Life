@@ -66,7 +66,7 @@ import machineService from '../services/machine.service';
     }
  */
 function getAll() {
-  return machineService.getMachineType('printer');
+    return machineService.getMachineType('printer');
 }
 
 /**
@@ -76,21 +76,21 @@ function getAll() {
  * @apiGroup Printers
  *
  *
- * @apiParam {String} {fablabId} id of the corresponding fablab (required)
- * @apiParam {String} {deviceName} name of the device (required)
- * @apiParam {String} {manufacturer} name of the manufacturer of the device
- * @apiParam {Array} {materials} array of material objects
- * @apiParam {String} {camSoftware} name of the cam software
- * @apiParam {Number} {printVolumeX} print volume of axis x
- * @apiParam {Number} {printVolumeY} print volume of axis y
- * @apiParam {Number} {printVolumeZ} print volume of axis z
- * @apiParam {Number} {printResolutionX} resolution of the print at axis x
- * @apiParam {Number} {printResolutionY} resolution of the print at axis y
- * @apiParam {Number} {printResolutionZ} resolution of the print at axis z
- * @apiParam {Number} {nozzleDiameter} the nozzle diameter
- * @apiParam {Number} {numberOfExtruders} the number of extruders
- * @apiParam {String} {pictureUrl} url to a picture of this device
- * @apiParam {String} {comment} a comment about the device
+ * @apiParam {String} fablabId id of the corresponding fablab (required)
+ * @apiParam {String} deviceName name of the device (required)
+ * @apiParam {String} manufacturer name of the manufacturer of the device
+ * @apiParam {Array} materials array of material objects
+ * @apiParam {String} camSoftware name of the cam software
+ * @apiParam {Number} printVolumeX print volume of axis x
+ * @apiParam {Number} printVolumeY print volume of axis y
+ * @apiParam {Number} printVolumeZ print volume of axis z
+ * @apiParam {Number} printResolutionX resolution of the print at axis x
+ * @apiParam {Number} printResolutionY resolution of the print at axis y
+ * @apiParam {Number} printResolutionZ resolution of the print at axis z
+ * @apiParam {Number} nozzleDiameter the nozzle diameter
+ * @apiParam {Number} numberOfExtruders the number of extruders
+ * @apiParam {String} pictureUrl url to a picture of this device
+ * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
  {
@@ -175,7 +175,7 @@ function getAll() {
  *
  */
 function create(params) {
-  return machineService.create('printer', params);
+    return machineService.create('printer', params);
 }
 
 // function getPrinterById (id) {

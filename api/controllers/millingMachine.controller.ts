@@ -56,17 +56,17 @@ function getAll() {
  * @apiGroup MillingMachines
  *
  *
- * @apiParam {String} {fablabId} id of the corresponding fablab (required)
- * @apiParam {String} {deviceName} name of the device (required)
- * @apiParam {String} {manufacturer} name of the manufacturer of the device
- * @apiParam {String} {camSoftware} name of the camera software
- * @apiParam {Number} {workspaceX} space of axis x
- * @apiParam {Number} {workspaceY} space volume of axis y
- * @apiParam {Number} {workspaceY} space volume of axis z
- * @apiParam {Number} {movementSpeed} speed of the milling machine
- * @apiParam {String} {stepSize} size of the steps
- * @apiParam {String} {pictureUrl} url to a picture of this device
- * @apiParam {String} {comment} a comment about the device
+ * @apiParam {String} fablabId id of the corresponding fablab (required)
+ * @apiParam {String} deviceName name of the device (required)
+ * @apiParam {String} manufacturer name of the manufacturer of the device
+ * @apiParam {String} camSoftware name of the camera software
+ * @apiParam {Number} workspaceX space of axis x
+ * @apiParam {Number} workspaceY space volume of axis y
+ * @apiParam {Number} workspaceY space volume of axis z
+ * @apiParam {Number} movementSpeed speed of the milling machine
+ * @apiParam {String} stepSize size of the steps
+ * @apiParam {String} pictureUrl url to a picture of this device
+ * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
 {
