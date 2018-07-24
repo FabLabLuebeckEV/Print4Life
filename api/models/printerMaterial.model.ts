@@ -9,12 +9,8 @@ const attributes = {
     type: String,
     required: true
   },
-  // old db fields
-  id: {
-    type: Number
-  }
 };
 
-const printerMaterialSchema = mongoose.Schema(attributes);
+const printerMaterialSchema = mongoose.Schema(attributes, { _id: false });
 
 export default printerMaterialSchema;

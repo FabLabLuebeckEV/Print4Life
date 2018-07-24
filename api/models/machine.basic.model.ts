@@ -13,13 +13,6 @@ const machineFields = {
   },
   manufacturer: {
     type: String
-  },
-  // old db fields
-  id: {
-    type: Number
-  },
-  fid: {
-    type: Number
   }
 };
 

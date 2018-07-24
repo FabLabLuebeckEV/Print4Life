@@ -1,9 +1,6 @@
 import * as mongoose from 'mongoose';
 
 const attributes = {
-  fid: {
-    type: String
-  },
   name: {
     type: String,
     required: true
