@@ -51,12 +51,12 @@ import machineService from '../services/machine.service';
       ]
     }
  */
-function getAll() {
-    return machineService.getMachineType('Printer');
+function getAll () {
+  return machineService.getMachineType('Printer');
 }
 
-function create(params) {
-    return machineService.create('Printer', params);
+function create (params) {
+  return machineService.create('Printer', params);
 }
 
 // function getPrinterById (id) {

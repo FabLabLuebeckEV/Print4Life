@@ -58,8 +58,8 @@ import machineService from '../services/machine.service';
     ]
 }
  */
-function getAll() {
-    return machineService.getMachineType('Lasercutter');
+function getAll () {
+  return machineService.getMachineType('Lasercutter');
 }
 
 export default { getAll };
