@@ -11,4 +11,12 @@ router.route('/').get((req, res) => {
   });
 });
 
+router.route('/create').post((req, res) => {
+  millingMachineCtrl.create(req.body).then((millingMachine) => {
+    res.json({ millingMachine });
+  }).catch((err) => {
+    res.status(400).send({ err: 'Malformed request!', stack: err });
+  });
+});
+
 export default router;

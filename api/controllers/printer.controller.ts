@@ -65,7 +65,7 @@ import machineService from '../services/machine.service';
       ]
     }
  */
-function getAll () {
+function getAll() {
   return machineService.getMachineType('printer');
 }
 
@@ -114,7 +114,7 @@ function getAll () {
    "comment": "Create Test"
 }
  *
- * @apiSuccess {Object} fablab the fablab object
+ * @apiSuccess {Object} printer the printer object
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
@@ -174,7 +174,7 @@ function getAll () {
  *
  *
  */
-function create (params) {
+function create(params) {
   return machineService.create('printer', params);
 }
 

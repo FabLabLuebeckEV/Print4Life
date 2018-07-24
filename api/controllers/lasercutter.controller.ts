@@ -58,8 +58,8 @@ import machineService from '../services/machine.service';
     ]
 }
  */
-function getAll () {
-  return machineService.getMachineType('lasercutter');
+function getAll() {
+    return machineService.getMachineType('lasercutter');
 }
 
 /**
@@ -72,7 +72,7 @@ function getAll () {
  * @apiParam {String} {fablabId} id of the corresponding fablab (required)
  * @apiParam {String} {deviceName} name of the device (required)
  * @apiParam {String} {manufacturer} name of the manufacturer of the device
- * @apiParam {Array} {materials} array of material objects
+ * @apiParam {Array} {laserTypes} array of laserType objects
  * @apiParam {Number} {workspaceX} space of axis x
  * @apiParam {Number} {workspaceY} space volume of axis y
  * @apiParam {Number} {workspaceY} space volume of axis z
@@ -98,7 +98,7 @@ function getAll () {
   "comment": "Create Test"
 }
  *
- * @apiSuccess {Object} fablab the fablab object
+ * @apiSuccess {Object} lasercutter the lasercutter object
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
@@ -145,16 +145,16 @@ function getAll () {
                 "$isValidatorError": true
             }
         },
-        "_message": "Printer validation failed",
-        "message": "Printer validation failed: fablabId: Path `fablabId` is required.",
+        "_message": "Lasercutter validation failed",
+        "message": "Lasercutter validation failed: fablabId: Path `fablabId` is required.",
         "name": "ValidationError"
     }
 }
  *
  *
  */
-function create (params) {
-  return machineService.create('lasercutter', params);
+function create(params) {
+    return machineService.create('lasercutter', params);
 }
 
 export default { getAll, create };

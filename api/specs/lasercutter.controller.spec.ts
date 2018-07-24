@@ -33,16 +33,17 @@ describe('Lasercutter Controller', () => {
   });
 
   it('create lasercutter (success)', (done) => {
-    request.post(`${endpoint}machines/lasercutters/create`, { body: testLasercutter, json: true }, (error, response) => {
-      const lasercutter = response.body.lasercutter;
-      expect(response.statusCode).toEqual(200);
-      expect(lasercutter).toBeDefined();
-      expect(lasercutter.deviceName).toEqual(testLasercutter.deviceName);
-      expect(lasercutter.type).toEqual('lasercutter');
-      expect(lasercutter.manufacturer).toEqual(testLasercutter.manufacturer);
-      expect(lasercutter.fablabId).toEqual(testLasercutter.fablabId);
-      done();
-    });
+    request.post(`${endpoint}machines/lasercutters/create`,
+      { body: testLasercutter, json: true }, (error, response) => {
+        const lasercutter = response.body.lasercutter;
+        expect(response.statusCode).toEqual(200);
+        expect(lasercutter).toBeDefined();
+        expect(lasercutter.deviceName).toEqual(testLasercutter.deviceName);
+        expect(lasercutter.type).toEqual('lasercutter');
+        expect(lasercutter.manufacturer).toEqual(testLasercutter.manufacturer);
+        expect(lasercutter.fablabId).toEqual(testLasercutter.fablabId);
+        done();
+      });
   });
 
   it('create lasercutter (missing fablabId)', (done) => {
