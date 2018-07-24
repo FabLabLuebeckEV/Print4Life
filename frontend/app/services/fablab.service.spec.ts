@@ -31,7 +31,6 @@ describe('FablabService', () => {
   it('should get a fablab', inject([FablabService], (FablabService) => {
     const mockResponse = [{
       'id': 1,
-      'fid': '1',
       'name': 'test',
       'phone': '1234',
       'mail': 'test@test.de',
@@ -40,7 +39,6 @@ describe('FablabService', () => {
 
     FablabService.getFablab(1).then((fablab) => {
       expect(fablab).toBeTruthy();
-      expect(fablab.fid).toEqual('1');
       expect(fablab.name).toEqual('test');
       expect(fablab.phone).toEqual('1234');
       expect(fablab.mail).toEqual('test@test.de');
