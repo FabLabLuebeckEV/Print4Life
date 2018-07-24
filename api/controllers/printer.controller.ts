@@ -4,20 +4,26 @@ import machineService from '../services/machine.service';
  * @api {get} /api/v1/machine/printer Get printers
  * @apiName GetPrinters
  * @apiVersion 1.0.0
- * @apiGroup Machines
+ * @apiGroup Printers
  *
  * @apiSuccess {Array} printers an array of printer objects
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
-*    {
-      "printers": [
+{
+    "printers": [
         {
-            "_id": "5b453dbe5cf4a9574849e96e",
-            "id": 3,
-            "fid": 2,
+            "_id": "5b55f7bf3fe0c8b01713b3fa",
+            "fablabId": "5b453ddb5cf4a9574849e98b",
+            "type": "printer",
             "deviceName": "Ultimaker 2+",
             "manufacturer": "Ultimaker",
+            "materials": [
+                {
+                    "material": "PLA",
+                    "type": "printerMaterial"
+                }
+            ],
             "camSoftware": "Cura",
             "printVolumeX": 210,
             "printVolumeY": 210,
@@ -28,14 +34,21 @@ import machineService from '../services/machine.service';
             "nozzleDiameter": 0.4,
             "numberOfExtruders": 1,
             "pictureURL": "upload/59e5da27a317a.jpg",
-            "comment": ""
+            "comment": "",
+            "__v": 0
         },
         {
-            "_id": "5b453dbe5cf4a9574849e96f",
-            "id": 4,
-            "fid": 2,
+            "_id": "5b55f7bf3fe0c8b01713b3fc",
+            "fablabId": "5b453ddb5cf4a9574849e98b",
+            "type": "printer",
             "deviceName": "Zprinter 450",
             "manufacturer": "Zcorp",
+            "materials": [
+                {
+                    "material": "Plaster",
+                    "type": "printerMaterial"
+                }
+            ],
             "camSoftware": "",
             "printVolumeX": 200,
             "printVolumeY": 200,
@@ -46,17 +59,124 @@ import machineService from '../services/machine.service';
             "nozzleDiameter": null,
             "numberOfExtruders": 0,
             "pictureURL": "upload/59e5dc87040cc.jpg",
-            "comment": "Full Color printer"
+            "comment": "Full Color printer",
+            "__v": 0
         }
       ]
     }
  */
 function getAll () {
-  return machineService.getMachineType('Printer');
+  return machineService.getMachineType('printer');
 }
 
+/**
+ * @api {post} /api/v1/machine/printer/create Create new Printer
+ * @apiName CreateNewPrinter
+ * @apiVersion 1.0.0
+ * @apiGroup Printers
+ *
+ *
+ * @apiParam {String} {fablabId} id of the corresponding fablab (required)
+ * @apiParam {String} {deviceName} name of the device (required)
+ * @apiParam {String} {manufacturer} name of the manufacturer of the device
+ * @apiParam {Array} {materials} array of material objects
+ * @apiParam {String} {camSoftware} name of the cam software
+ * @apiParam {Number} {printVolumeX} print volume of axis x
+ * @apiParam {Number} {printVolumeY} print volume of axis y
+ * @apiParam {Number} {printVolumeZ} print volume of axis z
+ * @apiParam {Number} {printResolutionX} resolution of the print at axis x
+ * @apiParam {Number} {printResolutionY} resolution of the print at axis y
+ * @apiParam {Number} {printResolutionZ} resolution of the print at axis z
+ * @apiParam {Number} {nozzleDiameter} the nozzle diameter
+ * @apiParam {Number} {numberOfExtruders} the number of extruders
+ * @apiParam {String} {pictureUrl} url to a picture of this device
+ * @apiParam {String} {comment} a comment about the device
+ * @apiParamExample {json} Request-Example:
+ *
+ {
+   "fablabId": "5b453ddb5cf4a9574849e98a",
+   "deviceName":"Test Printer" ,
+   "type": "printer",
+   "manufacturer": "Test Manufacturer" ,
+   "materials": [{
+     "material": "PLA",
+     "type": "printerMaterial"
+   }],
+   "camSoftware": "Test Software",
+   "printVolumeX": 2,
+   "printVolumeY": 2,
+   "printVolumeZ": 2,
+   "printResolutionX": 2,
+   "printResolutionY": 2,
+   "printResolutionZ": 2,
+   "nozzleDiameter": 2,
+   "numberOfExtruders": 2,
+   "pictureURL": "",
+   "comment": "Create Test"
+}
+ *
+ * @apiSuccess {Object} fablab the fablab object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "printer": {
+        "_id": "5b571447d748f04e8a0581ab",
+        "fablabId": "5b453ddb5cf4a9574849e98a",
+        "deviceName": "Test Printer",
+        "type": "printer",
+        "manufacturer": "Test Manufacturer",
+        "materials": [
+            {
+                "material": "PLA",
+                "type": "printerMaterial"
+            }
+        ],
+        "camSoftware": "Test Software",
+        "printVolumeX": 2,
+        "printVolumeY": 2,
+        "printVolumeZ": 2,
+        "printResolutionX": 2,
+        "printResolutionY": 2,
+        "printResolutionZ": 2,
+        "nozzleDiameter": 2,
+        "numberOfExtruders": 2,
+        "pictureURL": "",
+        "comment": "Create Test",
+        "__v": 0
+    }
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "err": "Malformed request!",
+    "stack": {
+        "errors": {
+            "fablabId": {
+                "message": "Path `fablabId` is required.",
+                "name": "ValidatorError",
+                "properties": {
+                    "message": "Path `fablabId` is required.",
+                    "type": "required",
+                    "path": "fablabId",
+                    "value": ""
+                },
+                "kind": "required",
+                "path": "fablabId",
+                "value": "",
+                "$isValidatorError": true
+            }
+        },
+        "_message": "Printer validation failed",
+        "message": "Printer validation failed: fablabId: Path `fablabId` is required.",
+        "name": "ValidationError"
+    }
+}
+ *
+ *
+ */
 function create (params) {
-  return machineService.create('Printer', params);
+  return machineService.create('printer', params);
 }
 
 // function getPrinterById (id) {

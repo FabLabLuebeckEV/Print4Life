@@ -36,7 +36,7 @@ import machineService from '../services/machine.service';
 }
  */
 function getAll () {
-  return machineService.getMachineType('OtherMachine');
+  return machineService.getMachineType('otherMachine');
 }
 
 export default { getAll };

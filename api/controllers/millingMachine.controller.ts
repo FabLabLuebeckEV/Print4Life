@@ -46,7 +46,7 @@ import machineService from '../services/machine.service';
 }
  */
 function getAll () {
-  return machineService.getMachineType('MillingMachine');
+  return machineService.getMachineType('millingMachine');
 }
 
 export default { getAll };

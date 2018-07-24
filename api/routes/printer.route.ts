@@ -14,8 +14,8 @@ router.route('/').get((req, res) => {
 router.route('/create').post((req, res) => {
   printerCtrl.create(req.body).then((printer) => {
     res.json({ printer });
-  }).catch(() => {
-    res.status(400).send({ err: 'Malformed request!' });
+  }).catch((err) => {
+    res.status(400).send({ err: 'Malformed request!', stack: err });
   });
 });
 

@@ -20,19 +20,19 @@ function getMachineType (type) {
   const promises = [];
   let obj;
   switch (type) {
-    case 'Printer':
+    case 'printer':
       obj = [];
       promises.push(Printer.find());
       break;
-    case 'Lasercutter':
+    case 'lasercutter':
       obj = [];
       promises.push(LaserCutter.find());
       break;
-    case 'OtherMachine':
+    case 'otherMachine':
       obj = [];
       promises.push(Other.find());
       break;
-    case 'MillingMachine':
+    case 'millingMachine':
       obj = [];
       promises.push(MillingMachine.find());
       break;
@@ -71,14 +71,17 @@ function getMachineType (type) {
 }
 
 function create (type, params) {
+  if (!params.type) {
+    params.type = type;
+  }
   switch (type) {
-    case 'Printer':
+    case 'printer':
       return (new Printer(params)).save();
-    case 'Lasercutter':
+    case 'lasercutter':
       return (new LaserCutter(params)).save();
-    case 'OtherMachine':
+    case 'otherMachine':
       return (new Other(params)).save();
-    case 'MillingMachine':
+    case 'millingMachine':
       return (new MillingMachine(params)).save();
     default:
       return Promise.reject('Machine Type not supported!');
