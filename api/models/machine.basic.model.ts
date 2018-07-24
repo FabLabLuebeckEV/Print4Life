@@ -19,7 +19,7 @@ const machineFields = {
   }
 };
 
-function getFields() {
+function getFields () {
   const object = {};
   Object.keys(machineFields).forEach((prop) => {
     object[prop] = machineFields[prop];

@@ -45,7 +45,7 @@ describe('FablabService', () => {
       expect(fablab.password).toEqual('$2y$10$sDebOY1Kx8LZNczsF3XjoOqdZHRJK0J80hc7SdEZ19hKDFmkx0owG');
     }, fail);
 
-    const req = httpTestingController.expectOne(config.backendUrl + '/fablab' + '/1');
+    const req = httpTestingController.expectOne(config.backendUrl + '/fablabs' + '/1');
     expect(req.request.method).toEqual('GET');
 
     req.flush(mockResponse[0]);

@@ -1,7 +1,7 @@
 import machineService from '../services/machine.service';
 
 /**
- * @api {get} /api/v1/machine/printer Get printers
+ * @api {get} /api/v1/machines/printers Get printers
  * @apiName GetPrinters
  * @apiVersion 1.0.0
  * @apiGroup Printers
@@ -70,7 +70,7 @@ function getAll () {
 }
 
 /**
- * @api {post} /api/v1/machine/printer/create Create new Printer
+ * @api {post} /api/v1/machines/printers/create Create new Printer
  * @apiName CreateNewPrinter
  * @apiVersion 1.0.0
  * @apiGroup Printers
@@ -96,7 +96,6 @@ function getAll () {
  {
    "fablabId": "5b453ddb5cf4a9574849e98a",
    "deviceName":"Test Printer" ,
-   "type": "printer",
    "manufacturer": "Test Manufacturer" ,
    "materials": [{
      "material": "PLA",

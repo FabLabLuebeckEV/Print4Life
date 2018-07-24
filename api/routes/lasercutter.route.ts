@@ -11,4 +11,12 @@ router.route('/').get((req, res) => {
   });
 });
 
+router.route('/create').post((req, res) => {
+  lasercutterCtrl.create(req.body).then((lasercutter) => {
+    res.json({ lasercutter });
+  }).catch((err) => {
+    res.status(400).send({ err: 'Malformed request!', stack: err });
+  });
+});
+
 export default router;

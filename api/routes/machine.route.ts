@@ -15,9 +15,9 @@ router.route('/').get((req, res) => {
   });
 });
 
-router.use('/printer/', printerRoute);
-router.use('/millingMachine/', millingMachineRoute);
-router.use('/otherMachine/', otherMachineRoute);
-router.use('/lasercutter/', lasercutterRoute);
+router.use('/printers/', printerRoute);
+router.use('/millingMachines/', millingMachineRoute);
+router.use('/otherMachines/', otherMachineRoute);
+router.use('/lasercutters/', lasercutterRoute);
 
 export default router;

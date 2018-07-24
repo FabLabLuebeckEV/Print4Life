@@ -6,7 +6,7 @@ const endpoint = configs.configArr.prod.baseUrlBackend;
 
 describe('Milling Machine Controller', () => {
   it('gets milling machines', (done) => {
-    request.get(`${endpoint}machine/millingMachine`, (error, response) => {
+    request.get(`${endpoint}machines/millingMachines`, (error, response) => {
       const millingMachines = JSON.parse(response.body).millingMachines;
       expect(response.statusCode).toEqual(200);
       expect(millingMachines).toBeDefined();

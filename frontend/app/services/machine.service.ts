@@ -10,22 +10,22 @@ export class MachineService {
   constructor(private http: HttpClient) { }
 
   public getAllPrinters(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machine/printer').toPromise();
+    return this.http.get(config.backendUrl + '/machines/printers').toPromise();
   }
 
   public getAllLasercutters(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machine/lasercutter').toPromise();
+    return this.http.get(config.backendUrl + '/machines/lasercutters').toPromise();
   }
 
   public getAllMillingMachines(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machine/millingMachine').toPromise();
+    return this.http.get(config.backendUrl + '/machines/millingMachines').toPromise();
   }
 
   public getAllOtherMachines(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machine/otherMachine').toPromise();
+    return this.http.get(config.backendUrl + '/machines/otherMachines').toPromise();
   }
 
   public getAllMachines(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machine/').toPromise();
+    return this.http.get(config.backendUrl + '/machines/').toPromise();
   }
 }

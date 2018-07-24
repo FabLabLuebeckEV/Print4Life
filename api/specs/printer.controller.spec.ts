@@ -27,7 +27,7 @@ const testPrinter = {
 
 describe('Printer Controller', () => {
   it('gets printers', (done) => {
-    request.get(`${endpoint}machine/printer`, (error, response) => {
+    request.get(`${endpoint}machines/printers`, (error, response) => {
       const printers = JSON.parse(response.body).printers;
       expect(response.statusCode).toEqual(200);
       expect(printers).toBeDefined();
@@ -38,7 +38,7 @@ describe('Printer Controller', () => {
   });
 
   it('create printer (success)', (done) => {
-    request.post(`${endpoint}machine/printer/create`, { body: testPrinter, json: true }, (error, response) => {
+    request.post(`${endpoint}machines/printers/create`, { body: testPrinter, json: true }, (error, response) => {
       const printer = response.body.printer;
       expect(response.statusCode).toEqual(200);
       expect(printer).toBeDefined();
@@ -53,7 +53,7 @@ describe('Printer Controller', () => {
   it('create printer (missing fablabId)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     delete testBody.fablabId;
-    request.post(`${endpoint}machine/printer/create`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}machines/printers/create`, { body: testBody, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -62,7 +62,7 @@ describe('Printer Controller', () => {
   it('create printer (fablabId too short)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     testBody.fablabId = 'tooShortForMongoDB23';
-    request.post(`${endpoint}machine/printer/create`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}machines/printers/create`, { body: testBody, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -71,7 +71,7 @@ describe('Printer Controller', () => {
   it('create printer (fablabId too long)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     testBody.fablabId = 'tooLongForMongoDBsObjectId1234567890';
-    request.post(`${endpoint}machine/printer/create`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}machines/printers/create`, { body: testBody, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });

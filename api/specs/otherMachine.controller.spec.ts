@@ -6,7 +6,7 @@ const endpoint = configs.configArr.prod.baseUrlBackend;
 
 describe('Other Machine Controller', () => {
   it('gets other machines', (done) => {
-    request.get(`${endpoint}machine/otherMachine`, (error, response) => {
+    request.get(`${endpoint}machines/otherMachines`, (error, response) => {
       const otherMachines = JSON.parse(response.body).otherMachines;
       expect(response.statusCode).toEqual(200);
       expect(otherMachines).toBeDefined();
