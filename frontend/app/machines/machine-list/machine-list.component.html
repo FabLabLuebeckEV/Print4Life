@@ -1,3 +1,9 @@
 <div class="row">
+    <div class="col-md-3">
+        <button type="button" class="btn btn-success spacing" routerLink="./new">New Machine</button>
+    </div>
+</div>
+<router-outlet></router-outlet>
+<div *ngIf="listView" class="row">
     <app-table [items]="machines"></app-table>
 </div>

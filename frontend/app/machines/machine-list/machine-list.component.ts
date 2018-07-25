@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { TableItem } from '../../components/table/table.component';
 import { faWrench, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-machine-list',
@@ -13,12 +15,29 @@ export class MachineListComponent implements OnInit {
 
   machines: Array<Array<Object>> = [];
   objectKeys: Array<String>;
+  listView: Boolean;
 
-  constructor(private machineService: MachineService, private fablabService: FablabService) {
+  constructor(private machineService: MachineService,
+    private fablabService: FablabService, private router: Router,
+    private location: Location) {
+    router.events.subscribe(() => {
+      const route = location.path();
+      if (route === '/machines') {
+        this.listView = true;
+      } else {
+        this.listView = false;
+      }
+    });
   }
 
   ngOnInit() {
-    this.init();
+    const route = this.router.url;
+    if (route === '/machines') {
+      this.listView = true;
+      this.init();
+    } else {
+      this.listView = false;
+    }
   }
 
   async init() {
