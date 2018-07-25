@@ -1,6 +1,7 @@
 import 'jasmine';
 import * as request from 'request';
 import * as configs from '../config';
+const uuidv4 = require('uuid/v4');
 
 import logger from '../logger';
 
@@ -31,9 +32,8 @@ const testOrder = {
   token: '42'
 };
 
-let orderResult;
-
 describe('Order Controller', () => {
+  testOrder.token = uuidv4();
   it('create order', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
@@ -41,7 +41,7 @@ describe('Order Controller', () => {
       json: true,
       body: testOrder
     }, (error, response) => {
-      orderResult = response.body.order;
+      const orderResult = response.body.order;
 
       expect(response.statusCode).toEqual(200);
       expect(orderResult).toBeDefined();
@@ -55,25 +55,7 @@ describe('Order Controller', () => {
 });
 
 describe('Order Controller', () => {
-  it('get all orders', (done) => {
-    request({
-      uri: `${endpoint}orders/`,
-      method: 'GET',
-      json: true,
-      body: {}
-    }, (error, response) => {
-      const orders = response.body.orders;
-
-      expect(response.statusCode).toEqual(200);
-      expect(orders).toBeDefined();
-      expect(orders).toBeDefined();
-      expect(orders.length).toBeGreaterThan(-1);
-      done();
-    });
-  });
-});
-
-describe('Order Controller', () => {
+  testOrder.token = uuidv4();
   it('get order by id', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
@@ -99,6 +81,7 @@ describe('Order Controller', () => {
 });
 
 describe('Order Controller', () => {
+  testOrder.token = uuidv4();
   it('update order', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
@@ -130,6 +113,7 @@ describe('Order Controller', () => {
 });
 
 describe('Order Controller', () => {
+  testOrder.token = uuidv4();
   it('delete order', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
