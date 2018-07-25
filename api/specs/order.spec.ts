@@ -1,9 +1,8 @@
 import 'jasmine';
 import * as request from 'request';
+import * as uuidv4 from 'uuid/v4';
 import * as configs from '../config';
-const uuidv4 = require('uuid/v4');
 
-import logger from '../logger';
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
 
@@ -11,7 +10,6 @@ describe('Order Controller', () => {
   it('gets orders', (done) => {
     request.get(`${endpoint}orders/`, (error, response) => {
       const orders = JSON.parse(response.body).orders;
-      logger.log(JSON.stringify(orders, null, 2));
       expect(response.statusCode).toEqual(200);
       expect(orders).toBeDefined();
       expect(orders.length).toBeGreaterThan(-1);
