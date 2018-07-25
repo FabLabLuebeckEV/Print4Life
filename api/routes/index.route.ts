@@ -1,5 +1,6 @@
 import * as express from 'express';
 import machineRoute from './machine.route';
+import orderRoute from './order.route';
 import transformRoute from './transform.route';
 import fablabRoute from './fablab.route';
 
@@ -10,6 +11,7 @@ router.get('/', (req, res) => {
 });
 
 router.use('/machines/', machineRoute);
+router.use('/orders/', orderRoute);
 router.use('/transform/', transformRoute);
 router.use('/fablabs/', fablabRoute);
 

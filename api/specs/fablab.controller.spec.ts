@@ -1,8 +1,8 @@
-import 'jasmine';
-import * as request from 'request';
-import * as configs from '../config';
+// import 'jasmine';
+// import * as request from 'request';
+// import * as configs from '../config';
 
-const endpoint = configs.configArr.prod.baseUrlBackend;
+// const endpoint = configs.configArr.prod.baseUrlBackend;
 
 describe('Fablab Controller', () => {
   it('gets fablab by id (positive number)', (done) => {

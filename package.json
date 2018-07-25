@@ -12,6 +12,7 @@
   "version": "0.0.1",
   "description": "An order-management for the fablab connected to an IBM Watson IoT Platform to connect their machinery to this order and planning process",
   "scripts": {
+    "pre-commit": "npm run build && npm run test-local && npm run apidocs",
     "apidocs": "apidoc -i api -o docs/api",
     "deploy": "npm run build && npm run api-serve",
     "build": "ng build --prod && tsc && npm run lint",
@@ -63,6 +64,7 @@
     "@types/cors": "^2.8.4",
     "@types/express": "^4.16.0",
     "@types/node": "~8.9.4",
+    "@types/uuid": "^3.4.3",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.1.1",
     "concurrently": "^3.6.0",
@@ -72,6 +74,7 @@
     "mongoose": "^5.0.15",
     "nodemon": "^1.17.3",
     "rxjs": "^6.0.0",
+    "uuid": "^3.3.2",
     "winston": "^2.4.2",
     "zone.js": "^0.8.26"
   },
