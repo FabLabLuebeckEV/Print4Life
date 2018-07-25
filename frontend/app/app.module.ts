@@ -12,15 +12,17 @@ import { MachineListComponent } from './machines/machine-list/machine-list.compo
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { appRoutes } from './config/routes';
 import { MachineService } from './services/machine.service';
-import { CardComponent } from './components/card/card.component';
 import { FablabService } from './services/fablab.service';
+import { TableComponent } from './components/table/table.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
     declarations: [
-        AppComponent, DropdownComponent, NavigationComponent, MachineListComponent, DashboardComponent, CardComponent
+        AppComponent, DropdownComponent, NavigationComponent, MachineListComponent, DashboardComponent, TableComponent
     ],
     imports: [
         BrowserModule,
+        FontAwesomeModule,
         HttpClientModule,
         NgbModule.forRoot(),
         RouterModule.forRoot(

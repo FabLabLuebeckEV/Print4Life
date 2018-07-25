@@ -1,0 +1,64 @@
+<table class="table table-striped table-spacing">
+  <thead>
+    <tr>
+      <th *ngFor="let header of headers" scope="col">{{header}}</th>
+      <th *ngIf="button1Active" scope="col"></th>
+      <th *ngIf="button2Active" scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of items">
+      <td *ngFor="let header of headers">{{item.obj[header]}}</td>
+      <td>
+        <!-- external link and no icon -->
+        <a *ngIf="item.button1.label && item.button1.href && !item.button1.routerLink && !item.button1.icon" [href]="item.button1.href">
+          <button *ngIf="item.button1.class" type="button" [class]="item.button1.class">{{item.button1.label}}</button>
+        </a>
+
+        <!-- external link and icon -->
+        <a *ngIf="item.button1.icon && item.button1.href && !item.button1.routerLink" [href]="item.button1.href">
+          <button *ngIf="item.button1.class" type="button" [class]="item.button1.class">
+            <fa-icon *ngIf="item.button1.icon" [icon]="item.button1.icon"></fa-icon>
+          </button>
+        </a>
+
+        <!-- internal link and no icon -->
+        <a *ngIf="item.button1.label && item.button1.routerLink && !item.button1.icon" [routerLink]="item.button1.href" routerLinkActive="true">
+          <button *ngIf="item.button1.href && item.button1.class" type="button" [class]="item.button1.class">{{item.button1.label}}</button>
+        </a>
+
+        <!-- internal link and icon -->
+        <a *ngIf="item.button1.label && item.button1.routerLink && item.button1.icon" [routerLink]="item.button1.href" routerLinkActive="true">
+          <button *ngIf="item.button1.href && item.button1.class" type="button" [class]="item.button1.class">
+            <fa-icon *ngIf="item.button1.icon" [icon]="item.button1.icon"></fa-icon>
+          </button>
+        </a>
+      </td>
+      <td>
+        <!-- external link and no icon -->
+        <a *ngIf="item.button2.label && item.button2.href && !item.button2.routerLink && !item.button2.icon" [href]="item.button2.href">
+          <button *ngIf="item.button2.class" type="button" [class]="item.button2.class">{{item.button2.label}}</button>
+        </a>
+
+        <!-- external link and icon -->
+        <a *ngIf="item.button2.icon && item.button2.href && !item.button2.routerLink" [href]="item.button2.href">
+          <button *ngIf="item.button2.class" type="button" [class]="item.button2.class">
+            <fa-icon *ngIf="item.button2.icon" [icon]="item.button2.icon"></fa-icon>
+          </button>
+        </a>
+
+        <!-- internal link and no icon -->
+        <a *ngIf="item.button2.label && item.button2.routerLink && !item.button2.icon" [routerLink]="item.button2.href" routerLinkActive="true">
+          <button *ngIf="item.button2.href && item.button2.class" type="button" [class]="item.button2.class">{{item.button2.label}}</button>
+        </a>
+
+        <!-- internal link and icon -->
+        <a *ngIf="item.button2.label && item.button2.routerLink && item.button2.icon" [routerLink]="item.button2.href" routerLinkActive="true">
+          <button *ngIf="item.button2.href && item.button2.class" type="button" [class]="item.button2.class">
+            <fa-icon *ngIf="item.button2.icon" [icon]="item.button2.icon"></fa-icon>
+          </button>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>

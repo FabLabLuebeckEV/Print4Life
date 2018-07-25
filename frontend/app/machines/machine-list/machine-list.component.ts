@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
-import { CardItem } from '../../components/card/card.component';
-
+import { TableItem } from '../../components/table/table.component';
+import { faWrench, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-machine-list',
@@ -12,7 +12,6 @@ import { CardItem } from '../../components/card/card.component';
 export class MachineListComponent implements OnInit {
 
   machines: Array<Array<Object>> = [];
-  cardItems: Array<CardItem>;
   objectKeys: Array<String>;
 
   constructor(private machineService: MachineService, private fablabService: FablabService) {
@@ -30,16 +29,25 @@ export class MachineListComponent implements OnInit {
       for (const elem of machines[type]) {
         const resFab = await this.fablabService.getFablab(elem.fablabId);
         const fablab = resFab.fablab;
-        const cardItem = new CardItem();
-        cardItem.id = elem._id;
-        cardItem.title = elem.deviceName;
-        cardItem.subtitle = elem.manufacturer;
-        cardItem.subsubtitle = fablab.name;
-        cardItem.editHref = 'machine/edit/' + cardItem.id;
-        cardItem.deleteHref = 'machine/delete/' + cardItem.id;
-        arr.push(cardItem);
+        const item = new TableItem();
+        item.obj['Device Type'] = elem.type;
+        item.obj['Device Name'] = elem.deviceName;
+        item.obj['Manufacturer'] = elem.manufacturer;
+        item.obj['Fablab'] = fablab.name;
+        item.obj['Description'] = '';
+        item.button1.label = 'Edit';
+        item.button1.href = 'machine/edit/' + elem._id;
+        item.button1.routerLink = true;
+        item.button1.class = 'btn btn-primary spacing';
+        item.button1.icon = faWrench;
+        item.button2.label = 'Delete';
+        item.button2.href = 'machine/delete/' + elem._id;
+        item.button2.routerLink = true;
+        item.button2.class = 'btn btn-danger spacing';
+        item.button2.icon = faTrashAlt;
+        arr.push(item);
       }
-      this.machines[type] = arr;
+      this.machines = this.machines.concat(arr);
     }
     this.objectKeys = Object.keys(this.machines);
   }
