@@ -4,13 +4,9 @@ const attributes = {
   laserType: {
     type: String,
     required: true
-  },
-  // old db fields
-  id: {
-    type: Number
-  },
+  }
 };
 
-const laserTypeSchema = mongoose.Schema(attributes);
+const laserTypeSchema = mongoose.Schema(attributes, { _id: false });
 
 export default laserTypeSchema;

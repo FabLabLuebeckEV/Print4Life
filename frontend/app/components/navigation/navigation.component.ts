@@ -11,7 +11,7 @@ export class NavigationComponent implements OnInit {
     {
       name: 'Machine',
       elements: [
-        { name: 'Get Machines', routerHref: 'machine' }
+        { name: 'Get Machines', routerHref: 'machines' }
       ]
     };
 

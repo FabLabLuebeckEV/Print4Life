@@ -44,7 +44,8 @@ const Fablab = mongoose.model('Fablab', fablabSchema);
  */
 
 function getFablab (id) {
-  return Fablab.findOne({ fid: id });
+  const _id = mongoose.Types.ObjectId(id);
+  return Fablab.findOne({ _id });
 }
 
 export default { getFablab };

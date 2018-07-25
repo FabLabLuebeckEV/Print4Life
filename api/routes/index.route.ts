@@ -10,9 +10,9 @@ router.get('/', (req, res) => {
   res.send({ health: 'alive' });
 });
 
-router.use('/machine/', machineRoute);
+router.use('/machines/', machineRoute);
 router.use('/orders/', orderRoute);
 router.use('/transform/', transformRoute);
-router.use('/fablab/', fablabRoute);
+router.use('/fablabs/', fablabRoute);
 
 export default router;

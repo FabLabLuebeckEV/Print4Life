@@ -1,10 +1,9 @@
 import * as express from 'express';
 import * as cors from 'cors';
+import * as bodyParser from 'body-parser';
 
 import routes from './routes/index.route';
 import config from './config';
-
-const bodyParser = require('body-parser');
 
 class App {
   public express;

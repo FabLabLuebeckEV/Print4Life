@@ -1,4 +1,3 @@
-<div *ngFor="let type of objectKeys" class="row">
-    <h3 class="col-md-12 spacing">{{type}}</h3>
-    <app-card *ngFor="let item of machines[type]" [item]="item" class="col-md-3"></app-card>
+<div class="row">
+    <app-table [items]="machines"></app-table>
 </div>
