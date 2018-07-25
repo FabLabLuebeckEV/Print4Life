@@ -33,35 +33,37 @@ const testOrder = {
 };
 
 describe('Order Controller', () => {
-  testOrder.token = uuidv4();
+  const testBody = JSON.parse(JSON.stringify(testOrder));
+  testBody.token = uuidv4();
   it('create order', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
       method: 'POST',
       json: true,
-      body: testOrder
+      body: testBody
     }, (error, response) => {
       const orderResult = response.body.order;
 
       expect(response.statusCode).toEqual(200);
       expect(orderResult).toBeDefined();
-      expect(orderResult.editor).toEqual(testOrder.editor);
-      expect(orderResult.owner).toEqual(testOrder.owner);
-      expect(orderResult.token).toEqual(testOrder.token);
-      expect(orderResult.status).toEqual(testOrder.status);
+      expect(orderResult.editor).toEqual(testBody.editor);
+      expect(orderResult.owner).toEqual(testBody.owner);
+      expect(orderResult.token).toEqual(testBody.token);
+      expect(orderResult.status).toEqual(testBody.status);
       done();
     });
   });
 });
 
 describe('Order Controller', () => {
-  testOrder.token = uuidv4();
+  const testBody = JSON.parse(JSON.stringify(testOrder));
+  testBody.token = uuidv4();
   it('get order by id', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
       method: 'POST',
       json: true,
-      body: testOrder
+      body: testBody
     }, (error, response) => {
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
@@ -70,10 +72,10 @@ describe('Order Controller', () => {
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body.order).toBeDefined();
-        expect(response.body.order.editor).toEqual(testOrder.editor);
-        expect(response.body.order.owner).toEqual(testOrder.owner);
-        expect(response.body.order.token).toEqual(testOrder.token);
-        expect(response.body.order.status).toEqual(testOrder.status);
+        expect(response.body.order.editor).toEqual(testBody.editor);
+        expect(response.body.order.owner).toEqual(testBody.owner);
+        expect(response.body.order.token).toEqual(testBody.token);
+        expect(response.body.order.status).toEqual(testBody.status);
         done();
       });
     });
@@ -81,13 +83,14 @@ describe('Order Controller', () => {
 });
 
 describe('Order Controller', () => {
-  testOrder.token = uuidv4();
+  const testBody = JSON.parse(JSON.stringify(testOrder));
+  testBody.token = uuidv4();
   it('update order', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
       method: 'POST',
       json: true,
-      body: testOrder
+      body: testBody
     }, (error, response) => {
       response.body.order.owner = 'Hans Peter';
       request({
@@ -103,9 +106,9 @@ describe('Order Controller', () => {
 
         expect(updatedOrder.owner).toEqual('Hans Peter');
 
-        expect(updatedOrder.token).toEqual(testOrder.token);
-        expect(updatedOrder.editor).toEqual(testOrder.editor);
-        expect(updatedOrder.status).toEqual(testOrder.status);
+        expect(updatedOrder.token).toEqual(testBody.token);
+        expect(updatedOrder.editor).toEqual(testBody.editor);
+        expect(updatedOrder.status).toEqual(testBody.status);
         done();
       });
     });
@@ -113,13 +116,14 @@ describe('Order Controller', () => {
 });
 
 describe('Order Controller', () => {
-  testOrder.token = uuidv4();
+  const testBody = JSON.parse(JSON.stringify(testOrder));
+  testBody.token = uuidv4();
   it('delete order', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
       method: 'POST',
       json: true,
-      body: testOrder
+      body: testBody
     }, (error, response) => {
       request({
         uri: `${endpoint}orders/deleteOrder`,
@@ -134,8 +138,8 @@ describe('Order Controller', () => {
 
         expect(updatedOrder.status).toEqual('deleted');
 
-        expect(updatedOrder.token).toEqual(testOrder.token);
-        expect(updatedOrder.editor).toEqual(testOrder.editor);
+        expect(updatedOrder.token).toEqual(testBody.token);
+        expect(updatedOrder.editor).toEqual(testBody.editor);
         done();
       });
     });

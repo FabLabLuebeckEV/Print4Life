@@ -203,9 +203,7 @@ function updateOrder (order) {
 function deleteOrder (order) {
   order.status = 'deleted';
   delete order.__v;
-  return Order.update({ _id: order._id }, order, { upsert: true }).then((result) => {
-      return Order.findOne({ _id: order._id });
-    });
+  return Order.update({ _id: order._id }, order, { upsert: true }).then((result) => Order.findOne({ _id: order._id }));
 }
 
 function rmDbVars (obj) {
