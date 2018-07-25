@@ -20,15 +20,23 @@ router.route('/placeOrder').post((req, res) => {
 });
 
 router.route('/updateOrder').post((req, res) => {
-  orderCtrl.updateOrder(req.body).then((update) => {
-    res.json({ update });
+  orderCtrl.updateOrder(req.body).then((order) => {
+    res.json({ order });
   }).catch((err) => {
     res.status(400).send({ error: 'Order not found or malformed update.', stack: err });
   });
 });
 
-router.route('/getOrderById').post((req, res) => {
-  orderCtrl.getOrderById(req.body).then((order) => {
+router.route('/deleteOrder').post((req, res) => {
+  orderCtrl.deleteOrder(req.body).then((order) => {
+    res.json({ order });
+  }).catch((err) => {
+    res.status(400).send({ error: 'Order not found.', stack: err });
+  });
+});
+
+router.route('/:id').get((req, res) => {
+  orderCtrl.getOrderById(req.params.id).then((order) => {
     res.json({ order });
   }).catch((err) => {
     res.status(400).send({ error: 'Could not find order.', stack: err });

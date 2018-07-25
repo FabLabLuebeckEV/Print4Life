@@ -15,7 +15,7 @@ const attributes = {
     contentType: String
   }],
   status: {
-    enum: ['new', 'assigned', 'production', 'shipment', 'archived', 'representive'],
+    enum: ['new', 'assigned', 'production', 'shipment', 'archived', 'representive', 'deleted'],
     type: String,
     default: 'new',
     required: true

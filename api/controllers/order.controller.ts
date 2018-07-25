@@ -55,13 +55,20 @@ function placeOrder (newOrder) {
   return Order(newOrder).save();
 }
 
-async function updateOrder (body) {
-  return Order.findOneAndUpdate({ _id: body._id }, body, { upsert: true }).exec();
+function updateOrder (order) {
+  delete order.__v;
+  return Order.update({ _id: order._id }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
+}
+
+function deleteOrder (order) {
+  order['status'] = 'deleted';
+  return updateOrder(order);
 }
 
 export default {
   getOrders,
   placeOrder,
   updateOrder,
-  getOrderById
+  getOrderById,
+  deleteOrder
 };
