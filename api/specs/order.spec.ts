@@ -1,6 +1,5 @@
 import 'jasmine';
 import * as request from 'request';
-import * as uuidv4 from 'uuid/v4';
 import * as configs from '../config';
 
 
@@ -26,13 +25,11 @@ const testOrder = {
   editor: 'Mister Bar',
   owner: 'Mister Foo',
   files: [],
-  status: 'new',
-  token: '42'
+  status: 'new'
 };
 
 describe('Order Controller', () => {
   const testBody = JSON.parse(JSON.stringify(testOrder));
-  testBody.token = uuidv4();
   it('create order', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
@@ -46,7 +43,7 @@ describe('Order Controller', () => {
       expect(orderResult).toBeDefined();
       expect(orderResult.editor).toEqual(testBody.editor);
       expect(orderResult.owner).toEqual(testBody.owner);
-      expect(orderResult.token).toEqual(testBody.token);
+      expect(orderResult.token).toBeDefined();
       expect(orderResult.status).toEqual(testBody.status);
       done();
     });
@@ -55,7 +52,6 @@ describe('Order Controller', () => {
 
 describe('Order Controller', () => {
   const testBody = JSON.parse(JSON.stringify(testOrder));
-  testBody.token = uuidv4();
   it('get order by id', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
@@ -72,7 +68,7 @@ describe('Order Controller', () => {
         expect(response.body.order).toBeDefined();
         expect(response.body.order.editor).toEqual(testBody.editor);
         expect(response.body.order.owner).toEqual(testBody.owner);
-        expect(response.body.order.token).toEqual(testBody.token);
+        expect(response.body.order.token).toBeDefined();
         expect(response.body.order.status).toEqual(testBody.status);
         done();
       });
@@ -82,7 +78,6 @@ describe('Order Controller', () => {
 
 describe('Order Controller', () => {
   const testBody = JSON.parse(JSON.stringify(testOrder));
-  testBody.token = uuidv4();
   it('update order', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
@@ -97,16 +92,14 @@ describe('Order Controller', () => {
         json: true,
         body: response.body.order
       }, (error, response) => {
-        const updatedOrder = response.body.order;
-
         expect(response.statusCode).toEqual(200);
-        expect(updatedOrder).toBeDefined();
+        expect(response.body.order).toBeDefined();
 
-        expect(updatedOrder.owner).toEqual('Hans Peter');
+        expect(response.body.order.owner).toEqual('Hans Peter');
 
-        expect(updatedOrder.token).toEqual(testBody.token);
-        expect(updatedOrder.editor).toEqual(testBody.editor);
-        expect(updatedOrder.status).toEqual(testBody.status);
+        expect(response.body.order.token).toBeDefined();
+        expect(response.body.order.editor).toEqual(testBody.editor);
+        expect(response.body.order.status).toEqual(testBody.status);
         done();
       });
     });
@@ -115,7 +108,6 @@ describe('Order Controller', () => {
 
 describe('Order Controller', () => {
   const testBody = JSON.parse(JSON.stringify(testOrder));
-  testBody.token = uuidv4();
   it('delete order', (done) => {
     request({
       uri: `${endpoint}orders/placeOrder`,
@@ -129,15 +121,13 @@ describe('Order Controller', () => {
         json: true,
         body: response.body.order
       }, (error, response) => {
-        const updatedOrder = response.body.order;
-
         expect(response.statusCode).toEqual(200);
-        expect(updatedOrder).toBeDefined();
+        expect(response.body.order).toBeDefined();
 
-        expect(updatedOrder.status).toEqual('deleted');
+        expect(response.body.order.status).toEqual('deleted');
 
-        expect(updatedOrder.token).toEqual(testBody.token);
-        expect(updatedOrder.editor).toEqual(testBody.editor);
+        expect(response.body.order.token).toBeDefined();
+        expect(response.body.order.editor).toEqual(testBody.editor);
         done();
       });
     });
