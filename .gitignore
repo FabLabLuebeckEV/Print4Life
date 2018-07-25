@@ -4,3 +4,4 @@ npm-debug.log*
 docs/api
 dev-mongo
 .nvmrc
+.vscode/settings.json
