@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-
+import * as uuid from 'uuid/v4';
 import logger from '../logger';
 import orderSchema from '../models/order.model';
 
@@ -39,7 +39,7 @@ const Order = mongoose.model('Order', orderSchema);
 function getOrders () {
   return Order.find((err, orders) => {
     if (err) {
-      return logger.error(err);
+      return err;
     } else if (orders) {
       return orders;
     }
@@ -110,7 +110,8 @@ function getOrderById (id) {
   }
  */
 function placeOrder (newOrder) {
-  return Order(rmDbVars(newOrder)).save();
+    newOrder['token'] = uuid();
+    return Order(rmDbVars(newOrder)).save();
 }
 
 /**
