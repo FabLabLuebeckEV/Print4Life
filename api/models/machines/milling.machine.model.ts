@@ -1,10 +1,8 @@
 import * as mongoose from 'mongoose';
-import machineFields from './machine.basic.model';
-import laserTypeSchema from './lasertype.model';
+import machineFields from '../machine.basic.model';
 
 const attributes = {
   ...machineFields(),
-  laserTypes: [laserTypeSchema],
   camSoftware: {
     type: String
   },
@@ -17,11 +15,11 @@ const attributes = {
   workspaceZ: {
     type: Number
   },
-  maxResoultion: {
-    type: Number,
+  movementSpeed: {
+    type: Number
   },
-  laserPower: {
-    type: String
+  stepSize: {
+    type: Number
   },
   // old db fields
   pictureURL: {
@@ -32,6 +30,6 @@ const attributes = {
   }
 };
 
-const laserCutterSchema = mongoose.Schema(attributes);
+const millingMachineSchema = mongoose.Schema(attributes);
 
-export default laserCutterSchema;
+export default millingMachineSchema;

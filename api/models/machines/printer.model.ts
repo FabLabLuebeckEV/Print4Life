@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
-import machineFields from './machine.basic.model';
-import printerMaterialSchema from './printerMaterial.model';
+import machineFields from '../machine.basic.model';
+import printerMaterialSchema from '../printerMaterial.model';
 
 const attributes = {
   ...machineFields(),

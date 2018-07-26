@@ -15,6 +15,14 @@ router.route('/').get((req, res) => {
   });
 });
 
+router.route('/types').get((req, res) => {
+  machineCtrl.getMachineTypes().then((types) => {
+    res.json({ types });
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
+});
+
 router.use('/printers/', printerRoute);
 router.use('/millingMachines/', millingMachineRoute);
 router.use('/otherMachines/', otherMachineRoute);

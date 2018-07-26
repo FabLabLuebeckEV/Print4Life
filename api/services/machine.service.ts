@@ -1,9 +1,9 @@
 import * as mongoose from 'mongoose';
 
-import printerSchema from '../models/printer.model';
-import otherMachineSchema from '../models/other.machine.model';
-import millingMachineSchema from '../models/milling.machine.model';
-import laserCutterSchema from '../models/lasercutter.model';
+import printerSchema from '../models/machines/printer.model';
+import otherMachineSchema from '../models/machines/other.machine.model';
+import millingMachineSchema from '../models/machines/milling.machine.model';
+import laserCutterSchema from '../models/machines/lasercutter.model';
 
 const Printer = mongoose.model('Printer', printerSchema);
 const Other = mongoose.model('OtherMachine', otherMachineSchema);

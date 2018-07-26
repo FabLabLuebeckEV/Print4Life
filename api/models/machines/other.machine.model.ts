@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import machineFields from './machine.basic.model';
+import machineFields from '../machine.basic.model';
 
 const attributes = {
   ...machineFields(),
