@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import machineService from '../services/machine.service';
+import materialService from '../services/material.service';
 
 /**
  * @api {get} /api/v1/machines/ Get all machines
@@ -121,15 +122,17 @@ function getMachineTypes () {
       } else {
         const types = [];
         files.forEach((file) => {
-          const split = file.split('.');
-          let type = '';
-          for (let i = 0; i < split.length; i += 1) {
-            if (split[i] !== 'ts' && split[i] !== 'model') {
-              split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
-              type += `${split[i]} `;
+          if (!file.startsWith('machine.basic')) {
+            const split = file.split('.');
+            let type = '';
+            for (let i = 0; i < split.length; i += 1) {
+              if (split[i] !== 'ts' && split[i] !== 'model') {
+                split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
+                type += `${split[i]} `;
+              }
             }
+            types.push(type.trim());
           }
-          types.push(type.trim());
         });
         resolve(types);
       }
@@ -137,4 +140,28 @@ function getMachineTypes () {
   });
 }
 
-export default { getAllMachines, getMachineTypes };
+/**
+ * @api {get} /api/v1/machines/materials/:machine Get materials per machine type
+ * @apiName GetMaterialsByType
+ * @apiVersion 1.0.0
+ * @apiGroup Materials
+ *
+ * @apiSuccess {Array} materials an array of materials for a given machine type
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "types": [
+        "Lasercutter",
+        "Milling Machine",
+        "Other Machine",
+        "Printer"
+    ]
+}
+ */
+function getMaterialsByType (type) {
+  type += 'Material';
+  return materialService.getMaterialByType(type);
+}
+
+export default { getAllMachines, getMachineTypes, getMaterialsByType };

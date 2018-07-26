@@ -3,6 +3,14 @@ import fablabCtrl from '../controllers/fablab.controller';
 
 const router = express.Router();
 
+router.route('/').get((req, res) => {
+  fablabCtrl.getAll().then((fablabs) => {
+    res.json({ fablabs });
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
+});
+
 router.route('/:id').get((req, res) => {
   if (req.params.id.length !== 24) {
     res.status(400).send({ error: 'Id needs to be a 24 character long hex string!' });

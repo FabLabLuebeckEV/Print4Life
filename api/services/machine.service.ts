@@ -70,6 +70,12 @@ function getMachineType (type) {
   });
 }
 
+/**
+ * This method creates a specific type of machine and returns a promis with the results
+ * type is the type of machine to get
+ * params are the params of the machine
+ * @returns a promise with the results
+ */
 function create (type, params) {
   if (!params.type) {
     params.type = type;

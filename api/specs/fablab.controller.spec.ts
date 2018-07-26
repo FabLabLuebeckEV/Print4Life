@@ -5,6 +5,16 @@ import * as configs from '../config';
 const endpoint = configs.configArr.prod.baseUrlBackend;
 
 describe('Fablab Controller', () => {
+  it('gets all fablabs', (done) => {
+    request.get(`${endpoint}fablabs`, (error, response) => {
+      const fablabs = JSON.parse(response.body).fablabs;
+      expect(response.statusCode).toEqual(200);
+      expect(fablabs).toBeDefined();
+      expect(fablabs.length).toBeGreaterThan(0);
+      done();
+    });
+  });
+
   it('gets fablab by id (positive number)', (done) => {
     request.get(`${endpoint}fablabs/5b453ddb5cf4a9574849e98a`, (error, response) => {
       const fablab = JSON.parse(response.body).fablab;
