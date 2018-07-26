@@ -32,6 +32,16 @@ describe('Lasercutter Controller', () => {
     });
   });
 
+  it('gets lasertypes', (done) => {
+    request.get(`${endpoint}machines/lasercutters/laserTypes`, (error, response) => {
+      const laserTypes = JSON.parse(response.body).laserTypes;
+      expect(response.statusCode).toEqual(200);
+      expect(laserTypes).toBeDefined();
+      expect(laserTypes.length).toBeGreaterThan(-1);
+      done();
+    });
+  });
+
   it('create lasercutter (success)', (done) => {
     request.post(`${endpoint}machines/lasercutters/create`,
       { body: testLasercutter, json: true }, (error, response) => {

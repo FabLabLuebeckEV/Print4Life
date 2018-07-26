@@ -146,6 +146,7 @@ function getMachineTypes () {
  * @apiVersion 1.0.0
  * @apiGroup Materials
  *
+ * @apiParam {String} machine is the name of the machine type
  * @apiSuccess {Array} materials an array of materials for a given machine type
  *
  * @apiSuccessExample Success-Response:
