@@ -28,4 +28,16 @@ export class MachineService {
   public getAllMachines(): Promise<any> {
     return this.http.get(config.backendUrl + '/machines/').toPromise();
   }
+
+  public getAllMachineTypes(): Promise<any> {
+    return this.http.get(config.backendUrl + '/machines/types').toPromise();
+  }
+
+  public getMaterialsByMachineType(machineType): Promise<any> {
+    return this.http.get(`${config.backendUrl}/machines/materials/${machineType}`).toPromise();
+  }
+
+  public createPrinter(printer): Promise<any> {
+    return this.http.post(`${config.backendUrl}/machines/printers/create`, printer).toPromise();
+  }
 }

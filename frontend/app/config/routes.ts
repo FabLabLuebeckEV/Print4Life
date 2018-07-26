@@ -8,9 +8,9 @@ export let appRoutes: Routes = [
         path: 'machines',
         component: MachineListComponent,
         children: [
-            { path: 'new', component: MachineFormComponent }
+            { path: 'new', component: MachineFormComponent },
             // {path: 'delete/:id', component: ArtistTrackListComponent},
-            // {path: 'edit/:id', component: ArtistAlbumListComponent},
+            {path: 'edit/:id', component: MachineFormComponent},
         ]
     },
 

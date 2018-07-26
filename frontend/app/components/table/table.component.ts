@@ -40,7 +40,7 @@ export class TableComponent implements OnInit, OnChanges {
     this._loadTable();
   }
 
-  _loadTable() {
+  private _loadTable() {
     this.items.forEach((item) => {
       Object.keys(item.obj).forEach((key) => {
         let found = false;

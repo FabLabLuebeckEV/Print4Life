@@ -11,6 +11,6 @@ const attributes = {
   },
 };
 
-const materialSchema = mongoose.Schema(attributes, { _id: false });
+const materialSchema = mongoose.Schema(attributes);
 
 export default materialSchema;

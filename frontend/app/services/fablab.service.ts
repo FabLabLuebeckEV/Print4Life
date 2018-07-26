@@ -12,4 +12,8 @@ export class FablabService {
   public getFablab(id): Promise<any> {
     return this.http.get(config.backendUrl + '/fablabs/' + id).toPromise();
   }
+
+  public getFablabs(): Promise<any> {
+    return this.http.get(config.backendUrl + '/fablabs/').toPromise();
+  }
 }

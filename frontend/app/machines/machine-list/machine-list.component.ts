@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { TableItem } from '../../components/table/table.component';
-import { faWrench, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faWrench, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,6 +16,7 @@ export class MachineListComponent implements OnInit {
   machines: Array<Array<Object>> = [];
   objectKeys: Array<String>;
   listView: Boolean;
+  plusIcon = faPlus;
 
   constructor(private machineService: MachineService,
     private fablabService: FablabService, private router: Router,
@@ -34,13 +35,13 @@ export class MachineListComponent implements OnInit {
     const route = this.router.url;
     if (route === '/machines') {
       this.listView = true;
-      this.init();
+      this._init();
     } else {
       this.listView = false;
     }
   }
 
-  async init() {
+  private async _init() {
     const resMach = await this.machineService.getAllMachines();
     const machines = resMach.machines;
     for (const type of Object.keys(machines)) {
@@ -55,12 +56,12 @@ export class MachineListComponent implements OnInit {
         item.obj['Fablab'] = fablab.name;
         item.obj['Description'] = '';
         item.button1.label = 'Edit';
-        item.button1.href = 'machine/edit/' + elem._id;
+        item.button1.href = './edit/' + elem._id;
         item.button1.routerLink = true;
         item.button1.class = 'btn btn-primary spacing';
         item.button1.icon = faWrench;
         item.button2.label = 'Delete';
-        item.button2.href = 'machine/delete/' + elem._id;
+        item.button2.href = './delete/' + elem._id;
         item.button2.routerLink = true;
         item.button2.class = 'btn btn-danger spacing';
         item.button2.icon = faTrashAlt;

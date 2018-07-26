@@ -7,6 +7,6 @@ const attributes = {
   }
 };
 
-const laserTypeSchema = mongoose.Schema(attributes, { _id: false });
+const laserTypeSchema = mongoose.Schema(attributes);
 
 export default laserTypeSchema;
