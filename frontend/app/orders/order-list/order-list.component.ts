@@ -21,7 +21,6 @@ export class OrderListComponent implements OnInit {
 
   async init() {
     const resOrders = await this.orderService.getAllOrders();
-    console.log(resOrders.orders.length);
     const orders = resOrders.orders;
     const arr = [];
     for (const order of orders) {
@@ -31,12 +30,12 @@ export class OrderListComponent implements OnInit {
       item.obj['Editor'] = order.editor;
       item.obj['Status'] = order.status;
       item.button1.label = 'Edit';
-      item.button1.href = config.paths.orders.updateOrder;
+      item.button1.href = `./${config.paths.orders.updateOrder}`;
       item.button1.routerLink = true;
       item.button1.class = 'btn btn-primary spacing';
       item.button1.icon = faWrench;
       item.button2.label = 'Delete';
-      item.button2.href = config.paths.orders.deleteOrder + '/' + order._id;
+      item.button2.href = `./${config.paths.orders.deleteOrder}/${order._id}`;
       item.button2.routerLink = true;
       item.button2.class = 'btn btn-danger spacing';
       item.button2.icon = faTrashAlt;
