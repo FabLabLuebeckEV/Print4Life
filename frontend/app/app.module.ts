@@ -15,10 +15,11 @@ import { MachineService } from './services/machine.service';
 import { FablabService } from './services/fablab.service';
 import { TableComponent } from './components/table/table.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { OrderListComponent } from './orders/order-list/order-list.component';
 
 @NgModule({
     declarations: [
-        AppComponent, DropdownComponent, NavigationComponent, MachineListComponent, DashboardComponent, TableComponent
+        AppComponent, DropdownComponent, NavigationComponent, MachineListComponent, DashboardComponent, TableComponent, OrderListComponent
     ],
     imports: [
         BrowserModule,
