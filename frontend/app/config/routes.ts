@@ -11,7 +11,10 @@ export let appRoutes: Routes = [
     },
     {
         path: config.paths.orders.root,
-        component: OrderListComponent
+        component: OrderListComponent,
+        children: [
+            { path: `${config.paths.orders.deleteOrder}/:id`, component: OrderListComponent},
+        ]
     },
     {
         path: '',
