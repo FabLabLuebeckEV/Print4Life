@@ -26,18 +26,17 @@ export class OrderListComponent implements OnInit {
     const arr = [];
     for (const order of orders) {
       const item = new TableItem();
-      console.log(order);
       item.obj['DB ID'] = order._id;
       item.obj['Owner'] = order.owner;
       item.obj['Editor'] = order.editor;
       item.obj['Status'] = order.status;
       item.button1.label = 'Edit';
-      item.button1.href = 'orders/editOrder/' + order._id;
+      item.button1.href = config.paths.orders.updateOrder;
       item.button1.routerLink = true;
       item.button1.class = 'btn btn-primary spacing';
       item.button1.icon = faWrench;
       item.button2.label = 'Delete';
-      item.button2.href = config.paths.orders.root + '/' + config.paths.orders.deleteOrder + '/' + order._id;
+      item.button2.href = config.paths.orders.deleteOrder + '/' + order._id;
       item.button2.routerLink = true;
       item.button2.class = 'btn btn-danger spacing';
       item.button2.icon = faTrashAlt;
