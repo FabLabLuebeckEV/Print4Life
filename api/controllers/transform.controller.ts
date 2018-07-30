@@ -1,30 +1,15 @@
 import * as mongoose from 'mongoose';
-
 import logger from '../logger';
-import printerSchema from '../models/machines/printer.model';
-import materialSchema from '../models/material.model';
-import printerCanMaterialSchema from '../models/printerCanMaterial.model';
-import otherMachineSchema from '../models/machines/other.machine.model';
-import millingMachineSchema from '../models/machines/milling.machine.model';
-import laserTypeSchema from '../models/lasertype.model';
-import laserCutterSchema from '../models/machines/lasercutter.model';
-import lasercutterCanLaserTypesSchema from '../models/laserCanTypes.model';
+import { Printer, printerSchema } from '../models/machines/printer.model';
+import { Material, materialSchema } from '../models/material.model';
+import { Other, otherMachineSchema } from '../models/machines/other.machine.model';
+import { MillingMachine, millingMachineSchema } from '../models/machines/milling.machine.model';
+import { LaserType, laserTypeSchema } from '../models/lasertype.model';
+import { LaserCutter, laserCutterSchema } from '../models/machines/lasercutter.model';
+import { PrinterCanMaterial } from '../models/printerCanMaterial.model';
+import { LasercutterCanLaserTypes } from '../models/laserCanTypes.model';
 
-const oldPrinter = mongoose.model('Printer', printerSchema);
-const Printer = mongoose.model('Printer', printerSchema);
 const PrinterMaterial = mongoose.model('PrinterMaterial', materialSchema);
-const PrinterCanMaterial = mongoose.model('PrinterCanMaterial', printerCanMaterialSchema);
-const Material = mongoose.model('Material', materialSchema);
-
-const oldOther = mongoose.model('OtherMachine', otherMachineSchema);
-const Other = mongoose.model('OtherMachine', otherMachineSchema);
-
-const oldMillingMachine = mongoose.model('MillingMachine', millingMachineSchema);
-const MillingMachine = mongoose.model('MillingMachine', millingMachineSchema);
-
-const LaserCutter = mongoose.model('Lasercutter', laserCutterSchema);
-const LaserType = mongoose.model('Lasercutterlasertype', laserTypeSchema);
-const LasercutterCanLaserTypes = mongoose.model('LaserCutterCanLaserTypes', lasercutterCanLaserTypesSchema);
 
 /**
  * @api {get} /api/v1/transform/milling Transform old milling machine db data to the current schema
@@ -40,7 +25,7 @@ const LasercutterCanLaserTypes = mongoose.model('LaserCutterCanLaserTypes', lase
  */
 function transformMillingMachine () {
   const props = Object.keys(millingMachineSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
-  return oldMillingMachine.find((err, oldMillingMachines) => {
+  return MillingMachine.find((err, oldMillingMachines) => {
     if (err) {
       return err;
     } else if (oldMillingMachines) {
@@ -84,7 +69,7 @@ function transformMillingMachine () {
  */
 function transformOthers () {
   const props = Object.keys(otherMachineSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
-  return oldOther.find((err, oldOthers) => {
+  return Other.find((err, oldOthers) => {
     if (err) { return err; } else if (oldOthers) {
       const machines = [];
       return Other.deleteMany({}, (err, deleted) => {
@@ -233,7 +218,7 @@ function transformPrinterMaterial () {
  */
 function transformPrinters () {
   const props = Object.keys(printerSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
-  return oldPrinter.find((err, printers) => {
+  return Printer.find((err, printers) => {
     if (err) { return err; } else if (printers) {
       Material.find((err, materials) => {
         if (err) { return err; } else if (materials) {

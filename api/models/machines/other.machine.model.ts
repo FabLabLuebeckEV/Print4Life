@@ -16,6 +16,7 @@ const attributes = {
   }
 };
 
-const otherMachineSchema = mongoose.Schema(attributes);
+export const otherMachineSchema = mongoose.Schema(attributes);
+export const Other = mongoose.model('OtherMachine', otherMachineSchema);
 
-export default otherMachineSchema;
+export default Other;

@@ -1,15 +1,7 @@
-import * as mongoose from 'mongoose';
-
-import printerSchema from '../models/machines/printer.model';
-import otherMachineSchema from '../models/machines/other.machine.model';
-import millingMachineSchema from '../models/machines/milling.machine.model';
-import laserCutterSchema from '../models/machines/lasercutter.model';
-
-const Printer = mongoose.model('Printer', printerSchema);
-const Other = mongoose.model('OtherMachine', otherMachineSchema);
-const MillingMachine = mongoose.model('MillingMachine', millingMachineSchema);
-
-const LaserCutter = mongoose.model('Lasercutter', laserCutterSchema);
+import { Printer } from '../models/machines/printer.model';
+import { Other } from '../models/machines/other.machine.model';
+import { MillingMachine } from '../models/machines/milling.machine.model';
+import { LaserCutter } from '../models/machines/lasercutter.model';
 
 /**
  * This method gets a specific type of machine (or all) and returns a promis with the results

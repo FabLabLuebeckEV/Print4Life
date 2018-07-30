@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import machineService from '../services/machine.service';
 import materialService from '../services/material.service';
+import lasertypeService from '../services/lasertype.service';
 
 /**
  * @api {get} /api/v1/machines/ Get all machines
@@ -165,4 +166,28 @@ function getMaterialsByType (type) {
   return materialService.getMaterialByType(type);
 }
 
-export default { getAllMachines, getMachineTypes, getMaterialsByType };
+/**
+ * @api {get} /api/v1/machines/lasertypes/ Get all lasertypes
+ * @apiName GetLaserTypes
+ * @apiVersion 1.0.0
+ * @apiGroup LaserTypes
+ *
+ * @apiSuccess {Array} laserTypes an array of all laserTypes
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "laserTypes": [
+        {
+            "_id": "5b55f7bf3fe0c8b01713b3dc",
+            "laserType": "CO2",
+            "__v": 0
+        }
+    ]
+}
+ */
+function getLaserTypes () {
+  return lasertypeService.getLaserTypes();
+}
+
+export default { getAllMachines, getMachineTypes, getMaterialsByType, getLaserTypes };

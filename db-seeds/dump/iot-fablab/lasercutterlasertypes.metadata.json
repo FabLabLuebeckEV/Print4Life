@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-dev.lasercutterlasertypes"}],"uuid":"ab7df733b3734291a0638b97675c185f"}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-dev.lasercutterlasertypes"},{"v":2,"unique":true,"key":{"laserType":1},"name":"laserType_1","ns":"iot-fablab-dev.lasercutterlasertypes","background":true}],"uuid":"31e958abc1a04cf7b616334be549d515"}

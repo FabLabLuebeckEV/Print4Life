@@ -1,8 +1,5 @@
-import * as mongoose from 'mongoose';
 import machineService from '../services/machine.service';
-import laserTypeSchema from '../models/lasertype.model';
-
-const LaserType = mongoose.model('LasercutterLasertype', laserTypeSchema);
+import { LaserType } from '../models/lasertype.model';
 
 /**
  * @api {get} /api/v1/machines/lasercutters Get lasercutters

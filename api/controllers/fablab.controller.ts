@@ -1,8 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import fablabSchema from '../models/fablab.model';
-
-const Fablab = mongoose.model('Fablab', fablabSchema);
+import Fablab from '../models/fablab.model';
 
 /**
  * @api {get} /api/v1/fablabs/:id Get fablab

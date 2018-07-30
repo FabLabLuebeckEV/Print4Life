@@ -9,6 +9,7 @@ const attributes = {
   }
 };
 
-const commentSchema = mongoose.Schema(attributes);
+export const commentSchema = mongoose.Schema(attributes);
+export const Comment = mongoose.model('Comment', commentSchema);
 
-export default commentSchema;
+export default Comment;

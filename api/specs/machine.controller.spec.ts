@@ -28,4 +28,14 @@ describe('Machine Controller', () => {
       done();
     });
   });
+
+  it('gets all laserTypes', (done) => {
+    request.get(`${endpoint}machines/laserTypes`, (error, response) => {
+      const laserTypes = JSON.parse(response.body).laserTypes;
+      expect(response.statusCode).toEqual(200);
+      expect(laserTypes).toBeDefined();
+      expect(laserTypes.length).toBeGreaterThan(0);
+      done();
+    });
+  });
 });
