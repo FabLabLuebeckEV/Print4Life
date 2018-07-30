@@ -1,12 +1,1 @@
-{
-    "options": {},
-    "indexes": [{
-        "v": 2,
-        "key": {
-            "_id": 1
-        },
-        "name": "_id_",
-        "ns": "iot-fablab-dev.materials"
-    }],
-    "uuid": "4468537fab2240749d9e0337e58555af"
-}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-dev.materials"}],"uuid":"4468537fab2240749d9e0337e58555af"}
