@@ -1,11 +1,7 @@
-import * as mongoose from 'mongoose';
-
-import laserTypeSchema from '../models/lasertype.model';
-
-const LaserTypes = mongoose.model('LasercutterLasertypes', laserTypeSchema);
+import { LaserType } from '../models/lasertype.model';
 
 function getLaserTypes () {
-  return LaserTypes.find();
+  return LaserType.find();
 }
 
 export default {

@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import machineFields from './machine.basic.model';
-import laserTypeSchema from '../lasertype.model';
+import { laserTypeSchema } from '../lasertype.model';
 
 const attributes = {
   ...machineFields(),
@@ -32,6 +32,7 @@ const attributes = {
   }
 };
 
-const laserCutterSchema = mongoose.Schema(attributes);
+export const laserCutterSchema = mongoose.Schema(attributes);
+export const LaserCutter = mongoose.model('Lasercutter', laserCutterSchema);
 
-export default laserCutterSchema;
+export default LaserCutter;

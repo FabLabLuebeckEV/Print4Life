@@ -13,6 +13,7 @@ const attributes = {
   }
 };
 
-const lasercutterCanLaserTypesSchema = mongoose.Schema(attributes);
+export const lasercutterCanLaserTypesSchema = mongoose.Schema(attributes);
+export const LasercutterCanLaserTypes = mongoose.model('LaserCutterCanLaserTypes', lasercutterCanLaserTypesSchema);
 
-export default lasercutterCanLaserTypesSchema;
+export default LasercutterCanLaserTypes;

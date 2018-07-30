@@ -1,8 +1,5 @@
-import * as mongoose from 'mongoose';
 import * as uuid from 'uuid/v4';
-import orderSchema from '../models/order.model';
-
-const Order = mongoose.model('Order', orderSchema);
+import { Order } from '../models/order.model';
 
 /**
  * @api {get} /api/v1/orders/ Request the list of orders
@@ -205,14 +202,14 @@ async function deleteOrder (id) {
   order.status = 'deleted';
   return updateOrder(order);
 
-//   return Order.findOne({ _id: id }).then((order) => {
-//     order.status = 'deleted';
-//     delete order.__v;
-//     return Order.update({ order }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
-//   });
-//   order.status = 'deleted';
-//   delete order.__v;
-//   return Order.update({ _id: order._id }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
+  //   return Order.findOne({ _id: id }).then((order) => {
+  //     order.status = 'deleted';
+  //     delete order.__v;
+  //     return Order.update({ order }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
+  //   });
+  //   order.status = 'deleted';
+  //   delete order.__v;
+  //   return Order.update({ _id: order._id }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
 }
 
 function rmDbVars (obj) {

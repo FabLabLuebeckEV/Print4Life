@@ -30,6 +30,7 @@ const attributes = {
   }
 };
 
-const millingMachineSchema = mongoose.Schema(attributes);
+export const millingMachineSchema = mongoose.Schema(attributes);
+export const MillingMachine = mongoose.model('MillingMachine', millingMachineSchema);
 
-export default millingMachineSchema;
+export default MillingMachine;

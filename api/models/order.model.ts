@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import commentSchema from './comment.model';
+import { commentSchema } from './comment.model';
 
 const attributes = {
   comments: [commentSchema],
@@ -27,6 +27,7 @@ const attributes = {
   }
 };
 
-const orderSchema = mongoose.Schema(attributes);
+export const orderSchema = mongoose.Schema(attributes);
+export const Order = mongoose.model('Order', orderSchema);
 
-export default orderSchema;
+export default Order;
