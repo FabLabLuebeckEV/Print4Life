@@ -116,10 +116,9 @@ describe('Order Controller', () => {
       body: testBody
     }, (error, response) => {
       request({
-        uri: `${endpoint}orders/deleteOrder`,
-        method: 'POST',
-        json: true,
-        body: response.body.order
+        uri: `${endpoint}orders/deleteOrder/${response.body.order._id}`,
+        method: 'GET',
+        json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body.order).toBeDefined();

@@ -17,10 +17,18 @@ import { TableComponent } from './components/table/table.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MachineFormComponent } from './machines/machine-form/machine-form.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { OrderListComponent } from './orders/order-list/order-list.component';
 
 @NgModule({
     declarations: [
-        AppComponent, DropdownComponent, NavigationComponent, MachineListComponent, DashboardComponent, TableComponent, MachineFormComponent
+        AppComponent,
+        DropdownComponent,
+        NavigationComponent,
+        MachineListComponent,
+        DashboardComponent,
+        TableComponent,
+        OrderListComponent,
+        MachineFormComponent
     ],
     imports: [
         BrowserModule,

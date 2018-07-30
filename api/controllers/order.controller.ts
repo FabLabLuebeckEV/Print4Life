@@ -108,9 +108,9 @@ function getOrderById (id) {
     }
   }
  */
-function placeOrder (newOrder) {
-  newOrder.token = uuid();
-  return Order(rmDbVars(newOrder)).save();
+function placeOrder (order) {
+  order.token = uuid();
+  return Order(rmDbVars(order)).save();
 }
 
 /**
@@ -200,10 +200,19 @@ function updateOrder (order) {
       }
   }
  */
-function deleteOrder (order) {
+async function deleteOrder (id) {
+  const order = await getOrderById(id);
   order.status = 'deleted';
-  delete order.__v;
-  return Order.update({ _id: order._id }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
+  return updateOrder(order);
+
+//   return Order.findOne({ _id: id }).then((order) => {
+//     order.status = 'deleted';
+//     delete order.__v;
+//     return Order.update({ order }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
+//   });
+//   order.status = 'deleted';
+//   delete order.__v;
+//   return Order.update({ _id: order._id }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
 }
 
 function rmDbVars (obj) {
