@@ -49,6 +49,14 @@ router.route('/materials/:machine').get((req, res) => {
   });
 });
 
+router.route('/laserTypes/').get((req, res) => {
+  machineCtrl.getLaserTypes().then((laserTypes) => {
+    res.json({ laserTypes });
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
+});
+
 router.use('/printers/', printerRoute);
 router.use('/millingMachines/', millingMachineRoute);
 router.use('/otherMachines/', otherMachineRoute);

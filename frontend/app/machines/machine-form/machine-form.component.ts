@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
-import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material } from '../../models/machines.model';
+import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
 
 @Component({
   selector: 'app-machine-form',
@@ -19,8 +19,10 @@ export class MachineFormComponent implements OnInit {
   model: Machine;
   fablabs: Array<any>;
   materialsArr: Array<Material>;
+  laserTypesArr: Array<Lasertype>;
   loadingFablabs: Boolean;
   loadingMaterials: Boolean;
+  loadingLaserTypes: Boolean;
 
   constructor(private machineService: MachineService, private fablabService: FablabService,
     private router: Router, private location: Location, private route: ActivatedRoute) {
@@ -46,6 +48,7 @@ export class MachineFormComponent implements OnInit {
     this.loadingFablabs = true;
     this._loadFablabs();
     this._loadMaterials(this.selectedType);
+    this._loadLaserTypes();
   }
 
   onSubmit() {
@@ -55,6 +58,12 @@ export class MachineFormComponent implements OnInit {
     }).catch((err) => {
       console.log(err);
     });
+  }
+
+  private async _loadLaserTypes() {
+    this.loadingLaserTypes = true;
+    this.laserTypesArr = (await this.machineService.getLaserTypes()).laserTypes;
+    this.loadingLaserTypes = false;
   }
 
   private _selectType(type) {
