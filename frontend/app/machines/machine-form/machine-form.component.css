@@ -2,17 +2,6 @@
     margin: 20px;
 }
 
-.ng-valid[required],
-.ng-valid.required {
-    border-left: 10px solid #42A948;
-    /* green */
-}
-
-.ng-invalid:not(form) {
-    border-left: 10px solid #a94442;
-    /* red */
-}
-
 .header-left-bound {
     margin-left: -20px;
 }
