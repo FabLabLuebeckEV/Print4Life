@@ -1,5 +1,9 @@
 import * as express from 'express';
 import machineCtrl from '../controllers/machine.controller';
+import printerRoute from '../routes/printer.route';
+import lasercutterRoute from '../routes/lasercutter.route';
+import otherMachineRoute from '../routes/otherMachine.route';
+import millingMachineRoute from '../routes/millingMachine.route';
 
 const router = express.Router();
 
@@ -11,36 +15,51 @@ router.route('/').get((req, res) => {
   });
 });
 
-router.route('/printer').get((req, res) => {
-  machineCtrl.getPrinters().then((printers) => {
-    res.json({ printers });
+router.route('/types').get((req, res) => {
+  machineCtrl.getMachineTypes().then((types) => {
+    res.json({ types });
   }).catch((err) => {
     res.status(500).send(err);
   });
 });
 
-router.route('/otherMachine').get((req, res) => {
-  machineCtrl.getOtherMachines().then((otherMachines) => {
-    res.json({ otherMachines });
+router.route('/materials/:machine').get((req, res) => {
+  if (!req.params.machine) {
+    res.status(400).send({ error: 'No machine given' });
+  }
+
+  machineCtrl.getMachineTypes().then((types) => {
+    let typeOk = false;
+    Object.keys(types).forEach((type) => {
+      const check = types[type].toLowerCase().replace(/ /g, '');
+      if (check === req.params.machine.toLowerCase()) {
+        typeOk = true;
+      }
+    });
+
+    if (!typeOk) {
+      res.status(404).send({ error: `Material by machine type '${req.params.machine}' not found` });
+    }
+
+    machineCtrl.getMaterialsByType(req.params.machine).then((materials) => {
+      res.json({ materials });
+    }).catch((err) => {
+      res.status(500).send(err);
+    });
+  });
+});
+
+router.route('/laserTypes/').get((req, res) => {
+  machineCtrl.getLaserTypes().then((laserTypes) => {
+    res.json({ laserTypes });
   }).catch((err) => {
     res.status(500).send(err);
   });
 });
 
-router.route('/lasercutter').get((req, res) => {
-  machineCtrl.getLasercutters().then((lasercutters) => {
-    res.json({ lasercutters });
-  }).catch((err) => {
-    res.status(500).send(err);
-  });
-});
-
-router.route('/millingMachine').get((req, res) => {
-  machineCtrl.getMillingMachines().then((millingMachines) => {
-    res.json({ millingMachines });
-  }).catch((err) => {
-    res.status(500).send(err);
-  });
-});
+router.use('/printers/', printerRoute);
+router.use('/millingMachines/', millingMachineRoute);
+router.use('/otherMachines/', otherMachineRoute);
+router.use('/lasercutters/', lasercutterRoute);
 
 export default router;

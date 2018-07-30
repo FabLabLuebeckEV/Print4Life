@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { config } from '../../config/config';
 
 @Component({
   selector: 'app-navigation',
@@ -11,7 +12,8 @@ export class NavigationComponent implements OnInit {
     {
       name: 'Machine',
       elements: [
-        { name: 'Get Machines', routerHref: 'machine' }
+        { name: 'Get Machines', routerHref: 'machines' },
+        { name: 'Get Orders', routerHref: config.paths.orders.root}
       ]
     };
 

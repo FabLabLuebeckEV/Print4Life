@@ -1,20 +1,20 @@
 import * as mongoose from 'mongoose';
 
 import logger from '../logger';
-import printerSchema from '../models/printer.model';
-import printerMaterialSchema from '../models/printerMaterial.model';
+import printerSchema from '../models/machines/printer.model';
+import materialSchema from '../models/material.model';
 import printerCanMaterialSchema from '../models/printerCanMaterial.model';
-import otherMachineSchema from '../models/other.machine.model';
-import millingMachineSchema from '../models/milling.machine.model';
+import otherMachineSchema from '../models/machines/other.machine.model';
+import millingMachineSchema from '../models/machines/milling.machine.model';
 import laserTypeSchema from '../models/lasertype.model';
-import laserCutterSchema from '../models/lasercutter.model';
+import laserCutterSchema from '../models/machines/lasercutter.model';
 import lasercutterCanLaserTypesSchema from '../models/laserCanTypes.model';
 
 const oldPrinter = mongoose.model('Printer', printerSchema);
 const Printer = mongoose.model('Printer', printerSchema);
-const PrinterMaterial = mongoose.model('PrinterMaterial', printerMaterialSchema);
+const PrinterMaterial = mongoose.model('PrinterMaterial', materialSchema);
 const PrinterCanMaterial = mongoose.model('PrinterCanMaterial', printerCanMaterialSchema);
-const Material = mongoose.model('Material', printerMaterialSchema);
+const Material = mongoose.model('Material', materialSchema);
 
 const oldOther = mongoose.model('OtherMachine', otherMachineSchema);
 const Other = mongoose.model('OtherMachine', otherMachineSchema);
@@ -249,7 +249,7 @@ function transformPrinters () {
                     printer.materials = [];
                     canMaterials.forEach((material) => {
                       if (printer.id === material.printerId) {
-                        const materialAdd = _find(materials, material.materialId, printerMaterialSchema);
+                        const materialAdd = _find(materials, material.materialId, materialSchema);
                         if (materialAdd) {
                           printer.materials.push(materialAdd);
                         }

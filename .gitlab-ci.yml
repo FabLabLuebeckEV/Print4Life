@@ -6,6 +6,7 @@ cache:
   
 stages:
   - build
+  - apidocs
   - test
   - deploy
 
@@ -14,10 +15,16 @@ build:
   artifacts:
     paths:
     - ./
-    expire_in: 1 week
+    expire_in: 2h
   script:
     - npm install
     - npm run build
+
+test_build_api_docs:
+  stage: apidocs
+  script:
+    - npm install
+    - npm run apidocs
 
 test:
   stage: test
@@ -30,7 +37,7 @@ test:
   services:
     - mongo
   script:
-   - 'which mongoimport || (apt-get update -y && apt-get install mongodb -y)'
+   - 'which mongorestore || (apt-get update -y && apt-get install mongodb -y)'
    - apt-get install wget -y
    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
    - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
@@ -41,12 +48,6 @@ test:
    - NODE_ENV=$NODE_ENV
    - npm install
    - npm run test
-
-test_build_api_docs:
-  stage: test
-  script:
-    - npm install
-    - npm run apidocs
     
 deploy:
   stage: deploy

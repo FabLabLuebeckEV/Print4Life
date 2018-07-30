@@ -31,7 +31,6 @@ describe('FablabService', () => {
   it('should get a fablab', inject([FablabService], (FablabService) => {
     const mockResponse = [{
       'id': 1,
-      'fid': '1',
       'name': 'test',
       'phone': '1234',
       'mail': 'test@test.de',
@@ -40,14 +39,13 @@ describe('FablabService', () => {
 
     FablabService.getFablab(1).then((fablab) => {
       expect(fablab).toBeTruthy();
-      expect(fablab.fid).toEqual('1');
       expect(fablab.name).toEqual('test');
       expect(fablab.phone).toEqual('1234');
       expect(fablab.mail).toEqual('test@test.de');
       expect(fablab.password).toEqual('$2y$10$sDebOY1Kx8LZNczsF3XjoOqdZHRJK0J80hc7SdEZ19hKDFmkx0owG');
     }, fail);
 
-    const req = httpTestingController.expectOne(config.backendUrl + '/fablab' + '/1');
+    const req = httpTestingController.expectOne(config.backendUrl + '/fablabs' + '/1');
     expect(req.request.method).toEqual('GET');
 
     req.flush(mockResponse[0]);

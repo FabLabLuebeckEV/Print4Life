@@ -1,9 +1,6 @@
 import * as mongoose from 'mongoose';
 
 const attributes = {
-  fid: {
-    type: String
-  },
   name: {
     type: String,
     required: true
@@ -21,6 +18,6 @@ const attributes = {
   }
 };
 
-const printerMaterialSchema = mongoose.Schema(attributes);
+const fablabSchema = mongoose.Schema(attributes);
 
-export default printerMaterialSchema;
+export default fablabSchema;

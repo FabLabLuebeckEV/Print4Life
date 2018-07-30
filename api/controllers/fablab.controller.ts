@@ -5,7 +5,7 @@ import fablabSchema from '../models/fablab.model';
 const Fablab = mongoose.model('Fablab', fablabSchema);
 
 /**
- * @api {get} /api/v1/fablab/:id Get fablab
+ * @api {get} /api/v1/fablabs/:id Get fablab
  * @apiName GetFablabById
  * @apiVersion 1.0.0
  * @apiGroup Fablabs
@@ -44,7 +44,35 @@ const Fablab = mongoose.model('Fablab', fablabSchema);
  */
 
 function getFablab (id) {
-  return Fablab.findOne({ fid: id });
+  const _id = mongoose.Types.ObjectId(id);
+  return Fablab.findOne({ _id });
 }
 
-export default { getFablab };
+/**
+ * @api {get} /api/v1/fablabs/ Get all fablabs
+ * @apiName GetAllFablabs
+ * @apiVersion 1.0.0
+ * @apiGroup Fablabs
+ *
+ * @apiSuccess {Object} fablabs is an array of fablab objects
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "fablabs": [
+        {
+            "_id": "5b453ddb5cf4a9574849e98a",
+            "name": "test",
+            "phone": 1234,
+            "mail": "test@test.de",
+            "password": "$2y$10$sDebOY1Kx8LZNczsF3XjoOqdZHRJK0J80hc7SdEZ19hKDFmkx0owG"
+        }
+    ]
+}
+ */
+
+function getAll () {
+  return Fablab.find();
+}
+
+export default { getFablab, getAll };

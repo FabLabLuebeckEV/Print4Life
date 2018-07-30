@@ -10,6 +10,10 @@ export class FablabService {
   constructor(private http: HttpClient) { }
 
   public getFablab(id): Promise<any> {
-    return this.http.get(config.backendUrl + '/fablab/' + id).toPromise();
+    return this.http.get(config.backendUrl + '/fablabs/' + id).toPromise();
+  }
+
+  public getFablabs(): Promise<any> {
+    return this.http.get(config.backendUrl + '/fablabs/').toPromise();
   }
 }

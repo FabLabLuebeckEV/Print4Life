@@ -1,7 +1,9 @@
 const machineFields = {
   fablabId: {
-    type: Number,
-    required: true
+    type: String,
+    required: true,
+    minlength: 24,
+    maxlength: 24
   },
   deviceName: {
     type: String,
@@ -9,17 +11,11 @@ const machineFields = {
   },
   type: {
     type: String,
+    enum: ['printer', 'lasercutter', 'otherMachine', 'millingMachine'],
     required: true
   },
   manufacturer: {
     type: String
-  },
-  // old db fields
-  id: {
-    type: Number
-  },
-  fid: {
-    type: Number
   }
 };
 
