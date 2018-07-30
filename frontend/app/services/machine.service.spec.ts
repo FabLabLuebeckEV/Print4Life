@@ -8,6 +8,98 @@ import { MachineService } from './machine.service';
 
 import { config } from '../config/config';
 
+const machineTypes = ['Printer', 'Lasercutter', 'Milling Machine', 'Other Machine'];
+
+const createPrinterTest = {
+  'fablabId': '2',
+  'type': 'printer',
+  'deviceName': 'createPrinterTest',
+  'manufacturer': 'Test',
+  'materials': [],
+  'camSoftware': 'Test',
+  'comment': 'Test'
+};
+
+const createLasercutterTest = {
+  'fablabId': '2',
+  'type': 'lasercutter',
+  'deviceName': 'createLasercutterTest',
+  'manufacturer': 'Test',
+  'laserTypes': [
+    {
+      '_id': '5b55f7bf3fe0c8b01713b3e4',
+      'laserType': 'CO2'
+    }
+  ],
+  'camSoftware': '',
+  'workspaceX': 1220,
+  'workspaceY': 610,
+  'workspaceZ': 250,
+  'laserPower': '75',
+  'pictureURL': 'upload/59e723ff82d3d.jpg',
+  'comment': 'Test'
+};
+
+const createMillingMachineTest = {
+  'fablabId': '2',
+  'type': 'millingMachine',
+  'deviceName': 'createMillingMachineTest',
+  'manufacturer': 'Test',
+  'camSoftware': '',
+  'workspaceX': 500,
+  'workspaceY': 500,
+  'workspaceZ': 350,
+  'movementSpeed': 12000,
+  'stepSize': null,
+  'pictureURL': 'upload/59e727d098b4f.png',
+  'comment': 'Test'
+};
+
+const createOtherMachineTest = {
+  'fablabId': '2',
+  'type': 'otherMachine',
+  'deviceName': 'createOtherMachineTest',
+  'manufacturer': 'Test',
+  'typeOfMachine': 'Cutting Plotter',
+  'pictureURL': 'upload/59e74a5970be0.jpg',
+  'comment': 'Test'
+};
+
+const laserTypes = [
+  {
+    '_id': '5b55f7bf3fe0c8b01713b3dc',
+    'laserType': 'CO2'
+  }
+];
+
+const printerMaterials = [
+  {
+    '_id': '5b55f7bf3fe0c8b01713b3e0',
+    'material': 'Plaster',
+    'type': 'printerMaterial'
+  },
+  {
+    '_id': '5b55f7bf3fe0c8b01713b3dd',
+    'material': 'PLA',
+    'type': 'printerMaterial'
+  },
+  {
+    '_id': '5b55f7bf3fe0c8b01713b3e1',
+    'material': 'Other',
+    'type': 'printerMaterial'
+  },
+  {
+    '_id': '5b55f7bf3fe0c8b01713b3de',
+    'material': 'ABS',
+    'type': 'printerMaterial'
+  },
+  {
+    '_id': '5b55f7bf3fe0c8b01713b3df',
+    'material': 'Resin',
+    'type': 'printerMaterial'
+  }
+];
+
 const lasercutters = [{
   'id': '5b5368ad9f08d5319db21ff8',
   'fablabId': 2,
@@ -145,12 +237,6 @@ describe('MachineService', () => {
   }));
 
   it('should get all machines', inject([MachineService], (MachineService) => {
-    const mockResponse = {
-      data: []
-    };
-
-    mockResponse.data.concat(lasercutters, millingMachines, printers, otherMachines);
-
     MachineService.getAllMachines().then((machines) => {
       expect(machines).toBeTruthy();
       expect(machines.length).toEqual(8);
@@ -238,5 +324,113 @@ describe('MachineService', () => {
     expect(req.request.method).toEqual('GET');
 
     req.flush(otherMachines);
+  }));
+
+  it('should get all machine types', inject([MachineService], (MachineService) => {
+    MachineService.getAllMachineTypes().then((machineTypes) => {
+      expect(machineTypes).toBeTruthy();
+      expect(machineTypes.length).toEqual(4);
+      expect(machineTypes[0]).toEqual('Printer');
+      expect(machineTypes[1]).toEqual('Lasercutter');
+      expect(machineTypes[2]).toEqual('Milling Machine');
+      expect(machineTypes[3]).toEqual('Other Machine');
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machines' + '/types');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(machineTypes);
+  }));
+
+  it('should get all materials for printers', inject([MachineService], (MachineService) => {
+    MachineService.getMaterialsByMachineType('printer').then((materials) => {
+      expect(materials).toBeTruthy();
+      expect(materials.length).toEqual(5);
+      expect(materials[0].material).toEqual('Plaster');
+      expect(materials[1].material).toEqual('PLA');
+      expect(materials[2].material).toEqual('Other');
+      expect(materials[3].material).toEqual('ABS');
+      expect(materials[4].material).toEqual('Resin');
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machines/materials' + '/printer');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(printerMaterials);
+  }));
+
+  it('should get all laser types', inject([MachineService], (MachineService) => {
+    MachineService.getLaserTypes().then((laserTypes) => {
+      expect(laserTypes).toBeTruthy();
+      expect(laserTypes.length).toEqual(1);
+      expect(laserTypes[0].laserType).toEqual('CO2');
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machines/laserTypes');
+    expect(req.request.method).toEqual('GET');
+
+    req.flush(laserTypes);
+  }));
+
+  it('should create printer', inject([MachineService], (MachineService) => {
+    MachineService.create('printer', createPrinterTest).then((printer) => {
+      expect(printer).toBeTruthy();
+      expect(printer.deviceName).toEqual('createPrinterTest');
+      expect(printer.manufacturer).toEqual('Test');
+      expect(printer.comment).toEqual('Test');
+      expect(printer.fablabId).toEqual('2');
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machines/printers/create');
+    expect(req.request.method).toEqual('POST');
+
+    req.flush(createPrinterTest);
+  }));
+
+  it('should create lasercutter', inject([MachineService], (MachineService) => {
+    MachineService.create('lasercutter', createLasercutterTest).then((lasercutter) => {
+      expect(lasercutter).toBeTruthy();
+      expect(lasercutter.deviceName).toEqual('createLasercutterTest');
+      expect(lasercutter.manufacturer).toEqual('Test');
+      expect(lasercutter.comment).toEqual('Test');
+      expect(lasercutter.laserTypes[0].laserType).toEqual('CO2');
+      expect(lasercutter.fablabId).toEqual('2');
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machines/lasercutters/create');
+    expect(req.request.method).toEqual('POST');
+
+    req.flush(createLasercutterTest);
+  }));
+
+  it('should create milling machine', inject([MachineService], (MachineService) => {
+    MachineService.create('millingMachine', createMillingMachineTest).then((millingMachine) => {
+      expect(millingMachine).toBeTruthy();
+      expect(millingMachine.deviceName).toEqual('createMillingMachineTest');
+      expect(millingMachine.manufacturer).toEqual('Test');
+      expect(millingMachine.comment).toEqual('Test');
+      expect(millingMachine.fablabId).toEqual('2');
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machines/millingMachines/create');
+    expect(req.request.method).toEqual('POST');
+
+    req.flush(createMillingMachineTest);
+  }));
+
+  it('should create other machine', inject([MachineService], (MachineService) => {
+    MachineService.create('otherMachine', createOtherMachineTest).then((otherMachine) => {
+      expect(otherMachine).toBeTruthy();
+      expect(otherMachine.deviceName).toEqual('createOtherMachineTest');
+      expect(otherMachine.manufacturer).toEqual('Test');
+      expect(otherMachine.comment).toEqual('Test');
+      expect(otherMachine.laserTypes[0].laserType).toEqual('CO2');
+      expect(otherMachine.fablabId).toEqual('2');
+    }, fail);
+
+    const req = httpTestingController.expectOne(config.backendUrl + '/machines/otherMachines/create');
+    expect(req.request.method).toEqual('POST');
+
+    req.flush(createOtherMachineTest);
   }));
 });

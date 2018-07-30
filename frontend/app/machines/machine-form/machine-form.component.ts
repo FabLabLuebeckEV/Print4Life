@@ -14,7 +14,6 @@ export class MachineFormComponent implements OnInit {
   machineTypes: Array<String> = [];
   selectedType: String;
   editView: Boolean;
-  routeChanged: Boolean;
   submitted: Boolean = false;
   model: Machine;
   fablabs: Array<any>;
@@ -29,13 +28,10 @@ export class MachineFormComponent implements OnInit {
     this.route.params.subscribe(params => console.log(params));
     router.events.subscribe(() => {
       const route = location.path();
-      this.routeChanged = false;
       if (route.startsWith('/machines/edit') && !this.editView) {
-        this.routeChanged = true;
         this.editView = true;
       } else {
         if (this.editView) {
-          this.routeChanged = true;
         }
         this.editView = false;
       }

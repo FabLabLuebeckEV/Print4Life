@@ -32,12 +32,8 @@ export class MachineListComponent implements OnInit {
   }
 
   ngOnInit() {
-    const route = this.router.url;
-    if (route === '/machines') {
-      this.listView = true;
+    if (this.listView) {
       this._init();
-    } else {
-      this.listView = false;
     }
   }
 
