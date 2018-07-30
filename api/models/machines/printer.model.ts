@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import machineFields from './machine.basic.model';
-import materialSchema from '../material.model';
+import { materialSchema } from '../material.model';
 
 const attributes = {
   ...machineFields(),
@@ -41,6 +41,7 @@ const attributes = {
   }
 };
 
-const printerSchema = mongoose.Schema(attributes);
+export const printerSchema = mongoose.Schema(attributes);
+export const Printer = mongoose.model('Printer', printerSchema);
 
-export default printerSchema;
+export default Printer;

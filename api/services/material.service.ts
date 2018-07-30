@@ -1,8 +1,4 @@
-import * as mongoose from 'mongoose';
-
-import materialSchema from '../models/material.model';
-
-const Material = mongoose.model('Material', materialSchema);
+import { Material } from '../models/material.model';
 
 function getMaterialByType (type) {
   return Material.find({ type });

@@ -18,6 +18,7 @@ const attributes = {
   }
 };
 
-const fablabSchema = mongoose.Schema(attributes);
+export const fablabSchema = mongoose.Schema(attributes);
+export const Fablab = mongoose.model('Fablab', fablabSchema);
 
-export default fablabSchema;
+export default Fablab;

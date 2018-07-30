@@ -7,6 +7,7 @@ const attributes = {
   }
 };
 
-const laserTypeSchema = mongoose.Schema(attributes);
+export const laserTypeSchema = mongoose.Schema(attributes);
+export const LaserType = mongoose.model('LasercutterLasertypes', laserTypeSchema);
 
-export default laserTypeSchema;
+export default LaserType;

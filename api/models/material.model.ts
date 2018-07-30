@@ -11,6 +11,7 @@ const attributes = {
   },
 };
 
-const materialSchema = mongoose.Schema(attributes);
+export const materialSchema = mongoose.Schema(attributes);
+export const Material = mongoose.model('Material', materialSchema);
 
-export default materialSchema;
+export default Material;
