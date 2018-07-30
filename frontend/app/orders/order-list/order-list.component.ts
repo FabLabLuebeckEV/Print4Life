@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { TableItem } from '../../components/table/table.component';
 import { OrderService } from '../../services/order.service';
 import { faWrench, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -12,11 +14,27 @@ import { config } from '../../config/config';
 export class OrderListComponent implements OnInit {
 
   orders: Array<Object> = [];
+  id: String;
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private router: Router,
+    private location: Location) {
+      router.events.subscribe(() => {
+        const route = location.path();
+      });
+    }
 
   ngOnInit() {
-    this.init();
+    const route = this.router.url;
+    if (route === '/orders') {
+      this.init();
+    }
+    if (route.includes('deleteOrder')) {
+      const path = route.split('/');
+      console.log(this.id);
+      this.orderService.deleteOrder(this.id);
+    }
   }
 
   async init() {

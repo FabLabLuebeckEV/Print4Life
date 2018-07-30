@@ -28,8 +28,8 @@ export class OrderService {
     return this.http.post(`${p}/${config.paths.orders.updateOrder}`, order, httpOptions).toPromise();
   }
 
-  public deleteOrder(order): Promise < any > {
-    return this.http.post(`${p}/${config.paths.orders.deleteOrder}`, order, httpOptions).toPromise();
+  public deleteOrder(id): Promise < any > {
+    return this.http.get(`${p}/${config.paths.orders.deleteOrder}/${id}`, httpOptions).toPromise();
   }
 
   public getOrderById(id): Promise < any > {

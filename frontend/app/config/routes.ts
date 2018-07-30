@@ -3,6 +3,7 @@ import { OrderListComponent } from '../orders/order-list/order-list.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { Routes } from '@angular/router';
 import { config } from '../config/config';
+import { DeleteModalComponent } from '../orders/delete-modal/delete-modal.component';
 
 export let appRoutes: Routes = [
     {
@@ -13,7 +14,7 @@ export let appRoutes: Routes = [
         path: config.paths.orders.root,
         component: OrderListComponent,
         children: [
-            { path: `${config.paths.orders.deleteOrder}/:id`, component: OrderListComponent},
+            { path: `deleteOrder/:id`, component: DeleteModalComponent},
         ]
     },
     {

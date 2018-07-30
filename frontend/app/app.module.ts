@@ -19,7 +19,13 @@ import { OrderListComponent } from './orders/order-list/order-list.component';
 
 @NgModule({
     declarations: [
-        AppComponent, DropdownComponent, NavigationComponent, MachineListComponent, DashboardComponent, TableComponent, OrderListComponent
+        AppComponent,
+        DropdownComponent,
+        NavigationComponent,
+        MachineListComponent,
+        DashboardComponent,
+        TableComponent,
+        OrderListComponent
     ],
     imports: [
         BrowserModule,
