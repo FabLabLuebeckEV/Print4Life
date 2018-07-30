@@ -1,5 +1,5 @@
 import * as uuid from 'uuid/v4';
-import { Order } from '../models/order.model';
+import { Order, orderSchema } from '../models/order.model';
 
 /**
  * @api {get} /api/v1/orders/ Request the list of orders
