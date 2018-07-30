@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-dev.orders"},{"v":2,"unique":true,"key":{"token":1},"name":"token_1","ns":"iot-fablab-dev.orders","background":true}],"uuid":"198df84c85c54a7b8eadf80f50b9f52f"}
