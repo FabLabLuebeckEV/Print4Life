@@ -163,7 +163,7 @@ describe('MachineService', () => {
   }));
 
   it('should get all printers', inject([MachineService], (MachineService) => {
-    MachineService.getAllPrinters().then((printers) => {
+    MachineService.getAll('printer').then((printers) => {
       expect(printers).toBeTruthy();
       expect(printers.length).toEqual(2);
       expect(printers[0].id).toEqual('5b5368ad9f08d5319db21fea');
@@ -181,7 +181,7 @@ describe('MachineService', () => {
   }));
 
   it('should get all lasercutters', inject([MachineService], (MachineService) => {
-    MachineService.getAllLasercutters().then((lasercutters) => {
+    MachineService.getAll('lasercutter').then((lasercutters) => {
       expect(lasercutters).toBeTruthy();
       expect(lasercutters.length).toEqual(2);
       expect(lasercutters[0].id).toEqual('5b5368ad9f08d5319db21ff8');
@@ -201,7 +201,7 @@ describe('MachineService', () => {
   }));
 
   it('should get all milling machines', inject([MachineService], (MachineService) => {
-    MachineService.getAllMillingMachines().then((millingMachines) => {
+    MachineService.getAll('millingMachine').then((millingMachines) => {
       expect(millingMachines).toBeTruthy();
       expect(millingMachines.length).toEqual(2);
       expect(millingMachines[0].id).toEqual('5b5569ab5cf4a957484aa97f');
@@ -221,7 +221,7 @@ describe('MachineService', () => {
   }));
 
   it('should get all other machines', inject([MachineService], (MachineService) => {
-    MachineService.getAllOtherMachines().then((otherMachines) => {
+    MachineService.getAll('otherMachine').then((otherMachines) => {
       expect(otherMachines).toBeTruthy();
       expect(otherMachines.length).toEqual(2);
       expect(otherMachines[0].id).toEqual('5b5368ad9f08d5319db21ffc');

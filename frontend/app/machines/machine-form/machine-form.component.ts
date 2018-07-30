@@ -49,7 +49,7 @@ export class MachineFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.machineService.create(this.selectedType.toLowerCase(), this.model).then((result) => {
+    this.machineService.create(this._camelCaseTypes(this.selectedType), this.model).then((result) => {
       console.log(result);
       this.submitted = true;
     }).catch((err) => {
@@ -85,7 +85,7 @@ export class MachineFormComponent implements OnInit {
     split[0] = split[0].toLowerCase();
     let machine = '';
     for (let i = 0; i < split.length; i += 1) {
-      machine = split[i] + ' ';
+      machine += split[i];
     }
     return machine.trim();
   }
