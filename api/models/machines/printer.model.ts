@@ -1,10 +1,10 @@
 import * as mongoose from 'mongoose';
 import machineFields from './machine.basic.model';
-import printerMaterialSchema from './printerMaterial.model';
+import materialSchema from '../material.model';
 
 const attributes = {
   ...machineFields(),
-  materials: [printerMaterialSchema],
+  materials: [materialSchema],
   camSoftware: {
     type: String
   },

@@ -18,6 +18,6 @@ const attributes = {
   }
 };
 
-const printerMaterialSchema = mongoose.Schema(attributes);
+const fablabSchema = mongoose.Schema(attributes);
 
-export default printerMaterialSchema;
+export default fablabSchema;

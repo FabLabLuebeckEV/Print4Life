@@ -18,4 +18,14 @@ describe('Machine Controller', () => {
       done();
     });
   });
+
+  it('gets all machine types', (done) => {
+    request.get(`${endpoint}machines/types`, (error, response) => {
+      const types = JSON.parse(response.body).types;
+      expect(response.statusCode).toEqual(200);
+      expect(types).toBeDefined();
+      expect(Object.keys(types).length).toBeGreaterThan(0);
+      done();
+    });
+  });
 });

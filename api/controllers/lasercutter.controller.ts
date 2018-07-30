@@ -1,5 +1,8 @@
+import * as mongoose from 'mongoose';
 import machineService from '../services/machine.service';
+import laserTypeSchema from '../models/lasertype.model';
 
+const LaserType = mongoose.model('LasercutterLasertype', laserTypeSchema);
 
 /**
  * @api {get} /api/v1/machines/lasercutters Get lasercutters
@@ -157,4 +160,31 @@ function create (params) {
   return machineService.create('lasercutter', params);
 }
 
-export default { getAll, create };
+/**
+ * @api {post} /api/v1/machines/lasercutters/laserTypes Get Lasertypes of Lasercutters
+ * @apiName GetLaserTypes
+ * @apiVersion 1.0.0
+ * @apiGroup Lasercutters
+ *
+ *
+ *
+ * @apiSuccess {Object} lasercutter the lasercutter object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "laserTypes": [
+        {
+            "_id": "5b55f7bf3fe0c8b01713b3dc",
+            "laserType": "CO2",
+            "__v": 0
+        }
+    ]
+}
+ *
+ *
+ */
+function getLaserTypes () {
+  return LaserType.find();
+}
+
+export default { getAll, create, getLaserTypes };

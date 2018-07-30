@@ -4,7 +4,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CredentialsInterceptorService } from './services/credential.interceptor.service';
-
+import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
@@ -15,6 +15,8 @@ import { MachineService } from './services/machine.service';
 import { FablabService } from './services/fablab.service';
 import { TableComponent } from './components/table/table.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MachineFormComponent } from './machines/machine-form/machine-form.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { OrderListComponent } from './orders/order-list/order-list.component';
 
 @NgModule({
@@ -25,10 +27,13 @@ import { OrderListComponent } from './orders/order-list/order-list.component';
         MachineListComponent,
         DashboardComponent,
         TableComponent,
-        OrderListComponent
+        OrderListComponent,
+        MachineFormComponent
     ],
     imports: [
         BrowserModule,
+        NgSelectModule,
+        FormsModule,
         FontAwesomeModule,
         HttpClientModule,
         NgbModule.forRoot(),

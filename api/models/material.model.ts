@@ -11,6 +11,6 @@ const attributes = {
   },
 };
 
-const printerMaterialSchema = mongoose.Schema(attributes, { _id: false });
+const materialSchema = mongoose.Schema(attributes);
 
-export default printerMaterialSchema;
+export default materialSchema;

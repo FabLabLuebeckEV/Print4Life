@@ -6,7 +6,7 @@ const endpoint = configs.configArr.prod.baseUrlBackend;
 
 const testMillingMachine = {
   fablabId: '5b453ddb5cf4a9574849e98a',
-  deviceName: 'Test Lasercutter',
+  deviceName: 'Test Milling Machine',
   manufacturer: 'Test Manufacturer',
   laserTypes: [{
     laserType: 'CO2'

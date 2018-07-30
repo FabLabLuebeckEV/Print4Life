@@ -11,6 +11,14 @@ router.route('/').get((req, res) => {
   });
 });
 
+router.route('/laserTypes').get((req, res) => {
+  lasercutterCtrl.getLaserTypes().then((laserTypes) => {
+    res.json({ laserTypes });
+  }).catch((err) => {
+    res.status(500).send(err);
+  });
+});
+
 router.route('/create').post((req, res) => {
   lasercutterCtrl.create(req.body).then((lasercutter) => {
     res.json({ lasercutter });
