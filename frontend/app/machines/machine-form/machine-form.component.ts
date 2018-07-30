@@ -49,7 +49,7 @@ export class MachineFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.machineService.createPrinter(this.model).then((result) => {
+    this.machineService.create(this.selectedType.toLowerCase(), this.model).then((result) => {
       console.log(result);
       this.submitted = true;
     }).catch((err) => {

@@ -2,20 +2,24 @@
     margin: 20px;
 }
 
-.ng-valid[required], .ng-valid.required  {
-    border-left: 5px solid #42A948; /* green */
-  }
-  
-.ng-invalid:not(form)  {
-    border-left: 5px solid #a94442; /* red */
+.ng-valid[required],
+.ng-valid.required {
+    border-left: 10px solid #42A948;
+    /* green */
+}
+
+.ng-invalid:not(form) {
+    border-left: 10px solid #a94442;
+    /* red */
 }
 
 .header-left-bound {
     margin-left: -20px;
 }
 
-.btn.btn-secondary:active, .btn-secondary.active {
+.btn.btn-secondary:active,
+.btn-secondary.active {
     font-size: 1.25rem;
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
 }

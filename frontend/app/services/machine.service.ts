@@ -9,20 +9,12 @@ export class MachineService {
 
   constructor(private http: HttpClient) { }
 
-  public getAllPrinters(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machines/printers').toPromise();
+  public getAll(machineType) {
+    return this.http.get(config.backendUrl + `/machines/${machineType}s`).toPromise();
   }
 
-  public getAllLasercutters(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machines/lasercutters').toPromise();
-  }
-
-  public getAllMillingMachines(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machines/millingMachines').toPromise();
-  }
-
-  public getAllOtherMachines(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machines/otherMachines').toPromise();
+  public create(machineType, obj) {
+    return this.http.post(`${config.backendUrl}/machines/${machineType}s/create`, obj).toPromise();
   }
 
   public getAllMachines(): Promise<any> {
@@ -37,7 +29,4 @@ export class MachineService {
     return this.http.get(`${config.backendUrl}/machines/materials/${machineType}`).toPromise();
   }
 
-  public createPrinter(printer): Promise<any> {
-    return this.http.post(`${config.backendUrl}/machines/printers/create`, printer).toPromise();
-  }
 }
