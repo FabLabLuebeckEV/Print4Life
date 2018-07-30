@@ -215,6 +215,17 @@ async function deleteOrder (id) {
 //   return Order.update({ _id: order._id }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
 }
 
+async function getStatus () {
+  return new Promise((resolve, reject) => {
+    const status = orderSchema.paths.status.enumValues;
+    if (status === undefined) {
+      reject();
+    } else {
+      resolve(status);
+    }
+  });
+}
+
 function rmDbVars (obj) {
   delete obj.__v;
   delete obj._id;
@@ -226,5 +237,6 @@ export default {
   placeOrder,
   updateOrder,
   getOrderById,
-  deleteOrder
+  deleteOrder,
+  getStatus
 };

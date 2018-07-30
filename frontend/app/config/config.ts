@@ -7,7 +7,9 @@ export let config = {
             updateOrder: 'updateOrder',
             deleteOrder: 'deleteOrder',
             getOrderById: 'getOrderById',
-            getAllOrders: ''
+            getAllOrders: '',
+            getStatus: 'status',
+            getOrder: 'getOrder' // TODO: not implemented yet
         },
     }
 };

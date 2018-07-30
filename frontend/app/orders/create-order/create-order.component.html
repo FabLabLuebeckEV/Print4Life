@@ -1,0 +1,28 @@
+<router-outlet></router-outlet>
+<p>Hello!</p>
+<div class="row spacing">
+    <h1 class="col-md-12 text-center">Order Form</h1>
+    <div class="container">
+        <form (ngSubmit)="onSubmit()" #machineForm="ngForm">
+          <div class="form-group row">
+              <div class="col-md-6">
+                <label for="owner">Owner</label>
+                <input type="text" class="form-control" id="owner" required [(ngModel)]="order.owner" name="owner" #owner="ngModel">
+                <div [hidden]="owner.valid || owner.pristine" class="alert alert-danger">
+                  Owner name is required
+                </div>
+              </div>
+          </div>
+          <div class="form-group row">
+              <div class="col-md-6">
+                <label for="editor">Editor</label>
+                <input type="text" class="form-control" id="editor" required [(ngModel)]="order.editor" name="editor" #editor="ngModel">
+                <div [hidden]="editor.valid || editor.pristine" class="alert alert-danger">
+                  Editor name is required
+                </div>
+              </div>
+          </div>
+          <button type="submit" class="btn btn-success" [disabled]="!machineForm.form.valid">Submit</button>
+        </form>
+    </div>
+</div>

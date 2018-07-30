@@ -35,4 +35,8 @@ export class OrderService {
   public getOrderById(id): Promise < any > {
     return this.http.get(`${p}/${config.paths.orders.getAllOrders}`, httpOptions).toPromise();
   }
+
+  public getStatus(): Promise < any > {
+    return this.http.get(`${p}/${config.paths.orders.getStatus}`, httpOptions).toPromise();
+  }
 }

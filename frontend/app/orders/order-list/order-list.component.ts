@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableItem } from '../../components/table/table.component';
 import { OrderService } from '../../services/order.service';
-import { faWrench, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faWrench, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { config } from '../../config/config';
 
 @Component({
@@ -15,25 +15,22 @@ export class OrderListComponent implements OnInit {
 
   orders: Array<Object> = [];
   id: String;
+  listView: Boolean;
+  plusIcon = faPlus;
 
   constructor(
     private orderService: OrderService,
     private router: Router,
     private location: Location) {
-      router.events.subscribe(() => {
-        const route = location.path();
-      });
-    }
+    router.events.subscribe(() => {
+      const route = location.path();
+      this.listView = (route === '/orders');
+    });
+  }
 
   ngOnInit() {
-    const route = this.router.url;
-    if (route === '/orders') {
+    if (this.listView) {
       this.init();
-    }
-    if (route.includes('deleteOrder')) {
-      const path = route.split('/');
-      console.log(this.id);
-      this.orderService.deleteOrder(this.id);
     }
   }
 

@@ -35,6 +35,14 @@ router.route('/deleteOrder/:id').get((req, res) => {
   });
 });
 
+router.route('/status/').get((req, res) => {
+  orderCtrl.getStatus().then((status) => {
+    res.json({ status });
+  }).catch((err) => {
+    res.status(500).send({ error: 'Couldn\'t find any valid status.', stack: err });
+  });
+});
+
 router.route('/:id').get((req, res) => {
   orderCtrl.getOrderById(req.params.id).then((order) => {
     res.json({ order });
