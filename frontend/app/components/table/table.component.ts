@@ -47,11 +47,13 @@ export class TableComponent implements OnInit, DoCheck {
     }
     this.items.forEach((elt, idx) => {
       const objDiffer = this.objDiffer[idx];
-      const objChanges = objDiffer.diff(elt);
-      if (objChanges) {
-        objChanges.forEachChangedItem((elt) => {
-          console.log(elt);
-        });
+      if (objDiffer) {
+        const objChanges = objDiffer.diff(elt);
+        if (objChanges) {
+          objChanges.forEachChangedItem((elt) => {
+            console.log(elt);
+          });
+        }
       }
     });
   }

@@ -16,7 +16,6 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
 export class MachineListComponent implements OnInit {
 
   machines: Array<TableItem> = [];
-  objectKeys: Array<String>;
   listView: Boolean;
   plusIcon = faPlus;
 
@@ -50,7 +49,7 @@ export class MachineListComponent implements OnInit {
       const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
       const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
       const modalRef = this._openMsgModal('Do you really want to delete this machine?',
-        'Are you sure you want to delete the machine?', deleteButton, abortButton);
+      'modal-header header-danger', 'Are you sure you want to delete the machine?', deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
           this.machineService.deleteMachine(machine.obj['Device Type'], machine.obj.id);
@@ -59,9 +58,12 @@ export class MachineListComponent implements OnInit {
     }
   }
 
-  private _openMsgModal(title: String, msg: String, button1: ModalButton, button2: ModalButton) {
+  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent);
     modalRef.componentInstance.title = title;
+    if (titleClass) {
+      modalRef.componentInstance.titleClass = titleClass;
+    }
     modalRef.componentInstance.msg = msg;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
@@ -96,6 +98,5 @@ export class MachineListComponent implements OnInit {
       }
       this.machines = this.machines.concat(arr);
     }
-    this.objectKeys = Object.keys(this.machines);
   }
 }

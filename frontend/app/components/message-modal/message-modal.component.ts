@@ -21,12 +21,16 @@ export class ModalButton {
 })
 export class MessageModalComponent implements OnInit {
   @Input() title: String;
+  @Input() titleClass: String;
   @Input() msg: String;
   @Input() button1: ModalButton;
   @Input() button2: ModalButton;
   constructor(public activeModal: NgbActiveModal) { }
 
   ngOnInit() {
+    if (!this.titleClass) {
+      this.titleClass = 'modal-header header-secondary';
+    }
   }
 
   close(button) {

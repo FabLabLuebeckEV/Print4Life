@@ -54,7 +54,7 @@ export class OrderListComponent implements OnInit {
       const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
       const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
       const modalRef = this._openMsgModal('Do you really want to delete this order?',
-        'Are you sure you want to delete the order?', deleteButton, abortButton);
+      'modal-header header-danger', 'Are you sure you want to delete the order?', deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
           this.orderService.deleteOrder(order.obj.id).then((result) => {
@@ -70,9 +70,12 @@ export class OrderListComponent implements OnInit {
     }
   }
 
-  private _openMsgModal(title: String, msg: String, button1: ModalButton, button2: ModalButton) {
+  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent);
     modalRef.componentInstance.title = title;
+    if (titleClass) {
+      modalRef.componentInstance.titleClass = titleClass;
+    }
     modalRef.componentInstance.msg = msg;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
@@ -91,7 +94,6 @@ export class OrderListComponent implements OnInit {
       item.obj['Status'] = order.status;
       item.button1.label = 'Edit';
       item.button1.href = `./${config.paths.orders.updateOrder}`;
-      item.button1.routerLink = true;
       item.button1.class = 'btn btn-primary spacing';
       item.button1.icon = faWrench;
       item.button2.label = 'Delete';

@@ -4,6 +4,8 @@ import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 
 @Component({
   selector: 'app-machine-form',
@@ -24,7 +26,8 @@ export class MachineFormComponent implements OnInit {
   loadingLaserTypes: Boolean;
 
   constructor(private machineService: MachineService, private fablabService: FablabService,
-    private router: Router, private location: Location, private route: ActivatedRoute) {
+    private router: Router, private location: Location, private route: ActivatedRoute,
+    private modalService: NgbModal) {
     this.route.params.subscribe(params => console.log(params));
     router.events.subscribe(() => {
       const route = location.path();
@@ -49,11 +52,41 @@ export class MachineFormComponent implements OnInit {
 
   onSubmit() {
     this.machineService.create(this._camelCaseTypes(this.selectedType), this.model).then((result) => {
-      console.log(result);
+      if (result) {
+        this._openSuccessMsg();
+      } else {
+        this._openErrMsg(undefined);
+      }
       this.submitted = true;
     }).catch((err) => {
-      console.log(err);
-    });
+      this._openErrMsg(err);
+  });
+}
+
+  private _openSuccessMsg() {
+    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    this._openMsgModal('Machine created successfully', 'modal-header header-success',
+      'The creation of a new machine was successful!', okButton, undefined);
+  }
+
+  private _openErrMsg(err) {
+    let errorMsg = `Something went wrong while creating the new machine.`;
+    if (err) {
+      errorMsg += ` Error: ${err}`;
+    }
+    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
+       okButton, undefined);
+  }
+
+  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent);
+    modalRef.componentInstance.title = title;
+    modalRef.componentInstance.titleClass = titleClass;
+    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.button1 = button1;
+    modalRef.componentInstance.button2 = button2;
+    return modalRef;
   }
 
   private async _loadLaserTypes() {
