@@ -33,4 +33,8 @@ export class MachineService {
     return this.http.get(`${config.backendUrl}/machines/laserTypes`).toPromise();
   }
 
+  public deleteMachine(type, id) {
+    return true;
+  }
+
 }

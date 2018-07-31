@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, KeyValueDiffers, DoCheck } from '@angular/core';
 
 export class TableButton {
   icon: any = undefined;
@@ -20,24 +20,40 @@ export class TableItem {
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit, OnChanges {
+export class TableComponent implements OnInit, DoCheck {
   @Input() items: Array<TableItem>;
   @Output() buttonEvent: EventEmitter<TableButton> = new EventEmitter();
   headers: Array<String> = [];
   button1Active: Boolean = false;
   button2Active: Boolean = false;
+  differ: any;
+  objDiffer: any;
 
-  constructor() { }
+  constructor(private differs: KeyValueDiffers) {
+    this.differ = differs.find([]).create();
+   }
 
   emit(button) {
     this.buttonEvent.emit(button);
   }
 
-  ngOnChanges(changes) {
-    if (changes.items) {
-      this.items = changes.items.currentValue;
+  ngDoCheck () {
+    if (!this.objDiffer && this.items.length > 0) {
+      this.objDiffer = {};
+      this.items.forEach((elt, idx) => {
+        this.objDiffer[idx] = this.differs.find(elt).create();
+      });
       this._loadTable();
     }
+    this.items.forEach((elt, idx) => {
+      const objDiffer = this.objDiffer[idx];
+      const objChanges = objDiffer.diff(elt);
+      if (objChanges) {
+        objChanges.forEachChangedItem((elt) => {
+          console.log(elt);
+        });
+      }
+    });
   }
 
   ngOnInit() {
@@ -62,7 +78,7 @@ export class TableComponent implements OnInit, OnChanges {
             found = true;
           }
         });
-        if (!found && key !== 'button1' && key !== 'button2') {
+        if (!found && key !== 'id') {
           this.headers.push(key);
         }
       });
