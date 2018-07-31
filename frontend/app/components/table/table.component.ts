@@ -1,19 +1,18 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+
+export class TableButton {
+  icon: any = undefined;
+  label: String = '';
+  href: String = '';
+  eventEmitter: Boolean = false;
+  routerLink: Boolean = true;
+  class: String = '';
+}
 
 export class TableItem {
   obj: any = {};
-  button1: any = {
-    label: String,
-    href: String,
-    routerLink: Boolean,
-    class: String
-  };
-  button2: any = {
-    label: String,
-    href: String,
-    routerLink: Boolean,
-    class: String
-  };
+  button1: TableButton = new TableButton();
+  button2: TableButton = new TableButton();
 }
 
 @Component({
@@ -22,12 +21,17 @@ export class TableItem {
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit, OnChanges {
-  @Input() items: Array<any>;
+  @Input() items: Array<TableItem>;
+  @Output() buttonEvent: EventEmitter<TableButton> = new EventEmitter();
   headers: Array<String> = [];
   button1Active: Boolean = false;
   button2Active: Boolean = false;
 
   constructor() { }
+
+  emit(button) {
+    this.buttonEvent.emit(button);
+  }
 
   ngOnChanges(changes) {
     if (changes.items) {
@@ -42,6 +46,15 @@ export class TableComponent implements OnInit, OnChanges {
 
   private _loadTable() {
     this.items.forEach((item) => {
+
+      if (item.button1) {
+        this.button1Active = true;
+      }
+
+      if (item.button2) {
+        this.button2Active = true;
+      }
+
       Object.keys(item.obj).forEach((key) => {
         let found = false;
         this.headers.forEach((header) => {
@@ -51,12 +64,6 @@ export class TableComponent implements OnInit, OnChanges {
         });
         if (!found && key !== 'button1' && key !== 'button2') {
           this.headers.push(key);
-        }
-        if (key === 'button1') {
-          this.button1Active = true;
-        }
-        if (key === 'button2') {
-          this.button2Active = true;
         }
       });
     });

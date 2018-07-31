@@ -37,6 +37,10 @@ export class MachineListComponent implements OnInit {
     }
   }
 
+  eventHandler(event) {
+    console.log(event);
+  }
+
   private async _init() {
     const resMach = await this.machineService.getAllMachines();
     const machines = resMach.machines;
@@ -53,12 +57,11 @@ export class MachineListComponent implements OnInit {
         item.obj['Description'] = '';
         item.button1.label = 'Edit';
         item.button1.href = './edit/' + elem._id;
-        item.button1.routerLink = true;
         item.button1.class = 'btn btn-primary spacing';
         item.button1.icon = faWrench;
         item.button2.label = 'Delete';
         item.button2.href = './delete/' + elem._id;
-        item.button2.routerLink = true;
+        item.button2.eventEmitter = true;
         item.button2.class = 'btn btn-danger spacing';
         item.button2.icon = faTrashAlt;
         arr.push(item);

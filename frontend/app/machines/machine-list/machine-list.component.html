@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <app-table [items]="machines"></app-table>
+            <app-table (buttonEvent)="eventHandler($event)" [items]="machines"></app-table>
         </div>
     </div>
 </div>
