@@ -7,6 +7,7 @@ import { faWrench, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
+import { config } from '../../config/config';
 
 @Component({
   selector: 'app-machine-list',
@@ -18,6 +19,7 @@ export class MachineListComponent implements OnInit {
   machines: Array<TableItem> = [];
   listView: Boolean;
   plusIcon = faPlus;
+  newLink: String = `./${config.paths.machines.create}`;
 
   constructor(private machineService: MachineService,
     private fablabService: FablabService, private router: Router,
@@ -49,7 +51,7 @@ export class MachineListComponent implements OnInit {
       const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
       const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
       const modalRef = this._openMsgModal('Do you really want to delete this machine?',
-      'modal-header header-danger', 'Are you sure you want to delete the machine?', deleteButton, abortButton);
+        'modal-header header-danger', 'Are you sure you want to delete the machine?', deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
           this.machineService.deleteMachine(machine.obj['Device Type'], machine.obj.id);
@@ -86,8 +88,8 @@ export class MachineListComponent implements OnInit {
         item.obj['Manufacturer'] = elem.manufacturer;
         item.obj['Fablab'] = fablab.name;
         item.obj['Description'] = '';
-        item.button1.label = 'Edit';
-        item.button1.href = './edit/' + elem._id;
+        item.button1.label = 'Update';
+        item.button1.href = `./${config.paths.machines.update}/${elem._id}`;
         item.button1.class = 'btn btn-primary spacing';
         item.button1.icon = faWrench;
         item.button2.label = 'Delete';

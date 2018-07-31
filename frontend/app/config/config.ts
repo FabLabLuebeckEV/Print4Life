@@ -9,5 +9,20 @@ export let config = {
             getOrderById: 'getOrderById',
             getAllOrders: ''
         },
+        machines: {
+            root: 'machines',
+            create: 'create',
+            update: 'update',
+            delete: 'delete',
+            getById: ':id',
+            getAll: '',
+            machineTypes: 'types',
+            materials: 'materials',
+            laserTypes: 'laserTypes'
+        },
+        fablabs: {
+            root: 'fablabs',
+            getById: ':id'
+        }
     }
 };

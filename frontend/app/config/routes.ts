@@ -8,12 +8,11 @@ import { config } from '../config/config';
 
 export let appRoutes: Routes = [
     {
-        path: 'machines',
+        path: config.paths.machines.root,
         component: MachineListComponent,
         children: [
-            { path: 'new', component: MachineFormComponent },
-            // {path: 'delete/:id', component: ArtistTrackListComponent},
-            {path: 'edit/:id', component: MachineFormComponent},
+            { path: config.paths.machines.create, component: MachineFormComponent },
+            { path: `${config.paths.machines.update}/${config.paths.machines.getById}`, component: MachineFormComponent },
         ]
     },
 
@@ -21,7 +20,7 @@ export let appRoutes: Routes = [
         path: config.paths.orders.root,
         component: OrderListComponent,
         children: [
-        //    { path: `deleteOrder/:id`, component: DeleteModalComponent},
+            //    { path: `deleteOrder/:id`, component: DeleteModalComponent},
         ]
     },
     {
