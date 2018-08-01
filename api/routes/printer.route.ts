@@ -23,7 +23,7 @@ router.route('/:id').delete((req, res) => {
   if (req.params.id.length !== 24) {
     res.status(400).send({ error: 'Id needs to be a 24 character long hex string!' });
   } else {
-    printerCtrl.deleteById(req.params.id).then((printer) => {
+    printerCtrl.deleteById(req.params.id).then(() => {
       res.status(204).send();
     }).catch((err) => {
       res.status(400).send({ err: 'Malformed request!', stack: err });

@@ -25,8 +25,6 @@ const testPrinter = {
   comment: 'Create Test'
 };
 
-const createResponseObj = {};
-
 describe('Printer Controller', () => {
   it('gets printers', (done) => {
     request.get(`${endpoint}machines/printers`, (error, response) => {
