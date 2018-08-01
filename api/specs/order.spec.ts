@@ -109,7 +109,7 @@ describe('Order Controller', () => {
     }, (error, response) => {
       request({
         uri: `${endpoint}orders/deleteOrder/${response.body.order._id}`,
-        method: 'GET',
+        method: 'PUT',
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);

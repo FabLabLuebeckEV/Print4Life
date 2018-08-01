@@ -22,7 +22,8 @@ export let appRoutes: Routes = [
         path: config.paths.orders.root,
         component: OrderListComponent,
         children: [
-            { path: 'new', component: CreateOrderComponent }
+            { path: config.paths.orders.createOrder, component: CreateOrderComponent },
+            { path: `${config.paths.orders.updateOrder}/:id`, component: CreateOrderComponent }
         ]
     },
     {

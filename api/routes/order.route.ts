@@ -27,7 +27,7 @@ router.route('/updateOrder').post((req, res) => {
   });
 });
 
-router.route('/deleteOrder/:id').get((req, res) => {
+router.route('/deleteOrder/:id').put((req, res) => {
   orderCtrl.deleteOrder(req.params.id).then((order) => {
     res.json({ order });
   }).catch((err) => {

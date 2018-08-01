@@ -6,10 +6,10 @@ export let config = {
             createOrder: 'placeOrder',
             updateOrder: 'updateOrder',
             deleteOrder: 'deleteOrder',
-            getOrderById: 'getOrderById',
+            getOrderById: ':id',
             getAllOrders: '',
             getStatus: 'status',
-            getOrder: 'getOrder' // TODO: not implemented yet
+            getOrder: 'getOrder' // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
         },
     }
 };

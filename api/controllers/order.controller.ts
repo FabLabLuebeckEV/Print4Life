@@ -1,4 +1,6 @@
 import * as uuid from 'uuid/v4';
+import * as mongoose from 'mongoose';
+
 import { Order, orderSchema } from '../models/order.model';
 
 /**
@@ -153,7 +155,10 @@ function placeOrder (order) {
  */
 function updateOrder (order) {
   delete order.__v;
-  return Order.update({ _id: order._id }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
+  return Order.update(
+    { _id: mongoose.Types.ObjectId(order._id) },
+    order,
+    { upsert: true }).then(() => Order.findOne({ _id: order._id }));
 }
 
 /**

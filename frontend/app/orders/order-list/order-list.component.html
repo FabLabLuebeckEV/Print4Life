@@ -7,6 +7,12 @@
           </button>
       </div>
   </div>
+  <!-- <div class="col-md-6 offset-3">
+    <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Status selection">
+        <button *ngFor="let status of validStatus" (click)="_selectStatus(status);" type="button" [class.active]="status === selectedStatus"
+        class="btn btn-secondary">{{status}}</button>
+    </div>
+  </div>  -->
   <div class="row">
     <app-table [items]="orders"></app-table>
   </div>

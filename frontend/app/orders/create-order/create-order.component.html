@@ -1,5 +1,4 @@
 <router-outlet></router-outlet>
-<p>Hello!</p>
 <div class="row spacing">
     <h1 class="col-md-12 text-center">Order Form</h1>
     <div class="container">
@@ -21,6 +20,15 @@
                   Editor name is required
                 </div>
               </div>
+          </div>
+          <div class="col-md-6">
+            <label for="status">Status</label>
+            <ng-select [loading]="loadingStatus" [items]=validStatus bindValue="_id" bindLabel="name" [(ngModel)]="order.status" id="status"
+              name="status" #status="ngModel" required>
+            </ng-select>
+            <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
+              Status is required
+            </div>
           </div>
           <button type="submit" class="btn btn-success" [disabled]="!machineForm.form.valid">Submit</button>
         </form>

@@ -14,6 +14,7 @@ import {
 } from '../../models/machines.model';
 
 import { Order } from '../../models/order.model';
+import { config } from '../../config/config';
 
 
 @Component({
@@ -25,16 +26,17 @@ export class CreateOrderComponent implements OnInit {
 
   machineTypes: Array<String> = [];
   selectedType: String;
-  editView: Boolean;
+  editView: Boolean = false;
   routeChanged: Boolean;
   submitted: Boolean = false;
-  order: Order;
+  order: Order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   fablabs: Array<any>;
   materialsArr: Array<Material>;
   loadingFablabs: Boolean;
   loadingMaterials: Boolean;
   loadingStatus: Boolean;
   validStatus: Array<String> = [];
+  orderId: String;
 
   constructor(
     private machineService: MachineService,
@@ -46,27 +48,50 @@ export class CreateOrderComponent implements OnInit {
 
     router.events.subscribe(() => {
       const route = location.path();
-      this.editView = route.endsWith('edit');
+      this.editView = route.indexOf(`${config.paths.orders.root}/${config.paths.orders.updateOrder}`) >= 0;
+      if (this.editView) {
+        const routeArr = route.split('/');
+        this.orderId = routeArr[routeArr.length - 1];
+      }
     });
   }
 
   ngOnInit() {
+    this._initializeOrder(this.orderId);
+
     this._loadMachineTypes();
     this.loadingFablabs = true;
     this._loadFablabs();
     this.loadingStatus = true;
     this._loadStatus();
-    this.order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined);
-    // this._loadMaterials(this.selectedType);
+// this._loadMaterials(this.selectedType);
   }
 
   onSubmit() {
-    this.orderService.createOrder(this.order).then((result) => {
-      console.log(result);
-      this.submitted = true;
-    }).catch((err) => {
-      console.log(err);
-    });
+    if (this.editView) {
+      this.orderService.updateOrder(this.order).then((result) => {
+        console.log('Updated', result);
+        this.submitted = true;
+      }).catch((err) => {
+        console.log(err);
+      });
+    } else {
+      this.orderService.createOrder(this.order).then((result) => {
+        console.log('created', result);
+        this.submitted = true;
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+  }
+
+  private async _initializeOrder(id) {
+    if (id !== undefined) {
+      this.order = (await this.orderService.getOrderById(id)).order;
+      if (this.order === undefined) {
+        console.log('ERROR');
+      }
+    }
   }
 
   private async _loadMachineTypes() {
