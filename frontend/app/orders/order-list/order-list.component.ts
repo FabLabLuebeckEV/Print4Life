@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableItem } from '../../components/table/table.component';
@@ -17,12 +17,13 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
 export class OrderListComponent implements OnInit {
 
   orders: Array<TableItem> = [];
+  visibleOrders: Array<TableItem> = [];
   id: String;
   listView: Boolean;
   plusIcon = faPlus;
-  // loadingStatus: Boolean;
-  // selectedStatus: String;
-  // validStatus: Array<String> = [];
+  loadingStatus: Boolean;
+  selectedStatus: Array<String> = [];
+  validStatus: Array<String> = [];
 
   constructor(
     private orderService: OrderService,
@@ -34,12 +35,20 @@ export class OrderListComponent implements OnInit {
       this.listView = (route === '/orders');
     });
   }
-
   ngOnInit() {
     if (this.listView) {
       this.init();
-      // this._loadStatus();
+      this._loadStatus();
     }
+  }
+
+  // remove add change clear
+  changeHandler(event: Array < String >) {
+    this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+    this.visibleOrders = this.visibleOrders.filter((ti) => {
+      console.log(ti);
+      return event.includes(ti.obj['Status']);
+    });
   }
 
   eventHandler(event) {
@@ -104,10 +113,11 @@ export class OrderListComponent implements OnInit {
       arr.push(item);
     }
     this.orders = this.orders.concat(arr);
+    this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
   }
 
-  // private async _loadStatus() {
-  //   this.validStatus = (await this.orderService.getStatus()).status;
-  //   this.loadingStatus = false;
-  // }
+  private async _loadStatus() {
+    this.validStatus = (await this.orderService.getStatus()).status;
+    this.loadingStatus = false;
+  }
 }
