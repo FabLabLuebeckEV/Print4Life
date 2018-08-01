@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CredentialsInterceptorService } from './services/credential.interceptor.service';
@@ -19,6 +19,8 @@ import { MachineFormComponent } from './machines/machine-form/machine-form.compo
 import { NgSelectModule } from '@ng-select/ng-select';
 import { OrderListComponent } from './orders/order-list/order-list.component';
 import { CreateOrderComponent } from './orders/create-order/create-order.component';
+import { MessageModalComponent } from './components/message-modal/message-modal.component';
+
 
 @NgModule({
     declarations: [
@@ -30,7 +32,8 @@ import { CreateOrderComponent } from './orders/create-order/create-order.compone
         TableComponent,
         OrderListComponent,
         MachineFormComponent,
-        CreateOrderComponent
+        CreateOrderComponent,
+        MessageModalComponent
     ],
     imports: [
         BrowserModule,
@@ -48,6 +51,9 @@ import { CreateOrderComponent } from './orders/create-order/create-order.compone
         { provide: HTTP_INTERCEPTORS, useClass: CredentialsInterceptorService, multi: true }, // magic for cors
         MachineService, FablabService
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [
+        MessageModalComponent
+    ]
 })
 export class AppModule { }

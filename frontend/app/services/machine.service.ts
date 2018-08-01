@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { config } from '../config/config';
 
+const rootPath = config.backendUrl + '/' + config.paths.machines.root;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,27 +12,31 @@ export class MachineService {
   constructor(private http: HttpClient) { }
 
   public getAll(machineType) {
-    return this.http.get(config.backendUrl + `/machines/${machineType}s`).toPromise();
+    return this.http.get(`${rootPath}/${machineType}s`).toPromise();
   }
 
   public create(machineType, obj) {
-    return this.http.post(`${config.backendUrl}/machines/${machineType}s/create`, obj).toPromise();
+    return this.http.post(`${rootPath}/${machineType}s/${config.paths.machines.create}`, obj).toPromise();
   }
 
   public getAllMachines(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machines/').toPromise();
+    return this.http.get(`${rootPath}/`).toPromise();
   }
 
   public getAllMachineTypes(): Promise<any> {
-    return this.http.get(config.backendUrl + '/machines/types').toPromise();
+    return this.http.get(`${rootPath}/${config.paths.machines.machineTypes}`).toPromise();
   }
 
   public getMaterialsByMachineType(machineType): Promise<any> {
-    return this.http.get(`${config.backendUrl}/machines/materials/${machineType}`).toPromise();
+    return this.http.get(`${rootPath}/${config.paths.machines.materials}/${machineType}`).toPromise();
   }
 
   public getLaserTypes(): Promise<any> {
-    return this.http.get(`${config.backendUrl}/machines/laserTypes`).toPromise();
+    return this.http.get(`${rootPath}/${config.paths.machines.laserTypes}`).toPromise();
+  }
+
+  public deleteMachine(type, id) {
+    return true;
   }
 
 }

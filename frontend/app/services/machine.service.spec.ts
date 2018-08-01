@@ -424,7 +424,6 @@ describe('MachineService', () => {
       expect(otherMachine.deviceName).toEqual('createOtherMachineTest');
       expect(otherMachine.manufacturer).toEqual('Test');
       expect(otherMachine.comment).toEqual('Test');
-      expect(otherMachine.laserTypes[0].laserType).toEqual('CO2');
       expect(otherMachine.fablabId).toEqual('2');
     }, fail);
 

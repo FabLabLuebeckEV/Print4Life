@@ -5,16 +5,14 @@ import { MachineFormComponent } from '../machines/machine-form/machine-form.comp
 import { Routes } from '@angular/router';
 import { config } from './config';
 import { CreateOrderComponent } from '../orders/create-order/create-order.component';
-// import { DeleteModalComponent } from '../orders/delete-modal/delete-modal.component';
 
 export let appRoutes: Routes = [
     {
-        path: 'machines',
+        path: config.paths.machines.root,
         component: MachineListComponent,
         children: [
-            { path: 'new', component: MachineFormComponent },
-            // {path: 'delete/:id', component: ArtistTrackListComponent},
-            {path: 'edit/:id', component: MachineFormComponent},
+            { path: config.paths.machines.create, component: MachineFormComponent },
+            { path: `${config.paths.machines.update}/${config.paths.machines.getById}`, component: MachineFormComponent },
         ]
     },
 

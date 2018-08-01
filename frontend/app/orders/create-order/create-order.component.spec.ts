@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
 import { CreateOrderComponent } from './create-order.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import {
   HttpClientTestingModule
@@ -14,7 +15,7 @@ describe('CreateOrderComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ CreateOrderComponent ],
-      imports: [RouterTestingModule, FormsModule, HttpClientTestingModule]
+      imports: [RouterTestingModule, FormsModule, HttpClientTestingModule, NgSelectModule]
     })
     .compileComponents();
   }));

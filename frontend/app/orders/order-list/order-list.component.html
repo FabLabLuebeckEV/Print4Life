@@ -1,11 +1,12 @@
-<router-outlet></router-outlet>
+<router-outlet>
+</router-outlet>
 <div *ngIf="listView">
   <div class="row">
-      <div class="col-md-2">
-          <button type="button" class="btn btn-success spacing-top-xxl spacing-left-xxl" routerLink="./new">
-              <fa-icon [icon]="plusIcon"></fa-icon>
-          </button>
-      </div>
+    <div class="col-md-2">
+      <button type="button" class="btn btn-success spacing-top-xxl spacing-left-xxl" routerLink="./new">
+        <fa-icon [icon]="plusIcon"></fa-icon>
+      </button>
+    </div>
   </div>
   <!-- <div class="col-md-6 offset-3">
     <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Status selection">
@@ -14,6 +15,6 @@
     </div>
   </div>  -->
   <div class="row">
-    <app-table [items]="orders"></app-table>
+    <app-table (buttonEvent)="eventHandler($event)" [items]="orders"></app-table>
   </div>
 </div>
