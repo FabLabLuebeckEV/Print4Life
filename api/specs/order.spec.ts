@@ -5,18 +5,6 @@ import * as configs from '../config';
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
 
-describe('Order Controller', () => {
-  it('gets orders', (done) => {
-    request.get(`${endpoint}orders/`, (error, response) => {
-      const orders = JSON.parse(response.body).orders;
-      expect(response.statusCode).toEqual(200);
-      expect(orders).toBeDefined();
-      expect(orders.length).toBeGreaterThan(-1);
-      done();
-    });
-  });
-});
-
 const testOrder = {
   comments: [{
     author: 'Mister Foo',
@@ -29,8 +17,18 @@ const testOrder = {
 };
 
 describe('Order Controller', () => {
-  const testBody = JSON.parse(JSON.stringify(testOrder));
+  it('gets orders', (done) => {
+    request.get(`${endpoint}orders/`, (error, response) => {
+      const orders = JSON.parse(response.body).orders;
+      expect(response.statusCode).toEqual(200);
+      expect(orders).toBeDefined();
+      expect(orders.length).toBeGreaterThan(-1);
+      done();
+    });
+  });
+
   it('create order', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testOrder));
     request({
       uri: `${endpoint}orders/placeOrder`,
       method: 'POST',
@@ -48,11 +46,9 @@ describe('Order Controller', () => {
       done();
     });
   });
-});
 
-describe('Order Controller', () => {
-  const testBody = JSON.parse(JSON.stringify(testOrder));
   it('get order by id', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testOrder));
     request({
       uri: `${endpoint}orders/placeOrder`,
       method: 'POST',
@@ -74,11 +70,9 @@ describe('Order Controller', () => {
       });
     });
   });
-});
 
-describe('Order Controller', () => {
-  const testBody = JSON.parse(JSON.stringify(testOrder));
   it('update order', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testOrder));
     request({
       uri: `${endpoint}orders/placeOrder`,
       method: 'POST',
@@ -104,11 +98,9 @@ describe('Order Controller', () => {
       });
     });
   });
-});
 
-describe('Order Controller', () => {
-  const testBody = JSON.parse(JSON.stringify(testOrder));
   it('delete order', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testOrder));
     request({
       uri: `${endpoint}orders/placeOrder`,
       method: 'POST',
@@ -117,7 +109,7 @@ describe('Order Controller', () => {
     }, (error, response) => {
       request({
         uri: `${endpoint}orders/deleteOrder/${response.body.order._id}`,
-        method: 'GET',
+        method: 'PUT',
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
@@ -129,6 +121,27 @@ describe('Order Controller', () => {
         expect(response.body.order.editor).toEqual(testBody.editor);
         done();
       });
+    });
+  });
+
+  it('gets status', (done) => {
+    request({
+      uri: `${endpoint}orders/status`,
+      method: 'GET',
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(200);
+      expect(response.body.status).toBeDefined();
+      expect(response.body.status.length).toBeGreaterThan(0);
+
+      expect(response.body.status.includes('new')).toEqual(true);
+      expect(response.body.status.includes('assigned')).toEqual(true);
+      expect(response.body.status.includes('production')).toEqual(true);
+      expect(response.body.status.includes('shipment')).toEqual(true);
+      expect(response.body.status.includes('archived')).toEqual(true);
+      expect(response.body.status.includes('representive')).toEqual(true);
+      expect(response.body.status.includes('deleted')).toEqual(true);
+      done();
     });
   });
 });

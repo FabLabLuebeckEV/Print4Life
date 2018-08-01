@@ -18,7 +18,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MachineFormComponent } from './machines/machine-form/machine-form.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { OrderListComponent } from './orders/order-list/order-list.component';
+import { CreateOrderComponent } from './orders/create-order/create-order.component';
 import { MessageModalComponent } from './components/message-modal/message-modal.component';
+
 
 @NgModule({
     declarations: [
@@ -30,6 +32,7 @@ import { MessageModalComponent } from './components/message-modal/message-modal.
         TableComponent,
         OrderListComponent,
         MachineFormComponent,
+        CreateOrderComponent,
         MessageModalComponent
     ],
     imports: [

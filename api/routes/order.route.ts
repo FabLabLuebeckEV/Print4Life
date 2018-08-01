@@ -27,11 +27,19 @@ router.route('/updateOrder').post((req, res) => {
   });
 });
 
-router.route('/deleteOrder/:id').get((req, res) => {
+router.route('/deleteOrder/:id').put((req, res) => {
   orderCtrl.deleteOrder(req.params.id).then((order) => {
     res.json({ order });
   }).catch((err) => {
     res.status(400).send({ error: 'Order not found.', stack: err });
+  });
+});
+
+router.route('/status/').get((req, res) => {
+  orderCtrl.getStatus().then((status) => {
+    res.json({ status });
+  }).catch((err) => {
+    res.status(500).send({ error: 'Couldn\'t find any valid status.', stack: err });
   });
 });
 

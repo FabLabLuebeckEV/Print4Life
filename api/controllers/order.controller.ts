@@ -1,5 +1,7 @@
 import * as uuid from 'uuid/v4';
-import { Order } from '../models/order.model';
+import * as mongoose from 'mongoose';
+
+import { Order, orderSchema } from '../models/order.model';
 
 /**
  * @api {get} /api/v1/orders/ Request the list of orders
@@ -153,7 +155,10 @@ function placeOrder (order) {
  */
 function updateOrder (order) {
   delete order.__v;
-  return Order.update({ _id: order._id }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
+  return Order.update(
+    { _id: mongoose.Types.ObjectId(order._id) },
+    order,
+    { upsert: true }).then(() => Order.findOne({ _id: order._id }));
 }
 
 /**
@@ -212,6 +217,17 @@ async function deleteOrder (id) {
   //   return Order.update({ _id: order._id }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
 }
 
+async function getStatus () {
+  return new Promise((resolve, reject) => {
+    const status = orderSchema.paths.status.enumValues;
+    if (status === undefined) {
+      reject();
+    } else {
+      resolve(status);
+    }
+  });
+}
+
 function rmDbVars (obj) {
   delete obj.__v;
   delete obj._id;
@@ -223,5 +239,6 @@ export default {
   placeOrder,
   updateOrder,
   getOrderById,
-  deleteOrder
+  deleteOrder,
+  getStatus
 };

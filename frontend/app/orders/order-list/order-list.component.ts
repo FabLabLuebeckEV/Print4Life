@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableItem } from '../../components/table/table.component';
 import { OrderService } from '../../services/order.service';
-import { faWrench, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faWrench, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { config } from '../../config/config';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
@@ -18,6 +18,11 @@ export class OrderListComponent implements OnInit {
 
   orders: Array<TableItem> = [];
   id: String;
+  listView: Boolean;
+  plusIcon = faPlus;
+  // loadingStatus: Boolean;
+  // selectedStatus: String;
+  // validStatus: Array<String> = [];
 
   constructor(
     private orderService: OrderService,
@@ -26,18 +31,14 @@ export class OrderListComponent implements OnInit {
     private modalService: NgbModal) {
     router.events.subscribe(() => {
       const route = location.path();
+      this.listView = (route === '/orders');
     });
   }
 
   ngOnInit() {
-    const route = this.router.url;
-    if (route === '/orders') {
+    if (this.listView) {
       this.init();
-    }
-    if (route.includes('deleteOrder')) {
-      const path = route.split('/');
-      console.log(this.id);
-      this.orderService.deleteOrder(this.id);
+      // this._loadStatus();
     }
   }
 
@@ -93,7 +94,7 @@ export class OrderListComponent implements OnInit {
       item.obj['Editor'] = order.editor;
       item.obj['Status'] = order.status;
       item.button1.label = 'Edit';
-      item.button1.href = `./${config.paths.orders.updateOrder}`;
+      item.button1.href = `./${config.paths.orders.updateOrder}/${order._id}`;
       item.button1.class = 'btn btn-primary spacing';
       item.button1.icon = faWrench;
       item.button2.label = 'Delete';
@@ -104,4 +105,9 @@ export class OrderListComponent implements OnInit {
     }
     this.orders = this.orders.concat(arr);
   }
+
+  // private async _loadStatus() {
+  //   this.validStatus = (await this.orderService.getStatus()).status;
+  //   this.loadingStatus = false;
+  // }
 }

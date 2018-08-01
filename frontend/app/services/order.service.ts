@@ -15,6 +15,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class OrderService {
+
   constructor(private http: HttpClient) { }
 
   public getAllOrders(): Promise < any > {
@@ -29,10 +30,14 @@ export class OrderService {
   }
 
   public deleteOrder(id): Promise < any > {
-    return this.http.get(`${p}/${config.paths.orders.deleteOrder}/${id}`, httpOptions).toPromise();
+    return this.http.put(`${p}/${config.paths.orders.deleteOrder}/${id}`, httpOptions).toPromise();
   }
 
   public getOrderById(id): Promise < any > {
-    return this.http.get(`${p}/${config.paths.orders.getAllOrders}`, httpOptions).toPromise();
+    return this.http.get(`${p}/${id}`, httpOptions).toPromise();
+  }
+
+  public getStatus(): Promise < any > {
+    return this.http.get(`${p}/${config.paths.orders.getStatus}`, httpOptions).toPromise();
   }
 }
