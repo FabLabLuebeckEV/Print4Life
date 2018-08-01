@@ -4,11 +4,11 @@ import { MillingMachine } from '../models/machines/milling.machine.model';
 import { LaserCutter } from '../models/machines/lasercutter.model';
 
 /**
- * This method gets a specific type of machine (or all) and returns a promis with the results
+ * This method gets a specific type of machine (or all) and returns a promise with the results
  * type is the type of machine to get
  * @returns a promise with the results
  */
-function getMachineType (type) {
+function getMachineType(type) {
   const promises = [];
   let obj;
   switch (type) {
@@ -63,12 +63,12 @@ function getMachineType (type) {
 }
 
 /**
- * This method creates a specific type of machine and returns a promis with the results
+ * This method creates a specific type of machine and returns a promise with the results
  * type is the type of machine to get
  * params are the params of the machine
  * @returns a promise with the results
  */
-function create (type, params) {
+function create(type, params) {
   if (!params.type) {
     params.type = type;
   }
@@ -86,7 +86,51 @@ function create (type, params) {
   }
 }
 
+/**
+ * This method deletes a specific type of machine by a given id and returns a promise with the success or failure
+ * type is the type of machine to get
+ * _id is the id of the machine
+ * @returns a promise with the results
+ */
+function deleteById(type, _id) {
+  switch (type) {
+    case 'printer':
+      return Printer.deleteOne({ _id });
+    case 'lasercutter':
+      return LaserCutter.deleteOne({ _id });
+    case 'otherMachine':
+      return Other.deleteOne({ _id });
+    case 'millingMachine':
+      return MillingMachine.deleteOne({ _id });
+    default:
+      return Promise.reject('Machine Type not supported!');
+  }
+}
+
+/**
+ * This method gets a specific type of machine by a given id and returns a promise with the result
+ * type is the type of machine to get
+ * _id is the id of the machine
+ * @returns a promise with the results
+ */
+function get(type, _id) {
+  switch (type) {
+    case 'printer':
+      return Printer.findOne({ _id });
+    case 'lasercutter':
+      return LaserCutter.findOne({ _id });
+    case 'otherMachine':
+      return Other.findOne({ _id });
+    case 'millingMachine':
+      return MillingMachine.findOne({ _id });
+    default:
+      return Promise.reject('Machine Type not supported!');
+  }
+}
+
 export default {
   getMachineType,
-  create
+  create,
+  deleteById,
+  get
 };

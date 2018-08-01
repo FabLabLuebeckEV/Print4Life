@@ -65,8 +65,8 @@ import machineService from '../services/machine.service';
       ]
     }
  */
-function getAll () {
-  return machineService.getMachineType('printer');
+function getAll() {
+    return machineService.getMachineType('printer');
 }
 
 /**
@@ -174,26 +174,18 @@ function getAll () {
  *
  *
  */
-function create (params) {
-  return machineService.create('printer', params);
+function create(params) {
+    return machineService.create('printer', params);
 }
 
-// function getPrinterById (id) {
-//     const query = new Order.findOne({ _id: id});
-//     return query.exec();
-//   return Order.findOne({ _id: id });
-// }
 
-// function placeOrder (newOrder) {
-//     const order = new Order(newOrder);
-//     return order.save();
-//   return Order(newOrder).save();
-// }
-
-// async function updatePrinter (body) {
-//     return Order.findOneAndUpdate({ _id: body._id }, body, {upsert: true} ).exec();
-//   return Order.findOneAndUpdate({ _id: body._id }, body, { upsert: true }).exec();
-// }
+function deleteById(id) {
+    return machineService.deleteById('printer', id);
+}
 
 
-export default { getAll, create };
+function get(id) {
+    return machineService.get('printer', id);
+}
+
+export default { getAll, create, deleteById, get };
