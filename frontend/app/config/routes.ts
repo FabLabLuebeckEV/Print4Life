@@ -3,8 +3,8 @@ import { OrderListComponent } from '../orders/order-list/order-list.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { MachineFormComponent } from '../machines/machine-form/machine-form.component';
 import { Routes } from '@angular/router';
-import { config } from '../config/config';
-// import { DeleteModalComponent } from '../orders/delete-modal/delete-modal.component';
+import { config } from './config';
+import { CreateOrderComponent } from '../orders/create-order/create-order.component';
 
 export let appRoutes: Routes = [
     {
@@ -20,7 +20,8 @@ export let appRoutes: Routes = [
         path: config.paths.orders.root,
         component: OrderListComponent,
         children: [
-            //    { path: `deleteOrder/:id`, component: DeleteModalComponent},
+            { path: config.paths.orders.createOrder, component: CreateOrderComponent },
+            { path: `${config.paths.orders.updateOrder}/:id`, component: CreateOrderComponent }
         ]
     },
     {

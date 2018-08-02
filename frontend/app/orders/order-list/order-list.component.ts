@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableItem } from '../../components/table/table.component';
 import { OrderService } from '../../services/order.service';
-import { faWrench, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faWrench, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { config } from '../../config/config';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
@@ -17,7 +17,13 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
 export class OrderListComponent implements OnInit {
 
   orders: Array<TableItem> = [];
+  visibleOrders: Array<TableItem> = [];
   id: String;
+  listView: Boolean;
+  plusIcon = faPlus;
+  loadingStatus: Boolean;
+  selectedStatus: Array<String> = [];
+  validStatus: Array<String> = [];
 
   constructor(
     private orderService: OrderService,
@@ -26,19 +32,22 @@ export class OrderListComponent implements OnInit {
     private modalService: NgbModal) {
     router.events.subscribe(() => {
       const route = location.path();
+      this.listView = (route === '/orders');
     });
   }
-
   ngOnInit() {
-    const route = this.router.url;
-    if (route === '/orders') {
+    if (this.listView) {
       this.init();
+      this._loadStatus();
     }
-    if (route.includes('deleteOrder')) {
-      const path = route.split('/');
-      console.log(this.id);
-      this.orderService.deleteOrder(this.id);
-    }
+  }
+
+  // remove add change clear
+  changeHandler(event: Array < String >) {
+    this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+    this.visibleOrders = this.visibleOrders.filter((ti) => {
+      return event.includes(ti.obj['Status']);
+    });
   }
 
   eventHandler(event) {
@@ -93,7 +102,7 @@ export class OrderListComponent implements OnInit {
       item.obj['Editor'] = order.editor;
       item.obj['Status'] = order.status;
       item.button1.label = 'Edit';
-      item.button1.href = `./${config.paths.orders.updateOrder}`;
+      item.button1.href = `./${config.paths.orders.updateOrder}/${order._id}`;
       item.button1.class = 'btn btn-primary spacing';
       item.button1.icon = faWrench;
       item.button2.label = 'Delete';
@@ -103,5 +112,11 @@ export class OrderListComponent implements OnInit {
       arr.push(item);
     }
     this.orders = this.orders.concat(arr);
+    this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+  }
+
+  private async _loadStatus() {
+    this.validStatus = (await this.orderService.getStatus()).status;
+    this.loadingStatus = false;
   }
 }

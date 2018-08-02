@@ -8,6 +8,7 @@ const p = config.backendUrl + '/' + config.paths.orders.root;
   providedIn: 'root'
 })
 export class OrderService {
+
   constructor(private http: HttpClient) { }
 
   public getAllOrders(): Promise < any > {
@@ -22,10 +23,18 @@ export class OrderService {
   }
 
   public deleteOrder(id): Promise < any > {
-    return this.http.get(`${p}/${config.paths.orders.deleteOrder}/${id}`).toPromise();
+    return this.http.delete(`${p}/${config.paths.orders.deleteOrder}/${id}`).toPromise();
   }
 
   public getOrderById(id): Promise < any > {
     return this.http.get(`${p}/${config.paths.orders.getAllOrders}`).toPromise();
+  }
+
+  public getOrderById(id): Promise < any > {
+    return this.http.get(`${p}/${id}`).toPromise();
+  }
+
+  public getStatus(): Promise < any > {
+    return this.http.get(`${p}/${config.paths.orders.getStatus}`).toPromise();
   }
 }
