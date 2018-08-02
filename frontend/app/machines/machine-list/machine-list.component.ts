@@ -31,9 +31,10 @@ export class MachineListComponent implements OnInit {
     private spinner: NgxSpinnerService) {
     router.events.subscribe(() => {
       const route = location.path();
-      if (route === '/machines') {
+      if (!this.listView && route === `/${config.paths.machines.root}`) {
         this.listView = true;
-      } else {
+        this.ngOnInit();
+      } else if (route !== `/${config.paths.machines.root}`) {
         this.listView = false;
       }
     });
