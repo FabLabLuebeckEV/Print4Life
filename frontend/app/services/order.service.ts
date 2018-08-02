@@ -30,7 +30,7 @@ export class OrderService {
   }
 
   public deleteOrder(id): Promise < any > {
-    return this.http.put(`${p}/${config.paths.orders.deleteOrder}/${id}`, httpOptions).toPromise();
+    return this.http.delete(`${p}/${config.paths.orders.deleteOrder}/${id}`, httpOptions).toPromise();
   }
 
   public getOrderById(id): Promise < any > {
