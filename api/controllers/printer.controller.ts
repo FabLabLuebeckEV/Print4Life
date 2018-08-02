@@ -249,6 +249,12 @@ function deleteById (id) {
 {
     "error": "Id needs to be a 24 character long hex string!"
 }
+ * @apiError 404 The object was not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Printer by id '9999' not found"
+ *     }
  *
  *
  */

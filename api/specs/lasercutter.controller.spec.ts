@@ -92,7 +92,7 @@ describe('Lasercutter Controller', () => {
         expect(response.statusCode).toEqual(204);
         request.get(`${endpoint}/${responseMachine._id}`, (error, response) => {
           expect(response.statusCode).toEqual(404);
-          expect(response.body.printer).toBeUndefined();
+          expect(response.body.lasercutter).toBeUndefined();
           done();
         });
       });

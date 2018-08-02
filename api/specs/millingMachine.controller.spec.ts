@@ -72,4 +72,63 @@ describe('Milling Machine Controller', () => {
       done();
     });
   });
+
+  it('delete milling machine (success)', (done) => {
+    let responseMachine;
+    request.post(`${endpoint}/create`, { body: testMillingMachine, json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(201);
+      responseMachine = response.body.millingMachine;
+      request.delete(`${endpoint}/${response.body.millingMachine._id}`, (error, response) => {
+        expect(response.statusCode).toEqual(204);
+        request.get(`${endpoint}/${responseMachine._id}`, (error, response) => {
+          expect(response.statusCode).toEqual(404);
+          expect(response.body.millingMachine).toBeUndefined();
+          done();
+        });
+      });
+    });
+  });
+
+  it('delete milling machine (id too long)', (done) => {
+    const id = 'tooLongForMongoDBsObjectId1234567890';
+    request.delete(`${endpoint}/${id}`, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('delete milling machine (id too short)', (done) => {
+    const id = 'tooShort';
+    request.delete(`${endpoint}/${id}`, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('get milling machine (success)', (done) => {
+    request.post(`${endpoint}/create`, { body: testMillingMachine, json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(201);
+      const id = response.body.millingMachine._id;
+      request.get(`${endpoint}/${id}`, (error, response) => {
+        expect(response.statusCode).toEqual(200);
+        done();
+      });
+    });
+  });
+
+  it('get milling machine (id too long)', (done) => {
+    const id = 'tooLongForMongoDBsObjectId1234567890';
+    request.delete(`${endpoint}/${id}`, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('get milling machine (id too short)', (done) => {
+    const id = 'tooShort';
+    request.delete(`${endpoint}/${id}`, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
 });

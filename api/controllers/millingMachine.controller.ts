@@ -138,4 +138,75 @@ function create (params) {
   return machineService.create('millingMachine', params);
 }
 
-export default { getAll, create };
+/**
+ * @api {get} /api/v1/machines/millingMachines/:id Gets a Milling Machine by a given id
+ * @apiName GetMillingMachineById
+ * @apiVersion 1.0.0
+ * @apiGroup MillingMachines
+ *
+ *
+ * @apiParam {id} is the id of the milling machine
+ *
+ * @apiSuccess {Object} millingMachine the milling machine object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "millingMachine": {
+        "_id": "5b62bd1c41736630fde4d2f2",
+        "fablabId": "5b453ddb5cf4a9574849e98a",
+        "deviceName": "Test Milling Machine",
+        "manufacturer": "Test Manufacturer",
+        "workspaceX": 2,
+        "workspaceY": 2,
+        "workspaceZ": 2,
+        "pictureURL": "",
+        "comment": "Create Test",
+        "type": "millingMachine",
+        "__v": 0
+    }
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ * @apiError 404 The object was not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Milling Machine by id '9999' not found"
+ *     }
+ *
+ *
+ */
+function get (id) {
+  return machineService.get('millingMachine', id);
+}
+
+/**
+ * @api {delete} /api/v1/machines/millingMachines/:id Deletes a Milling Machine by a given id
+ * @apiName DeleteMillingMachineById
+ * @apiVersion 1.0.0
+ * @apiGroup MillingMachines
+ *
+ *
+ * @apiParam {id} is the id of the milling machine
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ *
+ *
+ */
+function deleteById (id) {
+  return machineService.deleteById('millingMachine', id);
+}
+
+export default { getAll, create, get, deleteById };

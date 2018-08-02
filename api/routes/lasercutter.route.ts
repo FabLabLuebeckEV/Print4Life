@@ -45,7 +45,7 @@ router.route('/:id').get((req, res) => {
   } else {
     lasercutterCtrl.get(req.params.id).then((lasercutter) => {
       if (!lasercutter) {
-        res.status(404).send({ error: `Printer by id '${req.params.id}' not found` });
+        res.status(404).send({ error: `Lasercutter by id '${req.params.id}' not found` });
       } else {
         res.json({ lasercutter });
       }
