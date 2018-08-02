@@ -5,6 +5,7 @@ import machineService from '../services/machine.service';
  * @apiName GetOtherMachines
  * @apiVersion 1.0.0
  * @apiGroup OtherMachines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Array} otherMachines an array of other machine objects
  *
@@ -44,7 +45,7 @@ function getAll () {
  * @apiName CreateNewOtherMachine
  * @apiVersion 1.0.0
  * @apiGroup OtherMachines
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {String} fablabId id of the corresponding fablab (required)
  * @apiParam {String} deviceName name of the device (required)
@@ -123,7 +124,7 @@ function create (params) {
  * @apiName GetOtherMachineById
  * @apiVersion 1.0.0
  * @apiGroup OtherMachines
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {id} is the id of the other machine
  *
@@ -168,7 +169,7 @@ function get (id) {
  * @apiName DeleteOtherMachinesById
  * @apiVersion 1.0.0
  * @apiGroup OtherMachines
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {id} is the id of the other machine
  *

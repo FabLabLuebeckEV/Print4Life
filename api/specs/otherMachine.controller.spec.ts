@@ -15,8 +15,11 @@ const testOtherMachine = {
 
 describe('Other Machine Controller', () => {
   it('gets other machines', (done) => {
-    request.get(`${endpoint}`, (error, response) => {
-      const otherMachines = JSON.parse(response.body).otherMachines;
+    request.get(`${endpoint}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
+      const otherMachines = response.body.otherMachines;
       expect(response.statusCode).toEqual(200);
       expect(otherMachines).toBeDefined();
       expect(otherMachines.length).toBeGreaterThan(-1);
@@ -71,9 +74,15 @@ describe('Other Machine Controller', () => {
     request.post(`${endpoint}/create`, { body: testOtherMachine, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       responseMachine = response.body.otherMachine;
-      request.delete(`${endpoint}/${response.body.otherMachine._id}`, (error, response) => {
+      request.delete(`${endpoint}/${response.body.otherMachine._id}`, {
+        headers: { 'content-type': 'application/json' },
+        json: true
+      }, (error, response) => {
         expect(response.statusCode).toEqual(204);
-        request.get(`${endpoint}/${responseMachine._id}`, (error, response) => {
+        request.get(`${endpoint}/${responseMachine._id}`, {
+          headers: { 'content-type': 'application/json' },
+          json: true
+        }, (error, response) => {
           expect(response.statusCode).toEqual(404);
           expect(response.body.otherMachine).toBeUndefined();
           done();
@@ -84,7 +93,10 @@ describe('Other Machine Controller', () => {
 
   it('delete other machine (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -92,7 +104,10 @@ describe('Other Machine Controller', () => {
 
   it('delete other machine (id too short)', (done) => {
     const id = 'tooShort';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -102,7 +117,10 @@ describe('Other Machine Controller', () => {
     request.post(`${endpoint}/create`, { body: testOtherMachine, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       const id = response.body.otherMachine._id;
-      request.get(`${endpoint}/${id}`, (error, response) => {
+      request.get(`${endpoint}/${id}`, {
+        headers: { 'content-type': 'application/json' },
+        json: true
+      }, (error, response) => {
         expect(response.statusCode).toEqual(200);
         done();
       });
@@ -111,7 +129,10 @@ describe('Other Machine Controller', () => {
 
   it('get other machine (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -119,7 +140,10 @@ describe('Other Machine Controller', () => {
 
   it('get other machine (id too short)', (done) => {
     const id = 'tooShort';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });

@@ -16,6 +16,7 @@ const PrinterMaterial = mongoose.model('PrinterMaterial', materialSchema);
  * @apiName Transform Milling Machines
  * @apiVersion 1.0.0
  * @apiGroup Transform
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {String} msg a short message that everything went well
  *
@@ -60,6 +61,7 @@ function transformMillingMachine () {
  * @apiName Transform Other Machines
  * @apiVersion 1.0.0
  * @apiGroup Transform
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {String} msg a short message that everything went well
  *
@@ -125,6 +127,7 @@ function transformLaserTypes () {
  * @apiName Transform Laser Cutter
  * @apiVersion 1.0.0
  * @apiGroup Transform
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {String} msg a short message that everything went well
  *
@@ -209,6 +212,7 @@ function transformPrinterMaterial () {
  * @apiName Transform Printers
  * @apiVersion 1.0.0
  * @apiGroup Transform
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {String} msg a short message that everything went well
  *
@@ -271,6 +275,7 @@ function transformPrinters () {
  * @apiName Clean Documents of DB
  * @apiVersion 1.0.0
  * @apiGroup Transform
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Array} updated is an array containing the updated documents
  *

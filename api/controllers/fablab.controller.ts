@@ -7,6 +7,7 @@ import Fablab from '../models/fablab.model';
  * @apiName GetFablabById
  * @apiVersion 1.0.0
  * @apiGroup Fablabs
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {Number} id (old) id of the fablab (the id is named fid on each machine)
  *
@@ -51,6 +52,7 @@ function getFablab (id) {
  * @apiName GetAllFablabs
  * @apiVersion 1.0.0
  * @apiGroup Fablabs
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Object} fablabs is an array of fablab objects
  *

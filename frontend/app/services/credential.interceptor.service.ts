@@ -3,9 +3,10 @@ import { Observable } from 'rxjs';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 
 @Injectable()
-export class CredentialsInterceptorService implements HttpInterceptor {
+export class HttpInterceptorService implements HttpInterceptor {
     public intercept(request: HttpRequest<any>, handler: HttpHandler): Observable<HttpEvent<any>> {
         // intercept http requests and add with credentials for cors
-        return handler.handle(request.clone({ withCredentials: true }));
+        const headers = request.headers.append('content-type', 'application/json');
+        return handler.handle(request.clone({ headers, withCredentials: true }));
     }
 }

@@ -22,8 +22,11 @@ const testLasercutter = {
 
 describe('Lasercutter Controller', () => {
   it('gets lasercutters', (done) => {
-    request.get(`${endpoint}`, (error, response) => {
-      const lasercutters = JSON.parse(response.body).lasercutters;
+    request.get(`${endpoint}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
+      const lasercutters = response.body.lasercutters;
       expect(response.statusCode).toEqual(200);
       expect(lasercutters).toBeDefined();
       expect(lasercutters.length).toBeGreaterThan(-1);
@@ -33,8 +36,11 @@ describe('Lasercutter Controller', () => {
   });
 
   it('gets lasertypes', (done) => {
-    request.get(`${endpoint}/laserTypes`, (error, response) => {
-      const laserTypes = JSON.parse(response.body).laserTypes;
+    request.get(`${endpoint}/laserTypes`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
+      const laserTypes = response.body.laserTypes;
       expect(response.statusCode).toEqual(200);
       expect(laserTypes).toBeDefined();
       expect(laserTypes.length).toBeGreaterThan(-1);
@@ -88,20 +94,25 @@ describe('Lasercutter Controller', () => {
     request.post(`${endpoint}/create`, { body: testLasercutter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       responseMachine = response.body.lasercutter;
-      request.delete(`${endpoint}/${response.body.lasercutter._id}`, (error, response) => {
-        expect(response.statusCode).toEqual(204);
-        request.get(`${endpoint}/${responseMachine._id}`, (error, response) => {
-          expect(response.statusCode).toEqual(404);
-          expect(response.body.lasercutter).toBeUndefined();
-          done();
+      request.delete(`${endpoint}/${response.body.lasercutter._id}`,
+        { headers: { 'content-type': 'application/json' }, json: true },
+        (error, response) => {
+          expect(response.statusCode).toEqual(204);
+          request.get(`${endpoint}/${responseMachine._id}`, {
+            headers: { 'content-type': 'application/json' },
+            json: true
+          }, (error, response) => {
+            expect(response.statusCode).toEqual(404);
+            expect(response.body.lasercutter).toBeUndefined();
+            done();
+          });
         });
-      });
     });
   });
 
   it('delete lasercutter (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, { json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -109,7 +120,7 @@ describe('Lasercutter Controller', () => {
 
   it('delete lasercutter (id too short)', (done) => {
     const id = 'tooShort';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, { json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -119,7 +130,7 @@ describe('Lasercutter Controller', () => {
     request.post(`${endpoint}/create`, { body: testLasercutter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       const id = response.body.lasercutter._id;
-      request.get(`${endpoint}/${id}`, (error, response) => {
+      request.get(`${endpoint}/${id}`, { headers: { 'content-type': 'application/json' } }, (error, response) => {
         expect(response.statusCode).toEqual(200);
         done();
       });
@@ -128,7 +139,7 @@ describe('Lasercutter Controller', () => {
 
   it('get lasercutter (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, { json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -136,7 +147,7 @@ describe('Lasercutter Controller', () => {
 
   it('get lasercutter (id too short)', (done) => {
     const id = 'tooShort';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, { json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });

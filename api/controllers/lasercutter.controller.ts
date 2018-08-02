@@ -6,6 +6,7 @@ import { LaserType } from '../models/lasertype.model';
  * @apiName GetLasercutters
  * @apiVersion 1.0.0
  * @apiGroup Lasercutters
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Array} lasercutters an array of lasercutter objects
  *
@@ -67,7 +68,7 @@ function getAll () {
  * @apiName CreateNewLasercutter
  * @apiVersion 1.0.0
  * @apiGroup Lasercutters
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {String} fablabId id of the corresponding fablab (required)
  * @apiParam {String} deviceName name of the device (required)
@@ -162,7 +163,7 @@ function create (params) {
  * @apiName GetLaserTypes
  * @apiVersion 1.0.0
  * @apiGroup Lasercutters
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  *
  * @apiSuccess {Object} lasercutter the lasercutter object
@@ -189,7 +190,7 @@ function getLaserTypes () {
  * @apiName GetLasercutterById
  * @apiVersion 1.0.0
  * @apiGroup Lasercutters
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {id} is the id of the lasercutter
  *
@@ -243,7 +244,7 @@ function get (id) {
  * @apiName DeleteLasercutterById
  * @apiVersion 1.0.0
  * @apiGroup Lasercutters
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {id} is the id of the lasercutter
  *

@@ -5,6 +5,7 @@ import machineService from '../services/machine.service';
  * @apiName GetMillingMachines
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Array} millingMachines an array of milling machine objects
  *
@@ -54,7 +55,7 @@ function getAll () {
  * @apiName CreateNewMillingMachine
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {String} fablabId id of the corresponding fablab (required)
  * @apiParam {String} deviceName name of the device (required)
@@ -143,7 +144,7 @@ function create (params) {
  * @apiName GetMillingMachineById
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {id} is the id of the milling machine
  *
@@ -189,7 +190,7 @@ function get (id) {
  * @apiName DeleteMillingMachineById
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {id} is the id of the milling machine
  *

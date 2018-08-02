@@ -6,6 +6,7 @@ import { Order } from '../models/order.model';
  * @apiName GetOrders
  * @apiVersion 0.0.1
  * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Array} orders an array of order objects
  *
@@ -48,6 +49,7 @@ function getOrders () {
  * @apiName getOrderById
  * @apiVersion 0.0.1
  * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess { order } a single order
  *
@@ -81,6 +83,7 @@ function getOrderById (id) {
  * @apiName placeOrder
  * @apiVersion 0.0.1
  * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess { order } the new order object, if success
  *
@@ -115,6 +118,7 @@ function placeOrder (order) {
  * @apiName updateOrder
  * @apiVersion 0.0.1
  * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess { order } the updated order
  *
@@ -161,6 +165,7 @@ function updateOrder (order) {
  * @apiName delteOrder
  * @apiVersion 0.0.1
  * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess { order } the deleted order
  *
