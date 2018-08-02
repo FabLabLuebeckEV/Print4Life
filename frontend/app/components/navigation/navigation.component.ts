@@ -8,12 +8,19 @@ import { config } from '../../config/config';
 })
 export class NavigationComponent implements OnInit {
   title = 'Order Management';
-  dropdown =
+  maschineDropdown =
     {
       name: 'Machine',
       elements: [
-        { name: 'Get Machines', routerHref: 'machines' },
-        { name: 'Get Orders', routerHref: config.paths.orders.root}
+        { name: 'Get Machines', routerHref: 'machines' }
+      ]
+    };
+
+    orderDropdown =
+    {
+      name: 'Orders',
+      elements: [
+        { name: 'All orders', routerHref: config.paths.orders.root }
       ]
     };
 
