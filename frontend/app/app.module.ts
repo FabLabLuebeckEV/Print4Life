@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CredentialsInterceptorService } from './services/credential.interceptor.service';
@@ -20,6 +20,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { OrderListComponent } from './orders/order-list/order-list.component';
 import { CreateOrderComponent } from './orders/create-order/create-order.component';
 import { MessageModalComponent } from './components/message-modal/message-modal.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -37,15 +38,13 @@ import { MessageModalComponent } from './components/message-modal/message-modal.
     ],
     imports: [
         BrowserModule,
+        NgxSpinnerModule,
         NgSelectModule,
         FormsModule,
         FontAwesomeModule,
         HttpClientModule,
         NgbModule.forRoot(),
-        RouterModule.forRoot(
-            appRoutes,
-            { enableTracing: true } // <-- debugging purposes only
-        )
+        RouterModule.forRoot(appRoutes)
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: CredentialsInterceptorService, multi: true }, // magic for cors

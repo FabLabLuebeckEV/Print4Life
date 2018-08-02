@@ -26,5 +26,11 @@ export let config = {
             root: 'fablabs',
             getById: ':id'
         }
+    },
+    spinnerConfig: {
+        bdColor: 'rgba(51, 51, 51, 0.8)',
+        size: 'large',
+        color: '#fff',
+        type: 'ball-climbing-dot'
     }
 };

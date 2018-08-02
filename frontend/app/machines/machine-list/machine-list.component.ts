@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { config } from '../../config/config';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-machine-list',
@@ -15,49 +16,71 @@ import { config } from '../../config/config';
   styleUrls: ['./machine-list.component.css']
 })
 export class MachineListComponent implements OnInit {
-
-  machines: Array<TableItem> = [];
+  machineTypes: Array<String> = [];
+  displayedMachines: Array<TableItem> = [];
+  selectedMachineTypes: Array<String>;
   listView: Boolean;
+  loadingMachineTypes: Boolean;
   plusIcon = faPlus;
   newLink: String = `./${config.paths.machines.create}`;
+  spinnerConfig: Object = {'loadingText': 'Loading Machines', ...config.spinnerConfig};
 
   constructor(private machineService: MachineService,
     private fablabService: FablabService, private router: Router,
-    private location: Location, private modalService: NgbModal) {
+    private location: Location, private modalService: NgbModal,
+    private spinner: NgxSpinnerService) {
     router.events.subscribe(() => {
       const route = location.path();
-      if (route === '/machines') {
+      if (!this.listView && route === `/${config.paths.machines.root}`) {
         this.listView = true;
-      } else {
+        this.ngOnInit();
+      } else if (route !== `/${config.paths.machines.root}`) {
         this.listView = false;
       }
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.listView) {
+      await this._loadMachineTypes();
+      this.selectedMachineTypes = this.machineTypes;
       this._init();
     }
+  }
+
+  async filterHandler(event) {
+    this.selectedMachineTypes = event;
+    this.displayedMachines = await this._loadMachinesByTypes(this.selectedMachineTypes);
   }
 
   eventHandler(event) {
     if (event.label === 'Delete') {
       let machine: TableItem;
-      this.machines.forEach((item) => {
+      let machineIdx: number;
+      this.displayedMachines.forEach((item, idx) => {
         if (event === item.button1 || event === item.button2) {
           machine = item;
+          machineIdx = idx;
         }
       });
       const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
       const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
       const modalRef = this._openMsgModal('Do you really want to delete this machine?',
-        'modal-header header-danger', 'Are you sure you want to delete the machine?', deleteButton, abortButton);
+        'modal-header header-danger', `Are you sure you want to delete ${machine.obj['Device Name']} ?`, deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
-          this.machineService.deleteMachine(machine.obj['Device Type'], machine.obj.id);
+          this.machineService.deleteMachine(machine.obj['Device Type'], machine.obj.id).then((result) => {
+            this.displayedMachines.splice(machineIdx, 1);
+          });
         }
       });
     }
+  }
+
+  private async _loadMachineTypes() {
+    this.loadingMachineTypes = true;
+    this.machineTypes = (await this.machineService.getAllMachineTypes()).types;
+    this.loadingMachineTypes = false;
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
@@ -74,10 +97,25 @@ export class MachineListComponent implements OnInit {
 
 
   private async _init() {
-    const resMach = await this.machineService.getAllMachines();
-    const machines = resMach.machines;
+    const arr = await this._loadMachinesByTypes(this.machineTypes);
+    this.displayedMachines = JSON.parse(JSON.stringify(arr));
+  }
+
+  private async _loadMachinesByTypes(machineTypes: Array<String>) {
+    this.spinner.show();
+    const machines = [];
+    const arr = [];
+
+    for (let i = 0; i < machineTypes.length; i++) {
+      machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
+    }
+
+    for (const type of machineTypes) {
+      const resMach = await this.machineService.getAll(type);
+      machines.push(resMach[`${type}s`]);
+    }
+
     for (const type of Object.keys(machines)) {
-      const arr = [];
       for (const elem of machines[type]) {
         const resFab = await this.fablabService.getFablab(elem.fablabId);
         const fablab = resFab.fablab;
@@ -98,7 +136,8 @@ export class MachineListComponent implements OnInit {
         item.button2.icon = faTrashAlt;
         arr.push(item);
       }
-      this.machines = this.machines.concat(arr);
     }
+    this.spinner.hide();
+    return arr;
   }
 }

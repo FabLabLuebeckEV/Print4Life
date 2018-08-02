@@ -118,4 +118,74 @@ function create (params) {
   return machineService.create('otherMachine', params);
 }
 
-export default { getAll, create };
+/**
+ * @api {get} /api/v1/machines/otherMachines/:id Gets a Other Machine by a given id
+ * @apiName GetOtherMachineById
+ * @apiVersion 1.0.0
+ * @apiGroup OtherMachines
+ *
+ *
+ * @apiParam {id} is the id of the other machine
+ *
+ * @apiSuccess {Object} otherMachine the milling machine object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "otherMachine": {
+        "_id": "5b61abb7c3f4261df9ce7673",
+        "fablabId": "5b453ddb5cf4a9574849e98a",
+        "deviceName": "Test Other Machine",
+        "manufacturer": "Test Manufacturer",
+        "typeOfMachine": "Test Machine",
+        "pictureURL": "",
+        "comment": "Create Test",
+        "type": "otherMachine",
+        "__v": 0
+    }
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+
+ * @apiError 404 The object was not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Other Machine by id '9999' not found"
+ *     }
+ *
+ *
+ */
+function get (id) {
+  return machineService.get('otherMachine', id);
+}
+
+/**
+ * @api {delete} /api/v1/machines/otherMachines/:id Deletes a other Machine by a given id
+ * @apiName DeleteOtherMachinesById
+ * @apiVersion 1.0.0
+ * @apiGroup OtherMachines
+ *
+ *
+ * @apiParam {id} is the id of the other machine
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ *
+ *
+ */
+function deleteById (id) {
+  return machineService.deleteById('otherMachine', id);
+}
+
+export default { getAll, create, get, deleteById };

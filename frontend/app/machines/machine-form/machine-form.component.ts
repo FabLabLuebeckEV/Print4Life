@@ -6,6 +6,7 @@ import { FablabService } from '../../services/fablab.service';
 import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
+import {config} from '../../config/config';
 
 @Component({
   selector: 'app-machine-form',
@@ -28,7 +29,7 @@ export class MachineFormComponent implements OnInit {
   constructor(private machineService: MachineService, private fablabService: FablabService,
     private router: Router, private location: Location, private route: ActivatedRoute,
     private modalService: NgbModal) {
-    this.route.params.subscribe(params => console.log(params));
+    // this.route.params.subscribe(params => console.log(params));
     router.events.subscribe(() => {
       const route = location.path();
       if (route.startsWith('/machines/edit') && !this.editView) {
@@ -51,7 +52,7 @@ export class MachineFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.machineService.create(this._camelCaseTypes(this.selectedType), this.model).then((result) => {
+    this.machineService.create(this.machineService.camelCaseTypes(this.selectedType), this.model).then((result) => {
       if (result) {
         this._openSuccessMsg();
       } else {
@@ -66,7 +67,9 @@ export class MachineFormComponent implements OnInit {
   private _openSuccessMsg() {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Machine created successfully', 'modal-header header-success',
-      'The creation of a new machine was successful!', okButton, undefined);
+      'The creation of a new machine was successful!', okButton, undefined).result.then((result) => {
+        this.router.navigate([`/${config.paths.machines.root}`]);
+      });
   }
 
   private _openErrMsg(err) {
@@ -113,41 +116,31 @@ export class MachineFormComponent implements OnInit {
 
   private async _loadMaterials(type) {
     if (type && type !== '') {
-      this.materialsArr = (await this.machineService.getMaterialsByMachineType(this._camelCaseTypes(type))).materials;
+      this.materialsArr = (await this.machineService.getMaterialsByMachineType(this.machineService.camelCaseTypes(type))).materials;
       this.loadingMaterials = false;
     }
-  }
-
-  private _camelCaseTypes(type): String {
-    const split = type.split(' ');
-    split[0] = split[0].toLowerCase();
-    let machine = '';
-    for (let i = 0; i < split.length; i += 1) {
-      machine += split[i];
-    }
-    return machine.trim();
   }
 
   private _initModel(type) {
     switch (type) {
       case 'Printer':
         return new Printer(undefined, undefined, undefined,
-          this._camelCaseTypes(type), undefined, undefined, undefined, undefined, undefined,
+          this.machineService.camelCaseTypes(type), undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined, undefined, undefined,
           undefined, undefined);
       case 'Milling Machine':
-        return new MillingMachine(undefined, undefined, undefined, this._camelCaseTypes(type),
+        return new MillingMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined);
       case 'Other Machine':
-        return new OtherMachine(undefined, undefined, undefined, this._camelCaseTypes(type),
+        return new OtherMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined);
       case 'Lasercutter':
-        return new Lasercutter(undefined, undefined, undefined, this._camelCaseTypes(type),
+        return new Lasercutter(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined);
       default:
-        return new Machine(undefined, undefined, undefined, this._camelCaseTypes(type), undefined);
+        return new Machine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined);
     }
   }
 

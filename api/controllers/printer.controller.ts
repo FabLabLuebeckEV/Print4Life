@@ -116,7 +116,7 @@ function getAll () {
  *
  * @apiSuccess {Object} printer the printer object
  * @apiSuccessExample Success-Response:
- *    HTTP/1.1 200 OK
+ *    HTTP/1.1 201 OK
 {
     "printer": {
         "_id": "5b571447d748f04e8a0581ab",
@@ -178,22 +178,88 @@ function create (params) {
   return machineService.create('printer', params);
 }
 
-// function getPrinterById (id) {
-//     const query = new Order.findOne({ _id: id});
-//     return query.exec();
-//   return Order.findOne({ _id: id });
-// }
+/**
+ * @api {delete} /api/v1/machines/printers/:id Deletes a Printer by a given id
+ * @apiName DeletePrinterById
+ * @apiVersion 1.0.0
+ * @apiGroup Printers
+ *
+ *
+ * @apiParam {id} is the id of the printer
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ *
+ *
+ */
+function deleteById (id) {
+  return machineService.deleteById('printer', id);
+}
 
-// function placeOrder (newOrder) {
-//     const order = new Order(newOrder);
-//     return order.save();
-//   return Order(newOrder).save();
-// }
+/**
+ * @api {get} /api/v1/machines/printers/:id Gets a Printer by a given id
+ * @apiName GetPrinterById
+ * @apiVersion 1.0.0
+ * @apiGroup Printers
+ *
+ *
+ * @apiParam {id} is the id of the printer
+ *
+ * @apiSuccess {Object} printer the printer object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "printer": {
+        "_id": "5b61b2a1ed80e42748255735",
+        "fablabId": "5b453ddb5cf4a9574849e98a",
+        "deviceName": "Test Printer",
+        "manufacturer": "Test Manufacturer",
+        "materials": [
+            {
+                "_id": "5b61b2a1ed80e42748255736",
+                "material": "PLA",
+                "type": "printerMaterial"
+            }
+        ],
+        "camSoftware": "Test Software",
+        "printVolumeX": 2,
+        "printVolumeY": 2,
+        "printVolumeZ": 2,
+        "printResolutionX": 2,
+        "printResolutionY": 2,
+        "printResolutionZ": 2,
+        "nozzleDiameter": 2,
+        "numberOfExtruders": 2,
+        "pictureURL": "",
+        "comment": "Create Test",
+        "type": "printer",
+        "__v": 0
+    }
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ * @apiError 404 The object was not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Printer by id '9999' not found"
+ *     }
+ *
+ *
+ */
+function get (id) {
+  return machineService.get('printer', id);
+}
 
-// async function updatePrinter (body) {
-//     return Order.findOneAndUpdate({ _id: body._id }, body, {upsert: true} ).exec();
-//   return Order.findOneAndUpdate({ _id: body._id }, body, { upsert: true }).exec();
-// }
-
-
-export default { getAll, create };
+export default { getAll, create, deleteById, get };

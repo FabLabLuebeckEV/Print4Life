@@ -6,10 +6,18 @@
                 <fa-icon [icon]="plusIcon"></fa-icon>
             </button>
         </div>
+        <div class="col-md-6 offset-1">
+            <label for="status">Filter by Machine Type:</label>
+            <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false" [items]=machineTypes
+                bindLabel="machineTypeFilter" [(ngModel)]="selectedMachineTypes" id="machineTypeFilter" (change)="filterHandler($event)"
+                name="machineTypeFilter" #machineTypeFilter="ngModel">
+            </ng-select>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <app-table (buttonEvent)="eventHandler($event)" [items]="machines"></app-table>
+            <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size" [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+            <app-table (buttonEvent)="eventHandler($event)" [items]="displayedMachines"></app-table>
         </div>
     </div>
 </div>
