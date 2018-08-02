@@ -16,8 +16,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./machine-list.component.css']
 })
 export class MachineListComponent implements OnInit {
-
-  machines: Array<TableItem> = [];
   machineTypes: Array<String> = [];
   displayedMachines: Array<TableItem> = [];
   selectedMachineTypes: Array<String>;
@@ -58,7 +56,7 @@ export class MachineListComponent implements OnInit {
     if (event.label === 'Delete') {
       let machine: TableItem;
       let machineIdx: number;
-      this.machines.forEach((item, idx) => {
+      this.displayedMachines.forEach((item, idx) => {
         if (event === item.button1 || event === item.button2) {
           machine = item;
           machineIdx = idx;
@@ -71,8 +69,7 @@ export class MachineListComponent implements OnInit {
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
           this.machineService.deleteMachine(machine.obj['Device Type'], machine.obj.id).then((result) => {
-            const deleted = this.machines.splice(machineIdx, 1);
-            console.log(deleted);
+            this.displayedMachines.splice(machineIdx, 1);
           });
         }
       });
@@ -100,8 +97,7 @@ export class MachineListComponent implements OnInit {
 
   private async _init() {
     const arr = await this._loadMachinesByTypes(this.machineTypes);
-    this.machines = this.machines.concat(arr);
-    this.displayedMachines = JSON.parse(JSON.stringify(this.machines));
+    this.displayedMachines = JSON.parse(JSON.stringify(arr));
   }
 
   private async _loadMachinesByTypes(machineTypes: Array<String>) {

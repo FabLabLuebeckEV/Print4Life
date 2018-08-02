@@ -3,6 +3,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TableComponent } from '../../components/table/table.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import {
   HttpClientTestingModule
@@ -17,7 +21,15 @@ describe('MachineListComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [MachineListComponent, TableComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule, FontAwesomeModule, NgbModule.forRoot()]
+      imports: [
+        NgSelectModule,
+        FormsModule,
+        NgxSpinnerModule,
+        HttpClientTestingModule,
+        RouterTestingModule,
+        FontAwesomeModule,
+        NgbModule.forRoot()],
+      providers: [NgxSpinnerService]
     })
       .compileComponents();
   }));

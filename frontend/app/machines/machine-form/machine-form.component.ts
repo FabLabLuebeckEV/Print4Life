@@ -29,7 +29,7 @@ export class MachineFormComponent implements OnInit {
   constructor(private machineService: MachineService, private fablabService: FablabService,
     private router: Router, private location: Location, private route: ActivatedRoute,
     private modalService: NgbModal) {
-    this.route.params.subscribe(params => console.log(params));
+    // this.route.params.subscribe(params => console.log(params));
     router.events.subscribe(() => {
       const route = location.path();
       if (route.startsWith('/machines/edit') && !this.editView) {

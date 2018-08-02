@@ -49,7 +49,6 @@ export class MachineService {
   }
 
   public deleteMachine(machineType, id) {
-    console.log(`${rootPath}/${machineType}s/${id}`);
     return this.http.delete(`${rootPath}/${machineType}s/${id}`).toPromise();
   }
 
