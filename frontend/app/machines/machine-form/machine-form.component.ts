@@ -6,6 +6,7 @@ import { FablabService } from '../../services/fablab.service';
 import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
+import {config} from '../../config/config';
 
 @Component({
   selector: 'app-machine-form',
@@ -66,7 +67,9 @@ export class MachineFormComponent implements OnInit {
   private _openSuccessMsg() {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Machine created successfully', 'modal-header header-success',
-      'The creation of a new machine was successful!', okButton, undefined);
+      'The creation of a new machine was successful!', okButton, undefined).result.then((result) => {
+        this.router.navigate([`/${config.paths.machines.root}`]);
+      });
   }
 
   private _openErrMsg(err) {
