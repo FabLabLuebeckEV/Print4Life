@@ -184,4 +184,77 @@ function getLaserTypes () {
   return LaserType.find();
 }
 
-export default { getAll, create, getLaserTypes };
+/**
+ * @api {get} /api/v1/machines/lasercutters/:id Gets a Lasercutter by a given id
+ * @apiName GetLasercutterById
+ * @apiVersion 1.0.0
+ * @apiGroup Lasercutters
+ *
+ *
+ * @apiParam {id} is the id of the lasercutter
+ *
+ * @apiSuccess {Object} lasercutter the lasercutter object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "lasercutter": {
+        "_id": "5b62b46ea519361b031d51b8",
+        "fablabId": "5b453ddb5cf4a9574849e98a",
+        "deviceName": "Test Lasercutter",
+        "manufacturer": "Test Manufacturer",
+        "laserTypes": [
+            {
+                "_id": "5b62b46ea519361b031d51b9",
+                "laserType": "CO2"
+            }
+        ],
+        "workspaceX": 2,
+        "workspaceY": 2,
+        "workspaceZ": 2,
+        "maxResoultion": 2,
+        "laserPower": "High",
+        "pictureURL": "",
+        "comment": "Create Test",
+        "type": "lasercutter",
+        "__v": 0
+    }
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ *
+ *
+ */
+function get (id) {
+  return machineService.get('lasercutter', id);
+}
+
+/**
+ * @api {delete} /api/v1/machines/lasercutters/:id Deletes a Lasercutter by a given id
+ * @apiName DeleteLasercutterById
+ * @apiVersion 1.0.0
+ * @apiGroup Lasercutters
+ *
+ *
+ * @apiParam {id} is the id of the lasercutter
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ *
+ *
+ */
+function deleteById (id) {
+  return machineService.deleteById('lasercutter', id);
+}
+
+export default { getAll, create, getLaserTypes, deleteById, get };
