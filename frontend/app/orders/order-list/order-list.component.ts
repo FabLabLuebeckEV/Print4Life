@@ -46,7 +46,6 @@ export class OrderListComponent implements OnInit {
   changeHandler(event: Array < String >) {
     this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
     this.visibleOrders = this.visibleOrders.filter((ti) => {
-      console.log(ti);
       return event.includes(ti.obj['Status']);
     });
   }
