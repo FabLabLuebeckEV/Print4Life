@@ -43,18 +43,23 @@ export class MachineListComponent implements OnInit {
   eventHandler(event) {
     if (event.label === 'Delete') {
       let machine: TableItem;
-      this.machines.forEach((item) => {
+      let machineIdx: number;
+      this.machines.forEach((item, idx) => {
         if (event === item.button1 || event === item.button2) {
           machine = item;
+          machineIdx = idx;
         }
       });
       const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
       const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
       const modalRef = this._openMsgModal('Do you really want to delete this machine?',
-        'modal-header header-danger', 'Are you sure you want to delete the machine?', deleteButton, abortButton);
+        'modal-header header-danger', `Are you sure you want to delete ${machine.obj['Device Name']} ?`, deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
-          this.machineService.deleteMachine(machine.obj['Device Type'], machine.obj.id);
+          this.machineService.deleteMachine(machine.obj['Device Type'], machine.obj.id).then((result) => {
+            const deleted = this.machines.splice(machineIdx, 1);
+            console.log(deleted);
+          });
         }
       });
     }

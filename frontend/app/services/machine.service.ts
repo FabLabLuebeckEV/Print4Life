@@ -35,8 +35,13 @@ export class MachineService {
     return this.http.get(`${rootPath}/${config.paths.machines.laserTypes}`).toPromise();
   }
 
-  public deleteMachine(type, id) {
-    return true;
+  public deleteMachine(machineType, id) {
+    console.log(`${rootPath}/${machineType}s/${id}`);
+    return this.http.delete(`${rootPath}/${machineType}s/${id}`).toPromise();
+  }
+
+  public get(machineType, id) {
+    return this.http.get(`${rootPath}/${machineType}s/${id}`).toPromise();
   }
 
 }
