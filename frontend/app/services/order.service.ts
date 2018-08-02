@@ -27,10 +27,6 @@ export class OrderService {
   }
 
   public getOrderById(id): Promise < any > {
-    return this.http.get(`${p}/${config.paths.orders.getAllOrders}`).toPromise();
-  }
-
-  public getOrderById(id): Promise < any > {
     return this.http.get(`${p}/${id}`).toPromise();
   }
 
