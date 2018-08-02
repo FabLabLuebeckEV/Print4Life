@@ -187,7 +187,6 @@ function create (params) {
  *
  * @apiParam {id} is the id of the printer
  *
- * @apiSuccess {Object} printer the printer object
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 204 No-Content
  *
