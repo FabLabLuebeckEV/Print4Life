@@ -162,7 +162,7 @@ function updateOrder (order) {
 }
 
 /**
- * @api {post} /api/v1/orders/deleteOrder Marks an order as deleted
+ * @api {delete} /api/v1/orders/deleteOrder Marks an order as deleted
  * @apiName delteOrder
  * @apiVersion 0.0.1
  * @apiGroup Orders
