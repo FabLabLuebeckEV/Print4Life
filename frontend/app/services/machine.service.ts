@@ -11,6 +11,19 @@ export class MachineService {
 
   constructor(private http: HttpClient) { }
 
+  public camelCaseTypes(type): String {
+    const split = type.split(' ');
+    split[0] = split[0].charAt(0).toLowerCase() + split[0].slice(1);
+    if (split.length === 2) {
+      split[1] = split[1].charAt(0).toUpperCase() + split[1].slice(1);
+    }
+    let machine = '';
+    for (let i = 0; i < split.length; i += 1) {
+      machine += split[i];
+    }
+    return machine.trim();
+  }
+
   public getAll(machineType) {
     return this.http.get(`${rootPath}/${machineType}s`).toPromise();
   }

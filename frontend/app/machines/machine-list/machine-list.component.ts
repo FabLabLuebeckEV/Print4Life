@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { config } from '../../config/config';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-machine-list',
@@ -17,13 +18,19 @@ import { config } from '../../config/config';
 export class MachineListComponent implements OnInit {
 
   machines: Array<TableItem> = [];
+  machineTypes: Array<String> = [];
+  displayedMachines: Array<TableItem> = [];
+  selectedMachineTypes: Array<String>;
   listView: Boolean;
+  loadingMachineTypes: Boolean;
   plusIcon = faPlus;
   newLink: String = `./${config.paths.machines.create}`;
+  spinnerConfig: Object = {'loadingText': 'Loading Machines', ...config.spinnerConfig};
 
   constructor(private machineService: MachineService,
     private fablabService: FablabService, private router: Router,
-    private location: Location, private modalService: NgbModal) {
+    private location: Location, private modalService: NgbModal,
+    private spinner: NgxSpinnerService) {
     router.events.subscribe(() => {
       const route = location.path();
       if (route === '/machines') {
@@ -34,10 +41,17 @@ export class MachineListComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.listView) {
+      await this._loadMachineTypes();
+      this.selectedMachineTypes = this.machineTypes;
       this._init();
     }
+  }
+
+  async filterHandler(event) {
+    this.selectedMachineTypes = event;
+    this.displayedMachines = await this._loadMachinesByTypes(this.selectedMachineTypes);
   }
 
   eventHandler(event) {
@@ -65,6 +79,12 @@ export class MachineListComponent implements OnInit {
     }
   }
 
+  private async _loadMachineTypes() {
+    this.loadingMachineTypes = true;
+    this.machineTypes = (await this.machineService.getAllMachineTypes()).types;
+    this.loadingMachineTypes = false;
+  }
+
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent);
     modalRef.componentInstance.title = title;
@@ -79,10 +99,26 @@ export class MachineListComponent implements OnInit {
 
 
   private async _init() {
-    const resMach = await this.machineService.getAllMachines();
-    const machines = resMach.machines;
+    const arr = await this._loadMachinesByTypes(this.machineTypes);
+    this.machines = this.machines.concat(arr);
+    this.displayedMachines = JSON.parse(JSON.stringify(this.machines));
+  }
+
+  private async _loadMachinesByTypes(machineTypes: Array<String>) {
+    this.spinner.show();
+    const machines = [];
+    const arr = [];
+
+    for (let i = 0; i < machineTypes.length; i++) {
+      machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
+    }
+
+    for (const type of machineTypes) {
+      const resMach = await this.machineService.getAll(type);
+      machines.push(resMach[`${type}s`]);
+    }
+
     for (const type of Object.keys(machines)) {
-      const arr = [];
       for (const elem of machines[type]) {
         const resFab = await this.fablabService.getFablab(elem.fablabId);
         const fablab = resFab.fablab;
@@ -103,7 +139,8 @@ export class MachineListComponent implements OnInit {
         item.button2.icon = faTrashAlt;
         arr.push(item);
       }
-      this.machines = this.machines.concat(arr);
     }
+    this.spinner.hide();
+    return arr;
   }
 }

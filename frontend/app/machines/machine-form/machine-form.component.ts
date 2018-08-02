@@ -52,7 +52,7 @@ export class MachineFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.machineService.create(this._camelCaseTypes(this.selectedType), this.model).then((result) => {
+    this.machineService.create(this.machineService.camelCaseTypes(this.selectedType), this.model).then((result) => {
       if (result) {
         this._openSuccessMsg();
       } else {
@@ -116,41 +116,31 @@ export class MachineFormComponent implements OnInit {
 
   private async _loadMaterials(type) {
     if (type && type !== '') {
-      this.materialsArr = (await this.machineService.getMaterialsByMachineType(this._camelCaseTypes(type))).materials;
+      this.materialsArr = (await this.machineService.getMaterialsByMachineType(this.machineService.camelCaseTypes(type))).materials;
       this.loadingMaterials = false;
     }
-  }
-
-  private _camelCaseTypes(type): String {
-    const split = type.split(' ');
-    split[0] = split[0].toLowerCase();
-    let machine = '';
-    for (let i = 0; i < split.length; i += 1) {
-      machine += split[i];
-    }
-    return machine.trim();
   }
 
   private _initModel(type) {
     switch (type) {
       case 'Printer':
         return new Printer(undefined, undefined, undefined,
-          this._camelCaseTypes(type), undefined, undefined, undefined, undefined, undefined,
+          this.machineService.camelCaseTypes(type), undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined, undefined, undefined,
           undefined, undefined);
       case 'Milling Machine':
-        return new MillingMachine(undefined, undefined, undefined, this._camelCaseTypes(type),
+        return new MillingMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined);
       case 'Other Machine':
-        return new OtherMachine(undefined, undefined, undefined, this._camelCaseTypes(type),
+        return new OtherMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined);
       case 'Lasercutter':
-        return new Lasercutter(undefined, undefined, undefined, this._camelCaseTypes(type),
+        return new Lasercutter(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined);
       default:
-        return new Machine(undefined, undefined, undefined, this._camelCaseTypes(type), undefined);
+        return new Machine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined);
     }
   }
 
