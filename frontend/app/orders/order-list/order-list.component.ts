@@ -43,10 +43,10 @@ export class OrderListComponent implements OnInit {
   }
 
   // remove add change clear
-  changeHandler(event: Array < String >) {
+  changeHandler(event: Array<String>) {
     this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
     this.visibleOrders = this.visibleOrders.filter((ti) => {
-      return event.includes(ti.obj['Status']);
+      return event.includes(ti.obj['Status'].label);
     });
   }
 
@@ -63,16 +63,16 @@ export class OrderListComponent implements OnInit {
       const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
       const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
       const modalRef = this._openMsgModal('Do you really want to delete this order?',
-      'modal-header header-danger', 'Are you sure you want to delete the order?', deleteButton, abortButton);
+        'modal-header header-danger', 'Are you sure you want to delete the order?', deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
           this.orderService.deleteOrder(order.obj.id).then((result) => {
             result = result.order;
             this.orders[orderIdx].obj = {};
-            this.orders[orderIdx].obj['id'] = result._id;
-            this.orders[orderIdx].obj['Owner'] = result.owner;
-            this.orders[orderIdx].obj['Editor'] = result.editor;
-            this.orders[orderIdx].obj['Status'] = result.status;
+            this.orders[orderIdx].obj['id'] = { label: result._id };
+            this.orders[orderIdx].obj['Owner'] = { label: result.owner };
+            this.orders[orderIdx].obj['Editor'] = { label: result.editor };
+            this.orders[orderIdx].obj['Status'] = { label: result.status };
           });
         }
       });
@@ -97,10 +97,10 @@ export class OrderListComponent implements OnInit {
     const arr = [];
     for (const order of orders) {
       const item = new TableItem();
-      item.obj['id'] = order._id;
-      item.obj['Owner'] = order.owner;
-      item.obj['Editor'] = order.editor;
-      item.obj['Status'] = order.status;
+      item.obj['id'] = { label: order._id };
+      item.obj['Owner'] = { label: order.owner };
+      item.obj['Editor'] = { label: order.editor };
+      item.obj['Status'] = { label: order.status };
       item.button1.label = 'Edit';
       item.button1.href = `./${config.paths.orders.updateOrder}/${order._id}`;
       item.button1.class = 'btn btn-primary spacing';

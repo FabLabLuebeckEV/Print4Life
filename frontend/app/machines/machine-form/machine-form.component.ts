@@ -140,7 +140,7 @@ export class MachineFormComponent implements OnInit {
           undefined, undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined);
       default:
-        return new Machine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined);
+        return new Machine(undefined, undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined);
     }
   }
 

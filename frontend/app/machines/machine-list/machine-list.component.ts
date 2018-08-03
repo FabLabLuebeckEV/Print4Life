@@ -23,7 +23,7 @@ export class MachineListComponent implements OnInit {
   loadingMachineTypes: Boolean;
   plusIcon = faPlus;
   newLink: String = `./${config.paths.machines.create}`;
-  spinnerConfig: Object = {'loadingText': 'Loading Machines', ...config.spinnerConfig};
+  spinnerConfig: Object = { 'loadingText': 'Loading Machines', ...config.spinnerConfig };
 
   constructor(private machineService: MachineService,
     private fablabService: FablabService, private router: Router,
@@ -118,13 +118,14 @@ export class MachineListComponent implements OnInit {
       for (const elem of machines[type]) {
         const resFab = await this.fablabService.getFablab(elem.fablabId);
         const fablab = resFab.fablab;
+        elem.fablab = fablab;
         const item = new TableItem();
-        item.obj['id'] = elem._id;
-        item.obj['Device Type'] = elem.type;
-        item.obj['Device Name'] = elem.deviceName;
-        item.obj['Manufacturer'] = elem.manufacturer;
-        item.obj['Fablab'] = fablab.name;
-        item.obj['Description'] = '';
+        item.obj['id'] = { label: elem._id };
+        item.obj['Device Type'] = { label: elem.type };
+        item.obj['Device Name'] = { label: elem.deviceName, href: `./${elem.type}s/${elem._id}` };
+        item.obj['Manufacturer'] = { label: elem.manufacturer };
+        item.obj['Fablab'] = { label: fablab.name };
+        item.obj['Description'] = { label: '' };
         item.button1.label = 'Update';
         item.button1.href = `./${config.paths.machines.update}/${elem._id}`;
         item.button1.class = 'btn btn-primary spacing';

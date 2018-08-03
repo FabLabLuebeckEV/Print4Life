@@ -3,10 +3,10 @@ export class Machine {
     constructor(
         public _id: String,
         public fablabId: String,
+        public fablab: any,
         public deviceName: String,
         public type: String,
         public manufacturer: String) {
-
     }
 }
 
@@ -43,7 +43,7 @@ export class Printer extends Machine {
         public numberOfExtruders: Number,
         public pictureUrl: String,
         public comment: String
-    ) { super(_id, fablabId, deviceName, type, manufacturer); }
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer); }
 }
 
 export class MillingMachine extends Machine {
@@ -61,7 +61,7 @@ export class MillingMachine extends Machine {
         public stepSize: Number,
         public pictureUrl: String,
         public comment: String
-    ) { super(_id, fablabId, deviceName, type, manufacturer); }
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer); }
 }
 
 export class OtherMachine extends Machine {
@@ -74,7 +74,7 @@ export class OtherMachine extends Machine {
         public typeOfMachine: String,
         public pictureUrl: String,
         public comment: String
-    ) { super(_id, fablabId, deviceName, type, manufacturer); }
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer); }
 }
 
 export class Lasercutter extends Machine {
@@ -93,5 +93,5 @@ export class Lasercutter extends Machine {
         public laserPower: String,
         public pictureUrl: String,
         public comment: String
-    ) { super(_id, fablabId, deviceName, type, manufacturer); }
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer); }
 }

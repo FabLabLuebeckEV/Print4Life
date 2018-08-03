@@ -5,6 +5,7 @@ import { MachineFormComponent } from '../machines/machine-form/machine-form.comp
 import { Routes } from '@angular/router';
 import { config } from './config';
 import { CreateOrderComponent } from '../orders/create-order/create-order.component';
+import { MachineDetailComponent } from '../machines/machine-detail/machine-detail.component';
 
 export let appRoutes: Routes = [
     {
@@ -12,7 +13,8 @@ export let appRoutes: Routes = [
         component: MachineListComponent,
         children: [
             { path: config.paths.machines.create, component: MachineFormComponent },
-            { path: `${config.paths.machines.update}/${config.paths.machines.getById}`, component: MachineFormComponent },
+            { path: `${config.paths.machines.update}/:id`, component: MachineFormComponent },
+            { path: `${config.paths.machines.getById}`, component: MachineDetailComponent}
         ]
     },
 

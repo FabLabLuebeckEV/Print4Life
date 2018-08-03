@@ -16,7 +16,7 @@ export let config = {
             create: 'create',
             update: 'update',
             delete: 'delete',
-            getById: ':id',
+            getById: ':type/:id',
             getAll: '',
             machineTypes: 'types',
             materials: 'materials',

@@ -21,6 +21,7 @@ import { OrderListComponent } from './orders/order-list/order-list.component';
 import { CreateOrderComponent } from './orders/create-order/create-order.component';
 import { MessageModalComponent } from './components/message-modal/message-modal.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
         OrderListComponent,
         MachineFormComponent,
         CreateOrderComponent,
-        MessageModalComponent
+        MessageModalComponent,
+        MachineDetailComponent
     ],
     imports: [
         BrowserModule,

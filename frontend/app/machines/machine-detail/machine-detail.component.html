@@ -1,0 +1,72 @@
+<div *ngIf="!loading" class="row spacing">
+  <div class="col-md-12 text-center">
+    <h2>{{machine.deviceName}} - {{machine.fablab.name}}</h2>
+    <div class="container">
+      <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+
+        <ngb-panel [title]="machineProps['title']">
+          <ng-template ngbPanelContent>
+            <ul class="list-group col-md-12">
+              <div class="row">
+                <li *ngFor="let prop of machineProps['props']" class="col-md-6 list-group-item">
+                  <div class="row">
+                    <div class="col-md-6">
+                      {{prop.label}}:
+                    </div>
+                    <div class="col-md-6">
+                      {{machine[prop.key]}}
+                    </div>
+                  </div>
+                </li>
+              </div>
+            </ul>
+          </ng-template>
+        </ngb-panel>
+
+
+        <ngb-panel *ngFor="let item of machineSubObjects" [title]="item.title">
+          <ng-template ngbPanelContent>
+            <ul class="list-group col-md-12">
+              <div class="row">
+                <li *ngFor="let prop of objectKeys(item.obj)" class="col-md-6 list-group-item">
+                  <div class="row">
+                    <div class="col-md-6">
+                      {{prop}}:
+                    </div>
+                    <div class="col-md-6">
+                      {{item.obj[prop]}}
+                    </div>
+                  </div>
+                </li>
+              </div>
+            </ul>
+          </ng-template>
+        </ngb-panel>
+
+        <ngb-panel *ngFor="let key of machineSubArrays" [title]="key.title">
+          <ng-template ngbPanelContent>
+            <ul class="list-group col-md-12">
+              <div class="row">
+                <div *ngFor="let item of key.array" class="col-md-6">
+                  <div class="card spacing">
+                    <li *ngFor="let elem of objectKeys(item)" class="list-group-item">
+                      <div class="row">
+                        <div class="col-md-6">
+                          {{elem}}:
+                        </div>
+                        <div class="col-md-6">
+                          {{item[elem]}}
+                        </div>
+                      </div>
+                    </li>
+                  </div>
+                </div>
+              </div>
+            </ul>
+          </ng-template>
+        </ngb-panel>
+
+      </ngb-accordion>
+    </div>
+  </div>
+</div>
