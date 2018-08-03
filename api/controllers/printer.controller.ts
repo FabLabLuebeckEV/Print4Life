@@ -5,6 +5,7 @@ import machineService from '../services/machine.service';
  * @apiName GetPrinters
  * @apiVersion 1.0.0
  * @apiGroup Printers
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Array} printers an array of printer objects
  *
@@ -74,7 +75,7 @@ function getAll () {
  * @apiName CreateNewPrinter
  * @apiVersion 1.0.0
  * @apiGroup Printers
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {String} fablabId id of the corresponding fablab (required)
  * @apiParam {String} deviceName name of the device (required)
@@ -183,7 +184,7 @@ function create (params) {
  * @apiName DeletePrinterById
  * @apiVersion 1.0.0
  * @apiGroup Printers
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {id} is the id of the printer
  *
@@ -208,7 +209,7 @@ function deleteById (id) {
  * @apiName GetPrinterById
  * @apiVersion 1.0.0
  * @apiGroup Printers
- *
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {id} is the id of the printer
  *

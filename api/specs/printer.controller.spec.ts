@@ -27,8 +27,11 @@ const testPrinter = {
 
 describe('Printer Controller', () => {
   it('gets printers', (done) => {
-    request.get(`${endpoint}`, (error, response) => {
-      const printers = JSON.parse(response.body).printers;
+    request.get(`${endpoint}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
+      const printers = response.body.printers;
       expect(response.statusCode).toEqual(200);
       expect(printers).toBeDefined();
       expect(printers.length).toBeGreaterThan(-1);
@@ -82,9 +85,15 @@ describe('Printer Controller', () => {
     request.post(`${endpoint}/create`, { body: testPrinter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       responseMachine = response.body.printer;
-      request.delete(`${endpoint}/${response.body.printer._id}`, (error, response) => {
+      request.delete(`${endpoint}/${response.body.printer._id}`, {
+        headers: { 'content-type': 'application/json' },
+        json: true
+      }, (error, response) => {
         expect(response.statusCode).toEqual(204);
-        request.get(`${endpoint}/${responseMachine._id}`, (error, response) => {
+        request.get(`${endpoint}/${responseMachine._id}`, {
+          headers: { 'content-type': 'application/json' },
+          json: true
+        }, (error, response) => {
           expect(response.statusCode).toEqual(404);
           expect(response.body.printer).toBeUndefined();
           done();
@@ -95,7 +104,10 @@ describe('Printer Controller', () => {
 
   it('delete printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -103,7 +115,10 @@ describe('Printer Controller', () => {
 
   it('delete printer (id too short)', (done) => {
     const id = 'tooShort';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -113,7 +128,10 @@ describe('Printer Controller', () => {
     request.post(`${endpoint}/create`, { body: testPrinter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       const id = response.body.printer._id;
-      request.get(`${endpoint}/${id}`, (error, response) => {
+      request.get(`${endpoint}/${id}`, {
+        headers: { 'content-type': 'application/json' },
+        json: true
+      }, (error, response) => {
         expect(response.statusCode).toEqual(200);
         done();
       });
@@ -122,7 +140,10 @@ describe('Printer Controller', () => {
 
   it('get printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -130,7 +151,10 @@ describe('Printer Controller', () => {
 
   it('get printer (id too short)', (done) => {
     const id = 'tooShort';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });

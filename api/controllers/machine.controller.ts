@@ -8,6 +8,7 @@ import lasertypeService from '../services/lasertype.service';
  * @apiName GetMachines
  * @apiVersion 1.0.0
  * @apiGroup Machines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Array} machines an array of an array of machine objects
  *
@@ -101,6 +102,7 @@ function getAllMachines () {
  * @apiName GetMachineTypes
  * @apiVersion 1.0.0
  * @apiGroup Machines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Array} types an array of strings giving information about the machine types
  *
@@ -146,6 +148,7 @@ function getMachineTypes () {
  * @apiName GetMaterialsByType
  * @apiVersion 1.0.0
  * @apiGroup Materials
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {String} machine is the name of the machine type
  * @apiSuccess {Array} materials an array of materials for a given machine type
@@ -171,6 +174,7 @@ function getMaterialsByType (type) {
  * @apiName GetLaserTypes
  * @apiVersion 1.0.0
  * @apiGroup LaserTypes
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Array} laserTypes an array of all laserTypes
  *

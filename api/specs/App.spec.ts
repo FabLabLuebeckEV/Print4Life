@@ -6,7 +6,10 @@ const endpoint = configs.configArr.prod.baseUrlBackend;
 
 describe('App', () => {
   it('root', (done) => {
-    request.get(endpoint, (error, response) => {
+    request.get(endpoint, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(200);
       done();
     });

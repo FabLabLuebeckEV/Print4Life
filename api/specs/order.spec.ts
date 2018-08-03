@@ -5,6 +5,21 @@ import * as configs from '../config';
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
 
+describe('Order Controller', () => {
+  it('gets orders', (done) => {
+    request.get(`${endpoint}orders/`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
+      const orders = response.body.orders;
+      expect(response.statusCode).toEqual(200);
+      expect(orders).toBeDefined();
+      expect(orders.length).toBeGreaterThan(-1);
+      done();
+    });
+  });
+});
+
 const testOrder = {
   comments: [{
     author: 'Mister Foo',
@@ -18,13 +33,14 @@ const testOrder = {
 
 describe('Order Controller', () => {
   it('gets orders', (done) => {
-    request.get(`${endpoint}orders/`, (error, response) => {
-      const orders = JSON.parse(response.body).orders;
-      expect(response.statusCode).toEqual(200);
-      expect(orders).toBeDefined();
-      expect(orders.length).toBeGreaterThan(-1);
-      done();
-    });
+    request.get(`${endpoint}orders/`, { headers: { 'content-type': 'application/json' } },
+      (error, response) => {
+        const orders = JSON.parse(response.body).orders;
+        expect(response.statusCode).toEqual(200);
+        expect(orders).toBeDefined();
+        expect(orders.length).toBeGreaterThan(-1);
+        done();
+      });
   });
 
   it('create order', (done) => {
@@ -58,6 +74,7 @@ describe('Order Controller', () => {
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'GET',
+        headers: { 'content-type': 'application/json' },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
@@ -110,6 +127,7 @@ describe('Order Controller', () => {
       request({
         uri: `${endpoint}orders/deleteOrder/${response.body.order._id}`,
         method: 'DELETE',
+        headers: { 'content-type': 'application/json' },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
@@ -128,6 +146,7 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/status`,
       method: 'GET',
+      headers: { 'content-type': 'application/json' },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(200);

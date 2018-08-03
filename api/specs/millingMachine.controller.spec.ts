@@ -22,8 +22,11 @@ const testMillingMachine = {
 
 describe('Milling Machine Controller', () => {
   it('gets milling machines', (done) => {
-    request.get(`${endpoint}`, (error, response) => {
-      const millingMachines = JSON.parse(response.body).millingMachines;
+    request.get(`${endpoint}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
+      const millingMachines = response.body.millingMachines;
       expect(response.statusCode).toEqual(200);
       expect(millingMachines).toBeDefined();
       expect(millingMachines.length).toBeGreaterThan(-1);
@@ -78,9 +81,15 @@ describe('Milling Machine Controller', () => {
     request.post(`${endpoint}/create`, { body: testMillingMachine, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       responseMachine = response.body.millingMachine;
-      request.delete(`${endpoint}/${response.body.millingMachine._id}`, (error, response) => {
+      request.delete(`${endpoint}/${response.body.millingMachine._id}`, {
+        headers: { 'content-type': 'application/json' },
+        json: true
+      }, (error, response) => {
         expect(response.statusCode).toEqual(204);
-        request.get(`${endpoint}/${responseMachine._id}`, (error, response) => {
+        request.get(`${endpoint}/${responseMachine._id}`, {
+          headers: { 'content-type': 'application/json' },
+          json: true
+        }, (error, response) => {
           expect(response.statusCode).toEqual(404);
           expect(response.body.millingMachine).toBeUndefined();
           done();
@@ -91,7 +100,10 @@ describe('Milling Machine Controller', () => {
 
   it('delete milling machine (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -99,7 +111,10 @@ describe('Milling Machine Controller', () => {
 
   it('delete milling machine (id too short)', (done) => {
     const id = 'tooShort';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -109,7 +124,10 @@ describe('Milling Machine Controller', () => {
     request.post(`${endpoint}/create`, { body: testMillingMachine, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       const id = response.body.millingMachine._id;
-      request.get(`${endpoint}/${id}`, (error, response) => {
+      request.get(`${endpoint}/${id}`, {
+        headers: { 'content-type': 'application/json' },
+        json: true
+      }, (error, response) => {
         expect(response.statusCode).toEqual(200);
         done();
       });
@@ -118,7 +136,10 @@ describe('Milling Machine Controller', () => {
 
   it('get milling machine (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -126,7 +147,10 @@ describe('Milling Machine Controller', () => {
 
   it('get milling machine (id too short)', (done) => {
     const id = 'tooShort';
-    request.delete(`${endpoint}/${id}`, (error, response) => {
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
