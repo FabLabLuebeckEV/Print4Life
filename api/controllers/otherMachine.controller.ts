@@ -205,6 +205,19 @@ function deleteById (id) {
  * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  *
+ * @apiParamExample {json} Request-Example:
+ *
+{
+    "_id" : "5b66bbf95772aa134cf70d69",
+    "fablabId" : "5b453ddb5cf4a9574849e98a",
+    "deviceName" : "Updated",
+    "manufacturer" : "Test Manufacturer",
+    "typeOfMachine" : "Test Machine",
+    "pictureURL" : "",
+    "comment" : "Create Test",
+    "type" : "otherMachine",
+    "__v" : 0
+}
  * @apiSuccess {Object} printer the printer object
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
@@ -243,7 +256,6 @@ function deleteById (id) {
  *
  */
 function update (id, machine) {
-  delete machine.__v;
   return machineService.update(machineType, id, machine);
 }
 

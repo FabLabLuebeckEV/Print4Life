@@ -289,6 +289,34 @@ function get (id) {
  * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  *
+ * @apiParamExample {json} Request-Example:
+ *
+{
+    "_id" : "5b66a9d7cdb16f0a3e528630",
+    "fablabId" : "5b453ddb5cf4a9574849e98a",
+    "deviceName" : "Test Printer (Updated)",
+    "manufacturer" : "Test Manufacturer",
+    "materials" : [
+        {
+            "_id" : "5b66a9d7cdb16f0a3e528631",
+            "material" : "PLA",
+            "type" : "printerMaterial"
+        }
+    ],
+    "camSoftware" : "Test Software",
+    "printVolumeX" : 2,
+    "printVolumeY" : 2,
+    "printVolumeZ" : 2,
+    "printResolutionX" : 2,
+    "printResolutionY" : 2,
+    "printResolutionZ" : 2,
+    "nozzleDiameter" : 2,
+    "numberOfExtruders" : 2,
+    "pictureURL" : "",
+    "comment" : "Create Test",
+    "type" : "printer",
+    "__v" : 0
+}
  * @apiSuccess {Object} printer the printer object
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
@@ -342,7 +370,6 @@ function get (id) {
  *
  */
 function update (id, machine) {
-  delete machine.__v;
   return machineService.update(machineType, id, machine);
 }
 

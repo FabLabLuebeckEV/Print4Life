@@ -136,6 +136,7 @@ function get (type, _id) {
  * @returns a promise with the result
  */
 function update (type, _id, machine) {
+  delete machine.__v;
   switch (type) {
     case 'printer':
       return Printer.update(
