@@ -89,6 +89,50 @@ describe('Lasercutter Controller', () => {
     });
   });
 
+  it('update lasercutter (success)', (done) => {
+    request.post(`${endpoint}/create`, { body: testLasercutter, json: true }, (error, response) => {
+      const lasercutter = response.body.lasercutter;
+      expect(response.statusCode).toEqual(201);
+      expect(lasercutter).toBeDefined();
+      expect(lasercutter.deviceName).toEqual(testLasercutter.deviceName);
+      expect(lasercutter.type).toEqual('lasercutter');
+      expect(lasercutter.manufacturer).toEqual(testLasercutter.manufacturer);
+      expect(lasercutter.fablabId).toEqual(testLasercutter.fablabId);
+      lasercutter.deviceName = 'Updated';
+      request.put(`${endpoint}/${lasercutter._id}`, { body: lasercutter, json: true }, (error, response) => {
+        const updatedLasercutter = response.body.lasercutter;
+        expect(response.statusCode).toEqual(200);
+        expect(updatedLasercutter).toBeDefined();
+        expect(updatedLasercutter.deviceName).toEqual(lasercutter.deviceName);
+        done();
+      });
+    });
+  });
+
+  it('update lasercutter (id too short)', (done) => {
+    const id = 'tooShortForMongoDB23';
+    request.put(`${endpoint}/${id}`, { body: testLasercutter, json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('update lasercutter (id too long)', (done) => {
+    const id = 'tooLongForMongoDBsObjectId1234567890';
+    request.put(`${endpoint}/${id}`, { body: testLasercutter, json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('update lasercutter (no body)', (done) => {
+    const id = '5b453ddb5cf4a9574849e98a';
+    request.put(`${endpoint}/${id}`, { json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
   it('delete lasercutter (success)', (done) => {
     let responseMachine;
     request.post(`${endpoint}/create`, { body: testLasercutter, json: true }, (error, response) => {
