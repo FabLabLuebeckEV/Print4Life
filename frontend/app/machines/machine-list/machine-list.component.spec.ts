@@ -13,6 +13,11 @@ import {
 } from '@angular/common/http/testing';
 
 import { MachineListComponent } from './machine-list.component';
+import { ConfigService } from '../../config/config.service';
+import { MachineService } from '../../services/machine.service';
+import { FablabService } from '../../services/fablab.service';
+import { MachineFormComponent } from '../machine-form/machine-form.component';
+import { MachineDetailComponent } from '../machine-detail/machine-detail.component';
 
 describe('MachineListComponent', () => {
   let component: MachineListComponent;
@@ -20,7 +25,7 @@ describe('MachineListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MachineListComponent, TableComponent],
+      declarations: [MachineListComponent, MachineFormComponent, MachineDetailComponent, TableComponent],
       imports: [
         NgSelectModule,
         FormsModule,
@@ -29,7 +34,7 @@ describe('MachineListComponent', () => {
         RouterTestingModule,
         FontAwesomeModule,
         NgbModule.forRoot()],
-      providers: [NgxSpinnerService]
+      providers: [NgxSpinnerService, ConfigService, MachineService, FablabService]
     })
       .compileComponents();
   }));

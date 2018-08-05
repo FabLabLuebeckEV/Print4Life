@@ -13,7 +13,7 @@ export class MachineService {
     this.rootPath = routes.backendUrl + '/' + routes.paths.machines.root;
   }
 
-  public _uncamelCase(str: String) {
+  public _uncamelCase(str: String): String {
     const firstLetter = str.charAt(0);
     if (firstLetter.match(/[a-z]/)) {
       const split = str.split(/(?=[A-Z])/);

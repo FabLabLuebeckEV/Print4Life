@@ -31,14 +31,16 @@ export class MachineDetailComponent implements OnInit {
     this.backArrow = this.config.icons.back;
     this.backLink = `/${routes.paths.machines.root}`;
     this.route.params.subscribe(params => {
-      const type = params.type.substr(0, params.type.length - 1);
-      this.machineService.get(type, params.id).then((result) => {
-        this.machine = result[type];
-        this.fablabService.getFablab(this.machine.fablabId).then((result) => {
-          this.machine.fablab = result.fablab;
-          this._splitMachineProps();
+      if (params.type && params.id) {
+        const type = params.type.substr(0, params.type.length - 1);
+        this.machineService.get(type, params.id).then((result) => {
+          this.machine = result[type];
+          this.fablabService.getFablab(this.machine.fablabId).then((result) => {
+            this.machine.fablab = result.fablab;
+            this._splitMachineProps();
+          });
         });
-      });
+      }
     });
   }
 
@@ -69,7 +71,7 @@ export class MachineDetailComponent implements OnInit {
     if (prop instanceof Object && !Array.isArray(prop)) {
       const tmp = Object.keys(prop).filter((e) => e !== '_id' && e !== '__v');
       tmp.forEach((k) => {
-        newObj[this.machineService._uncamelCase(k)] = prop[k];
+        newObj[`${this.machineService._uncamelCase(k)}`] = prop[k];
       });
     } else if (Array.isArray(prop)) {
       const arr = [];

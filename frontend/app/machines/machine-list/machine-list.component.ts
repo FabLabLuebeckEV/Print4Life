@@ -36,7 +36,7 @@ export class MachineListComponent implements OnInit {
     this.newLink = `./${routes.paths.machines.create}`;
     router.events.subscribe(() => {
       const route = location.path();
-      if (route === '/machines') {
+      if (route === routes.paths.machines.root) {
         this.listView = true;
       } else {
         this.listView = false;

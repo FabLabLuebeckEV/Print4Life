@@ -37,17 +37,19 @@ export class MachineFormComponent implements OnInit {
     this.backArrow = this.config.icons.back;
     this.backLink = `/${routes.paths.machines.root}`;
     this.route.params.subscribe(params => {
-      const type = params.type.substr(0, params.type.length - 1);
-      this.machineService.get(type, params.id).then((result) => {
-        this.model = result[type];
-        this.selectedType = this.machineService._uncamelCase(type);
-        this._loadFablabs();
-        this._loadMaterials(this.selectedType);
-        this._loadLaserTypes();
-      });
+      if (params.type && params.id) {
+        const type = params.type.substr(0, params.type.length - 1);
+        this.machineService.get(type, params.id).then((result) => {
+          this.model = result[type];
+          this.selectedType = this.machineService._uncamelCase(type);
+          this._loadFablabs();
+          this._loadMaterials(this.selectedType);
+          this._loadLaserTypes();
+        });
+      }
     });
-    router.events.subscribe(() => {
-      const route = location.path();
+    this.router.events.subscribe(() => {
+      const route = this.location.path();
       if (route.indexOf('/update') >= 0 && !this.editView) {
         this.editView = true;
       } else {
