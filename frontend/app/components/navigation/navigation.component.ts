@@ -12,22 +12,20 @@ export class NavigationComponent implements OnInit {
   orderDropdown: Object;
 
   constructor() {
-    this.machineDropdown =
-    {
-      name: 'Machine',
-      elements: [
-        { name: 'Get Machines', routerHref: routes.paths.machines.root }
-      ]
-    };
+    this.machineDropdown = {
+        name: 'Machine',
+        elements: [
+          { name: 'Get Machines', routerHref: routes.paths.machines.root }
+        ]
+      };
 
-    this.orderDropdown =
-    {
-      name: 'Orders',
-      elements: [
-        { name: 'All orders', routerHref: routes.paths.orders.root }
-      ]
-    };
-    }
+    this.orderDropdown = {
+        name: 'Orders',
+        elements: [
+          { name: 'All orders', routerHref: routes.paths.orders.root }
+        ]
+      };
+  }
 
   ngOnInit() {
   }

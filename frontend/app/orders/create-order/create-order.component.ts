@@ -64,7 +64,7 @@ export class CreateOrderComponent implements OnInit {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Order successfully created', 'modal-header header-success',
       'The creation of a new machine was successful!', okButton, undefined).result.then((result) => {
-        this.router.navigate([`/${config.paths.orders.root}`]);
+        this.router.navigate([`/${this.config.paths.orders.root}`]);
       });
   }
 
@@ -75,7 +75,7 @@ export class CreateOrderComponent implements OnInit {
     }
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
-       okButton, undefined);
+      okButton, undefined);
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
