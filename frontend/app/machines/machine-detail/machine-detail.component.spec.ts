@@ -2,6 +2,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MachineDetailComponent } from './machine-detail.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ConfigService } from '../../config/config.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import {
   HttpClientTestingModule
@@ -13,11 +15,14 @@ describe('MachineDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MachineDetailComponent ],
-      imports: [NgbModule.forRoot(), HttpClientTestingModule,
-        RouterTestingModule]
+      declarations: [MachineDetailComponent],
+      imports: [NgbModule.forRoot(),
+        HttpClientTestingModule,
+        RouterTestingModule,
+        FontAwesomeModule],
+      providers: [ConfigService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

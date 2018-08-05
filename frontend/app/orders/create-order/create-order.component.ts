@@ -5,16 +5,12 @@ import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import {
-  Machine,
-  Printer,
-  MillingMachine,
-  OtherMachine,
-  Lasercutter,
   Material
 } from '../../models/machines.model';
 
 import { Order } from '../../models/order.model';
-import { config } from '../../config/config';
+import { ConfigService } from '../../config/config.service';
+import { routes } from '../../config/routes';
 
 
 @Component({
@@ -23,7 +19,9 @@ import { config } from '../../config/config';
   styleUrls: ['./create-order.component.css']
 })
 export class CreateOrderComponent implements OnInit {
-
+  config: any;
+  backLink: String;
+  backArrow: any;
   machineTypes: Array<String> = [];
   selectedType: String;
   editView: Boolean = false;
@@ -44,11 +42,14 @@ export class CreateOrderComponent implements OnInit {
     private router: Router,
     private location: Location,
     private route: ActivatedRoute,
-    private orderService: OrderService) {
-
+    private orderService: OrderService,
+    private configService: ConfigService) {
+    this.config = this.configService.getConfig();
+    this.backArrow = this.config.icons.back;
+    this.backLink = `/${routes.paths.orders.root}`;
     router.events.subscribe(() => {
       const route = location.path();
-      this.editView = route.indexOf(`${config.paths.orders.root}/${config.paths.orders.updateOrder}`) >= 0;
+      this.editView = route.indexOf(`${routes.paths.orders.root}/${routes.paths.orders.updateOrder}`) >= 0;
       if (this.editView) {
         const routeArr = route.split('/');
         this.orderId = routeArr[routeArr.length - 1];
@@ -64,7 +65,6 @@ export class CreateOrderComponent implements OnInit {
     this._loadFablabs();
     this.loadingStatus = true;
     this._loadStatus();
-// this._loadMaterials(this.selectedType);
   }
 
   onSubmit() {

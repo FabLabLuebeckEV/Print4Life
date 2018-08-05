@@ -1,33 +1,33 @@
-import { MachineListComponent } from '../machines/machine-list/machine-list.component';
-import { OrderListComponent } from '../orders/order-list/order-list.component';
-import { DashboardComponent } from '../dashboard/dashboard.component';
-import { MachineFormComponent } from '../machines/machine-form/machine-form.component';
-import { Routes } from '@angular/router';
-import { config } from './config';
-import { CreateOrderComponent } from '../orders/create-order/create-order.component';
-import { MachineDetailComponent } from '../machines/machine-detail/machine-detail.component';
-
-export let appRoutes: Routes = [
-    {
-        path: config.paths.machines.root,
-        component: MachineListComponent,
-        children: [
-            { path: config.paths.machines.create, component: MachineFormComponent },
-            { path: `${config.paths.machines.update}/:id`, component: MachineFormComponent },
-            { path: `${config.paths.machines.getById}`, component: MachineDetailComponent}
-        ]
-    },
-
-    {
-        path: config.paths.orders.root,
-        component: OrderListComponent,
-        children: [
-            { path: config.paths.orders.createOrder, component: CreateOrderComponent },
-            { path: `${config.paths.orders.updateOrder}/:id`, component: CreateOrderComponent }
-        ]
-    },
-    {
-        path: '',
-        component: DashboardComponent
+export const routes = {
+    backendUrl: 'http://localhost:3000/api/v1',
+    paths: {
+        orders: {
+            root: 'orders',
+            createOrder: 'placeOrder',
+            updateOrder: 'updateOrder',
+            deleteOrder: 'deleteOrder',
+            getOrderById: ':id',
+            getAllOrders: '',
+            getStatus: 'status',
+            getOrder: 'getOrder' // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
+        },
+        machines: {
+            root: 'machines',
+            create: 'create',
+            update: 'update',
+            delete: 'delete',
+            getById: ':type/:id',
+            getAll: '',
+            machineTypes: 'types',
+            materials: 'materials',
+            laserTypes: 'laserTypes'
+        },
+        fablabs: {
+            root: 'fablabs',
+            getById: ':id'
+        }
     }
-];
+};
+
+
+

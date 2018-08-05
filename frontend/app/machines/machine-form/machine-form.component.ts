@@ -6,7 +6,8 @@ import { FablabService } from '../../services/fablab.service';
 import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
-import {config} from '../../config/config';
+import { ConfigService } from '../../config/config.service';
+import { routes } from '../../config/routes';
 
 @Component({
   selector: 'app-machine-form',
@@ -14,6 +15,9 @@ import {config} from '../../config/config';
   styleUrls: ['./machine-form.component.css']
 })
 export class MachineFormComponent implements OnInit {
+  config: any;
+  backLink: String;
+  backArrow: any;
   machineTypes: Array<String> = [];
   selectedType: String;
   editView: Boolean;
@@ -28,8 +32,10 @@ export class MachineFormComponent implements OnInit {
 
   constructor(private machineService: MachineService, private fablabService: FablabService,
     private router: Router, private location: Location, private route: ActivatedRoute,
-    private modalService: NgbModal) {
-    // this.route.params.subscribe(params => console.log(params));
+    private modalService: NgbModal, private configService: ConfigService) {
+    this.config = this.configService.getConfig();
+    this.backArrow = this.config.icons.back;
+    this.backLink = `/${routes.paths.machines.root}`;
     router.events.subscribe(() => {
       const route = location.path();
       if (route.startsWith('/machines/edit') && !this.editView) {
@@ -61,14 +67,14 @@ export class MachineFormComponent implements OnInit {
       this.submitted = true;
     }).catch((err) => {
       this._openErrMsg(err);
-  });
-}
+    });
+  }
 
   private _openSuccessMsg() {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Machine created successfully', 'modal-header header-success',
       'The creation of a new machine was successful!', okButton, undefined).result.then((result) => {
-        this.router.navigate([`/${config.paths.machines.root}`]);
+        this.router.navigate([`/${routes.paths.machines.root}`]);
       });
   }
 
@@ -79,7 +85,7 @@ export class MachineFormComponent implements OnInit {
     }
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
-       okButton, undefined);
+      okButton, undefined);
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {

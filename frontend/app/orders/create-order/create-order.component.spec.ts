@@ -3,6 +3,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
 import { CreateOrderComponent } from './create-order.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ConfigService } from '../../config/config.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import {
   HttpClientTestingModule
@@ -14,10 +16,17 @@ describe('CreateOrderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateOrderComponent ],
-      imports: [RouterTestingModule, FormsModule, HttpClientTestingModule, NgSelectModule]
+      declarations: [CreateOrderComponent],
+      providers: [ConfigService],
+      imports: [
+        RouterTestingModule,
+        FormsModule,
+        HttpClientTestingModule,
+        NgSelectModule,
+        FontAwesomeModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

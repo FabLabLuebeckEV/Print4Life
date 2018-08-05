@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { MachineFormComponent } from './machine-form.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ConfigService } from '../../config/config.service';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import {
   HttpClientTestingModule
@@ -15,10 +17,17 @@ describe('MachineFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MachineFormComponent],
-      imports: [NgbModule.forRoot(), RouterTestingModule, HttpClientTestingModule, FormsModule, NgSelectModule]
+      declarations: [MachineFormComponent],
+      imports: [
+        NgbModule.forRoot(),
+        RouterTestingModule,
+        HttpClientTestingModule,
+        FontAwesomeModule,
+        FormsModule,
+        NgSelectModule],
+      providers: [ConfigService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

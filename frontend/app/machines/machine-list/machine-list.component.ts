@@ -3,12 +3,12 @@ import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { TableItem } from '../../components/table/table.component';
-import { faWrench, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
-import { config } from '../../config/config';
+import { ConfigService } from '../../config/config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { routes } from '../../config/routes';
 
 @Component({
   selector: 'app-machine-list',
@@ -16,19 +16,24 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./machine-list.component.css']
 })
 export class MachineListComponent implements OnInit {
+  private config: any;
   machineTypes: Array<String> = [];
   displayedMachines: Array<TableItem> = [];
   selectedMachineTypes: Array<String>;
   listView: Boolean;
   loadingMachineTypes: Boolean;
-  plusIcon = faPlus;
-  newLink: String = `./${config.paths.machines.create}`;
-  spinnerConfig: Object = { 'loadingText': 'Loading Machines', ...config.spinnerConfig };
+  plusIcon: any;
+  newLink: String;
+  spinnerConfig: Object = {};
 
   constructor(private machineService: MachineService,
     private fablabService: FablabService, private router: Router,
     private location: Location, private modalService: NgbModal,
-    private spinner: NgxSpinnerService) {
+    private spinner: NgxSpinnerService, private configService: ConfigService) {
+    this.config = this.configService.getConfig();
+    this.plusIcon = this.config.icons.add;
+    this.spinnerConfig = { 'loadingText': 'Loading Machines', ...this.config.spinnerConfig };
+    this.newLink = `./${routes.paths.machines.create}`;
     router.events.subscribe(() => {
       const route = location.path();
       if (route === '/machines') {
@@ -65,10 +70,10 @@ export class MachineListComponent implements OnInit {
       const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
       const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
       const modalRef = this._openMsgModal('Do you really want to delete this machine?',
-        'modal-header header-danger', `Are you sure you want to delete ${machine.obj['Device Name']} ?`, deleteButton, abortButton);
+        'modal-header header-danger', `Are you sure you want to delete ${machine.obj['Device Name'].label} ?`, deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
-          this.machineService.deleteMachine(machine.obj['Device Type'], machine.obj.id).then((result) => {
+          this.machineService.deleteMachine(machine.obj['Device Type'].label, machine.obj.id.label).then((result) => {
             this.displayedMachines.splice(machineIdx, 1);
           });
         }
@@ -127,13 +132,13 @@ export class MachineListComponent implements OnInit {
         item.obj['Fablab'] = { label: fablab.name };
         item.obj['Description'] = { label: '' };
         item.button1.label = 'Update';
-        item.button1.href = `./${config.paths.machines.update}/${elem._id}`;
+        item.button1.href = `./${routes.paths.machines.update}/${elem._id}`;
         item.button1.class = 'btn btn-primary spacing';
-        item.button1.icon = faWrench;
+        item.button1.icon = this.config.icons.edit;
         item.button2.label = 'Delete';
         item.button2.eventEmitter = true;
         item.button2.class = 'btn btn-danger spacing';
-        item.button2.icon = faTrashAlt;
+        item.button2.icon = this.config.icons.delete;
         arr.push(item);
       }
     }

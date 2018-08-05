@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { config } from '../config/config';
-
-const rootPath = config.backendUrl + '/' + config.paths.machines.root;
+import { routes } from '../config/routes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MachineService {
+  private config: any;
+  private rootPath: String;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.rootPath = routes.backendUrl + '/' + routes.paths.machines.root;
+  }
 
   public camelCaseTypes(type): String {
     const split = type.split(' ');
@@ -25,35 +27,35 @@ export class MachineService {
   }
 
   public getAll(machineType) {
-    return this.http.get(`${rootPath}/${machineType}s`).toPromise();
+    return this.http.get(`${this.rootPath}/${machineType}s`).toPromise();
   }
 
   public create(machineType, obj) {
-    return this.http.post(`${rootPath}/${machineType}s/${config.paths.machines.create}`, obj).toPromise();
+    return this.http.post(`${this.rootPath}/${machineType}s/${routes.paths.machines.create}`, obj).toPromise();
   }
 
   public getAllMachines(): Promise<any> {
-    return this.http.get(`${rootPath}/`).toPromise();
+    return this.http.get(`${this.rootPath}/`).toPromise();
   }
 
   public getAllMachineTypes(): Promise<any> {
-    return this.http.get(`${rootPath}/${config.paths.machines.machineTypes}`).toPromise();
+    return this.http.get(`${this.rootPath}/${routes.paths.machines.machineTypes}`).toPromise();
   }
 
   public getMaterialsByMachineType(machineType): Promise<any> {
-    return this.http.get(`${rootPath}/${config.paths.machines.materials}/${machineType}`).toPromise();
+    return this.http.get(`${this.rootPath}/${routes.paths.machines.materials}/${machineType}`).toPromise();
   }
 
   public getLaserTypes(): Promise<any> {
-    return this.http.get(`${rootPath}/${config.paths.machines.laserTypes}`).toPromise();
+    return this.http.get(`${this.rootPath}/${routes.paths.machines.laserTypes}`).toPromise();
   }
 
   public deleteMachine(machineType, id) {
-    return this.http.delete(`${rootPath}/${machineType}s/${id}`).toPromise();
+    return this.http.delete(`${this.rootPath}/${machineType}s/${id}`).toPromise();
   }
 
   public get(machineType, id) {
-    return this.http.get(`${rootPath}/${machineType}s/${id}`).toPromise();
+    return this.http.get(`${this.rootPath}/${machineType}s/${id}`).toPromise();
   }
 
 }

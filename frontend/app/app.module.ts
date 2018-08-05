@@ -10,7 +10,7 @@ import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { MachineListComponent } from './machines/machine-list/machine-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { appRoutes } from './config/routes';
+import { appRoutes } from './config/app.routes';
 import { MachineService } from './services/machine.service';
 import { FablabService } from './services/fablab.service';
 import { TableComponent } from './components/table/table.component';
@@ -22,7 +22,7 @@ import { CreateOrderComponent } from './orders/create-order/create-order.compone
 import { MessageModalComponent } from './components/message-modal/message-modal.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
-
+import { ConfigService } from './config/config.service';
 
 @NgModule({
     declarations: [
@@ -50,7 +50,7 @@ import { MachineDetailComponent } from './machines/machine-detail/machine-detail
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }, // magic for cors
-        MachineService, FablabService
+        MachineService, FablabService, ConfigService
     ],
     bootstrap: [AppComponent],
     entryComponents: [
