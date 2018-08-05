@@ -3,6 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
 import { CreateOrderComponent } from './create-order.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import {
   HttpClientTestingModule
@@ -14,10 +15,10 @@ describe('CreateOrderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateOrderComponent ],
-      imports: [RouterTestingModule, FormsModule, HttpClientTestingModule, NgSelectModule]
+      declarations: [CreateOrderComponent],
+      imports: [RouterTestingModule, FormsModule, HttpClientTestingModule, NgSelectModule, NgbModule.forRoot()]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
