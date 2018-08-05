@@ -132,7 +132,7 @@ export class MachineListComponent implements OnInit {
         item.obj['Fablab'] = { label: fablab.name };
         item.obj['Description'] = { label: '' };
         item.button1.label = 'Update';
-        item.button1.href = `./${routes.paths.machines.update}/${elem._id}`;
+        item.button1.href = `./${routes.paths.machines.update}/${elem.type}s/${elem._id}`;
         item.button1.class = 'btn btn-primary spacing';
         item.button1.icon = this.config.icons.edit;
         item.button2.label = 'Delete';

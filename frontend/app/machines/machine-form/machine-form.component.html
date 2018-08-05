@@ -13,7 +13,7 @@
 <div class="row spacing">
   <div class="col-md-12">
     <div class="container">
-      <div class="col-md-6 offset-3">
+      <div *ngIf="!editView" class="col-md-6 offset-3">
         <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Machine selection">
           <button *ngFor="let type of machineTypes" (click)="_selectType(type); machineForm.reset()" type="button" [class.active]="type === selectedType"
             class="btn btn-secondary">{{type}}</button>

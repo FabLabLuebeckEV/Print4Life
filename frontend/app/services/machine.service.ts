@@ -13,6 +13,18 @@ export class MachineService {
     this.rootPath = routes.backendUrl + '/' + routes.paths.machines.root;
   }
 
+  public _uncamelCase(str: String) {
+    const firstLetter = str.charAt(0);
+    if (firstLetter.match(/[a-z]/)) {
+      const split = str.split(/(?=[A-Z])/);
+      let newStr = split[0].charAt(0).toUpperCase() + split[0].slice(1) + ' ';
+      for (let i = 1; i < split.length; i++) {
+        split[i].length > 1 ? newStr += split[i] + ' ' : newStr += split[i];
+      }
+      return newStr.trim();
+    }
+  }
+
   public camelCaseTypes(type): String {
     const split = type.split(' ');
     split[0] = split[0].charAt(0).toLowerCase() + split[0].slice(1);
@@ -32,6 +44,10 @@ export class MachineService {
 
   public create(machineType, obj) {
     return this.http.post(`${this.rootPath}/${machineType}s/${routes.paths.machines.create}`, obj).toPromise();
+  }
+
+  public update(machineType, id, machine) {
+    return this.http.put(`${this.rootPath}/${machineType}s/${id}`, machine).toPromise();
   }
 
   public getAllMachines(): Promise<any> {

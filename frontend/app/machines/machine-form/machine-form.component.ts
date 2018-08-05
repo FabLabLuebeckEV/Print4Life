@@ -36,9 +36,19 @@ export class MachineFormComponent implements OnInit {
     this.config = this.configService.getConfig();
     this.backArrow = this.config.icons.back;
     this.backLink = `/${routes.paths.machines.root}`;
+    this.route.params.subscribe(params => {
+      const type = params.type.substr(0, params.type.length - 1);
+      this.machineService.get(type, params.id).then((result) => {
+        this.model = result[type];
+        this.selectedType = this.machineService._uncamelCase(type);
+        this._loadFablabs();
+        this._loadMaterials(this.selectedType);
+        this._loadLaserTypes();
+      });
+    });
     router.events.subscribe(() => {
       const route = location.path();
-      if (route.startsWith('/machines/edit') && !this.editView) {
+      if (route.indexOf('/update') >= 0 && !this.editView) {
         this.editView = true;
       } else {
         if (this.editView) {
@@ -58,28 +68,48 @@ export class MachineFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.machineService.create(this.machineService.camelCaseTypes(this.selectedType), this.model).then((result) => {
-      if (result) {
-        this._openSuccessMsg();
-      } else {
-        this._openErrMsg(undefined);
-      }
-      this.submitted = true;
-    }).catch((err) => {
-      this._openErrMsg(err);
-    });
+    if (!this.editView) {
+      this.machineService.create(this.machineService.camelCaseTypes(this.selectedType), this.model).then((result) => {
+        if (result) {
+          this._openSuccessMsg();
+        } else {
+          this._openErrMsg(undefined);
+        }
+        this.submitted = true;
+      }).catch((err) => {
+        this._openErrMsg(err);
+      });
+    } else {
+      this.machineService.update(this.machineService.camelCaseTypes(this.selectedType), this.model._id, this.model).then((result) => {
+        if (result) {
+          this._openSuccessMsg();
+        } else {
+          this._openErrMsg(undefined);
+        }
+        this.submitted = true;
+      }).catch((err) => {
+        this._openErrMsg(err);
+      });
+    }
+
   }
 
   private _openSuccessMsg() {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
-    this._openMsgModal('Machine created successfully', 'modal-header header-success',
-      'The creation of a new machine was successful!', okButton, undefined).result.then((result) => {
+    let msgHeader;
+    let msg;
+    this.editView ? msgHeader = 'Machine updated successfully' : msgHeader = 'Machine created successfully';
+    this.editView ? msg = 'Updating the machine was successful!' : msg = 'The creation of a new machine was successful!';
+    this._openMsgModal(msgHeader, 'modal-header header-success',
+      msg, okButton, undefined).result.then((result) => {
         this.router.navigate([`/${routes.paths.machines.root}`]);
       });
   }
 
   private _openErrMsg(err) {
-    let errorMsg = `Something went wrong while creating the new machine.`;
+    let errorMsg;
+    this.editView ? errorMsg = 'Something went wrong while updating the machine'
+      : errorMsg = `Something went wrong while creating the new machine.`;
     if (err) {
       errorMsg += ` Error: ${err}`;
     }
