@@ -46,6 +46,7 @@ router.route('/:id').get((req, res) => {
     });
   }
 });
+
 router.route('/:id').put((req, res) => {
   if (req.params.id.length !== 24) {
     res.status(400).send({ error: 'Id needs to be a 24 character long hex string!' });

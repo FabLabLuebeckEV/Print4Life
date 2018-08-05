@@ -69,6 +69,50 @@ describe('Other Machine Controller', () => {
     });
   });
 
+  it('update other machine (success)', (done) => {
+    request.post(`${endpoint}/create`, { body: testOtherMachine, json: true }, (error, response) => {
+      const otherMachine = response.body.otherMachine;
+      expect(response.statusCode).toEqual(201);
+      expect(otherMachine).toBeDefined();
+      expect(otherMachine.deviceName).toEqual(testOtherMachine.deviceName);
+      expect(otherMachine.type).toEqual('otherMachine');
+      expect(otherMachine.manufacturer).toEqual(testOtherMachine.manufacturer);
+      expect(otherMachine.fablabId).toEqual(testOtherMachine.fablabId);
+      otherMachine.deviceName = 'Updated';
+      request.put(`${endpoint}/${otherMachine._id}`, { body: otherMachine, json: true }, (error, response) => {
+        const updatedMachine = response.body.otherMachine;
+        expect(response.statusCode).toEqual(200);
+        expect(updatedMachine).toBeDefined();
+        expect(updatedMachine.deviceName).toEqual(otherMachine.deviceName);
+        done();
+      });
+    });
+  });
+
+  it('update other machine (id too short)', (done) => {
+    const id = 'tooShortForMongoDB23';
+    request.put(`${endpoint}/${id}`, { body: testOtherMachine, json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('update other machine (id too long)', (done) => {
+    const id = 'tooLongForMongoDBsObjectId1234567890';
+    request.put(`${endpoint}/${id}`, { body: testOtherMachine, json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('update other machine (no body)', (done) => {
+    const id = '5b453ddb5cf4a9574849e98a';
+    request.put(`${endpoint}/${id}`, { json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
   it('delete other machine (success)', (done) => {
     let responseMachine;
     request.post(`${endpoint}/create`, { body: testOtherMachine, json: true }, (error, response) => {

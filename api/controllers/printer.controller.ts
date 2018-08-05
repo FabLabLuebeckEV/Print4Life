@@ -1,5 +1,7 @@
 import machineService from '../services/machine.service';
 
+const machineType = 'printer';
+
 /**
  * @api {get} /api/v1/machines/printers Get printers
  * @apiName GetPrinters
@@ -66,8 +68,8 @@ import machineService from '../services/machine.service';
       ]
     }
  */
-function getAll() {
-    return machineService.getMachineType('printer');
+function getAll () {
+  return machineService.getMachineType(machineType);
 }
 
 /**
@@ -175,8 +177,8 @@ function getAll() {
  *
  *
  */
-function create(params) {
-    return machineService.create('printer', params);
+function create (params) {
+  return machineService.create(machineType, params);
 }
 
 /**
@@ -200,8 +202,8 @@ function create(params) {
  *
  *
  */
-function deleteById(id) {
-    return machineService.deleteById('printer', id);
+function deleteById (id) {
+  return machineService.deleteById(machineType, id);
 }
 
 /**
@@ -259,8 +261,8 @@ function deleteById(id) {
  *
  *
  */
-function get(id) {
-    return machineService.get('printer', id);
+function get (id) {
+  return machineService.get(machineType, id);
 }
 
 /**
@@ -339,9 +341,9 @@ function get(id) {
  *
  *
  */
-function update(id, machine) {
-    delete machine.__v;
-    return machineService.update('printer', id, machine);
+function update (id, machine) {
+  delete machine.__v;
+  return machineService.update(machineType, id, machine);
 }
 
 
