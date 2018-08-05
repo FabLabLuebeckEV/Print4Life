@@ -8,7 +8,7 @@ import { LaserCutter } from '../models/machines/lasercutter.model';
  * type is the type of machine to get
  * @returns a promise with the results
  */
-function getMachineType (type) {
+function getMachineType(type) {
   const promises = [];
   let obj;
   switch (type) {
@@ -68,7 +68,7 @@ function getMachineType (type) {
  * params are the params of the machine
  * @returns a promise with the results
  */
-function create (type, params) {
+function create(type, params) {
   if (!params.type) {
     params.type = type;
   }
@@ -92,7 +92,7 @@ function create (type, params) {
  * _id is the id of the machine
  * @returns a promise with the results
  */
-function deleteById (type, _id) {
+function deleteById(type, _id) {
   switch (type) {
     case 'printer':
       return Printer.deleteOne({ _id });
@@ -113,7 +113,7 @@ function deleteById (type, _id) {
  * _id is the id of the machine
  * @returns a promise with the results
  */
-function get (type, _id) {
+function get(type, _id) {
   switch (type) {
     case 'printer':
       return Printer.findOne({ _id });
@@ -128,9 +128,44 @@ function get (type, _id) {
   }
 }
 
+/**
+ * This method updates a specific type of machine by a given id and returns a promise with the result
+ * type is the type of machine to get
+ * _id is the id of the machine
+ * machine is the machine with updated fields
+ * @returns a promise with the result
+ */
+function update(type, _id, machine) {
+  switch (type) {
+    case 'printer':
+      return Printer.update(
+        { _id },
+        machine,
+        { upsert: true }).then(() => Printer.findOne({ _id }));
+    case 'lasercutter':
+      return LaserCutter.update(
+        { _id },
+        machine,
+        { upsert: true }).then(() => LaserCutter.findOne({ _id }));
+    case 'otherMachine':
+      return Other.update(
+        { _id },
+        machine,
+        { upsert: true }).then(() => Other.findOne({ _id }));
+    case 'millingMachine':
+      return MillingMachine.update(
+        { _id },
+        machine,
+        { upsert: true }).then(() => MillingMachine.findOne({ _id }));
+    default:
+      return Promise.reject('Machine Type not supported!');
+  }
+}
+
 export default {
   getMachineType,
   create,
   deleteById,
-  get
+  get,
+  update
 };
