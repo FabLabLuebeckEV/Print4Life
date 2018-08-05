@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import {
   Material
 } from '../../models/machines.model';
@@ -43,6 +45,7 @@ export class CreateOrderComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     private orderService: OrderService,
+    private modalService: NgbModal,
     private configService: ConfigService) {
     this.config = this.configService.getConfig();
     this.backArrow = this.config.icons.back;
@@ -55,6 +58,34 @@ export class CreateOrderComponent implements OnInit {
         this.orderId = routeArr[routeArr.length - 1];
       }
     });
+  }
+
+  private _openSuccessMsg() {
+    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    this._openMsgModal('Order successfully created', 'modal-header header-success',
+      'The creation of a new machine was successful!', okButton, undefined).result.then((result) => {
+        this.router.navigate([`/${config.paths.orders.root}`]);
+      });
+  }
+
+  private _openErrMsg(err) {
+    let errorMsg = `Something went wrong while creating the new order.`;
+    if (err) {
+      errorMsg += ` Error: ${err}`;
+    }
+    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
+       okButton, undefined);
+  }
+
+  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent);
+    modalRef.componentInstance.title = title;
+    modalRef.componentInstance.titleClass = titleClass;
+    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.button1 = button1;
+    modalRef.componentInstance.button2 = button2;
+    return modalRef;
   }
 
   ngOnInit() {
@@ -70,17 +101,25 @@ export class CreateOrderComponent implements OnInit {
   onSubmit() {
     if (this.editView) {
       this.orderService.updateOrder(this.order).then((result) => {
-        console.log('Updated', result);
-        this.submitted = true;
+        if (result) {
+          this._openSuccessMsg();
+          this.submitted = true;
+        } else {
+          this._openErrMsg(undefined);
+        }
       }).catch((err) => {
-        console.log(err);
+        this._openErrMsg(err);
       });
     } else {
       this.orderService.createOrder(this.order).then((result) => {
-        console.log('created', result);
-        this.submitted = true;
+        if (result) {
+          this._openSuccessMsg();
+          this.submitted = true;
+        } else {
+          this._openErrMsg(undefined);
+        }
       }).catch((err) => {
-        console.log(err);
+        this._openErrMsg(err);
       });
     }
   }

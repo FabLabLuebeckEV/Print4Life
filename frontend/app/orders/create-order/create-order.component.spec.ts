@@ -5,6 +5,7 @@ import { CreateOrderComponent } from './create-order.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ConfigService } from '../../config/config.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import {
   HttpClientTestingModule
@@ -23,7 +24,8 @@ describe('CreateOrderComponent', () => {
         FormsModule,
         HttpClientTestingModule,
         NgSelectModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        NgbModule.forRoot()
       ]
     })
       .compileComponents();

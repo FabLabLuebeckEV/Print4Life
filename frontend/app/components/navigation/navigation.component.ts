@@ -8,17 +8,26 @@ import { routes } from '../../config/routes';
 })
 export class NavigationComponent implements OnInit {
   title = 'Order Management';
-  dropdown: Object;
+  machineDropdown: Object;
+  orderDropdown: Object;
 
   constructor() {
-    this.dropdown = {
+    this.machineDropdown =
+    {
       name: 'Machine',
       elements: [
-        { name: 'Get Machines', routerHref: routes.paths.machines.root },
-        { name: 'Get Orders', routerHref: routes.paths.orders.root }
+        { name: 'Get Machines', routerHref: routes.paths.machines.root }
       ]
     };
-  }
+
+    this.orderDropdown =
+    {
+      name: 'Orders',
+      elements: [
+        { name: 'All orders', routerHref: routes.paths.orders.root }
+      ]
+    };
+    }
 
   ngOnInit() {
   }
