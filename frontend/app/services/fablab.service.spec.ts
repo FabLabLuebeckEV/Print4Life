@@ -5,15 +5,15 @@ import {
 } from '@angular/common/http/testing';
 
 import { FablabService } from './fablab.service';
-
-import { config } from '../config/config';
+import { ConfigService } from '../config/config.service';
+import { routes } from '../config/routes';
 
 describe('FablabService', () => {
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [FablabService],
+      providers: [FablabService, ConfigService],
       imports: [HttpClientTestingModule]
     });
     httpTestingController = TestBed.get(HttpTestingController);
@@ -45,7 +45,7 @@ describe('FablabService', () => {
       expect(fablab.password).toEqual('$2y$10$sDebOY1Kx8LZNczsF3XjoOqdZHRJK0J80hc7SdEZ19hKDFmkx0owG');
     }, fail);
 
-    const req = httpTestingController.expectOne(config.backendUrl + '/fablabs' + '/1');
+    const req = httpTestingController.expectOne(routes.backendUrl + '/fablabs' + '/1');
     expect(req.request.method).toEqual('GET');
 
     req.flush(mockResponse[0]);

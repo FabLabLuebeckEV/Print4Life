@@ -6,7 +6,8 @@ import { FablabService } from '../../services/fablab.service';
 import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
-import {config} from '../../config/config';
+import { ConfigService } from '../../config/config.service';
+import { routes } from '../../config/routes';
 
 @Component({
   selector: 'app-machine-form',
@@ -14,6 +15,9 @@ import {config} from '../../config/config';
   styleUrls: ['./machine-form.component.css']
 })
 export class MachineFormComponent implements OnInit {
+  config: any;
+  backLink: String;
+  backArrow: any;
   machineTypes: Array<String> = [];
   selectedType: String;
   editView: Boolean;
@@ -28,11 +32,25 @@ export class MachineFormComponent implements OnInit {
 
   constructor(private machineService: MachineService, private fablabService: FablabService,
     private router: Router, private location: Location, private route: ActivatedRoute,
-    private modalService: NgbModal) {
-    // this.route.params.subscribe(params => console.log(params));
-    router.events.subscribe(() => {
-      const route = location.path();
-      if (route.startsWith('/machines/edit') && !this.editView) {
+    private modalService: NgbModal, private configService: ConfigService) {
+    this.config = this.configService.getConfig();
+    this.backArrow = this.config.icons.back;
+    this.backLink = `/${routes.paths.machines.root}`;
+    this.route.params.subscribe(params => {
+      if (params.type && params.id) {
+        const type = params.type.substr(0, params.type.length - 1);
+        this.machineService.get(type, params.id).then((result) => {
+          this.model = result[type];
+          this.selectedType = this.machineService._uncamelCase(type);
+          this._loadFablabs();
+          this._loadMaterials(this.selectedType);
+          this._loadLaserTypes();
+        });
+      }
+    });
+    this.router.events.subscribe(() => {
+      const route = this.location.path();
+      if (route.indexOf('/update') >= 0 && !this.editView) {
         this.editView = true;
       } else {
         if (this.editView) {
@@ -52,34 +70,54 @@ export class MachineFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.machineService.create(this.machineService.camelCaseTypes(this.selectedType), this.model).then((result) => {
-      if (result) {
-        this._openSuccessMsg();
-      } else {
-        this._openErrMsg(undefined);
-      }
-      this.submitted = true;
-    }).catch((err) => {
-      this._openErrMsg(err);
-  });
-}
+    if (!this.editView) {
+      this.machineService.create(this.machineService.camelCaseTypes(this.selectedType), this.model).then((result) => {
+        if (result) {
+          this._openSuccessMsg();
+        } else {
+          this._openErrMsg(undefined);
+        }
+        this.submitted = true;
+      }).catch((err) => {
+        this._openErrMsg(err);
+      });
+    } else {
+      this.machineService.update(this.machineService.camelCaseTypes(this.selectedType), this.model._id, this.model).then((result) => {
+        if (result) {
+          this._openSuccessMsg();
+        } else {
+          this._openErrMsg(undefined);
+        }
+        this.submitted = true;
+      }).catch((err) => {
+        this._openErrMsg(err);
+      });
+    }
+
+  }
 
   private _openSuccessMsg() {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
-    this._openMsgModal('Machine created successfully', 'modal-header header-success',
-      'The creation of a new machine was successful!', okButton, undefined).result.then((result) => {
-        this.router.navigate([`/${config.paths.machines.root}`]);
+    let msgHeader;
+    let msg;
+    this.editView ? msgHeader = 'Machine updated successfully' : msgHeader = 'Machine created successfully';
+    this.editView ? msg = 'Updating the machine was successful!' : msg = 'The creation of a new machine was successful!';
+    this._openMsgModal(msgHeader, 'modal-header header-success',
+      msg, okButton, undefined).result.then((result) => {
+        this.router.navigate([`/${routes.paths.machines.root}`]);
       });
   }
 
   private _openErrMsg(err) {
-    let errorMsg = `Something went wrong while creating the new machine.`;
+    let errorMsg;
+    this.editView ? errorMsg = 'Something went wrong while updating the machine'
+      : errorMsg = `Something went wrong while creating the new machine.`;
     if (err) {
       errorMsg += ` Error: ${err}`;
     }
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
-       okButton, undefined);
+      okButton, undefined);
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
@@ -140,7 +178,7 @@ export class MachineFormComponent implements OnInit {
           undefined, undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined);
       default:
-        return new Machine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined);
+        return new Machine(undefined, undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined);
     }
   }
 

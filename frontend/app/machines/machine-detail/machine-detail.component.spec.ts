@@ -1,9 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { FormsModule } from '@angular/forms';
-import { MachineFormComponent } from './machine-form.component';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MachineDetailComponent } from './machine-detail.component';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ConfigService } from '../../config/config.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -11,27 +9,24 @@ import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
 
-describe('MachineFormComponent', () => {
-  let component: MachineFormComponent;
-  let fixture: ComponentFixture<MachineFormComponent>;
+describe('MachineDetailComponent', () => {
+  let component: MachineDetailComponent;
+  let fixture: ComponentFixture<MachineDetailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MachineFormComponent],
-      imports: [
-        NgbModule.forRoot(),
-        RouterTestingModule,
+      declarations: [MachineDetailComponent],
+      imports: [NgbModule.forRoot(),
         HttpClientTestingModule,
-        FontAwesomeModule,
-        FormsModule,
-        NgSelectModule],
+        RouterTestingModule,
+        FontAwesomeModule],
       providers: [ConfigService]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MachineFormComponent);
+    fixture = TestBed.createComponent(MachineDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

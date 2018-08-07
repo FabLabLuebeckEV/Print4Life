@@ -3,11 +3,10 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableItem } from '../../components/table/table.component';
 import { OrderService } from '../../services/order.service';
-import { faWrench, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { config } from '../../config/config';
+import { ConfigService } from '../../config/config.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
-
+import { routes } from '../../config/routes';
 
 @Component({
   selector: 'app-order-list',
@@ -15,12 +14,13 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
   styleUrls: ['./order-list.component.css']
 })
 export class OrderListComponent implements OnInit {
-
+  private config: any;
+  createLink: String;
   orders: Array<TableItem> = [];
   visibleOrders: Array<TableItem> = [];
   id: String;
   listView: Boolean;
-  plusIcon = faPlus;
+  plusIcon: any;
   loadingStatus: Boolean;
   selectedStatus: Array<String> = [];
   validStatus: Array<String> = [];
@@ -29,7 +29,11 @@ export class OrderListComponent implements OnInit {
     private orderService: OrderService,
     private router: Router,
     private location: Location,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private configService: ConfigService) {
+    this.config = this.configService.getConfig();
+    this.createLink = `./${routes.paths.orders.createOrder}`;
+    this.plusIcon = this.config.icons.add;
     router.events.subscribe(() => {
       const route = location.path();
       this.listView = (route === '/orders');
@@ -43,18 +47,17 @@ export class OrderListComponent implements OnInit {
   }
 
   // remove add change clear
-  changeHandler(event: Array < String >) {
+  changeHandler(event: Array<String>) {
     this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
-    this.visibleOrders = this.visibleOrders.filter((ti) => {
-      return event.includes(ti.obj['Status']);
-    });
+    this.selectedStatus = event;
+    this._filterOrdersByStatus();
   }
 
   eventHandler(event) {
     if (event.label === 'Delete') {
       let order: TableItem;
       let orderIdx: number;
-      this.orders.forEach((item, idx) => {
+      this.visibleOrders.forEach((item, idx) => {
         if (event === item.button1 || event === item.button2) {
           order = item;
           orderIdx = idx;
@@ -63,20 +66,37 @@ export class OrderListComponent implements OnInit {
       const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
       const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
       const modalRef = this._openMsgModal('Do you really want to delete this order?',
-      'modal-header header-danger', 'Are you sure you want to delete the order?', deleteButton, abortButton);
+        'modal-header header-danger', 'Are you sure you want to delete the order?', deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
-          this.orderService.deleteOrder(order.obj.id).then((result) => {
+          this.orderService.deleteOrder(order.obj.id.label).then((result) => {
             result = result.order;
-            this.orders[orderIdx].obj = {};
-            this.orders[orderIdx].obj['id'] = result._id;
-            this.orders[orderIdx].obj['Owner'] = result.owner;
-            this.orders[orderIdx].obj['Editor'] = result.editor;
-            this.orders[orderIdx].obj['Status'] = result.status;
+            const oldOrder = this.visibleOrders[orderIdx];
+            this.orders.forEach((item) => {
+              if (oldOrder.obj.id.label === item.obj.id.label) {
+                this.orders[orderIdx].obj = {};
+                this.orders[orderIdx].obj['id'] = { label: result._id };
+                this.orders[orderIdx].obj['Owner'] = { label: result.owner };
+                this.orders[orderIdx].obj['Editor'] = { label: result.editor };
+                this.orders[orderIdx].obj['Status'] = { label: result.status };
+              }
+            });
+            this.visibleOrders[orderIdx].obj = {};
+            this.visibleOrders[orderIdx].obj['id'] = { label: result._id };
+            this.visibleOrders[orderIdx].obj['Owner'] = { label: result.owner };
+            this.visibleOrders[orderIdx].obj['Editor'] = { label: result.editor };
+            this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
+            this._filterOrdersByStatus();
           });
         }
       });
     }
+  }
+
+  private _filterOrdersByStatus() {
+    this.visibleOrders = this.visibleOrders.filter((ti) => {
+      return this.selectedStatus.includes(ti.obj['Status'].label);
+    });
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
@@ -97,18 +117,18 @@ export class OrderListComponent implements OnInit {
     const arr = [];
     for (const order of orders) {
       const item = new TableItem();
-      item.obj['id'] = order._id;
-      item.obj['Owner'] = order.owner;
-      item.obj['Editor'] = order.editor;
-      item.obj['Status'] = order.status;
+      item.obj['id'] = { label: order._id };
+      item.obj['Owner'] = { label: order.owner };
+      item.obj['Editor'] = { label: order.editor };
+      item.obj['Status'] = { label: order.status };
       item.button1.label = 'Edit';
-      item.button1.href = `./${config.paths.orders.updateOrder}/${order._id}`;
+      item.button1.href = `./${routes.paths.orders.updateOrder}/${order._id}`;
       item.button1.class = 'btn btn-primary spacing';
-      item.button1.icon = faWrench;
+      item.button1.icon = this.config.icons.edit;
       item.button2.label = 'Delete';
       item.button2.eventEmitter = true;
       item.button2.class = 'btn btn-danger spacing';
-      item.button2.icon = faTrashAlt;
+      item.button2.icon = this.config.icons.delete;
       arr.push(item);
     }
     this.orders = this.orders.concat(arr);

@@ -76,6 +76,50 @@ describe('Milling Machine Controller', () => {
     });
   });
 
+  it('update milling machine (success)', (done) => {
+    request.post(`${endpoint}/create`, { body: testMillingMachine, json: true }, (error, response) => {
+      const millingMachine = response.body.millingMachine;
+      expect(response.statusCode).toEqual(201);
+      expect(millingMachine).toBeDefined();
+      expect(millingMachine.deviceName).toEqual(testMillingMachine.deviceName);
+      expect(millingMachine.type).toEqual('millingMachine');
+      expect(millingMachine.manufacturer).toEqual(testMillingMachine.manufacturer);
+      expect(millingMachine.fablabId).toEqual(testMillingMachine.fablabId);
+      millingMachine.deviceName = 'Updated';
+      request.put(`${endpoint}/${millingMachine._id}`, { body: millingMachine, json: true }, (error, response) => {
+        const updatedMachine = response.body.millingMachine;
+        expect(response.statusCode).toEqual(200);
+        expect(updatedMachine).toBeDefined();
+        expect(updatedMachine.deviceName).toEqual(millingMachine.deviceName);
+        done();
+      });
+    });
+  });
+
+  it('update milling machine (id too short)', (done) => {
+    const id = 'tooShortForMongoDB23';
+    request.put(`${endpoint}/${id}`, { body: testMillingMachine, json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('update milling machine (id too long)', (done) => {
+    const id = 'tooLongForMongoDBsObjectId1234567890';
+    request.put(`${endpoint}/${id}`, { body: testMillingMachine, json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('update milling machine (no body)', (done) => {
+    const id = '5b453ddb5cf4a9574849e98a';
+    request.put(`${endpoint}/${id}`, { json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
   it('delete milling machine (success)', (done) => {
     let responseMachine;
     request.post(`${endpoint}/create`, { body: testMillingMachine, json: true }, (error, response) => {

@@ -1,5 +1,6 @@
 import machineService from '../services/machine.service';
 
+const machineType = 'otherMachine';
 /**
  * @api {get} /api/v1/machines/otherMachines Get other machines
  * @apiName GetOtherMachines
@@ -37,7 +38,7 @@ import machineService from '../services/machine.service';
 }
  */
 function getAll () {
-  return machineService.getMachineType('otherMachine');
+  return machineService.getMachineType(machineType);
 }
 
 /**
@@ -116,7 +117,7 @@ function getAll () {
  *
  */
 function create (params) {
-  return machineService.create('otherMachine', params);
+  return machineService.create(machineType, params);
 }
 
 /**
@@ -161,7 +162,7 @@ function create (params) {
  *
  */
 function get (id) {
-  return machineService.get('otherMachine', id);
+  return machineService.get(machineType, id);
 }
 
 /**
@@ -186,7 +187,76 @@ function get (id) {
  *
  */
 function deleteById (id) {
-  return machineService.deleteById('otherMachine', id);
+  return machineService.deleteById(machineType, id);
 }
 
-export default { getAll, create, get, deleteById };
+/**
+ * @api {put} /api/v1/machines/otherMachines/:id Updates a Other Machine by a given id
+ * @apiName UpdateOtherMachineByID
+ * @apiVersion 1.0.0
+ * @apiGroup OtherMachines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {id} is the id of the other machine
+ * @apiParam {String} fablabId id of the corresponding fablab (required)
+ * @apiParam {String} deviceName name of the device (required)
+ * @apiParam {String} manufacturer name of the manufacturer of the device
+ * @apiParam {String} typeOfMachine the type of the machine
+ * @apiParam {String} pictureUrl url to a picture of this device
+ * @apiParam {String} comment a comment about the device
+ *
+ * @apiParamExample {json} Request-Example:
+ *
+{
+    "_id" : "5b66bbf95772aa134cf70d69",
+    "fablabId" : "5b453ddb5cf4a9574849e98a",
+    "deviceName" : "Updated",
+    "manufacturer" : "Test Manufacturer",
+    "typeOfMachine" : "Test Machine",
+    "pictureURL" : "",
+    "comment" : "Create Test",
+    "type" : "otherMachine",
+    "__v" : 0
+}
+ * @apiSuccess {Object} printer the printer object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "otherMachine": {
+        "_id": "5b66bbf95772aa134cf70d69",
+        "fablabId": "5b453ddb5cf4a9574849e98a",
+        "deviceName": "Updated",
+        "manufacturer": "Test Manufacturer",
+        "typeOfMachine": "Test Machine",
+        "pictureURL": "",
+        "comment": "Create Test",
+        "type": "otherMachine",
+        "__v": 0
+    }
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "No params to update given!"
+}
+ * @apiError 404 The object was not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Other Machine by id '9999' not found"
+ *     }
+ *
+ *
+ */
+function update (id, machine) {
+  return machineService.update(machineType, id, machine);
+}
+
+export default { getAll, create, get, deleteById, update };

@@ -7,16 +7,12 @@ import { FablabService } from '../../services/fablab.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import {
-  Machine,
-  Printer,
-  MillingMachine,
-  OtherMachine,
-  Lasercutter,
   Material
 } from '../../models/machines.model';
 
 import { Order } from '../../models/order.model';
-import { config } from '../../config/config';
+import { ConfigService } from '../../config/config.service';
+import { routes } from '../../config/routes';
 
 
 @Component({
@@ -25,7 +21,9 @@ import { config } from '../../config/config';
   styleUrls: ['./create-order.component.css']
 })
 export class CreateOrderComponent implements OnInit {
-
+  config: any;
+  backLink: String;
+  backArrow: any;
   machineTypes: Array<String> = [];
   selectedType: String;
   editView: Boolean = false;
@@ -47,11 +45,14 @@ export class CreateOrderComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     private orderService: OrderService,
-    private modalService: NgbModal) {
-
-    router.events.subscribe(() => {
+    private modalService: NgbModal,
+    private configService: ConfigService) {
+    this.config = this.configService.getConfig();
+    this.backArrow = this.config.icons.back;
+    this.backLink = `/${routes.paths.orders.root}`;
+    this.router.events.subscribe(() => {
       const route = location.path();
-      this.editView = route.indexOf(`${config.paths.orders.root}/${config.paths.orders.updateOrder}`) >= 0;
+      this.editView = route.indexOf(`${routes.paths.orders.root}/${routes.paths.orders.updateOrder}`) >= 0;
       if (this.editView) {
         const routeArr = route.split('/');
         this.orderId = routeArr[routeArr.length - 1];
@@ -63,7 +64,7 @@ export class CreateOrderComponent implements OnInit {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Order successfully created', 'modal-header header-success',
       'The creation of a new machine was successful!', okButton, undefined).result.then((result) => {
-        this.router.navigate([`/${config.paths.orders.root}`]);
+        this.router.navigate([`/${routes.paths.orders.root}`]);
       });
   }
 
@@ -74,7 +75,7 @@ export class CreateOrderComponent implements OnInit {
     }
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
-       okButton, undefined);
+      okButton, undefined);
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
@@ -95,7 +96,6 @@ export class CreateOrderComponent implements OnInit {
     this._loadFablabs();
     this.loadingStatus = true;
     this._loadStatus();
-// this._loadMaterials(this.selectedType);
   }
 
   onSubmit() {

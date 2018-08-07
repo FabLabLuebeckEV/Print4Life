@@ -1,0 +1,15 @@
+li:hover {
+    background-color: #f7f7f7;
+}
+
+.card {
+    border: none;
+}
+
+.spacing {
+    margin: 10px;
+}
+
+.spacing-right {
+    margin-right: 20px;
+}

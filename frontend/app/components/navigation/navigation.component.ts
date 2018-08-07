@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { config } from '../../config/config';
+import { routes } from '../../config/routes';
 
 @Component({
   selector: 'app-navigation',
@@ -8,23 +8,24 @@ import { config } from '../../config/config';
 })
 export class NavigationComponent implements OnInit {
   title = 'Order Management';
-  maschineDropdown =
-    {
-      name: 'Machine',
-      elements: [
-        { name: 'Get Machines', routerHref: 'machines' }
-      ]
-    };
+  machineDropdown: Object;
+  orderDropdown: Object;
 
-    orderDropdown =
-    {
-      name: 'Orders',
-      elements: [
-        { name: 'All orders', routerHref: config.paths.orders.root }
-      ]
-    };
+  constructor() {
+    this.machineDropdown = {
+        name: 'Machine',
+        elements: [
+          { name: 'Get Machines', routerHref: routes.paths.machines.root }
+        ]
+      };
 
-  constructor() { }
+    this.orderDropdown = {
+        name: 'Orders',
+        elements: [
+          { name: 'All orders', routerHref: routes.paths.orders.root }
+        ]
+      };
+  }
 
   ngOnInit() {
   }

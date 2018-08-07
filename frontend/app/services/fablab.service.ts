@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { config } from '../config/config';
-
-const rootPath = config.backendUrl + '/' + config.paths.fablabs.root;
-
+import { routes } from '../config/routes';
 @Injectable({
   providedIn: 'root'
 })
 export class FablabService {
+  private rootPath: String;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.rootPath = routes.backendUrl + '/' + routes.paths.fablabs.root;
+  }
 
   public getFablab(id): Promise<any> {
-    return this.http.get(`${rootPath}/${id}`).toPromise();
+    return this.http.get(`${this.rootPath}/${id}`).toPromise();
   }
 
   public getFablabs(): Promise<any> {
-    return this.http.get(`${rootPath}`).toPromise();
+    return this.http.get(`${this.rootPath}`).toPromise();
   }
 }

@@ -10,7 +10,10 @@ export class TableButton {
 }
 
 export class TableItem {
-  obj: any = {};
+  obj: any = {
+    label: String,
+    href: String
+  };
   button1: TableButton = new TableButton();
   button2: TableButton = new TableButton();
 }
