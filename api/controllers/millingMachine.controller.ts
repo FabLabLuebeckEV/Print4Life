@@ -1,5 +1,7 @@
 import machineService from '../services/machine.service';
 
+const machineType = 'millingMachine';
+
 /**
  * @api {get} /api/v1/machines/millingMachines Get milling machines
  * @apiName GetMillingMachines
@@ -47,7 +49,7 @@ import machineService from '../services/machine.service';
 }
  */
 function getAll () {
-  return machineService.getMachineType('millingMachine');
+  return machineService.getMachineType(machineType);
 }
 
 /**
@@ -136,7 +138,7 @@ function getAll () {
  *
  */
 function create (params) {
-  return machineService.create('millingMachine', params);
+  return machineService.create(machineType, params);
 }
 
 /**
@@ -182,7 +184,7 @@ function create (params) {
  *
  */
 function get (id) {
-  return machineService.get('millingMachine', id);
+  return machineService.get(machineType, id);
 }
 
 /**
@@ -207,7 +209,85 @@ function get (id) {
  *
  */
 function deleteById (id) {
-  return machineService.deleteById('millingMachine', id);
+  return machineService.deleteById(machineType, id);
 }
 
-export default { getAll, create, get, deleteById };
+/**
+ * @api {put} /api/v1/machines/millingMachines/:id Updates a Milling Machine by a given id
+ * @apiName UpdateMillingMachineByID
+ * @apiVersion 1.0.0
+ * @apiGroup MillingMachines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {id} is the id of the milling machine
+ * @apiParam {String} fablabId id of the corresponding fablab (required)
+ * @apiParam {String} deviceName name of the device (required)
+ * @apiParam {String} manufacturer name of the manufacturer of the device
+ * @apiParam {String} camSoftware name of the camera software
+ * @apiParam {Number} workspaceX space of axis x
+ * @apiParam {Number} workspaceY space volume of axis y
+ * @apiParam {Number} workspaceY space volume of axis z
+ * @apiParam {Number} movementSpeed speed of the milling machine
+ * @apiParam {String} stepSize size of the steps
+ * @apiParam {String} pictureUrl url to a picture of this device
+ * @apiParam {String} comment a comment about the device
+ *
+ * @apiParamExample {json} Request-Example:
+ *
+{
+    "_id" : "5b66c32d12e78b1ba254824e",
+    "fablabId" : "5b453ddb5cf4a9574849e98a",
+    "deviceName" : "Updated",
+    "manufacturer" : "Test Manufacturer",
+    "workspaceX" : 2,
+    "workspaceY" : 2,
+    "workspaceZ" : 2,
+    "pictureURL" : "",
+    "comment" : "Create Test",
+    "type" : "millingMachine",
+    "__v" : 0
+}
+ * @apiSuccess {Object} printer the printer object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "millingMachine": {
+        "_id": "5b66c32d12e78b1ba254824e",
+        "fablabId": "5b453ddb5cf4a9574849e98a",
+        "deviceName": "Updated",
+        "manufacturer": "Test Manufacturer",
+        "workspaceX": 2,
+        "workspaceY": 2,
+        "workspaceZ": 2,
+        "pictureURL": "",
+        "comment": "Create Test",
+        "type": "millingMachine",
+        "__v": 0
+    }
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "No params to update given!"
+}
+ * @apiError 404 The object was not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Milling Machine by id '9999' not found"
+ *     }
+ *
+ *
+ */
+function update (id, machine) {
+  return machineService.update(machineType, id, machine);
+}
+
+export default { getAll, create, get, deleteById, update };

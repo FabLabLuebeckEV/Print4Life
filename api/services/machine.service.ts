@@ -128,9 +128,45 @@ function get (type, _id) {
   }
 }
 
+/**
+ * This method updates a specific type of machine by a given id and returns a promise with the result
+ * type is the type of machine to get
+ * _id is the id of the machine
+ * machine is the machine with updated fields
+ * @returns a promise with the result
+ */
+function update (type, _id, machine) {
+  delete machine.__v;
+  switch (type) {
+    case 'printer':
+      return Printer.update(
+        { _id },
+        machine,
+        { upsert: true }).then(() => Printer.findOne({ _id }));
+    case 'lasercutter':
+      return LaserCutter.update(
+        { _id },
+        machine,
+        { upsert: true }).then(() => LaserCutter.findOne({ _id }));
+    case 'otherMachine':
+      return Other.update(
+        { _id },
+        machine,
+        { upsert: true }).then(() => Other.findOne({ _id }));
+    case 'millingMachine':
+      return MillingMachine.update(
+        { _id },
+        machine,
+        { upsert: true }).then(() => MillingMachine.findOne({ _id }));
+    default:
+      return Promise.reject('Machine Type not supported!');
+  }
+}
+
 export default {
   getMachineType,
   create,
   deleteById,
-  get
+  get,
+  update
 };

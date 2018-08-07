@@ -47,4 +47,25 @@ router.route('/:id').get((req, res) => {
   }
 });
 
+router.route('/:id').put((req, res) => {
+  if (req.params.id.length !== 24) {
+    res.status(400).send({ error: 'Id needs to be a 24 character long hex string!' });
+  } else if (Object.keys(req.body).length === 0) {
+    res.status(400).send({ error: 'No params to update given!' });
+  } else {
+    otherMachineCtrl.get(req.params.id).then((otherMachine) => {
+      if (!otherMachine) {
+        res.status(404).send({ error: `Other Machine by id '${req.params.id}' not found` });
+      } else {
+        otherMachineCtrl.update(req.params.id, req.body).then((otherMachine) => {
+          res.json({ otherMachine });
+        });
+      }
+    }).catch((err) => {
+      res.status(400).send({ err: 'Malformed request!', stack: err });
+    });
+  }
+});
+
+
 export default router;

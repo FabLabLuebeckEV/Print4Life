@@ -36,10 +36,10 @@ export class MachineListComponent implements OnInit {
     this.newLink = `./${routes.paths.machines.create}`;
     router.events.subscribe(() => {
       const route = location.path();
-      if (!this.listView && route === `/${this.config.paths.machines.root}`) {
+      if (!this.listView && route === routes.paths.machines.root) {
         this.listView = true;
         this.ngOnInit();
-      } else if (route !== `/${this.config.paths.machines.root}`) {
+      } else if (route !== routes.paths.machines.root) {
         this.listView = false;
       }
     });
@@ -133,7 +133,7 @@ export class MachineListComponent implements OnInit {
         item.obj['Fablab'] = { label: fablab.name };
         item.obj['Description'] = { label: '' };
         item.button1.label = 'Update';
-        item.button1.href = `./${routes.paths.machines.update}/${elem._id}`;
+        item.button1.href = `./${routes.paths.machines.update}/${elem.type}s/${elem._id}`;
         item.button1.class = 'btn btn-primary spacing';
         item.button1.icon = this.config.icons.edit;
         item.button2.label = 'Delete';

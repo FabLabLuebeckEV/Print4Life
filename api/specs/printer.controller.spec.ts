@@ -80,6 +80,50 @@ describe('Printer Controller', () => {
     });
   });
 
+  it('update printer (success)', (done) => {
+    request.post(`${endpoint}/create`, { body: testPrinter, json: true }, (error, response) => {
+      const printer = response.body.printer;
+      expect(response.statusCode).toEqual(201);
+      expect(printer).toBeDefined();
+      expect(printer.deviceName).toEqual(testPrinter.deviceName);
+      expect(printer.type).toEqual('printer');
+      expect(printer.manufacturer).toEqual(testPrinter.manufacturer);
+      expect(printer.fablabId).toEqual(testPrinter.fablabId);
+      printer.deviceName = 'Updated';
+      request.put(`${endpoint}/${printer._id}`, { body: printer, json: true }, (error, response) => {
+        const updatedPrinter = response.body.printer;
+        expect(response.statusCode).toEqual(200);
+        expect(updatedPrinter).toBeDefined();
+        expect(updatedPrinter.deviceName).toEqual(printer.deviceName);
+        done();
+      });
+    });
+  });
+
+  it('update printer (id too short)', (done) => {
+    const id = 'tooShortForMongoDB23';
+    request.put(`${endpoint}/${id}`, { body: testPrinter, json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('update printer (id too long)', (done) => {
+    const id = 'tooLongForMongoDBsObjectId1234567890';
+    request.put(`${endpoint}/${id}`, { body: testPrinter, json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('update printer (no body)', (done) => {
+    const id = '5b453ddb5cf4a9574849e98a';
+    request.put(`${endpoint}/${id}`, { json: true }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
   it('delete printer (success)', (done) => {
     let responseMachine;
     request.post(`${endpoint}/create`, { body: testPrinter, json: true }, (error, response) => {

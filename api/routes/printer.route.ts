@@ -47,4 +47,24 @@ router.route('/:id').get((req, res) => {
   }
 });
 
+router.route('/:id').put((req, res) => {
+  if (req.params.id.length !== 24) {
+    res.status(400).send({ error: 'Id needs to be a 24 character long hex string!' });
+  } else if (Object.keys(req.body).length === 0) {
+    res.status(400).send({ error: 'No params to update given!' });
+  } else {
+    printerCtrl.get(req.params.id).then((printer) => {
+      if (!printer) {
+        res.status(404).send({ error: `Printer by id '${req.params.id}' not found` });
+      } else {
+        printerCtrl.update(req.params.id, req.body).then((printer) => {
+          res.json({ printer });
+        });
+      }
+    }).catch((err) => {
+      res.status(400).send({ err: 'Malformed request!', stack: err });
+    });
+  }
+});
+
 export default router;

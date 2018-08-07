@@ -50,7 +50,7 @@ export class CreateOrderComponent implements OnInit {
     this.config = this.configService.getConfig();
     this.backArrow = this.config.icons.back;
     this.backLink = `/${routes.paths.orders.root}`;
-    router.events.subscribe(() => {
+    this.router.events.subscribe(() => {
       const route = location.path();
       this.editView = route.indexOf(`${routes.paths.orders.root}/${routes.paths.orders.updateOrder}`) >= 0;
       if (this.editView) {
@@ -64,7 +64,7 @@ export class CreateOrderComponent implements OnInit {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Order successfully created', 'modal-header header-success',
       'The creation of a new machine was successful!', okButton, undefined).result.then((result) => {
-        this.router.navigate([`/${this.config.paths.orders.root}`]);
+        this.router.navigate([`/${routes.paths.orders.root}`]);
       });
   }
 

@@ -24,8 +24,8 @@ describe('CreateOrderComponent', () => {
         FormsModule,
         HttpClientTestingModule,
         NgSelectModule,
-        FontAwesomeModule,
-        NgbModule.forRoot()
+        NgbModule.forRoot(),
+        FontAwesomeModule
       ]
     })
       .compileComponents();

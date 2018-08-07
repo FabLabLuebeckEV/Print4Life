@@ -55,4 +55,24 @@ router.route('/:id').get((req, res) => {
   }
 });
 
+router.route('/:id').put((req, res) => {
+  if (req.params.id.length !== 24) {
+    res.status(400).send({ error: 'Id needs to be a 24 character long hex string!' });
+  } else if (Object.keys(req.body).length === 0) {
+    res.status(400).send({ error: 'No params to update given!' });
+  } else {
+    lasercutterCtrl.get(req.params.id).then((lasercutter) => {
+      if (!lasercutter) {
+        res.status(404).send({ error: `Lasercutter by id '${req.params.id}' not found` });
+      } else {
+        lasercutterCtrl.update(req.params.id, req.body).then((lasercutter) => {
+          res.json({ lasercutter });
+        });
+      }
+    }).catch((err) => {
+      res.status(400).send({ err: 'Malformed request!', stack: err });
+    });
+  }
+});
+
 export default router;

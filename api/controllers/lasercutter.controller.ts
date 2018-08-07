@@ -1,6 +1,8 @@
 import machineService from '../services/machine.service';
 import { LaserType } from '../models/lasertype.model';
 
+const machineType = 'lasercutter';
+
 /**
  * @api {get} /api/v1/machines/lasercutters Get lasercutters
  * @apiName GetLasercutters
@@ -60,7 +62,7 @@ import { LaserType } from '../models/lasertype.model';
 }
  */
 function getAll () {
-  return machineService.getMachineType('lasercutter');
+  return machineService.getMachineType(machineType);
 }
 
 /**
@@ -155,7 +157,7 @@ function getAll () {
  *
  */
 function create (params) {
-  return machineService.create('lasercutter', params);
+  return machineService.create(machineType, params);
 }
 
 /**
@@ -236,7 +238,7 @@ function getLaserTypes () {
  *
  */
 function get (id) {
-  return machineService.get('lasercutter', id);
+  return machineService.get(machineType, id);
 }
 
 /**
@@ -261,7 +263,101 @@ function get (id) {
  *
  */
 function deleteById (id) {
-  return machineService.deleteById('lasercutter', id);
+  return machineService.deleteById(machineType, id);
 }
 
-export default { getAll, create, getLaserTypes, deleteById, get };
+/**
+ * @api {put} /api/v1/machines/lasercutters/:id Updates a Lasercutter by a given id
+ * @apiName UpdateLasercutterByID
+ * @apiVersion 1.0.0
+ * @apiGroup Lasercutters
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {id} is the id of the lasercutter
+ * @apiParam {String} fablabId id of the corresponding fablab (required)
+ * @apiParam {String} deviceName name of the device (required)
+ * @apiParam {String} manufacturer name of the manufacturer of the device
+ * @apiParam {Array} laserTypes array of laserType objects
+ * @apiParam {Number} workspaceX space of axis x
+ * @apiParam {Number} workspaceY space volume of axis y
+ * @apiParam {Number} workspaceY space volume of axis z
+ * @apiParam {Number} maxResoultion resolution of lasercutter
+ * @apiParam {String} laserPower power of the laser
+ * @apiParam {String} pictureUrl url to a picture of this device
+ * @apiParam {String} comment a comment about the device
+ *
+ * @apiParamExample {json} Request-Example:
+ *
+{
+    "_id" : "5b66c55aab1b741fbbc2fd3c",
+    "fablabId" : "5b453ddb5cf4a9574849e98a",
+    "deviceName" : "Updated",
+    "manufacturer" : "Test Manufacturer",
+    "laserTypes" : [
+        {
+            "_id" : "5b66c55aab1b741fbbc2fd3d",
+            "laserType" : "CO2"
+        }
+    ],
+    "workspaceX" : 2,
+    "workspaceY" : 2,
+    "workspaceZ" : 2,
+    "maxResoultion" : 2,
+    "laserPower" : "High",
+    "pictureURL" : "",
+    "comment" : "Create Test",
+    "type" : "lasercutter",
+    "__v" : 0
+}
+ * @apiSuccess {Object} printer the printer object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "lasercutter": {
+        "_id": "5b66c55aab1b741fbbc2fd3c",
+        "fablabId": "5b453ddb5cf4a9574849e98a",
+        "deviceName": "Updated",
+        "manufacturer": "Test Manufacturer",
+        "laserTypes": [
+            {
+                "_id": "5b66c55aab1b741fbbc2fd3d",
+                "laserType": "CO2"
+            }
+        ],
+        "workspaceX": 2,
+        "workspaceY": 2,
+        "workspaceZ": 2,
+        "maxResoultion": 2,
+        "laserPower": "High",
+        "pictureURL": "",
+        "comment": "Create Test",
+        "type": "lasercutter",
+        "__v": 0
+    }
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "No params to update given!"
+}
+ * @apiError 404 The object was not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Lasercutter by id '9999' not found"
+ *     }
+ *
+ *
+ */
+function update (id, machine) {
+  return machineService.update(machineType, id, machine);
+}
+
+export default { getAll, create, getLaserTypes, deleteById, get, update };

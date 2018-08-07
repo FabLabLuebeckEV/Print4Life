@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
@@ -31,14 +31,16 @@ export class MachineDetailComponent implements OnInit {
     this.backArrow = this.config.icons.back;
     this.backLink = `/${routes.paths.machines.root}`;
     this.route.params.subscribe(params => {
-      const type = params.type.substr(0, params.type.length - 1);
-      this.machineService.get(type, params.id).then((result) => {
-        this.machine = result[type];
-        this.fablabService.getFablab(this.machine.fablabId).then((result) => {
-          this.machine.fablab = result.fablab;
-          this._splitMachineProps();
+      if (params.type && params.id) {
+        const type = params.type.substr(0, params.type.length - 1);
+        this.machineService.get(type, params.id).then((result) => {
+          this.machine = result[type];
+          this.fablabService.getFablab(this.machine.fablabId).then((result) => {
+            this.machine.fablab = result.fablab;
+            this._splitMachineProps();
+          });
         });
-      });
+      }
     });
   }
 
@@ -52,13 +54,13 @@ export class MachineDetailComponent implements OnInit {
     machineProps.forEach((key, idx) => {
       const prop: any = this.machine[`${key}`];
       if (prop instanceof Object && !Array.isArray(prop)) {
-        this.machineSubObjects.push({ title: this._uncamelCase(key), obj: this._cleanPropObject(prop) });
+        this.machineSubObjects.push({ title: this.machineService._uncamelCase(key), obj: this._cleanPropObject(prop) });
         machineProps.splice(idx, 1);
       } else if (prop instanceof Object && Array.isArray(prop)) {
-        this.machineSubArrays.push({ title: this._uncamelCase(key), array: this._cleanPropObject(prop) });
+        this.machineSubArrays.push({ title: this.machineService._uncamelCase(key), array: this._cleanPropObject(prop) });
         machineProps.splice(idx, 1);
       } else {
-        this.machineProps['props'].push({ key, label: this._uncamelCase(key) });
+        this.machineProps['props'].push({ key, label: this.machineService._uncamelCase(key) });
       }
     });
     this.loading = false;
@@ -69,7 +71,7 @@ export class MachineDetailComponent implements OnInit {
     if (prop instanceof Object && !Array.isArray(prop)) {
       const tmp = Object.keys(prop).filter((e) => e !== '_id' && e !== '__v');
       tmp.forEach((k) => {
-        newObj[this._uncamelCase(k)] = prop[k];
+        newObj[`${this.machineService._uncamelCase(k)}`] = prop[k];
       });
     } else if (Array.isArray(prop)) {
       const arr = [];
@@ -81,15 +83,5 @@ export class MachineDetailComponent implements OnInit {
     return newObj;
   }
 
-  private _uncamelCase(str: String) {
-    const firstLetter = str.charAt(0);
-    if (firstLetter.match(/[a-z]/)) {
-      const split = str.split(/(?=[A-Z])/);
-      let newStr = split[0].charAt(0).toUpperCase() + split[0].slice(1) + ' ';
-      for (let i = 1; i < split.length; i++) {
-        split[i].length > 1 ? newStr += split[i] + ' ' : newStr += split[i];
-      }
-      return newStr.trim();
-    }
-  }
+
 }

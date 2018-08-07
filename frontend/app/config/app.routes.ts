@@ -13,7 +13,7 @@ export const appRoutes: Routes = [
         component: MachineListComponent,
         children: [
             { path: routes.paths.machines.create, component: MachineFormComponent },
-            { path: `${routes.paths.machines.update}/:id`, component: MachineFormComponent },
+            { path: `${routes.paths.machines.update}/:type/:id`, component: MachineFormComponent },
             { path: `${routes.paths.machines.getById}`, component: MachineDetailComponent }
         ]
     },
