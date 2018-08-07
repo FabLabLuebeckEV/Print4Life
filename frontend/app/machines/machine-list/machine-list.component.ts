@@ -36,7 +36,7 @@ export class MachineListComponent implements OnInit {
     this.newLink = `./${routes.paths.machines.create}`;
     router.events.subscribe(() => {
       const route = location.path();
-      if (!this.listView && route === routes.paths.machines.root) {
+      if (!this.listView && route === `/${routes.paths.machines.root}`) {
         this.listView = true;
         this.ngOnInit();
       } else if (route !== routes.paths.machines.root) {
@@ -46,7 +46,7 @@ export class MachineListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if (this.listView) {
+    if (this.listView && !this.loadingMachineTypes) {
       await this._loadMachineTypes();
       this.selectedMachineTypes = this.machineTypes;
       this._init();
