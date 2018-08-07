@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -13,7 +14,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent, NavigationComponent, DropdownComponent
       ],
-      imports: [RouterTestingModule]
+      imports: [RouterTestingModule, NgbModule.forRoot()]
     }).compileComponents();
   }));
 
