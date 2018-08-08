@@ -32,7 +32,7 @@ export class OrderListComponent implements OnInit {
     private modalService: NgbModal,
     private configService: ConfigService) {
     this.config = this.configService.getConfig();
-    this.createLink = `./${routes.paths.orders.createOrder}`;
+    this.createLink = `./${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
     router.events.subscribe(() => {
       const route = location.path();
@@ -122,7 +122,7 @@ export class OrderListComponent implements OnInit {
       item.obj['Editor'] = { label: order.editor };
       item.obj['Status'] = { label: order.status };
       item.button1.label = 'Edit';
-      item.button1.href = `./${routes.paths.orders.updateOrder}/${order._id}`;
+      item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
       item.button1.class = 'btn btn-primary spacing';
       item.button1.icon = this.config.icons.edit;
       item.button2.label = 'Delete';
