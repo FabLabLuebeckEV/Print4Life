@@ -96,7 +96,7 @@ router.route('/:id').put((req, res) => {
         res.status(404).send({ error: `Lasercutter by id '${req.params.id}' not found` });
       } else {
         lasercutterCtrl.update(req.params.id, req.body).then((lasercutter) => {
-          res.json({ lasercutter });
+          res.status(200).send({ lasercutter });
         });
       }
     }).catch((err) => {

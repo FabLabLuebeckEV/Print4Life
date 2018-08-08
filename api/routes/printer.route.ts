@@ -83,7 +83,7 @@ router.route('/:id').put((req, res) => {
         res.status(404).send({ error: `Printer by id '${req.params.id}' not found` });
       } else {
         printerCtrl.update(req.params.id, req.body).then((printer) => {
-          res.json({ printer });
+          res.status(200).send({ printer });
         });
       }
     }).catch((err) => {

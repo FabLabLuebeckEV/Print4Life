@@ -93,7 +93,7 @@ router.route('/:id').put((req, res) => {
         res.status(404).send({ error: `Milling Machine by id '${req.params.id}' not found` });
       } else {
         millingMachineCtrl.update(req.params.id, req.body).then((millingMachine) => {
-          res.json({ millingMachine });
+          res.status(200).send({ millingMachine });
         });
       }
     }).catch((err) => {

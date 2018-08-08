@@ -88,7 +88,7 @@ router.route('/:id').put((req, res) => {
         res.status(404).send({ error: `Other Machine by id '${req.params.id}' not found` });
       } else {
         otherMachineCtrl.update(req.params.id, req.body).then((otherMachine) => {
-          res.json({ otherMachine });
+          res.status(200).send({ otherMachine });
         });
       }
     }).catch((err) => {
