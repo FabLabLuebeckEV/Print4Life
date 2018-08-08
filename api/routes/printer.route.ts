@@ -6,7 +6,11 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   printerCtrl.getAll().then((printers) => {
-    res.json({ printers });
+    if (printers && printers.length === 0) {
+      res.status(204).send();
+    } else if (printers) {
+      res.status(200).send({ printers });
+    }
   }).catch((err) => {
     res.status(500).send(err);
   });
@@ -83,7 +87,7 @@ router.route('/:id').put((req, res) => {
         res.status(404).send({ error: `Printer by id '${req.params.id}' not found` });
       } else {
         printerCtrl.update(req.params.id, req.body).then((printer) => {
-          res.json({ printer });
+          res.status(200).send({ printer });
         });
       }
     }).catch((err) => {

@@ -6,7 +6,11 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   millingMachineCtrl.getAll().then((millingMachines) => {
-    res.json({ millingMachines });
+    if (millingMachines && millingMachines.length === 0) {
+      res.status(204).send();
+    } else if (millingMachines) {
+      res.status(200).send({ millingMachines });
+    }
   }).catch((err) => {
     res.status(500).send(err);
   });
@@ -74,7 +78,7 @@ router.route('/:id').get((req, res) => {
       if (!millingMachine) {
         res.status(404).send({ error: `Milling Machine by id '${req.params.id}' not found` });
       } else {
-        res.json({ millingMachine });
+        res.status(200).send({ millingMachine });
       }
     }).catch((err) => {
       res.status(400).send({ error: 'Malformed request!', stack: err });
@@ -93,7 +97,7 @@ router.route('/:id').put((req, res) => {
         res.status(404).send({ error: `Milling Machine by id '${req.params.id}' not found` });
       } else {
         millingMachineCtrl.update(req.params.id, req.body).then((millingMachine) => {
-          res.json({ millingMachine });
+          res.status(200).send({ millingMachine });
         });
       }
     }).catch((err) => {

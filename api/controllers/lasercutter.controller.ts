@@ -60,13 +60,16 @@ const machineType = 'lasercutter';
         }
     ]
 }
+
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
  */
 function getAll () {
   return machineService.getMachineType(machineType);
 }
 
 /**
- * @api {post} /api/v1/machines/lasercutters/create Create new Lasercutter
+ * @api {post} /api/v1/machines/lasercutters/ Create new Lasercutter
  * @apiName CreateNewLasercutter
  * @apiVersion 1.0.0
  * @apiGroup Lasercutters
@@ -180,6 +183,9 @@ function create (params) {
         }
     ]
 }
+
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
  *
  *
  */

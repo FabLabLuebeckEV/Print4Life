@@ -36,13 +36,15 @@ const machineType = 'otherMachine';
         }
     ]
 }
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
  */
 function getAll () {
   return machineService.getMachineType(machineType);
 }
 
 /**
- * @api {post} /api/v1/machines/otherMachines/create Create new Other Machine
+ * @api {post} /api/v1/machines/otherMachines/ Create new Other Machine
  * @apiName CreateNewOtherMachine
  * @apiVersion 1.0.0
  * @apiGroup OtherMachines

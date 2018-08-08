@@ -6,7 +6,11 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   lasercutterCtrl.getAll().then((lasercutters) => {
-    res.json({ lasercutters });
+    if (lasercutters && lasercutters.length === 0) {
+      res.status(204).send();
+    } else if (lasercutters) {
+      res.status(200).send({ lasercutters });
+    }
   }).catch((err) => {
     res.status(500).send(err);
   });
@@ -14,7 +18,11 @@ router.route('/').get((req, res) => {
 
 router.route('/laserTypes').get((req, res) => {
   lasercutterCtrl.getLaserTypes().then((laserTypes) => {
-    res.json({ laserTypes });
+    if (laserTypes && laserTypes.length === 0) {
+      res.status(204).send();
+    } else if (laserTypes) {
+      res.status(200).send({ laserTypes });
+    }
   }).catch((err) => {
     res.status(500).send(err);
   });
@@ -77,7 +85,7 @@ router.route('/:id').get((req, res) => {
       if (!lasercutter) {
         res.status(404).send({ error: `Lasercutter by id '${req.params.id}' not found` });
       } else {
-        res.json({ lasercutter });
+        res.status(200).send({ lasercutter });
       }
     }).catch((err) => {
       res.status(400).send({ error: 'Malformed request!', stack: err });
@@ -96,7 +104,7 @@ router.route('/:id').put((req, res) => {
         res.status(404).send({ error: `Lasercutter by id '${req.params.id}' not found` });
       } else {
         lasercutterCtrl.update(req.params.id, req.body).then((lasercutter) => {
-          res.json({ lasercutter });
+          res.status(200).send({ lasercutter });
         });
       }
     }).catch((err) => {
