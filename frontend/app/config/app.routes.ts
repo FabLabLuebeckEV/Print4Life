@@ -19,11 +19,11 @@ export const appRoutes: Routes = [
     },
 
     {
-        path: routes.paths.orders.root,
+        path: routes.paths.frontend.orders.root,
         component: OrderListComponent,
         children: [
-            { path: routes.paths.orders.createOrder, component: CreateOrderComponent },
-            { path: `${routes.paths.orders.updateOrder}/:id`, component: CreateOrderComponent }
+            { path: routes.paths.frontend.orders.create, component: CreateOrderComponent },
+            { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent }
         ]
     },
     {

@@ -34,16 +34,14 @@ import { Order, orderSchema } from '../models/order.model';
         }
       ]
     }
- */
-function getOrders () {
-  return Order.find((err, orders) => {
-    if (err) {
-      return err;
-    } else if (orders) {
-      return orders;
+* @apiSuccessExample Success-Response:
+*    HTTP/1.1 204 OK
+*   {
+        "orders": []
     }
-    return [];
-  });
+*/
+function getOrders () {
+  return Order.find();
 }
 
 /**
@@ -81,8 +79,8 @@ function getOrderById (id) {
 }
 
 /**
- * @api {post} /api/v1/orders/placeOrder Adds a new order
- * @apiName placeOrder
+ * @api {post} /api/v1/orders/:id Adds a new order
+ * @apiName createOrder
  * @apiVersion 0.0.1
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
@@ -110,13 +108,14 @@ function getOrderById (id) {
     }
   }
  */
-function placeOrder (order) {
+function createOrder (order) {
   order.token = uuid();
   return Order(rmDbVars(order)).save();
 }
 
 /**
- * @api {post} /api/v1/orders/updateOrder Updates an order
+ * @api {put} /api/v1/orders/:id Updates an order or creates it, if it doesn't
+ * exists yet.
  * @apiName updateOrder
  * @apiVersion 0.0.1
  * @apiGroup Orders
@@ -241,7 +240,7 @@ function rmDbVars (obj) {
 
 export default {
   getOrders,
-  placeOrder,
+  createOrder,
   updateOrder,
   getOrderById,
   deleteOrder,

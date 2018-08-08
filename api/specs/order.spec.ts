@@ -5,21 +5,6 @@ import * as configs from '../config';
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
 
-describe('Order Controller', () => {
-  it('gets orders', (done) => {
-    request.get(`${endpoint}orders/`, {
-      headers: { 'content-type': 'application/json' },
-      json: true
-    }, (error, response) => {
-      const orders = response.body.orders;
-      expect(response.statusCode).toEqual(200);
-      expect(orders).toBeDefined();
-      expect(orders.length).toBeGreaterThan(-1);
-      done();
-    });
-  });
-});
-
 const testOrder = {
   comments: [{
     author: 'Mister Foo',
@@ -46,7 +31,7 @@ describe('Order Controller', () => {
   it('create order', (done) => {
     const testBody = JSON.parse(JSON.stringify(testOrder));
     request({
-      uri: `${endpoint}orders/placeOrder`,
+      uri: `${endpoint}orders/`,
       method: 'POST',
       json: true,
       body: testBody
@@ -66,7 +51,7 @@ describe('Order Controller', () => {
   it('get order by id', (done) => {
     const testBody = JSON.parse(JSON.stringify(testOrder));
     request({
-      uri: `${endpoint}orders/placeOrder`,
+      uri: `${endpoint}orders/`,
       method: 'POST',
       json: true,
       body: testBody
@@ -91,15 +76,15 @@ describe('Order Controller', () => {
   it('update order', (done) => {
     const testBody = JSON.parse(JSON.stringify(testOrder));
     request({
-      uri: `${endpoint}orders/placeOrder`,
+      uri: `${endpoint}orders/`,
       method: 'POST',
       json: true,
       body: testBody
     }, (error, response) => {
       response.body.order.owner = 'Hans Peter';
       request({
-        uri: `${endpoint}orders/updateOrder`,
-        method: 'POST',
+        uri: `${endpoint}orders/${response.body.order._id}`,
+        method: 'PUT',
         json: true,
         body: response.body.order
       }, (error, response) => {
@@ -119,13 +104,13 @@ describe('Order Controller', () => {
   it('delete order', (done) => {
     const testBody = JSON.parse(JSON.stringify(testOrder));
     request({
-      uri: `${endpoint}orders/placeOrder`,
+      uri: `${endpoint}orders/`,
       method: 'POST',
       json: true,
       body: testBody
     }, (error, response) => {
       request({
-        uri: `${endpoint}orders/deleteOrder/${response.body.order._id}`,
+        uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'DELETE',
         headers: { 'content-type': 'application/json' },
         json: true
