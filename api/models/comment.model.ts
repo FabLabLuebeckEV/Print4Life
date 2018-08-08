@@ -6,6 +6,9 @@ const attributes = {
   },
   author: {
     type: String // TODO: add user model
+  },
+  timestamp: {
+    type: Number
   }
 };
 

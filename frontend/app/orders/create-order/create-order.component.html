@@ -13,7 +13,7 @@
 </div>
 <div class="row spacing">
   <div class="container">
-    <form (ngSubmit)="onSubmit()" #machineForm="ngForm">
+    <form (ngSubmit)="onSubmit()" #createOrderForm="ngForm">
       <div class="form-group row">
         <div class="col-md-6">
           <label for="owner">Owner</label>
@@ -31,6 +31,8 @@
             Editor name is required
           </div>
         </div>
+      </div>
+      <div class="form-group row">
         <div *ngIf="editView" class="col-md-6">
           <label for="status">Status</label>
           <ng-select [loading]="loadingStatus" [items]=validStatus bindValue="_id" bindLabel="name" [(ngModel)]="order.status" id="status"
@@ -41,16 +43,10 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <label for="status">Status</label>
-        <ng-select [loading]="loadingStatus" [items]=validStatus bindValue="_id" bindLabel="name" [(ngModel)]="order.status" id="status"
-          name="status" #status="ngModel" required>
-        </ng-select>
-        <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
-          Status is required
-        </div>
-      </div>
-      <button type="submit" class="btn btn-success" [disabled]="!machineForm.form.valid">Submit</button>
+      <button type="submit" class="btn btn-success" [disabled]="!createOrderForm.form.valid">Submit</button>
     </form>
+    <li *ngFor="let comment of order.comments">
+      {{ comment.author }}: {{ comment.content }} ({{ comment.timestamp }})
+    </li>
   </div>
 </div>
