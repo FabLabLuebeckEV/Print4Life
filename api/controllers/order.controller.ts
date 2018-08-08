@@ -233,7 +233,7 @@ async function getStatus () {
   });
 }
 
-async function addComment (id, comment) {
+async function createComment (id, comment) {
   const order = await getOrderById(id);
   order.comments.push(comment);
   await order.save();
@@ -253,5 +253,5 @@ export default {
   getOrderById,
   deleteOrder,
   getStatus,
-  addComment
+  createComment
 };

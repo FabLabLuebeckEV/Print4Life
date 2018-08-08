@@ -44,7 +44,7 @@ router.route('/status/').get((req, res) => {
 });
 
 router.route('/:id/comment').post((req, res) => {
-  orderCtrl.addComment(req.params.id, req.params.comment).then((comment) => {
+  orderCtrl.createComment(req.params.id, { timestamp: new Date(), ...req.body }).then((comment) => {
     res.status(201).send({ comment });
   }).catch((err) => {
     res.status(400).send({ error: 'Could not add comment to order.', stack: err });

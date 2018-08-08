@@ -10,7 +10,7 @@ import {
   Material
 } from '../../models/machines.model';
 
-import { Order } from '../../models/order.model';
+import { Order, Comment } from '../../models/order.model';
 import { ConfigService } from '../../config/config.service';
 import { routes } from '../../config/routes';
 
@@ -37,6 +37,7 @@ export class CreateOrderComponent implements OnInit {
   loadingStatus: Boolean;
   validStatus: Array<String> = [];
   orderId: String;
+  comment: Comment = new Comment(undefined, undefined, undefined);
 
   constructor(
     private machineService: MachineService,
@@ -96,6 +97,27 @@ export class CreateOrderComponent implements OnInit {
     this._loadFablabs();
     this.loadingStatus = true;
     this._loadStatus();
+  }
+
+  onSubmitComment() {
+    this.orderService.createComment(this.orderId, this.comment).then((result) => {
+      if (result) {
+        const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+        this._openMsgModal('Comment successfully added', 'modal-header header-success',
+          'Your comment was added and saved!', okButton, undefined).result.then((result) => {
+            this.router.navigate([`/${routes.paths.orders.root}`]);
+          });
+        this.submitted = true;
+      }
+    }).catch((err) => {
+      let errorMsg = `Something went wrong while adding the new comment.`;
+      if (err) {
+        errorMsg += ` Error: ${err}`;
+      }
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+      this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
+        okButton, undefined);
+    });
   }
 
   onSubmit() {
