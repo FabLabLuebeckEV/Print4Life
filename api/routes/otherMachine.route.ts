@@ -12,7 +12,7 @@ router.route('/').get((req, res) => {
   });
 });
 
-router.route('/create').post((req, res) => {
+router.route('/').post((req, res) => {
   otherMachineCtrl.create(req.body).then((otherMachine) => {
     res.status(201).send({ otherMachine });
   }).catch((err) => {

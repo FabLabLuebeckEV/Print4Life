@@ -20,7 +20,7 @@ router.route('/laserTypes').get((req, res) => {
   });
 });
 
-router.route('/create').post((req, res) => {
+router.route('/').post((req, res) => {
   lasercutterCtrl.create(req.body).then((lasercutter) => {
     res.status(201).send({ lasercutter });
   }).catch((err) => {

@@ -12,7 +12,7 @@ router.route('/').get((req, res) => {
   });
 });
 
-router.route('/create').post((req, res) => {
+router.route('/').post((req, res) => {
   printerCtrl.create(req.body).then((printer) => {
     res.status(201).send({ printer });
   }).catch((err) => {

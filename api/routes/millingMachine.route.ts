@@ -12,7 +12,7 @@ router.route('/').get((req, res) => {
   });
 });
 
-router.route('/create').post((req, res) => {
+router.route('/').post((req, res) => {
   millingMachineCtrl.create(req.body).then((millingMachine) => {
     res.status(201).send({ millingMachine });
   }).catch((err) => {

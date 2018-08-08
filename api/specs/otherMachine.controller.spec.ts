@@ -29,7 +29,7 @@ describe('Other Machine Controller', () => {
   });
 
   it('create other machine  (success)', (done) => {
-    request.post(`${endpoint}/create`,
+    request.post(`${endpoint}/`,
       { body: testOtherMachine, json: true }, (error, response) => {
         const otherMachine = response.body.otherMachine;
         expect(response.statusCode).toEqual(201);
@@ -45,7 +45,7 @@ describe('Other Machine Controller', () => {
   it('create other machine (missing fablabId)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testOtherMachine));
     delete testBody.fablabId;
-    request.post(`${endpoint}/create`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -54,7 +54,7 @@ describe('Other Machine Controller', () => {
   it('create other machine (fablabId too short)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testOtherMachine));
     testBody.fablabId = 'tooShortForMongoDB23';
-    request.post(`${endpoint}/create`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -63,14 +63,14 @@ describe('Other Machine Controller', () => {
   it('create other machine (fablabId too long)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testOtherMachine));
     testBody.fablabId = 'tooLongForMongoDBsObjectId1234567890';
-    request.post(`${endpoint}/create`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
   });
 
   it('update other machine (success)', (done) => {
-    request.post(`${endpoint}/create`, { body: testOtherMachine, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testOtherMachine, json: true }, (error, response) => {
       const otherMachine = response.body.otherMachine;
       expect(response.statusCode).toEqual(201);
       expect(otherMachine).toBeDefined();
@@ -115,7 +115,7 @@ describe('Other Machine Controller', () => {
 
   it('delete other machine (success)', (done) => {
     let responseMachine;
-    request.post(`${endpoint}/create`, { body: testOtherMachine, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testOtherMachine, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       responseMachine = response.body.otherMachine;
       request.delete(`${endpoint}/${response.body.otherMachine._id}`, {
@@ -160,7 +160,7 @@ describe('Other Machine Controller', () => {
   });
 
   it('get other machine (success)', (done) => {
-    request.post(`${endpoint}/create`, { body: testOtherMachine, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testOtherMachine, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       const id = response.body.otherMachine._id;
       request.get(`${endpoint}/${id}`, {
