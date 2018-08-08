@@ -105,7 +105,10 @@ export class CreateOrderComponent implements OnInit {
         const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
         this._openMsgModal('Comment successfully added', 'modal-header header-success',
           'Your comment was added and saved!', okButton, undefined).result.then((result) => {
-            this.router.navigate([`/${routes.paths.orders.root}`]);
+            this.orderService.getOrderById(this.orderId).then((result) => {
+              this.order = result.order;
+            });
+            this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.orderId}`]);
           });
         this.submitted = true;
       }

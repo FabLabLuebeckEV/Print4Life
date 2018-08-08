@@ -5,7 +5,8 @@ export const routes = {
             orders: {
                 root: 'orders',
                 getStatus: 'status',
-                getOrder: 'getOrder' // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
+                getOrder: 'getOrder', // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
+                comment: 'comment'
             }
         },
         frontend: {

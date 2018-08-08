@@ -36,6 +36,6 @@ export class OrderService {
   }
 
   public createComment(id, comment): Promise<any> {
-    return this.http.post(`${this.p}/${id}/comment`, comment).toPromise();
+    return this.http.post(`${this.p}/${id}/${routes.paths.backend.orders.comment}`, comment).toPromise();
   }
 }
