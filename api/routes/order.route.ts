@@ -17,7 +17,7 @@ router.route('/').get((req, res) => {
 
 router.route('/').post((req, res) => {
   orderCtrl.createOrder(req.body).then((order) => {
-    res.status(200).send({ order });
+    res.status(201).send({ order });
   }).catch((err) => {
     res.status(400).send({ error: 'Malformed order, one or more parameters wrong or missing', stack: err });
   });

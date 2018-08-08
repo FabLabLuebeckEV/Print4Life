@@ -38,7 +38,7 @@ describe('Order Controller', () => {
     }, (error, response) => {
       const orderResult = response.body.order;
 
-      expect(response.statusCode).toEqual(200);
+      expect(response.statusCode).toEqual(201);
       expect(orderResult).toBeDefined();
       expect(orderResult.editor).toEqual(testBody.editor);
       expect(orderResult.owner).toEqual(testBody.owner);
