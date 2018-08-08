@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   printerCtrl.getAll().then((printers) => {
-    res.json({ printers });
+    res.status(200).send({ printers });
   }).catch((err) => {
     res.status(500).send(err);
   });

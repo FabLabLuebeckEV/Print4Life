@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   otherMachineCtrl.getAll().then((otherMachines) => {
-    res.json({ otherMachines });
+    res.status(200).send({ otherMachines });
   }).catch((err) => {
     res.status(500).send(err);
   });
@@ -69,7 +69,7 @@ router.route('/:id').get((req, res) => {
       if (!otherMachine) {
         res.status(404).send({ error: `Other Machine by id '${req.params.id}' not found` });
       } else {
-        res.json({ otherMachine });
+        res.status(200).send({ otherMachine });
       }
     }).catch((err) => {
       res.status(400).send({ error: 'Malformed request!', stack: err });
