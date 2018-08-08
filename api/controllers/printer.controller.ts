@@ -67,13 +67,15 @@ const machineType = 'printer';
         }
       ]
     }
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
  */
 function getAll () {
   return machineService.getMachineType(machineType);
 }
 
 /**
- * @api {post} /api/v1/machines/printers/create Create new Printer
+ * @api {post} /api/v1/machines/printers/ Create new Printer
  * @apiName CreateNewPrinter
  * @apiVersion 1.0.0
  * @apiGroup Printers

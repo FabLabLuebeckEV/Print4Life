@@ -6,7 +6,11 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   lasercutterCtrl.getAll().then((lasercutters) => {
-    res.status(200).send({ lasercutters });
+    if (lasercutters && lasercutters.length === 0) {
+      res.status(204).send();
+    } else if (lasercutters) {
+      res.status(200).send({ lasercutters });
+    }
   }).catch((err) => {
     res.status(500).send(err);
   });
@@ -14,7 +18,11 @@ router.route('/').get((req, res) => {
 
 router.route('/laserTypes').get((req, res) => {
   lasercutterCtrl.getLaserTypes().then((laserTypes) => {
-    res.status(200).send({ laserTypes });
+    if (laserTypes && laserTypes.length === 0) {
+      res.status(204).send();
+    } else if (laserTypes) {
+      res.status(200).send({ laserTypes });
+    }
   }).catch((err) => {
     res.status(500).send(err);
   });

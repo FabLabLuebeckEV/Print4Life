@@ -6,7 +6,11 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   otherMachineCtrl.getAll().then((otherMachines) => {
-    res.status(200).send({ otherMachines });
+    if (otherMachines && otherMachines.length === 0) {
+      res.status(204).send();
+    } else if (otherMachines) {
+      res.status(200).send({ otherMachines });
+    }
   }).catch((err) => {
     res.status(500).send(err);
   });

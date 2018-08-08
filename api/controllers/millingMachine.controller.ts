@@ -47,13 +47,16 @@ const machineType = 'millingMachine';
         }
     ]
 }
+
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
  */
 function getAll () {
   return machineService.getMachineType(machineType);
 }
 
 /**
- * @api {post} /api/v1/machines/millingMachines/create Create new Milling Machine
+ * @api {post} /api/v1/machines/millingMachines/ Create new Milling Machine
  * @apiName CreateNewMillingMachine
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines

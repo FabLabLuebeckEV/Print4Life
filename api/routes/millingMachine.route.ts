@@ -6,7 +6,11 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   millingMachineCtrl.getAll().then((millingMachines) => {
-    res.status(200).send({ millingMachines });
+    if (millingMachines && millingMachines.length === 0) {
+      res.status(204).send();
+    } else if (millingMachines) {
+      res.status(200).send({ millingMachines });
+    }
   }).catch((err) => {
     res.status(500).send(err);
   });
