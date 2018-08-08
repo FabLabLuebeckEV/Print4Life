@@ -50,10 +50,10 @@ export class CreateOrderComponent implements OnInit {
     private configService: ConfigService) {
     this.config = this.configService.getConfig();
     this.backArrow = this.config.icons.back;
-    this.backLink = `/${routes.paths.orders.root}`;
+    this.backLink = `/${routes.paths.frontend.orders.root}`;
     this.router.events.subscribe(() => {
       const route = location.path();
-      this.editView = route.indexOf(`${routes.paths.orders.root}/${routes.paths.orders.updateOrder}`) >= 0;
+      this.editView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0;
       if (this.editView) {
         const routeArr = route.split('/');
         this.orderId = routeArr[routeArr.length - 1];
@@ -64,15 +64,15 @@ export class CreateOrderComponent implements OnInit {
   private _openSuccessMsg() {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Order successfully created', 'modal-header header-success',
-      'The creation of a new machine was successful!', okButton, undefined).result.then((result) => {
-        this.router.navigate([`/${routes.paths.orders.root}`]);
+    this.editView ? 'Order successfully updated!' : 'Order successfully created!', okButton, undefined).result.then((result) => {
+        this.router.navigate([`/${routes.paths.frontend.orders.root}`]);
       });
   }
 
   private _openErrMsg(err) {
     let errorMsg = `Something went wrong while creating the new order.`;
     if (err) {
-      errorMsg += ` Error: ${err}`;
+      errorMsg += ` Error: ${JSON.stringify(err, null, 2)}`;
     }
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Error', 'modal-header header-danger', errorMsg,

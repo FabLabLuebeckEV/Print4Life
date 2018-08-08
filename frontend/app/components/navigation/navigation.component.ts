@@ -23,7 +23,7 @@ export class NavigationComponent implements OnInit {
     this.orderDropdown = {
       name: 'Orders',
       elements: [
-        { name: 'All orders', routerHref: routes.paths.orders.root }
+        { name: 'All orders', routerHref: routes.paths.frontend.orders.root }
       ]
     };
   }

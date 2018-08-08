@@ -9,7 +9,7 @@ export class OrderService {
   private p: String;
 
   constructor(private http: HttpClient) {
-    this.p = routes.backendUrl + '/' + routes.paths.orders.root;
+    this.p = routes.backendUrl + '/' + routes.paths.backend.orders.root;
   }
 
   public getAllOrders(): Promise<any> {
@@ -17,14 +17,14 @@ export class OrderService {
   }
 
   public createOrder(order): Promise<any> {
-    return this.http.post(`${this.p}/${routes.paths.orders.createOrder}`, order).toPromise();
+    return this.http.post(`${this.p}`, order).toPromise();
   }
   public updateOrder(order): Promise<any> {
-    return this.http.post(`${this.p}/${routes.paths.orders.updateOrder}`, order).toPromise();
+    return this.http.put(`${this.p}/${order._id}`, order).toPromise();
   }
 
   public deleteOrder(id): Promise<any> {
-    return this.http.delete(`${this.p}/${routes.paths.orders.deleteOrder}/${id}`).toPromise();
+    return this.http.delete(`${this.p}/${id}`).toPromise();
   }
 
   public getOrderById(id): Promise<any> {
@@ -32,7 +32,7 @@ export class OrderService {
   }
 
   public getStatus(): Promise<any> {
-    return this.http.get(`${this.p}/${routes.paths.orders.getStatus}`).toPromise();
+    return this.http.get(`${this.p}/${routes.paths.backend.orders.getStatus}`).toPromise();
   }
 
   public createComment(id, comment): Promise<any> {

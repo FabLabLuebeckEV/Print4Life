@@ -1,15 +1,24 @@
 export const routes = {
     backendUrl: 'http://localhost:3000/api/v1',
     paths: {
-        orders: {
-            root: 'orders',
-            createOrder: 'placeOrder',
-            updateOrder: 'updateOrder',
-            deleteOrder: 'deleteOrder',
-            getOrderById: ':id',
-            getAllOrders: '',
-            getStatus: 'status',
-            getOrder: 'getOrder' // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
+        backend: {
+            orders: {
+                root: 'orders',
+                getStatus: 'status',
+                getOrder: 'getOrder' // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
+            }
+        },
+        frontend: {
+            orders: {
+                root: 'orders',
+                create: 'create',
+                update: 'update',
+                delete: 'delete',
+                getOrderById: 'getById',
+                getAllOrders: '',
+                getStatus: 'status',
+                getOrder: 'getOrder' // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
+            }
         },
         machines: {
             root: 'machines',

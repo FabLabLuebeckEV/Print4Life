@@ -49,7 +49,7 @@ describe('Lasercutter Controller', () => {
   });
 
   it('create lasercutter (success)', (done) => {
-    request.post(`${endpoint}/create`,
+    request.post(`${endpoint}/`,
       { body: testLasercutter, json: true }, (error, response) => {
         const lasercutter = response.body.lasercutter;
         expect(response.statusCode).toEqual(201);
@@ -65,7 +65,7 @@ describe('Lasercutter Controller', () => {
   it('create lasercutter (missing fablabId)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testLasercutter));
     delete testBody.fablabId;
-    request.post(`${endpoint}/create`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -74,7 +74,7 @@ describe('Lasercutter Controller', () => {
   it('create lasercutter (fablabId too short)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testLasercutter));
     testBody.fablabId = 'tooShortForMongoDB23';
-    request.post(`${endpoint}/create`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -83,14 +83,14 @@ describe('Lasercutter Controller', () => {
   it('create lasercutter (fablabId too long)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testLasercutter));
     testBody.fablabId = 'tooLongForMongoDBsObjectId1234567890';
-    request.post(`${endpoint}/create`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
   });
 
   it('update lasercutter (success)', (done) => {
-    request.post(`${endpoint}/create`, { body: testLasercutter, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testLasercutter, json: true }, (error, response) => {
       const lasercutter = response.body.lasercutter;
       expect(response.statusCode).toEqual(201);
       expect(lasercutter).toBeDefined();
@@ -135,13 +135,15 @@ describe('Lasercutter Controller', () => {
 
   it('delete lasercutter (success)', (done) => {
     let responseMachine;
-    request.post(`${endpoint}/create`, { body: testLasercutter, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testLasercutter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       responseMachine = response.body.lasercutter;
       request.delete(`${endpoint}/${response.body.lasercutter._id}`,
         { headers: { 'content-type': 'application/json' }, json: true },
         (error, response) => {
-          expect(response.statusCode).toEqual(204);
+          expect(response.statusCode).toEqual(200);
+          expect(response.body.lasercutter).toBeDefined();
+          expect(response.body.lasercutter._id).toEqual(responseMachine._id);
           request.get(`${endpoint}/${responseMachine._id}`, {
             headers: { 'content-type': 'application/json' },
             json: true
@@ -171,7 +173,7 @@ describe('Lasercutter Controller', () => {
   });
 
   it('get lasercutter (success)', (done) => {
-    request.post(`${endpoint}/create`, { body: testLasercutter, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, { body: testLasercutter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       const id = response.body.lasercutter._id;
       request.get(`${endpoint}/${id}`, { headers: { 'content-type': 'application/json' } }, (error, response) => {
