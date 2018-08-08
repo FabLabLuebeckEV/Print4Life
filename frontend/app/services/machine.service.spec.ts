@@ -385,7 +385,7 @@ describe('MachineService', () => {
       expect(printer.fablabId).toEqual('2');
     }, fail);
 
-    const req = httpTestingController.expectOne(routes.backendUrl + '/machines/printers/create');
+    const req = httpTestingController.expectOne(routes.backendUrl + '/machines/printers/');
     expect(req.request.method).toEqual('POST');
 
     req.flush(createPrinterTest);
@@ -401,7 +401,7 @@ describe('MachineService', () => {
       expect(lasercutter.fablabId).toEqual('2');
     }, fail);
 
-    const req = httpTestingController.expectOne(routes.backendUrl + '/machines/lasercutters/create');
+    const req = httpTestingController.expectOne(routes.backendUrl + '/machines/lasercutters/');
     expect(req.request.method).toEqual('POST');
 
     req.flush(createLasercutterTest);
@@ -416,7 +416,7 @@ describe('MachineService', () => {
       expect(millingMachine.fablabId).toEqual('2');
     }, fail);
 
-    const req = httpTestingController.expectOne(routes.backendUrl + '/machines/millingMachines/create');
+    const req = httpTestingController.expectOne(routes.backendUrl + '/machines/millingMachines/');
     expect(req.request.method).toEqual('POST');
 
     req.flush(createMillingMachineTest);
@@ -431,7 +431,7 @@ describe('MachineService', () => {
       expect(otherMachine.fablabId).toEqual('2');
     }, fail);
 
-    const req = httpTestingController.expectOne(routes.backendUrl + '/machines/otherMachines/create');
+    const req = httpTestingController.expectOne(routes.backendUrl + '/machines/otherMachines/');
     expect(req.request.method).toEqual('POST');
 
     req.flush(createOtherMachineTest);

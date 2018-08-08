@@ -161,7 +161,7 @@ function create (params) {
 }
 
 /**
- * @api {post} /api/v1/machines/lasercutters/laserTypes Get Lasertypes of Lasercutters
+ * @api {get} /api/v1/machines/lasercutters/laserTypes Get Lasertypes of Lasercutters
  * @apiName GetLaserTypes
  * @apiVersion 1.0.0
  * @apiGroup Lasercutters
@@ -251,13 +251,62 @@ function get (id) {
  * @apiParam {id} is the id of the lasercutter
  *
  * @apiSuccessExample Success-Response:
- *    HTTP/1.1 204 No-Content
+ *    HTTP/1.1 200 Ok
+ * {
+    "_id": "5b695b6ff371a21d0c858f2a",
+    "fablabId": "5b453ddb5cf4a9574849e98a",
+    "deviceName": "Test Lasercutter",
+    "manufacturer": "Test Manufacturer",
+    "laserTypes": [
+        {
+            "_id": "5b695b6ff371a21d0c858f2b",
+            "laserType": "CO2"
+        }
+    ],
+    "workspaceX": 2,
+    "workspaceY": 2,
+    "workspaceZ": 2,
+    "maxResoultion": 2,
+    "laserPower": "High",
+    "pictureURL": "",
+    "comment": "Create Test",
+    "type": "lasercutter",
+    "__v": 0
+}
  *
  * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
 {
     "error": "Id needs to be a 24 character long hex string!"
+}
+
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Malformed request!"
+}
+
+ * @apiError 404 Lasercutter not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+{
+    "error: `Lasercutter by id 9999 not found!`"
+}
+ *
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+{
+    "error": "Error while trying to get the Lasercutter by id 9999",
+}
+
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+{
+   "error": "Error while trying to delete the Lasercutter with id 9999"
 }
  *
  *

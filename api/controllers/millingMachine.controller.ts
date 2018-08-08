@@ -197,13 +197,54 @@ function get (id) {
  * @apiParam {id} is the id of the milling machine
  *
  * @apiSuccessExample Success-Response:
- *    HTTP/1.1 204 No-Content
+ *    HTTP/1.1 200 Ok
+ * {
+    "_id": "5b6ab21499f236256541caf7",
+    "fablabId": "5b453ddb5cf4a9574849e98a",
+    "deviceName": "Test Milling Machine",
+    "manufacturer": "Test Manufacturer",
+    "workspaceX": 2,
+    "workspaceY": 2,
+    "workspaceZ": 2,
+    "pictureURL": "",
+    "comment": "Create Test",
+    "type": "millingMachine",
+    "__v": 0
+}
  *
  * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
 {
     "error": "Id needs to be a 24 character long hex string!"
+}
+
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Malformed request!"
+}
+
+ * @apiError 404 Milling Machine not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+{
+    "error: `Milling Machine by id 9999 not found!`"
+}
+ *
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+{
+    "error": "Error while trying to get the Milling Machine by id 9999",
+}
+
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+{
+   "error": "Error while trying to delete the Milling Machine with id 9999"
 }
  *
  *

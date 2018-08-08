@@ -43,7 +43,7 @@ export class MachineService {
   }
 
   public create(machineType, obj) {
-    return this.http.post(`${this.rootPath}/${machineType}s/${routes.paths.machines.create}`, obj).toPromise();
+    return this.http.post(`${this.rootPath}/${machineType}s/`, obj).toPromise();
   }
 
   public update(machineType, id, machine) {

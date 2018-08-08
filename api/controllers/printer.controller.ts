@@ -191,13 +191,67 @@ function create (params) {
  * @apiParam {id} is the id of the printer
  *
  * @apiSuccessExample Success-Response:
- *    HTTP/1.1 204 No-Content
+ *    HTTP/1.1 200 OK
  *
+ * {
+    "_id": "5b66d17a250f8f3209d31577",
+    "fablabId": "5b453ddb5cf4a9574849e98a",
+    "deviceName": "Test Printer",
+    "manufacturer": "Test Manufacturer",
+    "materials": [
+        {
+            "_id": "5b66d17a250f8f3209d31578",
+            "material": "PLA",
+            "type": "printerMaterial"
+        }
+    ],
+    "camSoftware": "Test Software",
+    "printVolumeX": 2,
+    "printVolumeY": 2,
+    "printVolumeZ": 2,
+    "printResolutionX": 2,
+    "printResolutionY": 2,
+    "printResolutionZ": 2,
+    "nozzleDiameter": 2,
+    "numberOfExtruders": 2,
+    "pictureURL": "",
+    "comment": "Create Test",
+    "type": "printer",
+    "__v": 0
+}
  * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
 {
     "error": "Id needs to be a 24 character long hex string!"
+}
+
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Malformed request!"
+}
+
+ * @apiError 404 Printer not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+{
+    "error: `Printer by id 9999 not found!`"
+}
+ *
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+{
+    "error": "Error while trying to get the Printer by id 9999",
+}
+
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+{
+   "error": "Error while trying to delete the Printer with id 9999"
 }
  *
  *
