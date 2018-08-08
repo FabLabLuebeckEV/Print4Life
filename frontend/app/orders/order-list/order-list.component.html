@@ -16,6 +16,8 @@
     </div>
   </div>
   <div class="row">
+    <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size" [color]="spinnerConfig.color"
+      [type]="spinnerConfig.type"></ngx-spinner>
     <app-table (buttonEvent)="eventHandler($event)" [items]="visibleOrders"></app-table>
   </div>
 </div>
