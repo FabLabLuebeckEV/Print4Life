@@ -1,5 +1,6 @@
 import * as express from 'express';
 import otherMachineCtrl from '../controllers/otherMachine.controller';
+import logger from '../logger';
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ router.route('/create').post((req, res) => {
   otherMachineCtrl.create(req.body).then((otherMachine) => {
     res.status(201).send({ otherMachine });
   }).catch((err) => {
-    res.status(400).send({ err: 'Malformed request!', stack: err });
+    res.status(400).send({ error: 'Malformed request!', stack: err });
   });
 });
 
@@ -23,10 +24,39 @@ router.route('/:id').delete((req, res) => {
   if (req.params.id.length !== 24) {
     res.status(400).send({ error: 'Id needs to be a 24 character long hex string!' });
   } else {
-    otherMachineCtrl.deleteById(req.params.id).then(() => {
-      res.status(204).send();
+    let otherMachine;
+    otherMachineCtrl.get(req.params.id).then((o) => {
+      if (o) {
+        otherMachine = o;
+        otherMachineCtrl.deleteById(req.params.id).then((result) => {
+          if (result) {
+            otherMachineCtrl.get(req.params.id).then((result) => {
+              if (!result) {
+                res.status(200).send({ otherMachine });
+              }
+            }).catch((err) => {
+              logger.error(err);
+              res.status(500).send(
+                {
+                  err: `Error while trying to get the Other Machine by id ${req.params.id}`,
+                  stack: err
+                }
+              );
+            });
+          } else {
+            res.status(500).send({ error: `Error while trying to delete the Other Machine with id ${req.params.id}` });
+          }
+        }).catch((err) => {
+          logger.error(err);
+          res.status(400).send({ error: 'Malformed request!', stack: err });
+        });
+      } else {
+        logger.error(`Other Machine by id ${req.params.id} not found!`);
+        res.status(404).send({ error: `Other Machine by id ${req.params.id} not found!` });
+      }
     }).catch((err) => {
-      res.status(400).send({ err: 'Malformed request!', stack: err });
+      logger.error(err);
+      res.status(500).send({ error: `Error while trying to get the Other Machine by id ${req.params.id}`, stack: err });
     });
   }
 });
@@ -42,7 +72,7 @@ router.route('/:id').get((req, res) => {
         res.json({ otherMachine });
       }
     }).catch((err) => {
-      res.status(400).send({ err: 'Malformed request!', stack: err });
+      res.status(400).send({ error: 'Malformed request!', stack: err });
     });
   }
 });
@@ -62,7 +92,7 @@ router.route('/:id').put((req, res) => {
         });
       }
     }).catch((err) => {
-      res.status(400).send({ err: 'Malformed request!', stack: err });
+      res.status(400).send({ error: 'Malformed request!', stack: err });
     });
   }
 });

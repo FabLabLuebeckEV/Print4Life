@@ -133,7 +133,9 @@ describe('Printer Controller', () => {
         headers: { 'content-type': 'application/json' },
         json: true
       }, (error, response) => {
-        expect(response.statusCode).toEqual(204);
+        expect(response.statusCode).toEqual(200);
+        expect(response.body.printer).toBeDefined();
+        expect(response.body.printer._id).toEqual(responseMachine._id);
         request.get(`${endpoint}/${responseMachine._id}`, {
           headers: { 'content-type': 'application/json' },
           json: true

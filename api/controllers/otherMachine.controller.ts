@@ -175,13 +175,52 @@ function get (id) {
  * @apiParam {id} is the id of the other machine
  *
  * @apiSuccessExample Success-Response:
- *    HTTP/1.1 204 No-Content
+ *    HTTP/1.1 200 Ok
  *
+ * {
+    "_id": "5b66fefec92bc40cd9dcfef3",
+    "fablabId": "5b453ddb5cf4a9574849e98a",
+    "deviceName": "Updated",
+    "manufacturer": "Test Manufacturer",
+    "typeOfMachine": "Test Machine",
+    "pictureURL": "",
+    "comment": "Create Test",
+    "type": "otherMachine",
+    "__v": 0
+}
  * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
 {
     "error": "Id needs to be a 24 character long hex string!"
+}
+
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Malformed request!"
+}
+
+ * @apiError 404 Other Machine not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+{
+    "error: `Other Machine by id 9999 not found!`"
+}
+ *
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+{
+    "error": "Error while trying to get the Other Machine by id 9999",
+}
+
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+{
+   "error": "Error while trying to delete the Other Machine with id 9999"
 }
  *
  *
