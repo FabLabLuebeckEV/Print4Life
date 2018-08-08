@@ -10,3 +10,7 @@
     border-left: 10px solid #a94442;
     /* red */
 }
+
+.dropdown-backdrop {
+    position: absolute;
+}
