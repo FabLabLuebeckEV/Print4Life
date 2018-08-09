@@ -4,16 +4,13 @@ import * as configs from '../config';
 
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
-
 const testOrder = {
-  comments: [{
-    author: 'Mister Foo',
-    content: 'Hello there, could you print this?'
-  }],
+  projectname: 'unscheinBar',
+  comments: [],
   editor: 'Mister Bar',
   owner: 'Mister Foo',
   files: [],
-  status: 'new'
+  status: 'new',
 };
 
 describe('Order Controller', () => {
@@ -40,6 +37,7 @@ describe('Order Controller', () => {
 
       expect(response.statusCode).toEqual(201);
       expect(orderResult).toBeDefined();
+      expect(orderResult.projectname).toEqual(testBody.projectname);
       expect(orderResult.editor).toEqual(testBody.editor);
       expect(orderResult.owner).toEqual(testBody.owner);
       expect(orderResult.token).toBeDefined();

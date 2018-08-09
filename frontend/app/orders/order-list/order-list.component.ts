@@ -7,6 +7,7 @@ import { ConfigService } from '../../config/config.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { routes } from '../../config/routes';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-order-list',
@@ -19,30 +20,41 @@ export class OrderListComponent implements OnInit {
   orders: Array<TableItem> = [];
   visibleOrders: Array<TableItem> = [];
   id: String;
-  listView: Boolean;
+  listView: Boolean = false;
   plusIcon: any;
   loadingStatus: Boolean;
+  loadingOrders: Boolean = false;
   selectedStatus: Array<String> = [];
   validStatus: Array<String> = [];
+  spinnerConfig: Object;
 
   constructor(
     private orderService: OrderService,
     private router: Router,
     private location: Location,
     private modalService: NgbModal,
-    private configService: ConfigService) {
+    private configService: ConfigService,
+    private spinner: NgxSpinnerService) {
     this.config = this.configService.getConfig();
+    this.spinnerConfig = { 'loadingText': 'Loading Orders', ...this.config.spinnerConfig };
     this.createLink = `./${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
     router.events.subscribe(() => {
       const route = location.path();
-      this.listView = (route === '/orders');
+      if (route === '/orders') {
+        this.listView = true;
+        this.ngOnInit();
+      } else {
+        this.listView = false;
+      }
     });
   }
-  ngOnInit() {
-    if (this.listView) {
-      this.init();
+  async ngOnInit() {
+    if (this.listView && !this.loadingOrders) {
+      this.visibleOrders = [];
+      this.orders = [];
       this._loadStatus();
+      this.init();
     }
   }
 
@@ -86,7 +98,9 @@ export class OrderListComponent implements OnInit {
             this.visibleOrders[orderIdx].obj['Owner'] = { label: result.owner };
             this.visibleOrders[orderIdx].obj['Editor'] = { label: result.editor };
             this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
-            this._filterOrdersByStatus();
+            if (this.selectedStatus && this.selectedStatus.length > 0) {
+              this._filterOrdersByStatus();
+            }
           });
         }
       });
@@ -112,12 +126,16 @@ export class OrderListComponent implements OnInit {
   }
 
   async init() {
-    const resOrders = await this.orderService.getAllOrders();
-    const orders = resOrders.orders;
+    this.loadingOrders = true;
+    this.spinner.show();
+    const orders = (await this.orderService.getAllOrders()).orders;
+
     const arr = [];
     for (const order of orders) {
       const item = new TableItem();
       item.obj['id'] = { label: order._id };
+      item.obj['Created'] = { label: order.created, isDate: true };
+      item.obj['Projectname'] = { label: order.projectname };
       item.obj['Owner'] = { label: order.owner };
       item.obj['Editor'] = { label: order.editor };
       item.obj['Status'] = { label: order.status };
@@ -132,11 +150,16 @@ export class OrderListComponent implements OnInit {
       arr.push(item);
     }
     this.orders = this.orders.concat(arr);
+    this.visibleOrders = undefined;
     this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+    this._filterOrdersByStatus();
+    this.loadingOrders = false;
+    this.spinner.hide();
   }
 
   private async _loadStatus() {
     this.validStatus = (await this.orderService.getStatus()).status;
+    this.selectedStatus = this.validStatus;
     this.loadingStatus = false;
   }
 }

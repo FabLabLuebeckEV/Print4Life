@@ -10,7 +10,7 @@ import {
   Material
 } from '../../models/machines.model';
 
-import { Order } from '../../models/order.model';
+import { Order, Comment } from '../../models/order.model';
 import { ConfigService } from '../../config/config.service';
 import { routes } from '../../config/routes';
 
@@ -28,8 +28,7 @@ export class CreateOrderComponent implements OnInit {
   selectedType: String;
   editView: Boolean = false;
   routeChanged: Boolean;
-  submitted: Boolean = false;
-  order: Order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+  order: Order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   fablabs: Array<any>;
   materialsArr: Array<Material>;
   loadingFablabs: Boolean;
@@ -37,6 +36,7 @@ export class CreateOrderComponent implements OnInit {
   loadingStatus: Boolean;
   validStatus: Array<String> = [];
   orderId: String;
+  comment: Comment = new Comment(undefined, undefined, undefined);
 
   constructor(
     private machineService: MachineService,
@@ -98,12 +98,34 @@ export class CreateOrderComponent implements OnInit {
     this._loadStatus();
   }
 
+  onSubmitComment() {
+    this.orderService.createComment(this.orderId, this.comment).then((result) => {
+      if (result) {
+        const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+        this._openMsgModal('Comment successfully added', 'modal-header header-success',
+          'Your comment was added and saved!', okButton, undefined).result.then((result) => {
+            this.orderService.getOrderById(this.orderId).then((result) => {
+              this.order = result.order;
+            });
+            this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.orderId}`]);
+          });
+      }
+    }).catch((err) => {
+      let errorMsg = `Something went wrong while adding the new comment.`;
+      if (err) {
+        errorMsg += ` Error: ${err}`;
+      }
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+      this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
+        okButton, undefined);
+    });
+  }
+
   onSubmit() {
     if (this.editView) {
       this.orderService.updateOrder(this.order).then((result) => {
         if (result) {
           this._openSuccessMsg();
-          this.submitted = true;
         } else {
           this._openErrMsg(undefined);
         }
@@ -114,7 +136,6 @@ export class CreateOrderComponent implements OnInit {
       this.orderService.createOrder(this.order).then((result) => {
         if (result) {
           this._openSuccessMsg();
-          this.submitted = true;
         } else {
           this._openErrMsg(undefined);
         }

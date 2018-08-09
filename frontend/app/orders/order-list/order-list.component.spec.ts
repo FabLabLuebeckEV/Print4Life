@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent } from '../../components/message-modal/message-modal.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 import {
@@ -13,6 +15,7 @@ import {
 } from '@angular/common/http/testing';
 
 import { OrderListComponent } from './order-list.component';
+import { ConfigService } from '../../config/config.service';
 
 describe('OrderListComponent', () => {
   let component: OrderListComponent;
@@ -31,8 +34,10 @@ describe('OrderListComponent', () => {
         RouterTestingModule,
         FontAwesomeModule,
         NgSelectModule,
-        FormsModule
-      ]
+        FormsModule,
+        NgxSpinnerModule
+      ],
+      providers: [NgxSpinnerService, ConfigService]
     })
     .compileComponents();
   }));

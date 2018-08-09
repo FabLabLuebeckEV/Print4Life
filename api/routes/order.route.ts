@@ -47,6 +47,14 @@ router.route('/status/').get((req, res) => {
   });
 });
 
+router.route('/:id/comment').post((req, res) => {
+  orderCtrl.createComment(req.params.id, { timestamp: new Date(), ...req.body }).then((comment) => {
+    res.status(201).send({ comment });
+  }).catch((err) => {
+    res.status(400).send({ error: 'Could not add comment to order.', stack: err });
+  });
+});
+
 router.route('/:id').get((req, res) => {
   orderCtrl.getOrderById(req.params.id).then((order) => {
     res.status(200).send({ order });

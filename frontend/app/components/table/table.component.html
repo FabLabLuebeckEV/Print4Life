@@ -10,7 +10,8 @@
     <tr *ngFor="let item of items">
       <td *ngFor="let header of headers">
         <a *ngIf="item.obj[header].href" [routerLink]="item.obj[header].href">{{item.obj[header].label}}</a>
-        <span *ngIf="!item.obj[header].href">{{item.obj[header].label}}</span>
+        <span *ngIf="!item.obj[header].href && !item.obj[header].isDate">{{item.obj[header].label}}</span>
+        <span *ngIf="!item.obj[header].href && item.obj[header].isDate">{{item.obj[header].label | date:'short'}}</span>
       </td>
       <td>
         <!-- Button 1 -->

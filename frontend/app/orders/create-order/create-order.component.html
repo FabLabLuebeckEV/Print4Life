@@ -7,15 +7,24 @@
       </button>
     </a>
   </div>
-  <div class="col-md-9 text-center">
+  <div class="col-md-11 text-center">
     <h1>Order Form</h1>
   </div>
 </div>
 <div class="row spacing">
   <div class="container">
-    <form (ngSubmit)="onSubmit()" #machineForm="ngForm">
+    <form (ngSubmit)="onSubmit()" #createOrderForm="ngForm">
       <div class="form-group row">
-        <div class="col-md-6">
+        <div class="col-md-12">
+          <label for="projectname">Projectname</label>
+          <input type="text" class="form-control" id="projectname" required [(ngModel)]="order.projectname" name="projectname" #projectname="ngModel">
+          <div [hidden]="projectname.valid || projectname.pristine" class="alert alert-danger">
+              Projectname is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
           <label for="owner">Owner</label>
           <input type="text" class="form-control" id="owner" required [(ngModel)]="order.owner" name="owner" #owner="ngModel">
           <div [hidden]="owner.valid || owner.pristine" class="alert alert-danger">
@@ -24,14 +33,16 @@
         </div>
       </div>
       <div class="form-group row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <label for="editor">Editor</label>
           <input type="text" class="form-control" id="editor" required [(ngModel)]="order.editor" name="editor" #editor="ngModel">
           <div [hidden]="editor.valid || editor.pristine" class="alert alert-danger">
             Editor name is required
           </div>
         </div>
-        <div *ngIf="editView" class="col-md-6">
+      </div>
+      <div class="form-group row">
+        <div *ngIf="editView" class="col-md-12">
           <label for="status">Status</label>
           <ng-select [loading]="loadingStatus" [items]=validStatus bindValue="_id" bindLabel="name" [(ngModel)]="order.status" id="status"
             name="status" #status="ngModel" required>
@@ -41,16 +52,52 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <label for="status">Status</label>
-        <ng-select [loading]="loadingStatus" [items]=validStatus bindValue="_id" bindLabel="name" [(ngModel)]="order.status" id="status"
-          name="status" #status="ngModel" required>
-        </ng-select>
-        <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
-          Status is required
+      <button type="submit" class="btn btn-success" [disabled]="!createOrderForm.form.valid">Submit</button>
+    </form>
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h4>Comments</h4>
+      </div>
+    </div>
+    <div class="row">
+      <table class="table table-striped table-spacing">
+        <thead>
+          <tr>
+            <th scope="col">Author</th><th scope="col">Content</th><th scope="col">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let comment of order.comments">
+            <td>{{comment.author}}</td><td>{{comment.content}}</td><td>{{comment.timestamp | date:'short'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h6>Add comment</h6>
+      </div>
+    </div>
+    <form (ngSubmit)="onSubmitComment()" #createCommentForm="ngForm">
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="author">Author</label>
+          <input type="text" class="form-control" id="author" required [(ngModel)]="comment.author" name="author" #author="ngModel">
+          <div [hidden]="author.valid || author.pristine" class="alert alert-danger">
+            Author name is required
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!machineForm.form.valid">Submit</button>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="content">Content</label>
+          <textarea type="text" class="form-control" id="content" required [(ngModel)]="comment.content" name="content" #content="ngModel"></textarea>
+          <div [hidden]="content.valid || content.pristine" class="alert alert-danger">
+            Text is required
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success" [disabled]="!createCommentForm.form.valid">Submit</button>
     </form>
   </div>
 </div>

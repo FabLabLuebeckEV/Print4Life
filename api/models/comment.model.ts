@@ -2,10 +2,16 @@ import * as mongoose from 'mongoose';
 
 const attributes = {
   content: {
-    type: String
+    type: String,
+    required: true
   },
   author: {
-    type: String // TODO: add user model
+    type: String, // TODO: add user model
+    required: true
+  },
+  timestamp: {
+    type: Date,
+    required: true
   }
 };
 
