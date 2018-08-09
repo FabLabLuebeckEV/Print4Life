@@ -10,6 +10,8 @@ const machineType = 'lasercutter';
  * @apiGroup Lasercutters
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam (Query String) limit is the limit of objects to get
+ * @apiParam (Query String) skip is the number of objects to skip
  * @apiSuccess {Array} lasercutters an array of lasercutter objects
  *
  * @apiSuccessExample Success-Response:
@@ -64,8 +66,14 @@ const machineType = 'lasercutter';
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 204 No-Content
  */
-function getAll () {
-  return machineService.getMachineType(machineType);
+function getAll (limit?: string, skip?: string) {
+  let l: Number;
+  let s: Number;
+  if (limit && skip) {
+    l = Number.parseInt(limit, 10);
+    s = Number.parseInt(skip, 10);
+  }
+  return machineService.getMachineType(machineType, l, s);
 }
 
 /**
@@ -200,7 +208,7 @@ function getLaserTypes () {
  * @apiGroup Lasercutters
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiParam {id} is the id of the lasercutter
+ * @apiParam id is the id of the lasercutter
  *
  * @apiSuccess {Object} lasercutter the lasercutter object
  * @apiSuccessExample Success-Response:
@@ -364,7 +372,7 @@ function deleteById (id) {
     "type" : "lasercutter",
     "__v" : 0
 }
- * @apiSuccess {Object} printer the printer object
+ * @apiSuccess {Object} lasercutter the lasercutter object
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
@@ -415,4 +423,24 @@ function update (id, machine) {
   return machineService.update(machineType, id, machine);
 }
 
-export default { getAll, create, getLaserTypes, deleteById, get, update };
+/**
+ * @api {get} /api/v1/machines/lasercutters/count Counts the Lasercutters
+ * @apiName CountLasercutter
+ * @apiVersion 1.0.0
+ * @apiGroup Lasercutters
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess {Object} count the number of lasercutters
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *
+{
+    "count": 98
+}
+ *
+ */
+function count () {
+  return machineService.count(machineType);
+}
+
+export default { getAll, create, getLaserTypes, deleteById, get, update, count };

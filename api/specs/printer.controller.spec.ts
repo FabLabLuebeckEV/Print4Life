@@ -40,6 +40,34 @@ describe('Printer Controller', () => {
     });
   });
 
+  it('gets printers', (done) => {
+    request.get(`${endpoint}?limit=5&skip=5`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
+      const printers = response.body.printers;
+      expect(response.statusCode).toEqual(200);
+      expect(printers).toBeDefined();
+      expect(printers.length).toBeGreaterThan(-1);
+      expect(printers.length).toBeLessThan(6);
+      expect(printers[0].type).toEqual('printer');
+      done();
+    });
+  });
+
+  it('counts printers', (done) => {
+    request.get(`${endpoint}/count`, {
+      headers: { 'content-type': 'application/json' },
+      json: true
+    }, (error, response) => {
+      const count = response.body.count;
+      expect(response.statusCode).toEqual(200);
+      expect(count).toBeDefined();
+      expect(count).toBeGreaterThan(-1);
+      done();
+    });
+  });
+
   it('create printer (success)', (done) => {
     request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
       const printer = response.body.printer;
