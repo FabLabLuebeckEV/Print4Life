@@ -8,7 +8,9 @@ export const routes = {
                 // TODO: not implemented yet, should be a post
                 //  request with an object passed as a selector for mongoose
                 getOrder: 'getOrder',
-                comment: 'comment'
+                comment: 'comment',
+                count: 'count',
+                search: 'search'
             },
             machines: {
                 root: 'machines',

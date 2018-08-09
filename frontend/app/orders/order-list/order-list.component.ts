@@ -8,6 +8,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { routes } from '../../config/routes';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Icon } from '@fortawesome/fontawesome-svg-core';
+import { query } from '../../../../node_modules/@angular/core/src/render3/query';
 
 @Component({
   selector: 'app-order-list',
@@ -27,6 +29,17 @@ export class OrderListComponent implements OnInit {
   selectedStatus: Array<String> = [];
   validStatus: Array<String> = [];
   spinnerConfig: Object;
+  jumpArrow: Icon;
+  paginationObj: any = {
+    page: 1,
+    totalItems: 0,
+    perPage: 20,
+    maxSize: 10,
+    boundaryLinks: true,
+    rotate: true,
+    maxPages: 0,
+    jumpToPage: undefined
+  };
 
   constructor(
     private orderService: OrderService,
@@ -39,8 +52,9 @@ export class OrderListComponent implements OnInit {
     this.spinnerConfig = { 'loadingText': 'Loading Orders', ...this.config.spinnerConfig };
     this.createLink = `./${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
-    router.events.subscribe(() => {
-      const route = location.path();
+    this.jumpArrow = this.config.icons.forward;
+    this.router.events.subscribe(() => {
+      const route = this.location.path();
       if (route === '/orders') {
         this.listView = true;
         this.ngOnInit();
@@ -49,6 +63,7 @@ export class OrderListComponent implements OnInit {
       }
     });
   }
+
   async ngOnInit() {
     if (this.listView && !this.loadingOrders) {
       this.visibleOrders = [];
@@ -56,6 +71,10 @@ export class OrderListComponent implements OnInit {
       this._loadStatus();
       this.init();
     }
+  }
+
+  public pageChanged() {
+    this.init();
   }
 
   // remove add change clear
@@ -108,9 +127,7 @@ export class OrderListComponent implements OnInit {
   }
 
   private _filterOrdersByStatus() {
-    this.visibleOrders = this.visibleOrders.filter((ti) => {
-      return this.selectedStatus.includes(ti.obj['Status'].label);
-    });
+    this.init();
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
@@ -126,33 +143,57 @@ export class OrderListComponent implements OnInit {
   }
 
   async init() {
+    this.orders = [];
     this.loadingOrders = true;
     this.spinner.show();
-    const orders = (await this.orderService.getAllOrders()).orders;
-
-    const arr = [];
-    for (const order of orders) {
-      const item = new TableItem();
-      item.obj['id'] = { label: order._id };
-      item.obj['Created'] = { label: order.created, isDate: true };
-      item.obj['Projectname'] = { label: order.projectname };
-      item.obj['Owner'] = { label: order.owner };
-      item.obj['Editor'] = { label: order.editor };
-      item.obj['Status'] = { label: order.status };
-      item.button1.label = 'Edit';
-      item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
-      item.button1.class = 'btn btn-primary spacing';
-      item.button1.icon = this.config.icons.edit;
-      item.button2.label = 'Delete';
-      item.button2.eventEmitter = true;
-      item.button2.class = 'btn btn-danger spacing';
-      item.button2.icon = this.config.icons.delete;
-      arr.push(item);
+    let countObj;
+    let totalItems = 0;
+    let query;
+    if (this.selectedStatus.length > 0) {
+      query = {
+        $or: []
+      };
+      this.selectedStatus.forEach((status) => {
+        query.$or.push({ status: status });
+      });
     }
-    this.orders = this.orders.concat(arr);
-    this.visibleOrders = undefined;
-    this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
-    this._filterOrdersByStatus();
+
+    countObj = await this.orderService.count(query);
+    totalItems = countObj.count;
+
+    if (totalItems !== this.paginationObj.totalItems) {
+      this.paginationObj.totalItems = totalItems;
+    }
+
+    let orders = await this.orderService.getAllOrders(
+      query, this.paginationObj.perPage,
+      (this.paginationObj.page - 1) * this.paginationObj.perPage);
+    if (orders && orders.orders) {
+      orders = orders.orders;
+      const arr = [];
+      for (const order of orders) {
+        const item = new TableItem();
+        item.obj['id'] = { label: order._id };
+        item.obj['Created'] = { label: order.created, isDate: true };
+        item.obj['Projectname'] = { label: order.projectname };
+        item.obj['Owner'] = { label: order.owner };
+        item.obj['Editor'] = { label: order.editor };
+        item.obj['Status'] = { label: order.status };
+        item.button1.label = 'Edit';
+        item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
+        item.button1.class = 'btn btn-primary spacing';
+        item.button1.icon = this.config.icons.edit;
+        item.button2.label = 'Delete';
+        item.button2.eventEmitter = true;
+        item.button2.class = 'btn btn-danger spacing';
+        item.button2.icon = this.config.icons.delete;
+        arr.push(item);
+      }
+
+      this.orders = this.orders.concat(arr);
+      this.visibleOrders = undefined;
+      this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+    }
     this.loadingOrders = false;
     this.spinner.hide();
   }

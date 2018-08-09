@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { routes } from '../config/routes';
 
 @Injectable({
@@ -12,8 +12,34 @@ export class OrderService {
     this.p = routes.backendUrl + '/' + routes.paths.backend.orders.root;
   }
 
-  public getAllOrders(): Promise<any> {
-    return this.http.get(`${this.p}`).toPromise();
+  public getAllOrders(query?, limit?, skip?): Promise<any> {
+    let params = new HttpParams();
+    if (query) {
+      return this.search(query, limit, skip);
+    }
+    if (limit >= 0 && skip >= 0) {
+      params = params.append('limit', limit);
+      params = params.append('skip', skip);
+    }
+    return this.http.get(`${this.p}`, { params: params }).toPromise();
+  }
+
+  public search(query, limit?, skip?) {
+    const body = {
+      query: query,
+      limit: undefined,
+      skip: undefined
+    };
+
+    if (limit >= 0 && skip >= 0) {
+      body.limit = limit;
+      body.skip = skip;
+    }
+    return this.http.post(`${this.p}/${routes.paths.backend.orders.search}`, body).toPromise();
+  }
+
+  public count(query) {
+    return this.http.post(`${this.p}/${routes.paths.backend.orders.count}`, { query: query }).toPromise();
   }
 
   public createOrder(order): Promise<any> {

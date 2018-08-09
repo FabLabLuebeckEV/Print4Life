@@ -142,12 +142,6 @@ export class MachineListComponent implements OnInit {
 
     if (totalItems !== this.paginationObj.totalItems) {
       this.paginationObj.totalItems = totalItems;
-      // let maxPages = this.paginationObj.totalItems / this.paginationObj.perPage;
-      // if (this._decimalCount(maxPages) > 0) {
-      //   maxPages = Number.parseInt(maxPages.toFixed(0)) + 1;
-      // }
-      // this.paginationObj.maxPages = maxPages;
-      // console.log(this.paginationObj);
     }
 
     for (const type of machineTypes) {
