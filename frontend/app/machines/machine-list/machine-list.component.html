@@ -16,8 +16,27 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size" [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+            <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size" [color]="spinnerConfig.color"
+                [type]="spinnerConfig.type"></ngx-spinner>
             <app-table (buttonEvent)="eventHandler($event)" [items]="displayedMachines"></app-table>
         </div>
     </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2 offset-5 text-center">
+                    <label for="jumpToPage">Jump to Page</label>
+                    <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage" name="jumpToPage" #jumpToPage="ngModel">
+                </div>
+                <div class="col-md-1 align-self-end">
+                    <button type="button" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
+                        <fa-icon [icon]="jumpArrow"></fa-icon>
+                    </button>
+                </div>
+            </div>
+            <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems" [(page)]="paginationObj.page"
+                [pageSize]="paginationObj.perPage" (pageChange)="pageChanged($event)" [maxSize]="paginationObj.maxSize" [rotate]="paginationObj.rotate"
+                [boundaryLinks]="paginationObj.boundaryLinks" aria-label="Default pagination"></ngb-pagination>
+        </div>
+    </footer>
 </div>

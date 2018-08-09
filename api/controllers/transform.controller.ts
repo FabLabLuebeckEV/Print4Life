@@ -5,7 +5,7 @@ import { Material, materialSchema } from '../models/material.model';
 import { Other, otherMachineSchema } from '../models/machines/other.machine.model';
 import { MillingMachine, millingMachineSchema } from '../models/machines/milling.machine.model';
 import { LaserType, laserTypeSchema } from '../models/lasertype.model';
-import { LaserCutter, laserCutterSchema } from '../models/machines/lasercutter.model';
+import { Lasercutter, laserCutterSchema } from '../models/machines/lasercutter.model';
 import { PrinterCanMaterial } from '../models/printerCanMaterial.model';
 import { LasercutterCanLaserTypes } from '../models/laserCanTypes.model';
 
@@ -22,7 +22,7 @@ const PrinterMaterial = mongoose.model('PrinterMaterial', materialSchema);
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
-*    {"msg":"Transformation of milling machines done"}
+ *    {"msg":"Transformation of milling machines done"}
  */
 function transformMillingMachine () {
   const props = Object.keys(millingMachineSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
@@ -137,14 +137,14 @@ function transformLaserTypes () {
  */
 function transformLaserCutters () {
   const props = Object.keys(laserCutterSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
-  return LaserCutter.find((err, laserCutters) => {
+  return Lasercutter.find((err, laserCutters) => {
     if (err) { return err; } else if (laserCutters) {
       LaserType.find((err, laserTypes) => {
         if (err) { return err; } else if (laserTypes) {
           return LasercutterCanLaserTypes.find((err, canLaserTypes) => {
             if (err) { return err; } else if (canLaserTypes) {
               const machines = [];
-              return LaserCutter.deleteMany({}, (err, deleted) => {
+              return Lasercutter.deleteMany({}, (err, deleted) => {
                 if (err) { return err; } else if (deleted) {
                   laserCutters.forEach((laserCutter) => {
                     if (laserCutter.fid) {
@@ -165,7 +165,7 @@ function transformLaserCutters () {
                       ..._getCleanObject(laserCutter, props)
                     };
                     newObject.type = 'lasercutter';
-                    const newMachine = new LaserCutter(newObject);
+                    const newMachine = new Lasercutter(newObject);
                     newMachine.save();
                     machines.push(newMachine);
                   });
@@ -348,7 +348,7 @@ function cleanDocuments () {
       }
       return [];
     }).catch((err) => { logger.error(err); }),
-    LaserCutter.find((err, laserCutters) => {
+    Lasercutter.find((err, laserCutters) => {
       if (err) { return err; } else if (laserCutters) {
         laserCutters.forEach((laserCutter) => {
           laserCutter.id = undefined;

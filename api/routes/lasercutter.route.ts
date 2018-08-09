@@ -5,13 +5,23 @@ import logger from '../logger';
 const router = express.Router();
 
 router.route('/').get((req, res) => {
-  lasercutterCtrl.getAll().then((lasercutters) => {
+  lasercutterCtrl.getAll(req.query.limit, req.query.skip).then((lasercutters) => {
     if (lasercutters && lasercutters.length === 0) {
       res.status(204).send();
     } else if (lasercutters) {
       res.status(200).send({ lasercutters });
     }
   }).catch((err) => {
+    logger.error(err);
+    res.status(500).send(err);
+  });
+});
+
+router.route('/count').get((req, res) => {
+  lasercutterCtrl.count().then((count) => {
+    res.status(200).send({ count });
+  }).catch((err) => {
+    logger.error(err);
     res.status(500).send(err);
   });
 });
@@ -24,6 +34,7 @@ router.route('/laserTypes').get((req, res) => {
       res.status(200).send({ laserTypes });
     }
   }).catch((err) => {
+    logger.error(err);
     res.status(500).send(err);
   });
 });
@@ -32,6 +43,7 @@ router.route('/').post((req, res) => {
   lasercutterCtrl.create(req.body).then((lasercutter) => {
     res.status(201).send({ lasercutter });
   }).catch((err) => {
+    logger.error(err);
     res.status(400).send({ error: 'Malformed request!', stack: err });
   });
 });
@@ -88,6 +100,7 @@ router.route('/:id').get((req, res) => {
         res.status(200).send({ lasercutter });
       }
     }).catch((err) => {
+      logger.error(err);
       res.status(400).send({ error: 'Malformed request!', stack: err });
     });
   }
@@ -108,6 +121,7 @@ router.route('/:id').put((req, res) => {
         });
       }
     }).catch((err) => {
+      logger.error(err);
       res.status(400).send({ error: 'Malformed request!', stack: err });
     });
   }

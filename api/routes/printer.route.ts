@@ -5,13 +5,23 @@ import logger from '../logger';
 const router = express.Router();
 
 router.route('/').get((req, res) => {
-  printerCtrl.getAll().then((printers) => {
+  printerCtrl.getAll(req.query.limit, req.query.skip).then((printers) => {
     if (printers && printers.length === 0) {
       res.status(204).send();
     } else if (printers) {
       res.status(200).send({ printers });
     }
   }).catch((err) => {
+    logger.error(err);
+    res.status(500).send(err);
+  });
+});
+
+router.route('/count').get((req, res) => {
+  printerCtrl.count().then((count) => {
+    res.status(200).send({ count });
+  }).catch((err) => {
+    logger.error(err);
     res.status(500).send(err);
   });
 });
@@ -20,6 +30,7 @@ router.route('/').post((req, res) => {
   printerCtrl.create(req.body).then((printer) => {
     res.status(201).send({ printer });
   }).catch((err) => {
+    logger.error(err);
     res.status(400).send({ err: 'Malformed request!', stack: err });
   });
 });
@@ -71,6 +82,7 @@ router.route('/:id').get((req, res) => {
         res.status(200).send({ printer });
       }
     }).catch((err) => {
+      logger.error(err);
       res.status(400).send({ err: 'Malformed request!', stack: err });
     });
   }
@@ -91,6 +103,7 @@ router.route('/:id').put((req, res) => {
         });
       }
     }).catch((err) => {
+      logger.error(err);
       res.status(400).send({ err: 'Malformed request!', stack: err });
     });
   }

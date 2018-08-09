@@ -5,10 +5,25 @@ export const routes = {
             orders: {
                 root: 'orders',
                 getStatus: 'status',
-                 // TODO: not implemented yet, should be a post
-                 //  request with an object passed as a selector for mongoose
+                // TODO: not implemented yet, should be a post
+                //  request with an object passed as a selector for mongoose
                 getOrder: 'getOrder',
-                comment: 'comment'
+                comment: 'comment',
+                count: 'count',
+                search: 'search'
+            },
+            machines: {
+                root: 'machines',
+                byId: ':type/:id',
+                getAll: '',
+                machineTypes: 'types',
+                materials: 'materials',
+                laserTypes: 'laserTypes',
+                count: 'count'
+            },
+            fablabs: {
+                root: 'fablabs',
+                getById: ':id'
             }
         },
         frontend: {
@@ -22,23 +37,23 @@ export const routes = {
                 getAllOrders: '',
                 getStatus: 'status',
                 getOrder: 'getOrder' // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
+            },
+            machines: {
+                root: 'machines',
+                create: 'create',
+                update: 'update',
+                delete: 'delete',
+                getById: ':type/:id',
+                getAll: '',
+                machineTypes: 'types',
+                materials: 'materials',
+                laserTypes: 'laserTypes'
+            },
+            fablabs: {
+                root: 'fablabs',
+                getById: ':id'
             }
         },
-        machines: {
-            root: 'machines',
-            create: 'create',
-            update: 'update',
-            delete: 'delete',
-            getById: ':type/:id',
-            getAll: '',
-            machineTypes: 'types',
-            materials: 'materials',
-            laserTypes: 'laserTypes'
-        },
-        fablabs: {
-            root: 'fablabs',
-            getById: ':id'
-        }
     }
 };
 

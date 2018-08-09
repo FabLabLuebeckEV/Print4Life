@@ -33,6 +33,6 @@ const attributes = {
 };
 
 export const laserCutterSchema = mongoose.Schema(attributes);
-export const LaserCutter = mongoose.model('Lasercutter', laserCutterSchema);
+export const Lasercutter = mongoose.model('Lasercutter', laserCutterSchema);
 
-export default LaserCutter;
+export default Lasercutter;

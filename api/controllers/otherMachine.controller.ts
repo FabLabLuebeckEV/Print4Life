@@ -8,6 +8,8 @@ const machineType = 'otherMachine';
  * @apiGroup OtherMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam (Query String) limit is the limit of objects to get
+ * @apiParam (Query String) skip is the number of objects to skip
  * @apiSuccess {Array} otherMachines an array of other machine objects
  *
  * @apiSuccessExample Success-Response:
@@ -39,8 +41,14 @@ const machineType = 'otherMachine';
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 204 No-Content
  */
-function getAll () {
-  return machineService.getMachineType(machineType);
+function getAll (limit?: string, skip?: string) {
+  let l: Number;
+  let s: Number;
+  if (limit && skip) {
+    l = Number.parseInt(limit, 10);
+    s = Number.parseInt(skip, 10);
+  }
+  return machineService.getMachineType(machineType, l, s);
 }
 
 /**
@@ -129,7 +137,7 @@ function create (params) {
  * @apiGroup OtherMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiParam {id} is the id of the other machine
+ * @apiParam id is the id of the other machine
  *
  * @apiSuccess {Object} otherMachine the milling machine object
  * @apiSuccessExample Success-Response:
@@ -259,7 +267,7 @@ function deleteById (id) {
     "type" : "otherMachine",
     "__v" : 0
 }
- * @apiSuccess {Object} printer the printer object
+ * @apiSuccess {Object} otherMachine the other machine object
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
@@ -300,4 +308,24 @@ function update (id, machine) {
   return machineService.update(machineType, id, machine);
 }
 
-export default { getAll, create, get, deleteById, update };
+/**
+ * @api {get} /api/v1/machines/otherMachines/count Counts the Other Machines
+ * @apiName CountOtherMachines
+ * @apiVersion 1.0.0
+ * @apiGroup OtherMachines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess {Object} count the number of other machines
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *
+{
+    "count": 98
+}
+ *
+ */
+function count () {
+  return machineService.count(machineType);
+}
+
+export default { getAll, create, get, deleteById, update, count };

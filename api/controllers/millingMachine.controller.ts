@@ -9,6 +9,8 @@ const machineType = 'millingMachine';
  * @apiGroup MillingMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam (Query String) limit is the limit of objects to get
+ * @apiParam (Query String) skip is the number of objects to skip
  * @apiSuccess {Array} millingMachines an array of milling machine objects
  *
  * @apiSuccessExample Success-Response:
@@ -51,8 +53,14 @@ const machineType = 'millingMachine';
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 204 No-Content
  */
-function getAll () {
-  return machineService.getMachineType(machineType);
+function getAll (limit?: string, skip?: string) {
+  let l: Number;
+  let s: Number;
+  if (limit && skip) {
+    l = Number.parseInt(limit, 10);
+    s = Number.parseInt(skip, 10);
+  }
+  return machineService.getMachineType(machineType, l, s);
 }
 
 /**
@@ -151,7 +159,7 @@ function create (params) {
  * @apiGroup MillingMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiParam {id} is the id of the milling machine
+ * @apiParam id is the id of the milling machine
  *
  * @apiSuccess {Object} millingMachine the milling machine object
  * @apiSuccessExample Success-Response:
@@ -291,7 +299,7 @@ function deleteById (id) {
     "type" : "millingMachine",
     "__v" : 0
 }
- * @apiSuccess {Object} printer the printer object
+ * @apiSuccess {Object} millingMachine the milling machine object
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
@@ -334,4 +342,24 @@ function update (id, machine) {
   return machineService.update(machineType, id, machine);
 }
 
-export default { getAll, create, get, deleteById, update };
+/**
+ * @api {get} /api/v1/machines/millingMachines/count Counts the Milling Machines
+ * @apiName CountMillingMachine
+ * @apiVersion 1.0.0
+ * @apiGroup MillingMachines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess {Object} count the number of milling machines
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *
+{
+    "count": 98
+}
+ *
+ */
+function count () {
+  return machineService.count(machineType);
+}
+
+export default { getAll, create, get, deleteById, update, count };

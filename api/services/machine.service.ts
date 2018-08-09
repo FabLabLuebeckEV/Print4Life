@@ -1,32 +1,50 @@
 import { Printer } from '../models/machines/printer.model';
 import { Other } from '../models/machines/other.machine.model';
 import { MillingMachine } from '../models/machines/milling.machine.model';
-import { LaserCutter } from '../models/machines/lasercutter.model';
+import { Lasercutter } from '../models/machines/lasercutter.model';
 
 /**
  * This method gets a specific type of machine (or all) and returns a promise with the results
  * type is the type of machine to get
+ * limit is the number of items to get
+ * skip is the number of items to skip
  * @returns a promise with the results
  */
-function getMachineType (type) {
+function getMachineType (type: String, limit?: Number, skip?: Number) {
   const promises = [];
   let obj;
   switch (type) {
     case 'printer':
       obj = [];
-      promises.push(Printer.find());
+      if (limit >= 0 && skip >= 0) {
+        promises.push(Printer.find().limit(limit).skip(skip));
+      } else {
+        promises.push(Printer.find());
+      }
       break;
     case 'lasercutter':
       obj = [];
-      promises.push(LaserCutter.find());
+      if (limit >= 0 && skip >= 0) {
+        promises.push(Lasercutter.find().limit(limit).skip(skip));
+      } else {
+        promises.push(Lasercutter.find());
+      }
       break;
     case 'otherMachine':
       obj = [];
-      promises.push(Other.find());
+      if (limit >= 0 && skip >= 0) {
+        promises.push(Other.find().limit(limit).skip(skip));
+      } else {
+        promises.push(Other.find());
+      }
       break;
     case 'millingMachine':
       obj = [];
-      promises.push(MillingMachine.find());
+      if (limit >= 0 && skip >= 0) {
+        promises.push(MillingMachine.find().limit(limit).skip(skip));
+      } else {
+        promises.push(MillingMachine.find());
+      }
       break;
     default:
       obj = {
@@ -36,7 +54,7 @@ function getMachineType (type) {
         otherMachines: []
       };
       promises.push(Printer.find());
-      promises.push(LaserCutter.find());
+      promises.push(Lasercutter.find());
       promises.push(Other.find());
       promises.push(MillingMachine.find());
       break;
@@ -64,7 +82,7 @@ function getMachineType (type) {
 
 /**
  * This method creates a specific type of machine and returns a promise with the results
- * type is the type of machine to get
+ * type is the type of machine to create
  * params are the params of the machine
  * @returns a promise with the results
  */
@@ -76,7 +94,7 @@ function create (type, params) {
     case 'printer':
       return (new Printer(params)).save();
     case 'lasercutter':
-      return (new LaserCutter(params)).save();
+      return (new Lasercutter(params)).save();
     case 'otherMachine':
       return (new Other(params)).save();
     case 'millingMachine':
@@ -88,7 +106,7 @@ function create (type, params) {
 
 /**
  * This method deletes a specific type of machine by a given id and returns a promise with the success or failure
- * type is the type of machine to get
+ * type is the type of machine to delete
  * _id is the id of the machine
  * @returns a promise with the results
  */
@@ -97,7 +115,7 @@ function deleteById (type, _id) {
     case 'printer':
       return Printer.deleteOne({ _id });
     case 'lasercutter':
-      return LaserCutter.deleteOne({ _id });
+      return Lasercutter.deleteOne({ _id });
     case 'otherMachine':
       return Other.deleteOne({ _id });
     case 'millingMachine':
@@ -118,7 +136,7 @@ function get (type, _id) {
     case 'printer':
       return Printer.findOne({ _id });
     case 'lasercutter':
-      return LaserCutter.findOne({ _id });
+      return Lasercutter.findOne({ _id });
     case 'otherMachine':
       return Other.findOne({ _id });
     case 'millingMachine':
@@ -130,7 +148,7 @@ function get (type, _id) {
 
 /**
  * This method updates a specific type of machine by a given id and returns a promise with the result
- * type is the type of machine to get
+ * type is the type of machine to update
  * _id is the id of the machine
  * machine is the machine with updated fields
  * @returns a promise with the result
@@ -144,10 +162,10 @@ function update (type, _id, machine) {
         machine,
         { upsert: true }).then(() => Printer.findOne({ _id }));
     case 'lasercutter':
-      return LaserCutter.update(
+      return Lasercutter.update(
         { _id },
         machine,
-        { upsert: true }).then(() => LaserCutter.findOne({ _id }));
+        { upsert: true }).then(() => Lasercutter.findOne({ _id }));
     case 'otherMachine':
       return Other.update(
         { _id },
@@ -163,10 +181,31 @@ function update (type, _id, machine) {
   }
 }
 
+/**
+ * This method counts a specific type of machine returns a promise with the result
+ * type is the type of machine to count
+ * @returns a promise with the result
+ */
+function count (type) {
+  switch (type) {
+    case 'printer':
+      return Printer.count();
+    case 'lasercutter':
+      return Lasercutter.count();
+    case 'otherMachine':
+      return Other.count();
+    case 'millingMachine':
+      return MillingMachine.count();
+    default:
+      return Promise.reject('Machine Type not supported!');
+  }
+}
+
 export default {
   getMachineType,
   create,
   deleteById,
   get,
-  update
+  update,
+  count
 };

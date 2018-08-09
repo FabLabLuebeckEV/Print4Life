@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { faArrowLeft, faWrench, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faWrench, faTrashAlt, faPlus, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,8 @@ export class ConfigService {
       back: faArrowLeft,
       edit: faWrench,
       delete: faTrashAlt,
-      add: faPlus
+      add: faPlus,
+      forward: faArrowRight
     },
     spinnerConfig: {
       bdColor: 'rgba(51, 51, 51, 0.8)',

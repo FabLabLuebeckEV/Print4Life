@@ -9,6 +9,7 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
 import { ConfigService } from '../../config/config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { routes } from '../../config/routes';
+import { Icon } from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-machine-list',
@@ -22,9 +23,20 @@ export class MachineListComponent implements OnInit {
   selectedMachineTypes: Array<String>;
   listView: Boolean;
   loadingMachineTypes: Boolean;
-  plusIcon: any;
+  plusIcon: Icon;
+  jumpArrow: Icon;
   newLink: String;
   spinnerConfig: Object = {};
+  paginationObj: any = {
+    page: 1,
+    totalItems: 0,
+    perPage: 20,
+    maxSize: 10,
+    boundaryLinks: true,
+    rotate: true,
+    maxPages: 0,
+    jumpToPage: undefined
+  };
 
   constructor(private machineService: MachineService,
     private fablabService: FablabService, private router: Router,
@@ -32,17 +44,22 @@ export class MachineListComponent implements OnInit {
     private spinner: NgxSpinnerService, private configService: ConfigService) {
     this.config = this.configService.getConfig();
     this.plusIcon = this.config.icons.add;
+    this.jumpArrow = this.config.icons.forward;
     this.spinnerConfig = { 'loadingText': 'Loading Machines', ...this.config.spinnerConfig };
-    this.newLink = `./${routes.paths.machines.create}`;
-    router.events.subscribe(() => {
-      const route = location.path();
-      if (!this.listView && route === `/${routes.paths.machines.root}`) {
+    this.newLink = `./${routes.paths.frontend.machines.create}`;
+    this.router.events.subscribe(() => {
+      const route = this.location.path();
+      if (!this.listView && route === `/${routes.paths.frontend.machines.root}`) {
         this.listView = true;
         this.ngOnInit();
-      } else if (route !== routes.paths.machines.root) {
+      } else if (route !== routes.paths.frontend.machines.root) {
         this.listView = false;
       }
     });
+  }
+
+  async pageChanged() {
+    this.displayedMachines = await this._loadMachinesByTypes(this.selectedMachineTypes);
   }
 
   async ngOnInit() {
@@ -102,7 +119,7 @@ export class MachineListComponent implements OnInit {
 
 
   private async _init() {
-    const arr = await this._loadMachinesByTypes(this.machineTypes);
+    const arr = await this._loadMachinesByTypes(this.selectedMachineTypes);
     this.displayedMachines = JSON.parse(JSON.stringify(arr));
   }
 
@@ -110,14 +127,28 @@ export class MachineListComponent implements OnInit {
     this.spinner.show();
     const machines = [];
     const arr = [];
+    let countObj;
+    let totalItems = 0;
+    const perPage: number = Number.parseInt((this.paginationObj.perPage / machineTypes.length).toFixed(0));
 
     for (let i = 0; i < machineTypes.length; i++) {
       machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
     }
 
     for (const type of machineTypes) {
-      const resMach = await this.machineService.getAll(type);
-      machines.push(resMach[`${type}s`]);
+      countObj = await this.machineService.count(type);
+      totalItems += countObj.count;
+    }
+
+    if (totalItems !== this.paginationObj.totalItems) {
+      this.paginationObj.totalItems = totalItems;
+    }
+
+    for (const type of machineTypes) {
+      const resMach = await this.machineService.getAll(type, perPage, (this.paginationObj.page - 1) * perPage);
+      if (resMach) {
+        machines.push(resMach[`${type}s`]);
+      }
     }
 
     for (const type of Object.keys(machines)) {
@@ -133,7 +164,7 @@ export class MachineListComponent implements OnInit {
         item.obj['Fablab'] = { label: fablab.name };
         item.obj['Description'] = { label: '' };
         item.button1.label = 'Update';
-        item.button1.href = `./${routes.paths.machines.update}/${elem.type}s/${elem._id}`;
+        item.button1.href = `./${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
         item.button1.class = 'btn btn-primary spacing';
         item.button1.icon = this.config.icons.edit;
         item.button2.label = 'Delete';
@@ -145,5 +176,10 @@ export class MachineListComponent implements OnInit {
     }
     this.spinner.hide();
     return arr;
+  }
+
+  private _decimalCount(n: number) {
+    if (Math.floor(n.valueOf()) === n.valueOf()) { return 0; }
+    return n.toString().split('.')[1].length || 0;
   }
 }
