@@ -232,6 +232,13 @@ async function getStatus () {
   });
 }
 
+async function createComment (id, comment) {
+  const order = await getOrderById(id);
+  order.comments.push(comment);
+  await order.save();
+  return comment;
+}
+
 function rmDbVars (obj) {
   delete obj.__v;
   delete obj._id;
@@ -244,5 +251,6 @@ export default {
   updateOrder,
   getOrderById,
   deleteOrder,
-  getStatus
+  getStatus,
+  createComment
 };

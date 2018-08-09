@@ -34,4 +34,8 @@ export class OrderService {
   public getStatus(): Promise<any> {
     return this.http.get(`${this.p}/${routes.paths.backend.orders.getStatus}`).toPromise();
   }
+
+  public createComment(id, comment): Promise<any> {
+    return this.http.post(`${this.p}/${id}/${routes.paths.backend.orders.comment}`, comment).toPromise();
+  }
 }
