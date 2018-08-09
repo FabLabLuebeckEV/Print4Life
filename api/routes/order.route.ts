@@ -1,10 +1,11 @@
 import * as express from 'express';
 import orderCtrl from '../controllers/order.controller';
+import logger from '../logger';
 
 const router = express.Router();
 
 router.route('/').get((req, res) => {
-  orderCtrl.getOrders().then((orders) => {
+  orderCtrl.getOrders(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
       res.status(204).send({ orders });
     } else {
@@ -12,6 +13,27 @@ router.route('/').get((req, res) => {
     }
   }).catch((err) => {
     res.status(500).send({ error: 'There aren\'t any orders yet.', stack: err });
+  });
+});
+
+router.route('/search').post((req, res) => {
+  orderCtrl.getOrders(req.body.query, req.body.limit, req.body.skip).then((orders) => {
+    if (orders.length === 0) {
+      res.status(204).send({ orders });
+    } else {
+      res.status(200).send({ orders });
+    }
+  }).catch((err) => {
+    res.status(500).send({ error: 'There aren\'t any orders yet.', stack: err });
+  });
+});
+
+router.route('/count').post((req, res) => {
+  orderCtrl.count(req.body.query).then((count) => {
+    res.status(200).send({ count });
+  }).catch((err) => {
+    logger.error(err);
+    res.status(500).send(err);
   });
 });
 

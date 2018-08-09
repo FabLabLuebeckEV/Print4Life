@@ -1,5 +1,6 @@
 import * as uuid from 'uuid/v4';
 import * as mongoose from 'mongoose';
+import { isNumber } from 'util';
 
 import { Order, orderSchema } from '../models/order.model';
 
@@ -10,6 +11,8 @@ import { Order, orderSchema } from '../models/order.model';
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam (Query String) limit is the limit of objects to get
+ * @apiParam (Query String) skip is the number of objects to skip
  * @apiSuccess {Array} orders an array of order objects
  *
  * @apiSuccessExample Success-Response:
@@ -40,8 +43,18 @@ import { Order, orderSchema } from '../models/order.model';
         "orders": []
     }
 */
-function getOrders () {
-  return Order.find();
+function getOrders (query?: any, limit?: any, skip?: any) {
+  let l: Number;
+  let s: Number;
+  let promise;
+  if ((limit && skip) || (isNumber(limit) && isNumber(skip))) {
+    l = Number.parseInt(limit, 10);
+    s = Number.parseInt(skip, 10);
+    query ? promise = Order.find(query).limit(l).skip(s) : promise = Order.find(query).limit(l).skip(s);
+  } else {
+    query ? promise = Order.find(query) : promise = Order.find();
+  }
+  return promise;
 }
 
 /**
@@ -111,7 +124,7 @@ function getOrderById (id) {
 function createOrder (order) {
   order.token = uuid();
   order.created = new Date();
-  return Order(rmDbVars(order)).save();
+  return Order(_rmDbVars(order)).save();
 }
 
 /**
@@ -241,7 +254,27 @@ async function createComment (id, comment) {
   return comment;
 }
 
-function rmDbVars (obj) {
+/**
+* @api {get} /api/v1/orders/count Counts the Orders
+* @apiName CountOrders
+* @apiVersion 1.0.0
+* @apiGroup Orders
+* @apiHeader (Needed Request Headers) {String} Content-Type application/json
+*
+* @apiSuccess {Object} count the number of orders
+* @apiSuccessExample Success-Response:
+*    HTTP/1.1 200 OK
+*
+{
+   "count": 98
+}
+*
+*/
+function count (query) {
+  return Order.count(query);
+}
+
+function _rmDbVars (obj) {
   delete obj.__v;
   delete obj._id;
   return obj;
@@ -254,5 +287,6 @@ export default {
   getOrderById,
   deleteOrder,
   getStatus,
-  createComment
+  createComment,
+  count
 };
