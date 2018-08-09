@@ -25,6 +25,32 @@ describe('Order Controller', () => {
       });
   });
 
+  it('gets orders (limit & skip)', (done) => {
+    request.get(`${endpoint}orders/?limit=5&skip=5`, { headers: { 'content-type': 'application/json' } },
+      (error, response) => {
+        const orders = JSON.parse(response.body).orders;
+        expect(response.statusCode).toEqual(200);
+        expect(orders).toBeDefined();
+        expect(orders.length).toBeGreaterThan(-1);
+        expect(orders.length).toBeLessThan(6);
+        done();
+      });
+  });
+
+  it('counts orders', (done) => {
+    request.post(`${endpoint}orders//count`, {
+      headers: { 'content-type': 'application/json' },
+      json: true,
+      body: { $or: [{ status: 'new' }, { status: 'deleted' }] }
+    }, (error, response) => {
+      const count = response.body.count;
+      expect(response.statusCode).toEqual(200);
+      expect(count).toBeDefined();
+      expect(count).toBeGreaterThan(-1);
+      done();
+    });
+  });
+
   it('create order', (done) => {
     const testBody = JSON.parse(JSON.stringify(testOrder));
     request({

@@ -255,12 +255,26 @@ async function createComment (id, comment) {
 }
 
 /**
-* @api {get} /api/v1/orders/count Counts the Orders
+* @api {post} /api/v1/orders/count Counts the Orders
 * @apiName CountOrders
 * @apiVersion 1.0.0
 * @apiGroup Orders
 * @apiHeader (Needed Request Headers) {String} Content-Type application/json
 *
+* @apiParam query is the query object for mongoose
+* @apiParamExample {json} Request-Example:
+*
+{
+  "$or":
+    [
+      {
+        "status": "new"
+      },
+      {
+        "status": "deleted"
+      }
+    ]
+}
 * @apiSuccess {Object} count the number of orders
 * @apiSuccessExample Success-Response:
 *    HTTP/1.1 200 OK
