@@ -6,6 +6,7 @@ import { Routes } from '@angular/router';
 import { CreateOrderComponent } from '../orders/create-order/create-order.component';
 import { MachineDetailComponent } from '../machines/machine-detail/machine-detail.component';
 import { routes } from './routes';
+import { OrderDetailComponent } from '../orders/order-detail/order-detail.component';
 
 export const appRoutes: Routes = [
     {
@@ -23,7 +24,8 @@ export const appRoutes: Routes = [
         component: OrderListComponent,
         children: [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent },
-            { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent }
+            { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent },
+            { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent }
         ]
     },
     {

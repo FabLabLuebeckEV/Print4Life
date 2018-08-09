@@ -23,6 +23,7 @@ import { MessageModalComponent } from './components/message-modal/message-modal.
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
 import { ConfigService } from './config/config.service';
+import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { ConfigService } from './config/config.service';
         MachineFormComponent,
         CreateOrderComponent,
         MessageModalComponent,
-        MachineDetailComponent
+        MachineDetailComponent,
+        OrderDetailComponent
     ],
     imports: [
         BrowserModule,
