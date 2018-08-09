@@ -9,12 +9,12 @@ import { routes } from './routes';
 
 export const appRoutes: Routes = [
     {
-        path: routes.paths.machines.root,
+        path: routes.paths.frontend.machines.root,
         component: MachineListComponent,
         children: [
-            { path: routes.paths.machines.create, component: MachineFormComponent },
-            { path: `${routes.paths.machines.update}/:type/:id`, component: MachineFormComponent },
-            { path: `${routes.paths.machines.getById}`, component: MachineDetailComponent }
+            { path: routes.paths.frontend.machines.create, component: MachineFormComponent },
+            { path: `${routes.paths.frontend.machines.update}/:type/:id`, component: MachineFormComponent },
+            { path: `${routes.paths.frontend.machines.getById}`, component: MachineDetailComponent }
         ]
     },
 

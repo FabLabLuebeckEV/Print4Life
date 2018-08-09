@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { routes } from '../config/routes';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MachineService {
-  private config: any;
   private rootPath: String;
 
   constructor(private http: HttpClient) {
-    this.rootPath = routes.backendUrl + '/' + routes.paths.machines.root;
+    this.rootPath = routes.backendUrl + '/' + routes.paths.backend.machines.root;
   }
 
   public _uncamelCase(str: String): String {
@@ -38,8 +37,19 @@ export class MachineService {
     return machine.trim();
   }
 
-  public getAll(machineType) {
-    return this.http.get(`${this.rootPath}/${machineType}s`).toPromise();
+  public getAll(machineType, limit?, skip?) {
+    if (limit >= 0 && skip >= 0) {
+      let params = new HttpParams();
+      params = params.append('limit', limit);
+      params = params.append('skip', skip);
+      return this.http.get(`${this.rootPath}/${machineType}s`, { params: params }).toPromise();
+    } else {
+      return this.http.get(`${this.rootPath}/${machineType}s`).toPromise();
+    }
+  }
+
+  public count(machineType) {
+    return this.http.get(`${this.rootPath}/${machineType}s/${routes.paths.backend.machines.count}`).toPromise();
   }
 
   public create(machineType, obj) {
@@ -55,15 +65,15 @@ export class MachineService {
   }
 
   public getAllMachineTypes(): Promise<any> {
-    return this.http.get(`${this.rootPath}/${routes.paths.machines.machineTypes}`).toPromise();
+    return this.http.get(`${this.rootPath}/${routes.paths.backend.machines.machineTypes}`).toPromise();
   }
 
   public getMaterialsByMachineType(machineType): Promise<any> {
-    return this.http.get(`${this.rootPath}/${routes.paths.machines.materials}/${machineType}`).toPromise();
+    return this.http.get(`${this.rootPath}/${routes.paths.backend.machines.materials}/${machineType}`).toPromise();
   }
 
   public getLaserTypes(): Promise<any> {
-    return this.http.get(`${this.rootPath}/${routes.paths.machines.laserTypes}`).toPromise();
+    return this.http.get(`${this.rootPath}/${routes.paths.backend.machines.laserTypes}`).toPromise();
   }
 
   public deleteMachine(machineType, id) {

@@ -17,7 +17,7 @@ export class MachineDetailComponent implements OnInit {
   objectKeys = Object.keys;
   machine: any;
   machineProps: Object = {
-    title: 'Maschine Data',
+    title: 'Machine Data',
     props: []
   };
   machineSubObjects: Array<Object> = [];
@@ -29,7 +29,7 @@ export class MachineDetailComponent implements OnInit {
     private configService: ConfigService) {
     this.config = this.configService.getConfig();
     this.backArrow = this.config.icons.back;
-    this.backLink = `/${routes.paths.machines.root}`;
+    this.backLink = `/${routes.paths.frontend.machines.root}`;
     this.route.params.subscribe(params => {
       if (params.type && params.id) {
         const type = params.type.substr(0, params.type.length - 1);

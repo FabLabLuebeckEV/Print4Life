@@ -8,7 +8,7 @@ export class FablabService {
   private rootPath: String;
 
   constructor(private http: HttpClient) {
-    this.rootPath = routes.backendUrl + '/' + routes.paths.fablabs.root;
+    this.rootPath = routes.backendUrl + '/' + routes.paths.backend.fablabs.root;
   }
 
   public getFablab(id): Promise<any> {

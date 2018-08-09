@@ -6,6 +6,19 @@ export const routes = {
                 root: 'orders',
                 getStatus: 'status',
                 getOrder: 'getOrder' // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
+            },
+            machines: {
+                root: 'machines',
+                byId: ':type/:id',
+                getAll: '',
+                machineTypes: 'types',
+                materials: 'materials',
+                laserTypes: 'laserTypes',
+                count: 'count'
+            },
+            fablabs: {
+                root: 'fablabs',
+                getById: ':id'
             }
         },
         frontend: {
@@ -18,23 +31,23 @@ export const routes = {
                 getAllOrders: '',
                 getStatus: 'status',
                 getOrder: 'getOrder' // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
+            },
+            machines: {
+                root: 'machines',
+                create: 'create',
+                update: 'update',
+                delete: 'delete',
+                getById: ':type/:id',
+                getAll: '',
+                machineTypes: 'types',
+                materials: 'materials',
+                laserTypes: 'laserTypes'
+            },
+            fablabs: {
+                root: 'fablabs',
+                getById: ':id'
             }
         },
-        machines: {
-            root: 'machines',
-            create: 'create',
-            update: 'update',
-            delete: 'delete',
-            getById: ':type/:id',
-            getAll: '',
-            machineTypes: 'types',
-            materials: 'materials',
-            laserTypes: 'laserTypes'
-        },
-        fablabs: {
-            root: 'fablabs',
-            getById: ':id'
-        }
     }
 };
 
