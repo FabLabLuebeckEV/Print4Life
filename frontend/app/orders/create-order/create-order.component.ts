@@ -28,7 +28,6 @@ export class CreateOrderComponent implements OnInit {
   selectedType: String;
   editView: Boolean = false;
   routeChanged: Boolean;
-  submitted: Boolean = false;
   order: Order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   fablabs: Array<any>;
   materialsArr: Array<Material>;
@@ -110,7 +109,6 @@ export class CreateOrderComponent implements OnInit {
             });
             this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.orderId}`]);
           });
-        this.submitted = true;
       }
     }).catch((err) => {
       let errorMsg = `Something went wrong while adding the new comment.`;
@@ -128,7 +126,6 @@ export class CreateOrderComponent implements OnInit {
       this.orderService.updateOrder(this.order).then((result) => {
         if (result) {
           this._openSuccessMsg();
-          this.submitted = true;
         } else {
           this._openErrMsg(undefined);
         }
@@ -139,7 +136,6 @@ export class CreateOrderComponent implements OnInit {
       this.orderService.createOrder(this.order).then((result) => {
         if (result) {
           this._openSuccessMsg();
-          this.submitted = true;
         } else {
           this._openErrMsg(undefined);
         }
