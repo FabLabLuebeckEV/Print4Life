@@ -15,10 +15,6 @@ export class OrderDetailComponent implements OnInit {
   backArrow: any;
   backLink: any;
   order: Order = new Order(undefined, undefined, [], undefined, undefined, [], undefined, undefined);
-  orderPops: Object = {
-    title: 'Order Details',
-    props: []
-  };
 
   constructor(
     private route: ActivatedRoute,
