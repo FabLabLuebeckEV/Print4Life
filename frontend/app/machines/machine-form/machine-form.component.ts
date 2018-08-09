@@ -35,7 +35,7 @@ export class MachineFormComponent implements OnInit {
     private modalService: NgbModal, private configService: ConfigService) {
     this.config = this.configService.getConfig();
     this.backArrow = this.config.icons.back;
-    this.backLink = `/${routes.paths.machines.root}`;
+    this.backLink = `/${routes.paths.frontend.machines.root}`;
     this.route.params.subscribe(params => {
       if (params.type && params.id) {
         const type = params.type.substr(0, params.type.length - 1);
@@ -103,8 +103,8 @@ export class MachineFormComponent implements OnInit {
     this.editView ? msgHeader = 'Machine updated successfully' : msgHeader = 'Machine created successfully';
     this.editView ? msg = 'Updating the machine was successful!' : msg = 'The creation of a new machine was successful!';
     this._openMsgModal(msgHeader, 'modal-header header-success',
-      msg, okButton, undefined).result.then((result) => {
-        this.router.navigate([`/${routes.paths.machines.root}`]);
+      msg, okButton, undefined).result.then(() => {
+        this.router.navigate([`/${routes.paths.frontend.machines.root}`]);
       });
   }
 

@@ -5,13 +5,23 @@ import logger from '../logger';
 const router = express.Router();
 
 router.route('/').get((req, res) => {
-  otherMachineCtrl.getAll().then((otherMachines) => {
+  otherMachineCtrl.getAll(req.query.limit, req.query.skip).then((otherMachines) => {
     if (otherMachines && otherMachines.length === 0) {
       res.status(204).send();
     } else if (otherMachines) {
       res.status(200).send({ otherMachines });
     }
   }).catch((err) => {
+    logger.error(err);
+    res.status(500).send(err);
+  });
+});
+
+router.route('/count').get((req, res) => {
+  otherMachineCtrl.count().then((count) => {
+    res.status(200).send({ count });
+  }).catch((err) => {
+    logger.error(err);
     res.status(500).send(err);
   });
 });
@@ -20,6 +30,7 @@ router.route('/').post((req, res) => {
   otherMachineCtrl.create(req.body).then((otherMachine) => {
     res.status(201).send({ otherMachine });
   }).catch((err) => {
+    logger.error(err);
     res.status(400).send({ error: 'Malformed request!', stack: err });
   });
 });
@@ -76,6 +87,7 @@ router.route('/:id').get((req, res) => {
         res.status(200).send({ otherMachine });
       }
     }).catch((err) => {
+      logger.error(err);
       res.status(400).send({ error: 'Malformed request!', stack: err });
     });
   }
@@ -96,6 +108,7 @@ router.route('/:id').put((req, res) => {
         });
       }
     }).catch((err) => {
+      logger.error(err);
       res.status(400).send({ error: 'Malformed request!', stack: err });
     });
   }

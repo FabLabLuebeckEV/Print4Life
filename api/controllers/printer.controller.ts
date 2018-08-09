@@ -9,6 +9,8 @@ const machineType = 'printer';
  * @apiGroup Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam (Query String) limit is the limit of objects to get
+ * @apiParam (Query String) skip is the number of objects to skip
  * @apiSuccess {Array} printers an array of printer objects
  *
  * @apiSuccessExample Success-Response:
@@ -70,8 +72,14 @@ const machineType = 'printer';
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 204 No-Content
  */
-function getAll () {
-  return machineService.getMachineType(machineType);
+function getAll (limit?: string, skip?: string) {
+  let l: Number;
+  let s: Number;
+  if (limit && skip) {
+    l = Number.parseInt(limit, 10);
+    s = Number.parseInt(skip, 10);
+  }
+  return machineService.getMachineType(machineType, l, s);
 }
 
 /**
@@ -269,7 +277,7 @@ function deleteById (id) {
  * @apiGroup Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiParam {id} is the id of the printer
+ * @apiParam id is the id of the printer
  *
  * @apiSuccess {Object} printer the printer object
  * @apiSuccessExample Success-Response:
@@ -429,5 +437,25 @@ function update (id, machine) {
   return machineService.update(machineType, id, machine);
 }
 
+/**
+ * @api {get} /api/v1/machines/printers/count Counts the Printers
+ * @apiName CountPrinters
+ * @apiVersion 1.0.0
+ * @apiGroup Printers
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess {Object} count the number of printers
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *
+{
+    "count": 98
+}
+ *
+ */
+function count () {
+  return machineService.count(machineType);
+}
 
-export default { getAll, create, deleteById, get, update };
+
+export default { getAll, create, deleteById, get, update, count };
