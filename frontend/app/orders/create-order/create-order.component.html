@@ -16,6 +16,15 @@
     <form (ngSubmit)="onSubmit()" #createOrderForm="ngForm">
       <div class="form-group row">
         <div class="col-md-12">
+          <label for="projectname">Projectname</label>
+          <input type="text" class="form-control" id="projectname" required [(ngModel)]="order.projectname" name="projectname" #projectname="ngModel">
+          <div [hidden]="projectname.valid || projectname.pristine" class="alert alert-danger">
+              Projectname is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
           <label for="owner">Owner</label>
           <input type="text" class="form-control" id="owner" required [(ngModel)]="order.owner" name="owner" #owner="ngModel">
           <div [hidden]="owner.valid || owner.pristine" class="alert alert-danger">
