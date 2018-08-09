@@ -28,6 +28,10 @@ const attributes = {
     type: String,
     unique: true,
     required: true
+  },
+  created: {
+    type: Date,
+    required: true
   }
 };
 
