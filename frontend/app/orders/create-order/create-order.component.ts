@@ -28,7 +28,7 @@ export class CreateOrderComponent implements OnInit {
   selectedType: String;
   editView: Boolean = false;
   routeChanged: Boolean;
-  order: Order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+  order: Order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   fablabs: Array<any>;
   materialsArr: Array<Material>;
   loadingFablabs: Boolean;

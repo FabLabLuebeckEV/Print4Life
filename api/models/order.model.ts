@@ -3,6 +3,10 @@ import { commentSchema } from './comment.model';
 
 const attributes = {
   comments: [commentSchema],
+  projectname: {
+    type: String,
+    required: true
+  },
   editor: {
     type: String,
   }, // TODO: add user model
@@ -23,6 +27,10 @@ const attributes = {
   token: {
     type: String,
     unique: true,
+    required: true
+  },
+  created: {
+    type: Date,
     required: true
   }
 };

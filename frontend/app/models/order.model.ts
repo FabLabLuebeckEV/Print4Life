@@ -9,6 +9,7 @@ export class Comment {
 export class Order {
     constructor(
         public _id: String,
+        public projectname: String,
         public comments: Array<Comment>,
         public editor: String,
         public owner: String,
