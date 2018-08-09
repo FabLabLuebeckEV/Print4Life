@@ -40,7 +40,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('gets printers', (done) => {
+  it('gets printers (limit & skip)', (done) => {
     request.get(`${endpoint}?limit=5&skip=5`, {
       headers: { 'content-type': 'application/json' },
       json: true

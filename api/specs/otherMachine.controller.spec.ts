@@ -28,7 +28,7 @@ describe('Other Machine Controller', () => {
     });
   });
 
-  it('gets other machines', (done) => {
+  it('gets other machines (limit & skip)', (done) => {
     request.get(`${endpoint}?limit=5&skip=5`, {
       headers: { 'content-type': 'application/json' },
       json: true

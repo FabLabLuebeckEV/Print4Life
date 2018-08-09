@@ -35,7 +35,7 @@ describe('Lasercutter Controller', () => {
     });
   });
 
-  it('gets lasercutters', (done) => {
+  it('gets lasercutters (limit & skip)', (done) => {
     request.get(`${endpoint}?limit=5&skip=5`, {
       headers: { 'content-type': 'application/json' },
       json: true
