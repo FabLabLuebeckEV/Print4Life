@@ -14,8 +14,8 @@
   "scripts": {
     "precommit": "npm run build && npm run test-local && npm run apidocs",
     "apidocs": "apidoc -i api -o docs/api",
-    "deploy": "npm run build && npm run api-serve",
-    "build": "ng build --prod && tsc && npm run lint",
+    "deploy": "ng build --prod && tsc && npm run lint",
+    "build": "ng build && tsc && tsc && npm run lint",
     "test": "npm run ng-test && npm run api-test",
     "test-local": "npm run ng-test && npm run api-test-local",
     "serve": "concurrently --kill-others \"npm run api-serve\" \"npm run ng-serve\"",
@@ -34,8 +34,7 @@
     "ng-test": "ng test --watch=false"
   },
   "keywords": [],
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Rene Kremer",
       "email": "renejon90@googlemail.com"
     },

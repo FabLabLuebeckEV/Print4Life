@@ -10,7 +10,7 @@ stages:
   - test
   - deploy
 
-build:
+build_dev:
   stage: build
   artifacts:
     paths:
@@ -19,6 +19,21 @@ build:
   script:
     - npm install
     - npm run build
+  except: 
+    - master
+  
+build_prod:
+  stage: build
+  artifacts:
+    paths:
+    - ./
+    expire_in: 2h
+  script:
+    - npm install
+    - npm run deploy
+  only: 
+    - master
+    - staging
 
 test_build_api_docs:
   stage: apidocs
@@ -51,6 +66,10 @@ test:
     
 deploy:
   stage: deploy
+  environment:
+    name: staging
+    url: $SERVER_ADDRESS
+  when: manual
   only:
    - staging
   before_script:
@@ -64,5 +83,5 @@ deploy:
   script:
    - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "rm -rf /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && mkdir /home/$RUNNER_USERNAME/apps/$PROJECT_NAME"
    - rsync -rav -e ssh --exclude='.git/' --exclude='.gitlab-ci.yml' --exclude='node_modules' --delete-excluded ./ $RUNNER_USERNAME@$SERVER_ADDRESS:/home/$RUNNER_USERNAME/apps/$PROJECT_NAME
-   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && npm run build && rm -rf /var/www/html/* && cp -r dist/* /var/www/html"
-   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /var/www/html && pm2 start npm --name \"$PROJECT_NAME\" -- run api-serve"
+   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && npm run build && rm -rf /var/www/html/* && cp .htaccess dist/.htaccess && cp -r dist/* /var/www/html"
+   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 stop $PROJECT_NAME && pm2 start npm --name \"$PROJECT_NAME\" -- run api-serve"
