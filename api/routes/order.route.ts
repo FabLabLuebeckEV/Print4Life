@@ -1,6 +1,7 @@
 import * as express from 'express';
 import orderCtrl from '../controllers/order.controller';
 import logger from '../logger';
+import validatorService from '../services/validator.service';
 
 const router = express.Router();
 
@@ -8,11 +9,14 @@ router.route('/').get((req, res) => {
   orderCtrl.getOrders(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
       res.status(204).send({ orders });
+    } else if (req.query.limit && req.query.skip) {
+      res.status(206).send({ orders });
     } else {
       res.status(200).send({ orders });
     }
   }).catch((err) => {
-    res.status(500).send({ error: 'There aren\'t any orders yet.', stack: err });
+    logger.error({ error: 'Error while trying to get all orders!', stack: err });
+    res.status(500).send({ error: 'Error while trying to get all orders!', stack: err });
   });
 });
 
@@ -20,11 +24,20 @@ router.route('/search').post((req, res) => {
   orderCtrl.getOrders(req.body.query, req.body.limit, req.body.skip).then((orders) => {
     if (orders.length === 0) {
       res.status(204).send({ orders });
+    } else if (req.body.limit && req.body.skip) {
+      res.status(206).send({ orders });
     } else {
       res.status(200).send({ orders });
     }
   }).catch((err) => {
-    res.status(500).send({ error: 'There aren\'t any orders yet.', stack: err });
+    logger.error({
+      error: `Error while trying to search for a specific order with query: ${req.body.query}`,
+      stack: err
+    });
+    res.status(500).send({
+      error: `Error while trying to search for a specific order with query: ${req.body.query}`,
+      stack: err
+    });
   });
 });
 
@@ -32,8 +45,8 @@ router.route('/count').post((req, res) => {
   orderCtrl.count(req.body.query).then((count) => {
     res.status(200).send({ count });
   }).catch((err) => {
-    logger.error(err);
-    res.status(500).send(err);
+    logger.error({ error: 'Error while counting orders!', err });
+    res.status(500).send({ error: 'Error while counting orders!', err });
   });
 });
 
@@ -41,48 +54,88 @@ router.route('/').post((req, res) => {
   orderCtrl.createOrder(req.body).then((order) => {
     res.status(201).send({ order });
   }).catch((err) => {
+    logger.error({ error: 'Malformed order, one or more parameters wrong or missing', stack: err });
     res.status(400).send({ error: 'Malformed order, one or more parameters wrong or missing', stack: err });
   });
 });
 
 router.route('/:id').put((req, res) => {
-  orderCtrl.updateOrder(req.body).then((order) => {
-    res.status(200).send({ order });
-  }).catch((err) => {
-    res.status(400).send({ error: 'Order not found or malformed update.', stack: err });
-  });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    orderCtrl.updateOrder(req.body).then((order) => {
+      res.status(200).send({ order });
+    }).catch((err) => {
+      logger.error({ error: 'Malformed update.', stack: err });
+      res.status(400).send({ error: 'Malformed update.', stack: err });
+    });
+  }
 });
 
 router.route('/:id').delete((req, res) => {
-  orderCtrl.deleteOrder(req.params.id).then((order) => {
-    res.status(200).send({ order });
-  }).catch((err) => {
-    res.status(400).send({ error: 'Order not found.', stack: err });
-  });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    orderCtrl.deleteOrder(req.params.id).then((order) => {
+      res.status(200).send({ order });
+    }).catch((err) => {
+      logger.error({ error: 'Malformed Request!', stack: err });
+      res.status(400).send({ error: 'Malformed Request!', stack: err });
+    });
+  }
 });
 
 router.route('/status/').get((req, res) => {
   orderCtrl.getStatus().then((status) => {
-    res.status(200).send({ status });
+    if (!status) {
+      res.status(204).send();
+    } else {
+      res.status(200).send({ status });
+    }
   }).catch((err) => {
-    res.status(500).send({ error: 'Couldn\'t find any valid status.', stack: err });
+    logger.error({ error: 'Error while trying to get all valid status!', stack: err });
+    res.status(500).send({ error: 'Error while trying to get all valid status!', stack: err });
   });
 });
 
 router.route('/:id/comment').post((req, res) => {
-  orderCtrl.createComment(req.params.id, { timestamp: new Date(), ...req.body }).then((comment) => {
-    res.status(201).send({ comment });
-  }).catch((err) => {
-    res.status(400).send({ error: 'Could not add comment to order.', stack: err });
-  });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    orderCtrl.createComment(req.params.id, { timestamp: new Date(), ...req.body }).then((comment) => {
+      if (!comment) {
+        logger.error({ error: `Could not find any Order with id ${req.params.id}` });
+        res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
+      } else {
+        res.status(201).send({ comment });
+      }
+    }).catch((err) => {
+      logger.error({ error: 'Malformed Request! Could not add comment to order.', stack: err });
+      res.status(400).send({ error: 'Malformed Request! Could not add comment to order.', stack: err });
+    });
+  }
 });
 
 router.route('/:id').get((req, res) => {
-  orderCtrl.getOrderById(req.params.id).then((order) => {
-    res.status(200).send({ order });
-  }).catch((err) => {
-    res.status(400).send({ error: 'Could not find order.', stack: err });
-  });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    orderCtrl.getOrderById(req.params.id).then((order) => {
+      if (!order) {
+        logger.error({ error: `Could not find any Order with id ${req.params.id}` });
+        res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
+      } else {
+        res.status(200).send({ order });
+      }
+    }).catch((err) => {
+      logger.error({ error: `Error while trying to get Order with id ${req.params.id}`, stack: err });
+      res.status(500).send({ error: `Error while trying to get Order with id ${req.params.id}`, stack: err });
+    });
+  }
 });
 
 export default router;

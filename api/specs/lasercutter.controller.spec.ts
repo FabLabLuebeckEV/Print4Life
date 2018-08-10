@@ -42,7 +42,7 @@ describe('Lasercutter Controller', () => {
   //     json: true
   //   }, (error, response) => {
   //     const lasercutters = response.body.lasercutters;
-  //     expect(response.statusCode).toEqual(200);
+  //     expect(response.statusCode).toEqual(206);
   //     expect(lasercutters).toBeDefined();
   //     expect(lasercutters.length).toBeGreaterThan(-1);
   //     expect(lasercutters.length).toBeLessThan(6);

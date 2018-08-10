@@ -47,7 +47,7 @@ describe('Printer Controller', () => {
   //     json: true
   //   }, (error, response) => {
   //     const printers = response.body.printers;
-  //     expect(response.statusCode).toEqual(200);
+  //     expect(response.statusCode).toEqual(206);
   //     expect(printers).toBeDefined();
   //     expect(printers.length).toBeGreaterThan(-1);
   //     expect(printers.length).toBeLessThan(6);

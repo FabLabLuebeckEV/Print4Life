@@ -42,7 +42,7 @@ describe('Milling Machine Controller', () => {
   //     json: true
   //   }, (error, response) => {
   //     const millingMachines = response.body.millingMachines;
-  //     expect(response.statusCode).toEqual(200);
+  //     expect(response.statusCode).toEqual(206);
   //     expect(millingMachines).toBeDefined();
   //     expect(millingMachines.length).toBeGreaterThan(-1);
   //     expect(millingMachines.length).toBeLessThan(6);

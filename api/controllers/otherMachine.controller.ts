@@ -40,6 +40,33 @@ const machineType = 'otherMachine';
 }
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 204 No-Content
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 206 Partial Content
+{
+    "otherMachines": [
+        {
+            "_id": "5b51c25c1058dc218927273e",
+            "fablabId": 2,
+            "type": "otherMachine",
+            "deviceName": "Sign Maker BN-20",
+            "manufacturer": "Roland",
+            "typeOfMachine": "Cutting Plotter",
+            "comment": "",
+            "__v": 0
+        },
+        {
+            "_id": "5b51c25c1058dc2189272742",
+            "fablabId": 3,
+            "type": "otherMachine",
+            "deviceName": "NAO",
+            "manufacturer": "Softbank Robotics",
+            "typeOfMachine": "Humanoid Robot",
+            "comment": "",
+            "__v": 0
+        }
+    ]
+}
  */
 function getAll (limit?: string, skip?: string) {
   let l: Number;

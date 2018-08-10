@@ -7,7 +7,7 @@ import { Order, orderSchema } from '../models/order.model';
 /**
  * @api {get} /api/v1/orders/ Request the list of orders
  * @apiName GetOrders
- * @apiVersion 0.0.1
+ * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
@@ -38,9 +38,37 @@ import { Order, orderSchema } from '../models/order.model';
       ]
     }
 * @apiSuccessExample Success-Response:
-*    HTTP/1.1 204 OK
-*   {
-        "orders": []
+*    HTTP/1.1 204 No-Content
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while trying to get all orders!",
+      "stack": {
+          ...
+      }
+  }
+* @apiSuccessExample Success-Response:
+*    HTTP/1.1 206 Partial Content
+*    {
+      "orders": [
+        {
+            owner: "User X",
+            editor: "Editor Y",
+            files: {[
+                ...
+            ]},
+            status: "production",
+            comments: [{
+                    content: "Please print this.",
+                    author: "User X"
+                }, {
+                    conten: "Okay, I will do this.",
+                    author: "Editor Y"
+                }
+            ],
+        }
+      ]
     }
 */
 function getOrders (query?: any, limit?: any, skip?: any) {
@@ -60,7 +88,7 @@ function getOrders (query?: any, limit?: any, skip?: any) {
 /**
  * @api {get} /api/v1/orders/:id Request an order by its id
  * @apiName getOrderById
- * @apiVersion 0.0.1
+ * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
@@ -86,6 +114,23 @@ function getOrders (query?: any, limit?: any, skip?: any) {
         "__v": 0
     }
 }
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "error": "Could not find any Order with id 9999",
+      "stack": {
+          ...
+      }
+  }
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while trying to get Order with id 9999",
+      "stack": {
+          ...
+      }
+  }
  */
 function getOrderById (id) {
   return Order.findOne({ _id: id });
@@ -94,14 +139,14 @@ function getOrderById (id) {
 /**
  * @api {post} /api/v1/orders/:id Adds a new order
  * @apiName createOrder
- * @apiVersion 0.0.1
+ * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess { order } the new order object, if success
  *
  * @apiSuccessExample Success-Response:
- *    HTTP/1.1 200 OK
+ *    HTTP/1.1 201 Created
   {
     "order": {
         "status": "new",
@@ -120,6 +165,14 @@ function getOrderById (id) {
         "__v": 0
     }
   }
+  * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "error": "Malformed order, one or more parameters wrong or missing",
+      "stack": {
+          ...
+      }
+  }
  */
 function createOrder (order) {
   order.token = uuid();
@@ -131,7 +184,7 @@ function createOrder (order) {
  * @api {put} /api/v1/orders/:id Updates an order or creates it, if it doesn't
  * exists yet.
  * @apiName updateOrder
- * @apiVersion 0.0.1
+ * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
@@ -157,16 +210,11 @@ function createOrder (order) {
       '__v'; : 0;
   }
  * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 400 Bad Request
+ *     HTTP/1.1 400 Malformed Request
   {
-      "error": "Order not found or malformed update.",
+      "error": "Malformed update.",
       "stack": {
-          "message": "Cast to ObjectId failed for value \"BADID\" at path \"_id\" for model \"Order\"",
-          "name": "CastError",
-          "stringValue": "\"BADID\"",
-          "kind": "ObjectId",
-          "value": "BADID",
-          "path": "_id"
+          ...
       }
   }
  */
@@ -181,7 +229,7 @@ function updateOrder (order) {
 /**
  * @api {delete} /api/v1/orders/deleteOrder Marks an order as deleted
  * @apiName delteOrder
- * @apiVersion 0.0.1
+ * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
@@ -207,16 +255,11 @@ function updateOrder (order) {
       '__v'; : 0;
   }
  * @apiErrorExample {json} Error-Response:
- *     HTTP/1.1 400 Bad Request
+ *     HTTP/1.1 400 Malformed Request
   {
-      "error": "Order not found.",
+      "error": "Malformed Request!",
       "stack": {
-          "message": "Cast to ObjectId failed for value \"BADID\" at path \"_id\" for model \"Order\"",
-          "name": "CastError",
-          "stringValue": "\"BADID\"",
-          "kind": "ObjectId",
-          "value": "BADID",
-          "path": "_id"
+          ...
       }
   }
  */
@@ -224,17 +267,50 @@ async function deleteOrder (id) {
   const order = await getOrderById(id);
   order.status = 'deleted';
   return updateOrder(order);
-
-  //   return Order.findOne({ _id: id }).then((order) => {
-  //     order.status = 'deleted';
-  //     delete order.__v;
-  //     return Order.update({ order }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
-  //   });
-  //   order.status = 'deleted';
-  //   delete order.__v;
-  //   return Order.update({ _id: order._id }, order, { upsert: true }).then(() => Order.findOne({ _id: order._id }));
 }
 
+/**
+ * @api {get} /api/v1/orders/status Request all valid status
+ * @apiName getStatus
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { status } a list of valid status
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *  {
+    "order": {
+        "status": "new",
+        "_id": "5b55cf9730b4aa4bbeaf6f68",
+        "comments": [
+            {
+                "_id": "5b583da5514fac1bb10832b6",
+                "author": "Mister Foo",
+                "content": "Hello there, could you print this?"
+            }
+        ],
+        "editor": "Mister Bar",
+        "owner": "Mister X",
+        "files": [],
+        "token": "42",
+        "__v": 0
+    }
+}
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while trying to get all valid status!",
+      "stack": {
+          ...
+      }
+  }
+ */
 async function getStatus () {
   return new Promise((resolve, reject) => {
     const status = orderSchema.paths.status.enumValues;
@@ -246,12 +322,52 @@ async function getStatus () {
   });
 }
 
+// FIXME: Add example for comment creation
+/**
+ * @api {post} /api/v1/orders/:id/comment Adds a new comment to an order
+ * @apiName createOrder
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { comment } the new comment object, if success
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 201 Created
+  {
+    "comment": {
+        ...
+    }
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "error": "Could not find any Order with id 9999",
+      "stack": {
+          ...
+      }
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "error": "Malformed Request! Could not add comment to order.",
+      "stack": {
+          ...
+      }
+  }
+ */
 async function createComment (id, comment) {
+  let ret;
   const order = await getOrderById(id);
-  comment.timestamp = new Date();
-  order.comments.push(comment);
-  await order.save();
-  return comment;
+  if (order) {
+    comment.timestamp = new Date();
+    order.comments.push(comment);
+    await order.save();
+    ret = comment;
+  } else {
+    ret = undefined;
+  }
+  return ret;
 }
 
 /**
@@ -283,11 +399,24 @@ async function createComment (id, comment) {
    "count": 98
 }
 *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while counting orders!",
+      "stack": {
+          ...
+      }
+  }
 */
 function count (query) {
   return Order.count(query);
 }
 
+/**
+ * Deletes the MongoDB vars not needed for updates etc.
+obj is the obj where the DbVars should be deleted
+ * @returns obj is the cleaned object
+ */
 function _rmDbVars (obj) {
   delete obj.__v;
   delete obj._id;
