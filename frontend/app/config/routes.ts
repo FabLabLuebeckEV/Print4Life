@@ -32,6 +32,7 @@ export const routes = {
                 create: 'create',
                 update: 'update',
                 delete: 'delete',
+                detail: 'detail',
                 getOrderById: 'getById',
                 getAllOrders: '',
                 getStatus: 'status',

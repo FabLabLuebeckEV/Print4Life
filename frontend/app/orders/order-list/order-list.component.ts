@@ -175,7 +175,7 @@ export class OrderListComponent implements OnInit {
         const item = new TableItem();
         item.obj['id'] = { label: order._id };
         item.obj['Created'] = { label: order.created, isDate: true };
-        item.obj['Projectname'] = { label: order.projectname };
+        item.obj['Projectname'] = { label: order.projectname,  href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
         item.obj['Owner'] = { label: order.owner };
         item.obj['Editor'] = { label: order.editor };
         item.obj['Status'] = { label: order.status };
