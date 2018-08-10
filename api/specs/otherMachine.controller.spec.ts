@@ -35,7 +35,7 @@ describe('Other Machine Controller', () => {
   //     json: true
   //   }, (error, response) => {
   //     const otherMachines = response.body.otherMachines;
-  //     expect(response.statusCode).toEqual(200);
+  //     expect(response.statusCode).toEqual(206);
   //     expect(otherMachines).toBeDefined();
   //     expect(otherMachines.length).toBeGreaterThan(-1);
   //     expect(otherMachines.length).toBeLessThan(6);

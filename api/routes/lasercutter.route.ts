@@ -7,8 +7,10 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   lasercutterCtrl.getAll(req.query.limit, req.query.skip).then((lasercutters) => {
-    if (lasercutters && lasercutters.length === 0) {
+    if ((lasercutters && lasercutters.length === 0) || !lasercutters) {
       res.status(204).send();
+    } else if (lasercutters && req.query.limit && req.query.skip) {
+      res.status(206).send({ lasercutters });
     } else if (lasercutters) {
       res.status(200).send({ lasercutters });
     }

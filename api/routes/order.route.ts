@@ -9,6 +9,8 @@ router.route('/').get((req, res) => {
   orderCtrl.getOrders(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
       res.status(204).send({ orders });
+    } else if (req.query.limit && req.query.skip) {
+      res.status(206).send({ orders });
     } else {
       res.status(200).send({ orders });
     }
@@ -22,6 +24,8 @@ router.route('/search').post((req, res) => {
   orderCtrl.getOrders(req.body.query, req.body.limit, req.body.skip).then((orders) => {
     if (orders.length === 0) {
       res.status(204).send({ orders });
+    } else if (req.body.limit && req.body.skip) {
+      res.status(206).send({ orders });
     } else {
       res.status(200).send({ orders });
     }

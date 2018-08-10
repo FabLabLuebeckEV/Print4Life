@@ -7,8 +7,10 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   otherMachineCtrl.getAll(req.query.limit, req.query.skip).then((otherMachines) => {
-    if (otherMachines && otherMachines.length === 0) {
+    if ((otherMachines && otherMachines.length === 0) || !otherMachines) {
       res.status(204).send();
+    } else if (otherMachines && req.query.limit && req.query.skip) {
+      res.status(206).send({ otherMachines });
     } else if (otherMachines) {
       res.status(200).send({ otherMachines });
     }

@@ -71,6 +71,63 @@ const machineType = 'printer';
     }
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 204 No-Content
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 206 Partial Content
+{
+    "printers": [
+        {
+            "_id": "5b55f7bf3fe0c8b01713b3fa",
+            "fablabId": "5b453ddb5cf4a9574849e98b",
+            "type": "printer",
+            "deviceName": "Ultimaker 2+",
+            "manufacturer": "Ultimaker",
+            "materials": [
+                {
+                    "material": "PLA",
+                    "type": "printerMaterial"
+                }
+            ],
+            "camSoftware": "Cura",
+            "printVolumeX": 210,
+            "printVolumeY": 210,
+            "printVolumeZ": 205,
+            "printResolutionX": 0.1,
+            "printResolutionY": 0.1,
+            "printResolutionZ": 0.5,
+            "nozzleDiameter": 0.4,
+            "numberOfExtruders": 1,
+            "pictureURL": "upload/59e5da27a317a.jpg",
+            "comment": "",
+            "__v": 0
+        },
+        {
+            "_id": "5b55f7bf3fe0c8b01713b3fc",
+            "fablabId": "5b453ddb5cf4a9574849e98b",
+            "type": "printer",
+            "deviceName": "Zprinter 450",
+            "manufacturer": "Zcorp",
+            "materials": [
+                {
+                    "material": "Plaster",
+                    "type": "printerMaterial"
+                }
+            ],
+            "camSoftware": "",
+            "printVolumeX": 200,
+            "printVolumeY": 200,
+            "printVolumeZ": 180,
+            "printResolutionX": 0.1,
+            "printResolutionY": 0.1,
+            "printResolutionZ": 1,
+            "nozzleDiameter": null,
+            "numberOfExtruders": 0,
+            "pictureURL": "upload/59e5dc87040cc.jpg",
+            "comment": "Full Color printer",
+            "__v": 0
+        }
+      ]
+    }
  */
 function getAll (limit?: string, skip?: string) {
   let l: Number;

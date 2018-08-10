@@ -48,6 +48,28 @@ import { Order, orderSchema } from '../models/order.model';
           ...
       }
   }
+* @apiSuccessExample Success-Response:
+*    HTTP/1.1 206 Partial Content
+*    {
+      "orders": [
+        {
+            owner: "User X",
+            editor: "Editor Y",
+            files: {[
+                ...
+            ]},
+            status: "production",
+            comments: [{
+                    content: "Please print this.",
+                    author: "User X"
+                }, {
+                    conten: "Okay, I will do this.",
+                    author: "Editor Y"
+                }
+            ],
+        }
+      ]
+    }
 */
 function getOrders (query?: any, limit?: any, skip?: any) {
   let l: Number;

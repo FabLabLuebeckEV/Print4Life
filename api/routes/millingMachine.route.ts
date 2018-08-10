@@ -7,8 +7,10 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   millingMachineCtrl.getAll(req.query.limit, req.query.skip).then((millingMachines) => {
-    if (millingMachines && millingMachines.length === 0) {
+    if ((millingMachines && millingMachines.length === 0) || !millingMachines) {
       res.status(204).send();
+    } else if (millingMachines && req.query.limit && req.query.skip) {
+      res.status(206).send({ millingMachines });
     } else if (millingMachines) {
       res.status(200).send({ millingMachines });
     }

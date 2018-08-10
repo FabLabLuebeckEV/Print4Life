@@ -7,8 +7,10 @@ const router = express.Router();
 
 router.route('/').get((req, res) => {
   printerCtrl.getAll(req.query.limit, req.query.skip).then((printers) => {
-    if (printers && printers.length === 0) {
+    if ((printers && printers.length === 0) || !printers) {
       res.status(204).send();
+    } else if (printers && req.query.limit && req.query.skip) {
+      res.status(206).send({ printers });
     } else if (printers) {
       res.status(200).send({ printers });
     }
