@@ -1,6 +1,7 @@
 import * as express from 'express';
 import orderCtrl from '../controllers/order.controller';
 import logger from '../logger';
+import validatorService from '../services/validator.service';
 
 const router = express.Router();
 
@@ -55,21 +56,31 @@ router.route('/').post((req, res) => {
 });
 
 router.route('/:id').put((req, res) => {
-  orderCtrl.updateOrder(req.body).then((order) => {
-    res.status(200).send({ order });
-  }).catch((err) => {
-    logger.error({ error: 'Malformed update.', stack: err });
-    res.status(400).send({ error: 'Malformed update.', stack: err });
-  });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    orderCtrl.updateOrder(req.body).then((order) => {
+      res.status(200).send({ order });
+    }).catch((err) => {
+      logger.error({ error: 'Malformed update.', stack: err });
+      res.status(400).send({ error: 'Malformed update.', stack: err });
+    });
+  }
 });
 
 router.route('/:id').delete((req, res) => {
-  orderCtrl.deleteOrder(req.params.id).then((order) => {
-    res.status(200).send({ order });
-  }).catch((err) => {
-    logger.error({ error: 'Malformed Request!', stack: err });
-    res.status(400).send({ error: 'Malformed Request!', stack: err });
-  });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    orderCtrl.deleteOrder(req.params.id).then((order) => {
+      res.status(200).send({ order });
+    }).catch((err) => {
+      logger.error({ error: 'Malformed Request!', stack: err });
+      res.status(400).send({ error: 'Malformed Request!', stack: err });
+    });
+  }
 });
 
 router.route('/status/').get((req, res) => {
@@ -86,31 +97,41 @@ router.route('/status/').get((req, res) => {
 });
 
 router.route('/:id/comment').post((req, res) => {
-  orderCtrl.createComment(req.params.id, { timestamp: new Date(), ...req.body }).then((comment) => {
-    if (!comment) {
-      logger.error({ error: `Could not find any Order with id ${req.params.id}` });
-      res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
-    } else {
-      res.status(201).send({ comment });
-    }
-  }).catch((err) => {
-    logger.error({ error: 'Malformed Request! Could not add comment to order.', stack: err });
-    res.status(400).send({ error: 'Malformed Request! Could not add comment to order.', stack: err });
-  });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    orderCtrl.createComment(req.params.id, { timestamp: new Date(), ...req.body }).then((comment) => {
+      if (!comment) {
+        logger.error({ error: `Could not find any Order with id ${req.params.id}` });
+        res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
+      } else {
+        res.status(201).send({ comment });
+      }
+    }).catch((err) => {
+      logger.error({ error: 'Malformed Request! Could not add comment to order.', stack: err });
+      res.status(400).send({ error: 'Malformed Request! Could not add comment to order.', stack: err });
+    });
+  }
 });
 
 router.route('/:id').get((req, res) => {
-  orderCtrl.getOrderById(req.params.id).then((order) => {
-    if (!order) {
-      logger.error({ error: `Could not find any Order with id ${req.params.id}` });
-      res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
-    } else {
-      res.status(200).send({ order });
-    }
-  }).catch((err) => {
-    logger.error({ error: `Error while trying to get Order with id ${req.params.id}`, stack: err });
-    res.status(500).send({ error: `Error while trying to get Order with id ${req.params.id}`, stack: err });
-  });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    orderCtrl.getOrderById(req.params.id).then((order) => {
+      if (!order) {
+        logger.error({ error: `Could not find any Order with id ${req.params.id}` });
+        res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
+      } else {
+        res.status(200).send({ order });
+      }
+    }).catch((err) => {
+      logger.error({ error: `Error while trying to get Order with id ${req.params.id}`, stack: err });
+      res.status(500).send({ error: `Error while trying to get Order with id ${req.params.id}`, stack: err });
+    });
+  }
 });
 
 export default router;

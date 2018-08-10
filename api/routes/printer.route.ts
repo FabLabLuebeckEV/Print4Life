@@ -1,6 +1,7 @@
 import * as express from 'express';
 import printerCtrl from '../controllers/printer.controller';
 import logger from '../logger';
+import validatorService from '../services/validator.service';
 
 const router = express.Router();
 
@@ -36,8 +37,9 @@ router.route('/').post((req, res) => {
 });
 
 router.route('/:id').delete((req, res) => {
-  if (req.params.id.length !== 24) {
-    res.status(400).send({ error: 'Id needs to be a 24 character long hex string!' });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
   } else {
     let printer;
     printerCtrl.get(req.params.id).then((p) => {
@@ -72,8 +74,9 @@ router.route('/:id').delete((req, res) => {
 });
 
 router.route('/:id').get((req, res) => {
-  if (req.params.id.length !== 24) {
-    res.status(400).send({ error: 'Id needs to be a 24 character long hex string!' });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
   } else {
     printerCtrl.get(req.params.id).then((printer) => {
       if (!printer) {
@@ -89,8 +92,9 @@ router.route('/:id').get((req, res) => {
 });
 
 router.route('/:id').put((req, res) => {
-  if (req.params.id.length !== 24) {
-    res.status(400).send({ error: 'Id needs to be a 24 character long hex string!' });
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
   } else if (Object.keys(req.body).length === 0) {
     res.status(400).send({ error: 'No params to update given!' });
   } else {
