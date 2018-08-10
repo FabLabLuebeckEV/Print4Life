@@ -14,7 +14,17 @@ export class OrderDetailComponent implements OnInit {
   private config: any;
   backArrow: any;
   backLink: any;
-  order: Order = new Order(undefined, undefined, [], undefined, undefined, [], undefined, undefined);
+  order: Order = new Order(
+    undefined,
+    undefined,
+    [],
+    undefined,
+    undefined,
+    [],
+    undefined,
+    undefined,
+    undefined
+  );
 
   constructor(
     private route: ActivatedRoute,
