@@ -174,6 +174,7 @@ export class CreateOrderComponent implements OnInit {
     this.machines.forEach(element => {
       if (element._id === this.order.machine._id) {
         this.order.machine['deviceName'] = element.deviceName;
+        this.order.machine._id = element._id;
       }
     });
     const type = this.machineService.camelCaseTypes(this.order.machine.type);

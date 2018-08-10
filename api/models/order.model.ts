@@ -38,7 +38,7 @@ const attributes = {
       type: String,
       required: true
     },
-    id: {
+    _id: {
       type: String,
       required: true
     }
