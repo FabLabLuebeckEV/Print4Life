@@ -19,7 +19,7 @@
           <label for="projectname">Projectname</label>
           <input type="text" class="form-control" id="projectname" required [(ngModel)]="order.projectname" name="projectname" #projectname="ngModel">
           <div [hidden]="projectname.valid || projectname.pristine" class="alert alert-danger">
-              Projectname is required
+            Projectname is required
           </div>
         </div>
       </div>
@@ -52,8 +52,42 @@
           </div>
         </div>
       </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="selectedMachineType">Machine Type</label>
+          <ng-select [loading]="loadingMachineTypes" [items]=machineTypes [(ngModel)]="order.machine.type" id="selectedMachineType"
+            name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine.type)" required>
+          </ng-select>
+          <div [hidden]="selectedMachineType.valid || selectedMachineType.pristine" class="alert alert-danger">
+            Machine Type is required
+          </div>
+        </div>
+      </div>
+      <div *ngIf="order.machine.type" class="form-group row">
+        <div class="col-md-6">
+          <label for="selectedMachine">Select Machine</label>
+          <ng-select [loading]="loadingMachinesForType" [items]=machines bindValue="_id" bindLabel="deviceName" [(ngModel)]="order.machine._id"
+            id="selectedMachine" name="selectedMachine" #selectedMachine="ngModel" groupBy="fablabName" (change)="machineSelected(selectedMachine)"
+            required>
+            <ng-template ng-optgroup-tmp let-item="item">
+              {{item.fablabName || 'Unnamed FabLab'}}
+            </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+              {{ item.deviceName }}
+            </ng-template>
+          </ng-select>
+          <div [hidden]="selectedMachine.valid || selectedMachine.pristine" class="alert alert-danger">
+            Machine is required
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="selectedMachineDetailView">Info: </label>
+          <a [routerLink]="order.machine.detailView" name="selectedMachineDetailView">{{ order.machine.deviceName }}</a>
+        </div>
+      </div>
       <button type="submit" class="btn btn-success" [disabled]="!createOrderForm.form.valid">Submit</button>
     </form>
+    <!-- Print comments to this order as a table -->
     <div class="row">
       <div class="col-md-12 text-center">
         <h4>Comments</h4>
@@ -63,12 +97,16 @@
       <table class="table table-striped table-spacing">
         <thead>
           <tr>
-            <th scope="col">Author</th><th scope="col">Content</th><th scope="col">Timestamp</th>
+            <th scope="col">Author</th>
+            <th scope="col">Content</th>
+            <th scope="col">Timestamp</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let comment of order.comments">
-            <td>{{comment.author}}</td><td>{{comment.content}}</td><td>{{comment.timestamp | date:'short'}}</td>
+            <td>{{comment.author}}</td>
+            <td>{{comment.content}}</td>
+            <td>{{comment.timestamp | date:'short'}}</td>
           </tr>
         </tbody>
       </table>
@@ -78,6 +116,7 @@
         <h6>Add comment</h6>
       </div>
     </div>
+    <!-- Submit Comment Form -->
     <form (ngSubmit)="onSubmitComment()" #createCommentForm="ngForm">
       <div class="form-group row">
         <div class="col-md-12">

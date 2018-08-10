@@ -11,6 +11,10 @@ const testOrder = {
   owner: 'Mister Foo',
   files: [],
   status: 'new',
+  machine: {
+    type: 'Awesomness Generator',
+    _id: '12345678901234567890aaaa',
+  }
 };
 
 describe('Order Controller', () => {

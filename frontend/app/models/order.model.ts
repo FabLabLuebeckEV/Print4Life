@@ -6,6 +6,13 @@ export class Comment {
     ) { }
 }
 
+export class SimpleMachine {
+    constructor(
+        public _id: String,
+        public type: String,
+    ) { }
+}
+
 export class Order {
     constructor(
         public _id: String,
@@ -15,6 +22,7 @@ export class Order {
         public owner: String,
         public files: Array<any>,
         public status: String,
+        public machine: SimpleMachine,
         token: String
     ) { }
 }
