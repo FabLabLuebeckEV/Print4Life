@@ -37,14 +37,14 @@
           <td>Created</td>
           <td>{{order.created | date:'short'}}</td>
         </tr>
-        <tr>
+        <tr *ngIf="machine">
           <td>Machine</td>
           <td>
             <a [routerLink]="machine.detailView">{{ machine.deviceName }}</a>
-            <span class="badge badge-secondary">{{machine.type}}</span>
+            <span class="badge badge-secondary spacing">{{machine.type}}</span>
           </td>
         </tr>
-        <tr>
+        <tr *ngIf="fablab">
           <td>FabLab</td>
           <td>
             {{fablab.name}}

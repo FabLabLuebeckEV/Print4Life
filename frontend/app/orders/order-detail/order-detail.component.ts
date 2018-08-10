@@ -17,7 +17,7 @@ export class OrderDetailComponent implements OnInit {
   private config: any;
   backArrow: any;
   backLink: any;
-  fablab: any;
+
   order: Order = new Order(
     undefined,
     undefined,
@@ -30,6 +30,7 @@ export class OrderDetailComponent implements OnInit {
     undefined
   );
   machine: any;
+  fablab: any;
 
   constructor(
     private route: ActivatedRoute,
