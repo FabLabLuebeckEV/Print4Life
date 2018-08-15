@@ -91,7 +91,7 @@ deploy:
   script:
    - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "rm -rf /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && mkdir /home/$RUNNER_USERNAME/apps/$PROJECT_NAME"
    - rsync -rav -e ssh --exclude='.git/' --exclude='.gitlab-ci.yml' --exclude='node_modules' --delete-excluded ./ $RUNNER_USERNAME@$SERVER_ADDRESS:/home/$RUNNER_USERNAME/apps/$PROJECT_NAME
-   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && npm run deploy && rm -rf /var/www/html/* && cp -r dist/* /var/www/html"
+   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && npm run deploy && rm -rf /var/www/html/* && cp -r dist/. /var/www/html"
    # Delete this line if the database shall not be dropped
    - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "mongo iot-fablab-staging --eval \"db.dropDatabase()\" && cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME/db-seeds && bash scripts/import.sh $DATABASE_HOST $DATABASE_PORT $DATABASE $DATABASE_DUMP"
    # Comment end
