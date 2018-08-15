@@ -263,8 +263,7 @@ function createOrder(order) {
 }
 
 /**
- * @api {put} /api/v1/orders/:id Updates an order or creates it, if it doesn't
- * exists yet.
+ * @api {put} /api/v1/orders/:id Updates an order or creates it, if it doesn't exists yet.
  * @apiName updateOrder
  * @apiVersion 1.0.0
  * @apiGroup Orders
@@ -525,7 +524,6 @@ async function createComment(id, comment) {
 * @apiSuccess {Object} count the number of orders
 * @apiSuccessExample Success-Response:
 *    HTTP/1.1 200 OK
-*
 {
    "count": 98
 }
@@ -545,7 +543,7 @@ function count(query) {
 
 /**
  * Deletes the MongoDB vars not needed for updates etc.
-obj is the obj where the DbVars should be deleted
+ * obj is the obj where the DbVars should be deleted
  * @returns obj is the cleaned object
  */
 function _rmDbVars(obj) {
