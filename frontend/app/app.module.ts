@@ -24,6 +24,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
 import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
+import { UserFormComponent } from './users/user-form/user-form.component';
+import { UserComponent } from './users/user/user.component';
 
 @NgModule({
     declarations: [
@@ -38,7 +40,9 @@ import { OrderDetailComponent } from './orders/order-detail/order-detail.compone
         CreateOrderComponent,
         MessageModalComponent,
         MachineDetailComponent,
-        OrderDetailComponent
+        OrderDetailComponent,
+        UserFormComponent,
+        UserComponent
     ],
     imports: [
         BrowserModule,

@@ -27,6 +27,11 @@ export const routes = {
             }
         },
         frontend: {
+            users: {
+                root: 'users',
+                create: 'signup',
+                signin: 'signin'
+            },
             orders: {
                 root: 'orders',
                 create: 'create',

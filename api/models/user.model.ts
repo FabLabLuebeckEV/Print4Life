@@ -4,7 +4,7 @@ import { addressSchema } from './address.model';
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
+export const userSchema = new Schema({
   username: {
     type: String,
     unique: true,
@@ -25,7 +25,7 @@ const UserSchema = new Schema({
 });
 
 /* eslint-disable */
-UserSchema.pre('save', function (next) {
+userSchema.pre('save', function (next) {
     const user = this;
     if (this.isModified('password') || this.isNew) {
         bcrypt.genSalt(10, (err, salt) => {
@@ -47,7 +47,7 @@ UserSchema.pre('save', function (next) {
 /* eslint-enable */
 
 /* eslint-disable */
-UserSchema.methods.comparePassword = function (passw, cb) {
+userSchema.methods.comparePassword = function (passw, cb) {
     bcrypt.compare(passw, this.password, (err, isMatch) => {
         if (err) {
             return cb(err);
@@ -57,4 +57,6 @@ UserSchema.methods.comparePassword = function (passw, cb) {
 };
 /* eslint-enable */
 
-module.exports = mongoose.model('User', UserSchema);
+export const User = mongoose.model('User', userSchema);
+
+export default User;
