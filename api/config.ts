@@ -25,7 +25,7 @@ const prod = {
       database: 'iot-fablab-staging'
     }
   },
-  baseUrlBackend: 'http://212.83.56.107:3000/api/v1/',
+  baseUrlBackend: 'http://localhost:3000/api/v1/',
   baseUrlFrontend: 'http://localhost:80',
   cors: {
     whitelist: ['http://localhost:80', 'http://localhost', 'http://212.83.56.107'],

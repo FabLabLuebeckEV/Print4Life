@@ -34,7 +34,8 @@
     "ng-test": "ng test --watch=false"
   },
   "keywords": [],
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Rene Kremer",
       "email": "renejon90@googlemail.com"
     },
