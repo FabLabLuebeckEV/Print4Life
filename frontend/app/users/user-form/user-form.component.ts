@@ -20,7 +20,7 @@ export class UserFormComponent implements OnInit {
 
   address: Address = new Address(undefined, undefined, undefined, undefined);
   role: Role = new Role(undefined);
-  user: User = new User(undefined, undefined, undefined, undefined, undefined, undefined, this.address, this.role);
+  user: User = new User(undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.address, this.role);
 
   constructor(
     private configService: ConfigService,

@@ -20,6 +20,7 @@ export class User {
         public firstname: String,
         public secondname: String,
         public password: String,
+        public passwordValidation: String,
         public email: String,
         public address: Address,
         public role: Role

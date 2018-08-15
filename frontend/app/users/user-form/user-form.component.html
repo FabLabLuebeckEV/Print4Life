@@ -24,10 +24,51 @@
         </div>
       </div>
       <div class="form-group row">
+        <div class="col-md-6">
+          <label for="firstname">Firstname</label>
+          <input type="text" class="form-control" id="firstname" required [(ngModel)]="user.firstname" name="firstname" #firstname="ngModel">
+          <div [hidden]="firstname.valid || firstname.pristine" class="alert alert-danger">
+            Firstname is required
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="secondname">Secondname</label>
+          <input type="text" class="form-control" id="secondname" required [(ngModel)]="user.secondname" name="secondname" #secondname="ngModel">
+          <div [hidden]="secondname.valid || secondname.pristine" class="alert alert-danger">
+            Secondname is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-6">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password" #password="ngModel">
+          <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+            Password is required
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="validation">Password validation</label>
+          <input type="validation" class="form-control" id="validation" required [(ngModel)]="user.passwordValidation" name="validation"
+            #validation="ngModel">
+          <div [hidden]="validation.valid || validation.pristine" class="alert alert-danger">
+            validation is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="email">Email Address</label>
+          <input type="text" class="form-control" id="email" required [(ngModel)]="user.email" name="email" #email="ngModel">
+          <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+            Email is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
         <div class="col-md-12">
           <label for="role">Role</label>
-          <ng-select [loading]="loadingRoles" [items]=validRoles bindValue="role" bindLabel="role" [(ngModel)]="user.role" id="role"
-            name="role" #role="ngModel" required>
+          <ng-select [loading]="loadingRoles" [items]=validRoles [(ngModel)]="user.role" id="role" name="role" #role="ngModel" required>
           </ng-select>
           <div [hidden]="role.valid || role.pristine" class="alert alert-danger">
             Role is required
