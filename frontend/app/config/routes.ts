@@ -1,12 +1,13 @@
+import { environment } from '../../environments/environment';
+const backendUrl = !environment.production ? 'http://localhost:3000/api/v1' : 'http://212.83.56.107:3000/api/v1';
+
 export const routes = {
-    backendUrl: 'http://localhost:3000/api/v1',
+    backendUrl: backendUrl,
     paths: {
         backend: {
             orders: {
                 root: 'orders',
                 getStatus: 'status',
-                // TODO: not implemented yet, should be a post
-                //  request with an object passed as a selector for mongoose
                 getOrder: 'getOrder',
                 comment: 'comment',
                 count: 'count',
@@ -36,7 +37,7 @@ export const routes = {
                 getOrderById: 'getById',
                 getAllOrders: '',
                 getStatus: 'status',
-                getOrder: 'getOrder' // TODO: not implemented yet, should be a post request with an object passed as a selector for mongoose
+                getOrder: 'getOrder'
             },
             machines: {
                 root: 'machines',
