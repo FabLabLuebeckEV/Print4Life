@@ -17,7 +17,6 @@ import { Order, orderSchema } from '../models/order.model';
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
-*    {
 {
     "orders": [
         {
