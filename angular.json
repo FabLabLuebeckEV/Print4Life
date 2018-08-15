@@ -20,7 +20,8 @@
             "tsConfig": "frontend/tsconfig.app.json",
             "assets": [
               "frontend/favicon.ico",
-              "frontend/assets"
+              "frontend/assets",
+              "frontend/.htaccess"
             ],
             "styles": [
               "frontend/styles.css",
@@ -31,12 +32,10 @@
           },
           "configurations": {
             "production": {
-              "fileReplacements": [
-                {
-                  "replace": "frontend/environments/environment.ts",
-                  "with": "frontend/environments/environment.prod.ts"
-                }
-              ],
+              "fileReplacements": [{
+                "replace": "frontend/environments/environment.ts",
+                "with": "frontend/environments/environment.prod.ts"
+              }],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,

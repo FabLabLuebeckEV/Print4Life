@@ -28,7 +28,7 @@ const prod = {
   baseUrlBackend: 'http://localhost:3000/api/v1/',
   baseUrlFrontend: 'http://localhost:80',
   cors: {
-    whitelist: ['http://localhost:80'],
+    whitelist: ['http://localhost:80', 'http://localhost'],
     corsOptions: {
       origin: undefined,
       credentials: true
