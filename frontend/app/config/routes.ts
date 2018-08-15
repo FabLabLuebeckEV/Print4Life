@@ -2,6 +2,11 @@ export const routes = {
     backendUrl: 'http://localhost:3000/api/v1',
     paths: {
         backend: {
+            users: {
+                root: 'users',
+                getRoles: 'roles',
+                create: 'signup'
+            },
             orders: {
                 root: 'orders',
                 getStatus: 'status',
@@ -30,7 +35,8 @@ export const routes = {
             users: {
                 root: 'users',
                 create: 'signup',
-                signin: 'signin'
+                signin: 'signin',
+                update: 'edit'
             },
             orders: {
                 root: 'orders',

@@ -1,3 +1,40 @@
-<p>
-  user-form works!
-</p>
+<router-outlet></router-outlet>
+<div class="row spacing">
+  <div class="col-md-1 text-right">
+    <a [routerLink]="backLink">
+      <button type="button" class="btn btn-primary">
+        <fa-icon [icon]="backArrow"></fa-icon>
+      </button>
+    </a>
+  </div>
+  <div class="col-md-11 text-center">
+    <h1>Register User</h1>
+  </div>
+</div>
+<div class="row spacing">
+  <div class="container">
+    <form (ngSubmit)="onSubmit()" #createUserForm="ngForm">
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="username">Username</label>
+          <input type="text" class="form-control" id="username" required [(ngModel)]="user.username" name="username" #username="ngModel">
+          <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
+            Username is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="role">Role</label>
+          <ng-select [loading]="loadingRoles" [items]=validRoles bindValue="role" bindLabel="role" [(ngModel)]="user.role" id="role"
+            name="role" #role="ngModel" required>
+          </ng-select>
+          <div [hidden]="role.valid || role.pristine" class="alert alert-danger">
+            Role is required
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success" [disabled]="!createUserForm.form.valid">Submit</button>
+    </form>
+  </div>
+</div>

@@ -1,8 +1,6 @@
 import * as mongoose from 'mongoose';
 
-const Schema = mongoose.Schema;
-
-const attributes = new Schema({
+const attributes = {
   street: {
     type: String,
     required: true
@@ -19,12 +17,8 @@ const attributes = new Schema({
     type: String,
     required: true
   }
-}, {
-  _id: false,
-  __v: false
-});
+};
 
-export const addressSchema = mongoose.Schema(attributes);
-export const Address = mongoose.model('Address', addressSchema);
+export const addressSchema = mongoose.Schema(attributes, { _id: false, __v: false });
 
-export default Address;
+export default addressSchema;

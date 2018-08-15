@@ -6,12 +6,6 @@ import logger from '../logger';
 const router = express.Router();
 
 router.post('/signup', (req, res) => {
-  if (!req.body.username || !req.body.password) {
-    logger.error({ error: 'Malformed user, one or more parameters wrong or missing' });
-    res.status(400).send({ error: 'Malformed user, one or more parameters wrong or missing' });
-  } else {
-    userCtrl.signUp(req.body);
-  }
   userCtrl.signUp(req.body).then((user) => {
     res.status(200).send(user);
   }).catch((err) => {
@@ -20,3 +14,18 @@ router.post('/signup', (req, res) => {
     res.status(400).send(msg);
   });
 });
+
+router.route('/roles').get((req, res) => {
+  userCtrl.getRoles().then((roles) => {
+    if (!roles) {
+      res.status(204).send();
+    } else {
+      res.status(200).send({ roles });
+    }
+  }).catch((err) => {
+    logger.error({ error: 'Error while trying to get all valid roles!', stack: err });
+    res.status(500).send({ error: 'Error while trying to get all valid roles!', stack: err });
+  });
+});
+
+export default router;

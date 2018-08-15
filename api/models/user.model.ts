@@ -1,10 +1,19 @@
 import * as mongoose from 'mongoose';
 import { bcrypt } from 'bcrypt-nodejs';
 import { addressSchema } from './address.model';
+import { roleSchema } from './role.model';
 
 const Schema = mongoose.Schema;
 
 export const userSchema = new Schema({
+  firstname: {
+    type: String,
+    required: true
+  },
+  lastname: {
+    type: String,
+    required: true
+  },
   username: {
     type: String,
     unique: true,
@@ -19,9 +28,8 @@ export const userSchema = new Schema({
     required: true,
     unique: true
   },
-  address: {
-    type: addressSchema
-  }
+  address: addressSchema,
+  role: roleSchema
 });
 
 /* eslint-disable */
