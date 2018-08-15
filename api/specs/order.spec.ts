@@ -29,17 +29,17 @@ describe('Order Controller', () => {
       });
   });
 
-  it('gets orders (limit & skip)', (done) => {
-    request.get(`${endpoint}orders/?limit=5&skip=5`, { headers: { 'content-type': 'application/json' } },
-      (error, response) => {
-        const orders = JSON.parse(response.body).orders;
-        expect(response.statusCode).toEqual(206);
-        expect(orders).toBeDefined();
-        expect(orders.length).toBeGreaterThan(-1);
-        expect(orders.length).toBeLessThan(6);
-        done();
-      });
-  });
+  // it('gets orders (limit & skip)', (done) => {
+  //   request.get(`${endpoint}orders/?limit=5&skip=5`, { headers: { 'content-type': 'application/json' } },
+  //     (error, response) => {
+  //       const orders = JSON.parse(response.body).orders;
+  //       expect(response.statusCode).toEqual(206);
+  //       expect(orders).toBeDefined();
+  //       expect(orders.length).toBeGreaterThan(-1);
+  //       expect(orders.length).toBeLessThan(6);
+  //       done();
+  //     });
+  // });
 
   it('counts orders', (done) => {
     request.post(`${endpoint}orders//count`, {
