@@ -6,11 +6,9 @@ import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
-import {
-  Material
-} from '../../models/machines.model';
+import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
 
-import { Order, Comment } from '../../models/order.model';
+import { Order, Comment, SimpleMachine } from '../../models/order.model';
 import { ConfigService } from '../../config/config.service';
 import { routes } from '../../config/routes';
 
@@ -24,26 +22,38 @@ export class CreateOrderComponent implements OnInit {
   config: any;
   backLink: String;
   backArrow: any;
-  machineTypes: Array<String> = [];
   selectedType: String;
   editView: Boolean = false;
   routeChanged: Boolean;
-  order: Order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
-  fablabs: Array<any>;
-  materialsArr: Array<Material>;
-  loadingFablabs: Boolean;
-  loadingMaterials: Boolean;
-  loadingStatus: Boolean;
-  validStatus: Array<String> = [];
+
+  sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
+  order: Order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
+
+  loadingMachineTypes: Boolean;
+  machineTypes: Array<String> = [];
+
+  loadingMachinesForType: Boolean;
+  machines: Array<Machine> = [];
+
+  loadingStatus: Boolean;
+  validStatus: Array<String> = [];
+
+  loadingLaserTypes = true;
+  laserTypesArr: Array<Lasertype> = [];
+
+  loadingMaterials: Boolean;
+  materialsArr: Array<Material>;
+
+  loadingFablabs: Boolean;
+  fablabs: Array<any>;
 
   constructor(
     private machineService: MachineService,
     private fablabService: FablabService,
     private router: Router,
     private location: Location,
-    private route: ActivatedRoute,
     private orderService: OrderService,
     private modalService: NgbModal,
     private configService: ConfigService) {
@@ -51,7 +61,7 @@ export class CreateOrderComponent implements OnInit {
     this.backArrow = this.config.icons.back;
     this.backLink = `/${routes.paths.frontend.orders.root}`;
     this.router.events.subscribe(() => {
-      const route = location.path();
+      const route = this.location.path();
       this.editView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0;
       if (this.editView) {
         const routeArr = route.split('/');
@@ -63,7 +73,7 @@ export class CreateOrderComponent implements OnInit {
   private _openSuccessMsg() {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Order successfully created', 'modal-header header-success',
-    this.editView ? 'Order successfully updated!' : 'Order successfully created!', okButton, undefined).result.then((result) => {
+      this.editView ? 'Order successfully updated!' : 'Order successfully created!', okButton, undefined).result.then((result) => {
         this.router.navigate([`/${routes.paths.frontend.orders.root}`]);
       });
   }
@@ -88,13 +98,28 @@ export class CreateOrderComponent implements OnInit {
     return modalRef;
   }
 
+  async machineTypeChanged(type) {
+    let machineObj;
+    this.loadingMachinesForType = true;
+    type = this.machineService.camelCaseTypes(type);
+    machineObj = await this.machineService.getAll(type, undefined, undefined);
+    machineObj = (machineObj && machineObj[`${type}s`]) ? machineObj[`${type}s`] : undefined;
+    for (let i = 0; i < machineObj.length; i++) {
+      const resFab = await this.fablabService.getFablab(machineObj[i].fablabId);
+      const fablab = resFab.fablab;
+      machineObj[i].fablab = fablab;
+      machineObj[i].fablabName = fablab.name;
+    }
+    this.machines = machineObj;
+
+    this.loadingMachinesForType = false;
+  }
+
   ngOnInit() {
     this._initializeOrder(this.orderId);
 
     this._loadMachineTypes();
-    this.loadingFablabs = true;
     this._loadFablabs();
-    this.loadingStatus = true;
     this._loadStatus();
   }
 
@@ -145,6 +170,17 @@ export class CreateOrderComponent implements OnInit {
     }
   }
 
+  machineSelected(machine) {
+    this.machines.forEach(element => {
+      if (element._id === this.order.machine._id) {
+        this.order.machine['deviceName'] = element.deviceName;
+        this.order.machine._id = element._id;
+      }
+    });
+    const type = this.machineService.camelCaseTypes(this.order.machine.type);
+    this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${machine.viewModel}/`;
+  }
+
   private async _initializeOrder(id) {
     if (id !== undefined) {
       this.order = (await this.orderService.getOrderById(id)).order;
@@ -154,18 +190,28 @@ export class CreateOrderComponent implements OnInit {
     }
   }
 
-  private async _loadMachineTypes() {
-    this.machineTypes = (await this.machineService.getAllMachineTypes()).types;
-  }
-
   private async _loadStatus() {
+    this.loadingStatus = true;
     this.validStatus = (await this.orderService.getStatus()).status;
     this.loadingStatus = false;
   }
 
+  private async _loadMachineTypes() {
+    this.loadingMachineTypes = true;
+    this.machineTypes = (await this.machineService.getAllMachineTypes()).types;
+    this.loadingMachineTypes = false;
+  }
+
   private async _loadFablabs() {
+    this.loadingFablabs = true;
     this.fablabs = (await this.fablabService.getFablabs()).fablabs;
     this.loadingFablabs = false;
+  }
+
+  private async _loadLaserTypes() {
+    this.loadingLaserTypes = true;
+    this.laserTypesArr = (await this.machineService.getLaserTypes()).laserTypes;
+    this.loadingLaserTypes = false;
   }
 
   private async _loadMaterials(type) {

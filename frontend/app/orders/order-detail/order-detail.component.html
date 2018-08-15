@@ -13,61 +13,92 @@
   </div>
   <div class="row">
     <table class="table table-striped table-spacing">
-        <!-- <thead>
+      <!-- <thead>
           <tr>
             <th scope="col">Author</th><th scope="col">Content</th><th scope="col">Timestamp</th>
           </tr>
         </thead> -->
-        <tbody>
-          <tr>
-            <td>Owner</td><td>{{order.owner}}</td>
-          </tr>
-          <tr>
-            <td>Editor</td><td>{{order.editor}}</td>
-          </tr>
-          <tr>
-            <td>Status</td><td><span class="badge badge-secondary">{{order.status}}</span></td>
-          </tr>
-          <tr>
-            <td>Created</td><td>{{order.created | date:'short'}}</td>
-          </tr>
-        </tbody>
-      </table>
-  </div>
-  <div class="row spacing text-center">
-      <div class="col-md-12">
-        <h2>Comments <span class="badge badge-primary spacing text-center">{{ order.comments.length }}</span></h2>
-        </div>
-    </div>
-  <div class="row spacing" *ngIf="order.comments && order.comments.length > 0">
-    <table class="table table-striped table-spacing">
-      <thead>
-        <tr>
-          <th scope="col">Author</th><th scope="col">Content</th><th scope="col">Timestamp</th>
-        </tr>
-      </thead>
       <tbody>
-        <tr *ngFor="let comment of order.comments">
-          <td>{{comment.author}}</td><td>{{comment.content}}</td><td>{{comment.timestamp | date:'short'}}</td>
+        <tr>
+          <td>Owner</td>
+          <td>{{order.owner}}</td>
+        </tr>
+        <tr>
+          <td>Editor</td>
+          <td>{{order.editor}}</td>
+        </tr>
+        <tr>
+          <td>Status</td>
+          <td>
+            <span class="badge badge-secondary">{{order.status}}</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Created</td>
+          <td>{{order.created | date:'short'}}</td>
+        </tr>
+        <tr *ngIf="machine">
+          <td>Machine</td>
+          <td>
+            <a [routerLink]="machine.detailView">{{ machine.deviceName }}</a>
+            <span class="badge badge-secondary spacing">{{machine.type}}</span>
+          </td>
+        </tr>
+        <tr *ngIf="fablab">
+          <td>FabLab</td>
+          <td>
+            {{fablab.name}}
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="row spacing text-center">
     <div class="col-md-12">
-      <h2>Files <span class="badge badge-primary spacing text-center">{{ order.files.length }}</span></h2>
+      <h2>Comments
+        <span class="badge badge-primary spacing text-center">{{ order.comments.length }}</span>
+      </h2>
+    </div>
+  </div>
+  <div class="row spacing" *ngIf="order.comments && order.comments.length > 0">
+    <table class="table table-striped table-spacing">
+      <thead>
+        <tr>
+          <th scope="col">Author</th>
+          <th scope="col">Content</th>
+          <th scope="col">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let comment of order.comments">
+          <td>{{comment.author}}</td>
+          <td>{{comment.content}}</td>
+          <td>{{comment.timestamp | date:'short'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row spacing text-center">
+    <div class="col-md-12">
+      <h2>Files
+        <span class="badge badge-primary spacing text-center">{{ order.files.length }}</span>
+      </h2>
     </div>
   </div>
   <div class="row spacing" *ngIf="order.files && order.files.length > 0">
     <table class="table table-striped table-spacing">
       <thead>
         <tr>
-          <th scope="col">Author</th><th scope="col">File</th><th scope="col">Timestamp</th>
+          <th scope="col">Author</th>
+          <th scope="col">File</th>
+          <th scope="col">Timestamp</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let file of order.files">
-          <td>{{files.author}}</td><td>{{files.content}}</td><td>{{files.timestamp | date:'short'}}</td>
+          <td>{{files.author}}</td>
+          <td>{{files.content}}</td>
+          <td>{{files.timestamp | date:'short'}}</td>
         </tr>
       </tbody>
     </table>
