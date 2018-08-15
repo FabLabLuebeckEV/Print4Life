@@ -78,7 +78,6 @@ deploy:
   when: manual
   only:
    - staging
-   - fix/staging-ci
   before_script:
    - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
    - 'which mongorestore || (apt-get update -y && apt-get install mongodb -y)'
