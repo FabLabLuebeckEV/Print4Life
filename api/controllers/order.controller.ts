@@ -18,25 +18,62 @@ import { Order, orderSchema } from '../models/order.model';
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 *    {
-      "orders": [
+{
+    "orders": [
         {
-            owner: "User X",
-            editor: "Editor Y",
-            files: {[
-                ...
-            ]},
-            status: "production",
-            comments: [{
-                    content: "Please print this.",
-                    author: "User X"
-                }, {
-                    conten: "Okay, I will do this.",
-                    author: "Editor Y"
+            "machine": {
+                "_id": "5b55f7bf3fe0c8b01713b3ff",
+                "type": "Printer"
+            },
+            "status": "new",
+            "_id": "5b73f77739bbd845df0cb2df",
+            "projectname": "Comment Test",
+            "comments": [
+                {
+                    "_id": "5b73f77739bbd845df0cb2e0",
+                    "author": "Test",
+                    "content": "Test Comment",
+                    "createdAt": "2018-08-15T09:50:47.475Z"
+                },
+                {
+                    "_id": "5b73f7a939bbd845df0cb2e1",
+                    "author": "Blub",
+                    "content": "Bla",
+                    "createdAt": "2018-08-15T09:51:37.983Z"
                 }
             ],
+            "editor": "Test",
+            "owner": "Test",
+            "token": "87250a41-2587-40bf-8b09-bcd2a32b2c2d",
+            "createdAt": "2018-08-15T09:50:47.475Z",
+            "files": [],
+            "__v": 1
+        },
+        {
+            "machine": {
+                "_id": "5b55f7bf3fe0c8b01713b3e5",
+                "type": "Lasercutter"
+            },
+            "status": "new",
+            "_id": "5b73f81f39bbd845df0cb2e2",
+            "projectname": "Test 2 ",
+            "comments": [
+                {
+                    "_id": "5b73f81f39bbd845df0cb2e3",
+                    "author": "Test",
+                    "content": "Blub",
+                    "createdAt": "2018-08-15T09:53:35.043Z"
+                }
+            ],
+            "editor": "Test",
+            "owner": "Test",
+            "token": "e9a42f99-5689-4563-98ec-721abb754ba5",
+            "createdAt": "2018-08-15T09:53:35.043Z",
+            "files": [],
+            "__v": 0
         }
-      ]
-    }
+    ]
+}
 * @apiSuccessExample Success-Response:
 *    HTTP/1.1 204 No-Content
 *
@@ -96,21 +133,28 @@ function getOrders (query?: any, limit?: any, skip?: any) {
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
- *  {
+{
     "order": {
+        "machine": {
+            "_id": "5b55f7bf3fe0c8b01713b3e5",
+            "type": "Lasercutter"
+        },
         "status": "new",
-        "_id": "5b55cf9730b4aa4bbeaf6f68",
+        "_id": "5b73f81f39bbd845df0cb2e2",
+        "projectname": "Test 2 ",
         "comments": [
             {
-                "_id": "5b583da5514fac1bb10832b6",
-                "author": "Mister Foo",
-                "content": "Hello there, could you print this?"
+                "_id": "5b73f81f39bbd845df0cb2e3",
+                "author": "Test",
+                "content": "Blub",
+                "createdAt": "2018-08-15T09:53:35.043Z"
             }
         ],
-        "editor": "Mister Bar",
-        "owner": "Mister X",
+        "editor": "Test",
+        "owner": "Test",
+        "token": "e9a42f99-5689-4563-98ec-721abb754ba5",
+        "createdAt": "2018-08-15T09:53:35.043Z",
         "files": [],
-        "token": "42",
         "__v": 0
     }
 }
@@ -137,34 +181,66 @@ function getOrderById (id) {
 }
 
 /**
- * @api {post} /api/v1/orders/:id Adds a new order
+ * @api {post} /api/v1/orders/ Adds a new order
  * @apiName createOrder
  * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam {Object} machine simple object containing id and type of machine (required)
+ * @apiParam {String} projectName name of the project (required)
+ * @apiParam {Array} comments array of comment objects
+ * @apiParam {String} editor name of assigned editor
+ * @apiParam {String} owner name of owner of the order (required)
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+        "machine": {
+            "_id": "5b55f7bf3fe0c8b01713b3e5",
+            "type": "Lasercutter"
+        },
+        "projectname": "Test 2 ",
+        "comments": [
+            {
+                "_id": "5b73f81f39bbd845df0cb2e3",
+                "author": "Test",
+                "content": "Blub",
+                "createdAt": "2018-08-15T09:53:35.043Z"
+            }
+        ],
+        "editor": "Test",
+        "owner": "Test"
+}
+ *
  * @apiSuccess { order } the new order object, if success
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 201 Created
-  {
+{
     "order": {
+        "machine": {
+            "_id": "5b55f7bf3fe0c8b01713b3e5",
+            "type": "Lasercutter"
+        },
         "status": "new",
-        "_id": "5b58401ee7e9a1240d4b09ce",
+        "_id": "5b7403e85b1ddf5847ee59f2",
+        "projectname": "Test 2 ",
         "comments": [
             {
-                "_id": "5b58401ee7e9a1240d4b09cf",
-                "author": "Mister Foo",
-                "content": "Hello there, could you print this?"
+                "_id": "5b73f81f39bbd845df0cb2e3",
+                "author": "Test",
+                "content": "Blub",
+                "createdAt": "2018-08-15T09:53:35.043Z"
             }
         ],
-        "editor": "Mister Bar",
-        "owner": "Mister X",
+        "editor": "Test",
+        "owner": "Test",
+        "token": "e6ae7bef-657e-48e7-9c3b-960407cd7164",
+        "createdAt": "2018-08-15T10:43:52.291Z",
         "files": [],
-        "token": "42",
         "__v": 0
     }
-  }
+}
   * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
   {
@@ -176,7 +252,14 @@ function getOrderById (id) {
  */
 function createOrder (order) {
   order.token = uuid();
-  order.created = new Date();
+  order.createdAt = new Date();
+  if (order.comments) {
+    order.comments.forEach((comment) => {
+      if (!comment.createdAt) {
+        comment.createdAt = order.createdAt;
+      }
+    });
+  }
   return Order(_rmDbVars(order)).save();
 }
 
@@ -188,6 +271,40 @@ function createOrder (order) {
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam {Object} machine simple object containing id and type of machine (required)
+ * @apiParam {String} projectName name of the project (required)
+ * @apiParam {Array} comments array of comment objects
+ * @apiParam {String} editor name of assigned editor
+ * @apiParam {String} status name of status of the order (required)
+ * @apiParam {String} token uuid as token for the external login (required)
+ * @apiParam {String} owner name of owner of the order (required)
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+    "order": {
+        "machine": {
+            "_id": "5b55f7bf3fe0c8b01713b3e5",
+            "type": "Lasercutter"
+        },
+        "status": "new",
+        "_id": "5b73ff2e88ccd44a93dda7db",
+        "projectname": "Test 2 ",
+        "comments": [
+            {
+                "_id": "5b73f81f39bbd845df0cb2e3",
+                "author": "Test",
+                "content": "Blub",
+                "createdAt": "2018-08-15T09:53:35.043Z"
+            }
+        ],
+        "editor": "Test",
+        "owner": "Test",
+        "token": "66b0997a-b467-49fd-a769-242fc37ce78d",
+        "createdAt": "2018-08-15T10:23:42.852Z",
+        "files": [],
+        "__v": 0
+    }
+}
  * @apiSuccess { order } the updated order
  *
  * @apiSuccessExample Success-Response:
@@ -220,6 +337,9 @@ function createOrder (order) {
  */
 function updateOrder (order) {
   delete order.__v;
+  if (!order.createdAt) {
+    order.createdAt = new Date();
+  }
   return Order.update(
     { _id: mongoose.Types.ObjectId(order._id) },
     order,
@@ -237,23 +357,31 @@ function updateOrder (order) {
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
-  {
-  'order'; : {
-      'status'; : 'deleted',
-      '_id'; : '5b55cf9730b4aa4bbeaf6f68',
-      'comments'; : [
-          {
-              '_id': '5b583da5514fac1bb10832b6',
-              'author': 'Mister Foo',
-              'content': 'Hello there, could you print this?'
-          }
-      ],
-      'editor'; : 'Mister Bar',
-      'owner'; : 'Mister X',
-      'files'; : [],
-      'token'; : '42',
-      '__v'; : 0;
-  }
+{
+    "order": {
+        "machine": {
+            "_id": "5b55f7bf3fe0c8b01713b3e5",
+            "type": "Lasercutter"
+        },
+        "status": "deleted",
+        "_id": "5b73ff2e88ccd44a93dda7db",
+        "projectname": "Test 2 ",
+        "comments": [
+            {
+                "_id": "5b73f81f39bbd845df0cb2e3",
+                "author": "Test",
+                "content": "Blub",
+                "createdAt": "2018-08-15T09:53:35.043Z"
+            }
+        ],
+        "editor": "Test",
+        "owner": "Test",
+        "token": "66b0997a-b467-49fd-a769-242fc37ce78d",
+        "createdAt": "2018-08-15T10:23:42.852Z",
+        "files": [],
+        "__v": 0
+    }
+}
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
   {
@@ -283,23 +411,16 @@ async function deleteOrder (id) {
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
- *  {
-    "order": {
-        "status": "new",
-        "_id": "5b55cf9730b4aa4bbeaf6f68",
-        "comments": [
-            {
-                "_id": "5b583da5514fac1bb10832b6",
-                "author": "Mister Foo",
-                "content": "Hello there, could you print this?"
-            }
-        ],
-        "editor": "Mister Bar",
-        "owner": "Mister X",
-        "files": [],
-        "token": "42",
-        "__v": 0
-    }
+ * {
+    "status": [
+        "new",
+        "assigned",
+        "production",
+        "shipment",
+        "archived",
+        "representive",
+        "deleted"
+    ]
 }
 *
 * @apiErrorExample {json} Error-Response:
@@ -330,15 +451,27 @@ async function getStatus () {
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam {String} author name of the writer of the comment (required)
+ * @apiParam {String} content the content of the comment (required)
+ *
+ * @apiParamExample {json} Request-Example:
+ {
+    "author": "Test",
+    "content": "Blub"
+}
+
  * @apiSuccess { comment } the new comment object, if success
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 201 Created
-  {
+{
     "comment": {
-        ...
+        "timestamp": "2018-08-15T11:59:09.104Z",
+        "author": "Test",
+        "content": "Blub",
+        "createdAt": "2018-08-15T11:59:09.133Z"
     }
-  }
+}
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
   {
@@ -360,7 +493,7 @@ async function createComment (id, comment) {
   let ret;
   const order = await getOrderById(id);
   if (order) {
-    comment.timestamp = new Date();
+    comment.createdAt = new Date();
     order.comments.push(comment);
     await order.save();
     ret = comment;

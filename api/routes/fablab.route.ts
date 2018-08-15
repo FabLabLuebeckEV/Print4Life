@@ -8,6 +8,9 @@ const router = express.Router();
 router.route('/').get((req, res) => {
   fablabCtrl.getAll().then((fablabs) => {
     logger.info(`GET Fablabs with result ${fablabs}`);
+    fablabs.forEach((fablab) => {
+      delete fablab.password;
+    });
     res.json({ fablabs });
   }).catch((err) => {
     logger.error(err);
@@ -26,6 +29,8 @@ router.route('/:id').get((req, res) => {
         logger.error({ error: `Fablab by id '${req.params.id}' not found` });
         res.status(404).send({ error: `Fablab by id '${req.params.id}' not found` });
       } else {
+        // FIXME: Delete if user model is detached from fablab model (issue #29)
+        fablab.password = undefined;
         logger.info(`GET FablabById with result ${fablab}`);
         res.json({ fablab });
       }

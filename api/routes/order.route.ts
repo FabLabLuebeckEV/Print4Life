@@ -8,10 +8,13 @@ const router = express.Router();
 router.route('/').get((req, res) => {
   orderCtrl.getOrders(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
+      logger.info('GET Orders without result');
       res.status(204).send({ orders });
     } else if (req.query.limit && req.query.skip) {
+      logger.info(`GET Orders with partial result ${orders}`);
       res.status(206).send({ orders });
     } else {
+      logger.info(`GET Orders with results ${orders}`);
       res.status(200).send({ orders });
     }
   }).catch((err) => {
@@ -23,10 +26,18 @@ router.route('/').get((req, res) => {
 router.route('/search').post((req, res) => {
   orderCtrl.getOrders(req.body.query, req.body.limit, req.body.skip).then((orders) => {
     if (orders.length === 0) {
+      logger.info(`POST search for orders with query ${req.body.query}, ` +
+        `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
       res.status(204).send({ orders });
     } else if (req.body.limit && req.body.skip) {
+      logger.info(`POST search for orders with query ${req.body.query}, ` +
+        `limit ${req.body.limit} skip ${req.body.skip} ` +
+        `holds partial results ${orders}`);
       res.status(206).send({ orders });
     } else {
+      logger.info(`POST search for orders with query ${req.body.query}, ` +
+        `limit ${req.body.limit} skip ${req.body.skip} ` +
+        `holds results ${orders}`);
       res.status(200).send({ orders });
     }
   }).catch((err) => {
@@ -43,6 +54,7 @@ router.route('/search').post((req, res) => {
 
 router.route('/count').post((req, res) => {
   orderCtrl.count(req.body.query).then((count) => {
+    logger.info(`POST count with result ${count}`);
     res.status(200).send({ count });
   }).catch((err) => {
     logger.error({ error: 'Error while counting orders!', err });
@@ -52,6 +64,7 @@ router.route('/count').post((req, res) => {
 
 router.route('/').post((req, res) => {
   orderCtrl.createOrder(req.body).then((order) => {
+    logger.info(`POST Order with result ${order}`);
     res.status(201).send({ order });
   }).catch((err) => {
     logger.error({ error: 'Malformed order, one or more parameters wrong or missing', stack: err });
@@ -65,6 +78,7 @@ router.route('/:id').put((req, res) => {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
     orderCtrl.updateOrder(req.body).then((order) => {
+      logger.info(`PUT Order with result ${order}`);
       res.status(200).send({ order });
     }).catch((err) => {
       logger.error({ error: 'Malformed update.', stack: err });
@@ -79,6 +93,7 @@ router.route('/:id').delete((req, res) => {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
     orderCtrl.deleteOrder(req.params.id).then((order) => {
+      logger.info(`DELETE Order with result ${order}`);
       res.status(200).send({ order });
     }).catch((err) => {
       logger.error({ error: 'Malformed Request!', stack: err });
@@ -90,8 +105,10 @@ router.route('/:id').delete((req, res) => {
 router.route('/status/').get((req, res) => {
   orderCtrl.getStatus().then((status) => {
     if (!status) {
+      logger.info('GET status without result');
       res.status(204).send();
     } else {
+      logger.info(`GET status with result ${status}`);
       res.status(200).send({ status });
     }
   }).catch((err) => {
@@ -110,6 +127,7 @@ router.route('/:id/comment').post((req, res) => {
         logger.error({ error: `Could not find any Order with id ${req.params.id}` });
         res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
       } else {
+        logger.info(`POST comment with result ${comment}`);
         res.status(201).send({ comment });
       }
     }).catch((err) => {
@@ -129,6 +147,7 @@ router.route('/:id').get((req, res) => {
         logger.error({ error: `Could not find any Order with id ${req.params.id}` });
         res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
       } else {
+        logger.info(`GET Order with result ${order}`);
         res.status(200).send({ order });
       }
     }).catch((err) => {
