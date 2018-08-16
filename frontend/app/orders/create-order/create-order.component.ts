@@ -20,7 +20,6 @@ import { routes } from '../../config/routes';
 })
 export class CreateOrderComponent implements OnInit {
   config: any;
-  backLink: String;
   backArrow: any;
   selectedType: String;
   editView: Boolean = false;
@@ -59,7 +58,6 @@ export class CreateOrderComponent implements OnInit {
     private configService: ConfigService) {
     this.config = this.configService.getConfig();
     this.backArrow = this.config.icons.back;
-    this.backLink = `/${routes.paths.frontend.orders.root}`;
     this.router.events.subscribe(() => {
       const route = this.location.path();
       this.editView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0;
@@ -70,11 +68,15 @@ export class CreateOrderComponent implements OnInit {
     });
   }
 
+  public back() {
+    this.location.back();
+  }
+
   private _openSuccessMsg() {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Order successfully created', 'modal-header header-success',
       this.editView ? 'Order successfully updated!' : 'Order successfully created!', okButton, undefined).result.then((result) => {
-        this.router.navigate([`/${routes.paths.frontend.orders.root}`]);
+        this.back();
       });
   }
 
@@ -106,11 +108,10 @@ export class CreateOrderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._initializeOrder(this.orderId);
-
     this._loadMachineTypes();
     this._loadFablabs();
     this._loadStatus();
+    this._initializeOrder(this.orderId);
   }
 
   onSubmitComment() {
@@ -173,7 +174,7 @@ export class CreateOrderComponent implements OnInit {
     }
   }
 
-  machineSelected(machine) {
+  machineSelected() {
     this.machines.forEach(element => {
       if (element._id === this.order.machine._id) {
         this.order.machine['deviceName'] = element.deviceName;
@@ -181,12 +182,14 @@ export class CreateOrderComponent implements OnInit {
       }
     });
     const type = this.machineService.camelCaseTypes(this.order.machine.type);
-    this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${machine.viewModel}/`;
+    this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.order.machine._id}/`;
   }
 
   private async _initializeOrder(id) {
     if (id !== undefined) {
       this.order = (await this.orderService.getOrderById(id)).order;
+      await this.machineTypeChanged(this.order.machine.type);
+      this.machineSelected();
       if (this.order === undefined) {
         console.log('ERROR');
       }

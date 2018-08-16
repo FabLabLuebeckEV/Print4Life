@@ -77,7 +77,7 @@ deploy:
     DATABASE_DUMP: "dump/iot-fablab"
   when: manual
   only:
-   - staging
+   - master
   before_script:
    - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
    - 'which mongorestore || (apt-get update -y && apt-get install mongodb -y)'

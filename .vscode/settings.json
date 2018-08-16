@@ -12,5 +12,6 @@
         "**/*.min.*",
         "**/*.map",
         "**/docs/**"
-    ]
+    ],
+    "debug.node.autoAttach": "on"
 }

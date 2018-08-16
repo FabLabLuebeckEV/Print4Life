@@ -3,10 +3,12 @@ import { ConfigService } from '../../config/config.service';
 import { routes } from '../../config/routes';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../services/order.service';
-import { Order, Comment } from '../../models/order.model';
+import { Order } from '../../models/order.model';
 import { MachineService } from '../../services/machine.service';
-import { Machine } from '../../models/machines.model';
 import { FablabService } from '../../services/fablab.service';
+import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-order-detail',
@@ -16,7 +18,9 @@ import { FablabService } from '../../services/fablab.service';
 export class OrderDetailComponent implements OnInit {
   private config: any;
   backArrow: any;
-  backLink: any;
+  editIcon: any;
+  deleteIcon: any;
+  editLink: String;
 
   order: Order = new Order(
     undefined,
@@ -37,15 +41,19 @@ export class OrderDetailComponent implements OnInit {
     private orderService: OrderService,
     private machineService: MachineService,
     private fablabService: FablabService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private modalService: NgbModal,
+    private location: Location
   ) {
     this.config = this.configService.getConfig();
     this.backArrow = this.config.icons.back;
-    this.backLink = `/${routes.paths.frontend.orders.root}`;
+    this.editIcon = this.config.icons.edit;
+    this.deleteIcon = this.config.icons.delete;
     this.route.params.subscribe(params => {
       if (params.id) {
         this.orderService.getOrderById(params.id).then((result) => {
           this.order = result.order;
+           this.editLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
           this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
             const type = this.machineService.camelCaseTypes(this.order.machine.type);
             this.machine = result[`${type}`];
@@ -57,6 +65,37 @@ export class OrderDetailComponent implements OnInit {
         });
       }
     });
+  }
+
+  public back() {
+    this.location.back();
+  }
+
+
+  public delete() {
+    const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
+    const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
+    const modalRef = this._openMsgModal('Do you really want to delete this order?',
+      'modal-header header-danger', `Are you sure you want to delete ${this.order.projectname} ?`, deleteButton, abortButton);
+    modalRef.result.then((result) => {
+      if (result === deleteButton.returnValue) {
+        this.orderService.deleteOrder(this.order._id).then(() => {
+          this.back();
+        });
+      }
+    });
+  }
+
+  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent);
+    modalRef.componentInstance.title = title;
+    if (titleClass) {
+      modalRef.componentInstance.titleClass = titleClass;
+    }
+    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.button1 = button1;
+    modalRef.componentInstance.button2 = button2;
+    return modalRef;
   }
 
   ngOnInit() {

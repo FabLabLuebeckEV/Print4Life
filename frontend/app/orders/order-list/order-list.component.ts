@@ -174,14 +174,14 @@ export class OrderListComponent implements OnInit {
       for (const order of orders) {
         const item = new TableItem();
         item.obj['id'] = { label: order._id };
-        item.obj['Created'] = { label: order.created, isDate: true };
+        item.obj['Created at'] = { label: order.createdAt, isDate: true };
         item.obj['Projectname'] = { label: order.projectname,  href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
         item.obj['Owner'] = { label: order.owner };
         item.obj['Editor'] = { label: order.editor };
         item.obj['Status'] = { label: order.status };
         item.button1.label = 'Edit';
         item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
-        item.button1.class = 'btn btn-primary spacing';
+        item.button1.class = 'btn btn-warning spacing';
         item.button1.icon = this.config.icons.edit;
         item.button2.label = 'Delete';
         item.button2.eventEmitter = true;
