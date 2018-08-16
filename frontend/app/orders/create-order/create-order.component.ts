@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
-import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
+import { Machine, Material, Lasertype } from '../../models/machines.model';
 
 import { Order, Comment, SimpleMachine } from '../../models/order.model';
 import { ConfigService } from '../../config/config.service';
@@ -78,16 +78,6 @@ export class CreateOrderComponent implements OnInit {
       });
   }
 
-  private _openErrMsg(err) {
-    let errorMsg = `Something went wrong while creating the new order.`;
-    if (err) {
-      errorMsg += ` Error: ${JSON.stringify(err, null, 2)}`;
-    }
-    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
-    this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
-      okButton, undefined);
-  }
-
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent);
     modalRef.componentInstance.title = title;
@@ -124,9 +114,10 @@ export class CreateOrderComponent implements OnInit {
   }
 
   onSubmitComment() {
+    const errorMsg = `Something went wrong while adding the new comment.`;
+    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this.orderService.createComment(this.orderId, this.comment).then((result) => {
       if (result) {
-        const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
         this._openMsgModal('Comment successfully added', 'modal-header header-success',
           'Your comment was added and saved!', okButton, undefined).result.then((result) => {
             this.orderService.getOrderById(this.orderId).then((result) => {
@@ -135,37 +126,49 @@ export class CreateOrderComponent implements OnInit {
             this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.orderId}`]);
           });
       }
-    }).catch((err) => {
-      let errorMsg = `Something went wrong while adding the new comment.`;
-      if (err) {
-        errorMsg += ` Error: ${err}`;
-      }
-      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    }).catch(() => {
       this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
         okButton, undefined);
     });
   }
 
   onSubmit() {
+    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    let found = false;
+    if (this.comment.author && this.comment.content) {
+      if (!this.order.comments) {
+        this.order.comments = [];
+      }
+      this.order.comments.forEach((comment) => {
+        if (this.comment.author === comment.author && this.comment.content === comment.content) {
+          found = true;
+        }
+      });
+      if (!found) {
+        this.order.comments.push(this.comment);
+      }
+    }
     if (this.editView) {
+      const errorMsg = 'Error while trying to update!';
       this.orderService.updateOrder(this.order).then((result) => {
         if (result) {
           this._openSuccessMsg();
         } else {
-          this._openErrMsg(undefined);
+          this._openMsgModal('Error', 'modal-header header-danger', errorMsg, okButton, undefined);
         }
-      }).catch((err) => {
-        this._openErrMsg(err);
+      }).catch(() => {
+        this._openMsgModal('Error', 'modal-header header-danger', errorMsg, okButton, undefined);
       });
     } else {
+      const errorMsg = 'Error while trying to create!';
       this.orderService.createOrder(this.order).then((result) => {
         if (result) {
           this._openSuccessMsg();
         } else {
-          this._openErrMsg(undefined);
+          this._openMsgModal('Error', 'modal-header header-danger', errorMsg, okButton, undefined);
         }
-      }).catch((err) => {
-        this._openErrMsg(err);
+      }).catch(() => {
+        this._openMsgModal('Error', 'modal-header header-danger', errorMsg, okButton, undefined);
       });
     }
   }
@@ -206,28 +209,5 @@ export class CreateOrderComponent implements OnInit {
     this.loadingFablabs = true;
     this.fablabs = (await this.fablabService.getFablabs()).fablabs;
     this.loadingFablabs = false;
-  }
-
-  private async _loadLaserTypes() {
-    this.loadingLaserTypes = true;
-    this.laserTypesArr = (await this.machineService.getLaserTypes()).laserTypes;
-    this.loadingLaserTypes = false;
-  }
-
-  private async _loadMaterials(type) {
-    if (type && type !== '') {
-      this.materialsArr = (await this.machineService.getMaterialsByMachineType(this._camelCaseTypes(type))).materials;
-      this.loadingMaterials = false;
-    }
-  }
-
-  private _camelCaseTypes(type): String {
-    const split = type.split(' ');
-    split[0] = split[0].toLowerCase();
-    let machine = '';
-    for (let i = 0; i < split.length; i += 1) {
-      machine += split[i];
-    }
-    return machine.trim();
   }
 }

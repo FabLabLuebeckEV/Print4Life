@@ -23,13 +23,13 @@ const attributes = {
     type: String,
     default: 'new',
     required: true
-  }, // TODO: add model
+  },
   token: {
     type: String,
     unique: true,
     required: true
   },
-  created: {
+  createdAt: {
     type: Date,
     required: true
   },

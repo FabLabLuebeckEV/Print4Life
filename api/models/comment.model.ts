@@ -9,7 +9,7 @@ const attributes = {
     type: String, // TODO: add user model
     required: true
   },
-  timestamp: {
+  createdAt: {
     type: Date,
     required: true
   }

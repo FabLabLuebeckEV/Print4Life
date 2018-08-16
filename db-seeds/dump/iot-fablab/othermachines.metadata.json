@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-dev.othermachines"}],"uuid":"e57911df9fe74ff39beef9d7f30ad309"}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-staging.othermachines"}],"uuid":"c3031494346548d9a19d69343ba648ae"}
