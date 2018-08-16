@@ -181,7 +181,7 @@ export class OrderListComponent implements OnInit {
         item.obj['Status'] = { label: order.status };
         item.button1.label = 'Edit';
         item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
-        item.button1.class = 'btn btn-primary spacing';
+        item.button1.class = 'btn btn-warning spacing';
         item.button1.icon = this.config.icons.edit;
         item.button2.label = 'Delete';
         item.button2.eventEmitter = true;

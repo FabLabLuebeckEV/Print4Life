@@ -1,10 +1,8 @@
 <div class="row spacing">
   <div class="col-md-1 text-right">
-    <a [routerLink]="backLink">
-      <button type="button" class="btn btn-primary">
-        <fa-icon [icon]="backArrow"></fa-icon>
-      </button>
-    </a>
+    <button (click)="back()" type="button" class="btn btn-primary">
+      <fa-icon [icon]="backArrow"></fa-icon>
+    </button>
   </div>
   <div class="col-md-9 text-center">
     <h1>Machine Form</h1>

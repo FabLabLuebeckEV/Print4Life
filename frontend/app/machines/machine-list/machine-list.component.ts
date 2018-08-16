@@ -165,7 +165,7 @@ export class MachineListComponent implements OnInit {
         item.obj['Description'] = { label: '' };
         item.button1.label = 'Update';
         item.button1.href = `./${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
-        item.button1.class = 'btn btn-primary spacing';
+        item.button1.class = 'btn btn-warning spacing';
         item.button1.icon = this.config.icons.edit;
         item.button2.label = 'Delete';
         item.button2.eventEmitter = true;
@@ -176,10 +176,5 @@ export class MachineListComponent implements OnInit {
     }
     this.spinner.hide();
     return arr;
-  }
-
-  private _decimalCount(n: number) {
-    if (Math.floor(n.valueOf()) === n.valueOf()) { return 0; }
-    return n.toString().split('.')[1].length || 0;
   }
 }

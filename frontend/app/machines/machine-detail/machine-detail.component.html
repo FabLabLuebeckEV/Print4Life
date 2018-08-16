@@ -1,13 +1,19 @@
 <div *ngIf="!loading">
   <div class="row spacing">
-    <div class="col-md-2 text-center">
-      <a [routerLink]="backLink">
-        <button type="button" class="btn btn-primary">
-          <fa-icon [icon]="backArrow"></fa-icon>
+    <div class="col-md-3 text-center">
+      <button (click)="back()" type="button" class="btn btn-primary spacing-right-xs">
+        <fa-icon [icon]="backArrow"></fa-icon>
+      </button>
+      <a [routerLink]="editLink">
+        <button type="button" class="btn btn-warning spacing-right-xs">
+          <fa-icon [icon]="editIcon"></fa-icon>
         </button>
       </a>
+      <button (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
+        <fa-icon [icon]="deleteIcon"></fa-icon>
+      </button>
     </div>
-    <div class="col-md-8 offset-2">
+    <div class="col-md-7 offset-1">
       <h1>{{machine.deviceName}} - {{machine.fablab.name}}</h1>
     </div>
   </div>

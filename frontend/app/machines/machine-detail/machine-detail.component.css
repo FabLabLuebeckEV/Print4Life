@@ -9,3 +9,7 @@ li:hover {
 .spacing-right {
     margin-right: 20px;
 }
+
+.spacing-right-xs {
+    margin: 5px;
+}
