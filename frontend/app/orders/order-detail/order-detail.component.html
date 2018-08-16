@@ -41,7 +41,7 @@
         </tr>
         <tr>
           <td>Created</td>
-          <td>{{order.created | date:'short'}}</td>
+          <td>{{order.createdAt | date:'short'}}</td>
         </tr>
         <tr *ngIf="machine">
           <td>Machine</td>
@@ -79,7 +79,7 @@
         <tr *ngFor="let comment of order.comments">
           <td>{{comment.author}}</td>
           <td>{{comment.content}}</td>
-          <td>{{comment.timestamp | date:'short'}}</td>
+          <td>{{comment.createdAt | date:'short'}}</td>
         </tr>
       </tbody>
     </table>
