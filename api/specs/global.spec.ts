@@ -8,7 +8,8 @@ const jasmineLib = new Jasmine();
 server.run();
 jasmineLib.loadConfig({
   spec_dir: 'dist/specs',
-  spec_files: ['**/*[sS]pec.js']
+  spec_files: ['**/*[sS]pec.js'],
+  random: false
 });
 
 jasmineLib.execute();
