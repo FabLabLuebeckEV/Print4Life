@@ -21,6 +21,7 @@ build_dev:
     - npm run build
   except: 
     - master
+    - fix/ci
   
 build_prod:
   stage: build
