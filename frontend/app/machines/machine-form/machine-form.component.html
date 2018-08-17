@@ -187,60 +187,41 @@
         <div *ngIf="selectedType === 'Lasercutter'">
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="camSoftware">Cam Software</label>
-              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware" #camSoftware="ngModel">
-            </div>
-            <div class="col-md-4">
-              <label for="nozzleDiameter">Nozzle Diameter</label>
-              <input type="text" class="form-control" id="nozzleDiameter" [(ngModel)]="model.nozzleDiameter" name="nozzleDiameter" #nozzleDiameter="ngModel">
-            </div>
-            <div class="col-md-4">
               <label for="laserTypes">Laser Types</label>
               <ng-select [multiple]="true" [loading]="loadingLaserTypes" [hideSelected]="true" [closeOnSelect]="false" [items]=laserTypesArr
                 bindLabel="laserType" [(ngModel)]="model.laserTypes" id="laserTypes" name="laserTypes" #laserTypes="ngModel"
                 required>
               </ng-select>
             </div>
-          </div>
-
-          <div class="form-group row">
             <div class="col-md-4">
-              <label for="printVolumeX">Print Volume X</label>
-              <input type="number" class="form-control" id="printVolumeX" [(ngModel)]="model.printVolumeX" name="printVolumeX" #printVolumeX="ngModel">
+              <label for="laserPower">Laserpower</label>
+              <input type="number" class="form-control" id="laserPower" [(ngModel)]="model.laserPower" name="laserPower" #laserPower="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printVolumeY">Print Volume Y</label>
-              <input type="number" class="form-control" id="printVolumeY" [(ngModel)]="model.printVolumeY" name="printVolumeY" #printVolumeY="ngModel">
-            </div>
-            <div class="col-md-4">
-              <label for="printVolumeZ">Print Volume Z</label>
-              <input type="number" class="form-control" id="printVolumeZ" [(ngModel)]="model.printVolumeZ" name="printVolumeZ" #printVolumeZ="ngModel">
+              <label for="maxResolution">Max Resolution</label>
+              <input type="number" class="form-control" id="maxResolution" [(ngModel)]="model.maxResolution" name="maxResolution" #maxResolution="ngModel">
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="printResolutionX">Print Resolution X</label>
-              <input type="number" class="form-control" id="printResolutionX" [(ngModel)]="model.printResolutionX" name="printResolutionX"
-                #printResolutionX="ngModel">
+              <label for="workspaceX">Workspace X</label>
+              <input type="number" class="form-control" id="workspaceX" [(ngModel)]="model.workspaceX" name="workspaceX" #workspaceX="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printResolutionY">Print Resolution Y</label>
-              <input type="number" class="form-control" id="printResolutionY" [(ngModel)]="model.printResolutionY" name="printResolutionY"
-                #printResolutionY="ngModel">
+              <label for="workspaceY">Workspace Y</label>
+              <input type="number" class="form-control" id="workspaceY" [(ngModel)]="model.workspaceY" name="workspaceY" #workspaceY="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printResolutionZ">Print Resolution Z</label>
-              <input type="number" class="form-control" id="printResolutionZ" [(ngModel)]="model.printResolutionZ" name="printResolutionZ"
-                #printResolutionZ="ngModel">
+              <label for="workspaceZ">Workspace Z</label>
+              <input type="number" class="form-control" id="workspaceZ" [(ngModel)]="model.workspaceZ" name="workspaceZ" #workspaceZ="ngModel">
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="numberOfExtruders">Number of Extruders</label>
-              <input type="number" class="form-control" id="numberOfExtruders" [(ngModel)]="model.numberOfExtruders" name="numberOfExtruders"
-                #numberOfExtruders="ngModel">
+              <label for="camSoftware">Cam Software</label>
+              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware" #camSoftware="ngModel">
             </div>
             <div class="col-md-4">
               <label for="pictureUrl">Picture Url</label>

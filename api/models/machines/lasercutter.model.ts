@@ -17,7 +17,7 @@ const attributes = {
   workspaceZ: {
     type: Number
   },
-  maxResoultion: {
+  maxResolution: {
     type: Number,
   },
   laserPower: {
