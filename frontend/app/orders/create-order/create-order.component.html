@@ -81,7 +81,7 @@
         <div *ngIf="order.machine && order.machine.deviceName" class="col-md-4 offset-1">
           <label for="selectedMachineDetailView">Info:</label>
           <div>
-            <a [routerLink]="order.machine.detailView" name="selectedMachineDetailView" target="_blank">
+            <a [routerLink]="order.machine.detailView" name="selectedMachineDetailView">
               <button type="button" class="btn btn-primary">{{ order.machine.deviceName }}</button>
             </a>
           </div>
