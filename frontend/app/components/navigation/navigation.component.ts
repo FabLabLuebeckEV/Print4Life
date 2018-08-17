@@ -16,14 +16,14 @@ export class NavigationComponent implements OnInit {
     this.machineDropdown = {
       name: 'Machine',
       elements: [
-        { name: 'Get Machines', routerHref: routes.paths.frontend.machines.root }
+        { name: 'List Machines', routerHref: routes.paths.frontend.machines.root }
       ]
     };
 
     this.orderDropdown = {
       name: 'Orders',
       elements: [
-        { name: 'All orders', routerHref: routes.paths.frontend.orders.root }
+        { name: 'List Orders', routerHref: routes.paths.frontend.orders.root }
       ]
     };
   }
