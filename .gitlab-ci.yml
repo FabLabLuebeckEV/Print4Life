@@ -65,11 +65,10 @@ test:
    - npm install
    - npm run test
     
-deploy:
+deploy_staging:
   stage: deploy
   environment:
     name: staging
-    url: $SERVER_ADDRESS
   variables: 
     NODE_ENV: "prod"
     DATABASE_HOST: "localhost"
