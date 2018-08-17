@@ -19,11 +19,15 @@ describe('Other Machine Controller', () => {
       headers: { 'content-type': 'application/json' },
       json: true
     }, (error, response) => {
-      const otherMachines = response.body.otherMachines;
-      expect(response.statusCode).toEqual(200);
-      expect(otherMachines).toBeDefined();
-      expect(otherMachines.length).toBeGreaterThan(-1);
-      expect(otherMachines[0].type).toEqual('otherMachine');
+      if (response.body && response.body.otherMachines) {
+        const otherMachines = response.body.otherMachines;
+        expect(response.statusCode).toEqual(200);
+        expect(otherMachines).toBeDefined();
+        expect(otherMachines.length).toBeGreaterThan(-1);
+        expect(otherMachines[0].type).toEqual('otherMachine');
+      } else {
+        expect(response.statusCode).toEqual(204);
+      }
       done();
     });
   });

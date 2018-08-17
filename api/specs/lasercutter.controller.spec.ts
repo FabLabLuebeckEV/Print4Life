@@ -26,11 +26,15 @@ describe('Lasercutter Controller', () => {
       headers: { 'content-type': 'application/json' },
       json: true
     }, (error, response) => {
-      const lasercutters = response.body.lasercutters;
-      expect(response.statusCode).toEqual(200);
-      expect(lasercutters).toBeDefined();
-      expect(lasercutters.length).toBeGreaterThan(-1);
-      expect(lasercutters[0].type).toEqual('lasercutter');
+      if (response.body && response.body.lasercutters) {
+        const lasercutters = response.body.lasercutters;
+        expect(response.statusCode).toEqual(200);
+        expect(lasercutters).toBeDefined();
+        expect(lasercutters.length).toBeGreaterThan(-1);
+        expect(lasercutters[0].type).toEqual('lasercutter');
+      } else {
+        expect(response.statusCode).toEqual(204);
+      }
       done();
     });
   });

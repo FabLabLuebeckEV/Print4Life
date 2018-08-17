@@ -31,11 +31,15 @@ describe('Printer Controller', () => {
       headers: { 'content-type': 'application/json' },
       json: true
     }, (error, response) => {
-      const printers = response.body.printers;
-      expect(response.statusCode).toEqual(200);
-      expect(printers).toBeDefined();
-      expect(printers.length).toBeGreaterThan(-1);
-      expect(printers[0].type).toEqual('printer');
+      if (response.body && response.body.printers) {
+        const printers = response.body.printers;
+        expect(response.statusCode).toEqual(200);
+        expect(printers).toBeDefined();
+        expect(printers.length).toBeGreaterThan(-1);
+        expect(printers[0].type).toEqual('printer');
+      } else {
+        expect(response.statusCode).toEqual(204);
+      }
       done();
     });
   });
