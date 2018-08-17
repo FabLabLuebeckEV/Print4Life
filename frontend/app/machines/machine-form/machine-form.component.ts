@@ -7,7 +7,6 @@ import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { ConfigService } from '../../config/config.service';
-import { routes } from '../../config/routes';
 
 @Component({
   selector: 'app-machine-form',
@@ -114,9 +113,6 @@ export class MachineFormComponent implements OnInit {
     let errorMsg;
     this.editView ? errorMsg = 'Something went wrong while updating the machine'
       : errorMsg = `Something went wrong while creating the new machine.`;
-    if (err) {
-      errorMsg += ` Error: ${err}`;
-    }
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Error', 'modal-header header-danger', errorMsg,
       okButton, undefined);

@@ -50,7 +50,7 @@ export class MachineDetailComponent implements OnInit {
           this.fablabService.getFablab(this.machine.fablabId).then((result) => {
             this.machine.fablab = result.fablab;
             this.editLink = `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.update}/` +
-            `${this.machine.type}s/${this.machine._id}`;
+              `${this.machine.type}s/${this.machine._id}`;
             this._splitMachineProps();
           });
         });
@@ -95,16 +95,16 @@ export class MachineDetailComponent implements OnInit {
     const machineProps = Object.keys(this.machine).filter((key) => {
       return key !== '_id' && key !== 'fablabId' && key !== '__v';
     });
-    machineProps.forEach((key, idx) => {
+    machineProps.forEach((key) => {
       const prop: any = this.machine[`${key}`];
-      if (prop instanceof Object && !Array.isArray(prop)) {
-        this.machineSubObjects.push({ title: this.machineService._uncamelCase(key), obj: this._cleanPropObject(prop) });
-        machineProps.splice(idx, 1);
-      } else if (prop instanceof Object && Array.isArray(prop)) {
-        this.machineSubArrays.push({ title: this.machineService._uncamelCase(key), array: this._cleanPropObject(prop) });
-        machineProps.splice(idx, 1);
-      } else {
-        this.machineProps['props'].push({ key, label: this.machineService._uncamelCase(key) });
+      if (prop) {
+        if (prop instanceof Object && !Array.isArray(prop)) {
+          this.machineSubObjects.push({ title: this.machineService._uncamelCase(key), obj: this._cleanPropObject(prop) });
+        } else if (prop instanceof Object && Array.isArray(prop)) {
+          this.machineSubArrays.push({ title: this.machineService._uncamelCase(key), array: this._cleanPropObject(prop) });
+        } else {
+          this.machineProps['props'].push({ key, label: this.machineService._uncamelCase(key) });
+        }
       }
     });
     this.loading = false;
