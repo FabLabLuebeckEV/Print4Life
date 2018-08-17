@@ -9,7 +9,7 @@ router.route('/').get((req, res) => {
   orderCtrl.getOrders(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
       logger.info('GET Orders without result');
-      res.status(204).send({ orders });
+      res.status(204).send();
     } else if (req.query.limit && req.query.skip) {
       logger.info(`GET Orders with partial result ${orders}`);
       res.status(206).send({ orders });

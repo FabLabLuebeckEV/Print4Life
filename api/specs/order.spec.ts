@@ -19,12 +19,16 @@ const testOrder = {
 
 describe('Order Controller', () => {
   it('gets orders', (done) => {
-    request.get(`${endpoint}orders/`, { headers: { 'content-type': 'application/json' } },
+    request.get(`${endpoint}orders/`, { headers: { 'content-type': 'application/json' }, json: true },
       (error, response) => {
-        const orders = JSON.parse(response.body).orders;
-        expect(response.statusCode).toEqual(200);
-        expect(orders).toBeDefined();
-        expect(orders.length).toBeGreaterThan(-1);
+        if (response.body && response.body.orders) {
+          const orders = response.body.orders;
+          expect(response.statusCode).toEqual(200);
+          expect(orders).toBeDefined();
+          expect(orders.length).toBeGreaterThan(-1);
+        } else {
+          expect(response.statusCode).toEqual(204);
+        }
         done();
       });
   });

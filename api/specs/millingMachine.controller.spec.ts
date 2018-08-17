@@ -26,11 +26,15 @@ describe('Milling Machine Controller', () => {
       headers: { 'content-type': 'application/json' },
       json: true
     }, (error, response) => {
-      const millingMachines = response.body.millingMachines;
-      expect(response.statusCode).toEqual(200);
-      expect(millingMachines).toBeDefined();
-      expect(millingMachines.length).toBeGreaterThan(-1);
-      expect(millingMachines[0].type).toEqual('millingMachine');
+      if (response.body && response.body.millingMachines) {
+        const millingMachines = response.body.millingMachines;
+        expect(response.statusCode).toEqual(200);
+        expect(millingMachines).toBeDefined();
+        expect(millingMachines.length).toBeGreaterThan(-1);
+        expect(millingMachines[0].type).toEqual('millingMachine');
+      } else {
+        expect(response.statusCode).toEqual(204);
+      }
       done();
     });
   });
