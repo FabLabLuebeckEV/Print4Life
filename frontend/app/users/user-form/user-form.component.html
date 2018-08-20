@@ -49,7 +49,7 @@
         </div>
         <div class="col-md-6">
           <label for="validation">Password validation</label>
-          <input type="validation" class="form-control" id="validation" required [(ngModel)]="user.passwordValidation" name="validation"
+          <input type="password" class="form-control" id="validation" required [(ngModel)]="user.passwordValidation" name="validation"
             #validation="ngModel">
           <div [hidden]="validation.valid || validation.pristine" class="alert alert-danger">
             validation is required
@@ -72,6 +72,40 @@
           </ng-select>
           <div [hidden]="role.valid || role.pristine" class="alert alert-danger">
             Role is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="street">Street</label>
+          <input type="text" class="form-control" id="street" [(ngModel)]="user.address.street" name="street" #street="ngModel">
+          <div [hidden]="street.valid || street.pristine" class="alert alert-danger">
+            Street is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-4">
+          <label for="zipCode">Zip Code</label>
+          <input type="text" class="form-control" id="zipCode" [(ngModel)]="user.address.zipCode" name="zipCode" #zipCode="ngModel">
+          <div [hidden]="zipCode.valid || zipCode.pristine" class="alert alert-danger">
+            Zip code is required
+          </div>
+        </div>
+        <div class="col-md-8">
+          <label for="city">City</label>
+          <input type="text" class="form-control" id="city" [(ngModel)]="user.address.city" name="city" #city="ngModel">
+          <div [hidden]="city.valid || city.pristine" class="alert alert-danger">
+            City is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="country">Country</label>
+          <input type="text" class="form-control" id="country" [(ngModel)]="user.address.country" name="country" #country="ngModel">
+          <div [hidden]="country.valid || country.pristine" class="alert alert-danger">
+            Country is required
           </div>
         </div>
       </div>
