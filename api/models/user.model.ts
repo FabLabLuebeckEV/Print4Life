@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { bcrypt } from 'bcrypt-nodejs';
+import * as bcrypt from 'bcrypt';
 import { addressSchema } from './address.model';
 import { roleSchema } from './role.model';
 
@@ -40,7 +40,7 @@ userSchema.pre('save', function (next) {
             if (err) {
                 return next(err);
             }
-            bcrypt.hash(user.password, salt, null, (err, hash) => {
+            bcrypt.hash(user.password, salt, (err, hash) => {
                 if (err) {
                     return next(err);
                 }

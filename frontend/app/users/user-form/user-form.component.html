@@ -32,9 +32,9 @@
           </div>
         </div>
         <div class="col-md-6">
-          <label for="secondname">Secondname</label>
-          <input type="text" class="form-control" id="secondname" required [(ngModel)]="user.secondname" name="secondname" #secondname="ngModel">
-          <div [hidden]="secondname.valid || secondname.pristine" class="alert alert-danger">
+          <label for="lastname">Secondname</label>
+          <input type="text" class="form-control" id="lastname" required [(ngModel)]="user.lastname" name="lastname" #lastname="ngModel">
+          <div [hidden]="lastname.valid || lastname.pristine" class="alert alert-danger">
             Secondname is required
           </div>
         </div>

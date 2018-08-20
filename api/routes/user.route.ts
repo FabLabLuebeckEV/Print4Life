@@ -23,8 +23,9 @@ router.route('/roles').get((req, res) => {
       res.status(200).send({ roles });
     }
   }).catch((err) => {
-    logger.error({ error: 'Error while trying to get all valid roles!', stack: err });
-    res.status(500).send({ error: 'Error while trying to get all valid roles!', stack: err });
+    const msg = { error: 'Error while trying to get all valid roles!', stack: err };
+    logger.error(msg);
+    res.status(500).send(msg);
   });
 });
 

@@ -42,6 +42,12 @@ export class UserFormComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.userService.createUser(this.user)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 }

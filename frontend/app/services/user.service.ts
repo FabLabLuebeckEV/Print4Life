@@ -14,4 +14,8 @@ export class UserService {
   public getRoles(): Promise<any> {
     return this.http.get(`${this.p}/${routes.paths.backend.users.getRoles}`).toPromise();
   }
+
+  public createUser(user): Promise<any> {
+    return this.http.post(`${this.p}/${routes.paths.backend.users.create}`, user).toPromise();
+  }
 }

@@ -2,6 +2,8 @@ import { User } from '../models/user.model';
 import { roleSchema } from '../models/role.model';
 
 async function signUp (user) {
+  delete user._id;
+  delete user.__v;
   const newUser = new User({
     ...user
   });
