@@ -15,7 +15,7 @@
       </ng-select>
     </div>
     <div class="col-md-5">
-      <label for="status">Filter by machine type:</label>
+      <label for="machineType">Filter by machine type:</label>
       <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false" [items]=machineTypes
         placeholder="Filter by machine type..." bindLabel="machineType" [(ngModel)]="selectedMachineTypes" id="machineType"
         (change)="changeHandlerForMachineType($event)" name="machineType" #machineType="ngModel">

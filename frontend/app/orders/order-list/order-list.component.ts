@@ -126,7 +126,7 @@ export class OrderListComponent implements OnInit {
                 this.orders[orderIdx].obj['Owner'] = { label: result.owner };
                 this.orders[orderIdx].obj['Editor'] = { label: result.editor };
                 this.orders[orderIdx].obj['Status'] = { label: result.status };
-                this.orders[orderIdx].obj['Machinetype'] = { label: result.machine.type };
+                this.orders[orderIdx].obj['Device Type'] = { label: result.machine.type };
 
               }
             });
@@ -135,7 +135,7 @@ export class OrderListComponent implements OnInit {
             this.visibleOrders[orderIdx].obj['Owner'] = { label: result.owner };
             this.visibleOrders[orderIdx].obj['Editor'] = { label: result.editor };
             this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
-            this.visibleOrders[orderIdx].obj['Machinetype'] = { label: result.machine.type };
+            this.visibleOrders[orderIdx].obj['Device Type'] = { label: result.machine.type };
             if (this.selectedStatus && this.selectedStatus.length > 0) {
               this.init();
             }
@@ -205,7 +205,7 @@ export class OrderListComponent implements OnInit {
         item.obj['Owner'] = { label: order.owner };
         item.obj['Editor'] = { label: order.editor };
         item.obj['Status'] = { label: order.status };
-        item.obj['Machinetype'] = { label: order.machine.type };
+        item.obj['Device Type'] = { label: order.machine.type };
         item.button1.label = 'Edit';
         item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
         item.button1.class = 'btn btn-warning spacing';
