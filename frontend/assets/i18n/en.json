@@ -1,0 +1,18 @@
+{
+    "languages": {
+        "title": "Languages",
+        "german": "German",
+        "english": "English",
+        "danish": "Danish"
+    },
+    "dropdown": {
+        "machines": {
+            "title": "Machines",
+            "listMachines": "List Machines"
+        },
+        "orders": {
+            "title": "Orders",
+            "listOrders": "List Orders"
+        }
+    }
+}

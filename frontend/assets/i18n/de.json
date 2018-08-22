@@ -1,0 +1,18 @@
+{
+    "languages": {
+        "title": "Sprachauswahl",
+        "german": "Deutsch",
+        "english": "Englisch",
+        "danish": "Dänisch"
+    },
+    "dropdown": {
+        "machines": {
+            "title": "Machinen",
+            "listMachines": "Maschinenliste"
+        },
+        "orders": {
+            "title": "Aufträge",
+            "listOrders": "Auftragsliste"
+        }
+    }
+}
