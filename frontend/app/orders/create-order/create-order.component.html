@@ -33,7 +33,7 @@
       <div class="form-group row">
         <div class="col-md-12">
           <label for="editor">Editor</label>
-          <input type="text" class="form-control" id="editor" required [(ngModel)]="order.editor" name="editor" #editor="ngModel">
+          <input type="text" class="form-control" id="editor" [(ngModel)]="order.editor" name="editor" #editor="ngModel">
           <div [hidden]="editor.valid || editor.pristine" class="alert alert-danger">
             Editor name is required
           </div>
