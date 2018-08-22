@@ -20,6 +20,8 @@ import { routes } from '../../config/routes';
 })
 export class CreateOrderComponent implements OnInit {
   config: any;
+  publicIcon: any;
+  publicHint: String = 'This will be visible for you and the world.';
   backArrow: any;
   selectedType: String;
   editView: Boolean = false;
@@ -58,6 +60,7 @@ export class CreateOrderComponent implements OnInit {
     private configService: ConfigService) {
     this.config = this.configService.getConfig();
     this.backArrow = this.config.icons.back;
+    this.publicIcon = this.config.icons.public;
     this.router.events.subscribe(() => {
       const route = this.location.path();
       this.editView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0;
