@@ -95,4 +95,6 @@ deploy_staging:
    # Delete this line if the database shall not be dropped
    - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "mongo iot-fablab-staging --eval \"db.dropDatabase()\" && cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME/db-seeds && bash scripts/import.sh $DATABASE_HOST $DATABASE_PORT $DATABASE $DATABASE_DUMP"
    # Comment end
-   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 delete $PROJECT_NAME && pm2 start npm --name \"$PROJECT_NAME\" -- run api-serve"
+   # Delete old process if running, otherwise true and start process
+   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 delete $PROJECT_NAME || true"
+   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 start npm --name \"$PROJECT_NAME\" -- run api-serve"
