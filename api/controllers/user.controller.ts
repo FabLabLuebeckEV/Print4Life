@@ -1,5 +1,5 @@
 import { User } from '../models/user.model';
-import { roleSchema } from '../models/role.model';
+import { Role, roleSchema } from '../models/role.model';
 
 async function signUp (user) {
   delete user._id;
@@ -7,6 +7,8 @@ async function signUp (user) {
   const newUser = new User({
     ...user
   });
+  const role = new Role({ role: user.role });
+  newUser.role = role;
   return newUser.save();
 }
 
