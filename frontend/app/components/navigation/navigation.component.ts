@@ -31,7 +31,7 @@ export class NavigationComponent implements OnInit {
     this.userDropdown = {
       name: 'User',
       elements: [
-        { name: 'SignUp', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.create}` },
+        { name: 'SignUp', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}` },
         { name: 'SignIn', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signin}` },
         { name: 'Info', routerHref: `${routes.paths.frontend.users.root}/:id` }
       ]
