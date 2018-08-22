@@ -1,4 +1,10 @@
 {
+    "dashboard": {
+        "title": "Willkommen zur Fablab - Auftragsverwaltung!"
+    },
+    "navigation": {
+        "title": "Auftragsverwaltung"
+    },
     "languages": {
         "title": "Sprachauswahl",
         "german": "Deutsch",
@@ -14,5 +20,34 @@
             "title": "Aufträge",
             "listOrders": "Auftragsliste"
         }
+    },
+    "machineList": {
+        "spinnerLoadingText": "Lade Maschinen",
+        "buttons": {
+            "deleteLabel": "Löschen",
+            "updateLabel": "Ändern"
+        },
+        "modals": {
+            "yes": "Ja",
+            "abort": "Nein",
+            "deleteValue": "Löschen",
+            "abortValue": "Abbrechen",
+            "deleteHeader": "Möchten Sie wirklich diese Maschine löschen?",
+            "deleteQuestion": "Sind Sie sich sicher, dass sie",
+            "deleteQuestion2": "löschen wollen?"
+        }
+    },
+    "tableComponent": {
+        "Device Type": "Machinen Typ",
+        "Device Name": "Maschinen Name",
+        "Manufacturer": "Hersteller",
+        "Fablab": "Fablab",
+        "Description": "Beschreibung"
+    },
+    "deviceTypes": {
+        "lasercutter": "Lasercutter",
+        "otherMachine": "Andere Machine",
+        "millingMachine": "Fräßmaschine",
+        "printer": "3D Drucker"
     }
 }

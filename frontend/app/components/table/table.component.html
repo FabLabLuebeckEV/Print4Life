@@ -7,7 +7,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let item of items">
+    <tr *ngFor="let item of visibleItems">
       <td *ngFor="let header of headers">
         <a *ngIf="item.obj[header].href" [routerLink]="item.obj[header].href">{{item.obj[header].label}}</a>
         <span *ngIf="!item.obj[header].href && !item.obj[header].isDate">{{item.obj[header].label}}</span>
@@ -17,7 +17,8 @@
         <!-- Button 1 -->
 
         <!-- EventEmitter and no icon -->
-        <button *ngIf="item.button1.class && item.button1.eventEmitter && !item.button1.icon" (click)="emit(item.button1)" type="button" [class]="item.button1.class">{{item.button1.label}}</button>
+        <button *ngIf="item.button1.class && item.button1.eventEmitter && !item.button1.icon" (click)="emit(item.button1)" type="button"
+          [class]="item.button1.class">{{item.button1.label}}</button>
 
         <!-- EventEmitter and icon -->
         <button *ngIf="item.button1.class && item.button1.eventEmitter" (click)="emit(item.button1)" type="button" [class]="item.button1.class">
@@ -54,7 +55,8 @@
         <!-- Button 2 -->
 
         <!-- EventEmitter and no icon -->
-        <button *ngIf="item.button2.class && item.button2.eventEmitter && !item.button2.icon" (click)="emit(item.button2)" type="button" [class]="item.button2.class">{{item.button2.label}}</button>
+        <button *ngIf="item.button2.class && item.button2.eventEmitter && !item.button2.icon" (click)="emit(item.button2)" type="button"
+          [class]="item.button2.class">{{item.button2.label}}</button>
 
         <!-- EventEmitter and icon -->
         <button *ngIf="item.button2.class && item.button2.eventEmitter" (click)="emit(item.button2)" type="button" [class]="item.button2.class">

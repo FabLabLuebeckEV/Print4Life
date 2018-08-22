@@ -1,4 +1,10 @@
 {
+    "dashboard": {
+        "title": "Welcome to Fablab - Order Management! "
+    },
+    "navigation": {
+        "title": "Order Management"
+    },
     "languages": {
         "title": "Languages",
         "german": "German",
@@ -14,5 +20,34 @@
             "title": "Orders",
             "listOrders": "List Orders"
         }
+    },
+    "machineList": {
+        "spinnerLoadingText": "Loading Machines",
+        "buttons": {
+            "deleteLabel": "Delete",
+            "updateLabel": "Update"
+        },
+        "modals": {
+            "yes": "Yes",
+            "abort": "No",
+            "deleteValue": "Delete",
+            "abortValue": "Abort",
+            "deleteHeader": "Do you really want to delete the machine?",
+            "deleteQuestion": "Are you sure you want to delete",
+            "deleteQuestion2": "?"
+        }
+    },
+    "tableComponent": {
+        "Device Type": "Device Type",
+        "Device Name": "Device Name",
+        "Manufacturer": "Manufacturer",
+        "Fablab": "Fablab",
+        "Description": "Description"
+    },
+    "deviceTypes": {
+        "lasercutter": "Lasercutter",
+        "otherMachine": "Other Machine",
+        "millingMachine": "Milling Machine",
+        "printer": "Printer"
     }
 }

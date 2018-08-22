@@ -13,23 +13,22 @@ export class NavigationComponent implements OnInit {
   machineDropdown: Object = { name: '', elements: [] };
   orderDropdown: Object = { name: '', elements: [] };
   languageDropdown: Object = { name: '', elements: [] };
-  defaultLang = 'de';
 
   constructor(private translateService: TranslateService) {
-    this.translateService.setDefaultLang(this.defaultLang);
-    this._translate(this.defaultLang);
+    this._translate();
   }
 
   ngOnInit() {
   }
 
   public switchLanguage(language) {
-    this._translate(language);
+    this.translateService.use(language);
+    this._translate();
   }
 
-  private _translate(language) {
-    this.translateService.use(language);
-    this.translateService.get(['languages', 'dropdown.machines', 'dropdown.orders']).subscribe((translations => {
+  private _translate() {
+    this.translateService.get(['navigation', 'languages', 'dropdown.machines', 'dropdown.orders']).subscribe((translations => {
+      this.title = translations['navigation'].title;
       this.machineDropdown = {
         name: translations['dropdown.machines'].title,
         elements: [

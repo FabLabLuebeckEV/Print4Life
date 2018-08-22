@@ -89,7 +89,7 @@ export class OrderListComponent implements OnInit {
       let order: TableItem;
       let orderIdx: number;
       this.visibleOrders.forEach((item, idx) => {
-        if (event === item.button1 || event === item.button2) {
+        if (event.refId === item.button1.refId || event.refId === item.button2.refId) {
           order = item;
           orderIdx = idx;
         }
@@ -175,7 +175,7 @@ export class OrderListComponent implements OnInit {
         const item = new TableItem();
         item.obj['id'] = { label: order._id };
         item.obj['Created at'] = { label: order.createdAt, isDate: true };
-        item.obj['Projectname'] = { label: order.projectname,  href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
+        item.obj['Projectname'] = { label: order.projectname, href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
         item.obj['Owner'] = { label: order.owner };
         item.obj['Editor'] = { label: order.editor };
         item.obj['Status'] = { label: order.status };
@@ -187,6 +187,7 @@ export class OrderListComponent implements OnInit {
         item.button2.eventEmitter = true;
         item.button2.class = 'btn btn-danger spacing';
         item.button2.icon = this.config.icons.delete;
+        item.button2.refId = order._id;
         arr.push(item);
       }
 

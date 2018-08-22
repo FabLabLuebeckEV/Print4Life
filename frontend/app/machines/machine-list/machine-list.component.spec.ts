@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import {
   HttpClientTestingModule
@@ -33,8 +34,9 @@ describe('MachineListComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         FontAwesomeModule,
-        NgbModule.forRoot()],
-      providers: [NgxSpinnerService, ConfigService, MachineService, FablabService]
+        NgbModule.forRoot(),
+        TranslateModule.forRoot()],
+      providers: [NgxSpinnerService, ConfigService, MachineService, FablabService, TranslateService]
     })
       .compileComponents();
   }));
