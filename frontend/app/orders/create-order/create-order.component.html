@@ -1,4 +1,5 @@
 <router-outlet></router-outlet>
+<ng-template #tipContent>{{publicHint}}</ng-template>
 <div class="row spacing">
   <div class="col-md-1 text-right">
     <button (click)="back()" type="button" class="btn btn-primary spacing-right-xs">
@@ -15,6 +16,7 @@
       <div class="form-group row">
         <div class="col-md-12">
           <label for="projectname">Projectname</label>
+          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <input type="text" class="form-control" id="projectname" required [(ngModel)]="order.projectname" name="projectname" #projectname="ngModel">
           <div [hidden]="projectname.valid || projectname.pristine" class="alert alert-danger">
             Projectname is required
@@ -24,6 +26,7 @@
       <div class="form-group row">
         <div class="col-md-12">
           <label for="owner">Owner</label>
+          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <input type="text" class="form-control" id="owner" required [(ngModel)]="order.owner" name="owner" #owner="ngModel">
           <div [hidden]="owner.valid || owner.pristine" class="alert alert-danger">
             Owner name is required
@@ -33,6 +36,7 @@
       <div class="form-group row">
         <div class="col-md-12">
           <label for="editor">Editor</label>
+          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <input type="text" class="form-control" id="editor" required [(ngModel)]="order.editor" name="editor" #editor="ngModel">
           <div [hidden]="editor.valid || editor.pristine" class="alert alert-danger">
             Editor name is required
@@ -42,6 +46,7 @@
       <div class="form-group row">
         <div *ngIf="editView" class="col-md-12">
           <label for="status">Status</label>
+          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingStatus" [items]=validStatus bindValue="_id" bindLabel="name" [(ngModel)]="order.status" id="status"
             name="status" #status="ngModel" required>
           </ng-select>
@@ -53,6 +58,7 @@
       <div class="form-group row">
         <div class="col-md-12">
           <label for="selectedMachineType">Machine Type</label>
+          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingMachineTypes" [items]=machineTypes [(ngModel)]="order.machine.type" id="selectedMachineType"
             name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine.type)" required>
           </ng-select>
@@ -64,6 +70,7 @@
       <div *ngIf="order.machine.type" class="form-group row">
         <div class="col-md-6">
           <label for="selectedMachine">Select Machine</label>
+          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingMachinesForType" [items]=machines bindValue="_id" bindLabel="deviceName" [(ngModel)]="order.machine._id"
             id="selectedMachine" name="selectedMachine" #selectedMachine="ngModel" groupBy="fablabName" (change)="machineSelected(selectedMachine)"
             required>
