@@ -22,6 +22,8 @@
         }
     },
     "machineList": {
+        "paginationLabel": "Springe zur Seite",
+        "filterLabel": "Filter nach Maschinen Typ:",
         "spinnerLoadingText": "Lade Maschinen",
         "buttons": {
             "deleteLabel": "Löschen",

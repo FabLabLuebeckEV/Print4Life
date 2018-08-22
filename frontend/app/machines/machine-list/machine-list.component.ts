@@ -19,9 +19,13 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class MachineListComponent implements OnInit {
   private config: any;
-  machineTypes: Array<String> = [];
+  filter: any = {
+    originMachineTypes: [], // origin for backend containing all machine types
+    machineTypes: [], // shown machine types after translation to select in filter
+    shownMachineTypes: [], // selected and translated machine types in filter
+    selectedMachineTypes: undefined // selected machine types but in origin backend language
+  };
   displayedMachines: Array<TableItem> = [];
-  selectedMachineTypes: Array<String>;
   listView: Boolean;
   loadingMachineTypes: Boolean;
   plusIcon: Icon;
@@ -39,6 +43,8 @@ export class MachineListComponent implements OnInit {
     jumpToPage: undefined
   };
   translationFields = {
+    paginationLabel: '',
+    filterLabel: '',
     spinnerLoadingText: '',
     buttons: {
       deleteLabel: '',
@@ -69,10 +75,9 @@ export class MachineListComponent implements OnInit {
     private spinner: NgxSpinnerService, private configService: ConfigService,
     private translateService: TranslateService) {
     this.config = this.configService.getConfig();
-    this._translate();
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
-      this.filterHandler(this.selectedMachineTypes);
+      this.filterHandler(this.filter.shownMachineTypes);
     });
     this.plusIcon = this.config.icons.add;
     this.jumpArrow = this.config.icons.forward;
@@ -89,20 +94,33 @@ export class MachineListComponent implements OnInit {
   }
 
   async pageChanged() {
-    this.displayedMachines = await this._loadMachinesByTypes(this.selectedMachineTypes);
+    this.displayedMachines = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
   }
 
   async ngOnInit() {
     if (this.listView && !this.loadingMachineTypes) {
       await this._loadMachineTypes();
-      this.selectedMachineTypes = this.machineTypes;
+      this._translate();
       this._init();
     }
   }
 
   async filterHandler(event) {
-    this.selectedMachineTypes = event;
-    this.displayedMachines = await this._loadMachinesByTypes(this.selectedMachineTypes);
+    this.filter.selectedMachineTypes = [];
+    this.filter.shownMachineTypes = event;
+    this.translateService.get(['deviceTypes']).subscribe((translations => {
+      this.filter.originMachineTypes.forEach((machineType) => {
+        const type = translations['deviceTypes'][`${this.machineService.camelCaseTypes(machineType)}`];
+        if (type) {
+          this.filter.shownMachineTypes.forEach((selectedType) => {
+            if (selectedType === type) {
+              this.filter.selectedMachineTypes.push(machineType);
+            }
+          });
+        }
+      });
+    }));
+    this.displayedMachines = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
   }
 
   eventHandler(event) {
@@ -139,7 +157,25 @@ export class MachineListComponent implements OnInit {
 
   private async _loadMachineTypes() {
     this.loadingMachineTypes = true;
-    this.machineTypes = (await this.machineService.getAllMachineTypes()).types;
+    this.filter.originMachineTypes = (await this.machineService.getAllMachineTypes()).types;
+    this.filter.originMachineTypes.forEach((type, idx) => {
+      this.filter.originMachineTypes[idx] = this.machineService.camelCaseTypes(type);
+    });
+    this.filter.machineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
+    this.filter.shownMachineTypes = JSON.parse(JSON.stringify(this.filter.machineTypes));
+    this.translateService.get(['machineList', 'deviceTypes']).subscribe((translations => {
+      this.filter.machineTypes.forEach((type, idx) => {
+        const translated = translations['deviceTypes'][`${type}`];
+        this.filter.machineTypes[idx] = translated;
+      });
+      this.filter.shownMachineTypes.forEach((type, idx) => {
+        const translated = translations['deviceTypes'][`${type}`];
+        this.filter.shownMachineTypes[idx] = translated;
+      });
+    }));
+    if (!this.filter.selectedMachineTypes) {
+      this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
+    }
     this.loadingMachineTypes = false;
   }
 
@@ -157,7 +193,7 @@ export class MachineListComponent implements OnInit {
 
 
   private async _init() {
-    const arr = await this._loadMachinesByTypes(this.selectedMachineTypes);
+    const arr = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
     this.displayedMachines = JSON.parse(JSON.stringify(arr));
   }
 
@@ -218,9 +254,28 @@ export class MachineListComponent implements OnInit {
   }
 
   private _translate() {
-    this.translateService.get(['machineList']).subscribe((translations => {
+    this.translateService.get(['machineList', 'deviceTypes']).subscribe((translations => {
       this.spinnerConfig = { 'loadingText': translations['machineList'].spinnerLoadingText, ...this.config.spinnerConfig };
+      this.filter.machineTypes = [];
+      this.filter.shownMachineTypes = [];
+      this.filter.originMachineTypes.forEach((mType) => {
+        const camelType = this.machineService.camelCaseTypes(mType);
+        const translated = translations['deviceTypes'][`${camelType}`];
+        if (translated) {
+          this.filter.machineTypes.push(translated);
+        }
+      });
+      this.filter.selectedMachineTypes.forEach((mType) => {
+        const camelType = this.machineService.camelCaseTypes(mType);
+        const translated = translations['deviceTypes'][`${camelType}`];
+        if (translated) {
+          this.filter.shownMachineTypes.push(translated);
+        }
+      });
+
       this.translationFields = {
+        paginationLabel: translations['machineList'].paginationLabel,
+        filterLabel: translations['machineList'].filterLabel,
         spinnerLoadingText: translations['machineList'].spinnerLoadingText,
         buttons: {
           deleteLabel: translations['machineList'].buttons.deleteLabel,

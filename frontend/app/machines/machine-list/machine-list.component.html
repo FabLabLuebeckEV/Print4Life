@@ -7,9 +7,9 @@
             </button>
         </div>
         <div class="col-md-6 offset-1">
-            <label for="status">Filter by Machine Type:</label>
-            <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false" [items]=machineTypes
-                bindLabel="machineTypeFilter" [(ngModel)]="selectedMachineTypes" id="machineTypeFilter" (change)="filterHandler($event)"
+            <label for="status">{{translationFields.filterLabel}}</label>
+            <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.machineTypes
+                bindLabel="machineTypeFilter" [(ngModel)]="filter.shownMachineTypes" id="machineTypeFilter" (change)="filterHandler($event)"
                 name="machineTypeFilter" #machineTypeFilter="ngModel">
             </ng-select>
         </div>
@@ -25,7 +25,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-2 offset-5 text-center">
-                    <label for="jumpToPage">Jump to Page</label>
+                    <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
                     <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage" name="jumpToPage" #jumpToPage="ngModel">
                 </div>
                 <div class="col-md-1 align-self-end">
