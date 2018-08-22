@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableItem } from '../../components/table/table.component';
 import { OrderService } from '../../services/order.service';
+import { MachineService } from '../../services/machine.service';
 import { ConfigService } from '../../config/config.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
@@ -24,10 +25,16 @@ export class OrderListComponent implements OnInit {
   id: String;
   listView: Boolean = false;
   plusIcon: any;
-  loadingStatus: Boolean;
   loadingOrders: Boolean = false;
+
+  loadingStatus: Boolean;
   selectedStatus: Array<String> = [];
   validStatus: Array<String> = [];
+
+  loadingMachineTypes: Boolean;
+  machineTypes: Array<String> = [];
+  selectedMachineTypes: Array<String> = [];
+
   spinnerConfig: Object;
   jumpArrow: Icon;
   paginationObj: any = {
@@ -43,6 +50,7 @@ export class OrderListComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
+    private machineService: MachineService,
     private router: Router,
     private location: Location,
     private modalService: NgbModal,
@@ -69,6 +77,7 @@ export class OrderListComponent implements OnInit {
       this.visibleOrders = [];
       this.orders = [];
       this._loadStatus();
+      this._loadMachineTypes();
       this.init();
     }
   }
@@ -81,7 +90,14 @@ export class OrderListComponent implements OnInit {
   changeHandler(event: Array<String>) {
     this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
     this.selectedStatus = event;
-    this._filterOrdersByStatus();
+    this.init();
+  }
+
+    // remove add change clear
+  changeHandlerForMachineType(event: Array<String>) {
+    this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+    this.selectedMachineTypes = event;
+    this.init();
   }
 
   eventHandler(event) {
@@ -110,6 +126,8 @@ export class OrderListComponent implements OnInit {
                 this.orders[orderIdx].obj['Owner'] = { label: result.owner };
                 this.orders[orderIdx].obj['Editor'] = { label: result.editor };
                 this.orders[orderIdx].obj['Status'] = { label: result.status };
+                this.orders[orderIdx].obj['Device Type'] = { label: result.machine.type };
+
               }
             });
             this.visibleOrders[orderIdx].obj = {};
@@ -117,17 +135,17 @@ export class OrderListComponent implements OnInit {
             this.visibleOrders[orderIdx].obj['Owner'] = { label: result.owner };
             this.visibleOrders[orderIdx].obj['Editor'] = { label: result.editor };
             this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
+            this.visibleOrders[orderIdx].obj['Device Type'] = { label: result.machine.type };
             if (this.selectedStatus && this.selectedStatus.length > 0) {
-              this._filterOrdersByStatus();
+              this.init();
+            }
+            if (this.selectedMachineTypes && this.selectedMachineTypes.length > 0) {
+              this.init();
             }
           });
         }
       });
     }
-  }
-
-  private _filterOrdersByStatus() {
-    this.init();
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
@@ -144,17 +162,25 @@ export class OrderListComponent implements OnInit {
 
   async init() {
     this.orders = [];
+    this.visibleOrders = undefined;
+    this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
     this.loadingOrders = true;
     this.spinner.show();
     let countObj;
     let totalItems = 0;
     let query;
-    if (this.selectedStatus.length > 0) {
+    if (this.selectedStatus.length > 0 || this.selectedMachineTypes.length > 0) {
       query = {
-        $or: []
+        $and: [
+          {$or: []},
+          {$or: []}
+        ]
       };
       this.selectedStatus.forEach((status) => {
-        query.$or.push({ status: status });
+        query.$and[0].$or.push({ status: status });
+      });
+      this.selectedMachineTypes.forEach((type) => {
+        query.$and[1].$or.push({ 'machine.type': type});
       });
     }
 
@@ -179,6 +205,7 @@ export class OrderListComponent implements OnInit {
         item.obj['Owner'] = { label: order.owner };
         item.obj['Editor'] = { label: order.editor };
         item.obj['Status'] = { label: order.status };
+        item.obj['Device Type'] = { label: order.machine.type };
         item.button1.label = 'Edit';
         item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
         item.button1.class = 'btn btn-warning spacing';
@@ -199,8 +226,16 @@ export class OrderListComponent implements OnInit {
   }
 
   private async _loadStatus() {
+    this.loadingStatus = true;
     this.validStatus = (await this.orderService.getStatus()).status;
     this.selectedStatus = this.validStatus;
     this.loadingStatus = false;
+  }
+
+  private async _loadMachineTypes() {
+    this.loadingMachineTypes = true;
+    this.machineTypes = (await this.machineService.getAllMachineTypes()).types;
+    this.selectedMachineTypes = this.machineTypes;
+    this.loadingMachineTypes = false;
   }
 }
