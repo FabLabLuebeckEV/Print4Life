@@ -4,8 +4,7 @@ export const routes = {
         backend: {
             users: {
                 root: 'users',
-                getRoles: 'roles',
-                create: 'signup'
+                getRoles: 'roles'
             },
             orders: {
                 root: 'orders',
@@ -34,7 +33,7 @@ export const routes = {
         frontend: {
             users: {
                 root: 'users',
-                create: 'signup',
+                signup: 'signup',
                 signin: 'signin',
                 update: 'edit'
             },

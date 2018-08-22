@@ -5,9 +5,9 @@ import logger from '../logger';
 
 const router = express.Router();
 
-router.post('/signup', (req, res) => {
+router.post('/', (req, res) => {
   userCtrl.signUp(req.body).then((user) => {
-    res.status(200).send(user);
+    res.status(200).send({ user });
   }).catch((err) => {
     const msg = { error: 'Malformed user, one or more parameters wrong or missing', stack: err };
     logger.error(msg);

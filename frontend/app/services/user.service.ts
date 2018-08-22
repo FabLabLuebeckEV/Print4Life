@@ -16,6 +16,6 @@ export class UserService {
   }
 
   public createUser(user): Promise<any> {
-    return this.http.post(`${this.p}/${routes.paths.backend.users.create}`, user).toPromise();
+    return this.http.post(`${this.p}/`, user).toPromise();
   }
 }

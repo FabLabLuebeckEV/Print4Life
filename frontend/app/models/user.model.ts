@@ -18,7 +18,7 @@ export class User {
         public _id: String,
         public username: String,
         public firstname: String,
-        public secondname: String,
+        public lastname: String,
         public password: String,
         public passwordValidation: String,
         public email: String,
