@@ -10,7 +10,6 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
 import { routes } from '../../config/routes';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
-import { query } from '../../../../node_modules/@angular/core/src/render3/query';
 
 @Component({
   selector: 'app-order-list',
@@ -63,10 +62,10 @@ export class OrderListComponent implements OnInit {
     this.jumpArrow = this.config.icons.forward;
     this.router.events.subscribe(() => {
       const route = this.location.path();
-      if (route === '/orders') {
+      if (route === `/${routes.paths.frontend.orders.root}` && !this.listView) {
         this.listView = true;
         this.ngOnInit();
-      } else {
+      } else if (route !== `/${routes.paths.frontend.orders.root}`) {
         this.listView = false;
       }
     });
@@ -74,6 +73,7 @@ export class OrderListComponent implements OnInit {
 
   async ngOnInit() {
     if (this.listView && !this.loadingOrders) {
+      this.loadingOrders = true;
       this.visibleOrders = [];
       this.orders = [];
       await this._loadStatus();
@@ -88,16 +88,12 @@ export class OrderListComponent implements OnInit {
 
   // remove add change clear
   changeHandler(event: Array<String>) {
-    // this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
     this.selectedStatus = event;
-    // this.init();
   }
 
     // remove add change clear
   changeHandlerForMachineType(event: Array<String>) {
-    // this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
     this.selectedMachineTypes = event;
-    // this.init();
   }
 
   eventHandler(event) {
@@ -159,10 +155,10 @@ export class OrderListComponent implements OnInit {
   }
 
   async init() {
+    this.loadingOrders = true;
     this.orders = [];
     this.visibleOrders = undefined;
     this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
-    this.loadingOrders = true;
     this.spinner.show();
     let countObj;
     let totalItems = 0;
