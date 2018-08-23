@@ -37,10 +37,7 @@
         <div class="col-md-12">
           <label for="editor">Editor</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <input type="text" class="form-control" id="editor" required [(ngModel)]="order.editor" name="editor" #editor="ngModel">
-          <div [hidden]="editor.valid || editor.pristine" class="alert alert-danger">
-            Editor name is required
-          </div>
+          <input type="text" class="form-control" id="editor" [(ngModel)]="order.editor" name="editor" #editor="ngModel">
         </div>
       </div>
       <div class="form-group row">

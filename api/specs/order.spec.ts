@@ -12,7 +12,7 @@ const testOrder = {
   files: [],
   status: 'new',
   machine: {
-    type: 'Awesomness Generator',
+    type: 'otherMachine',
     _id: '12345678901234567890aaaa',
   }
 };
