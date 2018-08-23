@@ -70,8 +70,11 @@ export class MachineListComponent implements OnInit {
     }
   }
 
-  async filterHandler(event) {
+  changeFilterHandler(event) {
     this.selectedMachineTypes = event;
+  }
+
+  async filterHandler() {
     this.displayedMachines = await this._loadMachinesByTypes(this.selectedMachineTypes);
   }
 
