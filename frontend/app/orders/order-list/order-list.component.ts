@@ -88,16 +88,16 @@ export class OrderListComponent implements OnInit {
 
   // remove add change clear
   changeHandler(event: Array<String>) {
-    this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+    // this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
     this.selectedStatus = event;
-    this.init();
+    // this.init();
   }
 
     // remove add change clear
   changeHandlerForMachineType(event: Array<String>) {
-    this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+    // this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
     this.selectedMachineTypes = event;
-    this.init();
+    // this.init();
   }
 
   eventHandler(event) {
