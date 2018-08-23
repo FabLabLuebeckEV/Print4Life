@@ -35,7 +35,29 @@ export class MachineListComponent implements OnInit {
     boundaryLinks: true,
     rotate: true,
     maxPages: 0,
-    jumpToPage: undefined
+    jumpToPage: undefined,
+    machines: {
+      lasercutter: {
+        selected: true,
+        total: 0,
+        lastItem: 0
+      },
+      otherMachine: {
+        selected: true,
+        total: 0,
+        lastItem: 0
+      },
+      millingMachine: {
+        selected: true,
+        total: 0,
+        lastItem: 0
+      },
+      printer: {
+        selected: true,
+        total: 0,
+        lastItem: 0
+      }
+    }
   };
 
   constructor(private machineService: MachineService,
@@ -72,6 +94,12 @@ export class MachineListComponent implements OnInit {
 
   changeFilterHandler(event) {
     this.selectedMachineTypes = event;
+    Object.keys(this.paginationObj.machines).forEach((key) => {
+      this.paginationObj.machines[`${key}`].selected = false;
+    });
+    this.selectedMachineTypes.forEach((type) => {
+      this.paginationObj.machines[`${this.machineService.camelCaseTypes(type)}`].selected = true;
+    });
   }
 
   async filterHandler() {
@@ -133,6 +161,7 @@ export class MachineListComponent implements OnInit {
     let countObj;
     let totalItems = 0;
     const perPage: number = Number.parseInt((this.paginationObj.perPage / machineTypes.length).toFixed(0));
+    let maxPerPage = this.paginationObj.perPage;
 
     for (let i = 0; i < machineTypes.length; i++) {
       machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
@@ -140,6 +169,15 @@ export class MachineListComponent implements OnInit {
 
     for (const type of machineTypes) {
       countObj = await this.machineService.count(type);
+      Object.keys(this.paginationObj.machines).forEach((key) => {
+        if (key === type) {
+          this.paginationObj.machines[`${key}`].selected = true;
+          this.paginationObj.machines[`${key}`].total = countObj.count;
+          if (this.paginationObj.page === 1) {
+            this.paginationObj.machines[`${key}`].lastItem = 0;
+          }
+        }
+      });
       totalItems += countObj.count;
     }
 
@@ -148,9 +186,14 @@ export class MachineListComponent implements OnInit {
     }
 
     for (const type of machineTypes) {
-      const resMach = await this.machineService.getAll(type, perPage, (this.paginationObj.page - 1) * perPage);
-      if (resMach) {
-        machines.push(resMach[`${type}s`]);
+      if (this.paginationObj.machines[`${type}`].selected &&
+      this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0) {
+        const resMach = await this.machineService.getAll(type, maxPerPage, this.paginationObj.machines[`${type}`].lastItemstItem);
+        if (resMach) {
+          maxPerPage -= resMach[`${type}s`].length;
+          this.paginationObj.machines[`${type}`].lastItem += resMach[`${type}s`].length;
+          machines.push(resMach[`${type}s`]);
+        }
       }
     }
 
