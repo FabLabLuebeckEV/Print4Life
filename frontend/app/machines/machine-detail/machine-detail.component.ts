@@ -99,11 +99,11 @@ export class MachineDetailComponent implements OnInit {
       const prop: any = this.machine[`${key}`];
       if (prop) {
         if (prop instanceof Object && !Array.isArray(prop)) {
-          this.machineSubObjects.push({ title: this.machineService._uncamelCase(key), obj: this._cleanPropObject(prop) });
+          this.machineSubObjects.push({ title: this.machineService.uncamelCase(key), obj: this._cleanPropObject(prop) });
         } else if (prop instanceof Object && Array.isArray(prop)) {
-          this.machineSubArrays.push({ title: this.machineService._uncamelCase(key), array: this._cleanPropObject(prop) });
+          this.machineSubArrays.push({ title: this.machineService.uncamelCase(key), array: this._cleanPropObject(prop) });
         } else {
-          this.machineProps['props'].push({ key, label: this.machineService._uncamelCase(key) });
+          this.machineProps['props'].push({ key, label: this.machineService.uncamelCase(key) });
         }
       }
     });
@@ -115,7 +115,7 @@ export class MachineDetailComponent implements OnInit {
     if (prop instanceof Object && !Array.isArray(prop)) {
       const tmp = Object.keys(prop).filter((e) => e !== '_id' && e !== '__v');
       tmp.forEach((k) => {
-        newObj[`${this.machineService._uncamelCase(k)}`] = prop[k];
+        newObj[`${this.machineService.uncamelCase(k)}`] = prop[k];
       });
     } else if (Array.isArray(prop)) {
       const arr = [];

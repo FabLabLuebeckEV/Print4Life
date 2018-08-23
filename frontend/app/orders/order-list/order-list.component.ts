@@ -76,8 +76,8 @@ export class OrderListComponent implements OnInit {
     if (this.listView && !this.loadingOrders) {
       this.visibleOrders = [];
       this.orders = [];
-      this._loadStatus();
-      this._loadMachineTypes();
+      await this._loadStatus();
+      await this._loadMachineTypes();
       this.init();
     }
   }
@@ -136,10 +136,8 @@ export class OrderListComponent implements OnInit {
             this.visibleOrders[orderIdx].obj['Editor'] = { label: result.editor };
             this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
             this.visibleOrders[orderIdx].obj['Device Type'] = { label: result.machine.type };
-            if (this.selectedStatus && this.selectedStatus.length > 0) {
-              this.init();
-            }
-            if (this.selectedMachineTypes && this.selectedMachineTypes.length > 0) {
+            if ((this.selectedStatus && this.selectedStatus.length > 0) ||
+            this.selectedMachineTypes && this.selectedMachineTypes.length > 0) {
               this.init();
             }
           });
@@ -169,7 +167,7 @@ export class OrderListComponent implements OnInit {
     let countObj;
     let totalItems = 0;
     let query;
-    if (this.selectedStatus.length > 0 || this.selectedMachineTypes.length > 0) {
+    if (this.selectedStatus.length > 0 && this.selectedMachineTypes.length > 0) {
       query = {
         $and: [
           {$or: []},
@@ -180,7 +178,37 @@ export class OrderListComponent implements OnInit {
         query.$and[0].$or.push({ status: status });
       });
       this.selectedMachineTypes.forEach((type) => {
-        query.$and[1].$or.push({ 'machine.type': type});
+        query.$and[1].$or.push({ 'machine.type': this.machineService.camelCaseTypes(type)});
+      });
+    } else if (this.selectedStatus.length > 0 || this.selectedMachineTypes.length > 0) {
+      query = {
+        $or: [],
+        $nor: []
+      };
+      if (this.selectedStatus.length > 0) {
+        this.selectedStatus.forEach((status) => {
+          query.$or.push({ status: status });
+        });
+        this.machineTypes.forEach((type) => {
+          query.$nor.push({'machine.type': this.machineService.camelCaseTypes(type)});
+        });
+      } else if (this.selectedMachineTypes.length > 0) {
+        this.selectedMachineTypes.forEach((type) => {
+          query.$or.push({ 'machine.type': this.machineService.camelCaseTypes(type)});
+        });
+        this.validStatus.forEach((status) => {
+          query.$nor.push({status});
+        });
+      }
+    } else {
+      query = {
+        $nor: []
+      };
+      this.validStatus.forEach((status) => {
+        query.$nor.push({status});
+      });
+      this.machineTypes.forEach((type) => {
+        query.$nor.push({'machine.type': this.machineService.camelCaseTypes(type)});
       });
     }
 

@@ -12,7 +12,7 @@ export class MachineService {
     this.rootPath = routes.backendUrl + '/' + routes.paths.backend.machines.root;
   }
 
-  public _uncamelCase(str: String): String {
+  public uncamelCase(str: String): String {
     const firstLetter = str.charAt(0);
     if (firstLetter.match(/[a-z]/)) {
       const split = str.split(/(?=[A-Z])/);
@@ -38,26 +38,30 @@ export class MachineService {
   }
 
   public getAll(machineType, limit?, skip?) {
+    const type = this.camelCaseTypes(machineType);
     if (limit >= 0 && skip >= 0) {
       let params = new HttpParams();
       params = params.append('limit', limit);
       params = params.append('skip', skip);
-      return this.http.get(`${this.rootPath}/${machineType}s`, { params: params }).toPromise();
+      return this.http.get(`${this.rootPath}/${type}s`, { params: params }).toPromise();
     } else {
-      return this.http.get(`${this.rootPath}/${machineType}s`).toPromise();
+      return this.http.get(`${this.rootPath}/${type}s`).toPromise();
     }
   }
 
   public count(machineType) {
-    return this.http.get(`${this.rootPath}/${machineType}s/${routes.paths.backend.machines.count}`).toPromise();
+    const type = this.camelCaseTypes(machineType);
+    return this.http.get(`${this.rootPath}/${type}s/${routes.paths.backend.machines.count}`).toPromise();
   }
 
   public create(machineType, obj) {
-    return this.http.post(`${this.rootPath}/${machineType}s/`, obj).toPromise();
+    const type = this.camelCaseTypes(machineType);
+    return this.http.post(`${this.rootPath}/${type}s/`, obj).toPromise();
   }
 
   public update(machineType, id, machine) {
-    return this.http.put(`${this.rootPath}/${machineType}s/${id}`, machine).toPromise();
+    const type = this.camelCaseTypes(machineType);
+    return this.http.put(`${this.rootPath}/${type}s/${id}`, machine).toPromise();
   }
 
   public getAllMachines(): Promise<any> {
@@ -69,7 +73,8 @@ export class MachineService {
   }
 
   public getMaterialsByMachineType(machineType): Promise<any> {
-    return this.http.get(`${this.rootPath}/${routes.paths.backend.machines.materials}/${machineType}`).toPromise();
+    const type = this.camelCaseTypes(machineType);
+    return this.http.get(`${this.rootPath}/${routes.paths.backend.machines.materials}/${type}`).toPromise();
   }
 
   public getLaserTypes(): Promise<any> {
@@ -77,11 +82,13 @@ export class MachineService {
   }
 
   public deleteMachine(machineType, id) {
-    return this.http.delete(`${this.rootPath}/${machineType}s/${id}`).toPromise();
+    const type = this.camelCaseTypes(machineType);
+    return this.http.delete(`${this.rootPath}/${type}s/${id}`).toPromise();
   }
 
   public get(machineType, id) {
-    return this.http.get(`${this.rootPath}/${machineType}s/${id}`).toPromise();
+    const type = this.camelCaseTypes(machineType);
+    return this.http.get(`${this.rootPath}/${type}s/${id}`).toPromise();
   }
 
 }

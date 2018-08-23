@@ -96,9 +96,12 @@ export class CreateOrderComponent implements OnInit {
   async machineTypeChanged(type) {
     let machineObj;
     this.loadingMachinesForType = true;
-    type = this.machineService.camelCaseTypes(type);
+    this.order.machine._id = '';
+    this.order.machine['detailView'] = '';
+    this.order.machine['deviceName'] = '';
     machineObj = await this.machineService.getAll(type, undefined, undefined);
-    machineObj = (machineObj && machineObj[`${type}s`]) ? machineObj[`${type}s`] : undefined;
+    machineObj = (machineObj && machineObj[`${this.machineService.camelCaseTypes(type)}s`]) ?
+    machineObj[`${this.machineService.camelCaseTypes(type)}s`] : undefined;
     for (let i = 0; i < machineObj.length; i++) {
       const resFab = await this.fablabService.getFablab(machineObj[i].fablabId);
       const fablab = resFab.fablab;
@@ -139,6 +142,7 @@ export class CreateOrderComponent implements OnInit {
   onSubmit() {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     let found = false;
+    let orderCopy;
     if (this.comment.author && this.comment.content) {
       if (!this.order.comments) {
         this.order.comments = [];
@@ -152,9 +156,11 @@ export class CreateOrderComponent implements OnInit {
         this.order.comments.push(this.comment);
       }
     }
+    orderCopy = JSON.parse(JSON.stringify(this.order));
+    orderCopy.machine.type = this.machineService.camelCaseTypes(orderCopy.machine.type);
     if (this.editView) {
       const errorMsg = 'Error while trying to update!';
-      this.orderService.updateOrder(this.order).then((result) => {
+      this.orderService.updateOrder(orderCopy).then((result) => {
         if (result) {
           this._openSuccessMsg();
         } else {
@@ -165,7 +171,7 @@ export class CreateOrderComponent implements OnInit {
       });
     } else {
       const errorMsg = 'Error while trying to create!';
-      this.orderService.createOrder(this.order).then((result) => {
+      this.orderService.createOrder(orderCopy).then((result) => {
         if (result) {
           this._openSuccessMsg();
         } else {
@@ -191,7 +197,10 @@ export class CreateOrderComponent implements OnInit {
   private async _initializeOrder(id) {
     if (id !== undefined) {
       this.order = (await this.orderService.getOrderById(id)).order;
+      this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
+      const machineId = this.order.machine._id;
       await this.machineTypeChanged(this.order.machine.type);
+      this.order.machine._id = machineId;
       this.machineSelected();
       if (this.order === undefined) {
         console.log('ERROR');
