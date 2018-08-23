@@ -160,7 +160,6 @@ export class MachineListComponent implements OnInit {
     const arr = [];
     let countObj;
     let totalItems = 0;
-    const perPage: number = Number.parseInt((this.paginationObj.perPage / machineTypes.length).toFixed(0));
     let maxPerPage = this.paginationObj.perPage;
 
     for (let i = 0; i < machineTypes.length; i++) {
@@ -169,15 +168,11 @@ export class MachineListComponent implements OnInit {
 
     for (const type of machineTypes) {
       countObj = await this.machineService.count(type);
-      Object.keys(this.paginationObj.machines).forEach((key) => {
-        if (key === type) {
-          this.paginationObj.machines[`${key}`].selected = true;
-          this.paginationObj.machines[`${key}`].total = countObj.count;
-          if (this.paginationObj.page === 1) {
-            this.paginationObj.machines[`${key}`].lastItem = 0;
-          }
-        }
-      });
+      this.paginationObj.machines[`${type}`].selected = true;
+      this.paginationObj.machines[`${type}`].total = countObj.count;
+      if (this.paginationObj.page === 1) {
+        this.paginationObj.machines[`${type}`].lastItem = 0;
+      }
       totalItems += countObj.count;
     }
 
@@ -187,8 +182,8 @@ export class MachineListComponent implements OnInit {
 
     for (const type of machineTypes) {
       if (this.paginationObj.machines[`${type}`].selected &&
-      this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0) {
-        const resMach = await this.machineService.getAll(type, maxPerPage, this.paginationObj.machines[`${type}`].lastItemstItem);
+        this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0) {
+        const resMach = await this.machineService.getAll(type, maxPerPage, this.paginationObj.machines[`${type}`].lastItem);
         if (resMach) {
           maxPerPage -= resMach[`${type}s`].length;
           this.paginationObj.machines[`${type}`].lastItem += resMach[`${type}s`].length;
