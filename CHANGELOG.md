@@ -6,6 +6,11 @@
 * user and role management (/LF0210/, /LF0220/, /LF0230/, /LF0240/, /LF0350/, /LF0360/)
 * upload of files (/LF0300/, /LF0330/)
 
+## Version 0.2.1
+
+* add dns to cors settings
+* add changelog
+
 ## Version 0.2
 
 * basic CRUDs for machines
