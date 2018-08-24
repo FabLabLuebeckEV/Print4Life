@@ -9,8 +9,9 @@
         <div class="col-md-6 offset-1">
             <label for="status">{{translationFields.filterLabel}}</label>
             <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.machineTypes
-                bindLabel="machineTypeFilter" [(ngModel)]="filter.shownMachineTypes" id="machineTypeFilter" (change)="filterHandler($event)"
-                name="machineTypeFilter" #machineTypeFilter="ngModel">
+                bindLabel="machineTypeFilter" [(ngModel)]="filter.shownMachineTypes" id="machineTypeFilter" (close)="filterHandler()"
+                (remove)="filterHandler()" (clear)="filterHandler()" (change)="changeFilterHandler($event)" name="machineTypeFilter"
+                #machineTypeFilter="ngModel">
             </ng-select>
         </div>
     </div>
@@ -29,13 +30,13 @@
                     <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage" name="jumpToPage" #jumpToPage="ngModel">
                 </div>
                 <div class="col-md-1 align-self-end">
-                    <button type="button" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
+                    <button [disabled]="!paginationObj.jumpToPage" type="button" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
                         <fa-icon [icon]="jumpArrow"></fa-icon>
                     </button>
                 </div>
             </div>
             <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems" [(page)]="paginationObj.page"
-                [pageSize]="paginationObj.perPage" (pageChange)="pageChanged($event)" [maxSize]="paginationObj.maxSize" [rotate]="paginationObj.rotate"
+                [pageSize]="paginationObj.perPage" (pageChange)="filterHandler()" [maxSize]="paginationObj.maxSize" [rotate]="paginationObj.rotate"
                 [boundaryLinks]="paginationObj.boundaryLinks" aria-label="Default pagination"></ngb-pagination>
         </div>
     </footer>

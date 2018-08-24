@@ -40,7 +40,29 @@ export class MachineListComponent implements OnInit {
     boundaryLinks: true,
     rotate: true,
     maxPages: 0,
-    jumpToPage: undefined
+    jumpToPage: undefined,
+    machines: {
+      lasercutter: {
+        selected: true,
+        total: 0,
+        lastItem: 0
+      },
+      otherMachine: {
+        selected: true,
+        total: 0,
+        lastItem: 0
+      },
+      millingMachine: {
+        selected: true,
+        total: 0,
+        lastItem: 0
+      },
+      printer: {
+        selected: true,
+        total: 0,
+        lastItem: 0
+      }
+    }
   };
   translationFields = {
     paginationLabel: '',
@@ -77,7 +99,9 @@ export class MachineListComponent implements OnInit {
     this.config = this.configService.getConfig();
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
-      this.filterHandler(this.filter.shownMachineTypes);
+      this.changeFilterHandler(this.filter.shownMachineTypes);
+      this.paginationObj.page = 1;
+      this.filterHandler();
     });
     this.plusIcon = this.config.icons.add;
     this.jumpArrow = this.config.icons.forward;
@@ -93,10 +117,6 @@ export class MachineListComponent implements OnInit {
     });
   }
 
-  async pageChanged() {
-    this.displayedMachines = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
-  }
-
   async ngOnInit() {
     if (this.listView && !this.loadingMachineTypes) {
       await this._loadMachineTypes();
@@ -105,7 +125,7 @@ export class MachineListComponent implements OnInit {
     }
   }
 
-  async filterHandler(event) {
+  changeFilterHandler(event) {
     this.filter.selectedMachineTypes = [];
     this.filter.shownMachineTypes = event;
     this.translateService.get(['deviceTypes']).subscribe((translations => {
@@ -120,7 +140,17 @@ export class MachineListComponent implements OnInit {
         }
       });
     }));
-    this.displayedMachines = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
+    Object.keys(this.paginationObj.machines).forEach((key) => {
+      this.paginationObj.machines[`${key}`].selected = false;
+    });
+    this.filter.selectedMachineTypes.forEach((type) => {
+      this.paginationObj.machines[`${this.machineService.camelCaseTypes(type)}`].selected = true;
+    });
+  }
+
+  async filterHandler() {
+    const copy = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
+    this.displayedMachines = copy;
   }
 
   eventHandler(event) {
@@ -203,7 +233,7 @@ export class MachineListComponent implements OnInit {
     const arr = [];
     let countObj;
     let totalItems = 0;
-    const perPage: number = Number.parseInt((this.paginationObj.perPage / machineTypes.length).toFixed(0));
+    let maxPerPage = this.paginationObj.perPage;
 
     for (let i = 0; i < machineTypes.length; i++) {
       machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
@@ -211,6 +241,11 @@ export class MachineListComponent implements OnInit {
 
     for (const type of machineTypes) {
       countObj = await this.machineService.count(type);
+      this.paginationObj.machines[`${type}`].selected = true;
+      this.paginationObj.machines[`${type}`].total = countObj.count;
+      if (this.paginationObj.page === 1) {
+        this.paginationObj.machines[`${type}`].lastItem = 0;
+      }
       totalItems += countObj.count;
     }
 
@@ -219,9 +254,14 @@ export class MachineListComponent implements OnInit {
     }
 
     for (const type of machineTypes) {
-      const resMach = await this.machineService.getAll(type, perPage, (this.paginationObj.page - 1) * perPage);
-      if (resMach) {
-        machines.push(resMach[`${type}s`]);
+      if (this.paginationObj.machines[`${type}`].selected &&
+        this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0) {
+        const resMach = await this.machineService.getAll(type, maxPerPage, this.paginationObj.machines[`${type}`].lastItem);
+        if (resMach) {
+          maxPerPage -= resMach[`${type}s`].length;
+          this.paginationObj.machines[`${type}`].lastItem += resMach[`${type}s`].length;
+          machines.push(resMach[`${type}s`]);
+        }
       }
     }
 

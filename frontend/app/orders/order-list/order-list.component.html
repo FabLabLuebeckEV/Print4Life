@@ -7,11 +7,19 @@
         <fa-icon [icon]="plusIcon"></fa-icon>
       </button>
     </div>
-    <div class="col-md-6 offset-1">
+    <div class="col-md-5">
       <label for="status">Filter by status:</label>
       <ng-select [multiple]="true" [loading]="loadingStatus" [hideSelected]="true" [closeOnSelect]="false" [items]=validStatus
         placeholder="Filter by status..." bindLabel="status" [(ngModel)]="selectedStatus" id="status" (change)="changeHandler($event)"
-        name="status" #status="ngModel">
+        (close)="init()" (remove)="init()" (clear)="init()" name="status" #status="ngModel">
+      </ng-select>
+    </div>
+    <div class="col-md-5">
+      <label for="machineType">Filter by machine type:</label>
+      <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false" [items]=machineTypes
+        placeholder="Filter by machine type..." bindLabel="machineType" [(ngModel)]="selectedMachineTypes" id="machineType"
+        (change)="changeHandlerForMachineType($event)" (close)="init()" (remove)="init()" (clear)="init()" name="machineType"
+        #machineType="ngModel">
       </ng-select>
     </div>
   </div>
@@ -31,7 +39,7 @@
           <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage" name="jumpToPage" #jumpToPage="ngModel">
         </div>
         <div class="col-md-1 align-self-end">
-          <button type="button" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
+          <button [disabled]="!paginationObj.jumpToPage" type="button" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
             <fa-icon [icon]="jumpArrow"></fa-icon>
           </button>
         </div>
