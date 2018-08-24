@@ -11,10 +11,10 @@ router.route('/').get((req, res) => {
       logger.info('GET Milling Machines with no result');
       res.status(204).send();
     } else if (millingMachines && req.query.limit && req.query.skip) {
-      logger.info(`GET Milling Machines with partial result ${millingMachines}`);
+      logger.info(`GET Milling Machines with partial result ${JSON.stringify(millingMachines)}`);
       res.status(206).send({ millingMachines });
     } else if (millingMachines) {
-      logger.info(`GET Milling Machines with result ${millingMachines}`);
+      logger.info(`GET Milling Machines with result ${JSON.stringify(millingMachines)}`);
       res.status(200).send({ millingMachines });
     }
   }).catch((err) => {
@@ -26,7 +26,7 @@ router.route('/').get((req, res) => {
 
 router.route('/count').get((req, res) => {
   millingMachineCtrl.count().then((count) => {
-    logger.info(`GET count milling machines with result ${count}`);
+    logger.info(`GET count milling machines with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
     const msg = { error: 'Error while trying to count milling machines', stack: err };
@@ -37,7 +37,7 @@ router.route('/count').get((req, res) => {
 
 router.route('/').post((req, res) => {
   millingMachineCtrl.create(req.body).then((millingMachine) => {
-    logger.info(`POST Milling Machine with result ${millingMachine}`);
+    logger.info(`POST Milling Machine with result ${JSON.stringify(millingMachine)}`);
     res.status(201).send({ millingMachine });
   }).catch((err) => {
     const msg = { error: 'Malformed request!', stack: err };
@@ -60,7 +60,7 @@ router.route('/:id').delete((req, res) => {
           if (result) {
             millingMachineCtrl.get(req.params.id).then((result) => {
               if (!result) {
-                logger.info(`DELETE Milling Machine with result ${millingMachine}`);
+                logger.info(`DELETE Milling Machine with result ${JSON.stringify(millingMachine)}`);
                 res.status(200).send({ millingMachine });
               }
             }).catch((err) => {
@@ -110,7 +110,7 @@ router.route('/:id').get((req, res) => {
         logger.error(msg);
         res.status(404).send(msg);
       } else {
-        logger.info(`GET Milling Machine by id with result ${millingMachine}`);
+        logger.info(`GET Milling Machine by id with result ${JSON.stringify(millingMachine)}`);
         res.status(200).send({ millingMachine });
       }
     }).catch((err) => {
@@ -138,7 +138,7 @@ router.route('/:id').put((req, res) => {
         res.status(404).send(msg);
       } else {
         millingMachineCtrl.update(req.params.id, req.body).then((millingMachine) => {
-          logger.info(`PUT Milling Machine with result ${millingMachine}`);
+          logger.info(`PUT Milling Machine with result ${JSON.stringify(millingMachine)}`);
           res.status(200).send({ millingMachine });
         });
       }
