@@ -79,6 +79,7 @@ deploy_staging:
   only:
    - master
    - fix/ci
+   - patch/0.2.1
   before_script:
    - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
    - 'which mongorestore || (apt-get update -y && apt-get install mongodb -y)'
