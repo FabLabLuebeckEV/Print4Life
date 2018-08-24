@@ -8,17 +8,17 @@
       </button>
     </div>
     <div class="col-md-5">
-      <label for="status">Filter by status:</label>
-      <ng-select [multiple]="true" [loading]="loadingStatus" [hideSelected]="true" [closeOnSelect]="false" [items]=validStatus
-        placeholder="Filter by status..." bindLabel="status" [(ngModel)]="selectedStatus" id="status" (change)="changeHandler($event)"
+      <label for="status">{{translationFields.filterLabel.status}}</label>
+      <ng-select [multiple]="true" [loading]="loadingStatus" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.validStatus
+        bindLabel="status" [(ngModel)]="filter.shownStatus" id="status" (change)="changeHandlerStatus($event)"
         (close)="init()" (remove)="init()" (clear)="init()" name="status" #status="ngModel">
       </ng-select>
     </div>
     <div class="col-md-5">
-      <label for="machineType">Filter by machine type:</label>
-      <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false" [items]=machineTypes
-        placeholder="Filter by machine type..." bindLabel="machineType" [(ngModel)]="selectedMachineTypes" id="machineType"
-        (change)="changeHandlerForMachineType($event)" (close)="init()" (remove)="init()" (clear)="init()" name="machineType"
+      <label for="machineType">{{translationFields.filterLabel.machines}}</label>
+      <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.machineTypes
+        bindLabel="machineType" [(ngModel)]="filter.shownMachineTypes" id="machineType"
+        (change)="changeHandlerMachineType($event)" (close)="init()" (remove)="init()" (clear)="init()" name="machineType"
         #machineType="ngModel">
       </ng-select>
     </div>
@@ -35,7 +35,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-2 offset-5 text-center">
-          <label for="jumpToPage">Jump to Page</label>
+          <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
           <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage" name="jumpToPage" #jumpToPage="ngModel">
         </div>
         <div class="col-md-1 align-self-end">

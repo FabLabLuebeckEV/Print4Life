@@ -45,23 +45,28 @@ export class TableComponent implements OnInit, DoCheck {
 
   ngDoCheck() {
     let changes = false;
-    if (!this.objDiffer && this.items.length > 0) {
-      this.objDiffer = {};
-      this.items.forEach((elt, idx) => {
-        this.objDiffer[idx] = this.differs.find(elt).create();
-      });
-    }
-    this.items.forEach((elt, idx) => {
-      const objDiffer = this.objDiffer[idx];
-      if (objDiffer) {
-        const objChanges = objDiffer.diff(elt);
-        if (objChanges) {
-          changes = true;
-        }
+    if (this.items) {
+      if (!this.objDiffer && this.items.length > 0) {
+        this.objDiffer = {};
+        this.items.forEach((elt, idx) => {
+          this.objDiffer[idx] = this.differs.find(elt).create();
+        });
       }
-    });
-    if (changes) {
-      this._loadTable();
+      this.items.forEach((elt, idx) => {
+        const objDiffer = this.objDiffer[idx];
+        if (objDiffer) {
+          const objChanges = objDiffer.diff(elt);
+          if (objChanges) {
+            changes = true;
+          }
+        }
+      });
+      if (changes) {
+        this._loadTable();
+      }
+    } else {
+      this.items = [];
+      this.visibleItems = [];
     }
   }
 
@@ -70,35 +75,40 @@ export class TableComponent implements OnInit, DoCheck {
   }
 
   private _loadTable() {
-    this._translate();
-    this.headers = [];
-    this.visibleItems.forEach((item) => {
+    if (this.items) {
+      this._translate();
+      this.headers = [];
+      this.visibleItems.forEach((item) => {
 
-      if (item.button1) {
-        this.button1Active = true;
-      }
+        if (item.button1) {
+          this.button1Active = true;
+        }
 
-      if (item.button2) {
-        this.button2Active = true;
-      }
+        if (item.button2) {
+          this.button2Active = true;
+        }
 
-      Object.keys(item.obj).forEach((key) => {
-        let found = false;
-        this.headers.forEach((header) => {
-          if (header === key) {
-            found = true;
+        Object.keys(item.obj).forEach((key) => {
+          let found = false;
+          this.headers.forEach((header) => {
+            if (header === key) {
+              found = true;
+            }
+          });
+          if (!found && key !== 'id') {
+            this.headers.push(key);
           }
         });
-        if (!found && key !== 'id') {
-          this.headers.push(key);
-        }
       });
-    });
+    } else {
+      this.items = [];
+      this.visibleItems = [];
+    }
   }
 
   private _translate() {
     this.visibleItems = [];
-    this.translateService.get(['tableComponent', 'deviceTypes']).subscribe((translations => {
+    this.translateService.get(['tableComponent', 'deviceTypes', 'status']).subscribe((translations => {
       this.items.forEach((item) => {
         const itemCopy = JSON.parse(JSON.stringify(item));
         const visibleItem = new TableItem();
@@ -110,6 +120,10 @@ export class TableComponent implements OnInit, DoCheck {
           if (translatedKey) {
             if (key === 'Device Type') {
               const translatedType = translations['deviceTypes'][`${itemCopy.obj[`${key}`].label}`];
+              visibleItem.obj[`${translatedKey}`] = itemCopy.obj[`${key}`];
+              visibleItem.obj[`${translatedKey}`].label = translatedType;
+            } else if (key === 'Status') {
+              const translatedType = translations['status'][`${itemCopy.obj[`${key}`].label}`];
               visibleItem.obj[`${translatedKey}`] = itemCopy.obj[`${key}`];
               visibleItem.obj[`${translatedKey}`].label = translatedType;
             } else {

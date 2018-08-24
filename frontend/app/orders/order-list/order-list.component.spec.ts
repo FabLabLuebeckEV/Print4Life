@@ -3,11 +3,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TableComponent } from '../../components/table/table.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent } from '../../components/message-modal/message-modal.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 
 import {
@@ -35,9 +36,10 @@ describe('OrderListComponent', () => {
         FontAwesomeModule,
         NgSelectModule,
         FormsModule,
-        NgxSpinnerModule
+        NgxSpinnerModule,
+        TranslateModule.forRoot()
       ],
-      providers: [NgxSpinnerService, ConfigService]
+      providers: [NgxSpinnerService, ConfigService, TranslateService]
     })
     .compileComponents();
   }));

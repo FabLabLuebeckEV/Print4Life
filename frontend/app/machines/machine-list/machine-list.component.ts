@@ -80,13 +80,6 @@ export class MachineListComponent implements OnInit {
       deleteHeader: '',
       deleteQuestion: '',
       deleteQuestion2: ''
-    },
-    tableItemHeaders: {
-      deviceType: '',
-      deviceName: '',
-      manufacturer: '',
-      fablab: '',
-      description: ''
     }
   };
 
@@ -150,7 +143,11 @@ export class MachineListComponent implements OnInit {
 
   async filterHandler() {
     const copy = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
-    this.displayedMachines = copy;
+    if (copy.length > 0) {
+      this.displayedMachines = copy;
+    } else {
+      this.displayedMachines = undefined;
+    }
   }
 
   eventHandler(event) {
@@ -193,7 +190,7 @@ export class MachineListComponent implements OnInit {
     });
     this.filter.machineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
     this.filter.shownMachineTypes = JSON.parse(JSON.stringify(this.filter.machineTypes));
-    this.translateService.get(['machineList', 'deviceTypes']).subscribe((translations => {
+    this.translateService.get(['deviceTypes']).subscribe((translations => {
       this.filter.machineTypes.forEach((type, idx) => {
         const translated = translations['deviceTypes'][`${type}`];
         this.filter.machineTypes[idx] = translated;
@@ -224,7 +221,11 @@ export class MachineListComponent implements OnInit {
 
   private async _init() {
     const arr = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
-    this.displayedMachines = JSON.parse(JSON.stringify(arr));
+    if (arr.length > 0) {
+      this.displayedMachines = JSON.parse(JSON.stringify(arr));
+    } else {
+      this.displayedMachines = undefined;
+    }
   }
 
   private async _loadMachinesByTypes(machineTypes: Array<String>) {
@@ -329,13 +330,6 @@ export class MachineListComponent implements OnInit {
           deleteHeader: translations['machineList'].modals.deleteHeader,
           deleteQuestion: translations['machineList'].modals.deleteQuestion,
           deleteQuestion2: translations['machineList'].modals.deleteQuestion2
-        },
-        tableItemHeaders: {
-          deviceType: translations['machineList']['Device Type'],
-          deviceName: translations['machineList']['Device Name'],
-          manufacturer: translations['machineList']['Manufacturer'],
-          fablab: translations['machineList']['Fablab'],
-          description: translations['machineList']['Description']
         }
       };
     }));
