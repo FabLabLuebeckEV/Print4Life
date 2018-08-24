@@ -6,6 +6,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
+import {
+  HttpClientTestingModule
+} from '@angular/common/http/testing';
+
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
@@ -15,7 +19,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent, NavigationComponent, DropdownComponent
       ],
-      imports: [RouterTestingModule, NgbModule.forRoot(), TranslateModule.forRoot()],
+      imports: [RouterTestingModule, NgbModule.forRoot(), TranslateModule.forRoot(), HttpClientTestingModule],
       providers: [TranslateService]
     }).compileComponents();
   }));
