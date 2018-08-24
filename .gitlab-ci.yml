@@ -22,6 +22,7 @@ build_dev:
   except: 
     - master
     - fix/ci
+    - patch/0.2.1
   
 build_prod:
   stage: build
@@ -35,6 +36,7 @@ build_prod:
   only: 
     - master
     - fix/ci
+    - patch/0.2.1
 
 test_build_api_docs:
   stage: apidocs
