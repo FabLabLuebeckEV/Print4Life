@@ -11,6 +11,7 @@ export class NavigationComponent implements OnInit {
   isNavbarCollapsed: Boolean = false;
   machineDropdown: Object;
   orderDropdown: Object;
+  userDropdown: Object;
 
   constructor() {
     this.machineDropdown = {
@@ -24,6 +25,15 @@ export class NavigationComponent implements OnInit {
       name: 'Orders',
       elements: [
         { name: 'List Orders', routerHref: routes.paths.frontend.orders.root }
+      ]
+    };
+
+    this.userDropdown = {
+      name: 'User',
+      elements: [
+        { name: 'SignUp', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}` },
+        { name: 'SignIn', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signin}` },
+        { name: 'Info', routerHref: `${routes.paths.frontend.users.root}/:id` }
       ]
     };
   }

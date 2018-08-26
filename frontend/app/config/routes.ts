@@ -5,6 +5,10 @@ export const routes = {
     backendUrl: backendUrl,
     paths: {
         backend: {
+            users: {
+                root: 'users',
+                getRoles: 'roles'
+            },
             orders: {
                 root: 'orders',
                 getStatus: 'status',
@@ -28,6 +32,12 @@ export const routes = {
             }
         },
         frontend: {
+            users: {
+                root: 'users',
+                signup: 'signup',
+                signin: 'signin',
+                update: 'edit'
+            },
             orders: {
                 root: 'orders',
                 create: 'create',
