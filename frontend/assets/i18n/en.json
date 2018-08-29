@@ -1,0 +1,96 @@
+{
+    "dashboard": {
+        "title": "Welcome to Fablab - Order Management! "
+    },
+    "navigation": {
+        "title": "Order Management"
+    },
+    "languages": {
+        "title": "Languages",
+        "german": "German",
+        "english": "English",
+        "danish": "Danish"
+    },
+    "dropdown": {
+        "machines": {
+            "title": "Machines",
+            "listMachines": "List Machines"
+        },
+        "orders": {
+            "title": "Orders",
+            "listOrders": "List Orders"
+        },
+        "users": {
+            "title": "Users",
+            "signUp": "Sign up",
+            "login": "Login",
+            "info": "Info"
+        }
+    },
+    "machineList": {
+        "paginationLabel": "Jump to Page",
+        "filterLabel": "Filter by Machine Type:",
+        "spinnerLoadingText": "Loading Machines",
+        "buttons": {
+            "deleteLabel": "Delete",
+            "updateLabel": "Update"
+        },
+        "modals": {
+            "yes": "Yes",
+            "abort": "No",
+            "deleteValue": "Delete",
+            "abortValue": "Abort",
+            "deleteHeader": "Do you really want to delete the machine?",
+            "deleteQuestion": "Are you sure you want to delete",
+            "deleteQuestion2": "?"
+        }
+    },
+    "orderList": {
+        "paginationLabel": "Jump to Page",
+        "filterLabel": {
+            "machines": "Filter by Machine Type:",
+            "status": "Filter by Status:"
+        },
+        "spinnerLoadingText": "Loading Orders",
+        "buttons": {
+            "deleteLabel": "Delete",
+            "updateLabel": "Update"
+        },
+        "modals": {
+            "yes": "Yes",
+            "abort": "No",
+            "deleteValue": "Delete",
+            "abortValue": "Abort",
+            "deleteHeader": "Do you really want to delete this order?",
+            "deleteQuestion": "Are you sure you want to delete",
+            "deleteQuestion2": "?"
+        }
+    },
+    "tableComponent": {
+        "Device Type": "Device Type",
+        "Device Name": "Device Name",
+        "Manufacturer": "Manufacturer",
+        "Fablab": "Fablab",
+        "Description": "Description",
+        "Created at": "Created at",
+        "Projectname": "Projectname",
+        "Owner": "Owner",
+        "Editor": "Editor",
+        "Status": "Status"
+    },
+    "deviceTypes": {
+        "lasercutter": "Lasercutter",
+        "otherMachine": "Other Machine",
+        "millingMachine": "Milling Machine",
+        "printer": "Printer"
+    },
+    "status": {
+        "new": "new",
+        "assigned": "assigned",
+        "production": "production",
+        "shipment": "shipment",
+        "archived": "archived",
+        "representive": "representive",
+        "deleted": "deleted"
+    }
+}

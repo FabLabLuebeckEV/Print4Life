@@ -6,6 +6,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigService } from '../../config/config.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BackButtonComponent } from '../../components/back-button/back-button.component';
 
 import {
   HttpClientTestingModule
@@ -17,7 +18,7 @@ describe('MachineFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MachineFormComponent],
+      declarations: [MachineFormComponent, BackButtonComponent],
       imports: [
         NgbModule.forRoot(),
         RouterTestingModule,

@@ -4,6 +4,7 @@ import { MachineDetailComponent } from './machine-detail.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConfigService } from '../../config/config.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BackButtonComponent } from '../../components/back-button/back-button.component';
 
 import {
   HttpClientTestingModule
@@ -15,7 +16,7 @@ describe('MachineDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MachineDetailComponent],
+      declarations: [MachineDetailComponent, BackButtonComponent],
       imports: [NgbModule.forRoot(),
         HttpClientTestingModule,
         RouterTestingModule,

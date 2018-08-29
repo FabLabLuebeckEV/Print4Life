@@ -6,6 +6,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ConfigService } from '../../config/config.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { BackButtonComponent } from '../../components/back-button/back-button.component';
 
 import {
   HttpClientTestingModule
@@ -17,15 +19,16 @@ describe('CreateOrderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CreateOrderComponent],
-      providers: [ConfigService],
+      declarations: [CreateOrderComponent, BackButtonComponent],
+      providers: [ConfigService, TranslateService],
       imports: [
         RouterTestingModule,
         FormsModule,
         HttpClientTestingModule,
         NgSelectModule,
         NgbModule.forRoot(),
-        FontAwesomeModule
+        FontAwesomeModule,
+        TranslateModule.forRoot()
       ]
     })
       .compileComponents();

@@ -7,6 +7,7 @@ import { ConfigService } from '../../config/config.service';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { routes } from '../../config/routes';
+import { GenericService } from '../../services/generic.service';
 
 @Component({
   selector: 'app-machine-detail',
@@ -15,7 +16,6 @@ import { routes } from '../../config/routes';
 })
 export class MachineDetailComponent implements OnInit {
   private config: any;
-  backArrow: any;
   editLink: String;
   deleteLink: String;
   editIcon: any;
@@ -35,11 +35,10 @@ export class MachineDetailComponent implements OnInit {
     private machineService: MachineService,
     private fablabService: FablabService,
     private configService: ConfigService,
-    private location: Location,
+    private genericService: GenericService,
     private modalService: NgbModal) {
 
     this.config = this.configService.getConfig();
-    this.backArrow = this.config.icons.back;
     this.editIcon = this.config.icons.edit;
     this.deleteIcon = this.config.icons.delete;
     this.route.params.subscribe(params => {
@@ -58,10 +57,6 @@ export class MachineDetailComponent implements OnInit {
     });
   }
 
-  public back() {
-    this.location.back();
-  }
-
   public delete() {
     const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
     const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
@@ -70,7 +65,7 @@ export class MachineDetailComponent implements OnInit {
     modalRef.result.then((result) => {
       if (result === deleteButton.returnValue) {
         this.machineService.deleteMachine(this.machine.type, this.machine._id).then(() => {
-          this.back();
+          this.genericService.back();
         });
       }
     });

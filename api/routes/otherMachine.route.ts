@@ -11,10 +11,10 @@ router.route('/').get((req, res) => {
       logger.info('GET Other Machines with no result');
       res.status(204).send();
     } else if (otherMachines && req.query.limit && req.query.skip) {
-      logger.info(`GET Other Machines with partial result ${otherMachines}`);
+      logger.info(`GET Other Machines with partial result ${JSON.stringify(otherMachines)}`);
       res.status(206).send({ otherMachines });
     } else if (otherMachines) {
-      logger.info(`GET Other Machines with result ${otherMachines}`);
+      logger.info(`GET Other Machines with result ${JSON.stringify(otherMachines)}`);
       res.status(200).send({ otherMachines });
     }
   }).catch((err) => {
@@ -26,7 +26,7 @@ router.route('/').get((req, res) => {
 
 router.route('/count').get((req, res) => {
   otherMachineCtrl.count().then((count) => {
-    logger.info(`GET count other machines with result ${count}`);
+    logger.info(`GET count other machines with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
     const msg = { error: 'Error while trying to count other machines', stack: err };
@@ -37,7 +37,7 @@ router.route('/count').get((req, res) => {
 
 router.route('/').post((req, res) => {
   otherMachineCtrl.create(req.body).then((otherMachine) => {
-    logger.info(`POST Other Machine with result ${otherMachine}`);
+    logger.info(`POST Other Machine with result ${JSON.stringify(otherMachine)}`);
     res.status(201).send({ otherMachine });
   }).catch((err) => {
     const msg = { error: 'Malformed request!', stack: err };
@@ -60,7 +60,7 @@ router.route('/:id').delete((req, res) => {
           if (result) {
             otherMachineCtrl.get(req.params.id).then((result) => {
               if (!result) {
-                logger.info(`DELETE Other Machine with result ${otherMachine}`);
+                logger.info(`DELETE Other Machine with result ${JSON.stringify(otherMachine)}`);
                 res.status(200).send({ otherMachine });
               }
             }).catch((err) => {
@@ -107,7 +107,7 @@ router.route('/:id').get((req, res) => {
         logger.error(msg);
         res.status(404).send(msg);
       } else {
-        logger.info(`GET Other Machine by Id with result ${otherMachine}`);
+        logger.info(`GET Other Machine by Id with result ${JSON.stringify(otherMachine)}`);
         res.status(200).send({ otherMachine });
       }
     }).catch((err) => {
@@ -133,7 +133,7 @@ router.route('/:id').put((req, res) => {
         res.status(404).send(msg);
       } else {
         otherMachineCtrl.update(req.params.id, req.body).then((otherMachine) => {
-          logger.info(`PUT Other Machine with result ${otherMachine}`);
+          logger.info(`PUT Other Machine with result ${JSON.stringify(otherMachine)}`);
           res.status(200).send({ otherMachine });
         });
       }

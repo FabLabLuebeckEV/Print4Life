@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 export interface Dropdown {
   name: string;
@@ -13,9 +13,14 @@ export interface Dropdown {
 
 export class DropdownComponent implements OnInit {
   @Input() dropdown: Dropdown;
+  @Output() switchLanguageEvent: EventEmitter<String> = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
+  }
+
+  emit(language) {
+    this.switchLanguageEvent.emit(language);
   }
 
 }

@@ -10,6 +10,7 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
 import { routes } from '../../config/routes';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-list',
@@ -27,12 +28,18 @@ export class OrderListComponent implements OnInit {
   loadingOrders: Boolean = false;
 
   loadingStatus: Boolean;
-  selectedStatus: Array<String> = [];
-  validStatus: Array<String> = [];
+  filter: any = {
+    selectedStatus: undefined,
+    validStatus: [], // shown status after translation to select in filter
+    originalValidStatus: [], // origin for backend containing all status
+    shownStatus: [], // selected and translated status in filter
+    originalMachineTypes: [], // origin for backend containing all machine types
+    machineTypes: [], // shown machine types after translation to select in filter
+    shownMachineTypes: [], // selected and translated machine types in filter
+    selectedMachineTypes: undefined // selected machine types but in origin backend language
+  };
 
   loadingMachineTypes: Boolean;
-  machineTypes: Array<String> = [];
-  selectedMachineTypes: Array<String> = [];
 
   spinnerConfig: Object;
   jumpArrow: Icon;
@@ -46,6 +53,27 @@ export class OrderListComponent implements OnInit {
     maxPages: 0,
     jumpToPage: undefined
   };
+  translationFields = {
+    paginationLabel: '',
+    filterLabel: {
+      machines: '',
+      status: '',
+    },
+    spinnerLoadingText: '',
+    buttons: {
+      deleteLabel: '',
+      updateLabel: ''
+    },
+    modals: {
+      yes: '',
+      abort: '',
+      deleteValue: '',
+      abortValue: '',
+      deleteHeader: '',
+      deleteQuestion: '',
+      deleteQuestion2: ''
+    }
+  };
 
   constructor(
     private orderService: OrderService,
@@ -54,8 +82,14 @@ export class OrderListComponent implements OnInit {
     private location: Location,
     private modalService: NgbModal,
     private configService: ConfigService,
-    private spinner: NgxSpinnerService) {
+    private spinner: NgxSpinnerService,
+    private translateService: TranslateService) {
     this.config = this.configService.getConfig();
+    this.translateService.onLangChange.subscribe(() => {
+      this._translate();
+      this.paginationObj.page = 1;
+      this.init();
+    });
     this.spinnerConfig = { 'loadingText': 'Loading Orders', ...this.config.spinnerConfig };
     this.createLink = `./${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
@@ -78,6 +112,7 @@ export class OrderListComponent implements OnInit {
       this.orders = [];
       await this._loadStatus();
       await this._loadMachineTypes();
+      this._translate();
       this.init();
     }
   }
@@ -87,29 +122,57 @@ export class OrderListComponent implements OnInit {
   }
 
   // remove add change clear
-  changeHandler(event: Array<String>) {
-    this.selectedStatus = event;
+  changeHandlerStatus(event: Array<String>) {
+    this.filter.selectedStatus = [];
+    this.filter.shownStatus = event;
+    this.translateService.get(['status']).subscribe((translations => {
+      this.filter.originalValidStatus.forEach((status) => {
+        const translatedStatus = translations['status'][`${status}`];
+        if (translatedStatus) {
+          this.filter.shownStatus.forEach((selectedStatus) => {
+            if (selectedStatus === translatedStatus) {
+              this.filter.selectedStatus.push(status);
+            }
+          });
+        }
+      });
+    }));
   }
 
     // remove add change clear
-  changeHandlerForMachineType(event: Array<String>) {
-    this.selectedMachineTypes = event;
+  changeHandlerMachineType(event: Array<String>) {
+    this.filter.selectedMachineTypes = [];
+    this.filter.shownMachineTypes = event;
+    this.translateService.get(['deviceTypes']).subscribe((translations => {
+      this.filter.originalMachineTypes.forEach((machineType) => {
+        const type = translations['deviceTypes'][`${this.machineService.camelCaseTypes(machineType)}`];
+        if (type) {
+          this.filter.shownMachineTypes.forEach((selectedType) => {
+            if (selectedType === type) {
+              this.filter.selectedMachineTypes.push(machineType);
+            }
+          });
+        }
+      });
+    }));
   }
 
   eventHandler(event) {
-    if (event.label === 'Delete') {
+    if (event.label === this.translationFields.buttons.deleteLabel) {
       let order: TableItem;
       let orderIdx: number;
       this.visibleOrders.forEach((item, idx) => {
-        if (event === item.button1 || event === item.button2) {
+        if (event.refId === item.button1.refId || event.refId === item.button2.refId) {
           order = item;
           orderIdx = idx;
         }
       });
-      const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
-      const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
-      const modalRef = this._openMsgModal('Do you really want to delete this order?',
-        'modal-header header-danger', 'Are you sure you want to delete the order?', deleteButton, abortButton);
+      const deleteButton = new ModalButton(this.translationFields.modals.yes, 'btn btn-danger', this.translationFields.modals.deleteValue);
+      const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
+      this.translationFields.modals.abortValue);
+      const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+        'modal-header header-danger', `${this.translationFields.modals.deleteQuestion} ` +
+        `${order.obj[`Projectname`].label} ${this.translationFields.modals.deleteQuestion2}`, deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
           this.orderService.deleteOrder(order.obj.id.label).then((result) => {
@@ -132,8 +195,8 @@ export class OrderListComponent implements OnInit {
             this.visibleOrders[orderIdx].obj['Editor'] = { label: result.editor };
             this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
             this.visibleOrders[orderIdx].obj['Device Type'] = { label: result.machine.type };
-            if ((this.selectedStatus && this.selectedStatus.length > 0) ||
-            this.selectedMachineTypes && this.selectedMachineTypes.length > 0) {
+            if ((this.filter.selectedStatus && this.filter.selectedStatus.length > 0) ||
+            this.filter.selectedMachineTypes && this.filter.selectedMachineTypes.length > 0) {
               this.init();
             }
           });
@@ -156,43 +219,42 @@ export class OrderListComponent implements OnInit {
 
   async init() {
     this.loadingOrders = true;
-    this.orders = [];
+    this.orders = new Array();
     this.visibleOrders = undefined;
-    this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
     this.spinner.show();
     let countObj;
     let totalItems = 0;
     let query;
-    if (this.selectedStatus.length > 0 && this.selectedMachineTypes.length > 0) {
+    if (this.filter.selectedStatus.length > 0 && this.filter.selectedMachineTypes.length > 0) {
       query = {
         $and: [
           {$or: []},
           {$or: []}
         ]
       };
-      this.selectedStatus.forEach((status) => {
+      this.filter.selectedStatus.forEach((status) => {
         query.$and[0].$or.push({ status: status });
       });
-      this.selectedMachineTypes.forEach((type) => {
+      this.filter.selectedMachineTypes.forEach((type) => {
         query.$and[1].$or.push({ 'machine.type': this.machineService.camelCaseTypes(type)});
       });
-    } else if (this.selectedStatus.length > 0 || this.selectedMachineTypes.length > 0) {
+    } else if (this.filter.selectedStatus.length > 0 || this.filter.selectedMachineTypes.length > 0) {
       query = {
         $or: [],
         $nor: []
       };
-      if (this.selectedStatus.length > 0) {
-        this.selectedStatus.forEach((status) => {
+      if (this.filter.selectedStatus.length > 0) {
+        this.filter.selectedStatus.forEach((status) => {
           query.$or.push({ status: status });
         });
-        this.machineTypes.forEach((type) => {
+        this.filter.originalMachineTypes.forEach((type) => {
           query.$nor.push({'machine.type': this.machineService.camelCaseTypes(type)});
         });
-      } else if (this.selectedMachineTypes.length > 0) {
-        this.selectedMachineTypes.forEach((type) => {
+      } else if (this.filter.selectedMachineTypes.length > 0) {
+        this.filter.selectedMachineTypes.forEach((type) => {
           query.$or.push({ 'machine.type': this.machineService.camelCaseTypes(type)});
         });
-        this.validStatus.forEach((status) => {
+        this.filter.originalValidStatus.forEach((status) => {
           query.$nor.push({status});
         });
       }
@@ -200,10 +262,10 @@ export class OrderListComponent implements OnInit {
       query = {
         $nor: []
       };
-      this.validStatus.forEach((status) => {
+      this.filter.originalValidStatus.forEach((status) => {
         query.$nor.push({status});
       });
-      this.machineTypes.forEach((type) => {
+      this.filter.originalMachineTypes.forEach((type) => {
         query.$nor.push({'machine.type': this.machineService.camelCaseTypes(type)});
       });
     }
@@ -225,19 +287,20 @@ export class OrderListComponent implements OnInit {
         const item = new TableItem();
         item.obj['id'] = { label: order._id };
         item.obj['Created at'] = { label: order.createdAt, isDate: true };
-        item.obj['Projectname'] = { label: order.projectname,  href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
+        item.obj['Projectname'] = { label: order.projectname, href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
         item.obj['Owner'] = { label: order.owner };
         item.obj['Editor'] = { label: order.editor };
         item.obj['Status'] = { label: order.status };
         item.obj['Device Type'] = { label: order.machine.type };
-        item.button1.label = 'Edit';
+        item.button1.label = this.translationFields.buttons.updateLabel;
         item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
         item.button1.class = 'btn btn-warning spacing';
         item.button1.icon = this.config.icons.edit;
-        item.button2.label = 'Delete';
+        item.button2.label = this.translationFields.buttons.deleteLabel;
         item.button2.eventEmitter = true;
         item.button2.class = 'btn btn-danger spacing';
         item.button2.icon = this.config.icons.delete;
+        item.button2.refId = order._id;
         arr.push(item);
       }
 
@@ -251,15 +314,103 @@ export class OrderListComponent implements OnInit {
 
   private async _loadStatus() {
     this.loadingStatus = true;
-    this.validStatus = (await this.orderService.getStatus()).status;
-    this.selectedStatus = this.validStatus;
+    this.filter.originalValidStatus = (await this.orderService.getStatus()).status;
+    this.translateService.get(['status']).subscribe((translations => {
+      this.filter.validStatus.forEach((type, idx) => {
+        const translated = translations['status'][`${type}`];
+        this.filter.validStatus[idx] = translated;
+      });
+      this.filter.shownStatus.forEach((type, idx) => {
+        const translated = translations['status'][`${type}`];
+        this.filter.shownStatus[idx] = translated;
+      });
+    }));
+    if (!this.filter.selectedStatus) {
+      this.filter.selectedStatus = JSON.parse(JSON.stringify(this.filter.originalValidStatus));
+    }
     this.loadingStatus = false;
   }
 
   private async _loadMachineTypes() {
     this.loadingMachineTypes = true;
-    this.machineTypes = (await this.machineService.getAllMachineTypes()).types;
-    this.selectedMachineTypes = this.machineTypes;
+    this.filter.originalMachineTypes = (await this.machineService.getAllMachineTypes()).types;
+    this.filter.originalMachineTypes.forEach((type, idx) => {
+      this.filter.originalMachineTypes[idx] = this.machineService.camelCaseTypes(type);
+    });
+    this.filter.machineTypes = JSON.parse(JSON.stringify(this.filter.originalMachineTypes));
+    this.filter.shownMachineTypes = JSON.parse(JSON.stringify(this.filter.machineTypes));
+    this.translateService.get(['deviceTypes']).subscribe((translations => {
+      this.filter.machineTypes.forEach((type, idx) => {
+        const translated = translations['deviceTypes'][`${type}`];
+        this.filter.machineTypes[idx] = translated;
+      });
+      this.filter.shownMachineTypes.forEach((type, idx) => {
+        const translated = translations['deviceTypes'][`${type}`];
+        this.filter.shownMachineTypes[idx] = translated;
+      });
+    }));
+    if (!this.filter.selectedMachineTypes) {
+      this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originalMachineTypes));
+    }
     this.loadingMachineTypes = false;
+  }
+
+  private _translate() {
+    this.translateService.get(['orderList', 'deviceTypes', 'status']).subscribe((translations => {
+      this.spinnerConfig = { 'loadingText': translations['orderList'].spinnerLoadingText, ...this.config.spinnerConfig };
+      this.filter.machineTypes = [];
+      this.filter.shownMachineTypes = [];
+      this.filter.originalMachineTypes.forEach((mType) => {
+        const camelType = this.machineService.camelCaseTypes(mType);
+        const translated = translations['deviceTypes'][`${camelType}`];
+        if (translated) {
+          this.filter.machineTypes.push(translated);
+        }
+      });
+      this.filter.selectedMachineTypes.forEach((mType) => {
+        const camelType = this.machineService.camelCaseTypes(mType);
+        const translated = translations['deviceTypes'][`${camelType}`];
+        if (translated) {
+          this.filter.shownMachineTypes.push(translated);
+        }
+      });
+
+      this.filter.validStatus = [];
+      this.filter.shownStatus = [];
+      this.filter.originalValidStatus.forEach((status) => {
+        const translated = translations['status'][`${status}`];
+        if (translated) {
+          this.filter.validStatus.push(translated);
+        }
+      });
+      this.filter.selectedStatus.forEach((status) => {
+        const translated = translations['status'][`${status}`];
+        if (translated) {
+          this.filter.shownStatus.push(translated);
+        }
+      });
+
+      this.translationFields = {
+        paginationLabel: translations['orderList'].paginationLabel,
+        filterLabel: {
+          machines: translations['orderList']['filterLabel'].machines,
+          status: translations['orderList']['filterLabel'].status
+        },
+        spinnerLoadingText: translations['orderList'].spinnerLoadingText,
+        buttons: {
+          deleteLabel: translations['orderList'].buttons.deleteLabel,
+          updateLabel: translations['orderList'].buttons.updateLabel
+        },
+        modals: {
+          yes: translations['orderList'].modals.yes,
+          abort: translations['orderList'].modals.abort,
+          deleteValue: translations['orderList'].modals.deleteValue,
+          abortValue: translations['orderList'].modals.abortValue,
+          deleteHeader: translations['orderList'].modals.deleteHeader,
+          deleteQuestion: translations['orderList'].modals.deleteQuestion,
+          deleteQuestion2: translations['orderList'].modals.deleteQuestion2
+        }
+      };
+    }));
   }
 }

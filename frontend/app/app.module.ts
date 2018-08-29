@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { HttpInterceptorService } from './services/credential.interceptor.service';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
@@ -24,8 +24,15 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
 import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function translateHttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
+}
 import { UserFormComponent } from './users/user-form/user-form.component';
 import { UserComponent } from './users/user/user.component';
+import { BackButtonComponent } from './components/back-button/back-button.component';
 
 @NgModule({
     declarations: [
@@ -42,7 +49,8 @@ import { UserComponent } from './users/user/user.component';
         MachineDetailComponent,
         OrderDetailComponent,
         UserFormComponent,
-        UserComponent
+        UserComponent,
+        BackButtonComponent
     ],
     imports: [
         BrowserModule,
@@ -52,7 +60,14 @@ import { UserComponent } from './users/user/user.component';
         FontAwesomeModule,
         HttpClientModule,
         NgbModule.forRoot(),
-        RouterModule.forRoot(appRoutes)
+        RouterModule.forRoot(appRoutes),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: translateHttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }, // magic for cors

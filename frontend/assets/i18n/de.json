@@ -1,0 +1,96 @@
+{
+    "dashboard": {
+        "title": "Willkommen zur Fablab - Auftragsverwaltung!"
+    },
+    "navigation": {
+        "title": "Auftragsverwaltung"
+    },
+    "languages": {
+        "title": "Sprachauswahl",
+        "german": "Deutsch",
+        "english": "Englisch",
+        "danish": "Dänisch"
+    },
+    "dropdown": {
+        "machines": {
+            "title": "Machinen",
+            "listMachines": "Maschinenliste"
+        },
+        "orders": {
+            "title": "Aufträge",
+            "listOrders": "Auftragsliste"
+        },
+        "users": {
+            "title": "Benutzer",
+            "signUp": "Registrieren",
+            "login": "Einloggen",
+            "info": "Info"
+        }
+    },
+    "machineList": {
+        "paginationLabel": "",
+        "filterLabel": "Filter nach Maschinentyp:",
+        "spinnerLoadingText": "Lade Maschinen",
+        "buttons": {
+            "deleteLabel": "Löschen",
+            "updateLabel": "Ändern"
+        },
+        "modals": {
+            "yes": "Ja",
+            "abort": "Nein",
+            "deleteValue": "Löschen",
+            "abortValue": "Abbrechen",
+            "deleteHeader": "Möchten Sie wirklich diese Maschine löschen?",
+            "deleteQuestion": "Sind Sie sicher, dass Sie",
+            "deleteQuestion2": "löschen wollen?"
+        }
+    },
+    "orderList": {
+        "paginationLabel": "Springe zur Seite",
+        "filterLabel": {
+            "machines": "Filter nach Maschinentyp:",
+            "status": "Filter nach Status:"
+        },
+        "spinnerLoadingText": "Lade Aufträge",
+        "buttons": {
+            "deleteLabel": "Löschen",
+            "updateLabel": "Ändern"
+        },
+        "modals": {
+            "yes": "Ja",
+            "abort": "Nein",
+            "deleteValue": "Löschen",
+            "abortValue": "Abbrechen",
+            "deleteHeader": "Möchten Sie wirklich diesen Auftrag löschen?",
+            "deleteQuestion": "Sind Sie sicher, dass Sie",
+            "deleteQuestion2": "löschen wollen?"
+        }
+    },
+    "tableComponent": {
+        "Device Type": "Machinen Typ",
+        "Device Name": "Maschinen Name",
+        "Manufacturer": "Hersteller",
+        "Fablab": "Fablab",
+        "Description": "Beschreibung",
+        "Created at": "Erstellt am",
+        "Projectname": "Projektname",
+        "Owner": "Ersteller",
+        "Editor": "Bearbeiter",
+        "Status": "Status"
+    },
+    "deviceTypes": {
+        "lasercutter": "Lasercutter",
+        "otherMachine": "Andere Machine",
+        "millingMachine": "Fräßmaschine",
+        "printer": "3D Drucker"
+    },
+    "status": {
+        "new": "Neu",
+        "assigned": "Zugewiesen",
+        "production": "In Produktion",
+        "shipment": "Im Versand",
+        "archived": "Archiviert",
+        "representive": "Veröffentlicht",
+        "deleted": "Gelöscht"
+    }
+}
