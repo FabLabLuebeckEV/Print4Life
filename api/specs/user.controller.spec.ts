@@ -21,8 +21,8 @@ const testUser = {
 
 describe('User Controller', () => {
   it('create user', (done) => {
-    testUser.username += Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    testUser.email += Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    testUser.username += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    testUser.email += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     request.post(
       `${endpoint}users/`, {
         headers: { 'content-type': 'application/json' },
@@ -43,6 +43,60 @@ describe('User Controller', () => {
         expect(user.address.city).toEqual(testUser.address.city);
         expect(user.address.country).toEqual(testUser.address.country);
         done();
+      });
+  });
+
+  it('user login', (done) => {
+    testUser.username += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    testUser.email += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    request.post(
+      `${endpoint}users/`, {
+        headers: { 'content-type': 'application/json' },
+        json: true,
+        body: testUser
+      },
+      (error, response) => {
+        const user = response.body.user;
+        request.post(
+          `${endpoint}users/login`, {
+            headers: { 'content-type': 'application/json' },
+            json: true,
+            body: { username: user.username, password: testUser.password }
+          }, ((error, response) => {
+            expect(error).toBeNull();
+            expect(response).toBeDefined();
+            expect(response.body.login).toBeDefined();
+            expect(response.body.login.token).toBeDefined();
+            expect(response.body.login.success).toBeTruthy();
+            done();
+          }));
+      });
+  });
+
+  it('user login fails', (done) => {
+    testUser.username += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    testUser.email += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    request.post(
+      `${endpoint}users/`, {
+        headers: { 'content-type': 'application/json' },
+        json: true,
+        body: testUser
+      },
+      (error, response) => {
+        const user = response.body.user;
+        request.post(
+          `${endpoint}users/login`, {
+            headers: { 'content-type': 'application/json' },
+            json: true,
+            body: { username: user.username, password: 'definetly not my password' }
+          }, ((error, response) => {
+            expect(error).toBeNull();
+            expect(response).toBeDefined();
+            expect(response.body.login).toBeDefined();
+            expect(response.body.login.token).toBeUndefined();
+            expect(response.body.login.success).toBeFalsy();
+            done();
+          }));
       });
   });
 

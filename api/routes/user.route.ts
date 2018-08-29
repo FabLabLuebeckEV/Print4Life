@@ -45,7 +45,7 @@ router.route('/login').post(async (req, res) => {
   try {
     login = await userCtrl.login(user, req.body.password);
   } catch (err) {
-    const msg = { error: err.msg, stack: err };
+    const msg = { error: err.msg, stack: err, login: { success: false } };
     logger.error(msg);
     res.status(401).send(msg);
   }
