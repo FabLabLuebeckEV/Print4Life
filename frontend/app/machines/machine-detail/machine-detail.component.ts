@@ -116,12 +116,14 @@ export class MachineDetailComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap
       .subscribe((params) => {
-        this.params = {
-          id: params.get('id'),
-          type: params.get('type').substr(0, params.get('type').length - 1)
-        };
-        // FIXME: Error mit type
-        this._initMachine();
+        if (params && params.get('id') && params.get('type')) {
+          this.params = {
+            id: params.get('id'),
+            type: params.get('type').substr(0, params.get('type').length - 1)
+          };
+          // FIXME: Error mit type
+          this._initMachine();
+        }
       });
 
 
