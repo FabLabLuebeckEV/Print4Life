@@ -98,6 +98,34 @@ async function getRoles () {
   });
 }
 
+
+/**
+ * @api {post} /api/v1/users/login Logs a user in and returns a jsonwebtoken
+ * @apiName login
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { login } a login object with success and token
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+  "login": {
+      "success": true,
+      "token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6....."
+  }
+}
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Server Error
+{
+    "error": "Authentication failed. Wrong password.",
+    "stack": {
+        "success": false,
+        "msg": "Authentication failed. Wrong password."
+    }
+}
+ */
 function login (user, password): any {
   return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
     if (isMatch && !err) {
