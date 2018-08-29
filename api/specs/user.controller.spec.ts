@@ -21,8 +21,8 @@ const testUser = {
 
 describe('User Controller', () => {
   it('create user', (done) => {
-    testUser.username += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    testUser.email += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    testUser.username += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+    testUser.email += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
     request.post(
       `${endpoint}users/`, {
         headers: { 'content-type': 'application/json' },
@@ -47,8 +47,8 @@ describe('User Controller', () => {
   });
 
   it('user login', (done) => {
-    testUser.username += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    testUser.email += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    testUser.username += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+    testUser.email += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
     request.post(
       `${endpoint}users/`, {
         headers: { 'content-type': 'application/json' },
@@ -74,8 +74,8 @@ describe('User Controller', () => {
   });
 
   it('user login fails', (done) => {
-    testUser.username += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    testUser.email += '--' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    testUser.username += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+    testUser.email += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
     request.post(
       `${endpoint}users/`, {
         headers: { 'content-type': 'application/json' },
