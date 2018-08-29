@@ -1,5 +1,6 @@
 const env = process.env.NODE_ENV || 'dev';
 const dev = {
+  jwtSecret: 'meansecure',
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -19,6 +20,7 @@ const dev = {
 };
 
 const prod = {
+  jwtSecret: 'meansecure',
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -37,6 +39,7 @@ const prod = {
 };
 
 const test = {
+  jwtSecret: 'meansecure',
   connections: {
     mongo: {
       host: 'mongodb://mongo:27017/',
@@ -49,6 +52,7 @@ const test = {
 };
 
 const testLocal = {
+  jwtSecret: 'meansecure',
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',

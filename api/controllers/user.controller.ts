@@ -1,5 +1,8 @@
+import * as jwt from 'jsonwebtoken';
+
 import { User } from '../models/user.model';
 import { Role, roleSchema } from '../models/role.model';
+import config from '../config/config';
 
 /**
  * @api {post} /api/v1/users/ Adds a new order
@@ -95,7 +98,31 @@ async function getRoles () {
   });
 }
 
+function login (user): any {
+  user.comparePassword(user.password, (err, isMatch) => {
+    let obj;
+    if (isMatch && !err) {
+      const token = jwt.sign(user.toJSON(), config.jwkSecret);
+      obj = { success: true, token: `JWT ${token}` };
+    } else {
+      obj = { success: false, msg: 'Authentication failed. Wrong password.' };
+    }
+    return obj;
+  });
+}
+
+async function getUserByUsername (username) {
+  return User.findOne({ username });
+}
+
+async function getUserById (id) {
+  return User.findById(id);
+}
+
 export default {
   signUp,
-  getRoles
+  getRoles,
+  login,
+  getUserByUsername,
+  getUserById
 };

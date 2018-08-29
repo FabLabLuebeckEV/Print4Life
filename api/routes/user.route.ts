@@ -1,7 +1,7 @@
 import * as express from 'express';
+import * as passport from 'passport';
 import userCtrl from '../controllers/user.controller';
 import logger from '../logger';
-// import validatorService from '../services/validator.service';
 
 const router = express.Router();
 
@@ -28,5 +28,28 @@ router.route('/roles').get((req, res) => {
     res.status(500).send(msg);
   });
 });
+
+router.route('/login').post((req, res) => {
+  const user = userCtrl.getUserByUsername(req.body.username);
+  const login = userCtrl.login(user);
+  if (login.success) {
+    res.status(200).send({ login });
+  } else {
+    logger.error({ error: login.msg });
+    res.status(401).send({ login });
+  }
+});
+
+router.route('/:id').get(passport.authenticate('jwt', { session: false }), (req, res) => {
+  userCtrl.getUserById(req.params.id).then((user) => {
+    logger.info(`GET User by id with result ${user}`);
+    res.status(200).send({ user });
+  }).catch((err) => {
+    const msg = { error: 'GET User by id with no result.', stack: err };
+    logger.error(msg);
+    res.status(400).send(msg);
+  });
+});
+
 
 export default router;
