@@ -121,26 +121,9 @@ export class MachineDetailComponent implements OnInit {
             id: params.get('id'),
             type: params.get('type').substr(0, params.get('type').length - 1)
           };
-          // FIXME: Error mit type
           this._initMachine();
         }
       });
-
-
-
-
-    // this.params.type = this.params.type.substr(0, this.params.type.length - 1);
-    // this.route.params.subscribe(params => {
-    //   // TODO: Problem bei Löschen von Maschine, dann auswählen einer neuen Maschine in Detailansicht und dann Sprach wechsel
-    //   if (params.type && params.id) {
-    //     const type = params.type.substr(0, params.type.length - 1);
-    //     this.params = {
-    //       type: type,
-    //       id: params.id
-    //     };
-    //     this._initMachine();
-    //   }
-    // });
     this.translateService.onLangChange.subscribe(() => {
       this._initMachine();
     });
