@@ -107,6 +107,54 @@
             "creatingSuccessMsg": "Die Anlage der Maschine war erfolgreich!"
         }
     },
+    "machineDetail": {
+        "titles": {
+            "machineProps": "Maschinen Daten",
+            "laserTypes": "Laser Typen",
+            "fablab": "Fablab",
+            "materials": "Materialien"
+        },
+        "labels": {
+            "yes": "Ja",
+            "no": "Nein",
+            "deleteReturnValue": "Löschen",
+            "abortReturnValue": "Abbrechen"
+        },
+        "messages": {
+            "deleteHeader": "Wollen Sie wirklich diese Maschine löschen?",
+            "deleteMessage": "Sind Sie sicher, dass sie ",
+            "deleteMessage2": "löschen wollen?"
+        },
+        "props": {
+            "deviceName": "Name der Maschine",
+            "type": "Typ",
+            "manufacturer": "Hersteller",
+            "workspaceX": "Arbeitsfläche X",
+            "workspaceY": "Arbeitsfläche Y",
+            "workspaceZ": "Arbeitsfläche Z",
+            "maxResolution": "Maximale Auflösung",
+            "laserPower": "Leistung des Lasers",
+            "pictureURL": "Bild Url",
+            "comment": "Kommentar",
+            "name": "Name",
+            "phone": "Telefon",
+            "mail": "E-Mail",
+            "laserType": "Lasertyp",
+            "material": "Material",
+            "camSoftware": "Kamera Software",
+            "movementSpeed": "Bewegungsgeschwindigkeit",
+            "stepSize": "Schrittgröße",
+            "typeOfMachine": "Typ der Machine",
+            "printVolumeX": "Druckvolumen X",
+            "printVolumeY": "Druckvolumen Y",
+            "printVolumeZ": "Druckvolumen Z",
+            "printResolutionX": "Druckauflösung X",
+            "printResolutionY": "Druckauflösung Y",
+            "printResolutionZ": "Druckauflösung Z",
+            "nozzleDiameter": "Durchmesser Düse(n)",
+            "numberOfExtruders": "Anzahl von Extrudern"
+        }
+    },
     "tableComponent": {
         "Device Type": "Machinen Typ",
         "Device Name": "Maschinen Name",
@@ -124,6 +172,9 @@
         "otherMachine": "Andere Machine",
         "millingMachine": "Fräßmaschine",
         "printer": "3D Drucker"
+    },
+    "materialTypes": {
+        "printerMaterial": "Drucker Material"
     },
     "status": {
         "new": "Neu",

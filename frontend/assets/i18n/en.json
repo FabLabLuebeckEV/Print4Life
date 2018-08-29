@@ -86,6 +86,54 @@
             "creatingSuccessMsg": "The creation of a new machine was successful!"
         }
     },
+    "machineDetail": {
+        "titles": {
+            "machineProps": "Machine Data",
+            "laserTypes": "Laser Types",
+            "fablab": "Fablab",
+            "materials": "Materials"
+        },
+        "labels": {
+            "yes": "Yes",
+            "no": "No",
+            "deleteReturnValue": "Delete",
+            "abortReturnValue": "Abort"
+        },
+        "messages": {
+            "deleteHeader": "Do you really want to delete this machine?",
+            "deleteMessage": "Are you sure you want to delete",
+            "deleteMessage2": "?"
+        },
+        "props": {
+            "deviceName": "Device Name",
+            "type": "Type",
+            "manufacturer": "Manufacturer",
+            "workspaceX": "Workspace X",
+            "workspaceY": "Workspace Y",
+            "workspaceZ": "Workspace Z",
+            "maxResolution": "Max Resolution",
+            "laserPower": "Laser Power",
+            "pictureURL": "Picture Url",
+            "comment": "Comment",
+            "name": "Name",
+            "phone": "Phone",
+            "mail": "Mail",
+            "laserType": "Laser Type",
+            "material": "Material",
+            "camSoftware": "Cam Software",
+            "movementSpeed": "Movement Speed",
+            "stepSize": "Step Size",
+            "typeOfMachine": "Type of Machine",
+            "printVolumeX": "Print Volume X",
+            "printVolumeY": "Print Volume Y",
+            "printVolumeZ": "Print Volume Z",
+            "printResolutionX": "Print Resolution X",
+            "printResolutionY": "Print Resolution Y",
+            "printResolutionZ": "Print Resolution Z",
+            "nozzleDiameter": "Nozzle Diameter",
+            "numberOfExtruders": "Number of Extruders"
+        }
+    },
     "orderList": {
         "paginationLabel": "Jump to Page",
         "filterLabel": {
@@ -124,6 +172,9 @@
         "otherMachine": "Other Machine",
         "millingMachine": "Milling Machine",
         "printer": "Printer"
+    },
+    "materialTypes": {
+        "printerMaterial": "Printer Material"
     },
     "status": {
         "new": "new",

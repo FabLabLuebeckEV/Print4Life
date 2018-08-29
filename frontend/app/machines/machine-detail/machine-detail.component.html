@@ -11,8 +11,14 @@
         <fa-icon [icon]="deleteIcon"></fa-icon>
       </button>
     </div>
-    <div class="col-md-7 offset-1">
-      <h1>{{machine.deviceName}} - {{machine.fablab.name}}</h1>
+    <div class="col-md-7 offset-2">
+      <h1 *ngIf="machine && machine.deviceName">{{machine.deviceName}}
+      </h1>
+      <div *ngIf="machine.fablab && machine.fablab.name" class="row">
+        <div class="col-md-12">
+          <h2>{{machine.fablab.name}}</h2>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row spacing">
@@ -20,12 +26,12 @@
       <div class="container text-center">
         <ngb-accordion #acc="ngbAccordion" activeIds="machine-data">
 
-          <ngb-panel id="machine-data" [title]="machineProps['title']">
+          <ngb-panel *ngIf="machineProps['title'] && machineProps['props']" id="machine-data" [title]="machineProps['title']">
             <ng-template ngbPanelContent>
               <ul class="list-group col-md-12">
                 <div class="row">
                   <li *ngFor="let prop of machineProps['props']" class="col-md-6 list-group-item">
-                    <div class="row">
+                    <div *ngIf="prop.key && prop.label" class="row">
                       <div class="col-md-6">
                         {{prop.label}}:
                       </div>
@@ -41,11 +47,11 @@
 
 
           <ngb-panel *ngFor="let item of machineSubObjects" [title]="item.title">
-            <ng-template ngbPanelContent>
+            <ng-template *ngIf="item.obj" ngbPanelContent>
               <ul class="list-group col-md-12">
                 <div class="row">
                   <li *ngFor="let prop of objectKeys(item.obj)" class="col-md-6 list-group-item">
-                    <div class="row">
+                    <div *ngIf="prop" class="row">
                       <div class="col-md-6">
                         {{prop}}:
                       </div>
@@ -60,7 +66,7 @@
           </ngb-panel>
 
           <ngb-panel *ngFor="let key of machineSubArrays" [title]="key.title">
-            <ng-template ngbPanelContent>
+            <ng-template *ngIf="key.array" ngbPanelContent>
               <ul class="list-group col-md-12">
                 <div class="row">
                   <div *ngFor="let item of key.array" class="col-md-6">

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { ConfigService } from '../../config/config.service';
@@ -8,6 +7,7 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-machine-detail',
@@ -23,12 +23,27 @@ export class MachineDetailComponent implements OnInit {
   objectKeys = Object.keys;
   machine: any;
   machineProps: Object = {
-    title: 'Machine Data',
+    title: '',
     props: []
   };
   machineSubObjects: Array<Object> = [];
   machineSubArrays: Array<Object> = [];
   loading: Boolean = true;
+  translationFields = {
+    labels: {
+      yes: '',
+      no: '',
+      deleteReturnValue: '',
+      abortReturnValue: ''
+    },
+    messages: {
+      deleteHeader: '',
+      deleteMessage: '',
+      deleteMessage2: ''
+    }
+  };
+  params: any = {
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -36,35 +51,50 @@ export class MachineDetailComponent implements OnInit {
     private fablabService: FablabService,
     private configService: ConfigService,
     private genericService: GenericService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    private translateService: TranslateService) {
 
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
     this.deleteIcon = this.config.icons.delete;
-    this.route.params.subscribe(params => {
-      if (params.type && params.id) {
-        const type = params.type.substr(0, params.type.length - 1);
-        this.machineService.get(type, params.id).then((result) => {
-          this.machine = result[type];
-          this.fablabService.getFablab(this.machine.fablabId).then((result) => {
-            this.machine.fablab = result.fablab;
-            this.editLink = `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.update}/` +
-              `${this.machine.type}s/${this.machine._id}`;
-            this._splitMachineProps();
-          });
+  }
+
+  private _initMachine() {
+    if (this.params && this.params.type && this.params.id) {
+      this.machineService.get(this.params.type, this.params.id).then((result) => {
+        this.machine = undefined;
+        const machine = result[this.params.type];
+        this.machine = machine;
+        this.fablabService.getFablab(machine.fablabId).then((result) => {
+          this.machine.fablab = result.fablab;
+          this.editLink = `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.update}/` +
+            `${this.machine.type}s/${this.machine._id}`;
+          this.machineProps = {
+            title: '',
+            props: []
+          };
+          this.machineSubObjects = [];
+          this.machineSubArrays = [];
+          this._splitMachineProps();
+          this._translate();
         });
-      }
-    });
+      });
+    }
   }
 
   public delete() {
-    const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
-    const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
-    const modalRef = this._openMsgModal('Do you really want to delete this machine?',
-      'modal-header header-danger', `Are you sure you want to delete ${this.machine.deviceName} ?`, deleteButton, abortButton);
+    const deleteButton = new ModalButton(this.translationFields.labels.yes, 'btn btn-danger',
+      this.translationFields.labels.deleteReturnValue);
+    const abortButton = new ModalButton(this.translationFields.labels.no, 'btn btn-secondary',
+      this.translationFields.labels.abortReturnValue);
+    const modalRef = this._openMsgModal(this.translationFields.messages.deleteHeader,
+      'modal-header header-danger',
+      `${this.translationFields.messages.deleteMessage} ${this.machine.deviceName} ${this.translationFields.messages.deleteMessage2}`,
+      deleteButton, abortButton);
     modalRef.result.then((result) => {
       if (result === deleteButton.returnValue) {
-        this.machineService.deleteMachine(this.machine.type, this.machine._id).then(() => {
+        this.machineService.deleteMachine(this.machine.originType, this.machine._id).then(() => {
+          this.params = {};
           this.genericService.back();
         });
       }
@@ -84,33 +114,101 @@ export class MachineDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.route.paramMap
+      .subscribe((params) => {
+        this.params = {
+          id: params.get('id'),
+          type: params.get('type').substr(0, params.get('type').length - 1)
+        };
+        // FIXME: Error mit type
+        this._initMachine();
+      });
+
+
+
+
+    // this.params.type = this.params.type.substr(0, this.params.type.length - 1);
+    // this.route.params.subscribe(params => {
+    //   // TODO: Problem bei Löschen von Maschine, dann auswählen einer neuen Maschine in Detailansicht und dann Sprach wechsel
+    //   if (params.type && params.id) {
+    //     const type = params.type.substr(0, params.type.length - 1);
+    //     this.params = {
+    //       type: type,
+    //       id: params.id
+    //     };
+    //     this._initMachine();
+    //   }
+    // });
+    this.translateService.onLangChange.subscribe(() => {
+      this._initMachine();
+    });
   }
 
   private _splitMachineProps() {
     const machineProps = Object.keys(this.machine).filter((key) => {
       return key !== '_id' && key !== 'fablabId' && key !== '__v';
     });
-    machineProps.forEach((key) => {
-      const prop: any = this.machine[`${key}`];
-      if (prop) {
-        if (prop instanceof Object && !Array.isArray(prop)) {
-          this.machineSubObjects.push({ title: this.machineService.uncamelCase(key), obj: this._cleanPropObject(prop) });
-        } else if (prop instanceof Object && Array.isArray(prop)) {
-          this.machineSubArrays.push({ title: this.machineService.uncamelCase(key), array: this._cleanPropObject(prop) });
-        } else {
-          this.machineProps['props'].push({ key, label: this.machineService.uncamelCase(key) });
+    this.translateService.get(['machineDetail', 'deviceTypes']).subscribe((translations) => {
+      machineProps.forEach((key) => {
+        const prop: any = this.machine[`${key}`];
+        if (prop) {
+          if (prop instanceof Object && !Array.isArray(prop)) {
+            Object.keys(translations['machineDetail'].titles).forEach((k) => {
+              if (k === key) {
+                this.machineSubObjects.push({ title: translations['machineDetail'].titles[`${k}`], obj: this._cleanPropObject(prop) });
+              }
+            });
+          } else if (prop instanceof Object && Array.isArray(prop)) {
+            Object.keys(translations['machineDetail'].titles).forEach((k) => {
+              if (k === key) {
+                this.machineSubArrays.push({ title: translations['machineDetail'].titles[`${k}`], array: this._cleanPropObject(prop) });
+              }
+            });
+          } else {
+            if (key === 'type') {
+              Object.keys(translations['deviceTypes']).forEach((t) => {
+                if (prop === t) {
+                  this.machine.originType = JSON.parse(JSON.stringify(this.machine.type));
+                  this.machine.type = translations['deviceTypes'][`${prop}`];
+                  this.machineProps['props'].push({ key, label: translations['machineDetail']['props'][`${key}`] });
+                }
+              });
+            } else {
+              this.machineProps['props'].push({ key, label: translations['machineDetail']['props'][`${key}`] });
+            }
+          }
         }
-      }
+      });
+      this.loading = false;
     });
-    this.loading = false;
   }
 
   private _cleanPropObject(prop: any): Object {
     const newObj = {};
     if (prop instanceof Object && !Array.isArray(prop)) {
       const tmp = Object.keys(prop).filter((e) => e !== '_id' && e !== '__v');
-      tmp.forEach((k) => {
-        newObj[`${this.machineService.uncamelCase(k)}`] = prop[k];
+      this.translateService.get(['machineDetail', 'deviceTypes', 'materialTypes']).subscribe((translations) => {
+        tmp.forEach((k) => {
+          if (k === 'type') {
+            let changed = false;
+            Object.keys(translations['deviceTypes']).forEach((t) => {
+              if (prop[`${k}`] === t) {
+                changed = true;
+                prop[k] = translations['deviceTypes'][`${prop[`${k}`]}`];
+              }
+            });
+
+            if (!changed) {
+              Object.keys(translations['materialTypes']).forEach((t) => {
+                if (prop[`${k}`] === t) {
+                  changed = true;
+                  prop[k] = translations['materialTypes'][`${prop[`${k}`]}`];
+                }
+              });
+            }
+          }
+          newObj[`${translations['machineDetail']['props'][`${k}`]}`] = prop[k];
+        });
       });
     } else if (Array.isArray(prop)) {
       const arr = [];
@@ -122,5 +220,24 @@ export class MachineDetailComponent implements OnInit {
     return newObj;
   }
 
+  private _translate() {
+    this.translateService.get(['machineDetail', 'deviceTypes']).subscribe((translations => {
+      this.translationFields = {
+        labels: {
+          yes: translations['machineDetail'].labels.yes,
+          no: translations['machineDetail'].labels.no,
+          deleteReturnValue: translations['machineDetail'].labels.deleteReturnValue,
+          abortReturnValue: translations['machineDetail'].labels.abortReturnValue,
+        },
+        messages: {
+          deleteHeader: translations['machineDetail'].messages.deleteHeader,
+          deleteMessage: translations['machineDetail'].messages.deleteMessage,
+          deleteMessage2: translations['machineDetail'].messages.deleteMessage2
+        }
+      };
+
+      this.machineProps['title'] = translations['machineDetail'].titles.machineProps;
+    }));
+  }
 
 }
