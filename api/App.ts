@@ -3,7 +3,7 @@ import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
 
 import routes from './routes/index.route';
-import config from './config';
+import config from './config/config';
 
 class App {
   public express;

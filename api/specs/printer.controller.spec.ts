@@ -1,6 +1,6 @@
 import 'jasmine';
 import * as request from 'request';
-import * as configs from '../config';
+import * as configs from '../config/config';
 
 const endpoint = `${configs.configArr.prod.baseUrlBackend}machines/printers`;
 
