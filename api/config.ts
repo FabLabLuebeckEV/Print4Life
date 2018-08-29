@@ -28,7 +28,7 @@ const prod = {
   baseUrlBackend: 'http://localhost:3000/api/v1/',
   baseUrlFrontend: 'http://localhost:80',
   cors: {
-    whitelist: ['http://localhost:80', 'http://localhost', 'http://212.83.56.107'],
+    whitelist: ['http://localhost:80', 'http://localhost', 'http://212.83.56.107', 'http://iot-fablab.ddns.net'],
     corsOptions: {
       origin: undefined,
       credentials: true

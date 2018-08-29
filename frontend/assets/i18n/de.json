@@ -19,6 +19,12 @@
         "orders": {
             "title": "Aufträge",
             "listOrders": "Auftragsliste"
+        },
+        "users": {
+            "title": "Benutzer",
+            "signUp": "Registrieren",
+            "login": "Einloggen",
+            "info": "Info"
         }
     },
     "machineList": {
@@ -82,7 +88,7 @@
         "new": "Neu",
         "assigned": "Zugewiesen",
         "production": "In Produktion",
-        "shipment": "Im Versand", 
+        "shipment": "Im Versand",
         "archived": "Archiviert",
         "representive": "Veröffentlicht",
         "deleted": "Gelöscht"

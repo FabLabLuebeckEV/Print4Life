@@ -7,6 +7,8 @@ import { CreateOrderComponent } from '../orders/create-order/create-order.compon
 import { MachineDetailComponent } from '../machines/machine-detail/machine-detail.component';
 import { routes } from './routes';
 import { OrderDetailComponent } from '../orders/order-detail/order-detail.component';
+import { UserFormComponent } from '../users/user-form/user-form.component';
+import { UserComponent } from '../users/user/user.component';
 
 export const appRoutes: Routes = [
     {
@@ -26,6 +28,15 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent },
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent },
             { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent }
+        ]
+    },
+
+    {
+        path: routes.paths.frontend.users.root,
+        component: UserComponent,
+        children: [
+            { path: routes.paths.frontend.users.signup, component: UserFormComponent },
+            { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent }
         ]
     },
     {

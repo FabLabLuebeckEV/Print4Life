@@ -1,0 +1,115 @@
+<router-outlet></router-outlet>
+<div class="row spacing">
+  <div class="col-md-1 text-right">
+    <a [routerLink]="backLink">
+      <button type="button" class="btn btn-primary">
+        <fa-icon [icon]="backArrow"></fa-icon>
+      </button>
+    </a>
+  </div>
+  <div class="col-md-11 text-center">
+    <h1>Register User</h1>
+  </div>
+</div>
+<div class="row spacing">
+  <div class="container">
+    <form (ngSubmit)="onSubmit()" #createUserForm="ngForm">
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="username">Username</label>
+          <input type="text" class="form-control" id="username" required [(ngModel)]="user.username" name="username" #username="ngModel">
+          <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
+            Username is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-6">
+          <label for="firstname">Firstname</label>
+          <input type="text" class="form-control" id="firstname" required [(ngModel)]="user.firstname" name="firstname" #firstname="ngModel">
+          <div [hidden]="firstname.valid || firstname.pristine" class="alert alert-danger">
+            Firstname is required
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="lastname">Secondname</label>
+          <input type="text" class="form-control" id="lastname" required [(ngModel)]="user.lastname" name="lastname" #lastname="ngModel">
+          <div [hidden]="lastname.valid || lastname.pristine" class="alert alert-danger">
+            Secondname is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-6">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password" #password="ngModel">
+          <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+            Password is required
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="validation">Password validation</label>
+          <input type="password" class="form-control" id="validation" required [(ngModel)]="user.passwordValidation" name="validation"
+            #validation="ngModel">
+          <div [hidden]="validation.valid || validation.pristine" class="alert alert-danger">
+            validation is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="email">Email Address</label>
+          <input type="text" class="form-control" id="email" required [(ngModel)]="user.email" name="email" #email="ngModel">
+          <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+            Email is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="role">Role</label>
+          <ng-select [loading]="loadingRoles" [items]=validRoles [(ngModel)]="user.role" id="role" name="role" #role="ngModel" required>
+          </ng-select>
+          <div [hidden]="role.valid || role.pristine" class="alert alert-danger">
+            Role is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="street">Street</label>
+          <input type="text" class="form-control" id="street" [(ngModel)]="user.address.street" name="street" #street="ngModel">
+          <div [hidden]="street.valid || street.pristine" class="alert alert-danger">
+            Street is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-4">
+          <label for="zipCode">Zip Code</label>
+          <input type="text" class="form-control" id="zipCode" [(ngModel)]="user.address.zipCode" name="zipCode" #zipCode="ngModel">
+          <div [hidden]="zipCode.valid || zipCode.pristine" class="alert alert-danger">
+            Zip code is required
+          </div>
+        </div>
+        <div class="col-md-8">
+          <label for="city">City</label>
+          <input type="text" class="form-control" id="city" [(ngModel)]="user.address.city" name="city" #city="ngModel">
+          <div [hidden]="city.valid || city.pristine" class="alert alert-danger">
+            City is required
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="country">Country</label>
+          <input type="text" class="form-control" id="country" [(ngModel)]="user.address.country" name="country" #country="ngModel">
+          <div [hidden]="country.valid || country.pristine" class="alert alert-danger">
+            Country is required
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success" [disabled]="!createUserForm.form.valid">Submit</button>
+    </form>
+  </div>
+</div>

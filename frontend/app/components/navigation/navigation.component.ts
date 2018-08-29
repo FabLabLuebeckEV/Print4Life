@@ -13,6 +13,14 @@ export class NavigationComponent implements OnInit {
   machineDropdown: Object = { name: '', elements: [] };
   orderDropdown: Object = { name: '', elements: [] };
   languageDropdown: Object = { name: '', elements: [] };
+  userDropdown: Object = {
+    name: 'User',
+    elements: [
+      { name: 'SignUp', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}` },
+      { name: 'SignIn', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.login}` },
+      { name: 'Info', routerHref: `${routes.paths.frontend.users.root}/:id` }
+    ]
+  };
 
   constructor(private translateService: TranslateService) {
     this._translate();
@@ -27,7 +35,9 @@ export class NavigationComponent implements OnInit {
   }
 
   private _translate() {
-    this.translateService.get(['navigation', 'languages', 'dropdown.machines', 'dropdown.orders']).subscribe((translations => {
+    this.translateService.get(
+      ['navigation', 'languages', 'dropdown.machines', 'dropdown.orders', 'dropdown.users']
+    ).subscribe((translations => {
       this.title = translations['navigation'].title;
       this.machineDropdown = {
         name: translations['dropdown.machines'].title,
@@ -64,6 +74,24 @@ export class NavigationComponent implements OnInit {
             isFlag: true,
             class: 'flag-icon flag-icon-de',
             countryCode: 'de'
+          }
+        ]
+      };
+
+      this.userDropdown = {
+        name: translations['dropdown.users'].title,
+        elements: [
+          {
+            name: translations['dropdown.users'].signUp,
+            routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}`
+          },
+          {
+            name: translations['dropdown.users'].login,
+            routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.login}`
+          },
+          {
+            name: translations['dropdown.users'].info,
+            routerHref: `${routes.paths.frontend.users.root}/:id`
           }
         ]
       };

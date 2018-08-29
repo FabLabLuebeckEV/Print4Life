@@ -19,6 +19,12 @@
         "orders": {
             "title": "Orders",
             "listOrders": "List Orders"
+        },
+        "users": {
+            "title": "Users",
+            "signUp": "Sign up",
+            "login": "Login",
+            "info": "Info"
         }
     },
     "machineList": {
@@ -82,7 +88,7 @@
         "new": "new",
         "assigned": "assigned",
         "production": "production",
-        "shipment": "shipment", 
+        "shipment": "shipment",
         "archived": "archived",
         "representive": "representive",
         "deleted": "deleted"

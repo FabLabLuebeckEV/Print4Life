@@ -30,6 +30,8 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 export function translateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }
+import { UserFormComponent } from './users/user-form/user-form.component';
+import { UserComponent } from './users/user/user.component';
 
 @NgModule({
     declarations: [
@@ -44,7 +46,9 @@ export function translateHttpLoaderFactory(http: HttpClient) {
         CreateOrderComponent,
         MessageModalComponent,
         MachineDetailComponent,
-        OrderDetailComponent
+        OrderDetailComponent,
+        UserFormComponent,
+        UserComponent
     ],
     imports: [
         BrowserModule,

@@ -1,10 +1,14 @@
 import { environment } from '../../environments/environment';
-const backendUrl = !environment.production ? 'http://localhost:3000/api/v1' : 'http://212.83.56.107:3000/api/v1';
+const backendUrl = !environment.production ? 'http://localhost:3000/api/v1' : 'http://iot-fablab.ddns.net:3000/api/v1';
 
 export const routes = {
     backendUrl: backendUrl,
     paths: {
         backend: {
+            users: {
+                root: 'users',
+                getRoles: 'roles'
+            },
             orders: {
                 root: 'orders',
                 getStatus: 'status',
@@ -28,6 +32,12 @@ export const routes = {
             }
         },
         frontend: {
+            users: {
+                root: 'users',
+                signup: 'signup',
+                login: 'login',
+                update: 'edit'
+            },
             orders: {
                 root: 'orders',
                 create: 'create',
