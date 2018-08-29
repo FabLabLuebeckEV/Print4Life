@@ -40,7 +40,8 @@
     }
   },
   "keywords": [],
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Rene Kremer",
       "email": "renejon90@googlemail.com"
     },
