@@ -29,14 +29,30 @@ router.route('/roles').get((req, res) => {
   });
 });
 
-router.route('/login').post((req, res) => {
-  const user = userCtrl.getUserByUsername(req.body.username);
-  const login = userCtrl.login(user);
+router.route('/login').post(async (req, res) => {
+  let user;
+  try {
+    user = await userCtrl.getUserByUsername(req.body.username);
+  } catch (err) {
+    const msg = { error: 'User not found.', stack: err };
+    logger.error(msg);
+    res.status(404).send(msg);
+  }
+
+  logger.info(`User "${user.username}" was found in DB and tries to login with password "${req.body.password}".`);
+
+  let login;
+  try {
+    login = await userCtrl.login(user, req.body.password);
+  } catch (err) {
+    const msg = { error: err.msg, stack: err };
+    logger.error(msg);
+    res.status(401).send(msg);
+  }
+
   if (login.success) {
+    logger.info(`${user.username} successfully logged in with token: ${login.token}`);
     res.status(200).send({ login });
-  } else {
-    logger.error({ error: login.msg });
-    res.status(401).send({ login });
   }
 });
 

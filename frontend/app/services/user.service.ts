@@ -18,4 +18,12 @@ export class UserService {
   public createUser(user): Promise<any> {
     return this.http.post(`${this.p}/`, user).toPromise();
   }
+
+  public getProfile(id): Promise<any> {
+    return this.http.get(`${this.p}/${id}`).toPromise();
+  }
+
+  public login(user): Promise<any> {
+    return this.http.post(`${this.p}/${routes.paths.backend.users.login}`, user).toPromise();
+  }
 }

@@ -7,7 +7,8 @@ export const routes = {
         backend: {
             users: {
                 root: 'users',
-                getRoles: 'roles'
+                getRoles: 'roles',
+                login: 'login'
             },
             orders: {
                 root: 'orders',

@@ -9,6 +9,7 @@ import { routes } from './routes';
 import { OrderDetailComponent } from '../orders/order-detail/order-detail.component';
 import { UserFormComponent } from '../users/user-form/user-form.component';
 import { UserComponent } from '../users/user/user.component';
+import { UserLoginComponent } from '../users/user-login/user-login.component';
 
 export const appRoutes: Routes = [
     {
@@ -36,6 +37,7 @@ export const appRoutes: Routes = [
         component: UserComponent,
         children: [
             { path: routes.paths.frontend.users.signup, component: UserFormComponent },
+            { path: routes.paths.frontend.users.login, component: UserLoginComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent }
         ]
     },

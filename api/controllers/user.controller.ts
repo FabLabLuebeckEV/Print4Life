@@ -98,17 +98,15 @@ async function getRoles () {
   });
 }
 
-function login (user): any {
-  user.comparePassword(user.password, (err, isMatch) => {
-    let obj;
+function login (user, password): any {
+  return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
     if (isMatch && !err) {
-      const token = jwt.sign(user.toJSON(), config.jwkSecret);
-      obj = { success: true, token: `JWT ${token}` };
+      const token = jwt.sign(user.toJSON(), config.jwtSecret);
+      resolve({ success: true, token: `JWT ${token}` });
     } else {
-      obj = { success: false, msg: 'Authentication failed. Wrong password.' };
+      reject({ success: false, msg: 'Authentication failed. Wrong password.' });
     }
-    return obj;
-  });
+  }));
 }
 
 async function getUserByUsername (username) {

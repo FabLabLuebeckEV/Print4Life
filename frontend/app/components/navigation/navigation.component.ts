@@ -13,14 +13,7 @@ export class NavigationComponent implements OnInit {
   machineDropdown: Object = { name: '', elements: [] };
   orderDropdown: Object = { name: '', elements: [] };
   languageDropdown: Object = { name: '', elements: [] };
-  userDropdown: Object = {
-    name: 'User',
-    elements: [
-      { name: 'SignUp', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}` },
-      { name: 'SignIn', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.login}` },
-      { name: 'Info', routerHref: `${routes.paths.frontend.users.root}/:id` }
-    ]
-  };
+  userDropdown: Object = { name: '', elements: [] };
 
   constructor(private translateService: TranslateService) {
     this._translate();

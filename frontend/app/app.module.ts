@@ -33,6 +33,7 @@ export function translateHttpLoaderFactory(http: HttpClient) {
 import { UserFormComponent } from './users/user-form/user-form.component';
 import { UserComponent } from './users/user/user.component';
 import { BackButtonComponent } from './components/back-button/back-button.component';
+import { UserLoginComponent } from './users/user-login/user-login.component';
 
 @NgModule({
     declarations: [
@@ -50,7 +51,8 @@ import { BackButtonComponent } from './components/back-button/back-button.compon
         OrderDetailComponent,
         UserFormComponent,
         UserComponent,
-        BackButtonComponent
+        BackButtonComponent,
+        UserLoginComponent
     ],
     imports: [
         BrowserModule,

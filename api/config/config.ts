@@ -2,7 +2,7 @@ const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
 const ngPort = process.env.NG_PORT || 4200;
 const dev = {
-  jwtSecret: 'meansecure',
+  jwtSecret: 'verInsecurePW!!!111einself',
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -22,7 +22,7 @@ const dev = {
 };
 
 const prod = {
-  jwtSecret: 'meansecure',
+  jwtSecret: 'verInsecurePW!!!111einself',
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -41,7 +41,7 @@ const prod = {
 };
 
 const test = {
-  jwtSecret: 'meansecure',
+  jwtSecret: 'verInsecurePW!!!111einself',
   connections: {
     mongo: {
       host: 'mongodb://mongo:27017/',
@@ -54,7 +54,7 @@ const test = {
 };
 
 const testLocal = {
-  jwtSecret: 'meansecure',
+  jwtSecret: 'verInsecurePW!!!111einself',
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
