@@ -7,6 +7,7 @@ import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { ConfigService } from '../../config/config.service';
+import { GenericService } from '../../services/generic.service';
 
 @Component({
   selector: 'app-machine-form',
@@ -15,7 +16,6 @@ import { ConfigService } from '../../config/config.service';
 })
 export class MachineFormComponent implements OnInit {
   config: any;
-  backArrow: any;
   machineTypes: Array<String> = [];
   selectedType: String;
   editView: Boolean;
@@ -28,11 +28,16 @@ export class MachineFormComponent implements OnInit {
   loadingMaterials: Boolean;
   loadingLaserTypes: Boolean;
 
-  constructor(private machineService: MachineService, private fablabService: FablabService,
-    private router: Router, private location: Location, private route: ActivatedRoute,
-    private modalService: NgbModal, private configService: ConfigService) {
+  constructor(
+    private machineService: MachineService,
+    private fablabService: FablabService,
+    private router: Router,
+    private location: Location,
+    private route: ActivatedRoute,
+    private modalService: NgbModal,
+    private configService: ConfigService,
+    private genericService: GenericService) {
     this.config = this.configService.getConfig();
-    this.backArrow = this.config.icons.back;
     this.route.params.subscribe(params => {
       if (params.type && params.id) {
         const type = params.type.substr(0, params.type.length - 1);
@@ -56,10 +61,6 @@ export class MachineFormComponent implements OnInit {
       }
       this._loadMachineTypes();
     });
-  }
-
-  public back() {
-    this.location.back();
   }
 
   ngOnInit() {
@@ -105,7 +106,7 @@ export class MachineFormComponent implements OnInit {
     this.editView ? msg = 'Updating the machine was successful!' : msg = 'The creation of a new machine was successful!';
     this._openMsgModal(msgHeader, 'modal-header header-success',
       msg, okButton, undefined).result.then(() => {
-        this.back();
+        this.genericService.back();
       });
   }
 

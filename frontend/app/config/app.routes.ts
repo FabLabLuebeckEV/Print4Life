@@ -35,7 +35,7 @@ export const appRoutes: Routes = [
         path: routes.paths.frontend.users.root,
         component: UserComponent,
         children: [
-            { path: routes.paths.frontend.users.signin, component: UserFormComponent },
+            { path: routes.paths.frontend.users.signup, component: UserFormComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent }
         ]
     },

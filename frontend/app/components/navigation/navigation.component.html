@@ -1,7 +1,10 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light">
-  <a class="navbar-brand" href="#">{{title}}</a>
-  <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed" data-toggle="collapse"
-    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <a class="navbar-brand" href="#">
+    <img src="assets/img/fablab-logo.png" width="30" height="30" class="d-inline-block align-top" alt="Fablab-Logo" />
+    {{title}}</a>
+  <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
+    data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+    aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -9,7 +12,7 @@
     <ul class="navbar-nav">
       <li class="nav-item active">
         <a class="nav-link" routerLink="" routerLinkActive="active">
-          <span class="sr-only">Home</span>
+          <span class="sr-only"></span>
         </a>
       </li>
       <li class="nav-item">
@@ -24,7 +27,12 @@
         <app-dropdown [dropdown]="userDropdown">
         </app-dropdown>
       </li>
+      <li class="nav-item">
+        <app-dropdown [dropdown]="languageDropdown" (switchLanguageEvent)="switchLanguage($event)"></app-dropdown>
+      </li>
     </ul>
+
+
     <!-- <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,19 +7,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  title = 'Fablab - Order Management';
-  dropdownMenu = {
-    name: 'Links',
-    elements: [
-      { name: 'Tour of Heroes', href: 'https://angular.io/tutorial' },
-      { name: 'CLI Documentation', href: 'https://github.com/angular/angular-cli/wiki' },
-      { name: 'Angular blog', href: 'https://blog.angular.io/' }
-    ]
-  };
+  title = '';
 
-  constructor() { }
+  constructor(private translateService: TranslateService) {
+    this._translate();
+    this.translateService.onLangChange.subscribe(() => {
+      this._translate();
+    });
+  }
 
   ngOnInit() {
+  }
+
+
+  private _translate() {
+    this.translateService.get(['dashboard']).subscribe((translations => {
+      this.title = translations['dashboard'].title;
+    }));
   }
 
 }

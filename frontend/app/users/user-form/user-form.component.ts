@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { User, Address, Role } from '../../models/user.model';
-import { ConfigService } from '../../config/config.service';
-import { routes } from '../../config/routes';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -10,11 +8,6 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./user-form.component.css']
 })
 export class UserFormComponent implements OnInit {
-  config: any;
-
-  backLink: String;
-  backArrow: any;
-
   loadingRoles: Boolean = false;
   validRoles: Array<String> = [];
 
@@ -23,13 +16,8 @@ export class UserFormComponent implements OnInit {
   user: User = new User(undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.address, this.role);
 
   constructor(
-    private configService: ConfigService,
     private userService: UserService
-  ) {
-    this.config = this.configService.getConfig();
-    this.backArrow = this.config.icons.back;
-    this.backLink = `/${routes.paths.frontend.users.root}`;
-  }
+  ) { }
 
   ngOnInit() {
     this._loadRoles();

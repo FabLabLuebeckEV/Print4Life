@@ -1,8 +1,6 @@
 <div class="row spacing">
   <div class="col-md-1 text-right">
-    <button (click)="back()" type="button" class="btn btn-primary">
-      <fa-icon [icon]="backArrow"></fa-icon>
-    </button>
+    <app-back-button></app-back-button>
   </div>
   <div class="col-md-9 text-center">
     <h1>Machine Form</h1>
@@ -13,8 +11,8 @@
     <div class="container">
       <div *ngIf="!editView" class="col-md-6 offset-3">
         <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Machine selection">
-          <button *ngFor="let type of machineTypes" (click)="_selectType(type); machineForm.reset()" type="button" [class.active]="type === selectedType"
-            class="btn btn-secondary">{{type}}</button>
+          <button *ngFor="let type of machineTypes" (click)="_selectType(type); machineForm.reset()" type="button"
+            [class.active]="type === selectedType" class="btn btn-secondary">{{type}}</button>
         </div>
       </div>
       <form (ngSubmit)="onSubmit()" #machineForm="ngForm">
@@ -22,15 +20,16 @@
         <div *ngIf="selectedType" class="form-group row">
           <div class="col-md-6">
             <label for="deviceName">Device Name</label>
-            <input type="text" class="form-control" id="deviceName" required [(ngModel)]="model.deviceName" name="deviceName" #deviceName="ngModel">
+            <input type="text" class="form-control" id="deviceName" required [(ngModel)]="model.deviceName" name="deviceName"
+              #deviceName="ngModel">
             <div [hidden]="deviceName.valid || deviceName.pristine" class="alert alert-danger">
               Device Name is required
             </div>
           </div>
           <div class="col-md-6">
             <label for="fablabId">Fablab</label>
-            <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name" [(ngModel)]="model.fablabId" id="fablabId"
-              name="fablabId" #fablabId="ngModel" required>
+            <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name" [(ngModel)]="model.fablabId"
+              id="fablabId" name="fablabId" #fablabId="ngModel" required>
             </ng-select>
             <div [hidden]="fablabId.valid || fablabId.pristine" class="alert alert-danger">
               Fablab is required
@@ -41,7 +40,8 @@
         <div *ngIf="selectedType" class="form-group row">
           <div class="col-md-6">
             <label for="manufacturer">Manufacturer</label>
-            <input type="text" class="form-control" id="manufacturer" required [(ngModel)]="model.manufacturer" name="manufacturer" #manufacturer="ngModel">
+            <input type="text" class="form-control" id="manufacturer" required [(ngModel)]="model.manufacturer" name="manufacturer"
+              #manufacturer="ngModel">
             <div [hidden]="manufacturer.valid || manufacturer.pristine" class="alert alert-danger">
               Manufacturer is required
             </div>
@@ -56,16 +56,19 @@
           <div class="form-group row">
             <div class="col-md-4">
               <label for="camSoftware">Cam Software</label>
-              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware" #camSoftware="ngModel">
+              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware"
+                #camSoftware="ngModel">
             </div>
             <div class="col-md-4">
               <label for="nozzleDiameter">Nozzle Diameter</label>
-              <input type="text" class="form-control" id="nozzleDiameter" [(ngModel)]="model.nozzleDiameter" name="nozzleDiameter" #nozzleDiameter="ngModel">
+              <input type="text" class="form-control" id="nozzleDiameter" [(ngModel)]="model.nozzleDiameter" name="nozzleDiameter"
+                #nozzleDiameter="ngModel">
             </div>
             <div class="col-md-4">
               <label for="materials">Materials</label>
-              <ng-select [multiple]="true" [loading]="loadingMaterials" [hideSelected]="true" [closeOnSelect]="false" [items]=materialsArr
-                bindLabel="material" [(ngModel)]="model.materials" id="materials" name="materials" #materials="ngModel" required>
+              <ng-select [multiple]="true" [loading]="loadingMaterials" [hideSelected]="true" [closeOnSelect]="false"
+                [items]=materialsArr bindLabel="material" [(ngModel)]="model.materials" id="materials" name="materials"
+                #materials="ngModel" required>
               </ng-select>
             </div>
           </div>
@@ -73,15 +76,18 @@
           <div class="form-group row">
             <div class="col-md-4">
               <label for="printVolumeX">Print Volume X</label>
-              <input type="number" class="form-control" id="printVolumeX" [(ngModel)]="model.printVolumeX" name="printVolumeX" #printVolumeX="ngModel">
+              <input type="number" class="form-control" id="printVolumeX" [(ngModel)]="model.printVolumeX" name="printVolumeX"
+                #printVolumeX="ngModel">
             </div>
             <div class="col-md-4">
               <label for="printVolumeY">Print Volume Y</label>
-              <input type="number" class="form-control" id="printVolumeY" [(ngModel)]="model.printVolumeY" name="printVolumeY" #printVolumeY="ngModel">
+              <input type="number" class="form-control" id="printVolumeY" [(ngModel)]="model.printVolumeY" name="printVolumeY"
+                #printVolumeY="ngModel">
             </div>
             <div class="col-md-4">
               <label for="printVolumeZ">Print Volume Z</label>
-              <input type="number" class="form-control" id="printVolumeZ" [(ngModel)]="model.printVolumeZ" name="printVolumeZ" #printVolumeZ="ngModel">
+              <input type="number" class="form-control" id="printVolumeZ" [(ngModel)]="model.printVolumeZ" name="printVolumeZ"
+                #printVolumeZ="ngModel">
             </div>
           </div>
 
@@ -106,12 +112,13 @@
           <div class="form-group row">
             <div class="col-md-4">
               <label for="numberOfExtruders">Number of Extruders</label>
-              <input type="number" class="form-control" id="numberOfExtruders" [(ngModel)]="model.numberOfExtruders" name="numberOfExtruders"
-                #numberOfExtruders="ngModel">
+              <input type="number" class="form-control" id="numberOfExtruders" [(ngModel)]="model.numberOfExtruders"
+                name="numberOfExtruders" #numberOfExtruders="ngModel">
             </div>
             <div class="col-md-4">
               <label for="pictureUrl">Picture Url</label>
-              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl" #pictureUrl="ngModel">
+              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl"
+                #pictureUrl="ngModel">
             </div>
             <div class="col-md-4">
               <label for="comment">Comment</label>
@@ -124,37 +131,44 @@
           <div class="form-group row">
             <div class="col-md-4">
               <label for="camSoftware">Cam Software</label>
-              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware" #camSoftware="ngModel">
+              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware"
+                #camSoftware="ngModel">
             </div>
             <div class="col-md-4">
               <label for="movementSpeed">Movement Speed</label>
-              <input type="number" class="form-control" id="movementSpeed" [(ngModel)]="model.movementSpeed" name="movementSpeed" #movementSpeed="ngModel">
+              <input type="number" class="form-control" id="movementSpeed" [(ngModel)]="model.movementSpeed" name="movementSpeed"
+                #movementSpeed="ngModel">
             </div>
             <div class="col-md-4">
               <label for="stepSize">Step Size</label>
-              <input type="number" class="form-control" id="stepSize" [(ngModel)]="model.stepSize" name="stepSize" #stepSize="ngModel">
+              <input type="number" class="form-control" id="stepSize" [(ngModel)]="model.stepSize" name="stepSize"
+                #stepSize="ngModel">
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-4">
               <label for="workspaceX">Workspace X</label>
-              <input type="number" class="form-control" id="workspaceX" [(ngModel)]="model.workspaceX" name="workspaceX" #workspaceX="ngModel">
+              <input type="number" class="form-control" id="workspaceX" [(ngModel)]="model.workspaceX" name="workspaceX"
+                #workspaceX="ngModel">
             </div>
             <div class="col-md-4">
               <label for="workspaceY">Workspace Y</label>
-              <input type="number" class="form-control" id="workspaceY" [(ngModel)]="model.workspaceY" name="workspaceY" #workspaceY="ngModel">
+              <input type="number" class="form-control" id="workspaceY" [(ngModel)]="model.workspaceY" name="workspaceY"
+                #workspaceY="ngModel">
             </div>
             <div class="col-md-4">
               <label for="workspaceZ">Workspace Z</label>
-              <input type="number" class="form-control" id="workspaceZ" [(ngModel)]="model.workspaceZ" name="workspaceZ" #workspaceZ="ngModel">
+              <input type="number" class="form-control" id="workspaceZ" [(ngModel)]="model.workspaceZ" name="workspaceZ"
+                #workspaceZ="ngModel">
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-6">
               <label for="pictureUrl">Picture Url</label>
-              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl" #pictureUrl="ngModel">
+              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl"
+                #pictureUrl="ngModel">
             </div>
             <div class="col-md-6">
               <label for="comment">Comment</label>
@@ -167,15 +181,16 @@
           <div class="form-group row">
             <div class="col-md-4">
               <label for="typeOfMachine">Type of Machine</label>
-              <input type="text" class="form-control" id="typeOfMachine" required [(ngModel)]="model.typeOfMachine" name="typeOfMachine"
-                #typeOfMachine="ngModel">
+              <input type="text" class="form-control" id="typeOfMachine" required [(ngModel)]="model.typeOfMachine"
+                name="typeOfMachine" #typeOfMachine="ngModel">
               <div [hidden]="typeOfMachine.valid || typeOfMachine.pristine" class="alert alert-danger">
                 Device Name is required
               </div>
             </div>
             <div class="col-md-4">
               <label for="pictureUrl">Picture Url</label>
-              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl" #pictureUrl="ngModel">
+              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl"
+                #pictureUrl="ngModel">
             </div>
             <div class="col-md-4">
               <label for="comment">Comment</label>
@@ -188,44 +203,51 @@
           <div class="form-group row">
             <div class="col-md-4">
               <label for="laserTypes">Laser Types</label>
-              <ng-select [multiple]="true" [loading]="loadingLaserTypes" [hideSelected]="true" [closeOnSelect]="false" [items]=laserTypesArr
-                bindLabel="laserType" [(ngModel)]="model.laserTypes" id="laserTypes" name="laserTypes" #laserTypes="ngModel"
-                required>
+              <ng-select [multiple]="true" [loading]="loadingLaserTypes" [hideSelected]="true" [closeOnSelect]="false"
+                [items]=laserTypesArr bindLabel="laserType" [(ngModel)]="model.laserTypes" id="laserTypes" name="laserTypes"
+                #laserTypes="ngModel" required>
               </ng-select>
             </div>
             <div class="col-md-4">
               <label for="laserPower">Laserpower</label>
-              <input type="number" class="form-control" id="laserPower" [(ngModel)]="model.laserPower" name="laserPower" #laserPower="ngModel">
+              <input type="number" class="form-control" id="laserPower" [(ngModel)]="model.laserPower" name="laserPower"
+                #laserPower="ngModel">
             </div>
             <div class="col-md-4">
               <label for="maxResolution">Max Resolution</label>
-              <input type="number" class="form-control" id="maxResolution" [(ngModel)]="model.maxResolution" name="maxResolution" #maxResolution="ngModel">
+              <input type="number" class="form-control" id="maxResolution" [(ngModel)]="model.maxResolution" name="maxResolution"
+                #maxResolution="ngModel">
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-4">
               <label for="workspaceX">Workspace X</label>
-              <input type="number" class="form-control" id="workspaceX" [(ngModel)]="model.workspaceX" name="workspaceX" #workspaceX="ngModel">
+              <input type="number" class="form-control" id="workspaceX" [(ngModel)]="model.workspaceX" name="workspaceX"
+                #workspaceX="ngModel">
             </div>
             <div class="col-md-4">
               <label for="workspaceY">Workspace Y</label>
-              <input type="number" class="form-control" id="workspaceY" [(ngModel)]="model.workspaceY" name="workspaceY" #workspaceY="ngModel">
+              <input type="number" class="form-control" id="workspaceY" [(ngModel)]="model.workspaceY" name="workspaceY"
+                #workspaceY="ngModel">
             </div>
             <div class="col-md-4">
               <label for="workspaceZ">Workspace Z</label>
-              <input type="number" class="form-control" id="workspaceZ" [(ngModel)]="model.workspaceZ" name="workspaceZ" #workspaceZ="ngModel">
+              <input type="number" class="form-control" id="workspaceZ" [(ngModel)]="model.workspaceZ" name="workspaceZ"
+                #workspaceZ="ngModel">
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-4">
               <label for="camSoftware">Cam Software</label>
-              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware" #camSoftware="ngModel">
+              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware"
+                #camSoftware="ngModel">
             </div>
             <div class="col-md-4">
               <label for="pictureUrl">Picture Url</label>
-              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl" #pictureUrl="ngModel">
+              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl"
+                #pictureUrl="ngModel">
             </div>
             <div class="col-md-4">
               <label for="comment">Comment</label>

@@ -11,10 +11,10 @@ router.route('/').get((req, res) => {
       logger.info('GET Lasercutters with no result');
       res.status(204).send();
     } else if (lasercutters && req.query.limit && req.query.skip) {
-      logger.info(`GET Lasercutters with partial result ${lasercutters}`);
+      logger.info(`GET Lasercutters with partial result ${JSON.stringify(lasercutters)}`);
       res.status(206).send({ lasercutters });
     } else if (lasercutters) {
-      logger.info(`GET Lasercutters with result ${lasercutters}`);
+      logger.info(`GET Lasercutters with result ${JSON.stringify(lasercutters)}`);
       res.status(200).send({ lasercutters });
     }
   }).catch((err) => {
@@ -25,7 +25,7 @@ router.route('/').get((req, res) => {
 
 router.route('/count').get((req, res) => {
   lasercutterCtrl.count().then((count) => {
-    logger.info(`Count Lasercutters with result ${count}`);
+    logger.info(`Count Lasercutters with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
     logger.error(err);
@@ -39,7 +39,7 @@ router.route('/laserTypes').get((req, res) => {
       logger.info('GET Lasertypes with no result');
       res.status(204).send();
     } else if (laserTypes) {
-      logger.info(`GET Lasertypes with result ${laserTypes}`);
+      logger.info(`GET Lasertypes with result ${JSON.stringify(laserTypes)}`);
       res.status(200).send({ laserTypes });
     }
   }).catch((err) => {
@@ -50,7 +50,7 @@ router.route('/laserTypes').get((req, res) => {
 
 router.route('/').post((req, res) => {
   lasercutterCtrl.create(req.body).then((lasercutter) => {
-    logger.info(`POST Lasercutter with result ${lasercutter}`);
+    logger.info(`POST Lasercutter with result ${JSON.stringify(lasercutter)}`);
     res.status(201).send({ lasercutter });
   }).catch((err) => {
     const msg = { error: 'Malformed request!', stack: err };
@@ -73,7 +73,7 @@ router.route('/:id').delete((req, res) => {
           if (result) {
             lasercutterCtrl.get(req.params.id).then((result) => {
               if (!result) {
-                logger.info(`DELETE Lasercutter with result ${lasercutter}`);
+                logger.info(`DELETE Lasercutter with result ${JSON.stringify(lasercutter)}`);
                 res.status(200).send({ lasercutter });
               }
             }).catch((err) => {
@@ -119,7 +119,7 @@ router.route('/:id').get((req, res) => {
         logger.error(msg);
         res.status(404).send(msg);
       } else {
-        logger.info(`GET LasercutterById with result ${lasercutter}`);
+        logger.info(`GET LasercutterById with result ${JSON.stringify(lasercutter)}`);
         res.status(200).send({ lasercutter });
       }
     }).catch((err) => {
@@ -147,7 +147,7 @@ router.route('/:id').put((req, res) => {
         res.status(404).send(msg);
       } else {
         lasercutterCtrl.update(req.params.id, req.body).then((lasercutter) => {
-          logger.info(`PUT Lasercutter with result ${lasercutter}`);
+          logger.info(`PUT Lasercutter with result ${JSON.stringify(lasercutter)}`);
           res.status(200).send({ lasercutter });
         });
       }

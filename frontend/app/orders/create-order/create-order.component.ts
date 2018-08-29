@@ -11,6 +11,7 @@ import { Machine, Material, Lasertype } from '../../models/machines.model';
 import { Order, Comment, SimpleMachine } from '../../models/order.model';
 import { ConfigService } from '../../config/config.service';
 import { routes } from '../../config/routes';
+import { GenericService } from '../../services/generic.service';
 
 
 @Component({
@@ -22,7 +23,6 @@ export class CreateOrderComponent implements OnInit {
   config: any;
   publicIcon: any;
   publicHint: String = 'This will be visible for you and the world.';
-  backArrow: any;
   selectedType: String;
   editView: Boolean = false;
   routeChanged: Boolean;
@@ -57,9 +57,9 @@ export class CreateOrderComponent implements OnInit {
     private location: Location,
     private orderService: OrderService,
     private modalService: NgbModal,
-    private configService: ConfigService) {
+    private configService: ConfigService,
+    private genericService: GenericService) {
     this.config = this.configService.getConfig();
-    this.backArrow = this.config.icons.back;
     this.publicIcon = this.config.icons.public;
     this.router.events.subscribe(() => {
       const route = this.location.path();
@@ -71,15 +71,11 @@ export class CreateOrderComponent implements OnInit {
     });
   }
 
-  public back() {
-    this.location.back();
-  }
-
   private _openSuccessMsg() {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal('Order successfully created', 'modal-header header-success',
       this.editView ? 'Order successfully updated!' : 'Order successfully created!', okButton, undefined).result.then((result) => {
-        this.back();
+        this.genericService.back();
       });
   }
 
@@ -101,7 +97,7 @@ export class CreateOrderComponent implements OnInit {
     this.order.machine['deviceName'] = '';
     machineObj = await this.machineService.getAll(type, undefined, undefined);
     machineObj = (machineObj && machineObj[`${this.machineService.camelCaseTypes(type)}s`]) ?
-    machineObj[`${this.machineService.camelCaseTypes(type)}s`] : undefined;
+      machineObj[`${this.machineService.camelCaseTypes(type)}s`] : undefined;
     for (let i = 0; i < machineObj.length; i++) {
       const resFab = await this.fablabService.getFablab(machineObj[i].fablabId);
       const fablab = resFab.fablab;

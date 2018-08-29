@@ -1,2 +1,7 @@
 <app-navigation></app-navigation>
 <router-outlet></router-outlet>
+<footer *ngIf="softwareName && version" class="footer">
+    <div class="container text-center">
+        <span class="text-muted">{{softwareName}} - Version {{version}}</span>
+    </div>
+</footer>
