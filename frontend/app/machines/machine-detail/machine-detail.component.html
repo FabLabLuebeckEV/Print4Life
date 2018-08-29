@@ -1,9 +1,7 @@
 <div *ngIf="!loading">
   <div class="row spacing">
     <div class="col-md-3 text-center">
-      <button (click)="back()" type="button" class="btn btn-primary spacing-right-xs">
-        <fa-icon [icon]="backArrow"></fa-icon>
-      </button>
+      <app-back-button class="spacing-right-xs"></app-back-button>
       <a [routerLink]="editLink">
         <button type="button" class="btn btn-warning spacing-right-xs">
           <fa-icon [icon]="editIcon"></fa-icon>

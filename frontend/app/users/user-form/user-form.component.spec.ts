@@ -6,6 +6,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
+import { BackButtonComponent } from '../../components/back-button/back-button.component';
 import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
@@ -17,7 +18,7 @@ describe('UserFormComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        UserFormComponent
+        UserFormComponent, BackButtonComponent
       ],
       imports: [
         NgbModule.forRoot(),

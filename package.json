@@ -24,11 +24,11 @@
     "lint": "ng lint && eslint api --fix --ext ts",
     "e2e": "ng e2e",
     "api-serve-dev": "NODE_ENV='dev' node --inspect-brk=9229 dist",
-    "api-serve": "NODE_ENV='prod' node dist",
+    "api-serve": "NODE_ENV='prod' NG_PORT='80' node dist",
     "api-build": "tsc && npm run lint",
     "api-dev": "nodemon -e ts --exec \"npm run api-build && npm run api-serve-dev\"",
     "api-test": "tsc && node dist/specs/global.spec.js || false ",
-    "api-test-local": "tsc && NODE_ENV='testLocal' node dist/specs/global.spec.js || false ",
+    "api-test-local": "tsc && NODE_ENV='testLocal' PORT='65534' node dist/specs/global.spec.js || false ",
     "api-test-dev": "tsc && NODE_ENV='testLocal' node --inspect-brk=9229 dist/specs/global.spec.js",
     "ng-serve": "ng serve --port 80",
     "ng-dev": "ng lint && ng serve --poll=2000",
@@ -40,8 +40,7 @@
     }
   },
   "keywords": [],
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Rene Kremer",
       "email": "renejon90@googlemail.com"
     },

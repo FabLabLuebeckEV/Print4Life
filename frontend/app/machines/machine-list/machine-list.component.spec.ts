@@ -19,6 +19,7 @@ import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { MachineFormComponent } from '../machine-form/machine-form.component';
 import { MachineDetailComponent } from '../machine-detail/machine-detail.component';
+import { BackButtonComponent } from '../../components/back-button/back-button.component';
 
 describe('MachineListComponent', () => {
   let component: MachineListComponent;
@@ -26,7 +27,7 @@ describe('MachineListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MachineListComponent, MachineFormComponent, MachineDetailComponent, TableComponent],
+      declarations: [MachineListComponent, MachineFormComponent, MachineDetailComponent, TableComponent, BackButtonComponent],
       imports: [
         NgSelectModule,
         FormsModule,

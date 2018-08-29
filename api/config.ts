@@ -1,4 +1,6 @@
 const env = process.env.NODE_ENV || 'dev';
+const port = process.env.PORT || 3000;
+const ngPort = process.env.NG_PORT || 4200;
 const dev = {
   connections: {
     mongo: {
@@ -6,10 +8,10 @@ const dev = {
       database: 'iot-fablab-dev'
     }
   },
-  baseUrlBackend: 'http://localhost:3000/api/v1/',
-  baseUrlFrontend: 'http://localhost:4200',
+  baseUrlBackend: `http://localhost:${port}/api/v1/`,
+  baseUrlFrontend: `http://localhost:${ngPort}`,
   cors: {
-    whitelist: ['http://localhost:4200'],
+    whitelist: [`http://localhost:${ngPort}`],
     corsOptions: {
       origin: undefined,
       credentials: true
@@ -25,10 +27,10 @@ const prod = {
       database: 'iot-fablab-staging'
     }
   },
-  baseUrlBackend: 'http://localhost:3000/api/v1/',
-  baseUrlFrontend: 'http://localhost:80',
+  baseUrlBackend: `http://localhost:${port}/api/v1/`,
+  baseUrlFrontend: `http://localhost:${ngPort}`,
   cors: {
-    whitelist: ['http://localhost:80', 'http://localhost', 'http://212.83.56.107', 'http://iot-fablab.ddns.net'],
+    whitelist: [`http://localhost:${ngPort}`, `http://212.83.56.107:${ngPort}`, `http://iot-fablab.ddns.net:${ngPort}`],
     corsOptions: {
       origin: undefined,
       credentials: true
@@ -43,8 +45,8 @@ const test = {
       database: 'iot-fablab'
     }
   },
-  baseUrlBackend: 'http://localhost:3000/api/v1/',
-  baseUrlFrontend: 'http://localhost:80',
+  baseUrlBackend: `http://localhost:${port}/api/v1/`,
+  baseUrlFrontend: `http://localhost:${ngPort}`,
   cors: undefined
 };
 
@@ -55,8 +57,8 @@ const testLocal = {
       database: 'iot-fablab-dev'
     }
   },
-  baseUrlBackend: 'http://localhost:3000/api/v1/',
-  baseUrlFrontend: 'http://localhost:4200',
+  baseUrlBackend: `http://localhost:${port}/api/v1/`,
+  baseUrlFrontend: `http://localhost:${ngPort}`,
   cors: undefined
 };
 
