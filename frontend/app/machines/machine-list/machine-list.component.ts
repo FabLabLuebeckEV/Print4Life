@@ -23,7 +23,7 @@ export class MachineListComponent implements OnInit {
     originMachineTypes: [], // origin for backend containing all machine types
     machineTypes: [], // shown machine types after translation to select in filter
     shownMachineTypes: [], // selected and translated machine types in filter
-    selectedMachineTypes: undefined // selected machine types but in origin backend language
+    selectedMachineTypes: [] // selected machine types but in origin backend language
   };
   displayedMachines: Array<TableItem> = [];
   listView: Boolean;
@@ -90,12 +90,6 @@ export class MachineListComponent implements OnInit {
     private spinner: NgxSpinnerService, private configService: ConfigService,
     private translateService: TranslateService) {
     this.config = this.configService.getConfig();
-    this.translateService.onLangChange.subscribe(() => {
-      this._translate();
-      this.changeFilterHandler(this.filter.shownMachineTypes);
-      this.paginationObj.page = 1;
-      this.filterHandler();
-    });
     this.plusIcon = this.config.icons.add;
     this.jumpArrow = this.config.icons.forward;
     this.newLink = `./${routes.paths.frontend.machines.create}`;
@@ -112,6 +106,12 @@ export class MachineListComponent implements OnInit {
 
   async ngOnInit() {
     if (this.listView && !this.loadingMachineTypes) {
+      this.translateService.onLangChange.subscribe(() => {
+        this._translate();
+        this.changeFilterHandler(this.filter.shownMachineTypes);
+        this.paginationObj.page = 1;
+        this.filterHandler();
+      });
       await this._loadMachineTypes();
       this._translate();
       this._init();
@@ -200,9 +200,9 @@ export class MachineListComponent implements OnInit {
         this.filter.shownMachineTypes[idx] = translated;
       });
     }));
-    if (!this.filter.selectedMachineTypes) {
-      this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
-    }
+    // if (!this.filter.selectedMachineTypes) {
+    this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
+    // }
     this.loadingMachineTypes = false;
   }
 

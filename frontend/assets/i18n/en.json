@@ -45,6 +45,47 @@
             "deleteQuestion2": "?"
         }
     },
+    "machineForm": {
+        "createTitle": "Create Machine",
+        "editTitle": "Edit Machine",
+        "generalData": "General Machine Data",
+        "labels": {
+            "create": "Create",
+            "edit": "Edit",
+            "ok": "Ok",
+            "error": "Error",
+            "deviceName": "Device Name",
+            "fablab": "Fablab",
+            "manufacturer": "Manufacturer",
+            "data": "Data",
+            "camSoftware": "Cam Software",
+            "nozzleDiameter": "Nozzle Diameter",
+            "materials": "Materials",
+            "printVolume": "Print Volume",
+            "printResolution": "Print Resolution",
+            "numberOfExtruders": "Number of Extruders",
+            "pictureURL": "Picture Url",
+            "comment": "Comment",
+            "movementSpeed": "Movement Speed",
+            "stepSize": "Step Size",
+            "workspace": "Workspace",
+            "laserTypes": "Laser Types",
+            "laserPower": "Laserpower",
+            "maxResolution": "Max Resolution",
+            "typeOfMachine": "Type of Machine"
+        },
+        "messages": {
+            "deviceName": "Device Name is required",
+            "fablab": "Fablab is required",
+            "manufacturer": "Manufacturer is required",
+            "typeOfMachine": "Type of Machine is required",
+            "updatingError": "Something went wrong while updating the machine",
+            "updatingSuccessHeader": "Machine updated successfully",
+            "updatingSuccessMsg": "Updating the machine was successful!",
+            "creatingSuccessHeader": "Machine created successfully",
+            "creatingSuccessMsg": "The creation of a new machine was successful!"
+        }
+    },
     "orderList": {
         "paginationLabel": "Jump to Page",
         "filterLabel": {

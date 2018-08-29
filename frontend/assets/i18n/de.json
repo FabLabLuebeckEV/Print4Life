@@ -66,6 +66,47 @@
             "deleteQuestion2": "löschen wollen?"
         }
     },
+    "machineForm": {
+        "createTitle": "Maschine anlegen",
+        "editTitle": "Maschine bearbeiten",
+        "generalData": "Allgemeine Maschinendaten",
+        "labels": {
+            "create": "Anlegen",
+            "edit": "Aktualisieren",
+            "ok": "Ok",
+            "error": "Fehler",
+            "deviceName": "Name der Maschine",
+            "fablab": "Fablab",
+            "manufacturer": "Hersteller",
+            "data": "Daten",
+            "camSoftware": "Kamera Software",
+            "nozzleDiameter": "Durchmesser Düse(n)",
+            "materials": "Materialien",
+            "printVolume": "Druckvolumen",
+            "printResolution": "Druckauflösung",
+            "numberOfExtruders": "Anzahl von Extrudern",
+            "pictureURL": "Bild Url",
+            "comment": "Kommentar",
+            "movementSpeed": "Bewegungsgeschwindigkeit",
+            "stepSize": "Schrittgröße",
+            "workspace": "Arbeitsfläche",
+            "laserTypes": "Lasertypen",
+            "laserPower": "Leistung des Lasers",
+            "maxResolution": "Maximale Auflösung",
+            "typeOfMachine": "Typ der Maschine"
+        },
+        "messages": {
+            "deviceName": "Der Name der Maschine wird benötigt",
+            "fablab": "Fablab wird benötigt",
+            "manufacturer": "Hersteller wird benötigt",
+            "typeOfMachine": "Der Typ der Maschine wird benötigt",
+            "updatingError": "Es ist ein Fehler beim Aktualisieren der Maschine aufgetreten",
+            "updatingSuccessHeader": "Maschine erfolgreich aktualisiert",
+            "updatingSuccessMsg": "Aktualisieren der Maschine war erfolgreich!",
+            "creatingSuccessHeader": "Maschine erfolgreich angelegt",
+            "creatingSuccessMsg": "Die Anlage der Maschine war erfolgreich!"
+        }
+    },
     "tableComponent": {
         "Device Type": "Machinen Typ",
         "Device Name": "Maschinen Name",
