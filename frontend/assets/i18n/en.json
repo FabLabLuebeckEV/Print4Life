@@ -78,8 +78,6 @@
         "labels": {
             "create": "Create",
             "edit": "Edit",
-            "ok": "Ok",
-            "error": "Error",
             "deviceName": "Device Name",
             "fablab": "Fablab",
             "manufacturer": "Manufacturer",
@@ -100,16 +98,20 @@
             "maxResolution": "Max Resolution",
             "typeOfMachine": "Type of Machine"
         },
-        "messages": {
-            "deviceName": "Device Name is required",
-            "fablab": "Fablab is required",
-            "manufacturer": "Manufacturer is required",
-            "typeOfMachine": "Type of Machine is required",
+        "modals": {
+            "ok": "Ok",
+            "error": "Error",
             "updatingError": "Something went wrong while updating the machine",
             "updatingSuccessHeader": "Machine updated successfully",
             "updatingSuccessMsg": "Updating the machine was successful!",
             "creatingSuccessHeader": "Machine created successfully",
             "creatingSuccessMsg": "The creation of a new machine was successful!"
+        },
+        "messages": {
+            "deviceName": "Device Name is required",
+            "fablab": "Fablab is required",
+            "manufacturer": "Manufacturer is required",
+            "typeOfMachine": "Type of Machine is required"
         }
     },
     "machineDetail": {

@@ -35,8 +35,6 @@ export class MachineFormComponent implements OnInit {
     generalData: '',
     labels: {
       submit: '',
-      ok: '',
-      error: '',
       deviceName: '',
       fablab: '',
       manufacturer: '',
@@ -57,17 +55,18 @@ export class MachineFormComponent implements OnInit {
       maxResolution: '',
       typeOfMachine: ''
     },
+    modals: {
+      ok: '',
+      error: '',
+      successHeader: '',
+      successMessage: '',
+      errorMessage: ''
+    },
     messages: {
       deviceName: '',
       fablab: '',
       manufacturer: '',
-      typeOfMachine: '',
-      updatingSuccessHeader: '',
-      creatingSuccessHeader: '',
-      updatingSuccess: '',
-      updatingError: '',
-      creatingSuccess: '',
-
+      typeOfMachine: ''
     }
   };
 
@@ -149,13 +148,9 @@ export class MachineFormComponent implements OnInit {
   // Private Functions
 
   private _openSuccessMsg() {
-    const okButton = new ModalButton(this.translationFields.labels.ok, 'btn btn-primary', this.translationFields.labels.ok);
-    let msgHeader;
-    let msg;
-    this.editView ?
-      msgHeader = this.translationFields.messages.updatingSuccessHeader
-      : msgHeader = this.translationFields.messages.creatingSuccessHeader;
-    this.editView ? msg = this.translationFields.messages.updatingSuccess : msg = this.translationFields.messages.creatingSuccess;
+    const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
+    const msgHeader = this.translationFields.modals.successHeader;
+    const msg = this.translationFields.modals.successMessage;
     this._openMsgModal(msgHeader, 'modal-header header-success',
       msg, okButton, undefined).result.then(() => {
         this.genericService.back();
@@ -165,9 +160,9 @@ export class MachineFormComponent implements OnInit {
   private _openErrMsg(err) {
     let errorMsg;
     this.editView ? errorMsg = ''
-      : errorMsg = this.translationFields.messages.updatingError;
-    const okButton = new ModalButton(this.translationFields.labels.ok, 'btn btn-primary', this.translationFields.labels.ok);
-    this._openMsgModal(this.translationFields.labels.error, 'modal-header header-danger', errorMsg,
+      : errorMsg = this.translationFields.modals.errorMessage;
+    const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
+    this._openMsgModal(this.translationFields.modals.error, 'modal-header header-danger', errorMsg,
       okButton, undefined);
   }
 
@@ -259,10 +254,19 @@ export class MachineFormComponent implements OnInit {
         shownMachineTypes: shownMachineTypes,
         shownType: translations['deviceTypes'][`${this.machineService.camelCaseTypes(this.selectedType)}`],
         generalData: translations['machineForm'].generalData,
+        modals: {
+          ok: translations['machineForm'].modals.ok,
+          error: translations['machineForm'].modals.error,
+          successHeader: this.editView
+            ? translations['machineForm'].modals.updatingSuccessHeader
+            : translations['machineForm'].modals.creatingSuccessHeader,
+          successMessage: this.editView
+            ? translations['machineForm'].modals.updatingSuccessMsg
+            : translations['machineForm'].modals.creatingSuccessMsg,
+          errorMessage: this.editView ? translations['machineForm'].modals.updatingError : ''
+        },
         labels: {
           submit: this.editView ? translations['machineForm'].labels.edit : translations['machineForm'].labels.create,
-          ok: translations['machineForm'].labels.ok,
-          error: translations['machineForm'].labels.error,
           deviceName: translations['machineForm'].labels.deviceName,
           fablab: translations['machineForm'].labels.fablab,
           manufacturer: translations['machineForm'].labels.manufacturer,
@@ -288,11 +292,6 @@ export class MachineFormComponent implements OnInit {
           fablab: translations['machineForm'].messages.fablab,
           manufacturer: translations['machineForm'].messages.manufacturer,
           typeOfMachine: translations['machineForm'].messages.typeOfMachine,
-          updatingSuccessHeader: translations['machineForm'].messages.updatingSuccessHeader,
-          creatingSuccessHeader: translations['machineForm'].messages.creatingSuccessHeader,
-          updatingSuccess: translations['machineForm'].messages.updatingSuccessMsg,
-          updatingError: translations['machineForm'].messages.updatingError,
-          creatingSuccess: translations['machineForm'].messages.creatingSuccessMsg,
         }
       };
     }));

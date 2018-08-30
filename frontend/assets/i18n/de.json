@@ -78,8 +78,6 @@
         "labels": {
             "create": "Anlegen",
             "edit": "Aktualisieren",
-            "ok": "Ok",
-            "error": "Fehler",
             "deviceName": "Name der Maschine",
             "fablab": "Fablab",
             "manufacturer": "Hersteller",
@@ -100,16 +98,20 @@
             "maxResolution": "Maximale Auflösung",
             "typeOfMachine": "Typ der Maschine"
         },
-        "messages": {
-            "deviceName": "Der Name der Maschine wird benötigt",
-            "fablab": "Fablab wird benötigt",
-            "manufacturer": "Hersteller wird benötigt",
-            "typeOfMachine": "Der Typ der Maschine wird benötigt",
+        "modals": {
+            "ok": "Ok",
+            "error": "Fehler",
             "updatingError": "Es ist ein Fehler beim Aktualisieren der Maschine aufgetreten",
             "updatingSuccessHeader": "Maschine erfolgreich aktualisiert",
             "updatingSuccessMsg": "Aktualisieren der Maschine war erfolgreich!",
             "creatingSuccessHeader": "Maschine erfolgreich angelegt",
             "creatingSuccessMsg": "Die Anlage der Maschine war erfolgreich!"
+        },
+        "messages": {
+            "deviceName": "Der Name der Maschine wird benötigt",
+            "fablab": "Fablab wird benötigt",
+            "manufacturer": "Hersteller wird benötigt",
+            "typeOfMachine": "Der Typ der Maschine wird benötigt"
         }
     },
     "machineDetail": {
