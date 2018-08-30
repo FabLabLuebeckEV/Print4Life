@@ -50,8 +50,6 @@ export class CreateOrderComponent implements OnInit {
     shownStatus: [],
     publicHint: '',
     labels: {
-      ok: '',
-      okReturnValue: '',
       submit: '',
       sendComment: '',
       projectName: '',
@@ -67,14 +65,18 @@ export class CreateOrderComponent implements OnInit {
       content: '',
       timestamp: '',
     },
-    messages: {
+    modals: {
+      ok: '',
+      okReturnValue: '',
       createCommentError: '',
       createCommentSuccessHeader: '',
       createCommentSuccess: '',
       orderSuccessHeader: '',
       orderSuccess: '',
       errorHeader: '',
-      error: '',
+      error: ''
+    },
+    messages: {
       projectName: '',
       owner: '',
       status: '',
@@ -120,13 +122,13 @@ export class CreateOrderComponent implements OnInit {
   }
 
   onSubmitComment(form) {
-    const errorMsg = this.translationFields.messages.createCommentError;
-    const okButton = new ModalButton(this.translationFields.labels.ok, 'btn btn-primary', this.translationFields.labels.okReturnValue);
+    const errorMsg = this.translationFields.modals.createCommentError;
+    const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
 
     this.orderService.createComment(this.orderId, this.comment).then((result) => {
       if (result) {
-        this._openMsgModal(this.translationFields.messages.createCommentSuccessHeader, 'modal-header header-success',
-          this.translationFields.messages.createCommentSuccess, okButton, undefined).result.then((result) => {
+        this._openMsgModal(this.translationFields.modals.createCommentSuccessHeader, 'modal-header header-success',
+          this.translationFields.modals.createCommentSuccess, okButton, undefined).result.then((result) => {
             this.orderService.getOrderById(this.orderId).then((result) => {
               this.order = result.order;
               const author = JSON.parse(JSON.stringify(this.comment.author));
@@ -147,13 +149,13 @@ export class CreateOrderComponent implements OnInit {
           });
       }
     }).catch(() => {
-      this._openMsgModal(this.translationFields.messages.errorHeader, 'modal-header header-danger', errorMsg,
+      this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg,
         okButton, undefined);
     });
   }
 
   onSubmit() {
-    const okButton = new ModalButton(this.translationFields.labels.ok, 'btn btn-primary', this.translationFields.labels.ok);
+    const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
     let found = false;
     let orderCopy;
     if (this.comment.author && this.comment.content) {
@@ -172,26 +174,26 @@ export class CreateOrderComponent implements OnInit {
     orderCopy = JSON.parse(JSON.stringify(this.order));
     orderCopy.machine.type = this.machineService.camelCaseTypes(orderCopy.machine.type);
     if (this.editView) {
-      const errorMsg = this.translationFields.messages.error;
+      const errorMsg = this.translationFields.modals.error;
       this.orderService.updateOrder(orderCopy).then((result) => {
         if (result) {
           this._openSuccessMsg();
         } else {
-          this._openMsgModal(this.translationFields.messages.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
       }).catch(() => {
-        this._openMsgModal(this.translationFields.messages.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+        this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
       });
     } else {
-      const errorMsg = this.translationFields.messages.error;
+      const errorMsg = this.translationFields.modals.error;
       this.orderService.createOrder(orderCopy).then((result) => {
         if (result) {
           this._openSuccessMsg();
         } else {
-          this._openMsgModal(this.translationFields.messages.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
       }).catch(() => {
-        this._openMsgModal(this.translationFields.messages.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+        this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
       });
     }
   }
@@ -317,9 +319,9 @@ export class CreateOrderComponent implements OnInit {
 
 
   private _openSuccessMsg() {
-    const okButton = new ModalButton(this.translationFields.labels.ok, 'btn btn-primary', this.translationFields.labels.okReturnValue);
-    this._openMsgModal(this.translationFields.messages.orderSuccessHeader, 'modal-header header-success',
-      this.translationFields.messages.orderSuccess, okButton, undefined).result.then((result) => {
+    const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
+    this._openMsgModal(this.translationFields.modals.orderSuccessHeader, 'modal-header header-success',
+      this.translationFields.modals.orderSuccess, okButton, undefined).result.then((result) => {
         this.genericService.back();
       });
   }
@@ -375,8 +377,6 @@ export class CreateOrderComponent implements OnInit {
         labels: {
           submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.editSubmit,
           sendComment: translations['orderForm'].labels.sendComment,
-          ok: translations['orderForm'].labels.ok,
-          okReturnValue: translations['orderForm'].labels.okReturnValue,
           projectName: translations['orderForm'].labels.projectName,
           owner: translations['orderForm'].labels.owner,
           editor: translations['orderForm'].labels.editor,
@@ -390,20 +390,24 @@ export class CreateOrderComponent implements OnInit {
           content: translations['orderForm'].labels.content,
           timestamp: translations['orderForm'].labels.timestamp
         },
-        messages: {
-          createCommentError: translations['orderForm'].messages.createCommentError,
-          createCommentSuccess: translations['orderForm'].messages.createCommentSuccess,
-          createCommentSuccessHeader: translations['orderForm'].messages.createCommentSuccessHeader,
+        modals: {
+          ok: translations['orderForm'].modals.ok,
+          okReturnValue: translations['orderForm'].modals.okReturnValue,
+          createCommentError: translations['orderForm'].modals.createCommentError,
+          createCommentSuccess: translations['orderForm'].modals.createCommentSuccess,
+          createCommentSuccessHeader: translations['orderForm'].modals.createCommentSuccessHeader,
           orderSuccessHeader: this.editView
-            ? translations['orderForm'].messages.updateOrderSuccessHeader
-            : translations['orderForm'].messages.createOrderSuccessHeader,
+            ? translations['orderForm'].modals.updateOrderSuccessHeader
+            : translations['orderForm'].modals.createOrderSuccessHeader,
           orderSuccess: this.editView
-            ? translations['orderForm'].messages.updateOrderSuccess
-            : translations['orderForm'].messages.createOrderSuccess,
-          errorHeader: translations['orderForm'].messages.errorHeader,
+            ? translations['orderForm'].modals.updateOrderSuccess
+            : translations['orderForm'].modals.createOrderSuccess,
+          errorHeader: translations['orderForm'].modals.errorHeader,
           error: this.editView
-            ? translations['orderForm'].messages.updateError
-            : translations['orderForm'].messages.createError,
+            ? translations['orderForm'].modals.updateError
+            : translations['orderForm'].modals.createError,
+        },
+        messages: {
           projectName: translations['orderForm'].messages.projectName,
           owner: translations['orderForm'].messages.owner,
           status: translations['orderForm'].messages.status,

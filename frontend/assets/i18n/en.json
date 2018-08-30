@@ -186,8 +186,6 @@
         "editTitle": "Edit Order",
         "publicHint": "This will be visible for you and the world.",
         "labels": {
-            "ok": "Ok",
-            "okReturnValue": "Ok",
             "editSubmit": "Edit",
             "createSubmit": "Create",
             "sendComment": "Send Comment",
@@ -204,7 +202,9 @@
             "content": "Content",
             "timestamp": "Timestamp"
         },
-        "messages": {
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
             "createCommentError": "Something went wrong while adding the new comment.",
             "createCommentSuccessHeader": "Comment successfully added",
             "createCommentSuccess": "Your comment was added and saved!",
@@ -214,7 +214,9 @@
             "updateOrderSuccess": "The order was successfully updated!",
             "errorHeader": "Error",
             "updateError": "Error while trying to update!",
-            "createError": "Error while trying to create!",
+            "createError": "Error while trying to create!"
+        },
+        "messages": {
             "projectName": "Project name is required",
             "owner": "Owner name is required",
             "status": "Status is required",

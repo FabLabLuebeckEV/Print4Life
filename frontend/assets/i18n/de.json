@@ -186,8 +186,6 @@
         "editTitle": "Auftrag bearbeiten",
         "publicHint": "Dieses Feld wird für dich und die Welt öffentlich sein.",
         "labels": {
-            "ok": "Ok",
-            "okReturnValue": "Ok",
             "editSubmit": "Aktualisieren",
             "createSubmit": "Anlegen",
             "sendComment": "Kommentar absenden",
@@ -204,7 +202,9 @@
             "content": "Inhalt",
             "timestamp": "Erstellt am"
         },
-        "messages": {
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
             "createCommentError": "Es ist ein Fehler beim Absenden eines neuen Kommentars aufgetreten.",
             "createCommentSuccessHeader": "Kommentar wurde erfolgreich hinzugefügt",
             "createCommentSuccess": "Dein Kommentar wurde gespeichert!",
@@ -214,7 +214,9 @@
             "updateOrderSuccess": "Der Auftrag wurde erfolgreich aktualisiert!",
             "errorHeader": "Fehler",
             "updateError": "Ein Fehler ist beim Aktualisieren aufgetreten!",
-            "createError": "Ein Fehler ist beim Anlegen aufgetreten!",
+            "createError": "Ein Fehler ist beim Anlegen aufgetreten!"
+        },
+        "messages": {
             "projectName": "Der Projektname wird benötigt",
             "owner": "Der Name des Erstellers wird benötigt",
             "status": "Der Status wird benötigt",
