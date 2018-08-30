@@ -219,6 +219,31 @@
             "content": "Text is required"
         }
     },
+    "orderDetail": {
+        "labels": {
+            "owner": "Owner",
+            "editor": "Editor",
+            "status": "Status",
+            "createdAt": "Created",
+            "machine": "Machine",
+            "fablab": "Fablab",
+            "comments": "Comments",
+            "author": "Author",
+            "content": "Content",
+            "timestamp": "Timestamp",
+            "files": "Files",
+            "file": "File"
+        },
+        "modals": {
+            "ok": "Yes",
+            "abort": "No",
+            "deleteReturnValue": "Delete",
+            "abortReturnValue": "Abort",
+            "deleteHeader": "Do you really want to delete this order?",
+            "deleteQuestion": "Are you sure you want to delete",
+            "deleteQuestion2": "?"
+        }
+    },
     "tableComponent": {
         "Device Type": "Device Type",
         "Device Name": "Device Name",

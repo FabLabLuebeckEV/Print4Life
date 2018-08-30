@@ -10,6 +10,7 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { GenericService } from '../../services/generic.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-detail',
@@ -36,6 +37,32 @@ export class OrderDetailComponent implements OnInit {
   machine: any;
   fablab: any;
 
+  translationFields = {
+    labels: {
+      owner: '',
+      editor: '',
+      status: '',
+      createdAt: '',
+      machine: '',
+      fablab: '',
+      comments: '',
+      author: '',
+      content: '',
+      timestamp: '',
+      files: '',
+      file: ''
+    },
+    modals: {
+      ok: '',
+      abort: '',
+      deleteReturnValue: '',
+      abortReturnValue: '',
+      deleteHeader: '',
+      deleteQuestion: '',
+      deleteQuestion2: ''
+    }
+  };
+
   constructor(
     private route: ActivatedRoute,
     private orderService: OrderService,
@@ -43,37 +70,48 @@ export class OrderDetailComponent implements OnInit {
     private fablabService: FablabService,
     private configService: ConfigService,
     private modalService: NgbModal,
-    private genericService: GenericService
+    private genericService: GenericService,
+    private translateService: TranslateService
   ) {
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
     this.deleteIcon = this.config.icons.delete;
-    this.route.params.subscribe(params => {
-      if (params.id) {
-        this.orderService.getOrderById(params.id).then((result) => {
-          this.order = result.order;
-          this.editLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
-          this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
-            const type = this.machineService.camelCaseTypes(this.order.machine.type);
-            this.machine = result[`${type}`];
-            this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
-            this.fablabService.getFablab(this.machine.fablabId).then(result => {
-              this.fablab = result.fablab;
-            });
-          });
-        });
-      }
-    });
   }
 
   ngOnInit() {
+    this.translateService.onLangChange.subscribe(() => {
+      this._translate();
+    });
+
+    this.route.paramMap
+      .subscribe((params) => {
+        if (params && params.get('id')) {
+          this.orderService.getOrderById(params.get('id')).then((result) => {
+            this.order = result.order;
+            this.editLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
+            this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
+              const type = this.machineService.camelCaseTypes(this.order.machine.type);
+              this.machine = result[`${type}`];
+              this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
+              this.fablabService.getFablab(this.machine.fablabId).then(result => {
+                this.fablab = result.fablab;
+                this._translate();
+              });
+            });
+          });
+        }
+      });
   }
 
   public delete() {
-    const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
-    const abortButton = new ModalButton('No', 'btn btn-secondary', 'Abort');
-    const modalRef = this._openMsgModal('Do you really want to delete this order?',
-      'modal-header header-danger', `Are you sure you want to delete ${this.order.projectname} ?`, deleteButton, abortButton);
+    const deleteButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-danger',
+      this.translationFields.modals.deleteReturnValue);
+    const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
+      this.translationFields.modals.abortReturnValue);
+    const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+      'modal-header header-danger',
+      `${this.translationFields.modals.deleteQuestion} ${this.order.projectname} ${this.translationFields.modals.deleteQuestion2}`,
+      deleteButton, abortButton);
     modalRef.result.then((result) => {
       if (result === deleteButton.returnValue) {
         this.orderService.deleteOrder(this.order._id).then(() => {
@@ -95,5 +133,63 @@ export class OrderDetailComponent implements OnInit {
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;
+  }
+
+  private _translateStatus(): Promise<String> {
+    return new Promise((resolve) => {
+      this.translateService.get(['status']).subscribe((translations) => {
+        resolve(translations['status'][`${this.order.status}`]);
+      });
+    });
+  }
+
+  private _translateMachineType(): Promise<String> {
+    return new Promise((resolve) => {
+      this.translateService.get(['deviceTypes']).subscribe((translations => {
+        resolve(translations['deviceTypes'][`${this.machine.type}`]);
+      }));
+    });
+  }
+
+  private _translate() {
+    this.translateService.get(['orderDetail', 'deviceTypes', 'status']).subscribe((translations => {
+      if (this.order && this.order.status) {
+        this._translateStatus().then((shownStatus) => {
+          this.order['shownStatus'] = shownStatus;
+        });
+      }
+
+      if (this.machine && this.machine.type) {
+        this._translateMachineType().then((shownType) => {
+          this.machine['shownType'] = shownType;
+        });
+      }
+
+      this.translationFields = {
+        labels: {
+          owner: translations['orderDetail'].labels.owner,
+          editor: translations['orderDetail'].labels.editor,
+          status: translations['orderDetail'].labels.status,
+          createdAt: translations['orderDetail'].labels.createdAt,
+          machine: translations['orderDetail'].labels.machine,
+          fablab: translations['orderDetail'].labels.fablab,
+          comments: translations['orderDetail'].labels.comments,
+          author: translations['orderDetail'].labels.author,
+          content: translations['orderDetail'].labels.content,
+          timestamp: translations['orderDetail'].labels.timestamp,
+          files: translations['orderDetail'].labels.files,
+          file: translations['orderDetail'].labels.file
+        },
+        modals: {
+          ok: translations['orderDetail'].modals.ok,
+          abort: translations['orderDetail'].modals.abort,
+          deleteReturnValue: translations['orderDetail'].modals.deleteReturnValue,
+          abortReturnValue: translations['orderDetail'].modals.abortReturnValue,
+          deleteHeader: translations['orderDetail'].modals.deleteHeader,
+          deleteQuestion: translations['orderDetail'].modals.deleteQuestion,
+          deleteQuestion2: translations['orderDetail'].modals.deleteQuestion2
+        }
+      };
+    }));
   }
 }

@@ -219,6 +219,31 @@
             "content": "Der Inhalt des Kommentars wird benötigt"
         }
     },
+    "orderDetail": {
+        "labels": {
+            "owner": "Ersteller",
+            "editor": "Bearbeiter",
+            "status": "Status",
+            "createdAt": "Erstellt am",
+            "machine": "Maschine",
+            "fablab": "Fablab",
+            "comments": "Kommentare",
+            "author": "Author",
+            "content": "Inhalt",
+            "timestamp": "Erstellt am",
+            "files": "Dateien",
+            "file": "Datei"
+        },
+        "modals": {
+            "ok": "Ja",
+            "abort": "Nein",
+            "deleteReturnValue": "Löschen",
+            "abortReturnValue": "Abbrechen",
+            "deleteHeader": "Wollen Sie wirklich diesen Auftrag löschen?",
+            "deleteQuestion": "Sind Sie sicher, dass Sie",
+            "deleteQuestion2": "löschen wollen?"
+        }
+    },
     "tableComponent": {
         "Device Type": "Machinen Typ",
         "Device Name": "Maschinen Name",
