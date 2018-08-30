@@ -30,13 +30,11 @@ export class MachineDetailComponent implements OnInit {
   machineSubArrays: Array<Object> = [];
   loading: Boolean = true;
   translationFields = {
-    labels: {
+    modals: {
       yes: '',
       no: '',
       deleteReturnValue: '',
-      abortReturnValue: ''
-    },
-    messages: {
+      abortReturnValue: '',
       deleteHeader: '',
       deleteMessage: '',
       deleteMessage2: ''
@@ -76,13 +74,13 @@ export class MachineDetailComponent implements OnInit {
   }
 
   public delete() {
-    const deleteButton = new ModalButton(this.translationFields.labels.yes, 'btn btn-danger',
-      this.translationFields.labels.deleteReturnValue);
-    const abortButton = new ModalButton(this.translationFields.labels.no, 'btn btn-secondary',
-      this.translationFields.labels.abortReturnValue);
-    const modalRef = this._openMsgModal(this.translationFields.messages.deleteHeader,
+    const deleteButton = new ModalButton(this.translationFields.modals.yes, 'btn btn-danger',
+      this.translationFields.modals.deleteReturnValue);
+    const abortButton = new ModalButton(this.translationFields.modals.no, 'btn btn-secondary',
+      this.translationFields.modals.abortReturnValue);
+    const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
       'modal-header header-danger',
-      `${this.translationFields.messages.deleteMessage} ${this.machine.deviceName} ${this.translationFields.messages.deleteMessage2}`,
+      `${this.translationFields.modals.deleteMessage} ${this.machine.deviceName} ${this.translationFields.modals.deleteMessage2}`,
       deleteButton, abortButton);
     modalRef.result.then((result) => {
       if (result === deleteButton.returnValue) {
@@ -210,16 +208,14 @@ export class MachineDetailComponent implements OnInit {
   private _translate() {
     this.translateService.get(['machineDetail', 'deviceTypes']).subscribe((translations => {
       this.translationFields = {
-        labels: {
-          yes: translations['machineDetail'].labels.yes,
-          no: translations['machineDetail'].labels.no,
-          deleteReturnValue: translations['machineDetail'].labels.deleteReturnValue,
-          abortReturnValue: translations['machineDetail'].labels.abortReturnValue,
-        },
-        messages: {
-          deleteHeader: translations['machineDetail'].messages.deleteHeader,
-          deleteMessage: translations['machineDetail'].messages.deleteMessage,
-          deleteMessage2: translations['machineDetail'].messages.deleteMessage2
+        modals: {
+          deleteHeader: translations['machineDetail'].modals.deleteHeader,
+          deleteMessage: translations['machineDetail'].modals.deleteMessage,
+          deleteMessage2: translations['machineDetail'].modals.deleteMessage2,
+          yes: translations['machineDetail'].modals.yes,
+          no: translations['machineDetail'].modals.no,
+          deleteReturnValue: translations['machineDetail'].modals.deleteReturnValue,
+          abortReturnValue: translations['machineDetail'].modals.abortReturnValue,
         }
       };
 

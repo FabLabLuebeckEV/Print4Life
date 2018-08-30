@@ -121,13 +121,11 @@
             "fablab": "Fablab",
             "materials": "Materials"
         },
-        "labels": {
+        "modals": {
             "yes": "Yes",
             "no": "No",
             "deleteReturnValue": "Delete",
-            "abortReturnValue": "Abort"
-        },
-        "messages": {
+            "abortReturnValue": "Abort",
             "deleteHeader": "Do you really want to delete this machine?",
             "deleteMessage": "Are you sure you want to delete",
             "deleteMessage2": "?"
