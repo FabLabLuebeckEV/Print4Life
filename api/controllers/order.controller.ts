@@ -538,7 +538,7 @@ async function createComment (id, comment) {
   }
 */
 function count (query) {
-  return Order.count(query);
+  return Order.countDocuments(query);
 }
 
 /**
