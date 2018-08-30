@@ -118,6 +118,8 @@ export class MachineListComponent implements OnInit {
     }
   }
 
+  // Event handler
+
   changeFilterHandler(event) {
     this.filter.selectedMachineTypes = [];
     this.filter.shownMachineTypes = event;
@@ -181,6 +183,8 @@ export class MachineListComponent implements OnInit {
       });
     }
   }
+
+  // Private Functions
 
   private async _loadMachineTypes() {
     this.loadingMachineTypes = true;

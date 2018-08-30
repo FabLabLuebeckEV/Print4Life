@@ -14,11 +14,13 @@
     "dropdown": {
         "machines": {
             "title": "Machinen",
-            "listMachines": "Maschinenliste"
+            "listMachines": "Maschinenliste",
+            "createMachine": "Maschine anlegen"
         },
         "orders": {
             "title": "Aufträge",
-            "listOrders": "Auftragsliste"
+            "listOrders": "Auftragsliste",
+            "createOrder": "Auftrag anlegen"
         },
         "users": {
             "title": "Benutzer",

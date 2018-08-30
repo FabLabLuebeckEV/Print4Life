@@ -14,11 +14,13 @@
     "dropdown": {
         "machines": {
             "title": "Machines",
-            "listMachines": "List Machines"
+            "listMachines": "List Machines",
+            "createMachine": "Create Machine"
         },
         "orders": {
             "title": "Orders",
-            "listOrders": "List Orders"
+            "listOrders": "List Orders",
+            "createOrder": "Create Order"
         },
         "users": {
             "title": "Users",

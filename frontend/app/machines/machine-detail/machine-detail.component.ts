@@ -59,6 +59,43 @@ export class MachineDetailComponent implements OnInit {
     this.deleteIcon = this.config.icons.delete;
   }
 
+  ngOnInit() {
+    this.route.paramMap
+      .subscribe((params) => {
+        if (params && params.get('id') && params.get('type')) {
+          this.params = {
+            id: params.get('id'),
+            type: params.get('type').substr(0, params.get('type').length - 1)
+          };
+          this._initMachine();
+        }
+      });
+    this.translateService.onLangChange.subscribe(() => {
+      this._initMachine();
+    });
+  }
+
+  public delete() {
+    const deleteButton = new ModalButton(this.translationFields.labels.yes, 'btn btn-danger',
+      this.translationFields.labels.deleteReturnValue);
+    const abortButton = new ModalButton(this.translationFields.labels.no, 'btn btn-secondary',
+      this.translationFields.labels.abortReturnValue);
+    const modalRef = this._openMsgModal(this.translationFields.messages.deleteHeader,
+      'modal-header header-danger',
+      `${this.translationFields.messages.deleteMessage} ${this.machine.deviceName} ${this.translationFields.messages.deleteMessage2}`,
+      deleteButton, abortButton);
+    modalRef.result.then((result) => {
+      if (result === deleteButton.returnValue) {
+        this.machineService.deleteMachine(this.machine.originType, this.machine._id).then(() => {
+          this.params = {};
+          this.genericService.back();
+        });
+      }
+    });
+  }
+
+  // Private Functions
+
   private _initMachine() {
     if (this.params && this.params.type && this.params.id) {
       this.machineService.get(this.params.type, this.params.id).then((result) => {
@@ -82,25 +119,6 @@ export class MachineDetailComponent implements OnInit {
     }
   }
 
-  public delete() {
-    const deleteButton = new ModalButton(this.translationFields.labels.yes, 'btn btn-danger',
-      this.translationFields.labels.deleteReturnValue);
-    const abortButton = new ModalButton(this.translationFields.labels.no, 'btn btn-secondary',
-      this.translationFields.labels.abortReturnValue);
-    const modalRef = this._openMsgModal(this.translationFields.messages.deleteHeader,
-      'modal-header header-danger',
-      `${this.translationFields.messages.deleteMessage} ${this.machine.deviceName} ${this.translationFields.messages.deleteMessage2}`,
-      deleteButton, abortButton);
-    modalRef.result.then((result) => {
-      if (result === deleteButton.returnValue) {
-        this.machineService.deleteMachine(this.machine.originType, this.machine._id).then(() => {
-          this.params = {};
-          this.genericService.back();
-        });
-      }
-    });
-  }
-
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent);
     modalRef.componentInstance.title = title;
@@ -111,22 +129,6 @@ export class MachineDetailComponent implements OnInit {
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;
-  }
-
-  ngOnInit() {
-    this.route.paramMap
-      .subscribe((params) => {
-        if (params && params.get('id') && params.get('type')) {
-          this.params = {
-            id: params.get('id'),
-            type: params.get('type').substr(0, params.get('type').length - 1)
-          };
-          this._initMachine();
-        }
-      });
-    this.translateService.onLangChange.subscribe(() => {
-      this._initMachine();
-    });
   }
 
   private _splitMachineProps() {

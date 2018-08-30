@@ -5,7 +5,7 @@
       <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownBasic1">
         <div *ngFor="let item of dropdown.elements">
           <a *ngIf="item.href" class="dropdown-item" [href]="item.href">{{item.name}}</a>
-          <a *ngIf="item.routerHref" class="dropdown-item" [routerLink]="item.routerHref" routerLinkActive="active">{{item.name}}</a>
+          <a *ngIf="item.routerHref" class="dropdown-item" [routerLink]="item.routerHref">{{item.name}}</a>
           <button *ngIf="item.isFlag" [disabled]="item.disabled" class="dropdown-item" (click)="emit(item.countryCode)">
             <span [class]="item.class"></span> {{item.name}}
           </button>

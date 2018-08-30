@@ -144,8 +144,9 @@ export class MachineFormComponent implements OnInit {
         this._openErrMsg(err);
       });
     }
-
   }
+
+  // Private Functions
 
   private _openSuccessMsg() {
     const okButton = new ModalButton(this.translationFields.labels.ok, 'btn btn-primary', this.translationFields.labels.ok);
@@ -254,7 +255,7 @@ export class MachineFormComponent implements OnInit {
         }
       });
       this.translationFields = {
-        title: translations['machineForm'].title,
+        title: this.editView ? translations['machineForm'].editTitle : translations['machineForm'].createTitle,
         shownMachineTypes: shownMachineTypes,
         shownType: translations['deviceTypes'][`${this.machineService.camelCaseTypes(this.selectedType)}`],
         generalData: translations['machineForm'].generalData,

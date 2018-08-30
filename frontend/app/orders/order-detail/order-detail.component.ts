@@ -43,7 +43,6 @@ export class OrderDetailComponent implements OnInit {
     private fablabService: FablabService,
     private configService: ConfigService,
     private modalService: NgbModal,
-    private location: Location,
     private genericService: GenericService
   ) {
     this.config = this.configService.getConfig();
@@ -67,6 +66,8 @@ export class OrderDetailComponent implements OnInit {
     });
   }
 
+  ngOnInit() {
+  }
 
   public delete() {
     const deleteButton = new ModalButton('Yes', 'btn btn-danger', 'Delete');
@@ -82,6 +83,8 @@ export class OrderDetailComponent implements OnInit {
     });
   }
 
+  // Private Functions
+
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent);
     modalRef.componentInstance.title = title;
@@ -92,8 +95,5 @@ export class OrderDetailComponent implements OnInit {
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;
-  }
-
-  ngOnInit() {
   }
 }

@@ -23,12 +23,6 @@ export class UserFormComponent implements OnInit {
     this._loadRoles();
   }
 
-  private async _loadRoles() {
-    this.loadingRoles = true;
-    this.validRoles = (await this.userService.getRoles()).roles;
-    this.loadingRoles = false;
-  }
-
   onSubmit() {
     this.userService.createUser(this.user)
       .then(res => {
@@ -37,5 +31,13 @@ export class UserFormComponent implements OnInit {
       .catch(err => {
         console.log(err);
       });
+  }
+
+  // Private Functions
+
+  private async _loadRoles() {
+    this.loadingRoles = true;
+    this.validRoles = (await this.userService.getRoles()).roles;
+    this.loadingRoles = false;
   }
 }
