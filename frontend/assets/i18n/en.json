@@ -47,6 +47,12 @@
         "representive": "representive",
         "deleted": "deleted"
     },
+    "roles": {
+        "guest": "guest",
+        "user": "user",
+        "editor": "editor",
+        "admin": "admin"
+    },
     "machineList": {
         "paginationLabel": "Jump to Page",
         "filterLabel": "Filter by Machine Type:",
@@ -242,6 +248,49 @@
             "deleteHeader": "Do you really want to delete this order?",
             "deleteQuestion": "Are you sure you want to delete",
             "deleteQuestion2": "?"
+        }
+    },
+    "userForm": {
+        "createTitle": "Register User",
+        "editTitle": "Edit User",
+        "labels": {
+            "username": "Username",
+            "firstName": "First Name",
+            "secondName": "Secondname",
+            "password": "Password",
+            "passwordValidation": "Password validation",
+            "email": "E-mail Address",
+            "role": "Role",
+            "street": "Street",
+            "zipCode": "Zip Code",
+            "city": "City",
+            "country": "Country",
+            "createSubmit": "Register",
+            "editSubmit": "Edit"
+        },
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "createSuccessHeader": "User created",
+            "updateSuccessHeader": "User updated",
+            "createSuccess": "The user was successfully created!",
+            "updateSuccess": "The user was successfully updated!",
+            "errorHeader": "Error",
+            "updateError": "Error while trying to update!",
+            "createError": "Error while trying to create!"
+        },
+        "messages": {
+            "username": "Username is required",
+            "firstName": "First Name is required",
+            "secondName": "Second Name is required",
+            "password": "Password is required",
+            "passwordValidation": "Password validation is required",
+            "email": "E-mail Address is required",
+            "role": "Role is required",
+            "street": "Street is required",
+            "zipCode": "Zip code is required",
+            "city": "City is required",
+            "country": "Country is required"
         }
     },
     "tableComponent": {

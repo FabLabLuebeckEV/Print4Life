@@ -47,6 +47,12 @@
         "representive": "Veröffentlicht",
         "deleted": "Gelöscht"
     },
+    "roles": {
+        "guest": "Gast",
+        "user": "Benutzer",
+        "editor": "Bearbeiter",
+        "admin": "Administrator"
+    },
     "machineList": {
         "paginationLabel": "",
         "filterLabel": "Filter nach Maschinentyp:",
@@ -242,6 +248,49 @@
             "deleteHeader": "Wollen Sie wirklich diesen Auftrag löschen?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
             "deleteQuestion2": "löschen wollen?"
+        }
+    },
+    "userForm": {
+        "createTitle": "Benutzer registrieren",
+        "editTitle": "Benutzer bearbeiten",
+        "labels": {
+            "username": "Benutzername",
+            "firstName": "Vorname",
+            "secondName": "Nachname",
+            "password": "Passwort",
+            "passwordValidation": "Passwort Bestätigung",
+            "email": "E-mail Adresse",
+            "role": "Rolle",
+            "street": "Straße",
+            "zipCode": "PLZ",
+            "city": "Stadt",
+            "country": "Land",
+            "createSubmit": "Registrieren",
+            "editSubmit": "Aktualisieren"
+        },
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "createSuccessHeader": "Benutzer registriert",
+            "updateSuccessHeader": "Benutzer aktualisiert",
+            "createSuccess": "Der Benutzer wurde erfolgreich registriert!",
+            "updateSuccess": "Der Benutzer wurde erfolgreich aktualisiert!",
+            "errorHeader": "Fehler",
+            "updateError": "Fehler beim Aktualisieren des Benutzers!",
+            "createError": "Fehler beim Registrieren des Benutzers!"
+        },
+        "messages": {
+            "username": "Der Benutzername wird benötigt",
+            "firstName": "Der Vorname wird benötigt",
+            "secondName": "Der Nachname wird benötigt",
+            "password": "Das Passwort wird benötigt",
+            "passwordValidation": "Das Passwort muss bestätigt werden",
+            "email": "Die E-Mail Adresse wird benötigt",
+            "role": "Die Rolle wird benötigt",
+            "street": "Die Straße wird benötigt",
+            "zipCode": "Die Postleitzahl wird benötigt",
+            "city": "Die Stadt wird benötigt",
+            "country": "Das Land wird benötigt"
         }
     },
     "tableComponent": {

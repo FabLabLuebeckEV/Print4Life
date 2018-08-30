@@ -7,6 +7,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
 import { BackButtonComponent } from '../../components/back-button/back-button.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
@@ -20,13 +22,15 @@ describe('UserFormComponent', () => {
       declarations: [
         UserFormComponent, BackButtonComponent
       ],
+      providers: [TranslateService],
       imports: [
         NgbModule.forRoot(),
         RouterTestingModule,
         FontAwesomeModule,
         FormsModule,
         NgSelectModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        TranslateModule.forRoot()
       ]
     })
       .compileComponents();
