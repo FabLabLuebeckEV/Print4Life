@@ -9,6 +9,7 @@ import { OrderDetailComponent } from './order-detail.component';
 import { BackButtonComponent } from '../../components/back-button/back-button.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 describe('OrderDetailComponent', () => {
   let component: OrderDetailComponent;
@@ -19,11 +20,13 @@ describe('OrderDetailComponent', () => {
       declarations: [
         OrderDetailComponent, BackButtonComponent
       ],
+      providers: [TranslateService],
       imports: [
         NgbModule.forRoot(),
         HttpClientTestingModule,
         RouterTestingModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        TranslateModule.forRoot()
       ]
     })
       .compileComponents();
