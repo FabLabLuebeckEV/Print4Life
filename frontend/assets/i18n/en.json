@@ -27,6 +27,24 @@
             "info": "Info"
         }
     },
+    "deviceTypes": {
+        "lasercutter": "Lasercutter",
+        "otherMachine": "Other Machine",
+        "millingMachine": "Milling Machine",
+        "printer": "Printer"
+    },
+    "materialTypes": {
+        "printerMaterial": "Printer Material"
+    },
+    "status": {
+        "new": "new",
+        "assigned": "assigned",
+        "production": "production",
+        "shipment": "shipment",
+        "archived": "archived",
+        "representive": "representive",
+        "deleted": "deleted"
+    },
     "machineList": {
         "paginationLabel": "Jump to Page",
         "filterLabel": "Filter by Machine Type:",
@@ -155,6 +173,50 @@
             "deleteQuestion2": "?"
         }
     },
+    "orderForm": {
+        "createTitle": "Create Order",
+        "editTitle": "Edit Order",
+        "publicHint": "This will be visible for you and the world.",
+        "labels": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "editSubmit": "Edit",
+            "createSubmit": "Create",
+            "sendComment": "Send Comment",
+            "projectName": "Project Name",
+            "owner": "Owner",
+            "editor": "Editor",
+            "status": "Status",
+            "machineType": "Machine Type",
+            "selectedMachine": "Select Machine",
+            "selectedMachineInfo": "Info",
+            "comments": "Comments",
+            "newComment": "New Comment",
+            "author": "Author",
+            "content": "Content",
+            "timestamp": "Timestamp"
+        },
+        "messages": {
+            "createCommentError": "Something went wrong while adding the new comment.",
+            "createCommentSuccessHeader": "Comment successfully added",
+            "createCommentSuccess": "Your comment was added and saved!",
+            "createOrderSuccessHeader": "Order created",
+            "updateOrderSuccessHeader": "Order updated",
+            "createOrderSuccess": "The order was successfully created!",
+            "updateOrderSuccess": "The order was successfully updated!",
+            "errorHeader": "Error",
+            "updateError": "Error while trying to update!",
+            "createError": "Error while trying to create!",
+            "projectName": "Project name is required",
+            "owner": "Owner name is required",
+            "status": "Status is required",
+            "machineType": "Machine Type is required",
+            "selectedMachine": "Machine is required",
+            "unnamedFablab": "Unnamed FabLab",
+            "author": "Author name is required",
+            "content": "Text is required"
+        }
+    },
     "tableComponent": {
         "Device Type": "Device Type",
         "Device Name": "Device Name",
@@ -166,23 +228,5 @@
         "Owner": "Owner",
         "Editor": "Editor",
         "Status": "Status"
-    },
-    "deviceTypes": {
-        "lasercutter": "Lasercutter",
-        "otherMachine": "Other Machine",
-        "millingMachine": "Milling Machine",
-        "printer": "Printer"
-    },
-    "materialTypes": {
-        "printerMaterial": "Printer Material"
-    },
-    "status": {
-        "new": "new",
-        "assigned": "assigned",
-        "production": "production",
-        "shipment": "shipment",
-        "archived": "archived",
-        "representive": "representive",
-        "deleted": "deleted"
     }
 }

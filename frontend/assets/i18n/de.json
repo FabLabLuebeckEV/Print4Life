@@ -27,6 +27,24 @@
             "info": "Info"
         }
     },
+    "deviceTypes": {
+        "lasercutter": "Lasercutter",
+        "otherMachine": "Andere Machine",
+        "millingMachine": "Fräßmaschine",
+        "printer": "3D Drucker"
+    },
+    "materialTypes": {
+        "printerMaterial": "Drucker Material"
+    },
+    "status": {
+        "new": "Neu",
+        "assigned": "Zugewiesen",
+        "production": "In Produktion",
+        "shipment": "Im Versand",
+        "archived": "Archiviert",
+        "representive": "Veröffentlicht",
+        "deleted": "Gelöscht"
+    },
     "machineList": {
         "paginationLabel": "",
         "filterLabel": "Filter nach Maschinentyp:",
@@ -41,27 +59,6 @@
             "deleteValue": "Löschen",
             "abortValue": "Abbrechen",
             "deleteHeader": "Möchten Sie wirklich diese Maschine löschen?",
-            "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "löschen wollen?"
-        }
-    },
-    "orderList": {
-        "paginationLabel": "Springe zur Seite",
-        "filterLabel": {
-            "machines": "Filter nach Maschinentyp:",
-            "status": "Filter nach Status:"
-        },
-        "spinnerLoadingText": "Lade Aufträge",
-        "buttons": {
-            "deleteLabel": "Löschen",
-            "updateLabel": "Ändern"
-        },
-        "modals": {
-            "yes": "Ja",
-            "abort": "Nein",
-            "deleteValue": "Löschen",
-            "abortValue": "Abbrechen",
-            "deleteHeader": "Möchten Sie wirklich diesen Auftrag löschen?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
             "deleteQuestion2": "löschen wollen?"
         }
@@ -155,6 +152,71 @@
             "numberOfExtruders": "Anzahl von Extrudern"
         }
     },
+    "orderList": {
+        "paginationLabel": "Springe zur Seite",
+        "filterLabel": {
+            "machines": "Filter nach Maschinentyp:",
+            "status": "Filter nach Status:"
+        },
+        "spinnerLoadingText": "Lade Aufträge",
+        "buttons": {
+            "deleteLabel": "Löschen",
+            "updateLabel": "Ändern"
+        },
+        "modals": {
+            "yes": "Ja",
+            "abort": "Nein",
+            "deleteValue": "Löschen",
+            "abortValue": "Abbrechen",
+            "deleteHeader": "Möchten Sie wirklich diesen Auftrag löschen?",
+            "deleteQuestion": "Sind Sie sicher, dass Sie",
+            "deleteQuestion2": "löschen wollen?"
+        }
+    },
+    "orderForm": {
+        "createTitle": "Auftrag anlegen",
+        "editTitle": "Auftrag bearbeiten",
+        "publicHint": "Dieses Feld wird für dich und die Welt öffentlich sein.",
+        "labels": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "editSubmit": "Aktualisieren",
+            "createSubmit": "Anlegen",
+            "sendComment": "Kommentar absenden",
+            "projectName": "Projektname",
+            "owner": "Ersteller",
+            "editor": "Bearbeiter",
+            "status": "Status",
+            "machineType": "Maschinentyp",
+            "selectedMachine": "Ausgewählte Maschine",
+            "selectedMachineInfo": "Info",
+            "comments": "Kommentare",
+            "newComment": "Neuer Kommentar",
+            "author": "Author",
+            "content": "Inhalt",
+            "timestamp": "Erstellt am"
+        },
+        "messages": {
+            "createCommentError": "Es ist ein Fehler beim Absenden eines neuen Kommentars aufgetreten.",
+            "createCommentSuccessHeader": "Kommentar wurde erfolgreich hinzugefügt",
+            "createCommentSuccess": "Dein Kommentar wurde gespeichert!",
+            "createOrderSuccessHeader": "Auftrag angelegt",
+            "updateOrderSuccessHeader": "Auftrag aktualisiert",
+            "createOrderSuccess": "Der Auftrag wurde erfolgreich angelegt!",
+            "updateOrderSuccess": "Der Auftrag wurde erfolgreich aktualisiert!",
+            "errorHeader": "Fehler",
+            "updateError": "Ein Fehler ist beim Aktualisieren aufgetreten!",
+            "createError": "Ein Fehler ist beim Anlegen aufgetreten!",
+            "projectName": "Der Projektname wird benötigt",
+            "owner": "Der Name des Erstellers wird benötigt",
+            "status": "Der Status wird benötigt",
+            "machineType": "Der Maschinentyp wird benötigt",
+            "selectedMachine": "Die Maschine wird benötigt",
+            "unnamedFablab": "Unbekanntes FabLab",
+            "author": "Der Name des Authors wird benötigt",
+            "content": "Der Inhalt des Kommentars wird benötigt"
+        }
+    },
     "tableComponent": {
         "Device Type": "Machinen Typ",
         "Device Name": "Maschinen Name",
@@ -166,23 +228,5 @@
         "Owner": "Ersteller",
         "Editor": "Bearbeiter",
         "Status": "Status"
-    },
-    "deviceTypes": {
-        "lasercutter": "Lasercutter",
-        "otherMachine": "Andere Machine",
-        "millingMachine": "Fräßmaschine",
-        "printer": "3D Drucker"
-    },
-    "materialTypes": {
-        "printerMaterial": "Drucker Material"
-    },
-    "status": {
-        "new": "Neu",
-        "assigned": "Zugewiesen",
-        "production": "In Produktion",
-        "shipment": "Im Versand",
-        "archived": "Archiviert",
-        "representive": "Veröffentlicht",
-        "deleted": "Gelöscht"
     }
 }
