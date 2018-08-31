@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { addressSchema } from './address.model';
 import { roleSchema } from './role.model';
+import { jwtSchema } from './jwt.model';
 
 const Schema = mongoose.Schema;
 
@@ -29,7 +30,8 @@ export const userSchema = new Schema({
     unique: true
   },
   address: addressSchema,
-  role: roleSchema
+  role: roleSchema,
+  jwt: jwtSchema
 });
 
 /* eslint-disable */

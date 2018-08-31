@@ -130,7 +130,14 @@ function login (user, password): any {
   return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
     if (isMatch && !err) {
       const token = jwt.sign(user.toJSON(), config.jwtSecret);
-      resolve({ success: true, token: `JWT ${token}` });
+      user.jwt.token = token;
+      user.jwt.createdAt = new Date();
+      user.save()
+        .then(() => {
+          resolve({ success: true, token: `JWT ${token}` });
+        }).catch((err) => {
+          reject({ success: false, msg: 'Saving JWT failed', stack: err });
+        });
     } else {
       reject({ success: false, msg: 'Authentication failed. Wrong password.' });
     }

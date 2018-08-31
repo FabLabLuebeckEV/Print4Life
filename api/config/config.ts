@@ -1,11 +1,14 @@
 const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
 const ngPort = process.env.NG_PORT || 4200;
-const jwtSecret = 'verInsecurePW!!!111einself';
+const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
+// Tokens will expire after one hour.
+const jwtExpireDuration = 1000 * 60 * 60;
 const baseUrl = '/api/v1/';
 const publicRoutes = [`${baseUrl}orders`];
 const dev = {
   jwtSecret,
+  jwtExpireDuration,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -28,6 +31,7 @@ const dev = {
 
 const prod = {
   jwtSecret,
+  jwtExpireDuration,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -49,6 +53,7 @@ const prod = {
 
 const test = {
   jwtSecret,
+  jwtExpireDuration,
   connections: {
     mongo: {
       host: 'mongodb://mongo:27017/',
@@ -64,6 +69,7 @@ const test = {
 
 const testLocal = {
   jwtSecret,
+  jwtExpireDuration,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
