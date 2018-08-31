@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { routes } from '../../config/routes';
+import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LoginModalComponent } from '../../users/login-modal/login-modal.component';
 
 @Component({
   selector: 'app-navigation',
@@ -15,7 +18,11 @@ export class NavigationComponent implements OnInit {
   languageDropdown: Object = { name: '', elements: [] };
   userDropdown: Object = { name: '', elements: [] };
 
-  constructor(private translateService: TranslateService) {
+  constructor(
+    private translateService: TranslateService,
+    private userService: UserService,
+    private modalService: NgbModal,
+  ) {
     this._translate();
   }
 
@@ -97,5 +104,18 @@ export class NavigationComponent implements OnInit {
         ]
       };
     }));
+  }
+
+  private _login() {
+    const modalRef = this.modalService.open(LoginModalComponent, { size: 'sm' });
+    return modalRef;
+  }
+
+  private _logout() {
+    this.userService.logout();
+  }
+
+  private _register() {
+    // TODO: navigate to user-form-component
   }
 }

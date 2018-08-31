@@ -7,7 +7,10 @@ import { routes } from '../config/routes';
 })
 export class UserService {
   private p: String;
+  private token: String = '';
+  private user: Object;
   constructor(private http: HttpClient) {
+    this.token = localStorage.getItem('jwtToken');
     this.p = routes.backendUrl + '/' + routes.paths.backend.users.root;
   }
 
@@ -24,6 +27,35 @@ export class UserService {
   }
 
   public login(user): Promise<any> {
-    return this.http.post(`${this.p}/${routes.paths.backend.users.login}`, user).toPromise();
+    this.user = user;
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.p}/${routes.paths.backend.users.login}`, user).toPromise().then((login) => {
+        if (login['success']) {
+          this.token = login['token'];
+          localStorage.setItem('jwtToken', this.token.toString());
+          resolve(login);
+        } else {
+          reject(login);
+        }
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+  }
+
+  public logout(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      try {
+        localStorage.removeItem('jwtToken');
+        this.token = '';
+        resolve();
+      } catch (err) {
+        reject({ error: 'Logout failed', stack: err });
+      }
+    });
+  }
+
+  public isLoggedIn(): Boolean {
+    return this.token.length > 0;
   }
 }

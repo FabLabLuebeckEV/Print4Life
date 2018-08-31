@@ -306,5 +306,13 @@
         "Owner": "Ersteller",
         "Editor": "Bearbeiter",
         "Status": "Status"
+    },
+    "loginModal": {
+        "title": "Einloggen",
+        "labels": {
+            "username": "Benutzername",
+            "password": "Passwort",
+            "login": "Einloggen"
+        }
     }
 }
