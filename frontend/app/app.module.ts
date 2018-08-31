@@ -26,7 +26,6 @@ import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
 export function translateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }

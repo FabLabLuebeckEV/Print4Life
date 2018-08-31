@@ -2,7 +2,7 @@ export class Comment {
     constructor(
         public author: String,
         public content: String,
-        public timestamp: Number
+        public createdAt: Date
     ) { }
 }
 

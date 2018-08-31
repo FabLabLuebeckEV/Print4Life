@@ -1,4 +1,8 @@
 {
+    "date": {
+        "dateFormat": "DD.MM.YYYY",
+        "dateTimeFormat": "DD.MM.YYYY HH:mm"
+    },
     "dashboard": {
         "title": "Willkommen zur Fablab - Auftragsverwaltung!"
     },
@@ -200,7 +204,7 @@
             "newComment": "Neuer Kommentar",
             "author": "Author",
             "content": "Inhalt",
-            "timestamp": "Erstellt am"
+            "createdAt": "Erstellt am"
         },
         "modals": {
             "ok": "Ok",
@@ -238,7 +242,6 @@
             "comments": "Kommentare",
             "author": "Author",
             "content": "Inhalt",
-            "timestamp": "Erstellt am",
             "files": "Dateien",
             "file": "Datei"
         },

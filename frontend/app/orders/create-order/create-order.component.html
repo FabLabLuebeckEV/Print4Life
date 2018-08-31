@@ -140,14 +140,14 @@
               <tr>
                 <th class="align-middle text-center" scope="col">{{translationFields.labels.author}}</th>
                 <th class="align-middle text-center" scope="col">{{translationFields.labels.content}}</th>
-                <th class="align-middle text-center" scope="col">{{translationFields.labels.timestamp}}</th>
+                <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let comment of order.comments">
                 <td class="align-middle text-center">{{comment.author}}</td>
                 <td class="align-middle text-center">{{comment.content}}</td>
-                <td class="align-middle text-center">{{comment.createdAt | date:'short'}}</td>
+                <td class="align-middle text-center">{{comment['shownCreatedAt']}}</td>
               </tr>
             </tbody>
           </table>
