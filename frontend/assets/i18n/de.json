@@ -14,11 +14,13 @@
     "dropdown": {
         "machines": {
             "title": "Machinen",
-            "listMachines": "Maschinenliste"
+            "listMachines": "Maschinenliste",
+            "createMachine": "Maschine anlegen"
         },
         "orders": {
             "title": "Aufträge",
-            "listOrders": "Auftragsliste"
+            "listOrders": "Auftragsliste",
+            "createOrder": "Auftrag anlegen"
         },
         "users": {
             "title": "Benutzer",
@@ -26,6 +28,30 @@
             "login": "Einloggen",
             "info": "Info"
         }
+    },
+    "deviceTypes": {
+        "lasercutter": "Lasercutter",
+        "otherMachine": "Andere Machine",
+        "millingMachine": "Fräßmaschine",
+        "printer": "3D Drucker"
+    },
+    "materialTypes": {
+        "printerMaterial": "Drucker Material"
+    },
+    "status": {
+        "new": "Neu",
+        "assigned": "Zugewiesen",
+        "production": "In Produktion",
+        "shipment": "Im Versand",
+        "archived": "Archiviert",
+        "representive": "Veröffentlicht",
+        "deleted": "Gelöscht"
+    },
+    "roles": {
+        "guest": "Gast",
+        "user": "Benutzer",
+        "editor": "Bearbeiter",
+        "admin": "Administrator"
     },
     "machineList": {
         "paginationLabel": "",
@@ -43,6 +69,95 @@
             "deleteHeader": "Möchten Sie wirklich diese Maschine löschen?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
             "deleteQuestion2": "löschen wollen?"
+        }
+    },
+    "machineForm": {
+        "createTitle": "Maschine anlegen",
+        "editTitle": "Maschine bearbeiten",
+        "generalData": "Allgemeine Maschinendaten",
+        "labels": {
+            "create": "Anlegen",
+            "edit": "Aktualisieren",
+            "deviceName": "Name der Maschine",
+            "fablab": "Fablab",
+            "manufacturer": "Hersteller",
+            "data": "Daten",
+            "camSoftware": "Kamera Software",
+            "nozzleDiameter": "Durchmesser Düse(n)",
+            "materials": "Materialien",
+            "printVolume": "Druckvolumen",
+            "printResolution": "Druckauflösung",
+            "numberOfExtruders": "Anzahl von Extrudern",
+            "pictureURL": "Bild Url",
+            "comment": "Kommentar",
+            "movementSpeed": "Bewegungsgeschwindigkeit",
+            "stepSize": "Schrittgröße",
+            "workspace": "Arbeitsfläche",
+            "laserTypes": "Lasertypen",
+            "laserPower": "Leistung des Lasers",
+            "maxResolution": "Maximale Auflösung",
+            "typeOfMachine": "Typ der Maschine"
+        },
+        "modals": {
+            "ok": "Ok",
+            "error": "Fehler",
+            "updatingError": "Es ist ein Fehler beim Aktualisieren der Maschine aufgetreten",
+            "updatingSuccessHeader": "Maschine erfolgreich aktualisiert",
+            "updatingSuccessMsg": "Aktualisieren der Maschine war erfolgreich!",
+            "creatingSuccessHeader": "Maschine erfolgreich angelegt",
+            "creatingSuccessMsg": "Die Anlage der Maschine war erfolgreich!"
+        },
+        "messages": {
+            "deviceName": "Der Name der Maschine wird benötigt",
+            "fablab": "Fablab wird benötigt",
+            "manufacturer": "Hersteller wird benötigt",
+            "typeOfMachine": "Der Typ der Maschine wird benötigt"
+        }
+    },
+    "machineDetail": {
+        "titles": {
+            "machineProps": "Maschinen Daten",
+            "laserTypes": "Laser Typen",
+            "fablab": "Fablab",
+            "materials": "Materialien"
+        },
+        "modals": {
+            "yes": "Ja",
+            "no": "Nein",
+            "deleteReturnValue": "Löschen",
+            "abortReturnValue": "Abbrechen",
+            "deleteHeader": "Wollen Sie wirklich diese Maschine löschen?",
+            "deleteMessage": "Sind Sie sicher, dass sie ",
+            "deleteMessage2": "löschen wollen?"
+        },
+        "props": {
+            "deviceName": "Name der Maschine",
+            "type": "Typ",
+            "manufacturer": "Hersteller",
+            "workspaceX": "Arbeitsfläche X",
+            "workspaceY": "Arbeitsfläche Y",
+            "workspaceZ": "Arbeitsfläche Z",
+            "maxResolution": "Maximale Auflösung",
+            "laserPower": "Leistung des Lasers",
+            "pictureURL": "Bild Url",
+            "comment": "Kommentar",
+            "name": "Name",
+            "phone": "Telefon",
+            "mail": "E-Mail",
+            "laserType": "Lasertyp",
+            "material": "Material",
+            "camSoftware": "Kamera Software",
+            "movementSpeed": "Bewegungsgeschwindigkeit",
+            "stepSize": "Schrittgröße",
+            "typeOfMachine": "Typ der Machine",
+            "printVolumeX": "Druckvolumen X",
+            "printVolumeY": "Druckvolumen Y",
+            "printVolumeZ": "Druckvolumen Z",
+            "printResolutionX": "Druckauflösung X",
+            "printResolutionY": "Druckauflösung Y",
+            "printResolutionZ": "Druckauflösung Z",
+            "nozzleDiameter": "Durchmesser Düse(n)",
+            "numberOfExtruders": "Anzahl von Extrudern"
         }
     },
     "orderList": {
@@ -66,6 +181,120 @@
             "deleteQuestion2": "löschen wollen?"
         }
     },
+    "orderForm": {
+        "createTitle": "Auftrag anlegen",
+        "editTitle": "Auftrag bearbeiten",
+        "publicHint": "Dieses Feld wird für dich und die Welt öffentlich sein.",
+        "labels": {
+            "editSubmit": "Aktualisieren",
+            "createSubmit": "Anlegen",
+            "sendComment": "Kommentar absenden",
+            "projectName": "Projektname",
+            "owner": "Ersteller",
+            "editor": "Bearbeiter",
+            "status": "Status",
+            "machineType": "Maschinentyp",
+            "selectedMachine": "Ausgewählte Maschine",
+            "selectedMachineInfo": "Info",
+            "comments": "Kommentare",
+            "newComment": "Neuer Kommentar",
+            "author": "Author",
+            "content": "Inhalt",
+            "timestamp": "Erstellt am"
+        },
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "createCommentError": "Es ist ein Fehler beim Absenden eines neuen Kommentars aufgetreten.",
+            "createCommentSuccessHeader": "Kommentar wurde erfolgreich hinzugefügt",
+            "createCommentSuccess": "Dein Kommentar wurde gespeichert!",
+            "createOrderSuccessHeader": "Auftrag angelegt",
+            "updateOrderSuccessHeader": "Auftrag aktualisiert",
+            "createOrderSuccess": "Der Auftrag wurde erfolgreich angelegt!",
+            "updateOrderSuccess": "Der Auftrag wurde erfolgreich aktualisiert!",
+            "errorHeader": "Fehler",
+            "updateError": "Ein Fehler ist beim Aktualisieren aufgetreten!",
+            "createError": "Ein Fehler ist beim Anlegen aufgetreten!"
+        },
+        "messages": {
+            "projectName": "Der Projektname wird benötigt",
+            "owner": "Der Name des Erstellers wird benötigt",
+            "status": "Der Status wird benötigt",
+            "machineType": "Der Maschinentyp wird benötigt",
+            "selectedMachine": "Die Maschine wird benötigt",
+            "unnamedFablab": "Unbekanntes FabLab",
+            "author": "Der Name des Authors wird benötigt",
+            "content": "Der Inhalt des Kommentars wird benötigt"
+        }
+    },
+    "orderDetail": {
+        "labels": {
+            "owner": "Ersteller",
+            "editor": "Bearbeiter",
+            "status": "Status",
+            "createdAt": "Erstellt am",
+            "machine": "Maschine",
+            "fablab": "Fablab",
+            "comments": "Kommentare",
+            "author": "Author",
+            "content": "Inhalt",
+            "timestamp": "Erstellt am",
+            "files": "Dateien",
+            "file": "Datei"
+        },
+        "modals": {
+            "ok": "Ja",
+            "abort": "Nein",
+            "deleteReturnValue": "Löschen",
+            "abortReturnValue": "Abbrechen",
+            "deleteHeader": "Wollen Sie wirklich diesen Auftrag löschen?",
+            "deleteQuestion": "Sind Sie sicher, dass Sie",
+            "deleteQuestion2": "löschen wollen?"
+        }
+    },
+    "userForm": {
+        "createTitle": "Benutzer registrieren",
+        "editTitle": "Benutzer bearbeiten",
+        "labels": {
+            "username": "Benutzername",
+            "firstName": "Vorname",
+            "secondName": "Nachname",
+            "password": "Passwort",
+            "passwordValidation": "Passwort Bestätigung",
+            "email": "E-mail Adresse",
+            "role": "Rolle",
+            "street": "Straße",
+            "zipCode": "PLZ",
+            "city": "Stadt",
+            "country": "Land",
+            "createSubmit": "Registrieren",
+            "editSubmit": "Aktualisieren"
+        },
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "createSuccessHeader": "Benutzer registriert",
+            "updateSuccessHeader": "Benutzer aktualisiert",
+            "createSuccess": "Der Benutzer wurde erfolgreich registriert!",
+            "updateSuccess": "Der Benutzer wurde erfolgreich aktualisiert!",
+            "errorHeader": "Fehler",
+            "updateError": "Fehler beim Aktualisieren des Benutzers!",
+            "createError": "Fehler beim Registrieren des Benutzers!"
+        },
+        "messages": {
+            "username": "Der Benutzername wird benötigt",
+            "firstName": "Der Vorname wird benötigt",
+            "secondName": "Der Nachname wird benötigt",
+            "password": "Das Passwort wird benötigt",
+            "passwordValidation": "Das Passwort muss bestätigt werden",
+            "email": "Die E-Mail Adresse wird benötigt",
+            "role": "Die Rolle wird benötigt",
+            "street": "Die Straße wird benötigt",
+            "zipCode": "Die Postleitzahl wird benötigt",
+            "city": "Die Stadt wird benötigt",
+            "country": "Das Land wird benötigt"
+        }
+    },
     "tableComponent": {
         "Device Type": "Machinen Typ",
         "Device Name": "Maschinen Name",
@@ -77,20 +306,5 @@
         "Owner": "Ersteller",
         "Editor": "Bearbeiter",
         "Status": "Status"
-    },
-    "deviceTypes": {
-        "lasercutter": "Lasercutter",
-        "otherMachine": "Andere Machine",
-        "millingMachine": "Fräßmaschine",
-        "printer": "3D Drucker"
-    },
-    "status": {
-        "new": "Neu",
-        "assigned": "Zugewiesen",
-        "production": "In Produktion",
-        "shipment": "Im Versand",
-        "archived": "Archiviert",
-        "representive": "Veröffentlicht",
-        "deleted": "Gelöscht"
     }
 }

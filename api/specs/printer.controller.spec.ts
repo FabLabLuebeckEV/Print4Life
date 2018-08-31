@@ -26,6 +26,15 @@ const testPrinter = {
 };
 
 describe('Printer Controller', () => {
+  let originalTimeout;
+  const newTimeout = 10000;
+  beforeEach(() => {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = newTimeout;
+  });
+  afterEach(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
   it('gets printers', (done) => {
     request.get(`${endpoint}`, {
       headers: { 'content-type': 'application/json' },

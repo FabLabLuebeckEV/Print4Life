@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
   }
 
+  // Private Functions
 
   private _translate() {
     this.translateService.get(['dashboard']).subscribe((translations => {

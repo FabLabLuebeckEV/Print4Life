@@ -14,11 +14,13 @@
     "dropdown": {
         "machines": {
             "title": "Machines",
-            "listMachines": "List Machines"
+            "listMachines": "List Machines",
+            "createMachine": "Create Machine"
         },
         "orders": {
             "title": "Orders",
-            "listOrders": "List Orders"
+            "listOrders": "List Orders",
+            "createOrder": "Create Order"
         },
         "users": {
             "title": "Users",
@@ -26,6 +28,30 @@
             "login": "Login",
             "info": "Info"
         }
+    },
+    "deviceTypes": {
+        "lasercutter": "Lasercutter",
+        "otherMachine": "Other Machine",
+        "millingMachine": "Milling Machine",
+        "printer": "Printer"
+    },
+    "materialTypes": {
+        "printerMaterial": "Printer Material"
+    },
+    "status": {
+        "new": "new",
+        "assigned": "assigned",
+        "production": "production",
+        "shipment": "shipment",
+        "archived": "archived",
+        "representive": "representive",
+        "deleted": "deleted"
+    },
+    "roles": {
+        "guest": "guest",
+        "user": "user",
+        "editor": "editor",
+        "admin": "admin"
     },
     "machineList": {
         "paginationLabel": "Jump to Page",
@@ -43,6 +69,95 @@
             "deleteHeader": "Do you really want to delete the machine?",
             "deleteQuestion": "Are you sure you want to delete",
             "deleteQuestion2": "?"
+        }
+    },
+    "machineForm": {
+        "createTitle": "Create Machine",
+        "editTitle": "Edit Machine",
+        "generalData": "General Machine Data",
+        "labels": {
+            "create": "Create",
+            "edit": "Edit",
+            "deviceName": "Device Name",
+            "fablab": "Fablab",
+            "manufacturer": "Manufacturer",
+            "data": "Data",
+            "camSoftware": "Cam Software",
+            "nozzleDiameter": "Nozzle Diameter",
+            "materials": "Materials",
+            "printVolume": "Print Volume",
+            "printResolution": "Print Resolution",
+            "numberOfExtruders": "Number of Extruders",
+            "pictureURL": "Picture Url",
+            "comment": "Comment",
+            "movementSpeed": "Movement Speed",
+            "stepSize": "Step Size",
+            "workspace": "Workspace",
+            "laserTypes": "Laser Types",
+            "laserPower": "Laserpower",
+            "maxResolution": "Max Resolution",
+            "typeOfMachine": "Type of Machine"
+        },
+        "modals": {
+            "ok": "Ok",
+            "error": "Error",
+            "updatingError": "Something went wrong while updating the machine",
+            "updatingSuccessHeader": "Machine updated successfully",
+            "updatingSuccessMsg": "Updating the machine was successful!",
+            "creatingSuccessHeader": "Machine created successfully",
+            "creatingSuccessMsg": "The creation of a new machine was successful!"
+        },
+        "messages": {
+            "deviceName": "Device Name is required",
+            "fablab": "Fablab is required",
+            "manufacturer": "Manufacturer is required",
+            "typeOfMachine": "Type of Machine is required"
+        }
+    },
+    "machineDetail": {
+        "titles": {
+            "machineProps": "Machine Data",
+            "laserTypes": "Laser Types",
+            "fablab": "Fablab",
+            "materials": "Materials"
+        },
+        "modals": {
+            "yes": "Yes",
+            "no": "No",
+            "deleteReturnValue": "Delete",
+            "abortReturnValue": "Abort",
+            "deleteHeader": "Do you really want to delete this machine?",
+            "deleteMessage": "Are you sure you want to delete",
+            "deleteMessage2": "?"
+        },
+        "props": {
+            "deviceName": "Device Name",
+            "type": "Type",
+            "manufacturer": "Manufacturer",
+            "workspaceX": "Workspace X",
+            "workspaceY": "Workspace Y",
+            "workspaceZ": "Workspace Z",
+            "maxResolution": "Max Resolution",
+            "laserPower": "Laser Power",
+            "pictureURL": "Picture Url",
+            "comment": "Comment",
+            "name": "Name",
+            "phone": "Phone",
+            "mail": "Mail",
+            "laserType": "Laser Type",
+            "material": "Material",
+            "camSoftware": "Cam Software",
+            "movementSpeed": "Movement Speed",
+            "stepSize": "Step Size",
+            "typeOfMachine": "Type of Machine",
+            "printVolumeX": "Print Volume X",
+            "printVolumeY": "Print Volume Y",
+            "printVolumeZ": "Print Volume Z",
+            "printResolutionX": "Print Resolution X",
+            "printResolutionY": "Print Resolution Y",
+            "printResolutionZ": "Print Resolution Z",
+            "nozzleDiameter": "Nozzle Diameter",
+            "numberOfExtruders": "Number of Extruders"
         }
     },
     "orderList": {
@@ -66,6 +181,120 @@
             "deleteQuestion2": "?"
         }
     },
+    "orderForm": {
+        "createTitle": "Create Order",
+        "editTitle": "Edit Order",
+        "publicHint": "This will be visible for you and the world.",
+        "labels": {
+            "editSubmit": "Edit",
+            "createSubmit": "Create",
+            "sendComment": "Send Comment",
+            "projectName": "Project Name",
+            "owner": "Owner",
+            "editor": "Editor",
+            "status": "Status",
+            "machineType": "Machine Type",
+            "selectedMachine": "Select Machine",
+            "selectedMachineInfo": "Info",
+            "comments": "Comments",
+            "newComment": "New Comment",
+            "author": "Author",
+            "content": "Content",
+            "timestamp": "Timestamp"
+        },
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "createCommentError": "Something went wrong while adding the new comment.",
+            "createCommentSuccessHeader": "Comment successfully added",
+            "createCommentSuccess": "Your comment was added and saved!",
+            "createOrderSuccessHeader": "Order created",
+            "updateOrderSuccessHeader": "Order updated",
+            "createOrderSuccess": "The order was successfully created!",
+            "updateOrderSuccess": "The order was successfully updated!",
+            "errorHeader": "Error",
+            "updateError": "Error while trying to update!",
+            "createError": "Error while trying to create!"
+        },
+        "messages": {
+            "projectName": "Project name is required",
+            "owner": "Owner name is required",
+            "status": "Status is required",
+            "machineType": "Machine Type is required",
+            "selectedMachine": "Machine is required",
+            "unnamedFablab": "Unnamed FabLab",
+            "author": "Author name is required",
+            "content": "Text is required"
+        }
+    },
+    "orderDetail": {
+        "labels": {
+            "owner": "Owner",
+            "editor": "Editor",
+            "status": "Status",
+            "createdAt": "Created",
+            "machine": "Machine",
+            "fablab": "Fablab",
+            "comments": "Comments",
+            "author": "Author",
+            "content": "Content",
+            "timestamp": "Timestamp",
+            "files": "Files",
+            "file": "File"
+        },
+        "modals": {
+            "ok": "Yes",
+            "abort": "No",
+            "deleteReturnValue": "Delete",
+            "abortReturnValue": "Abort",
+            "deleteHeader": "Do you really want to delete this order?",
+            "deleteQuestion": "Are you sure you want to delete",
+            "deleteQuestion2": "?"
+        }
+    },
+    "userForm": {
+        "createTitle": "Register User",
+        "editTitle": "Edit User",
+        "labels": {
+            "username": "Username",
+            "firstName": "First Name",
+            "secondName": "Secondname",
+            "password": "Password",
+            "passwordValidation": "Password validation",
+            "email": "E-mail Address",
+            "role": "Role",
+            "street": "Street",
+            "zipCode": "Zip Code",
+            "city": "City",
+            "country": "Country",
+            "createSubmit": "Register",
+            "editSubmit": "Edit"
+        },
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "createSuccessHeader": "User created",
+            "updateSuccessHeader": "User updated",
+            "createSuccess": "The user was successfully created!",
+            "updateSuccess": "The user was successfully updated!",
+            "errorHeader": "Error",
+            "updateError": "Error while trying to update!",
+            "createError": "Error while trying to create!"
+        },
+        "messages": {
+            "username": "Username is required",
+            "firstName": "First Name is required",
+            "secondName": "Second Name is required",
+            "password": "Password is required",
+            "passwordValidation": "Password validation is required",
+            "email": "E-mail Address is required",
+            "role": "Role is required",
+            "street": "Street is required",
+            "zipCode": "Zip code is required",
+            "city": "City is required",
+            "country": "Country is required"
+        }
+    },
     "tableComponent": {
         "Device Type": "Device Type",
         "Device Name": "Device Name",
@@ -77,20 +306,5 @@
         "Owner": "Owner",
         "Editor": "Editor",
         "Status": "Status"
-    },
-    "deviceTypes": {
-        "lasercutter": "Lasercutter",
-        "otherMachine": "Other Machine",
-        "millingMachine": "Milling Machine",
-        "printer": "Printer"
-    },
-    "status": {
-        "new": "new",
-        "assigned": "assigned",
-        "production": "production",
-        "shipment": "shipment",
-        "archived": "archived",
-        "representive": "representive",
-        "deleted": "deleted"
     }
 }

@@ -14,6 +14,15 @@ const testOtherMachine = {
 };
 
 describe('Other Machine Controller', () => {
+  let originalTimeout;
+  const newTimeout = 10000;
+  beforeEach(() => {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = newTimeout;
+  });
+  afterEach(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
   it('gets other machines', (done) => {
     request.get(`${endpoint}`, {
       headers: { 'content-type': 'application/json' },

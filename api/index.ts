@@ -8,7 +8,6 @@ import config from './config/config';
 function run (callback) {
   const port = process.env.PORT || 3000;
   const ngPort = process.env.NG_PORT || 4200;
-  console.log(config.baseUrlFrontend);
   mongoose
     .connect(config.connections.mongo.host + config.connections.mongo.database, { autoReconnect: true })
     .catch((error) => logger.error(error));

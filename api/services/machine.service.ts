@@ -189,13 +189,13 @@ function update (type, _id, machine) {
 function count (type) {
   switch (type) {
     case 'printer':
-      return Printer.count();
+      return Printer.countDocuments();
     case 'lasercutter':
-      return Lasercutter.count();
+      return Lasercutter.countDocuments();
     case 'otherMachine':
-      return Other.count();
+      return Other.countDocuments();
     case 'millingMachine':
-      return MillingMachine.count();
+      return MillingMachine.countDocuments();
     default:
       return Promise.reject('Machine Type not supported!');
   }
