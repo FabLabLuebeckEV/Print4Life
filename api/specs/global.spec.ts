@@ -1,5 +1,6 @@
 'use strict';
-import { User } from '../models/user.model';
+
+// import { User } from '../models/user.model';
 
 const Jasmine = require('jasmine');
 const server = require('../index');
