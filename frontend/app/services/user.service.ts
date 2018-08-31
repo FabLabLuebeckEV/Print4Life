@@ -59,4 +59,12 @@ export class UserService {
   public isLoggedIn(): Boolean {
     return this.token.length > 0;
   }
+
+  public getToken(): String {
+    return this.token;
+  }
+
+  public getUser() {
+    return this.user;
+  }
 }
