@@ -4,8 +4,11 @@ import printerRoute from '../routes/printer.route';
 import lasercutterRoute from '../routes/lasercutter.route';
 import otherMachineRoute from '../routes/otherMachine.route';
 import millingMachineRoute from '../routes/millingMachine.route';
+import routerService from '../services/router.service';
 
 const router = express.Router();
+
+router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.route('/').get((req, res) => {
   machineCtrl.getAllMachines().then((machines) => {

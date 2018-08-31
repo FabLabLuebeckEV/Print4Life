@@ -2,8 +2,11 @@ import * as express from 'express';
 import * as passport from 'passport';
 import userCtrl from '../controllers/user.controller';
 import logger from '../logger';
+import routerService from '../services/router.service';
 
 const router = express.Router();
+
+router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.post('/', (req, res) => {
   userCtrl.signUp(req.body).then((user) => {
