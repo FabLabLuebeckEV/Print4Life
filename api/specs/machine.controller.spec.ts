@@ -3,11 +3,12 @@ import * as request from 'request';
 import * as configs from '../config/config';
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
+const authorizationHeader = 'Bearer TestUser';
 
 describe('Machine Controller', () => {
   it('gets all machines', (done) => {
     request.get(`${endpoint}machines/`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       const machines = response.body.machines;
@@ -24,7 +25,7 @@ describe('Machine Controller', () => {
 
   it('gets all machine types', (done) => {
     request.get(`${endpoint}machines/types`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       const types = response.body.types;
@@ -37,7 +38,7 @@ describe('Machine Controller', () => {
 
   it('gets all laserTypes', (done) => {
     request.get(`${endpoint}machines/laserTypes`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       const laserTypes = response.body.laserTypes;

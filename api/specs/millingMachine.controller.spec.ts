@@ -3,6 +3,7 @@ import * as request from 'request';
 import * as configs from '../config/config';
 
 const endpoint = `${configs.configArr.prod.baseUrlBackend}machines/millingMachines`;
+const authorizationHeader = 'Bearer TestUser';
 
 const testMillingMachine = {
   fablabId: '5b453ddb5cf4a9574849e98a',
@@ -32,7 +33,7 @@ describe('Milling Machine Controller', () => {
   });
   it('gets milling machines', (done) => {
     request.get(`${endpoint}`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       if (response.body && response.body.millingMachines) {
@@ -66,7 +67,7 @@ describe('Milling Machine Controller', () => {
 
   it('counts milling machines', (done) => {
     request.get(`${endpoint}/count`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       const count = response.body.count;
@@ -79,7 +80,11 @@ describe('Milling Machine Controller', () => {
 
   it('create milling machine  (success)', (done) => {
     request.post(`${endpoint}/`,
-      { body: testMillingMachine, json: true }, (error, response) => {
+      {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        body: testMillingMachine,
+        json: true
+      }, (error, response) => {
         const millingMachine = response.body.millingMachine;
         expect(response.statusCode).toEqual(201);
         expect(millingMachine).toBeDefined();
@@ -94,7 +99,11 @@ describe('Milling Machine Controller', () => {
   it('create milling machine  (missing fablabId)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testMillingMachine));
     delete testBody.fablabId;
-    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testBody,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -103,7 +112,11 @@ describe('Milling Machine Controller', () => {
   it('create milling machine  (fablabId too short)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testMillingMachine));
     testBody.fablabId = 'tooShortForMongoDB23';
-    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testBody,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -112,14 +125,22 @@ describe('Milling Machine Controller', () => {
   it('create milling machine (fablabId too long)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testMillingMachine));
     testBody.fablabId = 'tooLongForMongoDBsObjectId1234567890';
-    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testBody,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
   });
 
   it('update milling machine (success)', (done) => {
-    request.post(`${endpoint}/`, { body: testMillingMachine, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testMillingMachine,
+      json: true
+    }, (error, response) => {
       const millingMachine = response.body.millingMachine;
       expect(response.statusCode).toEqual(201);
       expect(millingMachine).toBeDefined();
@@ -128,7 +149,11 @@ describe('Milling Machine Controller', () => {
       expect(millingMachine.manufacturer).toEqual(testMillingMachine.manufacturer);
       expect(millingMachine.fablabId).toEqual(testMillingMachine.fablabId);
       millingMachine.deviceName = 'Updated';
-      request.put(`${endpoint}/${millingMachine._id}`, { body: millingMachine, json: true }, (error, response) => {
+      request.put(`${endpoint}/${millingMachine._id}`, {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        body: millingMachine,
+        json: true
+      }, (error, response) => {
         const updatedMachine = response.body.millingMachine;
         expect(response.statusCode).toEqual(200);
         expect(updatedMachine).toBeDefined();
@@ -140,7 +165,11 @@ describe('Milling Machine Controller', () => {
 
   it('update milling machine (id too short)', (done) => {
     const id = 'tooShortForMongoDB23';
-    request.put(`${endpoint}/${id}`, { body: testMillingMachine, json: true }, (error, response) => {
+    request.put(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testMillingMachine,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -148,7 +177,11 @@ describe('Milling Machine Controller', () => {
 
   it('update milling machine (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
-    request.put(`${endpoint}/${id}`, { body: testMillingMachine, json: true }, (error, response) => {
+    request.put(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testMillingMachine,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -156,7 +189,10 @@ describe('Milling Machine Controller', () => {
 
   it('update milling machine (no body)', (done) => {
     const id = '5b453ddb5cf4a9574849e98a';
-    request.put(`${endpoint}/${id}`, { json: true }, (error, response) => {
+    request.put(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -164,18 +200,22 @@ describe('Milling Machine Controller', () => {
 
   it('delete milling machine (success)', (done) => {
     let responseMachine;
-    request.post(`${endpoint}/`, { body: testMillingMachine, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testMillingMachine,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       responseMachine = response.body.millingMachine;
       request.delete(`${endpoint}/${response.body.millingMachine._id}`, {
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body.millingMachine).toBeDefined();
         expect(response.body.millingMachine._id).toEqual(responseMachine._id);
         request.get(`${endpoint}/${responseMachine._id}`, {
-          headers: { 'content-type': 'application/json' },
+          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
           json: true
         }, (error, response) => {
           expect(response.statusCode).toEqual(404);
@@ -189,7 +229,7 @@ describe('Milling Machine Controller', () => {
   it('delete milling machine (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.delete(`${endpoint}/${id}`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(400);
@@ -200,7 +240,7 @@ describe('Milling Machine Controller', () => {
   it('delete milling machine (id too short)', (done) => {
     const id = 'tooShort';
     request.delete(`${endpoint}/${id}`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(400);
@@ -209,11 +249,15 @@ describe('Milling Machine Controller', () => {
   });
 
   it('get milling machine (success)', (done) => {
-    request.post(`${endpoint}/`, { body: testMillingMachine, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testMillingMachine,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       const id = response.body.millingMachine._id;
       request.get(`${endpoint}/${id}`, {
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
@@ -225,7 +269,7 @@ describe('Milling Machine Controller', () => {
   it('get milling machine (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.delete(`${endpoint}/${id}`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(400);
@@ -236,7 +280,7 @@ describe('Milling Machine Controller', () => {
   it('get milling machine (id too short)', (done) => {
     const id = 'tooShort';
     request.delete(`${endpoint}/${id}`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(400);

@@ -3,6 +3,7 @@ import * as request from 'request';
 import * as configs from '../config/config';
 
 const endpoint = `${configs.configArr.prod.baseUrlBackend}machines/printers`;
+const authorizationHeader = 'Bearer TestUser';
 
 const testPrinter = {
   fablabId: '5b453ddb5cf4a9574849e98a',
@@ -37,7 +38,7 @@ describe('Printer Controller', () => {
   });
   it('gets printers', (done) => {
     request.get(`${endpoint}`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       if (response.body && response.body.printers) {
@@ -71,7 +72,7 @@ describe('Printer Controller', () => {
 
   it('counts printers', (done) => {
     request.get(`${endpoint}/count`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       const count = response.body.count;
@@ -83,7 +84,11 @@ describe('Printer Controller', () => {
   });
 
   it('create printer (success)', (done) => {
-    request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testPrinter,
+      json: true
+    }, (error, response) => {
       const printer = response.body.printer;
       expect(response.statusCode).toEqual(201);
       expect(printer).toBeDefined();
@@ -98,7 +103,11 @@ describe('Printer Controller', () => {
   it('create printer (missing fablabId)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     delete testBody.fablabId;
-    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testBody,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -107,7 +116,11 @@ describe('Printer Controller', () => {
   it('create printer (fablabId too short)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     testBody.fablabId = 'tooShortForMongoDB23';
-    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testBody,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -116,14 +129,22 @@ describe('Printer Controller', () => {
   it('create printer (fablabId too long)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     testBody.fablabId = 'tooLongForMongoDBsObjectId1234567890';
-    request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testBody,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
   });
 
   it('update printer (success)', (done) => {
-    request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testPrinter,
+      json: true
+    }, (error, response) => {
       const printer = response.body.printer;
       expect(response.statusCode).toEqual(201);
       expect(printer).toBeDefined();
@@ -132,7 +153,11 @@ describe('Printer Controller', () => {
       expect(printer.manufacturer).toEqual(testPrinter.manufacturer);
       expect(printer.fablabId).toEqual(testPrinter.fablabId);
       printer.deviceName = 'Updated';
-      request.put(`${endpoint}/${printer._id}`, { body: printer, json: true }, (error, response) => {
+      request.put(`${endpoint}/${printer._id}`, {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        body: printer,
+        json: true
+      }, (error, response) => {
         const updatedPrinter = response.body.printer;
         expect(response.statusCode).toEqual(200);
         expect(updatedPrinter).toBeDefined();
@@ -144,7 +169,11 @@ describe('Printer Controller', () => {
 
   it('update printer (id too short)', (done) => {
     const id = 'tooShortForMongoDB23';
-    request.put(`${endpoint}/${id}`, { body: testPrinter, json: true }, (error, response) => {
+    request.put(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testPrinter,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -152,7 +181,11 @@ describe('Printer Controller', () => {
 
   it('update printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
-    request.put(`${endpoint}/${id}`, { body: testPrinter, json: true }, (error, response) => {
+    request.put(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testPrinter,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -160,7 +193,10 @@ describe('Printer Controller', () => {
 
   it('update printer (no body)', (done) => {
     const id = '5b453ddb5cf4a9574849e98a';
-    request.put(`${endpoint}/${id}`, { json: true }, (error, response) => {
+    request.put(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(400);
       done();
     });
@@ -168,18 +204,22 @@ describe('Printer Controller', () => {
 
   it('delete printer (success)', (done) => {
     let responseMachine;
-    request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testPrinter,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       responseMachine = response.body.printer;
       request.delete(`${endpoint}/${response.body.printer._id}`, {
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body.printer).toBeDefined();
         expect(response.body.printer._id).toEqual(responseMachine._id);
         request.get(`${endpoint}/${responseMachine._id}`, {
-          headers: { 'content-type': 'application/json' },
+          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
           json: true
         }, (error, response) => {
           expect(response.statusCode).toEqual(404);
@@ -193,7 +233,7 @@ describe('Printer Controller', () => {
   it('delete printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.delete(`${endpoint}/${id}`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(400);
@@ -204,7 +244,7 @@ describe('Printer Controller', () => {
   it('delete printer (id too short)', (done) => {
     const id = 'tooShort';
     request.delete(`${endpoint}/${id}`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(400);
@@ -213,11 +253,15 @@ describe('Printer Controller', () => {
   });
 
   it('get printer (success)', (done) => {
-    request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testPrinter,
+      json: true
+    }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       const id = response.body.printer._id;
       request.get(`${endpoint}/${id}`, {
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
@@ -229,7 +273,7 @@ describe('Printer Controller', () => {
   it('get printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.delete(`${endpoint}/${id}`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(400);
@@ -240,7 +284,7 @@ describe('Printer Controller', () => {
   it('get printer (id too short)', (done) => {
     const id = 'tooShort';
     request.delete(`${endpoint}/${id}`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(400);
