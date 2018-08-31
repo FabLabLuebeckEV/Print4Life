@@ -4,6 +4,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NavigationComponent } from './navigation.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import {
+  HttpClientTestingModule
+} from '@angular/common/http/testing';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;
@@ -12,7 +15,11 @@ describe('NavigationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [NavigationComponent, DropdownComponent],
-      imports: [RouterTestingModule, NgbModule.forRoot(), TranslateModule.forRoot()],
+      imports: [
+        RouterTestingModule,
+        NgbModule.forRoot(),
+        TranslateModule.forRoot(),
+        HttpClientTestingModule],
       providers: [TranslateService]
     })
       .compileComponents();
