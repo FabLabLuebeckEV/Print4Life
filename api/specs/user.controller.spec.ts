@@ -4,6 +4,8 @@ import * as configs from '../config/config';
 
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
+const authorizationHeader = 'Bearer TestUser';
+
 const testUser = {
   firstname: 'Hans',
   lastname: 'Der Tester',
@@ -25,7 +27,7 @@ describe('User Controller', () => {
     testUser.email += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
     request.post(
       `${endpoint}users/`, {
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true,
         body: testUser
       },
@@ -51,7 +53,7 @@ describe('User Controller', () => {
     testUser.email += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
     request.post(
       `${endpoint}users/`, {
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true,
         body: testUser
       },
@@ -59,7 +61,7 @@ describe('User Controller', () => {
         const user = response.body.user;
         request.post(
           `${endpoint}users/login`, {
-            headers: { 'content-type': 'application/json' },
+            headers: { 'content-type': 'application/json', authorization: authorizationHeader },
             json: true,
             body: { username: user.username, password: testUser.password }
           }, ((error, response) => {
@@ -78,7 +80,7 @@ describe('User Controller', () => {
     testUser.email += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
     request.post(
       `${endpoint}users/`, {
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true,
         body: testUser
       },
@@ -86,7 +88,7 @@ describe('User Controller', () => {
         const user = response.body.user;
         request.post(
           `${endpoint}users/login`, {
-            headers: { 'content-type': 'application/json' },
+            headers: { 'content-type': 'application/json', authorization: authorizationHeader },
             json: true,
             body: { username: user.username, password: 'definetly not my password' }
           }, ((error, response) => {
@@ -104,7 +106,7 @@ describe('User Controller', () => {
     request({
       uri: `${endpoint}users/roles`,
       method: 'GET',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(200);

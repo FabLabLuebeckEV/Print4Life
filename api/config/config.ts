@@ -1,15 +1,20 @@
 const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
 const ngPort = process.env.NG_PORT || 4200;
+const jwtSecret = 'verInsecurePW!!!111einself';
+const baseUrl = '/api/v1/';
+const publicRoutes = [`${baseUrl}orders`];
 const dev = {
-  jwtSecret: 'verInsecurePW!!!111einself',
+  jwtSecret,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
       database: 'iot-fablab-dev'
     }
   },
-  baseUrlBackend: `http://localhost:${port}/api/v1/`,
+  rawBaseUrl: baseUrl,
+  publicRoutes,
+  baseUrlBackend: `http://localhost:${port}${baseUrl}`,
   baseUrlFrontend: `http://localhost:${ngPort}`,
   cors: {
     whitelist: [`http://localhost:${ngPort}`],
@@ -22,14 +27,16 @@ const dev = {
 };
 
 const prod = {
-  jwtSecret: 'verInsecurePW!!!111einself',
+  jwtSecret,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
       database: 'iot-fablab-staging'
     }
   },
-  baseUrlBackend: `http://localhost:${port}/api/v1/`,
+  rawBaseUrl: baseUrl,
+  publicRoutes,
+  baseUrlBackend: `http://localhost:${port}${baseUrl}`,
   baseUrlFrontend: `http://localhost:${ngPort}`,
   cors: {
     whitelist: [`http://localhost:${ngPort}`, `http://212.83.56.107:${ngPort}`, `http://iot-fablab.ddns.net:${ngPort}`],
@@ -41,27 +48,31 @@ const prod = {
 };
 
 const test = {
-  jwtSecret: 'verInsecurePW!!!111einself',
+  jwtSecret,
   connections: {
     mongo: {
       host: 'mongodb://mongo:27017/',
       database: 'iot-fablab'
     }
   },
-  baseUrlBackend: `http://localhost:${port}/api/v1/`,
+  rawBaseUrl: baseUrl,
+  publicRoutes,
+  baseUrlBackend: `http://localhost:${port}${baseUrl}`,
   baseUrlFrontend: `http://localhost:${ngPort}`,
   cors: undefined
 };
 
 const testLocal = {
-  jwtSecret: 'verInsecurePW!!!111einself',
+  jwtSecret,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
       database: 'iot-fablab-dev'
     }
   },
-  baseUrlBackend: `http://localhost:${port}/api/v1/`,
+  rawBaseUrl: baseUrl,
+  publicRoutes,
+  baseUrlBackend: `http://localhost:${port}${baseUrl}`,
   baseUrlFrontend: `http://localhost:${ngPort}`,
   cors: undefined
 };

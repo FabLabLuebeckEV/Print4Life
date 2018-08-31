@@ -4,6 +4,7 @@ import * as configs from '../config/config';
 
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
+const authorizationHeader = 'Bearer TestUser';
 const testOrder = {
   projectname: 'unscheinBar',
   comments: [],
@@ -19,18 +20,21 @@ const testOrder = {
 
 describe('Order Controller', () => {
   it('gets orders', (done) => {
-    request.get(`${endpoint}orders/`, { headers: { 'content-type': 'application/json' }, json: true },
-      (error, response) => {
-        if (response.body && response.body.orders) {
-          const orders = response.body.orders;
-          expect(response.statusCode).toEqual(200);
-          expect(orders).toBeDefined();
-          expect(orders.length).toBeGreaterThan(-1);
-        } else {
-          expect(response.statusCode).toEqual(204);
-        }
-        done();
-      });
+    request.get(`${endpoint}orders/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    },
+    (error, response) => {
+      if (response.body && response.body.orders) {
+        const orders = response.body.orders;
+        expect(response.statusCode).toEqual(200);
+        expect(orders).toBeDefined();
+        expect(orders.length).toBeGreaterThan(-1);
+      } else {
+        expect(response.statusCode).toEqual(204);
+      }
+      done();
+    });
   });
 
   // it('gets orders (limit & skip)', (done) => {
@@ -47,7 +51,7 @@ describe('Order Controller', () => {
 
   it('counts orders', (done) => {
     request.post(`${endpoint}orders//count`, {
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
       body: { $or: [{ status: 'new' }, { status: 'deleted' }] }
     }, (error, response) => {
@@ -64,6 +68,7 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/`,
       method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
       body: testBody
     }, (error, response) => {
@@ -85,13 +90,14 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/`,
       method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
       body: testBody
     }, (error, response) => {
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'GET',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
@@ -110,6 +116,7 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/`,
       method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
       body: testBody
     }, (error, response) => {
@@ -117,6 +124,7 @@ describe('Order Controller', () => {
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'PUT',
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true,
         body: response.body.order
       }, (error, response) => {
@@ -138,13 +146,14 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/`,
       method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
       body: testBody
     }, (error, response) => {
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'DELETE',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
@@ -163,7 +172,7 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/status`,
       method: 'GET',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(200);

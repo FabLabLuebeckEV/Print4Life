@@ -278,8 +278,8 @@
             "createSuccess": "The user was successfully created!",
             "updateSuccess": "The user was successfully updated!",
             "errorHeader": "Error",
-            "updateError": "Error while trying to update!",
-            "createError": "Error while trying to create!"
+            "updateError": "Error while trying to update the user!",
+            "createError": "Error while trying to create the user!"
         },
         "messages": {
             "username": "Username is required",

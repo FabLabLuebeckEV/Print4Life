@@ -2,8 +2,11 @@ import * as express from 'express';
 import orderCtrl from '../controllers/order.controller';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
+import routerService from '../services/router.service';
 
 const router = express.Router();
+
+router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.route('/').get((req, res) => {
   orderCtrl.getOrders(undefined, req.query.limit, req.query.skip).then((orders) => {
