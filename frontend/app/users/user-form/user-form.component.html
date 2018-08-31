@@ -42,17 +42,22 @@
         <div class="col-md-6">
           <label for="password">{{translationFields.labels.password}}</label>
           <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password"
-            #password="ngModel">
+            #password="ngModel" [ngModelOptions]="{updateOn: 'blur'}">
           <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
             {{translationFields.messages.password}}
           </div>
         </div>
         <div class="col-md-6">
           <label for="validation">{{translationFields.labels.passwordValidation}}</label>
-          <input type="password" class="form-control" id="validation" required [(ngModel)]="user.passwordValidation"
-            name="validation" #validation="ngModel">
-          <div [hidden]="validation.valid || validation.pristine" class="alert alert-danger">
+          <input type="password" class="form-control" [ngClass]="{'ng-invalid': user.password !== user.passwordValidation}"
+            id="validation" required [(ngModel)]="user.passwordValidation" name="validation" #validation="ngModel"
+            [ngModelOptions]="{updateOn: 'blur'}">
+          <div [hidden]="validation.valid || validation.pristine || !user.passwordValidation" class="alert alert-danger">
             {{translationFields.messages.passwordValidation}}
+          </div>
+          <div [hidden]="!user.passwordValidation || !user.password || user.passwordValidation && user.password && user.passwordValidation === user.password"
+            class="alert alert-danger">
+            {{translationFields.messages.passwordValidationWrong}}
           </div>
         </div>
       </div>
@@ -112,7 +117,7 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!createUserForm.form.valid">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success" [disabled]="!createUserForm.form.valid || user.password !== user.passwordValidation">{{translationFields.labels.submit}}</button>
     </form>
   </div>
 </div>
