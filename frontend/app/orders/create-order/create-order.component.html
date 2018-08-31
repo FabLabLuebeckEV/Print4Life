@@ -56,8 +56,8 @@
         <div class="col-md-12">
           <label for="selectedMachineType">{{translationFields.labels.machineType}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingMachineTypes" [items]=translationFields.shownMachineTypes [(ngModel)]="order.machine.shownType"
-            id="selectedMachineType" name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine.shownType)"
+          <ng-select [loading]="loadingMachineTypes" [items]=translationFields.shownMachineTypes [(ngModel)]="order.machine['shownType']"
+            id="selectedMachineType" name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine['shownType'])"
             required>
           </ng-select>
           <div [hidden]="selectedMachineType.valid || selectedMachineType.pristine" class="alert alert-danger">
