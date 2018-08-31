@@ -1,11 +1,11 @@
 <router-outlet></router-outlet>
-<ng-template #tipContent>{{publicHint}}</ng-template>
+<ng-template #tipContent>{{translationFields.publicHint}}</ng-template>
 <div class="row spacing">
-  <div class="col-md-1 text-right">
-    <app-back-button class="spacing-right-xs"></app-back-button>
+  <div class="col-md-12 text-center">
+    <h1>{{translationFields.title}}</h1>
   </div>
-  <div class="col-md-11 text-center">
-    <h1>Order Form</h1>
+  <div class="container">
+    <app-back-button class="spacing-right-xs"></app-back-button>
   </div>
 </div>
 <div class="row spacing">
@@ -13,77 +13,78 @@
     <form (ngSubmit)="onSubmit()" #createOrderForm="ngForm">
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="projectname">Projectname</label>
+          <label for="projectname">{{translationFields.labels.projectName}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <input type="text" class="form-control" id="projectname" required [(ngModel)]="order.projectname" name="projectname"
             #projectname="ngModel">
           <div [hidden]="projectname.valid || projectname.pristine" class="alert alert-danger">
-            Projectname is required
+            {{translationFields.messages.projectName}}
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="owner">Owner</label>
+          <label for="owner">{{translationFields.labels.owner}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <input type="text" class="form-control" id="owner" required [(ngModel)]="order.owner" name="owner" #owner="ngModel">
           <div [hidden]="owner.valid || owner.pristine" class="alert alert-danger">
-            Owner name is required
+            {{translationFields.messages.owner}}
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="editor">Editor</label>
+          <label for="editor">{{translationFields.labels.editor}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <input type="text" class="form-control" id="editor" [(ngModel)]="order.editor" name="editor" #editor="ngModel">
         </div>
       </div>
       <div class="form-group row">
         <div *ngIf="editView" class="col-md-12">
-          <label for="status">Status</label>
+          <label for="status">{{translationFields.labels.status}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingStatus" [items]=validStatus bindValue="_id" bindLabel="name" [(ngModel)]="order.status"
-            id="status" name="status" #status="ngModel" required>
+          <ng-select [loading]="loadingStatus" [items]=translationFields.shownStatus bindValue="_id" bindLabel="name"
+            [(ngModel)]="order.shownStatus" (change)="statusChanged(order.shownStatus)" id="status" name="status"
+            #status="ngModel" required>
           </ng-select>
           <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
-            Status is required
+            {{translationFields.messages.status}}
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="selectedMachineType">Machine Type</label>
+          <label for="selectedMachineType">{{translationFields.labels.machineType}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingMachineTypes" [items]=machineTypes [(ngModel)]="order.machine.type" id="selectedMachineType"
-            name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine.type)"
+          <ng-select [loading]="loadingMachineTypes" [items]=translationFields.shownMachineTypes [(ngModel)]="order.machine.shownType"
+            id="selectedMachineType" name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine.shownType)"
             required>
           </ng-select>
           <div [hidden]="selectedMachineType.valid || selectedMachineType.pristine" class="alert alert-danger">
-            Machine Type is required
+            {{translationFields.messages.machineType}}
           </div>
         </div>
       </div>
       <div *ngIf="order.machine.type" class="form-group row">
         <div class="col-md-6">
-          <label for="selectedMachine">Select Machine</label>
+          <label for="selectedMachine">{{translationFields.labels.selectedMachine}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingMachinesForType" [items]=machines bindValue="_id" bindLabel="deviceName"
             [(ngModel)]="order.machine._id" id="selectedMachine" name="selectedMachine" #selectedMachine="ngModel"
             groupBy="fablabName" (change)="machineSelected(selectedMachine)" required>
             <ng-template ng-optgroup-tmp let-item="item">
-              {{item.fablabName || 'Unnamed FabLab'}}
+              {{item.fablabName || translationFields.messages.unnamedFablab}}
             </ng-template>
             <ng-template ng-label-tmp let-item="item">
               {{ item.deviceName }}
             </ng-template>
           </ng-select>
           <div [hidden]="selectedMachine.valid || selectedMachine.pristine" class="alert alert-danger">
-            Machine is required
+            {{translationFields.messages.selectedMachine}}
           </div>
         </div>
         <div *ngIf="order.machine && order.machine.deviceName" class="col-md-4 offset-1">
-          <label for="selectedMachineDetailView">Info:</label>
+          <label for="selectedMachineDetailView">{{translationFields.labels.selectedMachineInfo}}:</label>
           <div>
             <a [routerLink]="order.machine.detailView" name="selectedMachineDetailView">
               <button type="button" class="btn btn-primary">{{ order.machine.deviceName }}</button>
@@ -95,89 +96,94 @@
       <div *ngIf="!editView">
         <div class="form-group row table-spacing">
           <div class="col-md-12 text-center">
-            <h4>Comments</h4>
+            <h4>{{translationFields.labels.comments}}</h4>
           </div>
         </div>
 
         <div class="form-group row">
           <div class="col-md-12">
-            <label for="author">Author</label>
+            <label for="author">{{translationFields.labels.author}}</label>
             <input type="text" class="form-control" id="author" required [(ngModel)]="comment.author" name="author"
               #author="ngModel">
             <div [hidden]="author.valid || author.pristine" class="alert alert-danger">
-              Author name is required
+              {{translationFields.messages.author}}
             </div>
           </div>
         </div>
 
         <div class="form-group row">
           <div class="col-md-12">
-            <label for="content">Content</label>
+            <label for="content">{{translationFields.labels.content}}</label>
             <textarea type="text" class="form-control" id="content" required [(ngModel)]="comment.content" name="content"
               #content="ngModel"></textarea>
             <div [hidden]="content.valid || content.pristine" class="alert alert-danger">
-              Text is required
+              {{translationFields.messages.content}}
             </div>
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!createOrderForm.form.valid">Submit</button>
+      <button type="submit" class="btn btn-success" [disabled]="!createOrderForm.form.valid">{{translationFields.labels.submit}}</button>
     </form>
 
     <!-- Print comments to this order as a table -->
     <div *ngIf="editView">
       <div class="row">
         <div class="col-md-12 text-center">
-          <h4>Comments</h4>
+          <h4>{{translationFields.labels.comments}}</h4>
         </div>
       </div>
+
       <div class="row">
-        <table class="table table-striped table-spacing">
-          <thead>
-            <tr>
-              <th scope="col">Author</th>
-              <th scope="col">Content</th>
-              <th scope="col">Timestamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let comment of order.comments">
-              <td>{{comment.author}}</td>
-              <td>{{comment.content}}</td>
-              <td>{{comment.createdAt | date:'short'}}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="col-md-12">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th class="align-middle text-center" scope="col">{{translationFields.labels.author}}</th>
+                <th class="align-middle text-center" scope="col">{{translationFields.labels.content}}</th>
+                <th class="align-middle text-center" scope="col">{{translationFields.labels.timestamp}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let comment of order.comments">
+                <td class="align-middle text-center">{{comment.author}}</td>
+                <td class="align-middle text-center">{{comment.content}}</td>
+                <td class="align-middle text-center">{{comment.createdAt | date:'short'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      <!-- Submit Comment Form -->
       <div class="row">
         <div class="col-md-12 text-center">
-          <h6>Add comment</h6>
+          <h5>{{translationFields.labels.newComment}}</h5>
         </div>
       </div>
     </div>
-    <!-- Submit Comment Form -->
-    <form *ngIf="editView" (ngSubmit)="onSubmitComment()" #createCommentForm="ngForm">
+
+    <form *ngIf="editView" (ngSubmit)="onSubmitComment(createCommentForm)" #createCommentForm="ngForm">
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="author">Author</label>
+          <label for="author">{{translationFields.labels.author}}</label>
           <input type="text" class="form-control" id="author" required [(ngModel)]="comment.author" name="author"
             #author="ngModel">
           <div [hidden]="author.valid || author.pristine" class="alert alert-danger">
-            Author name is required
+            {{translationFields.messages.author}}
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="content">Content</label>
+          <label for="content">{{translationFields.labels.content}}</label>
           <textarea type="text" class="form-control" id="content" required [(ngModel)]="comment.content" name="content"
             #content="ngModel"></textarea>
           <div [hidden]="content.valid || content.pristine" class="alert alert-danger">
-            Text is required
+            {{translationFields.messages.content}}
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!createCommentForm.form.valid">Submit</button>
+      <button type="submit" class="btn btn-success" [disabled]="!createCommentForm.form.valid">{{translationFields.labels.sendComment}}</button>
     </form>
   </div>
 </div>

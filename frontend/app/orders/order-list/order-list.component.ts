@@ -29,14 +29,14 @@ export class OrderListComponent implements OnInit {
 
   loadingStatus: Boolean;
   filter: any = {
-    selectedStatus: undefined,
+    selectedStatus: [],
     validStatus: [], // shown status after translation to select in filter
     originalValidStatus: [], // origin for backend containing all status
     shownStatus: [], // selected and translated status in filter
     originalMachineTypes: [], // origin for backend containing all machine types
     machineTypes: [], // shown machine types after translation to select in filter
     shownMachineTypes: [], // selected and translated machine types in filter
-    selectedMachineTypes: undefined // selected machine types but in origin backend language
+    selectedMachineTypes: [] // selected machine types but in origin backend language
   };
 
   loadingMachineTypes: Boolean;
@@ -85,11 +85,6 @@ export class OrderListComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private translateService: TranslateService) {
     this.config = this.configService.getConfig();
-    this.translateService.onLangChange.subscribe(() => {
-      this._translate();
-      this.paginationObj.page = 1;
-      this.init();
-    });
     this.spinnerConfig = { 'loadingText': 'Loading Orders', ...this.config.spinnerConfig };
     this.createLink = `./${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
@@ -107,6 +102,11 @@ export class OrderListComponent implements OnInit {
 
   async ngOnInit() {
     if (this.listView && !this.loadingOrders) {
+      this.translateService.onLangChange.subscribe(() => {
+        this._translate();
+        this.paginationObj.page = 1;
+        this.init();
+      });
       this.loadingOrders = true;
       this.visibleOrders = [];
       this.orders = [];
@@ -115,106 +115,6 @@ export class OrderListComponent implements OnInit {
       this._translate();
       this.init();
     }
-  }
-
-  public pageChanged() {
-    this.init();
-  }
-
-  // remove add change clear
-  changeHandlerStatus(event: Array<String>) {
-    this.filter.selectedStatus = [];
-    this.filter.shownStatus = event;
-    this.translateService.get(['status']).subscribe((translations => {
-      this.filter.originalValidStatus.forEach((status) => {
-        const translatedStatus = translations['status'][`${status}`];
-        if (translatedStatus) {
-          this.filter.shownStatus.forEach((selectedStatus) => {
-            if (selectedStatus === translatedStatus) {
-              this.filter.selectedStatus.push(status);
-            }
-          });
-        }
-      });
-    }));
-  }
-
-    // remove add change clear
-  changeHandlerMachineType(event: Array<String>) {
-    this.filter.selectedMachineTypes = [];
-    this.filter.shownMachineTypes = event;
-    this.translateService.get(['deviceTypes']).subscribe((translations => {
-      this.filter.originalMachineTypes.forEach((machineType) => {
-        const type = translations['deviceTypes'][`${this.machineService.camelCaseTypes(machineType)}`];
-        if (type) {
-          this.filter.shownMachineTypes.forEach((selectedType) => {
-            if (selectedType === type) {
-              this.filter.selectedMachineTypes.push(machineType);
-            }
-          });
-        }
-      });
-    }));
-  }
-
-  eventHandler(event) {
-    if (event.label === this.translationFields.buttons.deleteLabel) {
-      let order: TableItem;
-      let orderIdx: number;
-      this.visibleOrders.forEach((item, idx) => {
-        if (event.refId === item.button1.refId || event.refId === item.button2.refId) {
-          order = item;
-          orderIdx = idx;
-        }
-      });
-      const deleteButton = new ModalButton(this.translationFields.modals.yes, 'btn btn-danger', this.translationFields.modals.deleteValue);
-      const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
-      this.translationFields.modals.abortValue);
-      const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
-        'modal-header header-danger', `${this.translationFields.modals.deleteQuestion} ` +
-        `${order.obj[`Projectname`].label} ${this.translationFields.modals.deleteQuestion2}`, deleteButton, abortButton);
-      modalRef.result.then((result) => {
-        if (result === deleteButton.returnValue) {
-          this.orderService.deleteOrder(order.obj.id.label).then((result) => {
-            result = result.order;
-            const oldOrder = this.visibleOrders[orderIdx];
-            this.orders.forEach((item) => {
-              if (oldOrder.obj.id.label === item.obj.id.label) {
-                this.orders[orderIdx].obj = {};
-                this.orders[orderIdx].obj['id'] = { label: result._id };
-                this.orders[orderIdx].obj['Owner'] = { label: result.owner };
-                this.orders[orderIdx].obj['Editor'] = { label: result.editor };
-                this.orders[orderIdx].obj['Status'] = { label: result.status };
-                this.orders[orderIdx].obj['Device Type'] = { label: result.machine.type };
-
-              }
-            });
-            this.visibleOrders[orderIdx].obj = {};
-            this.visibleOrders[orderIdx].obj['id'] = { label: result._id };
-            this.visibleOrders[orderIdx].obj['Owner'] = { label: result.owner };
-            this.visibleOrders[orderIdx].obj['Editor'] = { label: result.editor };
-            this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
-            this.visibleOrders[orderIdx].obj['Device Type'] = { label: result.machine.type };
-            if ((this.filter.selectedStatus && this.filter.selectedStatus.length > 0) ||
-            this.filter.selectedMachineTypes && this.filter.selectedMachineTypes.length > 0) {
-              this.init();
-            }
-          });
-        }
-      });
-    }
-  }
-
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent);
-    modalRef.componentInstance.title = title;
-    if (titleClass) {
-      modalRef.componentInstance.titleClass = titleClass;
-    }
-    modalRef.componentInstance.msg = msg;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
   }
 
   async init() {
@@ -228,15 +128,15 @@ export class OrderListComponent implements OnInit {
     if (this.filter.selectedStatus.length > 0 && this.filter.selectedMachineTypes.length > 0) {
       query = {
         $and: [
-          {$or: []},
-          {$or: []}
+          { $or: [] },
+          { $or: [] }
         ]
       };
       this.filter.selectedStatus.forEach((status) => {
         query.$and[0].$or.push({ status: status });
       });
       this.filter.selectedMachineTypes.forEach((type) => {
-        query.$and[1].$or.push({ 'machine.type': this.machineService.camelCaseTypes(type)});
+        query.$and[1].$or.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
       });
     } else if (this.filter.selectedStatus.length > 0 || this.filter.selectedMachineTypes.length > 0) {
       query = {
@@ -248,14 +148,14 @@ export class OrderListComponent implements OnInit {
           query.$or.push({ status: status });
         });
         this.filter.originalMachineTypes.forEach((type) => {
-          query.$nor.push({'machine.type': this.machineService.camelCaseTypes(type)});
+          query.$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
         });
       } else if (this.filter.selectedMachineTypes.length > 0) {
         this.filter.selectedMachineTypes.forEach((type) => {
-          query.$or.push({ 'machine.type': this.machineService.camelCaseTypes(type)});
+          query.$or.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
         });
         this.filter.originalValidStatus.forEach((status) => {
-          query.$nor.push({status});
+          query.$nor.push({ status });
         });
       }
     } else {
@@ -263,10 +163,10 @@ export class OrderListComponent implements OnInit {
         $nor: []
       };
       this.filter.originalValidStatus.forEach((status) => {
-        query.$nor.push({status});
+        query.$nor.push({ status });
       });
       this.filter.originalMachineTypes.forEach((type) => {
-        query.$nor.push({'machine.type': this.machineService.camelCaseTypes(type)});
+        query.$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
       });
     }
 
@@ -312,6 +212,110 @@ export class OrderListComponent implements OnInit {
     this.spinner.hide();
   }
 
+  // Event Handler
+
+  public pageChanged() {
+    this.init();
+  }
+
+  // remove add change clear
+  changeHandlerStatus(event: Array<String>) {
+    this.filter.selectedStatus = [];
+    this.filter.shownStatus = event;
+    this.translateService.get(['status']).subscribe((translations => {
+      this.filter.originalValidStatus.forEach((status) => {
+        const translatedStatus = translations['status'][`${status}`];
+        if (translatedStatus) {
+          this.filter.shownStatus.forEach((selectedStatus) => {
+            if (selectedStatus === translatedStatus) {
+              this.filter.selectedStatus.push(status);
+            }
+          });
+        }
+      });
+    }));
+  }
+
+  // remove add change clear
+  changeHandlerMachineType(event: Array<String>) {
+    this.filter.selectedMachineTypes = [];
+    this.filter.shownMachineTypes = event;
+    this.translateService.get(['deviceTypes']).subscribe((translations => {
+      this.filter.originalMachineTypes.forEach((machineType) => {
+        const type = translations['deviceTypes'][`${this.machineService.camelCaseTypes(machineType)}`];
+        if (type) {
+          this.filter.shownMachineTypes.forEach((selectedType) => {
+            if (selectedType === type) {
+              this.filter.selectedMachineTypes.push(machineType);
+            }
+          });
+        }
+      });
+    }));
+  }
+
+  eventHandler(event) {
+    if (event.label === this.translationFields.buttons.deleteLabel) {
+      let order: TableItem;
+      let orderIdx: number;
+      this.visibleOrders.forEach((item, idx) => {
+        if (event.refId === item.button1.refId || event.refId === item.button2.refId) {
+          order = item;
+          orderIdx = idx;
+        }
+      });
+      const deleteButton = new ModalButton(this.translationFields.modals.yes, 'btn btn-danger', this.translationFields.modals.deleteValue);
+      const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
+        this.translationFields.modals.abortValue);
+      const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+        'modal-header header-danger', `${this.translationFields.modals.deleteQuestion} ` +
+        `${order.obj[`Projectname`].label} ${this.translationFields.modals.deleteQuestion2}`, deleteButton, abortButton);
+      modalRef.result.then((result) => {
+        if (result === deleteButton.returnValue) {
+          this.orderService.deleteOrder(order.obj.id.label).then((result) => {
+            result = result.order;
+            const oldOrder = this.visibleOrders[orderIdx];
+            this.orders.forEach((item) => {
+              if (oldOrder.obj.id.label === item.obj.id.label) {
+                this.orders[orderIdx].obj = {};
+                this.orders[orderIdx].obj['id'] = { label: result._id };
+                this.orders[orderIdx].obj['Owner'] = { label: result.owner };
+                this.orders[orderIdx].obj['Editor'] = { label: result.editor };
+                this.orders[orderIdx].obj['Status'] = { label: result.status };
+                this.orders[orderIdx].obj['Device Type'] = { label: result.machine.type };
+
+              }
+            });
+            this.visibleOrders[orderIdx].obj = {};
+            this.visibleOrders[orderIdx].obj['id'] = { label: result._id };
+            this.visibleOrders[orderIdx].obj['Owner'] = { label: result.owner };
+            this.visibleOrders[orderIdx].obj['Editor'] = { label: result.editor };
+            this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
+            this.visibleOrders[orderIdx].obj['Device Type'] = { label: result.machine.type };
+            if ((this.filter.selectedStatus && this.filter.selectedStatus.length > 0) ||
+              this.filter.selectedMachineTypes && this.filter.selectedMachineTypes.length > 0) {
+              this.init();
+            }
+          });
+        }
+      });
+    }
+  }
+
+  // Private Functions
+
+  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent);
+    modalRef.componentInstance.title = title;
+    if (titleClass) {
+      modalRef.componentInstance.titleClass = titleClass;
+    }
+    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.button1 = button1;
+    modalRef.componentInstance.button2 = button2;
+    return modalRef;
+  }
+
   private async _loadStatus() {
     this.loadingStatus = true;
     this.filter.originalValidStatus = (await this.orderService.getStatus()).status;
@@ -325,9 +329,7 @@ export class OrderListComponent implements OnInit {
         this.filter.shownStatus[idx] = translated;
       });
     }));
-    if (!this.filter.selectedStatus) {
-      this.filter.selectedStatus = JSON.parse(JSON.stringify(this.filter.originalValidStatus));
-    }
+    this.filter.selectedStatus = JSON.parse(JSON.stringify(this.filter.originalValidStatus));
     this.loadingStatus = false;
   }
 
@@ -349,9 +351,7 @@ export class OrderListComponent implements OnInit {
         this.filter.shownMachineTypes[idx] = translated;
       });
     }));
-    if (!this.filter.selectedMachineTypes) {
-      this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originalMachineTypes));
-    }
+    this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originalMachineTypes));
     this.loadingMachineTypes = false;
   }
 

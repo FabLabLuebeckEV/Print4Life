@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigService } from '../../config/config.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BackButtonComponent } from '../../components/back-button/back-button.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import {
   HttpClientTestingModule
@@ -25,8 +26,9 @@ describe('MachineFormComponent', () => {
         HttpClientTestingModule,
         FontAwesomeModule,
         FormsModule,
-        NgSelectModule],
-      providers: [ConfigService]
+        NgSelectModule,
+        TranslateModule.forRoot()],
+      providers: [ConfigService, TranslateService]
     })
       .compileComponents();
   }));

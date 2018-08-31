@@ -1,5 +1,8 @@
 <div *ngIf="true">
   <div class="row spacing text-center">
+    <div class="col-md-12 text-center">
+      <h1>{{order.projectname}}</h1>
+    </div>
     <div class="col-md-3 col-xl-2">
       <app-back-button class="spacing-right-xs"></app-back-button>
       <a [routerLink]="editLink">
@@ -11,100 +14,103 @@
         <fa-icon [icon]="deleteIcon"></fa-icon>
       </button>
     </div>
-    <div class="col-md-6 col-lg-4 col-xl-5 offset-1">
-      <h1>{{order.projectname}}</h1>
-    </div>
   </div>
   <div class="row">
-    <table class="table table-striped table-spacing">
-      <!-- <thead>
+    <div class="col-md-11 table-spacing">
+      <table class="table table-striped">
+        <!-- <thead>
+                <tr>
+                  <th scope="col">Author</th><th scope="col">Content</th><th scope="col">Timestamp</th>
+                </tr>
+              </thead> -->
+        <tbody>
           <tr>
-            <th scope="col">Author</th><th scope="col">Content</th><th scope="col">Timestamp</th>
+            <td class="align-middle text-center">{{translationFields.labels.owner}}</td>
+            <td class="align-middle text-center">{{order.owner}}</td>
           </tr>
-        </thead> -->
-      <tbody>
-        <tr>
-          <td>Owner</td>
-          <td>{{order.owner}}</td>
-        </tr>
-        <tr>
-          <td>Editor</td>
-          <td>{{order.editor}}</td>
-        </tr>
-        <tr>
-          <td>Status</td>
-          <td>
-            <span class="badge badge-secondary">{{order.status}}</span>
-          </td>
-        </tr>
-        <tr>
-          <td>Created</td>
-          <td>{{order.createdAt | date:'short'}}</td>
-        </tr>
-        <tr *ngIf="machine">
-          <td>Machine</td>
-          <td>
-            <a [routerLink]="machine.detailView">{{ machine.deviceName }}</a>
-            <span class="badge badge-secondary spacing">{{machine.type}}</span>
-          </td>
-        </tr>
-        <tr *ngIf="fablab">
-          <td>FabLab</td>
-          <td>
-            {{fablab.name}}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <tr>
+            <td class="align-middle text-center">{{translationFields.labels.editor}}</td>
+            <td class="align-middle text-center">{{order.editor}}</td>
+          </tr>
+          <tr>
+            <td class="align-middle text-center">{{translationFields.labels.status}}</td>
+            <td class="align-middle text-center">
+              <span class="badge badge-secondary">{{order.shownStatus}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="align-middle text-center">{{translationFields.labels.createdAt}}</td>
+            <td class="align-middle text-center">{{order.createdAt | date:'short'}}</td>
+          </tr>
+          <tr *ngIf="machine">
+            <td class="align-middle text-center">{{translationFields.labels.machine}}</td>
+            <td class="align-middle text-center">
+              <a [routerLink]="machine.detailView">{{ machine.deviceName }}</a>
+              <span class="badge badge-secondary spacing">{{machine.shownType}}</span>
+            </td>
+          </tr>
+          <tr *ngIf="fablab">
+            <td class="align-middle text-center">{{translationFields.labels.fablab}}</td>
+            <td class="align-middle text-center">
+              {{fablab.name}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="row spacing text-center">
     <div class="col-md-12">
-      <h2>Comments
+      <h2>{{translationFields.labels.comments}}
         <span class="badge badge-primary spacing text-center">{{ order.comments.length }}</span>
       </h2>
     </div>
   </div>
   <div class="row spacing" *ngIf="order.comments && order.comments.length > 0">
-    <table class="table table-striped table-spacing">
-      <thead>
-        <tr>
-          <th scope="col">Author</th>
-          <th scope="col">Content</th>
-          <th scope="col">Timestamp</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let comment of order.comments">
-          <td>{{comment.author}}</td>
-          <td>{{comment.content}}</td>
-          <td>{{comment.createdAt | date:'short'}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="col-md-11 table-spacing">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="align-middle text-center" scope="col">{{translationFields.labels.author}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields.labels.content}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields.labels.timestamp}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let comment of order.comments">
+            <td class="align-middle text-center">{{comment.author}}</td>
+            <td class="align-middle text-center">{{comment.content}}</td>
+            <td class="align-middle text-center">{{comment.createdAt | date:'short'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="row spacing text-center">
     <div class="col-md-12">
-      <h2>Files
+      <h2>{{translationFields.labels.files}}
         <span class="badge badge-primary spacing text-center">{{ order.files.length }}</span>
       </h2>
     </div>
   </div>
   <div class="row spacing" *ngIf="order.files && order.files.length > 0">
-    <table class="table table-striped table-spacing">
-      <thead>
-        <tr>
-          <th scope="col">Author</th>
-          <th scope="col">File</th>
-          <th scope="col">Timestamp</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let file of order.files">
-          <td>{{files.author}}</td>
-          <td>{{files.content}}</td>
-          <td>{{files.timestamp | date:'short'}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="col-md-11 table-spacing">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="align-middle text-center" scope="col">{{translationFields.labels.author}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields.labels.file}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields.labels.timestamp}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let file of order.files">
+            <td class="align-middle text-center">{{files.author}}</td>
+            <td class="align-middle text-center">{{files.content}}</td>
+            <td class="align-middle text-center">{{files.timestamp | date:'short'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

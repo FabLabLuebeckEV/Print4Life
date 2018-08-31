@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ConfigService } from '../../config/config.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BackButtonComponent } from '../../components/back-button/back-button.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import {
   HttpClientTestingModule
@@ -20,8 +21,9 @@ describe('MachineDetailComponent', () => {
       imports: [NgbModule.forRoot(),
         HttpClientTestingModule,
         RouterTestingModule,
-        FontAwesomeModule],
-      providers: [ConfigService]
+        FontAwesomeModule,
+      TranslateModule.forRoot()],
+      providers: [ConfigService, TranslateService]
     })
       .compileComponents();
   }));
