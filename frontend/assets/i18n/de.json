@@ -287,6 +287,7 @@
             "secondName": "Der Nachname wird benötigt",
             "password": "Das Passwort wird benötigt",
             "passwordValidation": "Das Passwort muss bestätigt werden",
+            "passwordValidationWrong": "Das Passwort und die Bestätigung stimmen nicht über ein!",
             "email": "Die E-Mail Adresse wird benötigt",
             "role": "Die Rolle wird benötigt",
             "street": "Die Straße wird benötigt",
