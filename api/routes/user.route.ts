@@ -42,7 +42,7 @@ router.route('/login').post(async (req, res) => {
     res.status(404).send(msg);
   }
 
-  logger.info(`User "${user.username}" was found in DB and tries to login with password "${req.body.password}".`);
+  logger.info(`User "${user.username}" was found in DB and tried to login with a bad password.`);
 
   let login;
   try {
