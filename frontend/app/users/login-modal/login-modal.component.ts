@@ -34,8 +34,8 @@ export class LoginModalComponent implements OnInit {
   }
 
   async login() {
-    this.response = (await this.userService.login(this.loginData));
-    localStorage.setItem('jwtToken', this.response['token']);
+    this.response = await this.userService.login(this.loginData);
+    this.activeModal.close(this.response);
   }
 
   private _translate() {

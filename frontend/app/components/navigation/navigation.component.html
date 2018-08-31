@@ -29,13 +29,13 @@
       <li class="nav-item">
         <app-dropdown [dropdown]="languageDropdown" (switchLanguageEvent)="switchLanguage($event)"></app-dropdown>
       </li>
-      <li class="nav-item">
+      <li *ngIf="!userIsLoggedIn" class="nav-item">
         <button class="btn btn-primary" (click)="_login()">Login</button>
       </li>
-      <li class="nav-item">
+      <li *ngIf="userIsLoggedIn" class="nav-item">
         <button class="btn btn-primary" (click)="_logout()">Logout</button>
       </li>
-      <li class="nav-item">
+      <li *ngIf="!userIsLoggedIn" class="nav-item">
         <button class="btn btn-primary" (click)="_register()">Register</button>
       </li>
     </ul>

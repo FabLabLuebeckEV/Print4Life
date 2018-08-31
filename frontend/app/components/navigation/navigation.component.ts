@@ -4,7 +4,7 @@ import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginModalComponent } from '../../users/login-modal/login-modal.component';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
@@ -17,11 +17,13 @@ export class NavigationComponent implements OnInit {
   orderDropdown: Object = { name: '', elements: [] };
   languageDropdown: Object = { name: '', elements: [] };
   userDropdown: Object = { name: '', elements: [] };
+  private userIsLoggedIn: Boolean;
 
   constructor(
     private translateService: TranslateService,
     private userService: UserService,
     private modalService: NgbModal,
+    private router: Router
   ) {
     this._translate();
   }
@@ -90,14 +92,6 @@ export class NavigationComponent implements OnInit {
         name: translations['dropdown.users'].title,
         elements: [
           {
-            name: translations['dropdown.users'].signUp,
-            routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}`
-          },
-          {
-            name: translations['dropdown.users'].login,
-            routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.login}`
-          },
-          {
             name: translations['dropdown.users'].info,
             routerHref: `${routes.paths.frontend.users.root}/:id`
           }
@@ -107,15 +101,19 @@ export class NavigationComponent implements OnInit {
   }
 
   private _login() {
-    const modalRef = this.modalService.open(LoginModalComponent, { size: 'sm' });
-    return modalRef;
+    this.modalService.open(LoginModalComponent, { size: 'sm' }).result.then((login) => {
+      this.userIsLoggedIn = this.userService.isLoggedIn();
+    }).catch((err) => {
+      this.userIsLoggedIn = this.userService.isLoggedIn();
+    });
   }
 
   private _logout() {
     this.userService.logout();
+    this.userIsLoggedIn = this.userService.isLoggedIn();
   }
 
   private _register() {
-    // TODO: navigate to user-form-component
+    this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}`]);
   }
 }
