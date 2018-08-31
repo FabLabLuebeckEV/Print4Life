@@ -261,7 +261,7 @@
             "secondName": "Nachname",
             "password": "Passwort",
             "passwordValidation": "Passwort Bestätigung",
-            "email": "E-mail Adresse",
+            "email": "E-Mail Adresse",
             "role": "Rolle",
             "street": "Straße",
             "zipCode": "PLZ",

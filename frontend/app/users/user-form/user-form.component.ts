@@ -3,9 +3,11 @@ import { User, Address, Role } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { routes } from '../../config/routes';
 import { TranslateService } from '@ngx-translate/core';
+import { GenericService } from '../../services/generic.service';
 
 @Component({
   selector: 'app-user-form',
@@ -66,7 +68,9 @@ export class UserFormComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private location: Location,
-    private translateService: TranslateService
+    private modalService: NgbModal,
+    private translateService: TranslateService,
+    private genericService: GenericService
   ) {
     this.router.events.subscribe(() => {
       const route = this.location.path();
@@ -103,10 +107,12 @@ export class UserFormComponent implements OnInit {
       }
       this.userService.createUser(userCopy)
         .then(res => {
-          console.log(res);
+          this._openSuccessMsg();
         })
         .catch(err => {
-          console.log(err);
+          const errorMsg = this.translationFields.modals.errorMessage;
+          const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
+          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         });
     }));
   }
@@ -125,6 +131,24 @@ export class UserFormComponent implements OnInit {
     this.loadingRoles = true;
     this.validRoles = (await this.userService.getRoles()).roles;
     this.loadingRoles = false;
+  }
+
+  private _openSuccessMsg() {
+    const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
+    this._openMsgModal(this.translationFields.modals.successHeader, 'modal-header header-success',
+      this.translationFields.modals.successMessage, okButton, undefined).result.then((result) => {
+        this.genericService.back();
+      });
+  }
+
+  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent);
+    modalRef.componentInstance.title = title;
+    modalRef.componentInstance.titleClass = titleClass;
+    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.button1 = button1;
+    modalRef.componentInstance.button2 = button2;
+    return modalRef;
   }
 
   private _translateRole(role): Promise<String> {
