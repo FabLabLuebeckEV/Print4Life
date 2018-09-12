@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableItem } from '../../components/table/table.component';
@@ -11,6 +11,7 @@ import { routes } from '../../config/routes';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-order-list',
@@ -119,6 +120,7 @@ export class OrderListComponent implements OnInit {
 
   async init() {
     this.loadingOrders = true;
+    const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.orders = new Array();
     this.visibleOrders = undefined;
     this.spinner.show();
@@ -181,32 +183,38 @@ export class OrderListComponent implements OnInit {
       query, this.paginationObj.perPage,
       (this.paginationObj.page - 1) * this.paginationObj.perPage);
     if (orders && orders.orders) {
-      orders = orders.orders;
-      const arr = [];
-      for (const order of orders) {
-        const item = new TableItem();
-        item.obj['id'] = { label: order._id };
-        item.obj['Created at'] = { label: order.createdAt, isDate: true };
-        item.obj['Projectname'] = { label: order.projectname, href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
-        item.obj['Owner'] = { label: order.owner };
-        item.obj['Editor'] = { label: order.editor };
-        item.obj['Status'] = { label: order.status };
-        item.obj['Device Type'] = { label: order.machine.type };
-        item.button1.label = this.translationFields.buttons.updateLabel;
-        item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
-        item.button1.class = 'btn btn-warning spacing';
-        item.button1.icon = this.config.icons.edit;
-        item.button2.label = this.translationFields.buttons.deleteLabel;
-        item.button2.eventEmitter = true;
-        item.button2.class = 'btn btn-danger spacing';
-        item.button2.icon = this.config.icons.delete;
-        item.button2.refId = order._id;
-        arr.push(item);
-      }
+      this.translateService.get(['date']).subscribe((translations => {
+        orders = orders.orders;
+        const arr = [];
+        for (const order of orders) {
+          const item = new TableItem();
+          item.obj['id'] = { label: order._id };
+          item.obj['Created at'] = {
+            label: currentLang === 'de'
+              ? moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat) + ' Uhr'
+              : moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat)
+          };
+          item.obj['Projectname'] = { label: order.projectname, href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
+          item.obj['Owner'] = { label: order.owner };
+          item.obj['Editor'] = { label: order.editor };
+          item.obj['Status'] = { label: order.status };
+          item.obj['Device Type'] = { label: order.machine.type };
+          item.button1.label = this.translationFields.buttons.updateLabel;
+          item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
+          item.button1.class = 'btn btn-warning spacing';
+          item.button1.icon = this.config.icons.edit;
+          item.button2.label = this.translationFields.buttons.deleteLabel;
+          item.button2.eventEmitter = true;
+          item.button2.class = 'btn btn-danger spacing';
+          item.button2.icon = this.config.icons.delete;
+          item.button2.refId = order._id;
+          arr.push(item);
+        }
 
-      this.orders = this.orders.concat(arr);
-      this.visibleOrders = undefined;
-      this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+        this.orders = this.orders.concat(arr);
+        this.visibleOrders = undefined;
+        this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+      }));
     }
     this.loadingOrders = false;
     this.spinner.hide();
