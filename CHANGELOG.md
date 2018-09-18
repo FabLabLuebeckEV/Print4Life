@@ -3,8 +3,14 @@
 ## Unreleased / Upcoming next
 
 * multilanguage support for English, German and Danish (/LF0380/)
-* user and role management (/LF0210/, /LF0220/, /LF0230/, /LF0240/, /LF0350/, /LF0360/)
+
+### Version 0.5
+
 * upload of files (/LF0300/, /LF0330/)
+
+### Version 0.4
+
+* user and role management (/LF0210/, /LF0220/, /LF0230/, /LF0240/, /LF0350/, /LF0360/)
 
 ## Version 0.3
 
