@@ -100,6 +100,7 @@ export class CreateOrderComponent implements OnInit {
     private translateService: TranslateService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
+    this._translate();
     this.router.events.subscribe(() => {
       const route = this.location.path();
       this.editView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0;
@@ -231,13 +232,15 @@ export class CreateOrderComponent implements OnInit {
   }
 
   machineSelected() {
-    this.machines.forEach(element => {
-      if (element._id === this.order.machine._id) {
-        this.order.machine['deviceName'] = element.deviceName;
-      }
-    });
-    const type = this.machineService.camelCaseTypes(this.order.machine.type);
-    this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.order.machine._id}/`;
+    if (this.order.machine.type && this.order.machine._id) {
+      this.machines.forEach(element => {
+        if (element._id === this.order.machine._id) {
+          this.order.machine['deviceName'] = element.deviceName;
+        }
+      });
+      const type = this.machineService.camelCaseTypes(this.order.machine.type);
+      this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.order.machine._id}/`;
+    }
   }
 
   // Private Functions
