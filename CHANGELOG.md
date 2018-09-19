@@ -12,6 +12,10 @@
 
 * user and role management (/LF0210/, /LF0220/, /LF0230/, /LF0240/, /LF0350/, /LF0360/)
 
+## Version 0.3.2
+
+* translation fix in create order form
+
 ## Version 0.3.1
 
 * minor cors fix
