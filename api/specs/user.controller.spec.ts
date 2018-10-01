@@ -1,27 +1,20 @@
 import 'jasmine';
 import * as request from 'request';
 import * as configs from '../config/config';
-
+import { testUser, getTestUserToken, newTimeout } from './global.spec';
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
-const authorizationHeader = 'Bearer TestUser';
-
-const testUser = {
-  firstname: 'Hans',
-  lastname: 'Der Tester',
-  username: 'Hansi',
-  password: 'VeryInsecurePW',
-  email: 'hansi@alm.de',
-  address: {
-    street: 'Middlehofer Straße 42',
-    zipCode: '421337',
-    city: 'Geldhausen',
-    country: 'Luxemburg',
-  },
-  role: 'admin'
-};
 
 describe('User Controller', () => {
+  let originalTimeout;
+  const authorizationHeader = getTestUserToken();
+  beforeEach(() => {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = newTimeout;
+  });
+  afterEach(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
   it('create user', (done) => {
     testUser.username += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
     testUser.email += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;

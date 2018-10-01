@@ -17,7 +17,7 @@ export class UserLoginComponent implements OnInit {
   constructor(
     private userService: UserService,
   ) {
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem('orderManagementJWTToken');
     if (token) {
       this.response.success = true;
       this.response.token = token;
@@ -29,11 +29,11 @@ export class UserLoginComponent implements OnInit {
 
   async login() {
     this.response = (await this.userService.login(this.loginData)).login;
-    localStorage.setItem('jwtToken', this.response.token);
+    localStorage.setItem('orderManagementJWTToken', this.response.token);
   }
 
   async logout() {
-    localStorage.removeItem('jwtToken');
+    localStorage.removeItem('orderManagementJWTToken');
     this.response.success = false;
     this.response.token = '';
   }

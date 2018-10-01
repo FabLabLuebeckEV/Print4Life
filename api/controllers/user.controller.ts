@@ -2,6 +2,7 @@ import * as jwt from 'jsonwebtoken';
 
 import { User } from '../models/user.model';
 import { Role, roleSchema } from '../models/role.model';
+import { JWT } from '../models/jwt.model';
 import config from '../config/config';
 
 /**
@@ -47,6 +48,7 @@ import config from '../config/config';
 async function signUp (user) {
   delete user._id;
   delete user.__v;
+  user.createdAt = new Date();
   const newUser = new User({
     ...user
   });
@@ -126,11 +128,18 @@ async function getRoles () {
     }
 }
  */
-function login (user, password): any {
+function login (user, password): Promise<Object> {
   return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
     if (isMatch && !err) {
-      const token = jwt.sign(user.toJSON(), config.jwtSecret);
-      resolve({ success: true, token: `JWT ${token}` });
+      if (user.jwt && user.jwt.issuedAt &&
+        (new Date()).valueOf() - user.jwt.issuedAt.valueOf() < config.jwtExpiryTime) {
+        resolve({ success: true, token: `JWT ${user.jwt.token}` });
+      } else {
+        const token = jwt.sign(user.toJSON(), config.jwtSecret);
+        user.jwt = new JWT({ token, issuedAt: new Date() });
+        user.save();
+        resolve({ success: true, token: `JWT ${token}` });
+      }
     } else {
       reject({ success: false, msg: 'Authentication failed. Wrong password.' });
     }

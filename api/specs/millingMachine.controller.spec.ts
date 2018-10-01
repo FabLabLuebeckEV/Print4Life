@@ -1,9 +1,9 @@
 import 'jasmine';
 import * as request from 'request';
 import * as configs from '../config/config';
+import { getTestUserToken, newTimeout } from './global.spec';
 
 const endpoint = `${configs.configArr.prod.baseUrlBackend}machines/millingMachines`;
-const authorizationHeader = 'Bearer TestUser';
 
 const testMillingMachine = {
   fablabId: '5b453ddb5cf4a9574849e98a',
@@ -23,7 +23,7 @@ const testMillingMachine = {
 
 describe('Milling Machine Controller', () => {
   let originalTimeout;
-  const newTimeout = 10000;
+  const authorizationHeader = getTestUserToken();
   beforeEach(() => {
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
     jasmine.DEFAULT_TIMEOUT_INTERVAL = newTimeout;

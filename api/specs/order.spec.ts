@@ -1,10 +1,10 @@
 import 'jasmine';
 import * as request from 'request';
 import * as configs from '../config/config';
+import { getTestUserToken, newTimeout } from './global.spec';
 
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
-const authorizationHeader = 'Bearer TestUser';
 const testOrder = {
   projectname: 'unscheinBar',
   comments: [],
@@ -19,6 +19,15 @@ const testOrder = {
 };
 
 describe('Order Controller', () => {
+  let originalTimeout;
+  const authorizationHeader = getTestUserToken();
+  beforeEach(() => {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = newTimeout;
+  });
+  afterEach(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
   it('gets orders', (done) => {
     request.get(`${endpoint}orders/`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },

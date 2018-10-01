@@ -2,10 +2,12 @@ const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
 const ngPort = process.env.NG_PORT || 4200;
 const jwtSecret = 'verInsecurePW!!!111einself';
+const jwtExpiryTime = 2 * 60 * 60 * 1000; // 2 hours (conversion from ms to hours)
 const baseUrl = '/api/v1/';
-const publicRoutes = [`${baseUrl}orders`];
+const publicRoutes = [`${baseUrl}orders`, `${baseUrl}users/login`, `${baseUrl}users/`];
 const dev = {
   jwtSecret,
+  jwtExpiryTime,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -28,6 +30,7 @@ const dev = {
 
 const prod = {
   jwtSecret,
+  jwtExpiryTime,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -49,6 +52,7 @@ const prod = {
 
 const test = {
   jwtSecret,
+  jwtExpiryTime,
   connections: {
     mongo: {
       host: 'mongodb://mongo:27017/',
@@ -64,6 +68,7 @@ const test = {
 
 const testLocal = {
   jwtSecret,
+  jwtExpiryTime,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
