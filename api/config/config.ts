@@ -8,6 +8,12 @@ const publicRoutes = [`${baseUrl}orders`, `${baseUrl}users/login`, `${baseUrl}us
 const dev = {
   jwtSecret,
   jwtExpiryTime,
+  loggerRotateOptions: {
+    datePattern: 'DD-MM-YYYY',
+    dirname: 'logs',
+    maxSize: '2m',
+    maxFiles: '10'
+  },
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -31,6 +37,12 @@ const dev = {
 const prod = {
   jwtSecret,
   jwtExpiryTime,
+  loggerRotateOptions: {
+    datePattern: 'DD-MM-YYYY',
+    dirname: 'logs',
+    maxSize: '10m',
+    maxFiles: '30'
+  },
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -53,6 +65,12 @@ const prod = {
 const test = {
   jwtSecret,
   jwtExpiryTime,
+  loggerRotateOptions: {
+    datePattern: 'DD-MM-YYYY',
+    dirname: 'logs',
+    maxSize: '2m',
+    maxFiles: '5'
+  },
   connections: {
     mongo: {
       host: 'mongodb://mongo:27017/',
@@ -69,6 +87,12 @@ const test = {
 const testLocal = {
   jwtSecret,
   jwtExpiryTime,
+  loggerRotateOptions: {
+    datePattern: 'DD-MM-YYYY',
+    dirname: 'logs',
+    maxSize: '2m',
+    maxFiles: '5'
+  },
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
