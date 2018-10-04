@@ -1,11 +1,21 @@
 import 'jasmine';
 import * as request from 'request';
 import * as configs from '../config/config';
+import { getTestUserToken, newTimeout } from './global.spec';
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
-const authorizationHeader = 'Bearer TestUser';
+
 
 describe('Machine Controller', () => {
+  let originalTimeout;
+  const authorizationHeader = getTestUserToken();
+  beforeEach(() => {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = newTimeout;
+  });
+  afterEach(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
   it('gets all machines', (done) => {
     request.get(`${endpoint}machines/`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },

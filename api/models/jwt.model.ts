@@ -1,17 +1,18 @@
 import * as mongoose from 'mongoose';
 
 const attributes = {
-  createdAt: {
-    type: Date,
-    required: true
-  },
   token: {
     type: String,
     required: true
   },
+  issuedAt: {
+    type: Date,
+    required: true
+  }
 };
 
-export const jwtSchema = mongoose.Schema(attributes);
-export const JwtModel = mongoose.model('Jwt', jwtSchema);
+export const jwtSchema = mongoose.Schema(attributes, { _id: false, __v: false });
 
-export default JwtModel;
+export const JWT = mongoose.model('JWT', jwtSchema);
+
+export default JWT;

@@ -31,7 +31,11 @@ export const userSchema = new Schema({
   },
   address: addressSchema,
   role: roleSchema,
-  jwt: jwtSchema
+  jwt: jwtSchema,
+  createdAt: {
+    type: Date,
+    required: true
+  }
 });
 
 /* eslint-disable */

@@ -2,13 +2,18 @@ const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
 const ngPort = process.env.NG_PORT || 4200;
 const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
-// Tokens will expire after one hour.
-const jwtExpireDuration = 1000 * 60 * 60;
+const jwtExpiryTime = 2 * 60 * 60 * 1000; // 2 hours (conversion from ms to hours)
 const baseUrl = '/api/v1/';
-const publicRoutes = [`${baseUrl}orders`];
+const publicRoutes = [`${baseUrl}orders`, `${baseUrl}users/login`, `${baseUrl}users/`];
 const dev = {
   jwtSecret,
-  jwtExpireDuration,
+  jwtExpiryTime,
+  loggerRotateOptions: {
+    datePattern: 'DD-MM-YYYY',
+    dirname: 'logs',
+    maxSize: '2m',
+    maxFiles: '10'
+  },
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -31,7 +36,13 @@ const dev = {
 
 const prod = {
   jwtSecret,
-  jwtExpireDuration,
+  jwtExpiryTime,
+  loggerRotateOptions: {
+    datePattern: 'DD-MM-YYYY',
+    dirname: 'logs',
+    maxSize: '10m',
+    maxFiles: '30'
+  },
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -53,7 +64,13 @@ const prod = {
 
 const test = {
   jwtSecret,
-  jwtExpireDuration,
+  jwtExpiryTime,
+  loggerRotateOptions: {
+    datePattern: 'DD-MM-YYYY',
+    dirname: 'logs',
+    maxSize: '2m',
+    maxFiles: '5'
+  },
   connections: {
     mongo: {
       host: 'mongodb://mongo:27017/',
@@ -69,7 +86,13 @@ const test = {
 
 const testLocal = {
   jwtSecret,
-  jwtExpireDuration,
+  jwtExpiryTime,
+  loggerRotateOptions: {
+    datePattern: 'DD-MM-YYYY',
+    dirname: 'logs',
+    maxSize: '2m',
+    maxFiles: '5'
+  },
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',

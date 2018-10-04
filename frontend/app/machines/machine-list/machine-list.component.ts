@@ -188,25 +188,26 @@ export class MachineListComponent implements OnInit {
 
   private async _loadMachineTypes() {
     this.loadingMachineTypes = true;
-    this.filter.originMachineTypes = (await this.machineService.getAllMachineTypes()).types;
-    this.filter.originMachineTypes.forEach((type, idx) => {
-      this.filter.originMachineTypes[idx] = this.machineService.camelCaseTypes(type);
-    });
-    this.filter.machineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
-    this.filter.shownMachineTypes = JSON.parse(JSON.stringify(this.filter.machineTypes));
-    this.translateService.get(['deviceTypes']).subscribe((translations => {
-      this.filter.machineTypes.forEach((type, idx) => {
-        const translated = translations['deviceTypes'][`${type}`];
-        this.filter.machineTypes[idx] = translated;
+    const machineTypes = (await this.machineService.getAllMachineTypes());
+    if (machineTypes) {
+      this.filter.originMachineTypes = machineTypes.types;
+      this.filter.originMachineTypes.forEach((type, idx) => {
+        this.filter.originMachineTypes[idx] = this.machineService.camelCaseTypes(type);
       });
-      this.filter.shownMachineTypes.forEach((type, idx) => {
-        const translated = translations['deviceTypes'][`${type}`];
-        this.filter.shownMachineTypes[idx] = translated;
-      });
-    }));
-    // if (!this.filter.selectedMachineTypes) {
-    this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
-    // }
+      this.filter.machineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
+      this.filter.shownMachineTypes = JSON.parse(JSON.stringify(this.filter.machineTypes));
+      this.translateService.get(['deviceTypes']).subscribe((translations => {
+        this.filter.machineTypes.forEach((type, idx) => {
+          const translated = translations['deviceTypes'][`${type}`];
+          this.filter.machineTypes[idx] = translated;
+        });
+        this.filter.shownMachineTypes.forEach((type, idx) => {
+          const translated = translations['deviceTypes'][`${type}`];
+          this.filter.shownMachineTypes[idx] = translated;
+        });
+      }));
+      this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
+    }
     this.loadingMachineTypes = false;
   }
 
