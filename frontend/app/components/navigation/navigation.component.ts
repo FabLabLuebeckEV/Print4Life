@@ -11,7 +11,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
-  title = 'Order Management';
+  title: String = 'Order Management';
+  login: String = 'Login';
+  logout: String = 'Logout';
+  register: String = 'Register';
   isNavbarCollapsed: Boolean = false;
   machineDropdown: Object = { name: '', elements: [] };
   orderDropdown: Object = { name: '', elements: [] };
@@ -41,6 +44,9 @@ export class NavigationComponent implements OnInit {
       ['navigation', 'languages', 'dropdown.machines', 'dropdown.orders', 'dropdown.users']
     ).subscribe((translations => {
       this.title = translations['navigation'].title;
+      this.login = translations['navigation'].login;
+      this.logout = translations['navigation'].logout;
+      this.register = translations['navigation'].register;
       this.machineDropdown = {
         name: translations['dropdown.machines'].title,
         elements: [

@@ -3,7 +3,10 @@
         "title": "Welcome to Fablab - Order Management! "
     },
     "navigation": {
-        "title": "Order Management"
+        "title": "Order Management",
+        "login": "Login",
+        "logout": "Logout",
+        "register": "Register"
     },
     "languages": {
         "title": "Languages",

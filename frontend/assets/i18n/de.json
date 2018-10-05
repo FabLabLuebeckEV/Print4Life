@@ -3,7 +3,10 @@
         "title": "Willkommen zur Fablab - Auftragsverwaltung!"
     },
     "navigation": {
-        "title": "Auftragsverwaltung"
+        "title": "Auftragsverwaltung",
+        "login": "Einloggen",
+        "logout": "Ausloggen",
+        "register": "Registrieren"
     },
     "languages": {
         "title": "Sprachauswahl",
