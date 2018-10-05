@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { MessageModalComponent, ModalButton } from '../components/message-modal/message-modal.component';
+import { ErrorService } from './error.service';
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
-    constructor(private modalService: NgbModal) {
+    constructor(private errorService: ErrorService) {
 
     }
     public intercept(request: HttpRequest<any>, handler: HttpHandler): Observable<HttpEvent<any>> {
@@ -25,28 +24,16 @@ export class HttpInterceptorService implements HttpInterceptor {
 
     private handleError(err: HttpErrorResponse): Observable<any> {
         if (err.status && err.message) {
-            const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
             switch (err.status) {
                 case 401:
                 case 403:
                     // console.log('handled error ' + err.status);
-                    this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', err.error.error,
-                        okButton, undefined);
+                    this.errorService.showError({ status: err.status, statusText: err.statusText, stack: err.error.error });
                     return of(err.message);
                 default:
                     throw Error;
             }
         }
         throw Error;
-    }
-
-    private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
-        const modalRef = this.modalService.open(MessageModalComponent);
-        modalRef.componentInstance.title = title;
-        modalRef.componentInstance.titleClass = titleClass;
-        modalRef.componentInstance.msg = msg;
-        modalRef.componentInstance.button1 = button1;
-        modalRef.componentInstance.button2 = button2;
-        return modalRef;
     }
 }

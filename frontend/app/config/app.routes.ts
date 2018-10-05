@@ -2,18 +2,41 @@ import { MachineListComponent } from '../machines/machine-list/machine-list.comp
 import { OrderListComponent } from '../orders/order-list/order-list.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { MachineFormComponent } from '../machines/machine-form/machine-form.component';
-import { Routes } from '@angular/router';
+import { Routes, CanActivate } from '@angular/router';
 import { CreateOrderComponent } from '../orders/create-order/create-order.component';
 import { MachineDetailComponent } from '../machines/machine-detail/machine-detail.component';
 import { routes } from './routes';
 import { OrderDetailComponent } from '../orders/order-detail/order-detail.component';
 import { UserFormComponent } from '../users/user-form/user-form.component';
 import { UserComponent } from '../users/user/user.component';
+import { Injectable } from '@angular/core';
+import { UserService } from '../services/user.service';
+import { Observable } from 'rxjs';
+import { ErrorService } from '../services/error.service';
+
+@Injectable()
+export class AuthGuard implements CanActivate {
+    constructor(private userService: UserService, private errorService: ErrorService) { }
+
+    canActivate(): Observable<boolean> | Promise<boolean> | boolean {
+        const isLoggedIn = this.userService.isLoggedIn();
+        if (!isLoggedIn) {
+            this.errorService.showError({
+                status: 401,
+                statusText: 'Unauthorized',
+                stack: 'You need to login to visit this route!'
+            });
+        }
+        return isLoggedIn;
+    }
+}
 
 export const appRoutes: Routes = [
     {
         path: routes.paths.frontend.machines.root,
         component: MachineListComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
         children: [
             { path: routes.paths.frontend.machines.create, component: MachineFormComponent },
             { path: `${routes.paths.frontend.machines.update}/:type/:id`, component: MachineFormComponent },
@@ -24,6 +47,8 @@ export const appRoutes: Routes = [
     {
         path: routes.paths.frontend.orders.root,
         component: OrderListComponent,
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
         children: [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent },
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent },
@@ -34,6 +59,7 @@ export const appRoutes: Routes = [
     {
         path: routes.paths.frontend.users.root,
         component: UserComponent,
+        // canActivate: [AuthGuard],
         children: [
             { path: routes.paths.frontend.users.signup, component: UserFormComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent }

@@ -26,6 +26,7 @@ import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AuthGuard } from './config/app.routes';
 
 export function translateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -73,7 +74,7 @@ import { LoginModalComponent } from './users/login-modal/login-modal.component';
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }, // magic for cors
-        MachineService, FablabService, ConfigService
+        MachineService, FablabService, ConfigService, AuthGuard
     ],
     bootstrap: [AppComponent],
     entryComponents: [

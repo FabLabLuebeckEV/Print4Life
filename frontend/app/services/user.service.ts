@@ -10,7 +10,7 @@ export class UserService {
   private token: String = '';
   private user: Object;
   constructor(private http: HttpClient) {
-    this.token = localStorage.getItem('jwtToken');
+    this.token = localStorage.getItem('orderManagementJWTToken');
     this.p = routes.backendUrl + '/' + routes.paths.backend.users.root;
   }
 
@@ -33,7 +33,7 @@ export class UserService {
         const login = result.login;
         if (login && login['success']) {
           this.token = login['token'];
-          localStorage.setItem('jwtToken', this.token.toString());
+          localStorage.setItem('orderManagementJWTToken', this.token.toString());
           resolve(login);
         } else {
           reject(login ? login : { error: 'No login message received' });
@@ -47,7 +47,7 @@ export class UserService {
   public logout(): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
-        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('orderManagementJWTToken');
         this.token = '';
         resolve();
       } catch (err) {
@@ -56,8 +56,8 @@ export class UserService {
     });
   }
 
-  public isLoggedIn(): Boolean {
-    return this.token.length > 0;
+  public isLoggedIn(): boolean {
+    return !!this.token && this.token.length > 0;
   }
 
   public getToken(): String {

@@ -29,6 +29,7 @@ export class NavigationComponent implements OnInit {
     private router: Router
   ) {
     this._translate();
+    this.userIsLoggedIn = this.userService.isLoggedIn();
   }
 
   ngOnInit() {
@@ -109,12 +110,14 @@ export class NavigationComponent implements OnInit {
   private _login() {
     this.modalService.open(LoginModalComponent, { size: 'sm' }).result.then((login) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
+      this.router.navigate(['/']);
     }).catch((err) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
     });
   }
 
   private _logout() {
+    this.router.navigate(['/']);
     this.userService.logout();
     this.userIsLoggedIn = this.userService.isLoggedIn();
   }
