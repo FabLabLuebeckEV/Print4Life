@@ -8,9 +8,9 @@ import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Location } from '@angular/common';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-order-detail',
@@ -19,6 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class OrderDetailComponent implements OnInit {
   private config: any;
+  private userIsLoggedIn: boolean;
   editIcon: any;
   deleteIcon: any;
   editLink: String;
@@ -71,7 +72,8 @@ export class OrderDetailComponent implements OnInit {
     private configService: ConfigService,
     private modalService: NgbModal,
     private genericService: GenericService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private userService: UserService
   ) {
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
@@ -101,6 +103,7 @@ export class OrderDetailComponent implements OnInit {
           });
         }
       });
+    this.userIsLoggedIn = this.userService.isLoggedIn();
   }
 
   public delete() {

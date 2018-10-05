@@ -4,7 +4,43 @@ const ngPort = process.env.NG_PORT || 4200;
 const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
 const jwtExpiryTime = 2 * 60 * 60 * 1000; // 2 hours (conversion from ms to hours)
 const baseUrl = '/api/v1/';
-const publicRoutes = [`${baseUrl}orders`, `${baseUrl}users/login`, `${baseUrl}users/`, `${baseUrl}users/roles`];
+const publicRoutes = [
+  {
+    url: `${baseUrl}orders/`,
+    canChilds: true,
+    methods: ['GET']
+  },
+  {
+    url: `${baseUrl}orders/count`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}orders/search`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}users/login`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}users/`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}users/roles`,
+    methods: ['GET']
+  },
+  {
+    url: `${baseUrl}machines/`,
+    canChilds: true,
+    methods: ['GET']
+  },
+  {
+    url: `${baseUrl}fablabs/`,
+    canChilds: true,
+    methods: ['GET']
+  }
+];
 const dev = {
   jwtSecret,
   jwtExpiryTime,

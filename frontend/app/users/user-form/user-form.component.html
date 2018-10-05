@@ -38,7 +38,7 @@
           </div>
         </div>
       </div>
-      <div class="form-group row">
+      <div *ngIf="!editView" class="form-group row">
         <div class="col-md-6">
           <label for="password">{{translationFields.labels.password}}</label>
           <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password"
@@ -70,7 +70,7 @@
           </div>
         </div>
       </div>
-      <div class="form-group row">
+      <div *ngIf="isAdmin" class="form-group row">
         <div class="col-md-12">
           <label for="role">{{translationFields.labels.role}}</label>
           <ng-select [loading]="loadingRoles" [items]=translationFields.shownRoles [(ngModel)]="user['shownRole']" id="role"
@@ -117,7 +117,7 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!createUserForm.form.valid || user.password !== user.passwordValidation">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success" [disabled]="!createUserForm.form.valid || (!editView && user.password !== user.passwordValidation)">{{translationFields.labels.submit}}</button>
     </form>
   </div>
 </div>

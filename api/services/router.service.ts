@@ -6,7 +6,7 @@ async function jwtValid (req, res, next) {
   let ret;
   let msg = 'Unauthorized! Please login with a user who is allowed to use this route';
   const tokenOk = await validatorService.checkToken(req);
-  if (_isPublicRoute(req.originalUrl) || tokenOk) {
+  if (_isPublicRoute(req.originalUrl, req.method) || tokenOk) {
     ret = next();
   } else if (!tokenOk) {
     msg = 'Token expired. Please login again!';
@@ -19,11 +19,23 @@ async function jwtValid (req, res, next) {
   return ret;
 }
 
-function _isPublicRoute (url) {
+function _isPublicRoute (url, method) {
   let isPublic = false;
   config.publicRoutes.forEach((route) => {
-    if (url === route) {
-      isPublic = true;
+    let methodOk = false;
+    route.methods.forEach((m) => {
+      if (m.toLowerCase() === method.toLowerCase() || m.toLowerCase() === '*') {
+        methodOk = true;
+      }
+    });
+    if (methodOk) {
+      if (route.canChilds) {
+        if (url.startsWith(route.url)) {
+          isPublic = true;
+        }
+      } else if (url === route.url) {
+        isPublic = true;
+      }
     }
   });
   return isPublic;

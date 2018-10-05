@@ -1,16 +1,21 @@
-import { Strategy, ExtractJwt } from 'passport-jwt';
+import {
+  Strategy,
+  ExtractJwt
+} from 'passport-jwt';
 
 // load up the user model
-const User = require('../models/user');
-const config = require('../config/database'); // get db config file
+import { User } from '../models/user.model';
+import config from '../config/config'; // get db config file
 
 module.exports = function (passport) {
-  const opts = {};
+  const opts = { jwtFromRequest: '', secretOrKey: '' };
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
   opts.secretOrKey = config.jwtSecret;
   passport.use(
     new Strategy(opts, (jwtPayload, done) => {
-      User.findOne({ id: jwtPayload.id }, (err, user) => {
+      User.findOne({
+        id: jwtPayload.id
+      }, (err, user) => {
         if (err) {
           return done(err, false);
         }

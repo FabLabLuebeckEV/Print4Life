@@ -52,7 +52,10 @@ async function signUp (user) {
   const newUser = new User({
     ...user
   });
-  const role = new Role({ role: user.role });
+  const role = new Role();
+  if (user.role) {
+    role.role = user.role.role;
+  }
   newUser.role = role;
   return newUser.save();
 }
@@ -131,19 +134,14 @@ async function getRoles () {
 function login (user, password): Promise<Object> {
   return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
     if (isMatch && !err) {
-      if (user.jwt && user.jwt.issuedAt &&
-        (new Date()).valueOf() - user.jwt.issuedAt.valueOf() < config.jwtExpiryTime) {
-        resolve({ success: true, token: `JWT ${user.jwt.token}` });
-      } else {
-        const token = jwt.sign(user.toJSON(), config.jwtSecret);
-        user.jwt = new JWT({ token, issuedAt: new Date() });
-        user.save()
-          .then(() => {
-            resolve({ success: true, token: `JWT ${token}` });
-          }).catch((err) => {
-            reject({ success: false, msg: 'Saving JWT failed', stack: err });
-          });
-      }
+      const token = jwt.sign(user.toJSON(), config.jwtSecret);
+      user.jwt = new JWT({ token, issuedAt: new Date() });
+      user.save()
+        .then(() => {
+          resolve({ success: true, token: `JWT ${token}` });
+        }).catch((err) => {
+          reject({ success: false, msg: 'Saving JWT failed', stack: err });
+        });
     } else {
       reject({ success: false, msg: 'Authentication failed. Wrong password.' });
     }
@@ -158,10 +156,15 @@ async function getUserById (id) {
   return User.findById(id);
 }
 
+async function getUserByToken (token) {
+  return User.findOne({ 'jwt.token': token });
+}
+
 export default {
   signUp,
   getRoles,
   login,
   getUserByUsername,
-  getUserById
+  getUserById,
+  getUserByToken
 };

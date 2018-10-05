@@ -22,7 +22,9 @@ export const testUser = {
     city: 'Geldhausen',
     country: 'Luxemburg',
   },
-  role: 'admin',
+  role: {
+    role: 'admin'
+  },
   createdAt: undefined
 };
 export const newTimeout = 60 * 1000;
@@ -36,7 +38,10 @@ User.findOne({ username: testUser.username }).then(async (result) => {
     const newUser = new User({
       ...testUser
     });
-    const role = new Role({ role: testUser.role });
+    const role = new Role();
+    if (testUser.role) {
+      role.role = testUser.role.role;
+    }
     newUser.role = role;
     await newUser.save();
     await request.post(

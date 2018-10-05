@@ -63,7 +63,7 @@ import { LoginModalComponent } from './users/login-modal/login-modal.component';
         FontAwesomeModule,
         HttpClientModule,
         NgbModule.forRoot(),
-        RouterModule.forRoot(appRoutes),
+        RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' }),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

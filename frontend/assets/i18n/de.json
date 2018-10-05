@@ -29,7 +29,8 @@
             "title": "Benutzer",
             "signUp": "Registrieren",
             "login": "Einloggen",
-            "info": "Info"
+            "profile": "Benutzerprofil anzeigen",
+            "listUsers": "Benutzerliste"
         }
     },
     "deviceTypes": {

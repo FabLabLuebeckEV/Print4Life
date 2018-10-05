@@ -35,11 +35,9 @@ export const appRoutes: Routes = [
     {
         path: routes.paths.frontend.machines.root,
         component: MachineListComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
         children: [
-            { path: routes.paths.frontend.machines.create, component: MachineFormComponent },
-            { path: `${routes.paths.frontend.machines.update}/:type/:id`, component: MachineFormComponent },
+            { path: routes.paths.frontend.machines.create, component: MachineFormComponent, canActivate: [AuthGuard], },
+            { path: `${routes.paths.frontend.machines.update}/:type/:id`, component: MachineFormComponent, canActivate: [AuthGuard], },
             { path: `${routes.paths.frontend.machines.getById}`, component: MachineDetailComponent }
         ]
     },
@@ -47,11 +45,9 @@ export const appRoutes: Routes = [
     {
         path: routes.paths.frontend.orders.root,
         component: OrderListComponent,
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
         children: [
-            { path: routes.paths.frontend.orders.create, component: CreateOrderComponent },
-            { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent },
+            { path: routes.paths.frontend.orders.create, component: CreateOrderComponent, canActivate: [AuthGuard], },
+            { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent }
         ]
     },
@@ -59,7 +55,6 @@ export const appRoutes: Routes = [
     {
         path: routes.paths.frontend.users.root,
         component: UserComponent,
-        // canActivate: [AuthGuard],
         children: [
             { path: routes.paths.frontend.users.signup, component: UserFormComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent }

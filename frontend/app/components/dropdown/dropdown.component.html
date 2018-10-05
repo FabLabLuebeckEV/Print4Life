@@ -1,7 +1,8 @@
 <div class="row">
   <div class="col">
     <div ngbDropdown class="d-inline-block dropdown">
-      <button class="btn btn-outline-primary dropdown-toggle" id="dropdownBasic1" ngbDropdownToggle>{{dropdown.name}}</button>
+      <button [disabled]="!dropdown.elements || !dropdown.elements.length" class="btn btn-outline-primary dropdown-toggle"
+        id="dropdownBasic1" ngbDropdownToggle>{{dropdown.name}}</button>
       <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownBasic1">
         <div *ngFor="let item of dropdown.elements">
           <a *ngIf="item.href" class="dropdown-item" [href]="item.href">{{item.name}}</a>

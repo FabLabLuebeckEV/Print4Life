@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-machine-detail',
@@ -16,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class MachineDetailComponent implements OnInit {
   private config: any;
+  private userIsLoggedIn: boolean;
   editLink: String;
   deleteLink: String;
   editIcon: any;
@@ -50,7 +52,8 @@ export class MachineDetailComponent implements OnInit {
     private configService: ConfigService,
     private genericService: GenericService,
     private modalService: NgbModal,
-    private translateService: TranslateService) {
+    private translateService: TranslateService,
+    private userService: UserService) {
 
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
@@ -71,6 +74,7 @@ export class MachineDetailComponent implements OnInit {
     this.translateService.onLangChange.subscribe(() => {
       this._initMachine();
     });
+    this.userIsLoggedIn = this.userService.isLoggedIn();
   }
 
   public delete() {

@@ -4,6 +4,8 @@ import userCtrl from '../controllers/user.controller';
 import logger from '../logger';
 import routerService from '../services/router.service';
 
+require('../config/passport')(passport);
+
 const router = express.Router();
 
 router.use((req, res, next) => routerService.jwtValid(req, res, next));
@@ -59,12 +61,24 @@ router.route('/login').post(async (req, res) => {
   }
 });
 
-router.route('/:id').get(passport.authenticate('jwt', { session: false }), (req, res) => {
-  userCtrl.getUserById(req.params.id).then((user) => {
+router.route('/:id').get((req, res) => {
+  const promise = [];
+  let by = '';
+  if (req.params.id.startsWith('JWT')) {
+    by = 'token';
+    const token = req.params.id.split('JWT')[1].trim();
+    promise.push(userCtrl.getUserByToken(token));
+  } else {
+    by = 'id';
+    promise.push(userCtrl.getUserById(req.params.id));
+  }
+
+  Promise.all(promise).then((result) => {
+    const user = result[0];
     logger.info(`GET User by id with result ${user}`);
     res.status(200).send({ user });
   }).catch((err) => {
-    const msg = { error: 'GET User by id with no result.', stack: err };
+    const msg = { error: `GET User by ${by} with no result.`, stack: err };
     logger.error(msg);
     res.status(400).send(msg);
   });

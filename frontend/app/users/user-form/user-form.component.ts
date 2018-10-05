@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User, Address, Role } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
@@ -20,9 +20,10 @@ export class UserFormComponent implements OnInit {
 
   editView: Boolean;
   userId: String;
+  isAdmin: Boolean;
 
   address: Address = new Address(undefined, undefined, undefined, undefined);
-  role: Role = new Role(undefined);
+  role: Role = new Role('user'); // default on register is user
   user: User = new User(undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.address, this.role);
   translationFields = {
     title: '',
@@ -71,20 +72,24 @@ export class UserFormComponent implements OnInit {
     private location: Location,
     private modalService: NgbModal,
     private translateService: TranslateService,
-    private genericService: GenericService
+    private genericService: GenericService,
+    private route: ActivatedRoute
   ) {
     this.router.events.subscribe(() => {
       const route = this.location.path();
       this.editView = route.indexOf(`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.update}`) >= 0;
-      if (this.editView) {
-        const routeArr = route.split('/');
-        this.userId = routeArr[routeArr.length - 1];
+    });
+    this.route.params.subscribe(params => {
+      if (params.id) {
+        this.userId = params.id;
       }
     });
   }
 
   async ngOnInit() {
     await this._loadRoles();
+    await this._initializeUser(this.userId);
+    this.isAdmin = await this.userService.isAdmin();
     this._translate();
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
@@ -128,6 +133,13 @@ export class UserFormComponent implements OnInit {
 
   // Private Functions
 
+  private async _initializeUser(id) {
+    if (id !== undefined) {
+      this.user = await this.userService.getProfile(id);
+      this.user.address = this.user.hasOwnProperty('address') ? this.user.address : this.address;
+      this.user.role = this.user.hasOwnProperty('role') ? this.user.role : this.role;
+    }
+  }
   private async _loadRoles() {
     this.loadingRoles = true;
     this.validRoles = (await this.userService.getRoles()).roles;

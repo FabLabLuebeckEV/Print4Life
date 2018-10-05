@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
@@ -97,15 +97,17 @@ export class CreateOrderComponent implements OnInit {
     private modalService: NgbModal,
     private configService: ConfigService,
     private genericService: GenericService,
-    private translateService: TranslateService) {
+    private translateService: TranslateService,
+    private route: ActivatedRoute) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
     this.router.events.subscribe(() => {
       const route = this.location.path();
       this.editView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0;
-      if (this.editView) {
-        const routeArr = route.split('/');
-        this.orderId = routeArr[routeArr.length - 1];
+    });
+    this.route.params.subscribe(params => {
+      if (params.id) {
+        this.orderId = params.id;
       }
     });
   }

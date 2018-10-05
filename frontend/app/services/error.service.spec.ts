@@ -2,10 +2,14 @@ import { TestBed, inject } from '@angular/core/testing';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ErrorService } from './error.service';
 
+import {
+  HttpClientTestingModule
+} from '@angular/common/http/testing';
+
 describe('ErrorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [NgbModule.forRoot()],
+      imports: [NgbModule.forRoot(), HttpClientTestingModule],
       providers: [NgbActiveModal, ErrorService]
     });
   });

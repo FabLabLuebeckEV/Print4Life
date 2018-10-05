@@ -11,6 +11,7 @@ import { routes } from '../../config/routes';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-order-list',
@@ -19,6 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class OrderListComponent implements OnInit {
   private config: any;
+  private userIsLoggedIn: boolean;
   createLink: String;
   orders: Array<TableItem> = [];
   visibleOrders: Array<TableItem> = [];
@@ -83,7 +85,8 @@ export class OrderListComponent implements OnInit {
     private modalService: NgbModal,
     private configService: ConfigService,
     private spinner: NgxSpinnerService,
-    private translateService: TranslateService) {
+    private translateService: TranslateService,
+    private userService: UserService) {
     this.config = this.configService.getConfig();
     this.spinnerConfig = { 'loadingText': 'Loading Orders', ...this.config.spinnerConfig };
     this.createLink = `./${routes.paths.frontend.orders.create}`;
@@ -112,6 +115,7 @@ export class OrderListComponent implements OnInit {
       this.orders = [];
       await this._loadStatus();
       await this._loadMachineTypes();
+      this.userIsLoggedIn = await this.userService.isLoggedIn();
       this._translate();
       this.init();
     }
@@ -192,15 +196,18 @@ export class OrderListComponent implements OnInit {
         item.obj['Editor'] = { label: order.editor };
         item.obj['Status'] = { label: order.status };
         item.obj['Device Type'] = { label: order.machine.type };
-        item.button1.label = this.translationFields.buttons.updateLabel;
-        item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
-        item.button1.class = 'btn btn-warning spacing';
-        item.button1.icon = this.config.icons.edit;
-        item.button2.label = this.translationFields.buttons.deleteLabel;
-        item.button2.eventEmitter = true;
-        item.button2.class = 'btn btn-danger spacing';
-        item.button2.icon = this.config.icons.delete;
-        item.button2.refId = order._id;
+        if (this.userIsLoggedIn) {
+          item.button1.label = this.translationFields.buttons.updateLabel;
+          item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
+          item.button1.class = 'btn btn-warning spacing';
+          item.button1.icon = this.config.icons.edit;
+          item.button2.label = this.translationFields.buttons.deleteLabel;
+          item.button2.eventEmitter = true;
+          item.button2.class = 'btn btn-danger spacing';
+          item.button2.icon = this.config.icons.delete;
+          item.button2.refId = order._id;
+        }
+
         arr.push(item);
       }
 

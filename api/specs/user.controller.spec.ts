@@ -32,7 +32,7 @@ describe('User Controller', () => {
         expect(user.firstname).toEqual(testUser.firstname);
         expect(user.lastname).toEqual(testUser.lastname);
         expect(user.email).toEqual(testUser.email);
-        expect(user.role.role).toEqual(testUser.role);
+        expect(user.role.role).toEqual(testUser.role.role);
         expect(user.address.street).toEqual(testUser.address.street);
         expect(user.address.zipCode).toEqual(testUser.address.zipCode);
         expect(user.address.city).toEqual(testUser.address.city);
