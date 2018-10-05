@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-order-detail',
@@ -49,7 +50,6 @@ export class OrderDetailComponent implements OnInit {
       comments: '',
       author: '',
       content: '',
-      timestamp: '',
       files: '',
       file: ''
     },
@@ -155,7 +155,8 @@ export class OrderDetailComponent implements OnInit {
   }
 
   private _translate() {
-    this.translateService.get(['orderDetail', 'deviceTypes', 'status']).subscribe((translations => {
+    const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
+    this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
       if (this.order && this.order.status) {
         this._translateStatus().then((shownStatus) => {
           this.order['shownStatus'] = shownStatus;
@@ -165,6 +166,16 @@ export class OrderDetailComponent implements OnInit {
       if (this.machine && this.machine.type) {
         this._translateMachineType().then((shownType) => {
           this.machine['shownType'] = shownType;
+        });
+      }
+
+      if (this.order && this.order.comments) {
+        this.order.comments.forEach((comment) => {
+          if (comment.createdAt) {
+            let createdAt = moment(comment.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
+            createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
+            comment['shownCreatedAt'] = createdAt;
+          }
         });
       }
 
@@ -179,7 +190,6 @@ export class OrderDetailComponent implements OnInit {
           comments: translations['orderDetail'].labels.comments,
           author: translations['orderDetail'].labels.author,
           content: translations['orderDetail'].labels.content,
-          timestamp: translations['orderDetail'].labels.timestamp,
           files: translations['orderDetail'].labels.files,
           file: translations['orderDetail'].labels.file
         },

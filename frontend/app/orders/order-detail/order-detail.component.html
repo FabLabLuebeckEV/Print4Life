@@ -40,7 +40,7 @@
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.createdAt}}</td>
-            <td class="align-middle text-center">{{order.createdAt | date:'short'}}</td>
+            <td class="align-middle text-center">{{order['shownCreatedAt']}}</td>
           </tr>
           <tr *ngIf="machine">
             <td class="align-middle text-center">{{translationFields.labels.machine}}</td>
@@ -73,14 +73,14 @@
           <tr>
             <th class="align-middle text-center" scope="col">{{translationFields.labels.author}}</th>
             <th class="align-middle text-center" scope="col">{{translationFields.labels.content}}</th>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.timestamp}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let comment of order.comments">
             <td class="align-middle text-center">{{comment.author}}</td>
             <td class="align-middle text-center">{{comment.content}}</td>
-            <td class="align-middle text-center">{{comment.createdAt | date:'short'}}</td>
+            <td class="align-middle text-center">{{comment['shownCreatedAt']}}</td>
           </tr>
         </tbody>
       </table>
@@ -100,7 +100,7 @@
           <tr>
             <th class="align-middle text-center" scope="col">{{translationFields.labels.author}}</th>
             <th class="align-middle text-center" scope="col">{{translationFields.labels.file}}</th>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.timestamp}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
           </tr>
         </thead>
         <tbody>

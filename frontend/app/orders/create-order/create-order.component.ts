@@ -7,12 +7,12 @@ import { FablabService } from '../../services/fablab.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { Machine } from '../../models/machines.model';
-
 import { Order, Comment, SimpleMachine } from '../../models/order.model';
 import { ConfigService } from '../../config/config.service';
 import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
+import * as moment from 'moment';
 
 
 @Component({
@@ -63,7 +63,7 @@ export class CreateOrderComponent implements OnInit {
       newComment: '',
       author: '',
       content: '',
-      timestamp: '',
+      createdAt: '',
     },
     modals: {
       ok: '',
@@ -101,6 +101,7 @@ export class CreateOrderComponent implements OnInit {
     private route: ActivatedRoute) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
+    this._translate();
     this.router.events.subscribe(() => {
       const route = this.location.path();
       this.editView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0;
@@ -119,7 +120,8 @@ export class CreateOrderComponent implements OnInit {
     await this._loadMachineTypes();
     await this._loadFablabs();
     await this._loadStatus();
-    this._initializeOrder(this.orderId);
+    await this._initializeOrder(this.orderId);
+    this.machineSelected();
     this._translate();
   }
 
@@ -232,13 +234,15 @@ export class CreateOrderComponent implements OnInit {
   }
 
   machineSelected() {
-    this.machines.forEach(element => {
-      if (element._id === this.order.machine._id) {
-        this.order.machine['deviceName'] = element.deviceName;
-      }
-    });
-    const type = this.machineService.camelCaseTypes(this.order.machine.type);
-    this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.order.machine._id}/`;
+    if (this.order.machine.type && this.order.machine._id) {
+      this.machines.forEach(element => {
+        if (element._id === this.order.machine._id) {
+          this.order.machine['deviceName'] = element.deviceName;
+        }
+      });
+      const type = this.machineService.camelCaseTypes(this.order.machine.type);
+      this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.order.machine._id}/`;
+    }
   }
 
   // Private Functions
@@ -250,9 +254,8 @@ export class CreateOrderComponent implements OnInit {
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
       this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
       const machineId = this.order.machine._id;
-      await this.machineTypeChanged(this.order.machine['shownType']);
+      this.machineTypeChanged(this.order.machine['shownType']);
       this.order.machine._id = machineId;
-      this.machineSelected();
     }
   }
 
@@ -339,7 +342,8 @@ export class CreateOrderComponent implements OnInit {
   }
 
   private _translate() {
-    this.translateService.get(['orderForm', 'deviceTypes', 'status']).subscribe((translations => {
+    const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
+    this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date']).subscribe((translations => {
       const shownMachineTypes = [];
       const shownStatus = [];
       this.machineTypes.forEach((mType) => {
@@ -371,6 +375,16 @@ export class CreateOrderComponent implements OnInit {
           console.log(error);
         });
       }
+
+      if (this.order && this.order.comments) {
+        this.order.comments.forEach((comment) => {
+          if (comment.createdAt) {
+            let createdAt = moment(comment.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
+            createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
+            comment['shownCreatedAt'] = createdAt;
+          }
+        });
+      }
       this.translationFields = {
         title: this.editView ? translations['orderForm'].editTitle : translations['orderForm'].createTitle,
         shownMachineTypes: shownMachineTypes,
@@ -390,7 +404,7 @@ export class CreateOrderComponent implements OnInit {
           newComment: translations['orderForm'].labels.newComment,
           author: translations['orderForm'].labels.author,
           content: translations['orderForm'].labels.content,
-          timestamp: translations['orderForm'].labels.timestamp
+          createdAt: translations['orderForm'].labels.createdAt
         },
         modals: {
           ok: translations['orderForm'].modals.ok,

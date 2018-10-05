@@ -1,4 +1,8 @@
 {
+    "date": {
+        "dateFormat": "DD/MM/YYYY",
+        "dateTimeFormat": "DD/MM/YYYY hh:mm a"
+    },
     "dashboard": {
         "title": "Welcome to Fablab - Order Management! "
     },
@@ -204,7 +208,7 @@
             "newComment": "New Comment",
             "author": "Author",
             "content": "Content",
-            "timestamp": "Timestamp"
+            "createdAt": "Created at"
         },
         "modals": {
             "ok": "Ok",
@@ -236,13 +240,12 @@
             "owner": "Owner",
             "editor": "Editor",
             "status": "Status",
-            "createdAt": "Created",
+            "createdAt": "Created at",
             "machine": "Machine",
             "fablab": "Fablab",
             "comments": "Comments",
             "author": "Author",
             "content": "Content",
-            "timestamp": "Timestamp",
             "files": "Files",
             "file": "File"
         },
