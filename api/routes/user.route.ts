@@ -1,10 +1,8 @@
 import * as express from 'express';
-import * as passport from 'passport';
 import userCtrl from '../controllers/user.controller';
 import logger from '../logger';
 import routerService from '../services/router.service';
-
-require('../config/passport')(passport);
+import validatorService from '../services/validator.service';
 
 const router = express.Router();
 
@@ -56,32 +54,55 @@ router.route('/login').post(async (req, res) => {
   }
 
   if (login.success) {
-    logger.info(`${user.username} successfully logged in with token: ${login.token}`);
+    logger.info(`${user.username} successfully logged in with token ${login.token}`);
     res.status(200).send({ login });
   }
 });
 
-router.route('/:id').get((req, res) => {
-  const promise = [];
-  let by = '';
-  if (req.params.id.startsWith('JWT')) {
-    by = 'token';
-    const token = req.params.id.split('JWT')[1].trim();
-    promise.push(userCtrl.getUserByToken(token));
+router.route('/findown').get((req, res) => {
+  if (req.headers && req.headers.authorization && typeof req.headers.authorization === 'string') {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    userCtrl.getUserByToken(token).then((user) => {
+      if (user) {
+        logger.info(`GET User by token with result ${user}`);
+        res.status(200).send({ user });
+      } else {
+        const msg = { error: 'GET User by token with no result.' };
+        logger.error(msg);
+        res.status(404).send(msg);
+      }
+    }).catch((err) => {
+      const msg = { error: 'Error while retrieving the user.', stack: err };
+      logger.error(msg);
+      res.status(500).send(msg);
+    });
   } else {
-    by = 'id';
-    promise.push(userCtrl.getUserById(req.params.id));
-  }
-
-  Promise.all(promise).then((result) => {
-    const user = result[0];
-    logger.info(`GET User by id with result ${user}`);
-    res.status(200).send({ user });
-  }).catch((err) => {
-    const msg = { error: `GET User by ${by} with no result.`, stack: err };
+    const msg = { error: 'No Authorization Header with JWT Token given.' };
     logger.error(msg);
     res.status(400).send(msg);
-  });
+  }
+});
+
+router.route('/:id').get((req, res) => {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    userCtrl.getUserById(req.params.id).then((user) => {
+      if (user) {
+        logger.info(`GET User by id with result ${user}`);
+        res.status(200).send({ user });
+      } else {
+        const msg = { error: 'GET User by id with no result.' };
+        logger.error(msg);
+        res.status(404).send(msg);
+      }
+    }).catch((err) => {
+      const msg = { error: 'Error while retrieving the user.', stack: err };
+      logger.error(msg);
+      res.status(500).send(msg);
+    });
+  }
 });
 
 

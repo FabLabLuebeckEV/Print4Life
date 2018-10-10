@@ -3,20 +3,22 @@ import { Observable, of } from 'rxjs';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { ErrorService } from './error.service';
+import { UserService } from './user.service';
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
-    constructor(private errorService: ErrorService) {
+    constructor(private errorService: ErrorService, private userService: UserService) {
 
     }
     public intercept(request: HttpRequest<any>, handler: HttpHandler): Observable<HttpEvent<any>> {
         // intercept http requests and add with credentials for cors
         let headers = request.headers
             .append('content-type', 'application/json');
-        if (localStorage.getItem('orderManagementJWTToken')) {
-            headers = headers.append('Authorization', `${localStorage.getItem('orderManagementJWTToken')}`);
+        if (localStorage.getItem(this.userService.getLocalStorageTokenName())) {
+            headers = headers.append('authorization', `${localStorage.getItem(this.userService.getLocalStorageTokenName())}`);
         }
-        return handler.handle(request.clone({ headers, withCredentials: true })).pipe(catchError((error, caught) => {
+        request = request.clone({ headers, withCredentials: true });
+        return handler.handle(request).pipe(catchError((error, caught) => {
             this.handleError(error);
             return of(error);
         }) as any);

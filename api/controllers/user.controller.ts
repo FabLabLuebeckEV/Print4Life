@@ -2,7 +2,6 @@ import * as jwt from 'jsonwebtoken';
 
 import { User } from '../models/user.model';
 import { Role, roleSchema } from '../models/role.model';
-import { JWT } from '../models/jwt.model';
 import config from '../config/config';
 
 /**
@@ -134,14 +133,19 @@ async function getRoles () {
 function login (user, password): Promise<Object> {
   return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
     if (isMatch && !err) {
-      const token = jwt.sign(user.toJSON(), config.jwtSecret);
-      user.jwt = new JWT({ token, issuedAt: new Date() });
-      user.save()
-        .then(() => {
-          resolve({ success: true, token: `JWT ${token}` });
-        }).catch((err) => {
-          reject({ success: false, msg: 'Saving JWT failed', stack: err });
-        });
+      const signObj = {
+        _id: user._id,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        address: user.address ? user.address.toJSON() : undefined,
+        password: user.password,
+        role: user.role.toJSON(),
+        createdAt: user.createdAt
+      };
+      const token = jwt.sign(signObj, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
+      resolve({ success: true, token: `JWT ${token}` });
     } else {
       reject({ success: false, msg: 'Authentication failed. Wrong password.' });
     }
@@ -152,12 +156,114 @@ async function getUserByUsername (username) {
   return User.findOne({ username });
 }
 
+/**
+ * @api {post} /api/v1/users/:id gets a user by its id
+ * @apiName getUserById
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { user } the user object, if success
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "user": {
+        "_id": "5bb21bb7cf8826848381a4f6",
+        "firstname": "Hans",
+        "lastname": "Der Tester",
+        "username": "Hansi",
+        "password": "$2b$10$YUn2.qB4H.fvBwUH/aQYO.HCGWek.XIlSS/.SSddYzyvGtTy9tMsO",
+        "email": "hansi@alm.de",
+        "address": {
+            "street": "Middlehofer Straße 42",
+            "zipCode": "421337",
+            "city": "Geldhausen",
+            "country": "Luxemburg"
+        },
+        "createdAt": "2018-10-01T13:05:59.429Z",
+        "role": {
+            "role": "admin"
+        },
+        "__v": 0
+    }
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "error": "'GET User by id with no result.'",
+  }
+
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+    "error": "Id needs to be a 24 character long hex string!"
+  }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while retrieving the user.",
+      "stack": {
+          ...
+      }
+  }
+ */
 async function getUserById (id) {
   return User.findById(id);
 }
 
+/**
+ * @api {post} /api/v1/users/findown gets the logged in user
+ * @apiName findOwnUser
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { user } the user object, if success
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "user": {
+        "_id": "5bb21bb7cf8826848381a4f6",
+        "firstname": "Hans",
+        "lastname": "Der Tester",
+        "username": "Hansi",
+        "password": "$2b$10$YUn2.qB4H.fvBwUH/aQYO.HCGWek.XIlSS/.SSddYzyvGtTy9tMsO",
+        "email": "hansi@alm.de",
+        "address": {
+            "street": "Middlehofer Straße 42",
+            "zipCode": "421337",
+            "city": "Geldhausen",
+            "country": "Luxemburg"
+        },
+        "createdAt": "2018-10-01T13:05:59.429Z",
+        "role": {
+            "role": "admin"
+        },
+        "__v": 0
+    }
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "error": "'GET User by token with no result.'",
+  }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while retrieving the user.",
+      "stack": {
+          ...
+      }
+  }
+ */
 async function getUserByToken (token) {
-  return User.findOne({ 'jwt.token': token });
+  const decoded = await jwt.verify(token, config.jwtSecret);
+  return getUserById(decoded._id);
 }
 
 export default {

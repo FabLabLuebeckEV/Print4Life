@@ -35,6 +35,7 @@ export const appRoutes: Routes = [
     {
         path: routes.paths.frontend.machines.root,
         component: MachineListComponent,
+        runGuardsAndResolvers: 'always',
         children: [
             { path: routes.paths.frontend.machines.create, component: MachineFormComponent, canActivate: [AuthGuard], },
             { path: `${routes.paths.frontend.machines.update}/:type/:id`, component: MachineFormComponent, canActivate: [AuthGuard], },
@@ -45,6 +46,7 @@ export const appRoutes: Routes = [
     {
         path: routes.paths.frontend.orders.root,
         component: OrderListComponent,
+        runGuardsAndResolvers: 'always',
         children: [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent, canActivate: [AuthGuard], },
@@ -55,6 +57,7 @@ export const appRoutes: Routes = [
     {
         path: routes.paths.frontend.users.root,
         component: UserComponent,
+        runGuardsAndResolvers: 'always',
         children: [
             { path: routes.paths.frontend.users.signup, component: UserFormComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent }
@@ -62,6 +65,7 @@ export const appRoutes: Routes = [
     },
     {
         path: '',
-        component: DashboardComponent
+        component: DashboardComponent,
+        runGuardsAndResolvers: 'always'
     }
 ];

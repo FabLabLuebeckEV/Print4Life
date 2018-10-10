@@ -8,7 +8,8 @@ export const routes = {
             users: {
                 root: 'users',
                 getRoles: 'roles',
-                login: 'login'
+                login: 'login',
+                findown: 'findown'
             },
             orders: {
                 root: 'orders',

@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginModalComponent } from '../../users/login-modal/login-modal.component';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
+import { Location } from '@angular/common';
 
 interface Dropdown {
   name: String;
@@ -143,16 +144,16 @@ export class NavigationComponent implements OnInit {
   private _login() {
     this.modalService.open(LoginModalComponent, { size: 'sm' }).result.then((login) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
-      this.router.navigate(['/']);
+      this.router.navigate([this.router.url]);
     }).catch((err) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
     });
   }
 
   private _logout() {
-    this.router.navigate(['/']);
     this.userService.logout();
     this.userIsLoggedIn = this.userService.isLoggedIn();
+    this.router.navigate(['/']);
   }
 
   private _register() {

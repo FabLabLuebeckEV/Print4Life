@@ -11,15 +11,20 @@ import { routes } from './config/routes';
 export class AppComponent {
     version: String;
     softwareName: String;
+    defaultLangStorageName = 'orderManagementLang';
     constructor(private translateService: TranslateService, private http: HttpClient) {
         const promise = this.http.get(`${routes.backendUrl}/version`).toPromise();
         promise.then((result: any) => {
             this.version = result.version;
         });
-        this.translateService.setDefaultLang('en');
+        if (!localStorage.getItem(this.defaultLangStorageName)) {
+            localStorage.setItem(this.defaultLangStorageName, 'en');
+        }
+        this.translateService.setDefaultLang(localStorage.getItem(this.defaultLangStorageName));
         this._translate();
         this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
             this.translateService.use(event.lang);
+            localStorage.setItem(this.defaultLangStorageName, event.lang);
             this._translate();
         });
     }

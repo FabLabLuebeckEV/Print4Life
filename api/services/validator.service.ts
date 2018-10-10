@@ -1,8 +1,16 @@
 import * as mongoose from 'mongoose';
-import { User } from '../models/user.model';
+import * as jwt from 'jsonwebtoken';
 import config from '../config/config';
 
-function checkId (id) {
+/* eslint-disable no-undef */
+export interface TokenCheck {
+  tokenOk: boolean;
+  error: any;
+  decoded: any;
+}
+/* eslint-enable no-undef */
+
+function checkId (id: string) {
   let retObj;
   const valid = mongoose.Types.ObjectId.isValid(id);
   if (!valid) {
@@ -13,21 +21,19 @@ function checkId (id) {
   return retObj;
 }
 
-async function checkToken (req): Promise<Boolean> {
-  let ret = false;
+async function checkToken (req): Promise<TokenCheck> {
+  let ret: TokenCheck;
   let token;
   let split;
   if (req.headers && req.headers.authorization) {
     split = req.headers.authorization.split('JWT');
     token = split && split.length > 1 ? split[1].trim() : undefined;
     if (token) {
-      const user = await User.findOne({ 'jwt.token': token });
-      if (user && user.jwt.issuedAt) {
-        const today = new Date();
-        const diff = today.valueOf() - user.jwt.issuedAt.valueOf();
-        if (diff < config.jwtExpiryTime) {
-          ret = true;
-        }
+      try {
+        const decoded = await jwt.verify(token, config.jwtSecret);
+        ret = { tokenOk: true, error: undefined, decoded };
+      } catch (error) {
+        ret = { tokenOk: false, error, decoded: undefined };
       }
     }
   }

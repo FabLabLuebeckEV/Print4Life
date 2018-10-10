@@ -273,7 +273,10 @@ export class CreateOrderComponent implements OnInit {
 
   private async _loadFablabs() {
     this.loadingFablabs = true;
-    this.fablabs = (await this.fablabService.getFablabs()).fablabs;
+    const result = await this.fablabService.getFablabs();
+    if (result && result.fablabs) {
+      this.fablabs = result.fablabs;
+    }
     this.loadingFablabs = false;
   }
 

@@ -4,13 +4,13 @@ import config from '../config/config';
 
 async function jwtValid (req, res, next) {
   let ret;
+  const tc = await validatorService.checkToken(req);
   let msg = 'Unauthorized! Please login with a user who is allowed to use this route';
-  const tokenOk = await validatorService.checkToken(req);
-  if (_isPublicRoute(req.originalUrl, req.method) || tokenOk) {
+  if (_isPublicRoute(req.originalUrl, req.method) || (tc && tc.tokenOk)) {
     ret = next();
-  } else if (!tokenOk) {
+  } else if (tc && !tc.tokenOk) {
     msg = 'Token expired. Please login again!';
-    logger.error(msg);
+    logger.error(`${tc.error.name}: ${msg}`);
     ret = res.status(401).send({ error: msg });
   } else {
     logger.error(msg);

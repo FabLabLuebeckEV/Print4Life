@@ -1,7 +1,6 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
-import * as passport from 'passport';
 
 import routes from './routes/index.route';
 import config from './config/config';
@@ -13,8 +12,6 @@ class App {
     this.express = express();
     this.setCorsOptions();
     this.mountRoutes();
-
-    this.initPassport();
   }
 
   private mountRoutes (): void {
@@ -45,10 +42,6 @@ class App {
     } else {
       this.express.use(cors());
     }
-  }
-
-  private initPassport () {
-    this.express.use(passport.initialize());
   }
 }
 

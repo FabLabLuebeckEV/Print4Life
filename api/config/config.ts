@@ -2,7 +2,12 @@ const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
 const ngPort = process.env.NG_PORT || 4200;
 const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
-const jwtExpiryTime = 2 * 60 * 60 * 1000; // 2 hours (conversion from ms to hours)
+/**
+ * set to 2 hours
+ * (values without unit are by default ms,
+ * see https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
+ */
+const jwtExpiryTime = '2h';
 const baseUrl = '/api/v1/';
 const publicRoutes = [
   {
@@ -47,7 +52,7 @@ const dev = {
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',
-    maxSize: '2m',
+    maxSize: '5m',
     maxFiles: '10'
   },
   connections: {
@@ -104,7 +109,7 @@ const test = {
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',
-    maxSize: '2m',
+    maxSize: '5m',
     maxFiles: '5'
   },
   connections: {
@@ -126,7 +131,7 @@ const testLocal = {
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',
-    maxSize: '2m',
+    maxSize: '5m',
     maxFiles: '5'
   },
   connections: {

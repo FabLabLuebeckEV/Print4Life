@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../components/message-modal/message-modal.component';
 import { UserService } from './user.service';
+import { Router } from '@angular/router';
 
 
 export interface Error {
@@ -14,7 +15,7 @@ export interface Error {
 })
 export class ErrorService {
 
-  constructor(private modalService: NgbModal, private userService: UserService) {
+  constructor(private modalService: NgbModal, private userService: UserService, private router: Router) {
   }
 
   public showError(err: Error) {
@@ -23,6 +24,7 @@ export class ErrorService {
       okButton, undefined).result.then(() => {
         if (err.stack.includes('expired')) {
           this.userService.logout();
+          this.router.navigate(['/']);
         }
       });
   }

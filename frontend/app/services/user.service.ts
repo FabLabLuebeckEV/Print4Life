@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { routes } from '../config/routes';
 import { User } from '../models/user.model';
@@ -14,6 +14,11 @@ export class UserService {
   constructor(private http: HttpClient) {
     this.token = localStorage.getItem(this.tokenStorageName);
     this.p = routes.backendUrl + '/' + routes.paths.backend.users.root;
+    this.getUser().then((user) => {
+      this.user = user;
+    }).catch(() => {
+      this.user = undefined;
+    });
   }
 
   public getRoles(): Promise<any> {
@@ -24,8 +29,16 @@ export class UserService {
     return this.http.post(`${this.p}/`, user).toPromise();
   }
 
-  public async getProfile(id): Promise<any> {
+  public async getProfile(id: String): Promise<any> {
     const result = await this.http.get(`${this.p}/${id}`).toPromise();
+    if (result && result.hasOwnProperty('user')) {
+      return result['user'];
+    }
+    return undefined;
+  }
+
+  public async findOwn(): Promise<any> {
+    const result = await this.http.get(`${this.p}/${routes.paths.backend.users.findown}`).toPromise();
     if (result && result.hasOwnProperty('user')) {
       return result['user'];
     }
@@ -74,7 +87,7 @@ export class UserService {
     if (this.user) {
       return this.user;
     } else if (this.token) {
-      const user = await this.getProfile(this.token);
+      const user = await this.findOwn();
       if (user) {
         this.user = user;
         return this.user;
@@ -95,5 +108,9 @@ export class UserService {
       isAdmin = this.user && this.user.role && this.user.role.role === 'admin';
     }
     return isAdmin;
+  }
+
+  public getLocalStorageTokenName(): string {
+    return this.tokenStorageName;
   }
 }

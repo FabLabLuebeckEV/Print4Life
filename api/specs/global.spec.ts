@@ -1,14 +1,14 @@
 
-
+import * as jwt from 'jsonwebtoken';
 import * as request from 'request';
 import * as configs from '../config/config';
 import { User } from '../models/user.model';
-import { JWT } from '../models/jwt.model';
 import { Role } from '../models/role.model';
 
 const Jasmine = require('jasmine');
 const server = require('../index');
 
+const env = process.env.NODE_ENV;
 const jasmineLib = new Jasmine();
 export const testUser = {
   firstname: 'Hans',
@@ -32,8 +32,8 @@ export const newTimeout = 60 * 1000;
 let token;
 
 server.run();
-User.findOne({ username: testUser.username }).then(async (result) => {
-  if (!result) {
+User.findOne({ username: testUser.username }).then(async (user) => {
+  if (!user) {
     testUser.createdAt = new Date();
     const newUser = new User({
       ...testUser
@@ -52,15 +52,23 @@ User.findOne({ username: testUser.username }).then(async (result) => {
       }, async (err, response) => {
         if (response && response.body && response.body.login && response.body.login.token) {
           token = response.body.login.token.split('JWT')[1].trim();
-          newUser.jwt = new JWT({ token, issuedAt: new Date() });
           await newUser.save();
           startJasmin();
         }
       });
   } else {
-    token = result.jwt.token;
-    result.jwt.issuedAt = new Date();
-    await result.save();
+    const signObj = {
+      _id: user._id,
+      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      address: user.address ? user.address.toJSON() : undefined,
+      password: user.password,
+      role: user.role.toJSON(),
+      createdAt: user.createdAt
+    };
+    token = jwt.sign(signObj, configs.configArr[env].jwtSecret, { expiresIn: configs.configArr[env].jwtExpiryTime });
     startJasmin();
   }
 });
