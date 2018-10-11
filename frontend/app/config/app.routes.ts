@@ -12,7 +12,7 @@ import { UserComponent } from '../users/user/user.component';
 import { Injectable } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Observable } from 'rxjs';
-import { ErrorService } from '../services/error.service';
+import { ErrorService, ErrorType } from '../services/error.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -22,9 +22,11 @@ export class AuthGuard implements CanActivate {
         const isLoggedIn = this.userService.isLoggedIn();
         if (!isLoggedIn) {
             this.errorService.showError({
+                type: ErrorType.UNAUTHORIZED,
                 status: 401,
                 statusText: 'Unauthorized',
-                stack: 'You need to login to visit this route!'
+                stack: 'You need to login to visit this route!',
+                data: undefined
             });
         }
         return isLoggedIn;

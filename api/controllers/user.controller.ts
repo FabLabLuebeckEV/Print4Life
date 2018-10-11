@@ -5,6 +5,7 @@ import { Role, roleSchema } from '../models/role.model';
 import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import emailService, { EmailOptions } from '../services/email.service';
+import { ErrorType } from '../services/router.service';
 /* eslint-enable no-unused-vars */
 
 /**
@@ -59,7 +60,7 @@ async function signUp (user) {
     role.role = user.role.role;
   }
   newUser.role = role;
-  newUser.activated = false;
+  newUser.activated = user.activated || false;
   newUser.preferredLanguage = newUser.preferredLanguage || 'en';
   return newUser.save();
 }
@@ -137,7 +138,7 @@ async function getRoles () {
  */
 function login (user, password): Promise<Object> {
   return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
-    if (isMatch && !err) {
+    if (isMatch && !err && user.activated) {
       const signObj = {
         _id: user._id,
         username: user.username,
@@ -151,6 +152,14 @@ function login (user, password): Promise<Object> {
       };
       const token = jwt.sign(signObj, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
       resolve({ success: true, token: `JWT ${token}` });
+    } else if (!user.activated) {
+      reject(
+        {
+          type: ErrorType.USER_DEACTIVATED,
+          success: false,
+          data: { userId: user._id },
+          msg: 'Your account is not activated.'
+        });
     } else {
       reject({ success: false, msg: 'Authentication failed. Wrong password.' });
     }
@@ -271,7 +280,7 @@ async function getUserByToken (token) {
   return getUserById(decoded._id);
 }
 
-function informAdmins (user) {
+function informAdmins (user, newUser: boolean) {
   let options: EmailOptions;
   if (!user.activated) {
     options = {
@@ -284,7 +293,8 @@ function informAdmins (user) {
               userName: `${user.firstname} ${user.lastname}`,
               userEmail: user.email,
               id: user._id,
-              url: `${config.baseUrlFrontend}/users/edit/${user._id}`
+              url: `${config.baseUrlFrontend}/users/edit/${user._id}`,
+              newUser
             }
     };
     User.find({ 'role.role': 'admin' }).then((admins) => {

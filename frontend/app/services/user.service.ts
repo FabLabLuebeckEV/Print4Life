@@ -48,7 +48,7 @@ export class UserService {
   public login(user): Promise<any> {
     return new Promise((resolve, reject) => {
       this.http.post(`${this.p}/${routes.paths.backend.users.login}`, user).toPromise().then((result: any) => {
-        const login = result.login;
+        const login = result && result.login ? result.login : undefined;
         if (login && login['success']) {
           this.token = login['token'];
           localStorage.setItem(this.tokenStorageName, this.token.toString());
@@ -108,6 +108,10 @@ export class UserService {
       isAdmin = this.user && this.user.role && this.user.role.role === 'admin';
     }
     return isAdmin;
+  }
+
+  public claimActivation(userId): void {
+    this.http.put(`${this.p}/activationRequest/${userId}`, undefined).toPromise();
   }
 
   public getLocalStorageTokenName(): string {

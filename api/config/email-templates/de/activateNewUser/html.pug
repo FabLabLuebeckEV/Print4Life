@@ -1,5 +1,8 @@
 p Hallo #{adminName},
-p ein neuer Benutzer hat sich registriert: #{userName} (#{userEmail})
+if newUser
+    p ein neuer Benutzer hat sich registriert: #{userName} (#{userEmail})
+else 
+    p der folgende Benutzer möchte aktiviert werden: #{userName} (#{userEmail})
 
 p Der Benutzer ist deaktiviert und kann sich nicht einloggen. Du kannst den Benutzer auf seiner Profilseite #[a(href=url) aktivieren] !
 

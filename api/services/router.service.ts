@@ -2,7 +2,7 @@ import logger from '../logger';
 import validatorService from './validator.service';
 import config from '../config/config';
 
-enum ErrorType {
+export enum ErrorType {
   TOKEN_EXPIRED,
   USER_DEACTIVATED,
   UNAUTHORIZED

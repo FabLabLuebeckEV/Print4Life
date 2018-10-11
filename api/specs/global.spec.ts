@@ -11,6 +11,7 @@ const server = require('../index');
 const env = process.env.NODE_ENV;
 const jasmineLib = new Jasmine();
 export const testUser = {
+  id: '',
   firstname: 'Hans',
   lastname: 'Der Tester',
   username: 'Hansi',
@@ -37,15 +38,17 @@ server.run();
 User.findOne({ username: testUser.username }).then(async (user) => {
   if (!user) {
     testUser.createdAt = new Date();
-    const newUser = new User({
+    testUser.id = undefined;
+    let newUser = new User({
       ...testUser
     });
     const role = new Role();
     if (testUser.role) {
-      role.role = testUser.role.role;
+      role.role = 'admin';
     }
     newUser.role = role;
-    await newUser.save();
+    newUser = await newUser.save();
+    testUser.id = newUser.id;
     await request.post(
       `${configs.configArr.prod.baseUrlBackend}users/login`, {
         headers: { 'content-type': 'application/json' },
@@ -70,6 +73,7 @@ User.findOne({ username: testUser.username }).then(async (user) => {
       role: user.role.toJSON(),
       createdAt: user.createdAt
     };
+    testUser.id = user.id;
     token = jwt.sign(signObj, configs.configArr[env].jwtSecret, { expiresIn: configs.configArr[env].jwtExpiryTime });
     startJasmin();
   }

@@ -4,11 +4,18 @@ import { MessageModalComponent, ModalButton } from '../components/message-modal/
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
 
+export enum ErrorType {
+  TOKEN_EXPIRED,
+  USER_DEACTIVATED,
+  UNAUTHORIZED
+}
 
 export interface Error {
+  type: ErrorType;
   status: Number;
   statusText: String;
   stack: String;
+  data: any;
 }
 @Injectable({
   providedIn: 'root'
@@ -19,10 +26,16 @@ export class ErrorService {
   }
 
   public showError(err: Error) {
+    let secondButton;
+    if (err.type && err.type as ErrorType === ErrorType.USER_DEACTIVATED as ErrorType) {
+      secondButton = new ModalButton('Send Activate Request', 'btn btn-success', 'Send Activate Request');
+    }
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', err.stack,
-      okButton, undefined).result.then(() => {
-        if (err.stack.includes('expired')) {
+      okButton, secondButton).result.then((result) => {
+        if (result === 'Send Activate Request') {
+          this.userService.claimActivation(err.data.userId);
+        } else if (err.type && err.type as ErrorType === ErrorType.TOKEN_EXPIRED as ErrorType) {
           this.userService.logout();
           this.router.navigate(['/']);
         }

@@ -33,6 +33,11 @@ const publicRoutes = [
     methods: ['POST']
   },
   {
+    url: `${baseUrl}users/activationRequest/`,
+    canChilds: true,
+    methods: ['PUT']
+  },
+  {
     url: `${baseUrl}users/`,
     methods: ['POST']
   },

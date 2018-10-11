@@ -1,7 +1,7 @@
 import * as express from 'express';
 import userCtrl from '../controllers/user.controller';
 import logger from '../logger';
-import routerService from '../services/router.service';
+import routerService, { ErrorType } from '../services/router.service';
 import validatorService from '../services/validator.service';
 
 const router = express.Router();
@@ -10,7 +10,7 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.post('/', (req, res) => {
   userCtrl.signUp(req.body).then((user) => {
-    userCtrl.informAdmins(user);
+    userCtrl.informAdmins(user, true);
     res.status(200).send({ user });
   }).catch((err) => {
     const msg = { error: 'Malformed user, one or more parameters wrong or missing', stack: err };
@@ -49,12 +49,17 @@ router.route('/login').post(async (req, res) => {
   try {
     login = await userCtrl.login(user, req.body.password);
   } catch (err) {
-    const msg = { error: err.msg, stack: err, login: { success: false } };
+    const msg = { type: err.type, error: err.msg, stack: err, data: undefined, login: { success: false } };
     logger.error(msg);
-    res.status(401).send(msg);
+    if (err.type === ErrorType.USER_DEACTIVATED) {
+      msg.data = err.data;
+      res.status(403).send(msg);
+    } else {
+      res.status(401).send(msg);
+    }
   }
 
-  if (login.success) {
+  if (login && login.success) {
     logger.info(`${user.username} successfully logged in with token ${login.token}`);
     res.status(200).send({ login });
   }
@@ -93,6 +98,57 @@ router.route('/:id').get((req, res) => {
       if (user) {
         logger.info(`GET User by id with result ${user}`);
         res.status(200).send({ user });
+      } else {
+        const msg = { error: 'GET User by id with no result.' };
+        logger.error(msg);
+        res.status(404).send(msg);
+      }
+    }).catch((err) => {
+      const msg = { error: 'Error while retrieving the user.', stack: err };
+      logger.error(msg);
+      res.status(500).send(msg);
+    });
+  }
+});
+
+/**
+ * @api {post} /api/v1/users/activationRequest/:id activate a user
+ * @apiName activationRequestByUser
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { object } an response object
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "msg": "Admins informed"
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "error": "'GET User by id with no result.'",
+  }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while retrieving the user.",
+      "stack": {
+          ...
+      }
+  }
+ */
+router.route('/activationRequest/:id').put((req, res) => {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    userCtrl.getUserById(req.params.id).then((user) => {
+      if (user) {
+        userCtrl.informAdmins(user, false);
+        res.status(200).send({ msg: 'Admins informed' });
       } else {
         const msg = { error: 'GET User by id with no result.' };
         logger.error(msg);
