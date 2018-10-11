@@ -2,13 +2,11 @@ import * as mongoose from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 import config from '../config/config';
 
-/* eslint-disable no-undef */
 export interface TokenCheck {
   tokenOk: boolean;
   error: any;
   decoded: any;
 }
-/* eslint-enable no-undef */
 
 function checkId (id: string) {
   let retObj;

@@ -34,14 +34,12 @@ if (env !== 'dev' && env !== 'prod') {
   });
 }
 
-/* eslint-disable no-undef */
 export interface EmailOptions {
-    preferredLanguage: string;
-    template: string;
-    to: string;
-    locals: any;
+  preferredLanguage: string;
+  template: string;
+  to: string;
+  locals: any;
 }
-/* eslint-enable no-undef */
 
 function sendMail (options: EmailOptions) {
   const dir = path.join(__dirname, '../', 'config', 'email-templates', options.preferredLanguage, options.template);
