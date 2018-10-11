@@ -10,6 +10,7 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.post('/', (req, res) => {
   userCtrl.signUp(req.body).then((user) => {
+    userCtrl.informAdmins(user);
     res.status(200).send({ user });
   }).catch((err) => {
     const msg = { error: 'Malformed user, one or more parameters wrong or missing', stack: err };

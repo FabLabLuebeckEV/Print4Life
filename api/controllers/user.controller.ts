@@ -3,6 +3,9 @@ import * as jwt from 'jsonwebtoken';
 import { User } from '../models/user.model';
 import { Role, roleSchema } from '../models/role.model';
 import config from '../config/config';
+/* eslint-disable no-unused-vars */
+import emailService, { EmailOptions } from '../services/email.service';
+/* eslint-enable no-unused-vars */
 
 /**
  * @api {post} /api/v1/users/ Adds a new order
@@ -56,6 +59,8 @@ async function signUp (user) {
     role.role = user.role.role;
   }
   newUser.role = role;
+  newUser.activated = false;
+  newUser.preferredLanguage = newUser.preferredLanguage || 'en';
   return newUser.save();
 }
 
@@ -266,8 +271,36 @@ async function getUserByToken (token) {
   return getUserById(decoded._id);
 }
 
+function informAdmins (user) {
+  let options: EmailOptions;
+  if (!user.activated) {
+    options = {
+      preferredLanguage: '',
+      template: 'activateNewUser',
+      to: '',
+      locals:
+            {
+              adminName: '',
+              userName: `${user.firstname} ${user.lastname}`,
+              userEmail: user.email,
+              id: user._id,
+              url: `${config.baseUrlFrontend}/users/edit/${user._id}`
+            }
+    };
+    User.find({ 'role.role': 'admin' }).then((admins) => {
+      admins.forEach((admin) => {
+        options.to = admin.email;
+        options.preferredLanguage = admin.preferredLanguage || 'en';
+        options.locals.adminName = `${admin.firstname} ${admin.lastname}`;
+        emailService.sendMail(options);
+      });
+    });
+  }
+}
+
 export default {
   signUp,
+  informAdmins,
   getRoles,
   login,
   getUserByUsername,

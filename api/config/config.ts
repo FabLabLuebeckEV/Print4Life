@@ -9,6 +9,11 @@ const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
  */
 const jwtExpiryTime = '2h';
 const baseUrl = '/api/v1/';
+const email = {
+  service: 'gmail',
+  address: 'iot.fablab@gmail.com',
+  password: '80ef1M4MgoGX'
+};
 const publicRoutes = [
   {
     url: `${baseUrl}orders/`,
@@ -55,6 +60,7 @@ const dev = {
     maxSize: '5m',
     maxFiles: '10'
   },
+  email,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -84,6 +90,7 @@ const prod = {
     maxSize: '10m',
     maxFiles: '30'
   },
+  email,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',
@@ -112,6 +119,7 @@ const test = {
     maxSize: '5m',
     maxFiles: '5'
   },
+  email,
   connections: {
     mongo: {
       host: 'mongodb://mongo:27017/',
@@ -134,6 +142,7 @@ const testLocal = {
     maxSize: '5m',
     maxFiles: '5'
   },
+  email,
   connections: {
     mongo: {
       host: 'mongodb://127.0.0.1:27017/',

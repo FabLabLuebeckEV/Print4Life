@@ -23,8 +23,10 @@ export const testUser = {
     country: 'Luxemburg',
   },
   role: {
-    role: 'admin'
+    role: 'user'
   },
+  preferredLanguage: 'en',
+  activated: true,
   createdAt: undefined
 };
 export const newTimeout = 60 * 1000;

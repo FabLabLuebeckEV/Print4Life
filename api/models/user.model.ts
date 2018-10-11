@@ -30,6 +30,15 @@ export const userSchema = new Schema({
   },
   address: addressSchema,
   role: roleSchema,
+  preferredLanguage: {
+    type: String,
+    required: true
+  },
+  activated: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   createdAt: {
     type: Date,
     required: true
