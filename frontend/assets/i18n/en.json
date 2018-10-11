@@ -270,6 +270,7 @@
             "passwordValidation": "Password validation",
             "email": "E-mail Address",
             "role": "Role",
+            "isActivated": "Account activated",
             "street": "Street",
             "zipCode": "Zip Code",
             "city": "City",

@@ -24,7 +24,7 @@ export class UserFormComponent implements OnInit {
 
   address: Address = new Address(undefined, undefined, undefined, undefined);
   role: Role = new Role('user'); // default on register is user
-  user: User = new User(undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.address, this.role);
+  user: User = new User(undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.address, this.role, false);
   translationFields = {
     title: '',
     shownRoles: [],
@@ -36,6 +36,7 @@ export class UserFormComponent implements OnInit {
       passwordValidation: '',
       email: '',
       role: '',
+      isActivated: '',
       street: '',
       zipCode: '',
       city: '',
@@ -205,7 +206,7 @@ export class UserFormComponent implements OnInit {
       }
 
       this.translationFields = {
-        title: true
+        title: !this.editView
           ? translations['userForm'].createTitle
           : translations['userForm'].editTitle,
         shownRoles: shownRoles,
@@ -217,11 +218,12 @@ export class UserFormComponent implements OnInit {
           passwordValidation: translations['userForm'].labels.passwordValidation,
           email: translations['userForm'].labels.email,
           role: translations['userForm'].labels.role,
+          isActivated: translations['userForm'].labels.isActivated,
           street: translations['userForm'].labels.street,
           zipCode: translations['userForm'].labels.zipCode,
           city: translations['userForm'].labels.city,
           country: translations['userForm'].labels.country,
-          submit: true
+          submit: !this.editView
             ? translations['userForm'].labels.createSubmit
             : translations['userForm'].labels.editSubmit
         },

@@ -270,6 +270,7 @@
             "passwordValidation": "Passwort Bestätigung",
             "email": "E-Mail Adresse",
             "role": "Rolle",
+            "isActivated": "Account aktiviert",
             "street": "Straße",
             "zipCode": "PLZ",
             "city": "Stadt",

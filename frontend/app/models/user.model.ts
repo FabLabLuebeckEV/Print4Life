@@ -23,7 +23,8 @@ export class User {
         public passwordValidation: String,
         public email: String,
         public address: Address,
-        public role: Role
+        public role: Role,
+        public isActivated: boolean
     ) { }
 }
 
