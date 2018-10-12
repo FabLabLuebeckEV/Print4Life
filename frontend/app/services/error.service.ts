@@ -7,7 +7,9 @@ import { Router } from '@angular/router';
 export enum ErrorType {
   TOKEN_EXPIRED,
   USER_DEACTIVATED,
-  UNAUTHORIZED
+  UNAUTHORIZED,
+  USERNAME_EXISTS,
+  EMAIL_EXISTS
 }
 
 export interface Error {

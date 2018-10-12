@@ -27,6 +27,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     private handleError(err: HttpErrorResponse): Observable<any> {
         if (err.status && err.message) {
             switch (err.status) {
+                case 400:
                 case 401:
                 case 403:
                     // console.log('handled error ' + err.status);

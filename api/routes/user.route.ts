@@ -48,15 +48,55 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
       }
   }
  */
-router.post('/', (req, res) => {
-  userCtrl.signUp(req.body).then((user) => {
-    userCtrl.informAdmins(user, true);
-    res.status(200).send({ user });
-  }).catch((err) => {
-    const msg = { error: 'Malformed user, one or more parameters wrong or missing', stack: err };
+router.post('/', async (req, res) => {
+  let user;
+  let reject = false;
+  try {
+    user = await userCtrl.getUserByUsername(req.body.username);
+    if (user) {
+      const msg = {
+        type: ErrorType.USERNAME_EXISTS,
+        error: 'Malformed user. Username already exists!',
+        stack: undefined
+      };
+      logger.error(msg);
+      reject = true;
+      res.status(400).send(msg);
+    }
+  } catch (error) {
+    const msg = {
+      error: `Error while getting the user by its username (${req.body.username})`,
+      stack: error
+    };
     logger.error(msg);
-    res.status(400).send(msg);
-  });
+  }
+
+  try {
+    user = await userCtrl.getUsers({ email: req.body.email });
+    if (user && user.length > 0) {
+      const msg = {
+        type: ErrorType.EMAIL_EXISTS,
+        error: 'Malformed user. Email Address already exists!',
+        stack: undefined
+      };
+      logger.error(msg);
+      reject = true;
+      res.status(400).send(msg);
+    }
+  } catch (error) {
+    const msg = { error: `Error while getting the user by its email address (${req.body.email})`, stack: error };
+    logger.error(msg);
+  }
+  if (!reject) {
+    userCtrl.signUp(req.body).then((user) => {
+      userCtrl.informAdmins(user, true);
+      res.status(200).send({ user });
+    }).catch((err) => {
+      const msg = { error: 'Malformed user, one or more parameters wrong or missing', stack: err };
+      logger.error(msg);
+      res.status(400).send(msg);
+    });
+  }
 });
 
 /**
@@ -266,17 +306,17 @@ router.route('/search').post((req, res) => {
   userCtrl.getUsers(req.body.query, req.body.limit, req.body.skip).then((users) => {
     if (users.length === 0) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
-        `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+                `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
       res.status(204).send({ users });
     } else if (req.body.limit && req.body.skip) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
-        `limit ${req.body.limit} skip ${req.body.skip} ` +
-        `holds partial results ${JSON.stringify(users)}`);
+                `limit ${req.body.limit} skip ${req.body.skip} ` +
+                `holds partial results ${JSON.stringify(users)}`);
       res.status(206).send({ users });
     } else {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
-        `limit ${req.body.limit} skip ${req.body.skip} ` +
-        `holds results ${JSON.stringify(users)}`);
+                `limit ${req.body.limit} skip ${req.body.skip} ` +
+                `holds results ${JSON.stringify(users)}`);
       res.status(200).send({ users });
     }
   }).catch((err) => {
