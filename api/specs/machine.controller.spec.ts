@@ -45,17 +45,4 @@ describe('Machine Controller', () => {
       done();
     });
   });
-
-  it('gets all laserTypes', (done) => {
-    request.get(`${endpoint}machines/laserTypes`, {
-      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
-      json: true
-    }, (error, response) => {
-      const laserTypes = response.body.laserTypes;
-      expect(response.statusCode).toEqual(200);
-      expect(laserTypes).toBeDefined();
-      expect(laserTypes.length).toBeGreaterThan(0);
-      done();
-    });
-  });
 });

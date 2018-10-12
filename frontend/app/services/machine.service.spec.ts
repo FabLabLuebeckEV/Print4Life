@@ -363,19 +363,6 @@ describe('MachineService', () => {
     req.flush(printerMaterials);
   }));
 
-  it('should get all laser types', inject([MachineService], (MachineService) => {
-    MachineService.getLaserTypes().then((laserTypes) => {
-      expect(laserTypes).toBeTruthy();
-      expect(laserTypes.length).toEqual(1);
-      expect(laserTypes[0].laserType).toEqual('CO2');
-    }, fail);
-
-    const req = httpTestingController.expectOne(routes.backendUrl + '/machines/laserTypes');
-    expect(req.request.method).toEqual('GET');
-
-    req.flush(laserTypes);
-  }));
-
   it('should create printer', inject([MachineService], (MachineService) => {
     MachineService.create('printer', createPrinterTest).then((printer) => {
       expect(printer).toBeTruthy();

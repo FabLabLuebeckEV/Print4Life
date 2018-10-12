@@ -8,6 +8,109 @@ const router = express.Router();
 
 router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
+/**
+ * @api {get} /api/v1/orders/ Request the list of orders
+ * @apiName GetOrders
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam (Query String) limit is the limit of objects to get
+ * @apiParam (Query String) skip is the number of objects to skip
+ * @apiSuccess {Array} orders an array of order objects
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "orders": [
+        {
+            "machine": {
+                "_id": "5b55f7bf3fe0c8b01713b3ff",
+                "type": "Printer"
+            },
+            "status": "new",
+            "_id": "5b73f77739bbd845df0cb2df",
+            "projectname": "Comment Test",
+            "comments": [
+                {
+                    "_id": "5b73f77739bbd845df0cb2e0",
+                    "author": "Test",
+                    "content": "Test Comment",
+                    "createdAt": "2018-08-15T09:50:47.475Z"
+                },
+                {
+                    "_id": "5b73f7a939bbd845df0cb2e1",
+                    "author": "Blub",
+                    "content": "Bla",
+                    "createdAt": "2018-08-15T09:51:37.983Z"
+                }
+            ],
+            "editor": "Test",
+            "owner": "Test",
+            "token": "87250a41-2587-40bf-8b09-bcd2a32b2c2d",
+            "createdAt": "2018-08-15T09:50:47.475Z",
+            "files": [],
+            "__v": 1
+        },
+        {
+            "machine": {
+                "_id": "5b55f7bf3fe0c8b01713b3e5",
+                "type": "Lasercutter"
+            },
+            "status": "new",
+            "_id": "5b73f81f39bbd845df0cb2e2",
+            "projectname": "Test 2 ",
+            "comments": [
+                {
+                    "_id": "5b73f81f39bbd845df0cb2e3",
+                    "author": "Test",
+                    "content": "Blub",
+                    "createdAt": "2018-08-15T09:53:35.043Z"
+                }
+            ],
+            "editor": "Test",
+            "owner": "Test",
+            "token": "e9a42f99-5689-4563-98ec-721abb754ba5",
+            "createdAt": "2018-08-15T09:53:35.043Z",
+            "files": [],
+            "__v": 0
+        }
+    ]
+}
+* @apiSuccessExample Success-Response:
+*    HTTP/1.1 204 No-Content
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while trying to get all orders!",
+      "stack": {
+          ...
+      }
+  }
+* @apiSuccessExample Success-Response:
+*    HTTP/1.1 206 Partial Content
+*    {
+      "orders": [
+        {
+            owner: "User X",
+            editor: "Editor Y",
+            files: {[
+                ...
+            ]},
+            status: "production",
+            comments: [{
+                    content: "Please print this.",
+                    author: "User X"
+                }, {
+                    conten: "Okay, I will do this.",
+                    author: "Editor Y"
+                }
+            ],
+        }
+      ]
+    }
+*/
 router.route('/').get((req, res) => {
   orderCtrl.getOrders(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
@@ -55,6 +158,43 @@ router.route('/search').post((req, res) => {
   });
 });
 
+/**
+* @api {post} /api/v1/orders/count Counts the Orders
+* @apiName CountOrders
+* @apiVersion 1.0.0
+* @apiGroup Orders
+* @apiHeader (Needed Request Headers) {String} Content-Type application/json
+*
+* @apiParam query is the query object for mongoose
+* @apiParamExample {json} Request-Example:
+*
+{
+  "$or":
+    [
+      {
+        "status": "new"
+      },
+      {
+        "status": "deleted"
+      }
+    ]
+}
+* @apiSuccess {Object} count the number of orders
+* @apiSuccessExample Success-Response:
+*    HTTP/1.1 200 OK
+{
+   "count": 98
+}
+*
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while counting orders!",
+      "stack": {
+          ...
+      }
+  }
+*/
 router.route('/count').post((req, res) => {
   orderCtrl.count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
@@ -65,6 +205,76 @@ router.route('/count').post((req, res) => {
   });
 });
 
+/**
+ * @api {post} /api/v1/orders/ Adds a new order
+ * @apiName createOrder
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {Object} machine simple object containing id and type of machine (required)
+ * @apiParam {String} projectName name of the project (required)
+ * @apiParam {Array} comments array of comment objects
+ * @apiParam {String} editor name of assigned editor
+ * @apiParam {String} owner name of owner of the order (required)
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+        "machine": {
+            "_id": "5b55f7bf3fe0c8b01713b3e5",
+            "type": "Lasercutter"
+        },
+        "projectname": "Test 2 ",
+        "comments": [
+            {
+                "_id": "5b73f81f39bbd845df0cb2e3",
+                "author": "Test",
+                "content": "Blub",
+                "createdAt": "2018-08-15T09:53:35.043Z"
+            }
+        ],
+        "editor": "Test",
+        "owner": "Test"
+}
+ *
+ * @apiSuccess { order } the new order object, if success
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 201 Created
+{
+    "order": {
+        "machine": {
+            "_id": "5b55f7bf3fe0c8b01713b3e5",
+            "type": "Lasercutter"
+        },
+        "status": "new",
+        "_id": "5b7403e85b1ddf5847ee59f2",
+        "projectname": "Test 2 ",
+        "comments": [
+            {
+                "_id": "5b73f81f39bbd845df0cb2e3",
+                "author": "Test",
+                "content": "Blub",
+                "createdAt": "2018-08-15T09:53:35.043Z"
+            }
+        ],
+        "editor": "Test",
+        "owner": "Test",
+        "token": "e6ae7bef-657e-48e7-9c3b-960407cd7164",
+        "createdAt": "2018-08-15T10:43:52.291Z",
+        "files": [],
+        "__v": 0
+    }
+}
+  * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "error": "Malformed order, one or more parameters wrong or missing",
+      "stack": {
+          ...
+      }
+  }
+ */
 router.route('/').post((req, res) => {
   orderCtrl.createOrder(req.body).then((order) => {
     logger.info(`POST Order with result ${JSON.stringify(order)}`);
@@ -75,6 +285,77 @@ router.route('/').post((req, res) => {
   });
 });
 
+/**
+ * @api {put} /api/v1/orders/:id Updates an order or creates it, if it doesn't exists yet.
+ * @apiName updateOrder
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {Object} machine simple object containing id and type of machine (required)
+ * @apiParam {String} projectName name of the project (required)
+ * @apiParam {Array} comments array of comment objects
+ * @apiParam {String} editor name of assigned editor
+ * @apiParam {String} status name of status of the order (required)
+ * @apiParam {String} token uuid as token for the external login (required)
+ * @apiParam {String} owner name of owner of the order (required)
+ *
+ * @apiParamExample {json} Request-Example:
+ * {
+    "order": {
+        "machine": {
+            "_id": "5b55f7bf3fe0c8b01713b3e5",
+            "type": "Lasercutter"
+        },
+        "status": "new",
+        "_id": "5b73ff2e88ccd44a93dda7db",
+        "projectname": "Test 2 ",
+        "comments": [
+            {
+                "_id": "5b73f81f39bbd845df0cb2e3",
+                "author": "Test",
+                "content": "Blub",
+                "createdAt": "2018-08-15T09:53:35.043Z"
+            }
+        ],
+        "editor": "Test",
+        "owner": "Test",
+        "token": "66b0997a-b467-49fd-a769-242fc37ce78d",
+        "createdAt": "2018-08-15T10:23:42.852Z",
+        "files": [],
+        "__v": 0
+    }
+}
+ * @apiSuccess { order } the updated order
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+  {
+  'order'; : {
+      'status'; : 'new',
+      '_id'; : '5b55cf9730b4aa4bbeaf6f68',
+      'comments'; : [
+          {
+              '_id': '5b583da5514fac1bb10832b6',
+              'author': 'Mister Foo',
+              'content': 'Hello there, could you print this?'
+          }
+      ],
+      'editor'; : 'Mister Bar',
+      'owner'; : 'Mister X',
+      'files'; : [],
+      'token'; : '42',
+      '__v'; : 0;
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "error": "Malformed update.",
+      "stack": {
+          ...
+      }
+  }
+ */
 router.route('/:id').put((req, res) => {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
@@ -90,6 +371,51 @@ router.route('/:id').put((req, res) => {
   }
 });
 
+/**
+ * @api {delete} /api/v1/orders/deleteOrder Marks an order as deleted
+ * @apiName delteOrder
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { order } the deleted order
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "order": {
+        "machine": {
+            "_id": "5b55f7bf3fe0c8b01713b3e5",
+            "type": "Lasercutter"
+        },
+        "status": "deleted",
+        "_id": "5b73ff2e88ccd44a93dda7db",
+        "projectname": "Test 2 ",
+        "comments": [
+            {
+                "_id": "5b73f81f39bbd845df0cb2e3",
+                "author": "Test",
+                "content": "Blub",
+                "createdAt": "2018-08-15T09:53:35.043Z"
+            }
+        ],
+        "editor": "Test",
+        "owner": "Test",
+        "token": "66b0997a-b467-49fd-a769-242fc37ce78d",
+        "createdAt": "2018-08-15T10:23:42.852Z",
+        "files": [],
+        "__v": 0
+    }
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "error": "Malformed Request!",
+      "stack": {
+          ...
+      }
+  }
+ */
 router.route('/:id').delete((req, res) => {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
@@ -105,6 +431,41 @@ router.route('/:id').delete((req, res) => {
   }
 });
 
+/**
+ * @api {get} /api/v1/orders/status Request all valid status
+ * @apiName getStatus
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { status } a list of valid status
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ * {
+    "status": [
+        "new",
+        "assigned",
+        "production",
+        "shipment",
+        "archived",
+        "representive",
+        "deleted"
+    ]
+}
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while trying to get all valid status!",
+      "stack": {
+          ...
+      }
+  }
+ */
 router.route('/status/').get((req, res) => {
   orderCtrl.getStatus().then((status) => {
     if (!status) {
@@ -120,6 +481,51 @@ router.route('/status/').get((req, res) => {
   });
 });
 
+/**
+ * @api {post} /api/v1/orders/:id/comment Adds a new comment to an order
+ * @apiName createOrder
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {String} author name of the writer of the comment (required)
+ * @apiParam {String} content the content of the comment (required)
+ *
+ * @apiParamExample {json} Request-Example:
+ {
+    "author": "Test",
+    "content": "Blub"
+}
+
+ * @apiSuccess { comment } the new comment object, if success
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 201 Created
+{
+    "comment": {
+        "timestamp": "2018-08-15T11:59:09.104Z",
+        "author": "Test",
+        "content": "Blub",
+        "createdAt": "2018-08-15T11:59:09.133Z"
+    }
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "error": "Could not find any Order with id 9999",
+      "stack": {
+          ...
+      }
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "error": "Malformed Request! Could not add comment to order.",
+      "stack": {
+          ...
+      }
+  }
+ */
 router.route('/:id/comment').post((req, res) => {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
@@ -140,6 +546,60 @@ router.route('/:id/comment').post((req, res) => {
   }
 });
 
+/**
+ * @api {get} /api/v1/orders/:id Request an order by its id
+ * @apiName getOrderById
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { order } a single order
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "order": {
+        "machine": {
+            "_id": "5b55f7bf3fe0c8b01713b3e5",
+            "type": "Lasercutter"
+        },
+        "status": "new",
+        "_id": "5b73f81f39bbd845df0cb2e2",
+        "projectname": "Test 2 ",
+        "comments": [
+            {
+                "_id": "5b73f81f39bbd845df0cb2e3",
+                "author": "Test",
+                "content": "Blub",
+                "createdAt": "2018-08-15T09:53:35.043Z"
+            }
+        ],
+        "editor": "Test",
+        "owner": "Test",
+        "token": "e9a42f99-5689-4563-98ec-721abb754ba5",
+        "createdAt": "2018-08-15T09:53:35.043Z",
+        "files": [],
+        "__v": 0
+    }
+}
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "error": "Could not find any Order with id 9999",
+      "stack": {
+          ...
+      }
+  }
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while trying to get Order with id 9999",
+      "stack": {
+          ...
+      }
+  }
+ */
 router.route('/:id').get((req, res) => {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
