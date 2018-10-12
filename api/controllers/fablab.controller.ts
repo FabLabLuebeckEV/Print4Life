@@ -17,12 +17,16 @@ import Fablab from '../models/fablab.model';
  *    HTTP/1.1 200 OK
 {
     "fablab": {
-        "_id": "5b51e86f5cf4a957484a8156",
-        "fid": "2",
-        "name": "FabLab EAL",
-        "phone": null,
-        "mail": "Micj@eal.dk",
-        "password": "$2y$10$f3mwR3rlkbwd8w7AZUtza.jI4FmuB9qeWvsVNXzubzxZPVW3hAW82"
+        "activated": true,
+        "_id": "5bc05a26cdd1c72c56834b6f",
+        "name": "Fablab Ostsee e.V.",
+        "address": {
+            "street": "Milkyway 5",
+            "zipCode": "33445",
+            "city": "City of Nowhere",
+            "country": "Dreamland"
+        },
+        "__v": 0
     }
 }
  * @apiError 400 The request is malformed (most likely a wrong type of id is given)
@@ -42,7 +46,7 @@ import Fablab from '../models/fablab.model';
  *
  */
 
-function getFablab (id) {
+function get (id) {
   const _id = mongoose.Types.ObjectId(id);
   return Fablab.findOne({ _id });
 }
@@ -61,11 +65,28 @@ function getFablab (id) {
 {
     "fablabs": [
         {
-            "_id": "5b453ddb5cf4a9574849e98a",
-            "name": "test",
-            "phone": 1234,
-            "mail": "test@test.de",
-            "password": "$2y$10$sDebOY1Kx8LZNczsF3XjoOqdZHRJK0J80hc7SdEZ19hKDFmkx0owG"
+            "activated": true,
+            "_id": "5bc05a26cdd1c72c56834b6d",
+            "name": "Updated",
+            "address": {
+                "street": "Milkyway 5",
+                "zipCode": "33445",
+                "city": "City of Nowhere",
+                "country": "Dreamland"
+            },
+            "__v": 0
+        },
+        {
+            "activated": true,
+            "_id": "5bc05a26cdd1c72c56834b6f",
+            "name": "Fablab Ostsee e.V.",
+            "address": {
+                "street": "Milkyway 5",
+                "zipCode": "33445",
+                "city": "City of Nowhere",
+                "country": "Dreamland"
+            },
+            "__v": 0
         }
     ]
 }
@@ -75,4 +96,126 @@ function getAll () {
   return Fablab.find();
 }
 
-export default { getFablab, getAll };
+/**
+ * @api {post} /api/v1/fablabs/ Create new Fablab
+ * @apiName CreateNewFablab
+ * @apiVersion 1.0.0
+ * @apiGroup Fablabs
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {String} is the name of the fablab (required)
+ * @apiParam {Object} address is the address object of the fablab (required)
+ * @apiParamExample {json} Request-Example:
+ *
+{
+    "name": "Fablab Ostsee e.V.",
+    "address": {
+        "street": "Milkyway 5",
+        "zipCode": "33445",
+        "city": "City of Nowhere",
+        "country": "Dreamland"
+    }
+}
+ *
+ * @apiSuccess {Object} fablab the fablab object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 201 OK
+{
+    "fablab": {
+        "activated": true,
+        "_id": "5bc05aa67b88dd2be5a09017",
+        "name": "Fablab Ostsee e.V.",
+        "address": {
+            "street": "Milkyway 5",
+            "zipCode": "33445",
+            "city": "City of Nowhere",
+            "country": "Dreamland"
+        },
+        "__v": 0
+    }
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "err": "Malformed request!",
+    "stack": {
+        ...
+    }
+}
+ *
+ *
+ */
+function create (params) {
+  const fablab = new Fablab(params);
+  return fablab.save();
+}
+
+/**
+ * @api {put} /api/v1/fablabs/:id Updates a Fablab by a given id
+ * @apiName UpdateFablabByID
+ * @apiVersion 1.0.0
+ * @apiGroup Fablabs
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {id} is the id of the fablab
+ * @apiParam {String} is the name of the fablab
+ * @apiParam {Object} address is the address object of the fablab
+ *
+ * @apiParamExample {json} Request-Example:
+ *
+{
+    "name": "New Name",
+    "address": {
+        "street": "new Street",
+        "zipCode": "22335",
+        "city": "New City",
+        "country": "New Land"
+    }
+}
+ * @apiSuccess {Object} fablab the fablab object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "fablab": {
+        "activated": true,
+        "_id": "5bc05290bf18281b2a8427f1",
+        "name": "New Name",
+        "address": {
+            "street": "new Street",
+            "zipCode": "22335",
+            "city": "New City",
+            "country": "New Land"
+        },
+        "__v": 0
+    }
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "No params to update given!"
+}
+ * @apiError 404 The object was not found
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "Fablab by id '9999' not found"
+ *     }
+ *
+ *
+ */
+function update (_id, params) {
+  return Fablab.update(
+    { _id },
+    params,
+    { upsert: true }).then(() => Fablab.findOne({ _id }));
+}
+
+export default { get, getAll, create, update };

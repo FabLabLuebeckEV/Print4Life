@@ -16,7 +16,7 @@ const email = {
 };
 const publicRoutes = [
   {
-    url: `${baseUrl}orders/`,
+    url: `${baseUrl}orders`,
     canChilds: true,
     methods: ['GET']
   },
@@ -46,14 +46,14 @@ const publicRoutes = [
     methods: ['GET']
   },
   {
-    url: `${baseUrl}machines/`,
+    url: `${baseUrl}machines`,
     canChilds: true,
     methods: ['GET']
   },
   {
-    url: `${baseUrl}fablabs/`,
+    url: `${baseUrl}fablabs`,
     canChilds: true,
-    methods: ['GET']
+    methods: ['*']
   }
 ];
 const dev = {

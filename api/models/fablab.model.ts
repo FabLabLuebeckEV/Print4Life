@@ -1,20 +1,19 @@
 import * as mongoose from 'mongoose';
+import addressSchema from './address.model';
 
 const attributes = {
   name: {
     type: String,
     required: true
   },
-  phone: {
-    type: Number,
-  },
-  mail: {
-    type: String,
+  address: {
+    type: addressSchema,
     required: true
   },
-  password: {
-    type: String,
-    required: true
+  activated: {
+    type: Boolean,
+    required: true,
+    default: true
   }
 };
 

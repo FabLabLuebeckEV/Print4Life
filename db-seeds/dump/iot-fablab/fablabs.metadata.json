@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-staging.fablabs"}],"uuid":"7e938ac862144a789fd396adf1662a55"}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-dev.fablabs"}],"uuid":"6191796ac16a4883bec73f62a1a595e8"}

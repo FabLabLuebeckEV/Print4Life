@@ -29,7 +29,10 @@ export const userSchema = new Schema({
     unique: true
   },
   address: addressSchema,
-  role: roleSchema,
+  role: {
+    type: roleSchema,
+    required: true
+  },
   preferredLanguage: {
     type: String,
     required: true
