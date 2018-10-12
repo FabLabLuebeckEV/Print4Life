@@ -24,7 +24,7 @@ export class User {
         public email: String,
         public address: Address,
         public role: Role,
-        public isActivated: boolean
+        public activated: boolean
     ) { }
 }
 

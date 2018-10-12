@@ -14,7 +14,7 @@
         <div class="col-md-12">
           <label for="username">{{translationFields.labels.username}}</label>
           <input type="text" class="form-control" id="username" required [(ngModel)]="user.username" name="username"
-            #username="ngModel">
+            [disabled]=editView #username="ngModel">
           <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
             {{translationFields.messages.username}}
           </div>
@@ -81,9 +81,20 @@
             {{translationFields.messages.role}}
           </div>
         </div>
+        <!-- <div class="col-md-4">
+          <label for="role">{{translationFields.labels.isActivated}}</label><br>
+          <input type="checkbox" ng-model="user.activated" [disabled]=!isAdmin>
+        </div> -->
         <div class="col-md-4">
           <label for="role">{{translationFields.labels.isActivated}}</label><br>
-          <input type="checkbox" ng-model="user.isActivated" [disabled]=!isAdmin>
+          <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="user.activated">
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="true">{{translationFields.buttons.activatedTrue}}
+            </label>
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="false">{{translationFields.buttons.activatedFalse}}
+            </label>
+          </div>
         </div>
       </div>
 

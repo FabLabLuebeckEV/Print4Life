@@ -177,8 +177,16 @@
         },
         "buttons": {
             "deleteLabel": "Delete",
-            "updateLabel": "Update",
-            "activateLabell": "Activate"
+            "updateLabel": "Update"
+        },
+        "modals": {
+            "yes": "Yes",
+            "abort": "No",
+            "deleteValue": "Delete",
+            "abortValue": "Abort",
+            "deleteHeader": "Do you really want to deactivate this user?",
+            "deleteQuestion": "Are you sure you want to",
+            "deleteQuestion2": "deactivate?"
         }
     },
     "orderList": {
@@ -315,6 +323,10 @@
             "zipCode": "Zip code is required",
             "city": "City is required",
             "country": "Country is required"
+        },
+        "buttons": {
+            "activatedTrue": "active",
+            "activatedFalse": "inactive"
         }
     },
     "tableComponent": {
@@ -331,7 +343,8 @@
         "Username": "Username",
         "Firstname": "Firstname",
         "Lastname": "Lastname",
-        "Role": "Role"
+        "Role": "Role",
+        "Active": "Active"
     },
     "loginModal": {
         "title": "Login",

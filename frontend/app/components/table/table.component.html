@@ -9,8 +9,10 @@
   <tbody>
     <tr *ngFor="let item of visibleItems">
       <td *ngFor="let header of headers">
-        <a *ngIf="item.obj[header].href" [routerLink]="item.obj[header].href">{{item.obj[header].label}}</a>
-        <span *ngIf="!item.obj[header].href">{{item.obj[header].label}}</span>
+        <!-- !FIX ME -->
+        <a *ngIf="item.obj[header].href && !item.obj[header].badge" [routerLink]="item.obj[header].href">{{item.obj[header].label}}</a>
+        <span *ngIf="!item.obj[header].href && !item.obj[header].badge">{{item.obj[header].label}}</span>
+        <span *ngIf="item.obj[header].badge && !item.obj[header].href" [class]="item.obj[header].class">{{item.obj[header].label}}</span>
       </td>
       <td>
         <!-- Button 1 -->

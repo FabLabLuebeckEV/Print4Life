@@ -6,6 +6,7 @@ import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import emailService, { EmailOptions } from '../services/email.service';
 import { ErrorType } from '../services/router.service';
+
 /* eslint-enable no-unused-vars */
 
 async function signUp (user) {
@@ -125,6 +126,23 @@ function count (query) {
   return User.countDocuments(query);
 }
 
+function updateUser (user) {
+  delete user.__v;
+  if (!user.createdAt) {
+    user.createdAt = new Date();
+  }
+  return User.update(
+    { _id: user._id },
+    user,
+    { upsert: true }).then(() => User.findOne({ _id: user._id }));
+}
+
+async function deleteUser (_id) {
+  const user = await getUserById(_id);
+  user.activated = false;
+  return updateUser(user);
+}
+
 export default {
   signUp,
   informAdmins,
@@ -134,5 +152,7 @@ export default {
   getUserById,
   getUserByToken,
   getUsers,
-  count
+  count,
+  updateUser,
+  deleteUser
 };

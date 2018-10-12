@@ -302,6 +302,36 @@ router.post('/', async (req, res) => {
       ]
     }
 */
+router.route('/:id').put((req, res) => {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    userCtrl.updateUser(req.body).then((user) => {
+      logger.info(`PUT User with result ${JSON.stringify(user)}`);
+      res.status(200).send({ user });
+    }).catch((err) => {
+      logger.error({ error: 'Malformed update.', stack: err });
+      res.status(400).send({ error: 'Malformed update.', stack: err });
+    });
+  }
+});
+
+router.route('/:id').delete((req, res) => {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    userCtrl.deleteUser(req.params.id).then((user) => {
+      logger.info(`DELETE User with result ${JSON.stringify(user)}`);
+      res.status(200).send({ user });
+    }).catch((err) => {
+      logger.error({ error: 'Malformed Request!', stack: err });
+      res.status(400).send({ error: 'Malformed Request!', stack: err });
+    });
+  }
+});
+
 router.route('/search').post((req, res) => {
   userCtrl.getUsers(req.body.query, req.body.limit, req.body.skip).then((users) => {
     if (users.length === 0) {

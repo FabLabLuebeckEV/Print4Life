@@ -176,9 +176,17 @@
             "roles": "Filter nach Rolle:"
         },
         "buttons": {
-            "deleteLabel": "Löschen",
-            "updateLabel": "Ändern",
-            "activateLabell": "Aktivieren"
+            "deleteLabel": "Deaktivieren",
+            "updateLabel": "Ändern"
+        },
+        "modals": {
+            "yes": "Ja",
+            "abort": "Nein",
+            "deleteValue": "Deaktivieren",
+            "abortValue": "Abbrechen",
+            "deleteHeader": "Möchten Sie den Nutzer wirklich deaktivieren?",
+            "deleteQuestion": "Sind Sie sicher, dass Sie",
+            "deleteQuestion2": "deaktivieren wollen?"
         }
     },
     "orderList": {
@@ -315,6 +323,10 @@
             "zipCode": "Die Postleitzahl wird benötigt",
             "city": "Die Stadt wird benötigt",
             "country": "Das Land wird benötigt"
+        },
+        "buttons": {
+            "activatedTrue": "Aktiv",
+            "activatedFalse": "Inaktiv"
         }
     },
     "tableComponent": {
@@ -331,7 +343,8 @@
         "Username": "Benutzername",
         "Firstname": "Vorname",
         "Lastname": "Nachname",
-        "Role": "Rolle"
+        "Role": "Rolle",
+        "Active": "Aktiviert"
     },
     "loginModal": {
         "title": "Einloggen",

@@ -29,6 +29,14 @@ export class UserService {
     return this.http.post(`${this.p}/`, user).toPromise();
   }
 
+  public updateUser(user): Promise<any> {
+    return this.http.put(`${this.p}/${user._id}`, user).toPromise();
+  }
+
+  public deleteUser(id): Promise<any> {
+    return this.http.delete(`${this.p}/${id}`).toPromise();
+  }
+
   public async getProfile(id: String): Promise<any> {
     const result = await this.http.get(`${this.p}/${id}`).toPromise();
     if (result && result.hasOwnProperty('user')) {

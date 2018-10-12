@@ -64,6 +64,10 @@ export class UserFormComponent implements OnInit {
       zipCode: '',
       city: '',
       country: ''
+    },
+    buttons: {
+      activatedTrue: '',
+      activatedFalse: ''
     }
   };
 
@@ -112,7 +116,8 @@ export class UserFormComponent implements OnInit {
         || !userCopy.address.street || !userCopy.address.zipCode) {
         delete userCopy.address;
       }
-      this.userService.createUser(userCopy)
+      if (this.editView) {
+        this.userService.updateUser(userCopy)
         .then(res => {
           if (res) {
             this._openSuccessMsg();
@@ -123,6 +128,17 @@ export class UserFormComponent implements OnInit {
           const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         });
+      } else {
+        this.userService.createUser(userCopy)
+        .then(res => {
+          this._openSuccessMsg();
+        })
+        .catch(err => {
+          const errorMsg = this.translationFields.modals.errorMessage;
+          const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
+          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+        });
+      }
     }));
   }
 
@@ -256,6 +272,10 @@ export class UserFormComponent implements OnInit {
           zipCode: translations['userForm'].messages.zipCode,
           city: translations['userForm'].messages.city,
           country: translations['userForm'].messages.country
+        },
+        buttons: {
+          activatedTrue: translations['userForm'].buttons.activatedTrue,
+          activatedFalse: translations['userForm'].buttons.activatedFalse
         }
       };
     }));

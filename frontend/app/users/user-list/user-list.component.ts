@@ -3,6 +3,8 @@ import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { ConfigService } from '../../config/config.service';
 import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { User } from '../../models/user.model';
 import { TableItem } from '../../components/table/table.component';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -34,6 +36,15 @@ export class UserListComponent implements OnInit {
       activateLabel: '',
       updateLabel: '',
       deleteLabel: ''
+    },
+    modals: {
+      yes: '',
+      abort: '',
+      deleteValue: '',
+      abortValue: '',
+      deleteHeader: '',
+      deleteQuestion: '',
+      deleteQuestion2: ''
     }
   };
   private filter = {
@@ -60,7 +71,8 @@ export class UserListComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private configService: ConfigService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private modalService: NgbModal
   ) {
     this.config = this.configService.getConfig();
     this.jumpArrow = this.config.icons.forward;
@@ -137,7 +149,8 @@ export class UserListComponent implements OnInit {
         item.obj['Firstname'] = { label: user.firstname };
         item.obj['Lastname'] = { label: user.lastname };
         item.obj['Role'] = { label: user.role.role };
-        item.obj['Status'] = { label: user.isActivated };
+        item.obj['Active'] = { label: user.activated, badge: true, class: user.activated ? 'label label-success' : 'label label-danger' };
+        item.obj['id'] = { label: user._id };
         if (this.userIsAdmin) {
           item.button1.label = this.translationFields.buttons.updateLabel;
           item.button1.href = `./${routes.paths.frontend.users.update}/${user._id}`;
@@ -184,11 +197,56 @@ export class UserListComponent implements OnInit {
           userIdx = idx;
         }
       });
+
+      const deleteButton = new ModalButton(this.translationFields.modals.yes, 'btn btn-danger', this.translationFields.modals.deleteValue);
+      const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
+        this.translationFields.modals.abortValue);
+      const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+        'modal-header header-danger', `${this.translationFields.modals.deleteQuestion} ` +
+        `${user.obj[`Username`].label} ${this.translationFields.modals.deleteQuestion2}`, deleteButton, abortButton);
+      modalRef.result.then((result) => {
+        if (result === deleteButton.returnValue) {
+          this.userService.deleteUser(user.obj.id.label).then((result) => {
+            result = result.user;
+            const oldUser = this.visibleUsers[userIdx];
+            this.users.forEach((item) => {
+              if (oldUser.obj.id.label === item.obj.id.label) {
+                this.users[userIdx].obj = {};
+                this.users[userIdx].obj['id'] = { label: result._id };
+                this.users[userIdx].obj['Username'] = { label: result.username };
+                this.users[userIdx].obj['Firstname'] = { label: result.firstname };
+                this.users[userIdx].obj['Lastname'] = { label: result.lastname };
+                this.users[userIdx].obj['Role'] = { label: result.role.role };
+                this.users[userIdx].obj['Active'] = {
+                  label: result.activated,
+                  badge: true,
+                  class: result.activated ? 'label label-success' : 'label label-danger'
+                };
+              }
+            });
+            this.users[userIdx].obj = {};
+            this.users[userIdx].obj['id'] = { label: result._id };
+            this.users[userIdx].obj['Username'] = { label: result.username };
+            this.users[userIdx].obj['Firstname'] = { label: result.firstname };
+            this.users[userIdx].obj['Lastname'] = { label: result.lastname };
+            this.users[userIdx].obj['Role'] = { label: result.role.role };
+            this.users[userIdx].obj['Active'] = {
+              label: result.activated,
+              badge: true,
+              class: result.activated ? 'label label-success' : 'label label-danger'
+            };
+            if ((this.filter.selectedRoles && this.filter.selectedRoles.length > 0)) {
+              this.init();
+            }
+          });
+        }
+      });
     }
   }
 
   private _translate() {
     this.translateService.get(['roles', 'userList']).subscribe((translations => {
+      this.spinnerConfig = { 'loadingText': translations['userList'].spinnerLoadingText, ...this.config.spinnerConfig };
       this.filter.validRoles = [];
       this.filter.shownRoles = [];
       this.filter.originalRoles.forEach((role) => {
@@ -215,6 +273,15 @@ export class UserListComponent implements OnInit {
           deleteLabel: translations['userList'].buttons.deleteLabel,
           updateLabel: translations['userList'].buttons.updateLabel,
           activateLabel: translations['userList'].buttons.activateLabel
+        },
+        modals: {
+          yes: translations['userList'].modals.yes,
+          abort: translations['userList'].modals.abort,
+          deleteValue: translations['userList'].modals.deleteValue,
+          abortValue: translations['userList'].modals.abortValue,
+          deleteHeader: translations['userList'].modals.deleteHeader,
+          deleteQuestion: translations['userList'].modals.deleteQuestion,
+          deleteQuestion2: translations['userList'].modals.deleteQuestion2
         }
       };
     }));
@@ -234,5 +301,17 @@ export class UserListComponent implements OnInit {
         }
       });
     }));
+  }
+
+  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent);
+    modalRef.componentInstance.title = title;
+    if (titleClass) {
+      modalRef.componentInstance.titleClass = titleClass;
+    }
+    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.button1 = button1;
+    modalRef.componentInstance.button2 = button2;
+    return modalRef;
   }
 }
