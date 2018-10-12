@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { routes } from '../config/routes';
 import { User } from '../models/user.model';
 
@@ -60,6 +60,36 @@ export class UserService {
         reject(err);
       });
     });
+  }
+
+  public getAllUsers(query?, limit?, skip?): Promise<any> {
+    let params = new HttpParams();
+    if (query) {
+      return this.search(query, limit, skip);
+    }
+    if (limit >= 0 && skip >= 0) {
+      params = params.append('limit', limit);
+      params = params.append('skip', skip);
+    }
+    return this.http.get(`${this.p}`, { params: params }).toPromise();
+  }
+
+  public count(query) {
+    return this.http.post(`${this.p}/${routes.paths.backend.users.count}`, { query: query }).toPromise();
+  }
+
+  public search(query, limit?, skip?) {
+    const body = {
+      query: query,
+      limit: undefined,
+      skip: undefined
+    };
+
+    if (limit >= 0 && skip >= 0) {
+      body.limit = limit;
+      body.skip = skip;
+    }
+    return this.http.post(`${this.p}/${routes.paths.backend.users.search}`, body).toPromise();
   }
 
   public logout(): Promise<any> {

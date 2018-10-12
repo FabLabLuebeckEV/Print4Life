@@ -19,6 +19,45 @@ router.post('/', (req, res) => {
   });
 });
 
+router.route('/search').post((req, res) => {
+  userCtrl.getUsers(req.body.query, req.body.limit, req.body.skip).then((users) => {
+    if (users.length === 0) {
+      logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
+        `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+      res.status(204).send({ users });
+    } else if (req.body.limit && req.body.skip) {
+      logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
+        `limit ${req.body.limit} skip ${req.body.skip} ` +
+        `holds partial results ${JSON.stringify(users)}`);
+      res.status(206).send({ users });
+    } else {
+      logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
+        `limit ${req.body.limit} skip ${req.body.skip} ` +
+        `holds results ${JSON.stringify(users)}`);
+      res.status(200).send({ users });
+    }
+  }).catch((err) => {
+    logger.error({
+      error: `Error while trying to search for a specific user with query: ${JSON.stringify(req.body.query)}`,
+      stack: err
+    });
+    res.status(500).send({
+      error: `Error while trying to search for a specific user with query: ${JSON.stringify(req.body.query)}`,
+      stack: err
+    });
+  });
+});
+
+router.route('/count').post((req, res) => {
+  userCtrl.count(req.body.query).then((count) => {
+    logger.info(`POST count with result ${JSON.stringify(count)}`);
+    res.status(200).send({ count });
+  }).catch((err) => {
+    logger.error({ error: 'Error while counting users!', err });
+    res.status(500).send({ error: 'Error while counting users!', err });
+  });
+});
+
 router.route('/roles').get((req, res) => {
   userCtrl.getRoles().then((roles) => {
     if (!roles) {

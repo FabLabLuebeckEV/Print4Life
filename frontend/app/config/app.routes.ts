@@ -8,11 +8,11 @@ import { MachineDetailComponent } from '../machines/machine-detail/machine-detai
 import { routes } from './routes';
 import { OrderDetailComponent } from '../orders/order-detail/order-detail.component';
 import { UserFormComponent } from '../users/user-form/user-form.component';
-import { UserComponent } from '../users/user/user.component';
 import { Injectable } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { Observable } from 'rxjs';
 import { ErrorService, ErrorType } from '../services/error.service';
+import { UserListComponent } from '../users/user-list/user-list.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -58,11 +58,11 @@ export const appRoutes: Routes = [
 
     {
         path: routes.paths.frontend.users.root,
-        component: UserComponent,
+        component: UserListComponent,
         runGuardsAndResolvers: 'always',
         children: [
             { path: routes.paths.frontend.users.signup, component: UserFormComponent },
-            { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent }
+            { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent },
         ]
     },
     {

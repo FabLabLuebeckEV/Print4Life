@@ -9,7 +9,9 @@ export const routes = {
                 root: 'users',
                 getRoles: 'roles',
                 login: 'login',
-                findown: 'findown'
+                findown: 'findown',
+                search: 'search',
+                count: 'count'
             },
             orders: {
                 root: 'orders',
@@ -38,7 +40,8 @@ export const routes = {
                 root: 'users',
                 signup: 'signup',
                 login: 'login',
-                update: 'edit'
+                update: 'edit',
+                list: 'list'
             },
             orders: {
                 root: 'orders',

@@ -1,0 +1,40 @@
+<router-outlet>
+</router-outlet>
+<div *ngIf="listView">
+  <div class="row">
+    <div class="col-md-6">
+      <label for="roles">{{translationFields.filterLabel.roles}}</label>
+      <ng-select [multiple]="true" [loading]="loadingRoles" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.validRoles
+        bindLabel="roles" [(ngModel)]="filter.shownRoles" id="roles" (change)="_changeHandlerRoles($event)" (close)="init()"
+        (remove)="init()" (clear)="init()" name="roles" #roles="ngModel">
+      </ng-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size"
+        [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+      <app-table (buttonEvent)="eventHandler($event)" [items]="visibleUsers"></app-table>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 offset-5 text-center">
+          <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
+          <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage" name="jumpToPage"
+            #jumpToPage="ngModel">
+        </div>
+        <div class="col-md-1 align-self-end">
+          <button [disabled]="!paginationObj.jumpToPage" type="button" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
+            <fa-icon [icon]="jumpArrow"></fa-icon>
+          </button>
+        </div>
+      </div>
+      <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems"
+        [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="pageChanged($event)" [maxSize]="paginationObj.maxSize"
+        [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks" aria-label="Default pagination"></ngb-pagination>
+    </div>
+  </footer>
+</div>

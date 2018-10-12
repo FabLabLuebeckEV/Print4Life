@@ -168,6 +168,19 @@
             "numberOfExtruders": "Anzahl von Extrudern"
         }
     },
+    "userList": {
+        "title": "Benutzerliste",
+        "spinnerLoadingText": "Lade Benutzer",
+        "paginationLabel": "Springe zur Seite",
+        "filterLabel": {
+            "roles": "Filter nach Rolle:"
+        },
+        "buttons": {
+            "deleteLabel": "Löschen",
+            "updateLabel": "Ändern",
+            "activateLabell": "Aktivieren"
+        }
+    },
     "orderList": {
         "paginationLabel": "Springe zur Seite",
         "filterLabel": {
@@ -314,7 +327,11 @@
         "Projectname": "Projektname",
         "Owner": "Ersteller",
         "Editor": "Bearbeiter",
-        "Status": "Status"
+        "Status": "Status",
+        "Username": "Benutzername",
+        "Firstname": "Vorname",
+        "Lastname": "Nachname",
+        "Role": "Rolle"
     },
     "loginModal": {
         "title": "Einloggen",

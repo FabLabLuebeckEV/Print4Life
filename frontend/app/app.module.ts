@@ -32,9 +32,9 @@ export function translateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }
 import { UserFormComponent } from './users/user-form/user-form.component';
-import { UserComponent } from './users/user/user.component';
 import { BackButtonComponent } from './components/back-button/back-button.component';
 import { LoginModalComponent } from './users/login-modal/login-modal.component';
+import { UserListComponent } from './users/user-list/user-list.component';
 
 @NgModule({
     declarations: [
@@ -51,9 +51,9 @@ import { LoginModalComponent } from './users/login-modal/login-modal.component';
         MachineDetailComponent,
         OrderDetailComponent,
         UserFormComponent,
-        UserComponent,
         BackButtonComponent,
-        LoginModalComponent
+        LoginModalComponent,
+        UserListComponent
     ],
     imports: [
         BrowserModule,
