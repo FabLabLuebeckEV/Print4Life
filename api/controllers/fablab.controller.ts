@@ -23,4 +23,10 @@ function update (_id, params) {
     { upsert: true }).then(() => Fablab.findOne({ _id }));
 }
 
-export default { get, getAll, create, update };
+async function deleteById (id) {
+  const fablab = await get(id);
+  fablab.activated = false;
+  return update(id, fablab);
+}
+
+export default { get, getAll, create, update, deleteById };

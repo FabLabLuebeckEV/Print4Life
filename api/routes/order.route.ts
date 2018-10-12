@@ -133,17 +133,17 @@ router.route('/search').post((req, res) => {
   orderCtrl.getOrders(req.body.query, req.body.limit, req.body.skip).then((orders) => {
     if (orders.length === 0) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, ` +
-        `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+                `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
       res.status(204).send({ orders });
     } else if (req.body.limit && req.body.skip) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, ` +
-        `limit ${req.body.limit} skip ${req.body.skip} ` +
-        `holds partial results ${JSON.stringify(orders)}`);
+                `limit ${req.body.limit} skip ${req.body.skip} ` +
+                `holds partial results ${JSON.stringify(orders)}`);
       res.status(206).send({ orders });
     } else {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, ` +
-        `limit ${req.body.limit} skip ${req.body.skip} ` +
-        `holds results ${JSON.stringify(orders)}`);
+                `limit ${req.body.limit} skip ${req.body.skip} ` +
+                `holds results ${JSON.stringify(orders)}`);
       res.status(200).send({ orders });
     }
   }).catch((err) => {
@@ -372,8 +372,8 @@ router.route('/:id').put((req, res) => {
 });
 
 /**
- * @api {delete} /api/v1/orders/deleteOrder Marks an order as deleted
- * @apiName delteOrder
+ * @api {delete} /api/v1/orders/:id Marks an order as deleted
+ * @apiName deleteOrder
  * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json

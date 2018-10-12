@@ -275,4 +275,53 @@ router.route('/:id').put((req, res) => {
   }
 });
 
+/**
+ * @api {delete} /api/v1/fablabs/:id Marks an fablab als inactive
+ * @apiName deleteFablab
+ * @apiVersion 1.0.0
+ * @apiGroup Fablabs
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { fablab } the deleted fablab
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "fablab": {
+        "activated": false,
+        "_id": "5bc07aca171a83680e1877f6",
+        "name": "Fablab Ostsee e.V.",
+        "address": {
+            "street": "Milkyway 5",
+            "zipCode": "33445",
+            "city": "City of Nowhere",
+            "country": "Dreamland"
+        },
+        "__v": 0
+    }
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "error": "Malformed Request!",
+      "stack": {
+          ...
+      }
+  }
+ */
+router.route('/:id').delete((req, res) => {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    fablabCtrl.deleteById(req.params.id).then((fablab) => {
+      logger.info(`DELETE Fablab with result ${JSON.stringify(fablab)}`);
+      res.status(200).send({ fablab });
+    }).catch((err) => {
+      logger.error({ error: 'Malformed Request!', stack: err });
+      res.status(400).send({ error: 'Malformed Request!', stack: err });
+    });
+  }
+});
+
 export default router;

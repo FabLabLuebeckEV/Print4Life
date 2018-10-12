@@ -196,4 +196,48 @@ describe('Fablab Controller', () => {
       done();
     });
   });
+
+  it('delete printer (success)', (done) => {
+    let responseFablab;
+    request.post(`${endpoint}/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testFablab,
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(201);
+      responseFablab = response.body.fablab;
+      request.delete(`${endpoint}/${response.body.fablab._id}`, {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        json: true
+      }, (error, response) => {
+        expect(response.statusCode).toEqual(200);
+        expect(response.body.fablab).toBeDefined();
+        expect(response.body.fablab._id).toEqual(responseFablab._id);
+        expect(response.body.fablab.activated).toEqual(false);
+        done();
+      });
+    });
+  });
+
+  it('delete printer (id too long)', (done) => {
+    const id = 'tooLongForMongoDBsObjectId1234567890';
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
+
+  it('delete printer (id too short)', (done) => {
+    const id = 'tooShort';
+    request.delete(`${endpoint}/${id}`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      done();
+    });
+  });
 });
