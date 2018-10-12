@@ -78,7 +78,7 @@ export class MachineService {
   }
 
   public getLaserTypes(): Promise<any> {
-    return this.http.get(`${this.rootPath}/${routes.paths.backend.machines.laserTypes}`).toPromise();
+    return this.http.get(`${this.rootPath}/lasercutters/${routes.paths.backend.machines.laserTypes}`).toPromise();
   }
 
   public deleteMachine(machineType, id) {
