@@ -355,7 +355,17 @@
         "labels": {
             "username": "Username",
             "password": "Password",
-            "login": "Login"
+            "login": "Login",
+            "resetPassword": "Reset Password"
+        },
+        "modals": {
+            "title": "Reset Password",
+            "inputLabel": "E-Mail Address",
+            "buttonLabel": "Reset",
+            "successHeader": "Password resetted!",
+            "successMessage": "Please check your e-mails to get the new password.",
+            "errorHeader": "Something went wrong",
+            "errorMessage": "Some error occured. We couldn't reset the password."
         }
     }
 }

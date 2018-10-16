@@ -142,7 +142,7 @@ export class NavigationComponent implements OnInit {
   }
 
   private _login() {
-    this.modalService.open(LoginModalComponent, { size: 'sm' }).result.then((login) => {
+    this.modalService.open(LoginModalComponent).result.then((login) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.router.navigate([this.router.url]);
     }).catch((err) => {

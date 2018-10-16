@@ -149,7 +149,11 @@ export class UserService {
   }
 
   public claimActivation(userId): void {
-    this.http.put(`${this.p}/activationRequest/${userId}`, undefined).toPromise();
+    this.http.put(`${this.p}/${routes.paths.backend.users.activationRequest}/${userId}`, undefined).toPromise();
+  }
+
+  public async resetPassword(email) {
+    return this.http.post(`${this.p}/${routes.paths.backend.users.resetPassword}/`, email).toPromise();
   }
 
   public getLocalStorageTokenName(): string {

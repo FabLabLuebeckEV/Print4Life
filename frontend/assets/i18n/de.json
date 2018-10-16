@@ -355,7 +355,17 @@
         "labels": {
             "username": "Benutzername",
             "password": "Passwort",
-            "login": "Einloggen"
+            "login": "Einloggen",
+            "resetPassword": "Passwort zurücksetzen"
+        },
+        "modals": {
+            "title": "Passwort zurücksetzen",
+            "inputLabel": "E-Mail Adresse",
+            "buttonLabel": "Zurücksetzen",
+            "successHeader": "Password wurde zurückgesetzt!",
+            "successMessage": "Bitte überprüfen Sie Ihre E-Mails.",
+            "errorHeader": "Ein Fehler ist aufgetreten",
+            "errorMessage": "Wir konnten das Passwort nicht zurücksetzen."
         }
     }
 }

@@ -42,6 +42,10 @@ const publicRoutes = [
     methods: ['POST']
   },
   {
+    url: `${baseUrl}users/resetPassword/`,
+    methods: ['POST']
+  },
+  {
     url: `${baseUrl}users/roles`,
     methods: ['GET']
   },

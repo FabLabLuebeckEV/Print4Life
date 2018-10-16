@@ -6,6 +6,7 @@ import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import emailService, { EmailOptions } from '../services/email.service';
 import { ErrorType } from '../services/router.service';
+import logger from '../logger';
 
 /* eslint-enable no-unused-vars */
 
@@ -88,14 +89,14 @@ function informAdmins (user, newUser: boolean) {
       template: 'activateNewUser',
       to: '',
       locals:
-            {
-              adminName: '',
-              userName: `${user.firstname} ${user.lastname}`,
-              userEmail: user.email,
-              id: user._id,
-              url: `${config.baseUrlFrontend}/users/edit/${user._id}`,
-              newUser
-            }
+      {
+        adminName: '',
+        userName: `${user.firstname} ${user.lastname}`,
+        userEmail: user.email,
+        id: user._id,
+        url: `${config.baseUrlFrontend}/users/edit/${user._id}`,
+        newUser
+      }
     };
     User.find({ 'role.role': 'admin' }).then((admins) => {
       admins.forEach((admin) => {
@@ -126,7 +127,7 @@ function count (query) {
   return User.countDocuments(query);
 }
 
-function updateUser (user) {
+async function updateUser (user) {
   delete user.__v;
   if (!user.createdAt) {
     user.createdAt = new Date();
@@ -143,6 +144,37 @@ async function deleteUser (_id) {
   return updateUser(user);
 }
 
+async function resetPassword (email: string) {
+  const users = await getUsers({ email }, 1, 0);
+  let password;
+  let user;
+  if (users && users.length === 1) {
+    user = users[0];
+    user.password = `${Math.random().toString(36).substring(2, 15)}`;
+    password = user.password;
+    try {
+      await user.save();
+      const options = {
+        preferredLanguage: user.preferredLanguage ? user.preferredLanguage : 'en',
+        template: 'resetPassword',
+        to: user.email,
+        locals:
+        {
+          userName: `${user.firstname} ${user.lastname}`,
+          password,
+          url: `${config.baseUrlFrontend}/`
+        }
+      };
+      emailService.sendMail(options);
+      return true;
+    } catch (err) {
+      logger.error(err.message);
+      return false;
+    }
+  }
+  return false;
+}
+
 export default {
   signUp,
   informAdmins,
@@ -154,5 +186,6 @@ export default {
   getUsers,
   count,
   updateUser,
-  deleteUser
+  deleteUser,
+  resetPassword
 };

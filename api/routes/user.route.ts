@@ -336,17 +336,17 @@ router.route('/search').post((req, res) => {
   userCtrl.getUsers(req.body.query, req.body.limit, req.body.skip).then((users) => {
     if (users.length === 0) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
-                `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+        `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
       res.status(204).send({ users });
     } else if (req.body.limit && req.body.skip) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
-                `limit ${req.body.limit} skip ${req.body.skip} ` +
-                `holds partial results ${JSON.stringify(users)}`);
+        `limit ${req.body.limit} skip ${req.body.skip} ` +
+        `holds partial results ${JSON.stringify(users)}`);
       res.status(206).send({ users });
     } else {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
-                `limit ${req.body.limit} skip ${req.body.skip} ` +
-                `holds results ${JSON.stringify(users)}`);
+        `limit ${req.body.limit} skip ${req.body.skip} ` +
+        `holds results ${JSON.stringify(users)}`);
       res.status(200).send({ users });
     }
   }).catch((err) => {
@@ -513,7 +513,7 @@ router.route('/login').post(async (req, res) => {
 });
 
 /**
- * @api {post} /api/v1/users/findown gets the logged in user
+ * @api {get} /api/v1/users/findown gets the logged in user
  * @apiName findOwnUser
  * @apiVersion 1.0.0
  * @apiGroup Users
@@ -584,7 +584,7 @@ router.route('/findown').get((req, res) => {
 });
 
 /**
- * @api {post} /api/v1/users/:id gets a user by its id
+ * @api {get} /api/v1/users/:id gets a user by its id
  * @apiName getUserById
  * @apiVersion 1.0.0
  * @apiGroup Users
@@ -660,7 +660,7 @@ router.route('/:id').get((req, res) => {
 });
 
 /**
- * @api {post} /api/v1/users/activationRequest/:id activate a user
+ * @api {put} /api/v1/users/activationRequest/:id activate a user
  * @apiName activationRequestByUser
  * @apiVersion 1.0.0
  * @apiGroup Users
@@ -710,5 +710,53 @@ router.route('/activationRequest/:id').put((req, res) => {
   }
 });
 
+/**
+ * @api {post} /api/v1/users/resetPassword/ resets the password of a user
+ * @apiName resetPassword
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { object } an response object
+ *
+ * @apiParamExample {json} Request-Example:
+ *
+{
+  "email": "hans-hansen@hans.com"
+}
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "msg": "Password reset"
+}
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while resetting the password.",
+      "stack": {
+          ...
+      }
+  }
+ */
+router.route('/resetPassword/').post((req, res) => {
+  if (!req.body.email) {
+    res.status(400).send({ error: 'Malformed Request! No Email given.' });
+  } else {
+    userCtrl.resetPassword(req.body.email).then((success) => {
+      if (!success) {
+        const msg = { error: 'Error while resetting the password.' };
+        logger.error(msg);
+        res.status(500).send(msg);
+      }
+      logger.info({ msg: `Password reset for user with e-mail address ${req.body.email}` });
+      res.status(200).send({ msg: 'Password reset' });
+    }).catch((err) => {
+      const msg = { error: 'Error while resetting the password.', stack: err };
+      logger.error(msg);
+      res.status(500).send(msg);
+    });
+  }
+});
 
 export default router;

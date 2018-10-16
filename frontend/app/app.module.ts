@@ -35,6 +35,7 @@ import { UserFormComponent } from './users/user-form/user-form.component';
 import { BackButtonComponent } from './components/back-button/back-button.component';
 import { LoginModalComponent } from './users/login-modal/login-modal.component';
 import { UserListComponent } from './users/user-list/user-list.component';
+import { InputModalComponent } from './components/input-modal/input-modal.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import { UserListComponent } from './users/user-list/user-list.component';
         UserFormComponent,
         BackButtonComponent,
         LoginModalComponent,
-        UserListComponent
+        UserListComponent,
+        InputModalComponent
     ],
     imports: [
         BrowserModule,
@@ -79,7 +81,8 @@ import { UserListComponent } from './users/user-list/user-list.component';
     bootstrap: [AppComponent],
     entryComponents: [
         MessageModalComponent,
-        LoginModalComponent
+        LoginModalComponent,
+        InputModalComponent
     ]
 })
 export class AppModule { }

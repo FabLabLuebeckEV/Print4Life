@@ -11,7 +11,9 @@ export const routes = {
                 login: 'login',
                 findown: 'findown',
                 search: 'search',
-                count: 'count'
+                count: 'count',
+                activationRequest: 'activationRequest',
+                resetPassword: 'resetPassword'
             },
             orders: {
                 root: 'orders',
