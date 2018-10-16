@@ -187,6 +187,10 @@
             "deleteHeader": "Möchten Sie den Nutzer wirklich deaktivieren?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
             "deleteQuestion2": "deaktivieren wollen?"
+        },
+        "badges": {
+            "active": "Aktiv",
+            "inactive": "Inaktiv"
         }
     },
     "orderList": {

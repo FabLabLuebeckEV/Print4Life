@@ -187,6 +187,10 @@
             "deleteHeader": "Do you really want to deactivate this user?",
             "deleteQuestion": "Are you sure you want to",
             "deleteQuestion2": "deactivate?"
+        },
+        "badges": {
+            "active": "Active",
+            "inactive": "Inactive"
         }
     },
     "orderList": {

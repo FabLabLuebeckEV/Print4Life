@@ -45,6 +45,10 @@ export class UserListComponent implements OnInit {
       deleteHeader: '',
       deleteQuestion: '',
       deleteQuestion2: ''
+    },
+    badges: {
+      active: '',
+      inactive: ''
     }
   };
   private filter = {
@@ -149,7 +153,13 @@ export class UserListComponent implements OnInit {
         item.obj['Firstname'] = { label: user.firstname };
         item.obj['Lastname'] = { label: user.lastname };
         item.obj['Role'] = { label: user.role.role };
-        item.obj['Active'] = { label: user.activated, badge: true, class: user.activated ? 'label label-success' : 'label label-danger' };
+        item.obj['Active'] = {
+          label: user.activated && user.activated === true ?
+            this.translationFields.badges.active :
+            this.translationFields.badges.inactive,
+          badge: true,
+          class: user.activated && user.activated === true ? 'badge badge-success' : 'badge badge-danger'
+        };
         item.obj['id'] = { label: user._id };
         if (this.userIsAdmin) {
           item.button1.label = this.translationFields.buttons.updateLabel;
@@ -218,9 +228,11 @@ export class UserListComponent implements OnInit {
                 this.users[userIdx].obj['Lastname'] = { label: result.lastname };
                 this.users[userIdx].obj['Role'] = { label: result.role.role };
                 this.users[userIdx].obj['Active'] = {
-                  label: result.activated,
+                  label: result.activated && result.activated === true ?
+                    this.translationFields.badges.active :
+                    this.translationFields.badges.inactive,
                   badge: true,
-                  class: result.activated ? 'label label-success' : 'label label-danger'
+                  class: result.activated && result.activated === true ? 'badge badge-success' : 'badge badge-danger'
                 };
               }
             });
@@ -231,9 +243,11 @@ export class UserListComponent implements OnInit {
             this.users[userIdx].obj['Lastname'] = { label: result.lastname };
             this.users[userIdx].obj['Role'] = { label: result.role.role };
             this.users[userIdx].obj['Active'] = {
-              label: result.activated,
+              label: result.activated && result.activated === true ?
+                this.translationFields.badges.active :
+                this.translationFields.badges.inactive,
               badge: true,
-              class: result.activated ? 'label label-success' : 'label label-danger'
+              class: result.activated && result.activated === true ? 'badge badge-success' : 'badge badge-danger'
             };
             if ((this.filter.selectedRoles && this.filter.selectedRoles.length > 0)) {
               this.init();
@@ -282,6 +296,10 @@ export class UserListComponent implements OnInit {
           deleteHeader: translations['userList'].modals.deleteHeader,
           deleteQuestion: translations['userList'].modals.deleteQuestion,
           deleteQuestion2: translations['userList'].modals.deleteQuestion2
+        },
+        badges: {
+          active: translations['userList'].badges.active,
+          inactive: translations['userList'].badges.inactive
         }
       };
     }));
