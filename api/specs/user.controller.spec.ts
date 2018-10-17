@@ -150,9 +150,9 @@ describe('User Controller', () => {
       expect(response.body.languages).toBeDefined();
       expect(response.body.languages.length).toBeGreaterThan(0);
 
-      expect(response.body.languages.includes('german')).toEqual(true);
-      expect(response.body.languages.includes('english')).toEqual(true);
-      expect(response.body.languages.includes('danish')).toEqual(true);
+      expect(response.body.languages.includes('de')).toEqual(true);
+      expect(response.body.languages.includes('en')).toEqual(true);
+      expect(response.body.languages.includes('dk')).toEqual(true);
       done();
     });
   });
