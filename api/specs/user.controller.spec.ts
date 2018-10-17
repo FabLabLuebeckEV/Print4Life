@@ -68,6 +68,31 @@ describe('User Controller', () => {
       });
   });
 
+  it('user reset password', (done) => {
+    testUser.username += `${Math.random().toString(36).substring(2, 15)}`;
+    testUser.email += `${Math.random().toString(36).substring(2, 15)}`;
+    request.post(
+      `${endpoint}users/`, {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        json: true,
+        body: testUser
+      },
+      (error, response) => {
+        const user = response.body.user;
+        request.put(
+          `${endpoint}users/${user._id}/changePassword`, {
+            headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+            json: true,
+            body: { oldPassword: testUser.password, newPassword: 'newPassword' }
+          }, ((error, response) => {
+            expect(error).toBeNull();
+            expect(response).toBeDefined();
+            expect(response.body.msg).toBeDefined();
+            done();
+          }));
+      });
+  });
+
   it('user login fails', (done) => {
     testUser.username += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
     testUser.email += `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
