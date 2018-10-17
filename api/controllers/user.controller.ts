@@ -98,7 +98,7 @@ function informAdmins (user, newUser: boolean) {
         newUser
       }
     };
-    User.find({ 'role.role': 'admin' }).then((admins) => {
+    User.find({ 'role.role': 'admin', activated: true }).then((admins) => {
       admins.forEach((admin) => {
         options.to = admin.email;
         options.preferredLanguage = admin.preferredLanguage || 'en';

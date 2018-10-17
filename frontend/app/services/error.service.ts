@@ -50,7 +50,10 @@ export class ErrorService {
         this.isOpen = true;
         modalRef.result.then((result) => {
           if (result === 'Send Activate Request') {
-            this.userService.claimActivation(err.data.userId);
+            this.userService.claimActivation(err.data.userId).then(() => {
+              this._openMsgModal(`Activation Request sent!`, 'modal-header header-success',
+                'An Admin was informed that you wish an activation of your user account!', okButton, undefined);
+            });
           }
           this.isOpen = false;
         });
