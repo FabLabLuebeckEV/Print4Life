@@ -23,25 +23,39 @@ export interface Error {
   providedIn: 'root'
 })
 export class ErrorService {
-
+  isOpen = false;
   constructor(private modalService: NgbModal, private userService: UserService, private router: Router) {
   }
 
   public showError(err: Error) {
     let secondButton;
-    if (err.type && err.type as ErrorType === ErrorType.USER_DEACTIVATED as ErrorType) {
-      secondButton = new ModalButton('Send Activate Request', 'btn btn-success', 'Send Activate Request');
-    }
+    let modalRef;
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
-    this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', err.stack,
-      okButton, secondButton).result.then((result) => {
-        if (result === 'Send Activate Request') {
-          this.userService.claimActivation(err.data.userId);
-        } else if (err.type && err.type as ErrorType === ErrorType.TOKEN_EXPIRED as ErrorType) {
-          this.userService.logout();
-          this.router.navigate(['/']);
+    if (!this.isOpen) {
+      if (err.hasOwnProperty('type') && err.type as ErrorType === ErrorType.TOKEN_EXPIRED as ErrorType) {
+        this.userService.logout();
+        this.router.navigate(['/']);
+        modalRef = this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', err.stack,
+          okButton, secondButton);
+        this.isOpen = true;
+        modalRef.result.then(() => {
+          this.isOpen = false;
+        });
+      } else {
+        if (err.hasOwnProperty('type') && err.type as ErrorType === ErrorType.USER_DEACTIVATED as ErrorType) {
+          secondButton = new ModalButton('Send Activate Request', 'btn btn-success', 'Send Activate Request');
         }
-      });
+        modalRef = this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', err.stack,
+          okButton, secondButton);
+        this.isOpen = true;
+        modalRef.result.then((result) => {
+          if (result === 'Send Activate Request') {
+            this.userService.claimActivation(err.data.userId);
+          }
+          this.isOpen = false;
+        });
+      }
+    }
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
