@@ -111,9 +111,14 @@ export class UserListComponent implements OnInit {
   }
 
   async init() {
-    this.loadingUsers = true;
     this.users = new Array();
     this.visibleUsers = undefined;
+    this._loadUsers();
+  }
+
+  private async _loadUsers(): Promise<TableItem[]> {
+    const arr = [];
+    this.loadingUsers = true;
     this.spinner.show();
     let countObj;
     let totalItems = 0;
@@ -146,7 +151,6 @@ export class UserListComponent implements OnInit {
       (this.paginationObj.page - 1) * this.paginationObj.perPage);
     if (users && users.users) {
       users = users.users;
-      const arr = [];
       for (const user of users) {
         const item = new TableItem();
         item.obj['Username'] = { label: user.username, href: `./${routes.paths.frontend.users.update}/${user._id}` };
@@ -181,6 +185,7 @@ export class UserListComponent implements OnInit {
     }
     this.loadingUsers = false;
     this.spinner.hide();
+    return arr;
   }
 
   private async _loadRoles() {
@@ -195,6 +200,17 @@ export class UserListComponent implements OnInit {
     }));
     this.filter.selectedRoles = JSON.parse(JSON.stringify(this.filter.originalRoles));
     this.loadingRoles = false;
+  }
+
+  async pageChanged() {
+    try {
+      const copy = await this._loadUsers();
+      if (copy.length > 0) {
+        this.visibleUsers = copy;
+      }
+    } catch (err) {
+      this.visibleUsers = undefined;
+    }
   }
 
   eventHandler(event) {

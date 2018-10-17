@@ -20,20 +20,22 @@
 
   <footer class="footer">
     <div class="container">
-      <div class="row">
-        <div class="col-md-2 offset-5 text-center">
-          <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
-          <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage" name="jumpToPage"
-            #jumpToPage="ngModel">
+      <form>
+        <div class="row">
+          <div class="col-md-2 offset-5 text-center">
+            <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
+            <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage" name="jumpToPage"
+              #jumpToPage="ngModel">
+          </div>
+          <div class="col-md-1 align-self-end">
+            <button [disabled]="!paginationObj.jumpToPage" type="submit" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
+              <fa-icon [icon]="jumpArrow"></fa-icon>
+            </button>
+          </div>
         </div>
-        <div class="col-md-1 align-self-end">
-          <button [disabled]="!paginationObj.jumpToPage" type="button" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
-            <fa-icon [icon]="jumpArrow"></fa-icon>
-          </button>
-        </div>
-      </div>
+      </form>
       <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems"
-        [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="pageChanged($event)" [maxSize]="paginationObj.maxSize"
+        [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="pageChanged()" [maxSize]="paginationObj.maxSize"
         [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks" aria-label="Default pagination"></ngb-pagination>
     </div>
   </footer>
