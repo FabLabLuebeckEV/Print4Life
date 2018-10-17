@@ -13,6 +13,12 @@ export class Role {
     ) { }
 }
 
+export class Language {
+    constructor(
+        public language: String
+    ) { }
+}
+
 export class User {
     constructor(
         public _id: String,
@@ -24,6 +30,7 @@ export class User {
         public email: String,
         public address: Address,
         public role: Role,
+        public preferredLanguage: Language,
         public activated: boolean
     ) { }
 }

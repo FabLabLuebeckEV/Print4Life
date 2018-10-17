@@ -8,6 +8,7 @@ export const routes = {
             users: {
                 root: 'users',
                 getRoles: 'roles',
+                getLanguages: 'languages',
                 login: 'login',
                 findown: 'findown',
                 search: 'search',

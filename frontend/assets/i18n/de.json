@@ -16,7 +16,10 @@
         "title": "Sprachauswahl",
         "german": "Deutsch",
         "english": "Englisch",
-        "danish": "Dänisch"
+        "danish": "Dänisch",
+        "de": "Deutsch",
+        "gb": "Englisch",
+        "dk": "Dänisch"
     },
     "dropdown": {
         "machines": {
@@ -303,7 +306,8 @@
             "createSubmit": "Registrieren",
             "editSubmit": "Aktualisieren",
             "fablab": "Fablab",
-            "changePassword": "Passwort Ändern"
+            "changePassword": "Passwort Ändern",
+            "preferredLanguage": "Bevorzugte Sprache"
         },
         "modals": {
             "ok": "Ok",
@@ -333,7 +337,8 @@
             "zipCode": "Die Postleitzahl wird benötigt",
             "city": "Die Stadt wird benötigt",
             "country": "Das Land wird benötigt",
-            "notAssigned": "Keine Zuweisung"
+            "notAssigned": "Keine Zuweisung",
+            "preferredLanguage": "Eine bevorzugte Sprache wird benötigt"
         },
         "buttons": {
             "activatedTrue": "Aktiv",

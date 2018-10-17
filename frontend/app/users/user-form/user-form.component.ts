@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { User, Address, Role } from '../../models/user.model';
+import { User, Address, Role, Language } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -10,6 +10,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { GenericService } from '../../services/generic.service';
 import { FablabService } from 'frontend/app/services/fablab.service';
 import { ChangePasswdModalComponent } from '../change-passwd-modal/change-passwd-modal.component';
+import { lang } from 'moment';
+
+interface Dropdown {
+  name: String;
+  elements: Array<Object>;
+}
 
 @Component({
   selector: 'app-user-form',
@@ -20,6 +26,9 @@ export class UserFormComponent implements OnInit {
   loadingRoles: Boolean = false;
   validRoles: Array<String> = [];
 
+  loadingLanguages: Boolean = false;
+  validLanguages: Array<String> = [];
+
   editView: Boolean;
   userId: String;
   isAdmin: Boolean;
@@ -28,10 +37,15 @@ export class UserFormComponent implements OnInit {
 
   address: Address = new Address(undefined, undefined, undefined, undefined);
   role: Role = new Role('user'); // default on register is user
-  user: User = new User(undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.address, this.role, false);
+  preferredLanguage = new Language('en'); // default en/english
+  user: User = new User(
+    undefined, undefined, undefined, undefined,
+    undefined, undefined, undefined, this.address,
+    this.role, this.preferredLanguage, false);
   translationFields = {
     title: '',
     shownRoles: [],
+    shownLanguages: [],
     labels: {
       username: '',
       firstName: '',
@@ -48,6 +62,7 @@ export class UserFormComponent implements OnInit {
       submit: '',
       fablab: '',
       changePassword: '',
+      preferredLanguage: ''
     },
     modals: {
       ok: '',
@@ -74,7 +89,8 @@ export class UserFormComponent implements OnInit {
       zipCode: '',
       city: '',
       country: '',
-      notAssigned: ''
+      notAssigned: '',
+      preferredLanguage: ''
     },
     buttons: {
       activatedTrue: '',
@@ -107,6 +123,7 @@ export class UserFormComponent implements OnInit {
   async ngOnInit() {
     this.loadingFablabs = true;
     await this._loadRoles();
+    await this._loadLanguages();
     await this._initializeUser(this.userId);
     this._loadFablabs();
     this.isAdmin = await this.userService.isAdmin();
@@ -118,7 +135,15 @@ export class UserFormComponent implements OnInit {
 
   onSubmit() {
     const userCopy = JSON.parse(JSON.stringify(this.user));
-    this.translateService.get(['roles']).subscribe((translations => {
+    this.translateService.get(['roles', 'languages']).subscribe((translations => {
+      this.validLanguages.forEach(lang => {
+        const translated = translations['languages'][`${lang}`];
+        if (translated) {
+          if (userCopy['shownRole'] === translated) {
+            userCopy.preferredLanguage = new Language(lang);
+          }
+        }
+      });
       this.validRoles.forEach((role) => {
         const translated = translations['roles'][`${role}`];
         if (translated) {
@@ -165,6 +190,12 @@ export class UserFormComponent implements OnInit {
     this.user.role.role = role;
   }
 
+  async languageChanged(language) {
+    this.user['shownLanguage'] = language;
+    language = await this._translateLanguage(this.user['shownLanguage']);
+    this.user.preferredLanguage.language = language;
+  }
+
   // Private Functions
 
   private async _loadFablabs() {
@@ -180,12 +211,20 @@ export class UserFormComponent implements OnInit {
       this.user = await this.userService.getProfile(id);
       this.user.address = this.user.hasOwnProperty('address') ? this.user.address : this.address;
       this.user.role = this.user.hasOwnProperty('role') ? this.user.role : this.role;
+      this.user.preferredLanguage = this.user.hasOwnProperty('preferredLanguage') ? this.user.preferredLanguage : this.preferredLanguage;
     }
   }
+
   private async _loadRoles() {
     this.loadingRoles = true;
     this.validRoles = (await this.userService.getRoles()).roles;
     this.loadingRoles = false;
+  }
+
+  private async _loadLanguages() {
+    this.loadingLanguages = true;
+    this.validLanguages = (await this.userService.getLanguages()).languages;
+    this.loadingLanguages = false;
   }
 
   private _openSuccessMsg() {
@@ -228,6 +267,28 @@ export class UserFormComponent implements OnInit {
     });
   }
 
+  private _translateLanguage(language): Promise<String> {
+    return new Promise((resolve) => {
+      this.translateService.get(['languages']).subscribe((translations) => {
+        let retStatus;
+        // translation to origin
+        this.validLanguages.forEach((vLang) => {
+          const l = translations['languages'][`${vLang}`];
+          if (l) {
+            if (language === l) {
+              retStatus = vLang;
+            }
+          }
+        });
+        // origin to translation
+        if (!retStatus) {
+          retStatus = translations['languages'][`${language}`];
+        }
+        resolve(retStatus);
+      });
+    });
+  }
+
   private _changePassword() {
     const modalRef = this.modalService.open(ChangePasswdModalComponent);
     modalRef.componentInstance.userId = this.user._id;
@@ -242,12 +303,20 @@ export class UserFormComponent implements OnInit {
   }
 
   private _translate() {
-    this.translateService.get(['userForm', 'roles']).subscribe((translations => {
+    this.translateService.get(['userForm', 'roles', 'languages']).subscribe((translations => {
       const shownRoles = [];
       this.validRoles.forEach((role) => {
         const translated = translations['roles'][`${role}`];
         if (translated) {
           shownRoles.push(translated);
+        }
+      });
+
+      const shownLanguages = [];
+      this.validLanguages.forEach(lang => {
+        const translated = translations['languages'][`${lang}`];
+        if (translated) {
+          shownLanguages.push(translated);
         }
       });
 
@@ -259,11 +328,20 @@ export class UserFormComponent implements OnInit {
         });
       }
 
+      if (this.user && this.user.preferredLanguage && this.user.preferredLanguage.language) {
+        this._translateLanguage(this.user.preferredLanguage.language).then((shownLanguage) => {
+          this.user['shownLanguage'] = shownLanguage;
+        }).catch((error) => {
+          console.log(error);
+        });
+      }
+
       this.translationFields = {
         title: !this.editView
           ? translations['userForm'].createTitle
           : translations['userForm'].editTitle,
         shownRoles: shownRoles,
+        shownLanguages: shownLanguages,
         labels: {
           username: translations['userForm'].labels.username,
           firstName: translations['userForm'].labels.firstName,
@@ -281,7 +359,8 @@ export class UserFormComponent implements OnInit {
             ? translations['userForm'].labels.createSubmit
             : translations['userForm'].labels.editSubmit,
           fablab: translations['userForm'].labels.fablab,
-          changePassword: translations['userForm'].labels.changePassword
+          changePassword: translations['userForm'].labels.changePassword,
+          preferredLanguage: translations['userForm'].labels.preferredLanguage
         },
         modals: {
           ok: translations['userForm'].modals.ok,
@@ -314,7 +393,8 @@ export class UserFormComponent implements OnInit {
           zipCode: translations['userForm'].messages.zipCode,
           city: translations['userForm'].messages.city,
           country: translations['userForm'].messages.country,
-          notAssigned: translations['userForm'].messages.notAssigned
+          notAssigned: translations['userForm'].messages.notAssigned,
+          preferredLanguage: translations['userForm'].messages.preferredLanguage
         },
         buttons: {
           activatedTrue: translations['userForm'].buttons.activatedTrue,

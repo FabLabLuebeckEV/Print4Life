@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { addressSchema } from './address.model';
 import { roleSchema } from './role.model';
+import { languageSchema } from './language';
 
 const Schema = mongoose.Schema;
 
@@ -34,7 +35,7 @@ export const userSchema = new Schema({
     required: true
   },
   preferredLanguage: {
-    type: String,
+    type: languageSchema,
     required: true
   },
   activated: {

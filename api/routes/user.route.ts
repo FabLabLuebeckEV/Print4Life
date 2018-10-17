@@ -455,6 +455,51 @@ router.route('/roles').get((req, res) => {
 });
 
 /**
+ * @api {get} /api/v1/users/languages Gets all supported languages
+ * @apiName getLanguages
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { languages } a list of supported languages
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *  {
+      "roles": [
+          "german",
+          "danish",
+          "english",
+      ]
+    }
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while trying to get all valid languages!",
+      "stack": {
+          ...
+      }
+  }
+ */
+router.route('/languages').get((req, res) => {
+  userCtrl.getLanguages().then((languages) => {
+    if (!languages) {
+      res.status(204).send();
+    } else {
+      res.status(200).send({ languages });
+    }
+  }).catch((err) => {
+    const msg = { error: 'Error while trying to get all valid languages!', stack: err };
+    logger.error(msg);
+    res.status(500).send(msg);
+  });
+});
+
+/**
  * @api {post} /api/v1/users/login Logs a user in and returns a jsonwebtoken
  * @apiName login
  * @apiVersion 1.0.0

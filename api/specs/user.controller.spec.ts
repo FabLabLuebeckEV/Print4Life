@@ -139,6 +139,24 @@ describe('User Controller', () => {
     });
   });
 
+  it('gets languages', (done) => {
+    request({
+      uri: `${endpoint}users/languages`,
+      method: 'GET',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(200);
+      expect(response.body.languages).toBeDefined();
+      expect(response.body.languages.length).toBeGreaterThan(0);
+
+      expect(response.body.languages.includes('german')).toEqual(true);
+      expect(response.body.languages.includes('english')).toEqual(true);
+      expect(response.body.languages.includes('danish')).toEqual(true);
+      done();
+    });
+  });
+
   it('counts users', (done) => {
     request.post(`${endpoint}users/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },

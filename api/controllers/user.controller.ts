@@ -7,6 +7,7 @@ import config from '../config/config';
 import emailService, { EmailOptions } from '../services/email.service';
 import { ErrorType } from '../services/router.service';
 import logger from '../logger';
+import { languageSchema } from '../models/language';
 
 /* eslint-enable no-unused-vars */
 
@@ -34,6 +35,17 @@ async function getRoles () {
       reject();
     } else {
       resolve(roles);
+    }
+  });
+}
+
+async function getLanguages () {
+  return new Promise((resolve, reject) => {
+    const langs = languageSchema.paths.language.enumValues;
+    if (langs === undefined) {
+      reject();
+    } else {
+      resolve(langs);
     }
   });
 }
@@ -184,6 +196,7 @@ export default {
   signUp,
   informAdmins,
   getRoles,
+  getLanguages,
   login,
   getUserByUsername,
   getUserById,

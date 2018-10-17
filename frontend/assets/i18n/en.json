@@ -16,7 +16,10 @@
         "title": "Languages",
         "german": "German",
         "english": "English",
-        "danish": "Danish"
+        "danish": "Danish",
+        "de": "German",
+        "gb": "English",
+        "dk": "Danish"
     },
     "dropdown": {
         "machines": {
@@ -303,7 +306,8 @@
             "createSubmit": "Register",
             "editSubmit": "Edit",
             "fablab": "Fablab",
-            "changePassword": "Change Password"
+            "changePassword": "Change Password",
+            "preferredLanguage": "Preferred Language"
         },
         "modals": {
             "ok": "Ok",
@@ -333,7 +337,8 @@
             "zipCode": "Zip code is required",
             "city": "City is required",
             "country": "Country is required",
-            "notAssigned": "Not assigned"
+            "notAssigned": "Not assigned",
+            "preferredLanguage": "Preferred Language is required"
         },
         "buttons": {
             "activatedTrue": "active",
