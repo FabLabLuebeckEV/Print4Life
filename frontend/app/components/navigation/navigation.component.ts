@@ -6,7 +6,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginModalComponent } from '../../users/login-modal/login-modal.component';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
-import { Location } from '@angular/common';
 
 interface Dropdown {
   name: String;
@@ -121,9 +120,7 @@ export class NavigationComponent implements OnInit {
 
       this.userDropdown = {
         name: translations['dropdown.users'].title,
-        elements: [
-
-        ]
+        elements: []
       };
 
       if (this.user) {

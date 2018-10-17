@@ -301,7 +301,8 @@
             "city": "Stadt",
             "country": "Land",
             "createSubmit": "Registrieren",
-            "editSubmit": "Aktualisieren"
+            "editSubmit": "Aktualisieren",
+            "fablab": "Fablab"
         },
         "modals": {
             "ok": "Ok",
@@ -326,7 +327,8 @@
             "street": "Die Straße wird benötigt",
             "zipCode": "Die Postleitzahl wird benötigt",
             "city": "Die Stadt wird benötigt",
-            "country": "Das Land wird benötigt"
+            "country": "Das Land wird benötigt",
+            "notAssigned": "Keine Zuweisung"
         },
         "buttons": {
             "activatedTrue": "Aktiv",

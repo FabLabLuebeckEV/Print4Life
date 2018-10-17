@@ -301,7 +301,8 @@
             "city": "City",
             "country": "Country",
             "createSubmit": "Register",
-            "editSubmit": "Edit"
+            "editSubmit": "Edit",
+            "fablab": "Fablab"
         },
         "modals": {
             "ok": "Ok",
@@ -326,7 +327,8 @@
             "street": "Street is required",
             "zipCode": "Zip code is required",
             "city": "City is required",
-            "country": "Country is required"
+            "country": "Country is required",
+            "notAssigned": "Not assigned"
         },
         "buttons": {
             "activatedTrue": "active",

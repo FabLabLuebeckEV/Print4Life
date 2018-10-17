@@ -8,6 +8,7 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
 import { routes } from '../../config/routes';
 import { TranslateService } from '@ngx-translate/core';
 import { GenericService } from '../../services/generic.service';
+import { FablabService } from 'frontend/app/services/fablab.service';
 
 @Component({
   selector: 'app-user-form',
@@ -21,6 +22,8 @@ export class UserFormComponent implements OnInit {
   editView: Boolean;
   userId: String;
   isAdmin: Boolean;
+  loadingFablabs: Boolean;
+  fablabs: Array<any>;
 
   address: Address = new Address(undefined, undefined, undefined, undefined);
   role: Role = new Role('user'); // default on register is user
@@ -41,7 +44,8 @@ export class UserFormComponent implements OnInit {
       zipCode: '',
       city: '',
       country: '',
-      submit: ''
+      submit: '',
+      fablab: ''
     },
     modals: {
       ok: '',
@@ -63,7 +67,8 @@ export class UserFormComponent implements OnInit {
       street: '',
       zipCode: '',
       city: '',
-      country: ''
+      country: '',
+      notAssigned: ''
     },
     buttons: {
       activatedTrue: '',
@@ -78,7 +83,8 @@ export class UserFormComponent implements OnInit {
     private modalService: NgbModal,
     private translateService: TranslateService,
     private genericService: GenericService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private fablabService: FablabService
   ) {
     this.router.events.subscribe(() => {
       const route = this.location.path();
@@ -92,8 +98,10 @@ export class UserFormComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.loadingFablabs = true;
     await this._loadRoles();
     await this._initializeUser(this.userId);
+    this._loadFablabs();
     this.isAdmin = await this.userService.isAdmin();
     this._translate();
     this.translateService.onLangChange.subscribe(() => {
@@ -118,26 +126,26 @@ export class UserFormComponent implements OnInit {
       }
       if (this.editView) {
         this.userService.updateUser(userCopy)
-        .then(res => {
-          if (res) {
-            this._openSuccessMsg();
-          }
-        })
-        .catch(err => {
-          const errorMsg = this.translationFields.modals.errorMessage;
-          const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
-          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
-        });
+          .then(res => {
+            if (res) {
+              this._openSuccessMsg();
+            }
+          })
+          .catch(err => {
+            const errorMsg = this.translationFields.modals.errorMessage;
+            const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
+            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+          });
       } else {
         this.userService.createUser(userCopy)
-        .then(res => {
-          this._openSuccessMsg();
-        })
-        .catch(err => {
-          const errorMsg = this.translationFields.modals.errorMessage;
-          const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
-          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
-        });
+          .then(res => {
+            this._openSuccessMsg();
+          })
+          .catch(err => {
+            const errorMsg = this.translationFields.modals.errorMessage;
+            const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
+            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+          });
       }
     }));
   }
@@ -151,6 +159,14 @@ export class UserFormComponent implements OnInit {
   }
 
   // Private Functions
+
+  private async _loadFablabs() {
+    try {
+      this.fablabs = (await this.fablabService.getFablabs()).fablabs;
+    } finally {
+      this.loadingFablabs = false;
+    }
+  }
 
   private async _initializeUser(id) {
     if (id !== undefined) {
@@ -243,7 +259,8 @@ export class UserFormComponent implements OnInit {
           country: translations['userForm'].labels.country,
           submit: !this.editView
             ? translations['userForm'].labels.createSubmit
-            : translations['userForm'].labels.editSubmit
+            : translations['userForm'].labels.editSubmit,
+          fablab: translations['userForm'].labels.fablab,
         },
         modals: {
           ok: translations['userForm'].modals.ok,
@@ -271,7 +288,8 @@ export class UserFormComponent implements OnInit {
           street: translations['userForm'].messages.street,
           zipCode: translations['userForm'].messages.zipCode,
           city: translations['userForm'].messages.city,
-          country: translations['userForm'].messages.country
+          country: translations['userForm'].messages.country,
+          notAssigned: translations['userForm'].messages.notAssigned
         },
         buttons: {
           activatedTrue: translations['userForm'].buttons.activatedTrue,
