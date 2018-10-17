@@ -8,8 +8,8 @@ const endpoint = configs.configArr.prod.baseUrlBackend;
 const testOrder = {
   projectname: 'unscheinBar',
   comments: [],
-  editor: 'Mister Bar',
-  owner: 'Mister Foo',
+  editor: '12345678901234567890aaaa',
+  owner: '12345678901234567890aaaa',
   files: [],
   status: 'new',
   machine: {
