@@ -48,7 +48,7 @@ export class CreateOrderComponent implements OnInit {
   fablabs: Array<any>;
   editors: Array<User>;
   loadingEditors: Boolean;
-  loggedInUser: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined);
+  loggedInUser: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
   translationFields = {
     title: '',

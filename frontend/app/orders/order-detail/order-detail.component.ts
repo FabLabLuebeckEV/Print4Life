@@ -25,8 +25,8 @@ export class OrderDetailComponent implements OnInit {
   editIcon: any;
   deleteIcon: any;
   editLink: String;
-  editor: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined);
-  owner: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined);
+  editor: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+  owner: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
   order: Order = new Order(
     undefined,
