@@ -12,6 +12,7 @@ import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
 import * as moment from 'moment';
+import { User } from 'frontend/app/models/user.model';
 
 @Component({
   selector: 'app-order-detail',
@@ -24,6 +25,8 @@ export class OrderDetailComponent implements OnInit {
   editIcon: any;
   deleteIcon: any;
   editLink: String;
+  editor: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined);
+  owner: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined);
 
   order: Order = new Order(
     undefined,
@@ -32,6 +35,7 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     undefined,
     [],
+    undefined,
     undefined,
     undefined,
     undefined
@@ -88,8 +92,18 @@ export class OrderDetailComponent implements OnInit {
     this.route.paramMap
       .subscribe((params) => {
         if (params && params.get('id')) {
-          this.orderService.getOrderById(params.get('id')).then((result) => {
+          this.orderService.getOrderById(params.get('id')).then(async (result) => {
             this.order = result.order;
+            this.owner = await this.userService.getProfile(this.order.owner);
+            this.owner['fullname'] = this.owner.firstname + ' ' + this.owner.lastname;
+            if (this.order.editor) {
+              this.editor = await this.userService.getProfile(this.order.editor);
+              this.editor['fullname'] = this.editor.firstname + ' ' + this.editor.lastname;
+            }
+            this.order.comments.forEach(async (comment) => {
+              const author = await this.userService.getProfile(comment.author);
+              comment['authorName'] = author.firstname + ' ' + author.lastname;
+            });
             this.editLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
             this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
               const type = this.machineService.camelCaseTypes(this.order.machine.type);
@@ -157,6 +171,11 @@ export class OrderDetailComponent implements OnInit {
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
+      if (this.order) {
+        let createdAt = moment(this.order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
+        createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
+        this.order['shownCreatedAt'] = createdAt;
+      }
       if (this.order && this.order.status) {
         this._translateStatus().then((shownStatus) => {
           this.order['shownStatus'] = shownStatus;

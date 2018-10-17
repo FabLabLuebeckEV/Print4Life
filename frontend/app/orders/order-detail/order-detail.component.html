@@ -26,11 +26,11 @@
         <tbody>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.owner}}</td>
-            <td class="align-middle text-center">{{order.owner}}</td>
+            <td class="align-middle text-center">{{owner.fullname}}</td>
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.editor}}</td>
-            <td class="align-middle text-center">{{order.editor}}</td>
+            <td class="align-middle text-center">{{editor.fullname}}</td>
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.status}}</td>
@@ -40,7 +40,7 @@
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.createdAt}}</td>
-            <td class="align-middle text-center">{{order['shownCreatedAt']}}</td>
+            <td class="align-middle text-center">{{order.shownCreatedAt}}</td>
           </tr>
           <tr *ngIf="machine">
             <td class="align-middle text-center">{{translationFields.labels.machine}}</td>
@@ -78,9 +78,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let comment of order.comments">
-            <td class="align-middle text-center">{{comment.author}}</td>
+            <td class="align-middle text-center">{{comment.authorName}}</td>
             <td class="align-middle text-center">{{comment.content}}</td>
-            <td class="align-middle text-center">{{comment['shownCreatedAt']}}</td>
+            <td class="align-middle text-center">{{comment.shownCreatedAt}}</td>
           </tr>
         </tbody>
       </table>

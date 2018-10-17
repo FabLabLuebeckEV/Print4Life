@@ -187,11 +187,13 @@ export class OrderListComponent implements OnInit {
       query, this.paginationObj.perPage,
       (this.paginationObj.page - 1) * this.paginationObj.perPage);
     if (orders && orders.orders) {
-      this.translateService.get(['date']).subscribe((translations => {
+      this.translateService.get(['date']).subscribe((async translations => {
         orders = orders.orders;
         const arr = [];
         for (const order of orders) {
           const item = new TableItem();
+          const owner = await this.userService.getProfile(order.owner);
+          const editor = order.editor ? await this.userService.getProfile(order.editor) : undefined;
           item.obj['id'] = { label: order._id };
           item.obj['Created at'] = {
             label: currentLang === 'de'
@@ -199,8 +201,8 @@ export class OrderListComponent implements OnInit {
               : moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat)
           };
           item.obj['Projectname'] = { label: order.projectname, href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
-          item.obj['Owner'] = { label: order.owner };
-          item.obj['Editor'] = { label: order.editor };
+          item.obj['Owner'] = { label: owner.firstname + ' ' + owner.lastname };
+          item.obj['Editor'] = { label: editor ? editor.firstname + ' ' + editor.lastname : '' };
           item.obj['Status'] = { label: order.status };
           item.obj['Device Type'] = { label: order.machine.type };
           if (this.userIsLoggedIn) {
@@ -286,15 +288,17 @@ export class OrderListComponent implements OnInit {
         `${order.obj[`Projectname`].label} ${this.translationFields.modals.deleteQuestion2}`, deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
-          this.orderService.deleteOrder(order.obj.id.label).then((result) => {
+          this.orderService.deleteOrder(order.obj.id.label).then(async (result) => {
             result = result.order;
             const oldOrder = this.visibleOrders[orderIdx];
+            const owner = await this.userService.getProfile(result.owner);
+            const editor = result.editor ? await this.userService.getProfile(result.editor) : undefined;
             this.orders.forEach((item) => {
               if (oldOrder.obj.id.label === item.obj.id.label) {
                 this.orders[orderIdx].obj = {};
                 this.orders[orderIdx].obj['id'] = { label: result._id };
-                this.orders[orderIdx].obj['Owner'] = { label: result.owner };
-                this.orders[orderIdx].obj['Editor'] = { label: result.editor };
+                this.orders[orderIdx].obj['Owner'] = { label: owner.firstname + ' ' + owner.lastname };
+                this.orders[orderIdx].obj['Editor'] = { label: editor ? editor.firstname + ' ' + editor.lastname : '' };
                 this.orders[orderIdx].obj['Status'] = { label: result.status };
                 this.orders[orderIdx].obj['Device Type'] = { label: result.machine.type };
 

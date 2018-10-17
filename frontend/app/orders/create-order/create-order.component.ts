@@ -13,6 +13,8 @@ import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
+import { User } from 'frontend/app/models/user.model';
+import { UserService } from 'frontend/app/services/user.service';
 
 
 @Component({
@@ -28,7 +30,8 @@ export class CreateOrderComponent implements OnInit {
   routeChanged: Boolean;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
-  order: Order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined);
+  order: Order = new Order(
+    undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
 
@@ -43,6 +46,9 @@ export class CreateOrderComponent implements OnInit {
 
   loadingFablabs: Boolean;
   fablabs: Array<any>;
+  editors: Array<User>;
+  loadingEditors: Boolean;
+  loggedInUser: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined);
 
   translationFields = {
     title: '',
@@ -98,7 +104,8 @@ export class CreateOrderComponent implements OnInit {
     private configService: ConfigService,
     private genericService: GenericService,
     private translateService: TranslateService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private userService: UserService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
     this._translate();
@@ -128,26 +135,22 @@ export class CreateOrderComponent implements OnInit {
   onSubmitComment(form) {
     const errorMsg = this.translationFields.modals.createCommentError;
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
-
+    this.comment.author = this.loggedInUser._id;
+    this.comment['authorName'] = undefined;
     this.orderService.createComment(this.orderId, this.comment).then((result) => {
       if (result) {
         this._openMsgModal(this.translationFields.modals.createCommentSuccessHeader, 'modal-header header-success',
           this.translationFields.modals.createCommentSuccess, okButton, undefined).result.then((result) => {
             this.orderService.getOrderById(this.orderId).then((result) => {
-              this.order = result.order;
-              const author = JSON.parse(JSON.stringify(this.comment.author));
+              this.order.comments = result.order.comments;
               form.reset();
-              form.controls['author'].setValue(author);
-              this._translateMachineType(this.order.machine.type).then((shownType) => {
-                this.order.machine['shownType'] = shownType;
-                this._translateStatus(this.order.status).then((shownStatus) => {
-                  this.order['shownStatus'] = shownStatus;
-                }).catch((error) => {
-                  console.log(error);
-                });
-              }).catch((error) => {
-                console.log(error);
+              this.order.comments.forEach(async (comment) => {
+                const user = await this.userService.getProfile(comment.author);
+                if (user) {
+                  comment['authorName'] = user.firstname + ' ' + user.lastname;
+                }
               });
+              this._translate();
             });
             this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.orderId}`]);
           });
@@ -162,6 +165,7 @@ export class CreateOrderComponent implements OnInit {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
     let found = false;
     let orderCopy;
+    this.comment.author = this.loggedInUser._id;
     if (this.comment.author && this.comment.content) {
       if (!this.order.comments) {
         this.order.comments = [];
@@ -172,6 +176,7 @@ export class CreateOrderComponent implements OnInit {
         }
       });
       if (!found) {
+        this.comment['authorName'] = undefined;
         this.order.comments.push(this.comment);
       }
     }
@@ -247,16 +252,46 @@ export class CreateOrderComponent implements OnInit {
 
   // Private Functions
 
+  private async _loadEditors() {
+    this.loadingEditors = true;
+    try {
+      const result = await this.userService.getAllUsers({ 'role.role': 'editor', activated: true }, 0, 0);
+      if (result && result.users) {
+        this.editors = result.users;
+        this.editors.forEach((editor) => {
+          editor['shownName'] = editor.firstname + ' ' + editor.lastname;
+        });
+      }
+    }
+    finally {
+      this.loadingEditors = false;
+    }
+  }
+
+
   private async _initializeOrder(id) {
+    this.loggedInUser = await this.userService.getUser();
     if (id !== undefined) {
+      await this._loadEditors();
       this.order = (await this.orderService.getOrderById(id)).order;
+      this.order.editor = this.order.editor && this.order.editor.length === 24 ?
+        (await this.userService.getProfile(this.order.editor)).user : undefined;
       this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
       this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
+      this.order.comments.forEach(async (comment) => {
+        const user = await this.userService.getProfile(comment.author);
+        if (user) {
+          comment['authorName'] = user.firstname + ' ' + user.lastname;
+        }
+      });
       const machineId = this.order.machine._id;
       this.machineTypeChanged(this.order.machine['shownType']);
       this.order.machine._id = machineId;
+    } else {
+      this.order.owner = this.loggedInUser._id;
     }
+
   }
 
   private async _loadStatus() {
