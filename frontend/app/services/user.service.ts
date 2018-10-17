@@ -152,8 +152,8 @@ export class UserService {
     return isAdmin;
   }
 
-  public claimActivation(userId): void {
-    this.http.put(`${this.p}/${routes.paths.backend.users.activationRequest}/${userId}`, undefined).toPromise();
+  public claimActivation(userId) {
+    return this.http.put(`${this.p}/${userId}/${routes.paths.backend.users.activationRequest}`, undefined).toPromise();
   }
 
   public async resetPassword(email) {

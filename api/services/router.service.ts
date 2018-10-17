@@ -50,6 +50,11 @@ function _isPublicRoute (url, method) {
         if (url.startsWith(route.url)) {
           isPublic = true;
         }
+      } else if (route.url.includes(':id')) {
+        const split = route.url.split(':id');
+        if (url.startsWith(split[0]) && url.endsWith(split[1])) {
+          isPublic = true;
+        }
       } else if (url === route.url) {
         isPublic = true;
       }

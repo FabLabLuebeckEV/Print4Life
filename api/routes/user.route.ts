@@ -661,7 +661,7 @@ router.route('/:id').get((req, res) => {
 });
 
 /**
- * @api {put} /api/v1/users/activationRequest/:id activate a user
+ * @api {put} /api/v1/users/:id/activationRequest activate a user
  * @apiName activationRequestByUser
  * @apiVersion 1.0.0
  * @apiGroup Users
@@ -689,7 +689,7 @@ router.route('/:id').get((req, res) => {
       }
   }
  */
-router.route('/activationRequest/:id').put((req, res) => {
+router.route('/:id/activationRequest/').put((req, res) => {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
