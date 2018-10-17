@@ -4,8 +4,7 @@ const attributes = {
   language: {
     enum: ['de', 'dk', 'en'],
     type: String,
-    default: 'en',
-    required: true
+    default: 'en'
   },
 };
 

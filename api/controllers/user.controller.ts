@@ -7,13 +7,17 @@ import config from '../config/config';
 import emailService, { EmailOptions } from '../services/email.service';
 import { ErrorType } from '../services/router.service';
 import logger from '../logger';
-import { languageSchema } from '../models/language';
+import Language, { languageSchema } from '../models/language';
 
 /* eslint-enable no-unused-vars */
 
 async function signUp (user) {
   delete user._id;
   delete user.__v;
+  if (!user.preferredLanguage) {
+    const language = new Language();
+    user.preferredLanguage = language;
+  }
   user.createdAt = new Date();
   const newUser = new User({
     ...user
@@ -24,7 +28,6 @@ async function signUp (user) {
   }
   newUser.role = role;
   newUser.activated = user.activated || false;
-  newUser.preferredLanguage = newUser.preferredLanguage || 'en';
   return newUser.save();
 }
 
@@ -113,7 +116,7 @@ function informAdmins (user, newUser: boolean) {
     User.find({ 'role.role': 'admin', activated: true }).then((admins) => {
       admins.forEach((admin) => {
         options.to = admin.email;
-        options.preferredLanguage = admin.preferredLanguage || 'en';
+        options.preferredLanguage = admin.preferredLanguage.language || 'en';
         options.locals.adminName = `${admin.firstname} ${admin.lastname}`;
         emailService.sendMail(options);
       });
@@ -172,7 +175,7 @@ async function resetPassword (email: string) {
     try {
       await user.save();
       const options = {
-        preferredLanguage: user.preferredLanguage ? user.preferredLanguage : 'en',
+        preferredLanguage: user.preferredLanguage.language ? user.preferredLanguage.language : 'en',
         template: 'resetPassword',
         to: user.email,
         locals:

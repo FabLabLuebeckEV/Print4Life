@@ -132,7 +132,9 @@ router.post('/', async (req, res) => {
             "role": {
                 "role": "admin"
             },
-            "preferredLanguage": "en",
+            "preferredLanguage": {
+              "language": "en"
+            },
             "createdAt": "2018-10-12T06:53:34.419Z",
             "__v": 0
         },
@@ -153,7 +155,9 @@ router.post('/', async (req, res) => {
             "role": {
                 "role": "user"
             },
-            "preferredLanguage": "en",
+            "preferredLanguage": {
+              "language": "en"
+            },
             "createdAt": "2018-10-12T07:01:45.252Z",
             "__v": 0
         },
@@ -174,7 +178,9 @@ router.post('/', async (req, res) => {
             "role": {
                 "role": "user"
             },
-            "preferredLanguage": "en",
+            "preferredLanguage": {
+              "language": "en"
+            },
             "createdAt": "2018-10-12T07:01:45.397Z",
             "__v": 0
         },
@@ -195,7 +201,9 @@ router.post('/', async (req, res) => {
             "role": {
                 "role": "user"
             },
-            "preferredLanguage": "en",
+            "preferredLanguage": {
+              "language": "en"
+            },
             "createdAt": "2018-10-12T07:01:45.469Z",
             "__v": 0
         },
@@ -216,7 +224,9 @@ router.post('/', async (req, res) => {
             "role": {
                 "role": "user"
             },
-            "preferredLanguage": "en",
+            "preferredLanguage": {
+              "language": "en"
+            },
             "createdAt": "2018-10-12T07:04:54.388Z",
             "__v": 0
         },
@@ -237,7 +247,9 @@ router.post('/', async (req, res) => {
             "role": {
                 "role": "user"
             },
-            "preferredLanguage": "en",
+            "preferredLanguage": {
+              "language": "en"
+            },
             "createdAt": "2018-10-12T07:04:54.538Z",
             "__v": 0
         },
@@ -258,7 +270,9 @@ router.post('/', async (req, res) => {
             "role": {
                 "role": "user"
             },
-            "preferredLanguage": "en",
+            "preferredLanguage": {
+              "language": "en"
+            },
             "createdAt": "2018-10-12T07:04:54.689Z",
             "__v": 0
         }
@@ -296,7 +310,9 @@ router.post('/', async (req, res) => {
             "role": {
                 "role": "admin"
             },
-            "preferredLanguage": "en",
+            "preferredLanguage": {
+              "language": "en"
+            },
             "createdAt": "2018-10-12T06:53:34.419Z",
             "__v": 0
         }

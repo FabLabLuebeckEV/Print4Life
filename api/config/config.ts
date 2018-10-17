@@ -49,6 +49,10 @@ const publicRoutes = [
     methods: ['GET']
   },
   {
+    url: `${baseUrl}users/languages`,
+    methods: ['GET']
+  },
+  {
     url: `${baseUrl}machines`,
     canChilds: true,
     methods: ['GET']

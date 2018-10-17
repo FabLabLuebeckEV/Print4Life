@@ -26,7 +26,6 @@ export const testUser = {
   role: {
     role: 'user'
   },
-  preferredLanguage: 'en',
   activated: true,
   createdAt: undefined
 };
