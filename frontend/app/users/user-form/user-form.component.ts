@@ -265,16 +265,16 @@ export class UserFormComponent implements OnInit {
         modals: {
           ok: translations['userForm'].modals.ok,
           okReturnValue: translations['userForm'].modals.okReturnValue,
-          successHeader: true
-            ? translations['userForm'].modals.createSuccessHeader
-            : translations['userForm'].modals.updateSuccessHeader,
-          successMessage: true
-            ? translations['userForm'].modals.createSuccess
-            : translations['userForm'].modals.updateSuccess,
+          successHeader: this.editView
+            ? translations['userForm'].modals.updateSuccessHeader
+            : translations['userForm'].modals.createSuccessHeader,
+          successMessage: this.editView
+            ? translations['userForm'].modals.updateSuccess
+            : translations['userForm'].modals.createSuccess,
           errorHeader: translations['userForm'].modals.errorHeader,
-          errorMessage: true
-            ? translations['userForm'].modals.createError
-            : translations['userForm'].modals.updateError
+          errorMessage: this.editView
+            ? translations['userForm'].modals.updateError
+            : translations['userForm'].modals.createError
         },
         messages: {
           username: translations['userForm'].messages.username,
