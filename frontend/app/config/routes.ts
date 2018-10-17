@@ -13,7 +13,8 @@ export const routes = {
                 search: 'search',
                 count: 'count',
                 activationRequest: 'activationRequest',
-                resetPassword: 'resetPassword'
+                resetPassword: 'resetPassword',
+                changePassword: 'changePassword'
             },
             orders: {
                 root: 'orders',

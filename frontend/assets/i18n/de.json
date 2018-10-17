@@ -302,7 +302,8 @@
             "country": "Land",
             "createSubmit": "Registrieren",
             "editSubmit": "Aktualisieren",
-            "fablab": "Fablab"
+            "fablab": "Fablab",
+            "changePassword": "Passwort Ändern"
         },
         "modals": {
             "ok": "Ok",
@@ -313,7 +314,11 @@
             "updateSuccess": "Der Benutzer wurde erfolgreich aktualisiert!",
             "errorHeader": "Fehler",
             "updateError": "Fehler beim Aktualisieren des Benutzers!",
-            "createError": "Fehler beim Registrieren des Benutzers!"
+            "createError": "Fehler beim Registrieren des Benutzers!",
+            "updatePasswordSuccessHeader": "Passwort aktualisiert",
+            "updatePasswordSuccess": "Benutzen Sie von nun an das neue Passwort.",
+            "updatePasswordErrorHeader": "Fehlgeschlagen",
+            "updatePassworderror": "Das aktuelle Passwort war falsch."
         },
         "messages": {
             "username": "Der Benutzername wird benötigt",
@@ -332,7 +337,8 @@
         },
         "buttons": {
             "activatedTrue": "Aktiv",
-            "activatedFalse": "Inaktiv"
+            "activatedFalse": "Inaktiv",
+            "changePassword": "Ändern"
         }
     },
     "tableComponent": {
@@ -368,6 +374,22 @@
             "successMessage": "Bitte überprüfen Sie Ihre E-Mails.",
             "errorHeader": "Ein Fehler ist aufgetreten",
             "errorMessage": "Wir konnten das Passwort nicht zurücksetzen."
+        }
+    },
+    "changePasswdModal": {
+        "title": "Passwort ändern",
+        "labels": {
+            "oldPassword": "Altes Password",
+            "password": "Passwort",
+            "password2": "Passwort bestätigen"
+        },
+        "modals": {
+            "title": "Passwort Ändern",
+            "buttonLabel": "Aktualisieren",
+            "successHeader": "Erldigt",
+            "successMessage": "Verwenden Sie von nun an Ihr neues Passwort.",
+            "errorHeader": "Ein Fehler ist aufgetreten",
+            "errorMessage": "Wir konnten das Passwort nicht ändern."
         }
     }
 }

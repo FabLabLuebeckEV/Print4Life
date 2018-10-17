@@ -4,6 +4,7 @@ import logger from '../logger';
 import routerService, { ErrorType } from '../services/router.service';
 import validatorService from '../services/validator.service';
 
+
 const router = express.Router();
 
 router.use((req, res, next) => routerService.jwtValid(req, res, next));
@@ -753,6 +754,42 @@ router.route('/resetPassword/').post((req, res) => {
       res.status(200).send({ msg: 'Password reset' });
     }).catch((err) => {
       const msg = { error: 'Error while resetting the password.', stack: err };
+      logger.error(msg);
+      res.status(500).send(msg);
+    });
+  }
+});
+
+router.route('/:id/changePassword').put((req, res) => {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    userCtrl.getUserById(req.params.id).then((user) => {
+      if (user) {
+        user.comparePassword(req.body.oldPassword, (err, isMatch) => {
+          if (err) {
+            const msg = { error: 'The current user password is not correct.' };
+            logger.error(msg);
+            res.status(401).send(msg);
+          } else if (isMatch) {
+            const msg = { msg: `User ${user._id} successfully changed his password.` };
+            logger.error(msg);
+            userCtrl.changePassword(user, req.body.newPassword);
+            res.status(200).send(msg);
+          } else {
+            const msg = { error: 'Something bad happened' };
+            logger.error(msg);
+            res.status(404).send(msg);
+          }
+        });
+      } else {
+        const msg = { error: 'GET User by id with no result.' };
+        logger.error(msg);
+        res.status(404).send(msg);
+      }
+    }).catch((err) => {
+      const msg = { error: 'Error while retrieving the user.', stack: err };
       logger.error(msg);
       res.status(500).send(msg);
     });

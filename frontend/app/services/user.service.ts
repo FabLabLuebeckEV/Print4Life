@@ -33,6 +33,10 @@ export class UserService {
     return this.http.put(`${this.p}/${user._id}`, user).toPromise();
   }
 
+  public changePassword(id, oldPassword, newPassword): Promise<any> {
+    return this.http.put(`${this.p}/${id}/${routes.paths.backend.users.changePassword}`, { oldPassword, newPassword }).toPromise();
+  }
+
   public deleteUser(id): Promise<any> {
     return this.http.delete(`${this.p}/${id}`).toPromise();
   }

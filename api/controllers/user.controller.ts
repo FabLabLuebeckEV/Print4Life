@@ -144,6 +144,11 @@ async function deleteUser (_id) {
   return updateUser(user);
 }
 
+async function changePassword (user, newPassword) {
+  user.password = newPassword;
+  return user.save(user);
+}
+
 async function resetPassword (email: string) {
   const users = await getUsers({ email }, 1, 0);
   let password;
@@ -187,5 +192,6 @@ export default {
   count,
   updateUser,
   deleteUser,
-  resetPassword
+  resetPassword,
+  changePassword
 };

@@ -9,6 +9,7 @@ import { routes } from '../../config/routes';
 import { TranslateService } from '@ngx-translate/core';
 import { GenericService } from '../../services/generic.service';
 import { FablabService } from 'frontend/app/services/fablab.service';
+import { ChangePasswdModalComponent } from '../change-passwd-modal/change-passwd-modal.component';
 
 @Component({
   selector: 'app-user-form',
@@ -45,7 +46,8 @@ export class UserFormComponent implements OnInit {
       city: '',
       country: '',
       submit: '',
-      fablab: ''
+      fablab: '',
+      changePassword: '',
     },
     modals: {
       ok: '',
@@ -53,7 +55,11 @@ export class UserFormComponent implements OnInit {
       successHeader: '',
       successMessage: '',
       errorHeader: '',
-      errorMessage: ''
+      errorMessage: '',
+      updatePasswordSuccessHeader: '',
+      updatePasswordSuccess: '',
+      updatePasswordErrorHeader: '',
+      updatePasswordError: ''
     },
     messages: {
       username: '',
@@ -72,7 +78,8 @@ export class UserFormComponent implements OnInit {
     },
     buttons: {
       activatedTrue: '',
-      activatedFalse: ''
+      activatedFalse: '',
+      changePassword: ''
     }
   };
 
@@ -221,6 +228,19 @@ export class UserFormComponent implements OnInit {
     });
   }
 
+  private _changePassword() {
+    const modalRef = this.modalService.open(ChangePasswdModalComponent);
+    modalRef.componentInstance.userId = this.user._id;
+    modalRef.result.then((result) => {
+      if (result.msg) {
+        this._openSuccessMsg();
+      }
+    }).catch((err) => {
+      const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
+      this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', err, okButton, undefined);
+    });
+  }
+
   private _translate() {
     this.translateService.get(['userForm', 'roles']).subscribe((translations => {
       const shownRoles = [];
@@ -261,6 +281,7 @@ export class UserFormComponent implements OnInit {
             ? translations['userForm'].labels.createSubmit
             : translations['userForm'].labels.editSubmit,
           fablab: translations['userForm'].labels.fablab,
+          changePassword: translations['userForm'].labels.changePassword
         },
         modals: {
           ok: translations['userForm'].modals.ok,
@@ -274,7 +295,11 @@ export class UserFormComponent implements OnInit {
           errorHeader: translations['userForm'].modals.errorHeader,
           errorMessage: this.editView
             ? translations['userForm'].modals.updateError
-            : translations['userForm'].modals.createError
+            : translations['userForm'].modals.createError,
+          updatePasswordSuccessHeader: translations['userForm'].modals.updatePasswordSuccessHeader,
+          updatePasswordSuccess: translations['userForm'].modals.updatePasswordSuccess,
+          updatePasswordErrorHeader: translations['userForm'].modals.updatePasswordErrorHeader,
+          updatePasswordError: translations['userForm'].modals.updatePasswordError
         },
         messages: {
           username: translations['userForm'].messages.username,
@@ -293,7 +318,8 @@ export class UserFormComponent implements OnInit {
         },
         buttons: {
           activatedTrue: translations['userForm'].buttons.activatedTrue,
-          activatedFalse: translations['userForm'].buttons.activatedFalse
+          activatedFalse: translations['userForm'].buttons.activatedFalse,
+          changePassword: translations['userForm'].buttons.changePassword
         }
       };
     }));

@@ -78,7 +78,7 @@
       </div>
 
       <div *ngIf=editView class="form-group row">
-        <div class="col-md-8">
+        <div class="col-md-6">
           <label for="role">{{translationFields.labels.role}}</label>
           <ng-select [loading]="loadingRoles" [items]=translationFields.shownRoles [(ngModel)]="user['shownRole']" id="role"
             name="role" #role="ngModel" (change)="roleChanged(user['shownRole'])" [disabled]=!isAdmin required>
@@ -87,20 +87,20 @@
             {{translationFields.messages.role}}
           </div>
         </div>
-        <!-- <div class="col-md-4">
-          <label for="role">{{translationFields.labels.isActivated}}</label><br>
-          <input type="checkbox" ng-model="user.activated" [disabled]=!isAdmin>
-        </div> -->
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="role">{{translationFields.labels.isActivated}}</label><br>
           <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="user.activated">
-            <label ngbButtonLabel class="btn-primary">
+            <label ngbButtonLabel class="btn-secondary">
               <input ngbButton type="radio" [value]="true">{{translationFields.buttons.activatedTrue}}
             </label>
-            <label ngbButtonLabel class="btn-primary">
+            <label ngbButtonLabel class="btn-secondary">
               <input ngbButton type="radio" [value]="false">{{translationFields.buttons.activatedFalse}}
             </label>
           </div>
+        </div>
+        <div *ngIf=editView class="col-md-3">
+          <label for="role">{{translationFields.labels.changePassword}}</label><br>
+          <button type="button" class="btn btn-warning" (click)="_changePassword()">{{translationFields.buttons.changePassword}}</button>
         </div>
       </div>
 

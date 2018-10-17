@@ -302,7 +302,8 @@
             "country": "Country",
             "createSubmit": "Register",
             "editSubmit": "Edit",
-            "fablab": "Fablab"
+            "fablab": "Fablab",
+            "changePassword": "Change Password"
         },
         "modals": {
             "ok": "Ok",
@@ -313,7 +314,11 @@
             "updateSuccess": "The user was successfully updated!",
             "errorHeader": "Error",
             "updateError": "Error while trying to update the user!",
-            "createError": "Error while trying to create the user!"
+            "createError": "Error while trying to create the user!",
+            "updatePasswordSuccessHeader": "Password updated",
+            "updatePasswordSuccess": "Use the new password from now on.",
+            "updatePasswordErrorHeader": "Failed",
+            "updatePassworderror": "The current password was wrong"
         },
         "messages": {
             "username": "Username is required",
@@ -332,7 +337,8 @@
         },
         "buttons": {
             "activatedTrue": "active",
-            "activatedFalse": "inactive"
+            "activatedFalse": "inactive",
+            "changePassword": "change"
         }
     },
     "tableComponent": {
@@ -368,6 +374,22 @@
             "successMessage": "Please check your e-mails to get the new password.",
             "errorHeader": "Something went wrong",
             "errorMessage": "Some error occured. We couldn't reset the password."
+        }
+    },
+    "changePasswdModal": {
+        "title": "Change Password",
+        "labels": {
+            "oldPassword": "Current Password",
+            "password": "New Password",
+            "password2": "Retype Password"
+        },
+        "modals": {
+            "title": "Change Password",
+            "buttonLabel": "Update",
+            "successHeader": "Done",
+            "successMessage": "Please use your new password from now on.",
+            "errorHeader": "Something went wrong",
+            "errorMessage": "Some error occured. We couldn't change the password."
         }
     }
 }
