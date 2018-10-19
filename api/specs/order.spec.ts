@@ -129,7 +129,7 @@ describe('Order Controller', () => {
       json: true,
       body: testBody
     }, (error, response) => {
-      response.body.order.owner = 'Hans Peter';
+      response.body.order.owner = 'aaa123456789012345678902';
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'PUT',
@@ -140,7 +140,7 @@ describe('Order Controller', () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body.order).toBeDefined();
 
-        expect(response.body.order.owner).toEqual('Hans Peter');
+        expect(response.body.order.owner).toEqual('aaa123456789012345678902');
 
         expect(response.body.order.token).toBeDefined();
         expect(response.body.order.editor).toEqual(testBody.editor);

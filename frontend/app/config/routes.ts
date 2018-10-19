@@ -15,7 +15,8 @@ export const routes = {
                 count: 'count',
                 activationRequest: 'activationRequest',
                 resetPassword: 'resetPassword',
-                changePassword: 'changePassword'
+                changePassword: 'changePassword',
+                getNames: 'getNames'
             },
             orders: {
                 root: 'orders',

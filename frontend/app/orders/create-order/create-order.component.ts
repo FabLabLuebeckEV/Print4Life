@@ -145,7 +145,7 @@ export class CreateOrderComponent implements OnInit {
               this.order.comments = result.order.comments;
               form.reset();
               this.order.comments.forEach(async (comment) => {
-                const user = await this.userService.getProfile(comment.author);
+                const user = await this.userService.getNamesOfUser(comment.author);
                 if (user) {
                   comment['authorName'] = user.firstname + ' ' + user.lastname;
                 }
@@ -275,12 +275,12 @@ export class CreateOrderComponent implements OnInit {
       await this._loadEditors();
       this.order = (await this.orderService.getOrderById(id)).order;
       this.order.editor = this.order.editor && this.order.editor.length === 24 ?
-        (await this.userService.getProfile(this.order.editor)).user : undefined;
+        (await this.userService.getNamesOfUser(this.order.editor)).user : undefined;
       this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
       this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
       this.order.comments.forEach(async (comment) => {
-        const user = await this.userService.getProfile(comment.author);
+        const user = await this.userService.getNamesOfUser(comment.author);
         if (user) {
           comment['authorName'] = user.firstname + ' ' + user.lastname;
         }

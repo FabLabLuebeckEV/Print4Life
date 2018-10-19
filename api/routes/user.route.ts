@@ -802,6 +802,69 @@ router.route('/:id').get((req, res) => {
   }
 });
 
+
+/**
+ * @api {get} /api/v1/users/:id/getNames gets the names of a user by its id
+ * @apiName getNamesOfUser
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { user } the user object, if success
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "user": {
+        "_id": "5bc98e4ea1283b2033f544c8",
+        "firstname": "Hans",
+        "lastname": "Der Tester"
+    }
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "error": "'GET User by id with no result.'",
+  }
+
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+    "error": "Id needs to be a 24 character long hex string!"
+  }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while retrieving the user.",
+      "stack": {
+          ...
+      }
+  }
+ */
+router.route('/:id/getNames').get((req, res) => {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    userCtrl.getUserById(req.params.id).then((user) => {
+      if (user) {
+        logger.info(`GET User by id with result ${user}`);
+        res.status(200).send({ user: { _id: user.id, firstname: user.firstname, lastname: user.lastname } });
+      } else {
+        const msg = { error: 'GET User by id with no result.' };
+        logger.error(msg);
+        res.status(404).send(msg);
+      }
+    }).catch((err) => {
+      const msg = { error: 'Error while retrieving the user.', stack: err };
+      logger.error(msg);
+      res.status(500).send(msg);
+    });
+  }
+});
+
 /**
  * @api {put} /api/v1/users/:id/activationRequest activate a user
  * @apiName activationRequestByUser

@@ -37,6 +37,10 @@ const publicRoutes = [
     methods: ['PUT']
   },
   {
+    url: `${baseUrl}users/:id/getNames`,
+    methods: ['GET']
+  },
+  {
     url: `${baseUrl}users/`,
     methods: ['POST']
   },

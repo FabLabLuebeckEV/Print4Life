@@ -55,6 +55,14 @@ export class UserService {
     return undefined;
   }
 
+  public async getNamesOfUser(id: String): Promise<any> {
+    const result = await this.http.get(`${this.p}/${id}/${routes.paths.backend.users.getNames}`).toPromise();
+    if (result && result.hasOwnProperty('user')) {
+      return result['user'];
+    }
+    return undefined;
+  }
+
   public async findOwn(): Promise<any> {
     const result = await this.http.get(`${this.p}/${routes.paths.backend.users.findown}`).toPromise();
     if (result && result.hasOwnProperty('user')) {

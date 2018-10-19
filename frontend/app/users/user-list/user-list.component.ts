@@ -5,7 +5,6 @@ import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
-import { User } from '../../models/user.model';
 import { TableItem } from '../../components/table/table.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { routes } from '../../config/routes';

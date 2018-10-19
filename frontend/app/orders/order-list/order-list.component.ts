@@ -201,8 +201,11 @@ export class OrderListComponent implements OnInit {
               : moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat)
           };
           item.obj['Projectname'] = { label: order.projectname, href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
-          item.obj['Owner'] = { label: owner.firstname + ' ' + owner.lastname };
-          item.obj['Editor'] = { label: editor ? editor.firstname + ' ' + editor.lastname : '' };
+          item.obj['Owner'] = { label: owner.firstname + ' ' + owner.lastname, href: `/${routes.paths.frontend.users.root}/${owner._id}` };
+          item.obj['Editor'] = {
+            label: editor ? editor.firstname + ' ' + editor.lastname : '',
+            href: editor ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
+          };
           item.obj['Status'] = { label: order.status };
           item.obj['Device Type'] = { label: order.machine.type };
           if (this.userIsLoggedIn) {
@@ -297,8 +300,13 @@ export class OrderListComponent implements OnInit {
               if (oldOrder.obj.id.label === item.obj.id.label) {
                 this.orders[orderIdx].obj = {};
                 this.orders[orderIdx].obj['id'] = { label: result._id };
-                this.orders[orderIdx].obj['Owner'] = { label: owner.firstname + ' ' + owner.lastname };
-                this.orders[orderIdx].obj['Editor'] = { label: editor ? editor.firstname + ' ' + editor.lastname : '' };
+                this.orders[orderIdx].obj['Owner'] = {
+                  label: owner.firstname + ' ' + owner.lastname, href: `/${routes.paths.frontend.users.root}/${owner._id}`
+                };
+                this.orders[orderIdx].obj['Editor'] = {
+                  label: editor ? editor.firstname + ' ' + editor.lastname : '',
+                  href: `/${routes.paths.frontend.users.root}/${editor._id}`
+                };
                 this.orders[orderIdx].obj['Status'] = { label: result.status };
                 this.orders[orderIdx].obj['Device Type'] = { label: result.machine.type };
 
@@ -306,8 +314,13 @@ export class OrderListComponent implements OnInit {
             });
             this.visibleOrders[orderIdx].obj = {};
             this.visibleOrders[orderIdx].obj['id'] = { label: result._id };
-            this.visibleOrders[orderIdx].obj['Owner'] = { label: result.owner };
-            this.visibleOrders[orderIdx].obj['Editor'] = { label: result.editor };
+            this.visibleOrders[orderIdx].obj['Owner'] = {
+              label: owner.firstname + ' ' + owner.lastname, href: `/${routes.paths.frontend.users.root}/${owner._id}`
+            };
+            this.visibleOrders[orderIdx].obj['Editor'] = {
+              label: editor ? editor.firstname + ' ' + editor.lastname : '',
+              href: editor ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
+            };
             this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
             this.visibleOrders[orderIdx].obj['Device Type'] = { label: result.machine.type };
             if ((this.filter.selectedStatus && this.filter.selectedStatus.length > 0) ||
