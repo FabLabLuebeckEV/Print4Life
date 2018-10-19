@@ -101,7 +101,118 @@ router.post('/', async (req, res) => {
 });
 
 /**
- * @api {get} /api/v1/users/search Request the list of users by a given query
+ * @api {put} /api/v1/users/ Adds a new user
+ * @apiName createUser
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { user } the new user object, if success
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 201 Created
+  {
+    "user": {
+        "_id": "5b7d29ed40ddae62a94e5940",
+        "firstname": "Hans",
+        "lastname": "Der Tester",
+        "username": "Hansiii",
+        "password": "$2b$10$WDCFfQTo1KKLt3ZXtlkvuuso1Pxqu6FbkG6KvJWzchz2k0xeDNVYe",
+        "email": "hansiii@alm.de",
+        "address": {
+            "street": "Middlehofer Straße 42",
+            "zipCode": "421337",
+            "city": "Geldhausen",
+            "country": "Luxemburg"
+        },
+        "role": {
+            "role": "admin"
+        },
+        "__v": 0
+    }
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "error": "Malformed user, one or more parameters wrong or missing",
+      "stack": {
+          ...
+      }
+  }
+ */
+router.route('/:id').put((req, res) => {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    userCtrl.updateUser(req.body).then((user) => {
+      logger.info(`PUT User with result ${JSON.stringify(user)}`);
+      res.status(200).send({ user });
+    }).catch((err) => {
+      logger.error({ error: 'Malformed update.', stack: err });
+      res.status(400).send({ error: 'Malformed update.', stack: err });
+    });
+  }
+});
+
+/**
+ * @api {delete} /api/v1/users/ Deactivates the user
+ * @apiName deleteUser
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { user } the deactivated user object, if success
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 201 Created
+  {
+    "user": {
+        "_id": "5b7d29ed40ddae62a94e5940",
+        "firstname": "Hans",
+        "lastname": "Der Tester",
+        "username": "Hansiii",
+        "password": "$2b$10$WDCFfQTo1KKLt3ZXtlkvuuso1Pxqu6FbkG6KvJWzchz2k0xeDNVYe",
+        "email": "hansiii@alm.de",
+        "address": {
+            "street": "Middlehofer Straße 42",
+            "zipCode": "421337",
+            "city": "Geldhausen",
+            "country": "Luxemburg"
+        },
+        "role": {
+            "role": "admin"
+        },
+        "activated": true,
+        "__v": 0
+    }
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "error": "Malformed Request!",
+      "stack": {
+          ...
+      }
+  }
+ */
+router.route('/:id').delete((req, res) => {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    userCtrl.deleteUser(req.params.id).then((user) => {
+      logger.info(`DELETE User with result ${JSON.stringify(user)}`);
+      res.status(200).send({ user });
+    }).catch((err) => {
+      logger.error({ error: 'Malformed Request!', stack: err });
+      res.status(400).send({ error: 'Malformed Request!', stack: err });
+    });
+  }
+});
+
+/**
+ * @api {post} /api/v1/users/search Request the list of users by a given query
  * @apiName GetUsers
  * @apiVersion 1.0.0
  * @apiGroup Orders
@@ -319,36 +430,6 @@ router.post('/', async (req, res) => {
       ]
     }
 */
-router.route('/:id').put((req, res) => {
-  const checkId = validatorService.checkId(req.params.id);
-  if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    userCtrl.updateUser(req.body).then((user) => {
-      logger.info(`PUT User with result ${JSON.stringify(user)}`);
-      res.status(200).send({ user });
-    }).catch((err) => {
-      logger.error({ error: 'Malformed update.', stack: err });
-      res.status(400).send({ error: 'Malformed update.', stack: err });
-    });
-  }
-});
-
-router.route('/:id').delete((req, res) => {
-  const checkId = validatorService.checkId(req.params.id);
-  if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    userCtrl.deleteUser(req.params.id).then((user) => {
-      logger.info(`DELETE User with result ${JSON.stringify(user)}`);
-      res.status(200).send({ user });
-    }).catch((err) => {
-      logger.error({ error: 'Malformed Request!', stack: err });
-      res.status(400).send({ error: 'Malformed Request!', stack: err });
-    });
-  }
-});
-
 router.route('/search').post((req, res) => {
   userCtrl.getUsers(req.body.query, req.body.limit, req.body.skip).then((users) => {
     if (users.length === 0) {
@@ -823,6 +904,56 @@ router.route('/resetPassword/').post((req, res) => {
   }
 });
 
+/**
+ * @api {put} /api/v1/users/changePassword/ changes the password of a user
+ * @apiName changePassword
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { object } a response message
+ *
+ * @apiParamExample {json} Request-Example:
+ *
+{
+  "oldPassword": "123456",
+  "newPassword": "vieSahTuthui5ki9Aefu"
+}
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "msg": "User <user._id> successfully changed his password."
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 401 Server Error
+  {
+      "error": "The current user password is not correct.'",
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Something bad happened",
+      "stack": {
+          ...
+      }
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Server Error
+  {
+      "error": "GET User by id with no result.",
+      "stack": {
+          ...
+      }
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while retrieving the user.",
+      "stack": {
+          ...
+      }
+  }
+ */
 router.route('/:id/changePassword').put((req, res) => {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
@@ -843,7 +974,7 @@ router.route('/:id/changePassword').put((req, res) => {
           } else {
             const msg = { error: 'Something bad happened' };
             logger.error(msg);
-            res.status(404).send(msg);
+            res.status(500).send(msg);
           }
         });
       } else {
