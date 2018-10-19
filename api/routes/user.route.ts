@@ -807,11 +807,13 @@ router.route('/resetPassword/').post((req, res) => {
   } else {
     userCtrl.resetPassword(req.body.email).then((success) => {
       if (!success) {
-        const msg = { error: 'Error while resetting the password.' };
+        const msg = {
+          error: `Error while resetting the password or there is no user with e-mail address ${req.body.email}`
+        };
         logger.error(msg);
-        res.status(500).send(msg);
+      } else {
+        logger.info({ msg: `Password reset for user with e-mail address ${req.body.email}` });
       }
-      logger.info({ msg: `Password reset for user with e-mail address ${req.body.email}` });
       res.status(200).send({ msg: 'Password reset' });
     }).catch((err) => {
       const msg = { error: 'Error while resetting the password.', stack: err };
