@@ -215,12 +215,12 @@ router.route('/:id').delete((req, res) => {
  * @api {post} /api/v1/users/search Request the list of users by a given query
  * @apiName GetUsers
  * @apiVersion 1.0.0
- * @apiGroup Orders
+ * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam (Query String) limit is the limit of objects to get
  * @apiParam (Query String) skip is the number of objects to skip
- * @apiSuccess {Array} orders an array of order objects
+ * @apiSuccess {Array} users an array of user objects
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK

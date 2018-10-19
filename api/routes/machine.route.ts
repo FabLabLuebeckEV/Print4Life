@@ -5,6 +5,7 @@ import lasercutterRoute from '../routes/lasercutter.route';
 import otherMachineRoute from '../routes/otherMachine.route';
 import millingMachineRoute from '../routes/millingMachine.route';
 import routerService from '../services/router.service';
+import logger from '../logger';
 
 const router = express.Router();
 
@@ -102,9 +103,12 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.route('/').get((req, res) => {
   machineCtrl.getAllMachines().then((machines) => {
-    res.json({ machines });
+    logger.info('Get all machines');
+    res.status(200).send({ machines });
   }).catch((err) => {
-    res.status(500).send(err);
+    const msg = { error: 'Error while getting all machines', stack: err };
+    logger.error(msg);
+    res.status(500).send(msg);
   });
 });
 
@@ -130,9 +134,12 @@ router.route('/').get((req, res) => {
  */
 router.route('/types').get((req, res) => {
   machineCtrl.getMachineTypes().then((types) => {
-    res.json({ types });
+    logger.info(`Get all machine types: ${types}`);
+    res.status(200).send({ types });
   }).catch((err) => {
-    res.status(500).send(err);
+    const msg = { error: 'Error while getting all machine types', stack: err };
+    logger.error(msg);
+    res.status(500).send(msg);
   });
 });
 
@@ -159,7 +166,9 @@ router.route('/types').get((req, res) => {
  */
 router.route('/materials/:machine').get((req, res) => {
   if (!req.params.machine) {
-    res.status(400).send({ error: 'No machine given' });
+    const msg = { error: 'No machine given' };
+    logger.error(msg);
+    res.status(400).send(msg);
   }
 
   machineCtrl.getMachineTypes().then((types) => {
@@ -172,13 +181,18 @@ router.route('/materials/:machine').get((req, res) => {
     });
 
     if (!typeOk) {
-      res.status(404).send({ error: `Material by machine type '${req.params.machine}' not found` });
+      const msg = { error: `Material by machine type '${req.params.machine}' not found` };
+      logger.error(msg);
+      res.status(404).send(msg);
     }
 
     machineCtrl.getMaterialsByType(req.params.machine).then((materials) => {
-      res.json({ materials });
+      logger.info(`GET all machine materials: ${materials}`);
+      res.status(200).send({ materials });
     }).catch((err) => {
-      res.status(500).send(err);
+      const msg = { error: 'Error while getting all machine types', stack: err };
+      logger.error(msg);
+      res.status(500).send(msg);
     });
   });
 });

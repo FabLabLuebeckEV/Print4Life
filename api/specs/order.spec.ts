@@ -59,7 +59,7 @@ describe('Order Controller', () => {
   // });
 
   it('counts orders', (done) => {
-    request.post(`${endpoint}orders//count`, {
+    request.post(`${endpoint}orders/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
       body: { $or: [{ status: 'new' }, { status: 'deleted' }] }
