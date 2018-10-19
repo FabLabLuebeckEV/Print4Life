@@ -2,7 +2,7 @@
 </router-outlet>
 <div *ngIf="listView">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 offset-3">
       <label for="roles">{{translationFields.filterLabel.roles}}</label>
       <ng-select [multiple]="true" [loading]="loadingRoles" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.validRoles
         bindLabel="roles" [(ngModel)]="filter.shownRoles" id="roles" (change)="_changeHandlerRoles($event)" (close)="init()"
