@@ -2,6 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { routes } from '../config/routes';
 import { User } from '../models/user.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +12,12 @@ export class UserService {
   private p: String;
   private token: String = '';
   private user: User;
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private translateService: TranslateService) {
     this.token = localStorage.getItem(this.tokenStorageName);
     this.p = routes.backendUrl + '/' + routes.paths.backend.users.root;
     this.getUser().then((user) => {
       this.user = user;
+      this._setUserLanguage();
     }).catch(() => {
       this.user = undefined;
     });
@@ -131,11 +133,13 @@ export class UserService {
 
   public async getUser(): Promise<User> {
     if (this.user) {
+      this._setUserLanguage();
       return this.user;
     } else if (this.token) {
       const user = await this.findOwn();
       if (user) {
         this.user = user;
+        this._setUserLanguage();
         return this.user;
       } else {
         return undefined;
@@ -166,5 +170,16 @@ export class UserService {
 
   public getLocalStorageTokenName(): string {
     return this.tokenStorageName;
+  }
+
+  public async resetLocalUser() {
+    this.user = undefined;
+    this.user = await this.getUser();
+  }
+
+  private _setUserLanguage() {
+    if (this.user.preferredLanguage && this.user.preferredLanguage.hasOwnProperty('language')) {
+      this.translateService.use(this.user.preferredLanguage.language + '');
+    }
   }
 }

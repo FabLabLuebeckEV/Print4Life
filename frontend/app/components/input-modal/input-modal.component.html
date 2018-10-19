@@ -4,14 +4,16 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<div class="modal-body">
-  <label for="inputField" class="spacing-right">{{inputLabel}}</label>
-  <input type="text" id="inputField" [(ngModel)]="inputString" name="inputField" #inputField="ngModel">
-</div>
-<div class="modal-footer">
-  <div class="row">
-    <div class="col-sm-12">
-      <button *ngIf="button1" type="button" [class]="button1.class" (click)="close(inputString)">{{button1.label}}</button>
+<form>
+  <div class="modal-body">
+    <label for="inputField" class="spacing-right">{{inputLabel}}</label>
+    <input type="text" id="inputField" [(ngModel)]="inputString" name="inputField" #inputField="ngModel">
+  </div>
+  <div class="modal-footer">
+    <div class="row">
+      <div class="col-sm-12">
+        <button *ngIf="button1" type="submit" [class]="button1.class" (click)="close(inputString)">{{button1.label}}</button>
+      </div>
     </div>
   </div>
-</div>
+</form>

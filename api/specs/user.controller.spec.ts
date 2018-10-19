@@ -33,6 +33,7 @@ describe('User Controller', () => {
         expect(user.lastname).toEqual(testUser.lastname);
         expect(user.email).toEqual(testUser.email);
         expect(user.role.role).toEqual(testUser.role.role);
+        expect(user.preferredLanguage.language).toEqual('en');
         expect(user.address.street).toEqual(testUser.address.street);
         expect(user.address.zipCode).toEqual(testUser.address.zipCode);
         expect(user.address.city).toEqual(testUser.address.city);

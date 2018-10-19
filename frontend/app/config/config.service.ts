@@ -6,6 +6,8 @@ import { faArrowLeft, faWrench, faTrashAlt, faPlus, faArrowRight, faGlobeAmerica
 })
 export class ConfigService {
   private config: Object = {
+    defaultLangStorageName: 'orderManagementLang',
+    defaultLang: 'en',
     icons: {
       back: faArrowLeft,
       edit: faWrench,
