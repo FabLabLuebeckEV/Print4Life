@@ -1,0 +1,50 @@
+<div *ngIf="true">
+  <div class="row spacing text-center">
+    <div class="col-md-12 text-center">
+      <h1>{{user.username}}</h1>
+    </div>
+    <div class="col-md-3 col-xl-2">
+      <app-back-button class="spacing-right-xs"></app-back-button>
+      <a [routerLink]="editLink">
+        <button *ngIf="userIsLoggedIn" type="button" class="btn btn-warning spacing-right-xs">
+          <fa-icon [icon]="editIcon"></fa-icon>
+        </button>
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-11 table-spacing">
+      <table class="table table-striped">
+        <tbody *ngIf="user">
+          <tr>
+            <td class="align-middle text-center">{{translationFields.labels.firstname}}</td>
+            <td class="align-middle text-center">{{user.firstname}}</td>
+          </tr>
+          <tr>
+            <td class="align-middle text-center">{{translationFields.labels.lastname}}</td>
+            <td class="align-middle text-center">{{user.lastname}}</td>
+          </tr>
+          <tr>
+            <td class="align-middle text-center">{{translationFields.labels.role}}</td>
+            <td class="align-middle text-center">
+              <span class="badge badge-secondary">{{user.shownRole}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="align-middle text-center">{{translationFields.labels.activated}}</td>
+            <td class="align-middle text-center">
+              <span *ngIf="user.activated" class="badge badge-success">{{translationFields.badges.active}}</span>
+              <span *ngIf="!user.activated" class="badge badge-danger">{{translationFields.badges.inactive}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="align-middle text-center">{{translationFields.labels.address.title}}</td>
+            <td *ngIf="user.address" class="align-middle text-center">{{user.address.street}}<br>{{user.address.zipCode
+              + " " +
+              user.address.city}}<br>{{user.address.country}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

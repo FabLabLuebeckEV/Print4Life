@@ -153,7 +153,7 @@ export class UserListComponent implements OnInit {
       users = users.users;
       for (const user of users) {
         const item = new TableItem();
-        item.obj['Username'] = { label: user.username, href: `./${routes.paths.frontend.users.update}/${user._id}` };
+        item.obj['Username'] = { label: user.username, href: `./${user._id}` };
         item.obj['Firstname'] = { label: user.firstname };
         item.obj['Lastname'] = { label: user.lastname };
         item.obj['Role'] = { label: user.role.role };

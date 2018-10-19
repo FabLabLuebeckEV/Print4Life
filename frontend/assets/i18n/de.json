@@ -263,6 +263,37 @@
             "content": "Der Inhalt des Kommentars wird benötigt"
         }
     },
+    "userDetail": {
+        "labels": {
+            "username": "Benutzername",
+            "firstname": "Vorname",
+            "lastname": "Nachnahme",
+            "email": "Emailadresse",
+            "address": {
+                "title": "Adresse",
+                "street": "Straße",
+                "city": "Stadt",
+                "zipCode": "PLZ",
+                "country": "Land"
+            },
+            "activated": "Aktiviert",
+            "role": "Rolle",
+            "preferredLanguage": "Bevorzugte Sprache"
+        },
+        "modals": {
+            "ok": "Ja",
+            "abort": "Nein",
+            "deactivateReturnValue": "Deaktivieren",
+            "abortReturnValue": "Abbrechen",
+            "deleteHeader": "Wollen Sie wirklich diesen Benutzer deaktivieren?",
+            "deleteQuestion": "Sind Sie sicher, dass Sie",
+            "deleteQuestion2": "den benutzer deaktivieren wollen?"
+        },
+        "badges": {
+            "active": "Aktiv",
+            "inactive": "Inaktiv"
+        }
+    },
     "orderDetail": {
         "labels": {
             "owner": "Ersteller",

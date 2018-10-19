@@ -13,6 +13,7 @@ import { UserService } from '../services/user.service';
 import { Observable } from 'rxjs';
 import { ErrorService, ErrorType } from '../services/error.service';
 import { UserListComponent } from '../users/user-list/user-list.component';
+import { UserDetailComponent } from '../users/user-detail/user-detail.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -63,6 +64,7 @@ export const appRoutes: Routes = [
         children: [
             { path: routes.paths.frontend.users.signup, component: UserFormComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent },
+            { path: ':id', component: UserDetailComponent }
         ]
     },
     {

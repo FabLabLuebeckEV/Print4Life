@@ -37,6 +37,7 @@ import { LoginModalComponent } from './users/login-modal/login-modal.component';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { InputModalComponent } from './components/input-modal/input-modal.component';
 import { ChangePasswdModalComponent } from './users/change-passwd-modal/change-passwd-modal.component';
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
 
 @NgModule({
     declarations: [
@@ -57,7 +58,8 @@ import { ChangePasswdModalComponent } from './users/change-passwd-modal/change-p
         LoginModalComponent,
         UserListComponent,
         InputModalComponent,
-        ChangePasswdModalComponent
+        ChangePasswdModalComponent,
+        UserDetailComponent
     ],
     imports: [
         BrowserModule,

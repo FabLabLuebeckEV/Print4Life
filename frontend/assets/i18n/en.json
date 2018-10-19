@@ -263,6 +263,37 @@
             "content": "Text is required"
         }
     },
+    "userDetail": {
+        "labels": {
+            "username": "Username",
+            "firstname": "Firstname",
+            "lastname": "Lastname",
+            "email": "Emailaddress",
+            "address": {
+                "title": "Address",
+                "street": "Street",
+                "city": "City",
+                "zipCode": "ZIP",
+                "country": "Country"
+            },
+            "activated": "Activated",
+            "role": "Role",
+            "preferredLanguage": "Preferred Language"
+        },
+        "modals": {
+            "ok": "Yes",
+            "abort": "No",
+            "deactivateReturnValue": "Deactivate",
+            "abortReturnValue": "Abort",
+            "deleteHeader": "Do you really want to deactivate this user?",
+            "deleteQuestion": "Are you sure you want to deactivate",
+            "deleteQuestion2": "?"
+        },
+        "badges": {
+            "active": "Active",
+            "inactive": "Inactive"
+        }
+    },
     "orderDetail": {
         "labels": {
             "owner": "Owner",
