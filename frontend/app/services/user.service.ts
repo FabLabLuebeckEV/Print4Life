@@ -172,6 +172,11 @@ export class UserService {
     return this.tokenStorageName;
   }
 
+  public async resetLocalUser() {
+    this.user = undefined;
+    this.user = await this.getUser();
+  }
+
   private _setUserLanguage() {
     if (this.user.preferredLanguage && this.user.preferredLanguage.hasOwnProperty('language')) {
       this.translateService.use(this.user.preferredLanguage.language + '');
