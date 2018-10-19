@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
-import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
+import { Machine, Printer3D, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { ConfigService } from '../../config/config.service';
@@ -218,8 +218,8 @@ export class MachineFormComponent implements OnInit {
 
   private _initModel(type) {
     switch (type) {
-      case 'Printer':
-        return new Printer(undefined, undefined, undefined,
+      case 'Printer3D':
+        return new Printer3D(undefined, undefined, undefined,
           this.machineService.camelCaseTypes(type), undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined, undefined, undefined,
           undefined, undefined);

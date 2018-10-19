@@ -2,7 +2,7 @@ import 'jasmine';
 import * as request from 'request';
 import * as configs from '../config';
 
-const endpoint = `${configs.configArr.prod.baseUrlBackend}machines/printers`;
+const endpoint = `${configs.configArr.prod.baseUrlBackend}machines/3d-printers`;
 
 const testPrinter = {
   fablabId: '5b453ddb5cf4a9574849e98a',
@@ -25,7 +25,7 @@ const testPrinter = {
   comment: 'Create Test'
 };
 
-describe('Printer Controller', () => {
+describe('3D Printer Controller', () => {
   let originalTimeout;
   const newTimeout = 10000;
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe('Printer Controller', () => {
   afterEach(() => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   });
-  it('gets printers', (done) => {
+  it('gets 3D printers', (done) => {
     request.get(`${endpoint}`, {
       headers: { 'content-type': 'application/json' },
       json: true
@@ -69,7 +69,7 @@ describe('Printer Controller', () => {
   //   });
   // });
 
-  it('counts printers', (done) => {
+  it('counts 3D printers', (done) => {
     request.get(`${endpoint}/count`, {
       headers: { 'content-type': 'application/json' },
       json: true
@@ -82,7 +82,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('create printer (success)', (done) => {
+  it('create 3D printer (success)', (done) => {
     request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
       const printer = response.body.printer;
       expect(response.statusCode).toEqual(201);
@@ -95,7 +95,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('create printer (missing fablabId)', (done) => {
+  it('create 3D printer (missing fablabId)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     delete testBody.fablabId;
     request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
@@ -104,7 +104,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('create printer (fablabId too short)', (done) => {
+  it('create 3D printer (fablabId too short)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     testBody.fablabId = 'tooShortForMongoDB23';
     request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
@@ -113,7 +113,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('create printer (fablabId too long)', (done) => {
+  it('create 3D printer (fablabId too long)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     testBody.fablabId = 'tooLongForMongoDBsObjectId1234567890';
     request.post(`${endpoint}/`, { body: testBody, json: true }, (error, response) => {
@@ -122,7 +122,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('update printer (success)', (done) => {
+  it('update 3D printer (success)', (done) => {
     request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
       const printer = response.body.printer;
       expect(response.statusCode).toEqual(201);
@@ -142,7 +142,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('update printer (id too short)', (done) => {
+  it('update 3D printer (id too short)', (done) => {
     const id = 'tooShortForMongoDB23';
     request.put(`${endpoint}/${id}`, { body: testPrinter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
@@ -150,7 +150,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('update printer (id too long)', (done) => {
+  it('update 3D printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.put(`${endpoint}/${id}`, { body: testPrinter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
@@ -158,7 +158,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('update printer (no body)', (done) => {
+  it('update 3D printer (no body)', (done) => {
     const id = '5b453ddb5cf4a9574849e98a';
     request.put(`${endpoint}/${id}`, { json: true }, (error, response) => {
       expect(response.statusCode).toEqual(400);
@@ -166,7 +166,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('delete printer (success)', (done) => {
+  it('delete 3D printer (success)', (done) => {
     let responseMachine;
     request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
@@ -190,7 +190,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('delete printer (id too long)', (done) => {
+  it('delete 3D printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.delete(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json' },
@@ -201,7 +201,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('delete printer (id too short)', (done) => {
+  it('delete 3D printer (id too short)', (done) => {
     const id = 'tooShort';
     request.delete(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json' },
@@ -212,7 +212,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('get printer (success)', (done) => {
+  it('get 3D printer (success)', (done) => {
     request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
       const id = response.body.printer._id;
@@ -226,7 +226,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('get printer (id too long)', (done) => {
+  it('get 3D printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.delete(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json' },
@@ -237,7 +237,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('get printer (id too short)', (done) => {
+  it('get 3D printer (id too short)', (done) => {
     const id = 'tooShort';
     request.delete(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json' },

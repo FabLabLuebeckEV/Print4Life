@@ -1,26 +1,26 @@
 import machineService from '../services/machine.service';
 
-const machineType = 'printer';
+const machineType = '3d-printer';
 
 /**
- * @api {get} /api/v1/machines/printers Get printers
- * @apiName GetPrinters
+ * @api {get} /api/v1/machines/3d-printer Get 3d-printer
+ * @apiName Get3Dprinters
  * @apiVersion 1.0.0
  * @apiGroup Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam (Query String) limit is the limit of objects to get
  * @apiParam (Query String) skip is the number of objects to skip
- * @apiSuccess {Array} printers an array of printer objects
+ * @apiSuccess {Array} 3d-printers an array of printer objects
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
-    "printers": [
+    "3d-printers": [
         {
             "_id": "5b55f7bf3fe0c8b01713b3fa",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "printer",
+            "type": "3d-printers",
             "deviceName": "Ultimaker 2+",
             "manufacturer": "Ultimaker",
             "materials": [
@@ -45,7 +45,7 @@ const machineType = 'printer';
         {
             "_id": "5b55f7bf3fe0c8b01713b3fc",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "printer",
+            "type": "3d-printers",
             "deviceName": "Zprinter 450",
             "manufacturer": "Zcorp",
             "materials": [
@@ -75,11 +75,11 @@ const machineType = 'printer';
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 206 Partial Content
 {
-    "printers": [
+    "3d-printers": [
         {
             "_id": "5b55f7bf3fe0c8b01713b3fa",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "printer",
+            "type": "3d-printers",
             "deviceName": "Ultimaker 2+",
             "manufacturer": "Ultimaker",
             "materials": [
@@ -104,7 +104,7 @@ const machineType = 'printer';
         {
             "_id": "5b55f7bf3fe0c8b01713b3fc",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "printer",
+            "type": "3d-printers",
             "deviceName": "Zprinter 450",
             "manufacturer": "Zcorp",
             "materials": [
@@ -140,7 +140,7 @@ function getAll (limit?: string, skip?: string) {
 }
 
 /**
- * @api {post} /api/v1/machines/printers/ Create new Printer
+ * @api {post} /api/v1/machines/3d-printers/ Create new Printer
  * @apiName CreateNewPrinter
  * @apiVersion 1.0.0
  * @apiGroup Printers
@@ -192,7 +192,7 @@ function getAll (limit?: string, skip?: string) {
         "_id": "5b571447d748f04e8a0581ab",
         "fablabId": "5b453ddb5cf4a9574849e98a",
         "deviceName": "Test Printer",
-        "type": "printer",
+        "type": "3d-printers",
         "manufacturer": "Test Manufacturer",
         "materials": [
             {
@@ -249,8 +249,8 @@ function create (params) {
 }
 
 /**
- * @api {delete} /api/v1/machines/printers/:id Deletes a Printer by a given id
- * @apiName DeletePrinterById
+ * @api {delete} /api/v1/machines/3d-printers/:id Deletes a Printer by a given id
+ * @apiName Delete3DPrinterById
  * @apiVersion 1.0.0
  * @apiGroup Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
@@ -283,7 +283,7 @@ function create (params) {
     "numberOfExtruders": 2,
     "pictureURL": "",
     "comment": "Create Test",
-    "type": "printer",
+    "type": "3d-printers",
     "__v": 0
 }
  * @apiError 400 The request is malformed
@@ -328,7 +328,7 @@ function deleteById (id) {
 }
 
 /**
- * @api {get} /api/v1/machines/printers/:id Gets a Printer by a given id
+ * @api {get} /api/v1/machines/3d-printers/:id Gets a Printer by a given id
  * @apiName GetPrinterById
  * @apiVersion 1.0.0
  * @apiGroup Printers
@@ -340,7 +340,7 @@ function deleteById (id) {
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
-    "printer": {
+    "printers3d": {
         "_id": "5b61b2a1ed80e42748255735",
         "fablabId": "5b453ddb5cf4a9574849e98a",
         "deviceName": "Test Printer",
@@ -363,7 +363,7 @@ function deleteById (id) {
         "numberOfExtruders": 2,
         "pictureURL": "",
         "comment": "Create Test",
-        "type": "printer",
+        "type": "3d-printers",
         "__v": 0
     }
 }
@@ -387,7 +387,7 @@ function get (id) {
 }
 
 /**
- * @api {put} /api/v1/machines/printers/:id Updates a Printer by a given id
+ * @api {put} /api/v1/machines/3d-printers/:id Updates a Printer by a given id
  * @apiName UpdatePrinterByID
  * @apiVersion 1.0.0
  * @apiGroup Printers
@@ -435,14 +435,14 @@ function get (id) {
     "numberOfExtruders" : 2,
     "pictureURL" : "",
     "comment" : "Create Test",
-    "type" : "printer",
+    "type" : "3d-printers",
     "__v" : 0
 }
  * @apiSuccess {Object} printer the printer object
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
-    "printer": {
+    "printer3d": {
         "_id": "5b66a9d7cdb16f0a3e528630",
         "fablabId": "5b453ddb5cf4a9574849e98a",
         "deviceName": "Test Printer (Updated)",
@@ -465,7 +465,7 @@ function get (id) {
         "numberOfExtruders": 2,
         "pictureURL": "",
         "comment": "Create Test",
-        "type": "printer",
+        "type": "3d-printers",
         "__v": 0
     }
 }
@@ -495,13 +495,13 @@ function update (id, machine) {
 }
 
 /**
- * @api {get} /api/v1/machines/printers/count Counts the Printers
+ * @api {get} /api/v1/machines/3d-printers/count Counts the 3D Printers
  * @apiName CountPrinters
  * @apiVersion 1.0.0
  * @apiGroup Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess {Object} count the number of printers
+ * @apiSuccess {Object} count the number of 3d-printers
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
  *

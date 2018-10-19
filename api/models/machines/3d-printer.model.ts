@@ -41,7 +41,7 @@ const attributes = {
   }
 };
 
-export const printerSchema = mongoose.Schema(attributes);
-export const Printer = mongoose.model('Printer', printerSchema);
+export const printer3DSchema = mongoose.Schema(attributes);
+export const Printer3D = mongoose.model('3DPrinter', printer3DSchema);
 
-export default Printer;
+export default Printer3D;

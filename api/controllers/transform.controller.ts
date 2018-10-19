@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import logger from '../logger';
-import { Printer, printerSchema } from '../models/machines/printer.model';
+import { Printer3D, printer3DSchema } from '../models/machines/3d-printer.model';
 import { Material, materialSchema } from '../models/material.model';
 import { Other, otherMachineSchema } from '../models/machines/other.machine.model';
 import { MillingMachine, millingMachineSchema } from '../models/machines/milling.machine.model';
@@ -221,15 +221,15 @@ function transformPrinterMaterial () {
 *    {"msg":"Transformation of printers done"}
  */
 function transformPrinters () {
-  const props = Object.keys(printerSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
-  return Printer.find((err, printers) => {
+  const props = Object.keys(printer3DSchema.paths).filter((prop) => prop !== '_id' && prop !== '__v');
+  return Printer3D.find((err, printers) => {
     if (err) { return err; } else if (printers) {
       Material.find((err, materials) => {
         if (err) { return err; } else if (materials) {
           return PrinterCanMaterial.find((err, canMaterials) => {
             if (err) { return err; } else if (canMaterials) {
               const machines = [];
-              return Printer.deleteMany({}, (err, deleted) => {
+              return Printer3D.deleteMany({}, (err, deleted) => {
                 if (err) { return err; } else if (deleted) {
                   printers.forEach((printer) => {
                     if (printer.fid) {
@@ -250,7 +250,7 @@ function transformPrinters () {
                       ..._getCleanObject(printer, props)
                     };
                     newObject.type = 'printer';
-                    const newPrinter = new Printer(newObject);
+                    const newPrinter = new Printer3D(newObject);
                     newPrinter.save();
                     machines.push(newPrinter);
                   });
@@ -314,7 +314,7 @@ function cleanDocuments () {
       }
       return [];
     }).catch((err) => { logger.error(err); }),
-    Printer.find((err, printers) => {
+    Printer3D.find((err, printers) => {
       if (err) { return err; } else if (printers) {
         printers.forEach((Printer) => {
           Printer.id = undefined;

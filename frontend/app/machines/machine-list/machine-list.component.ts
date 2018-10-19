@@ -57,7 +57,7 @@ export class MachineListComponent implements OnInit {
         total: 0,
         lastItem: 0
       },
-      printer: {
+      printer3D: {
         selected: true,
         total: 0,
         lastItem: 0

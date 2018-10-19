@@ -16,7 +16,7 @@ import lasertypeService from '../services/lasertype.service';
  *    HTTP/1.1 200 OK
 {
     "machines": {
-        "printers": [
+        "printers3d": [
             {
                 "_id": "5b51c25c1058dc2189272733",
                 "fablabId": 2,

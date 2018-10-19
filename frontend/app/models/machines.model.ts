@@ -14,16 +14,16 @@ export class Material {
     constructor(
         public material: String,
         public type: String
-    ) {}
+    ) { }
 }
 
 export class Lasertype {
     constructor(
         public laserType: String
-    ) {}
+    ) { }
 }
 
-export class Printer extends Machine {
+export class Printer3D extends Machine {
 
     constructor(
         public _id: String,
