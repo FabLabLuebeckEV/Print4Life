@@ -31,7 +31,8 @@ export class User {
         public address: Address,
         public role: Role,
         public preferredLanguage: Language,
-        public activated: boolean
+        public activated: boolean,
+        public fablabId: String
     ) { }
 }
 

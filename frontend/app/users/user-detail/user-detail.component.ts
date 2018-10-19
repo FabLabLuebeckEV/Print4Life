@@ -21,7 +21,8 @@ export class UserDetailComponent implements OnInit {
   editIcon: any;
   disableIcon: any;
   editLink: String;
-  user: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+  user: User = new User(
+    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
   translationFields = {
     labels: {

@@ -35,7 +35,10 @@
           <label for="editor">{{translationFields.labels.editor}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingEditors" [items]=editors bindValue="_id" bindLabel="shownName" [(ngModel)]="order.editor"
-            id="editor" name="editor" #editor="ngModel" [disabled]="!this.editView">
+            id="editor" name="editor" #editor="ngModel" groupBy="fablabName" [disabled]="!editView || !loggedInUser || !loggedInUser.role || !loggedInUser.role.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+            <ng-template ng-optgroup-tmp let-item="item">
+              {{item.fablabName || translationFields.messages.unnamedFablab}}
+            </ng-template>
           </ng-select>
         </div>
       </div>

@@ -48,7 +48,8 @@ export class CreateOrderComponent implements OnInit {
   fablabs: Array<any>;
   editors: Array<User>;
   loadingEditors: Boolean;
-  loggedInUser: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+  loggedInUser: User = new User(
+    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
   translationFields = {
     title: '',
@@ -253,18 +254,33 @@ export class CreateOrderComponent implements OnInit {
   // Private Functions
 
   private async _loadEditors() {
+    const promises = [];
+    let editors = [];
     this.loadingEditors = true;
     try {
       const result = await this.userService.getAllUsers({ 'role.role': 'editor', activated: true }, 0, 0);
       if (result && result.users) {
-        this.editors = result.users;
-        this.editors.forEach((editor) => {
+        editors = result.users;
+        editors.forEach(async (editor) => {
+          if (editor.fablabId) {
+            promises.push(this.fablabService.getFablab(editor.fablabId).then((res) => {
+              editor['fablabName'] = res.fablab.name;
+            }));
+          } else {
+            editor['fablabName'] = this.translationFields.messages.unnamedFablab;
+          }
           editor['shownName'] = editor.firstname + ' ' + editor.lastname;
         });
       }
     }
     finally {
-      this.loadingEditors = false;
+      // because the ng-select needs to get all finished editors to render groupBy
+      Promise.all(promises).then(() => {
+        this.editors = editors;
+        this.loadingEditors = false;
+      }).catch(() => {
+        this.loadingEditors = false;
+      });
     }
   }
 

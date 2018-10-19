@@ -3,6 +3,7 @@ import userCtrl from '../controllers/user.controller';
 import logger from '../logger';
 import routerService, { ErrorType } from '../services/router.service';
 import validatorService from '../services/validator.service';
+import fablabCtrl from '../controllers/fablab.controller';
 
 
 const router = express.Router();
@@ -848,10 +849,23 @@ router.route('/:id/getNames').get((req, res) => {
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    userCtrl.getUserById(req.params.id).then((user) => {
+    userCtrl.getUserById(req.params.id).then(async (user) => {
       if (user) {
+        user.fablabName = '';
+        if (user.fablabId) {
+          const fablab = await fablabCtrl.get(user.fablabId);
+          user.fablabName = fablab.name;
+        }
         logger.info(`GET User by id with result ${user}`);
-        res.status(200).send({ user: { _id: user.id, firstname: user.firstname, lastname: user.lastname } });
+        res.status(200).send({
+          user: {
+            _id: user.id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            fullname: `${user.firstname} ${user.lastname}`,
+            fablabName: user.fablabName
+          }
+        });
       } else {
         const msg = { error: 'GET User by id with no result.' };
         logger.error(msg);

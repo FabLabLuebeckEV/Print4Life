@@ -28,14 +28,14 @@
             <td class="align-middle text-center">{{translationFields.labels.owner}}</td>
             <td class="align-middle text-center">
               <a *ngIf=userIsLoggedIn [routerLink]="ownerLink">{{ owner.fullname }}</a>
-              <span *ngIf=!userIsLoggedIn>{{ owner.fullname }</span>
+              <span *ngIf=!userIsLoggedIn>{{ owner.fullname }}</span>
             </td>
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.editor}}</td>
             <td class="align-middle text-center">
               <a *ngIf=userIsLoggedIn [routerLink]="editorLink">{{ editor.fullname }}</a>
-              <span *ngIf=!userIsLoggedIn>{{ editor.fullname }</span>
+              <span *ngIf=!userIsLoggedIn>{{ editor.fullname }}</span>
             </td>
           </tr>
           <tr>
@@ -51,7 +51,8 @@
           <tr *ngIf="machine">
             <td class="align-middle text-center">{{translationFields.labels.machine}}</td>
             <td class="align-middle text-center">
-              <a [routerLink]="machine.detailView">{{ machine.deviceName }}</a>
+              <a *ngIf="userIsLoggedIn" [routerLink]="machine.detailView">{{ machine.deviceName }}</a>
+              <span *ngIf="!userIsLoggedIn">{{ machine.deviceName }}</span>
               <span class="badge badge-secondary spacing">{{machine.shownType}}</span>
             </td>
           </tr>

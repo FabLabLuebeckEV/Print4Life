@@ -168,7 +168,11 @@
             "printResolutionY": "Print Resolution Y",
             "printResolutionZ": "Print Resolution Z",
             "nozzleDiameter": "Nozzle Diameter",
-            "numberOfExtruders": "Number of Extruders"
+            "numberOfExtruders": "Number of Extruders",
+            "street": "Street",
+            "zipCode": "Zipcode",
+            "city": "City",
+            "country": "Country"
         }
     },
     "userList": {

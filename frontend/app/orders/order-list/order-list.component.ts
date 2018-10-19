@@ -192,8 +192,8 @@ export class OrderListComponent implements OnInit {
         const arr = [];
         for (const order of orders) {
           const item = new TableItem();
-          const owner = await this.userService.getProfile(order.owner);
-          const editor = order.editor ? await this.userService.getProfile(order.editor) : undefined;
+          const owner = await this.userService.getNamesOfUser(order.owner);
+          const editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
           item.obj['id'] = { label: order._id };
           item.obj['Created at'] = {
             label: currentLang === 'de'
@@ -201,10 +201,13 @@ export class OrderListComponent implements OnInit {
               : moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat)
           };
           item.obj['Projectname'] = { label: order.projectname, href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
-          item.obj['Owner'] = { label: owner.firstname + ' ' + owner.lastname, href: `/${routes.paths.frontend.users.root}/${owner._id}` };
+          item.obj['Owner'] = {
+            label: owner.firstname + ' ' + owner.lastname,
+            href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''
+          };
           item.obj['Editor'] = {
             label: editor ? editor.firstname + ' ' + editor.lastname : '',
-            href: editor ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
+            href: editor && this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
           };
           item.obj['Status'] = { label: order.status };
           item.obj['Device Type'] = { label: order.machine.type };
@@ -294,18 +297,19 @@ export class OrderListComponent implements OnInit {
           this.orderService.deleteOrder(order.obj.id.label).then(async (result) => {
             result = result.order;
             const oldOrder = this.visibleOrders[orderIdx];
-            const owner = await this.userService.getProfile(result.owner);
-            const editor = result.editor ? await this.userService.getProfile(result.editor) : undefined;
+            const owner = await this.userService.getNamesOfUser(result.owner);
+            const editor = result.editor ? await this.userService.getNamesOfUser(result.editor) : undefined;
             this.orders.forEach((item) => {
               if (oldOrder.obj.id.label === item.obj.id.label) {
                 this.orders[orderIdx].obj = {};
                 this.orders[orderIdx].obj['id'] = { label: result._id };
                 this.orders[orderIdx].obj['Owner'] = {
-                  label: owner.firstname + ' ' + owner.lastname, href: `/${routes.paths.frontend.users.root}/${owner._id}`
+                  label: owner.firstname + ' ' + owner.lastname,
+                  href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''
                 };
                 this.orders[orderIdx].obj['Editor'] = {
                   label: editor ? editor.firstname + ' ' + editor.lastname : '',
-                  href: `/${routes.paths.frontend.users.root}/${editor._id}`
+                  href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
                 };
                 this.orders[orderIdx].obj['Status'] = { label: result.status };
                 this.orders[orderIdx].obj['Device Type'] = { label: result.machine.type };
@@ -315,11 +319,12 @@ export class OrderListComponent implements OnInit {
             this.visibleOrders[orderIdx].obj = {};
             this.visibleOrders[orderIdx].obj['id'] = { label: result._id };
             this.visibleOrders[orderIdx].obj['Owner'] = {
-              label: owner.firstname + ' ' + owner.lastname, href: `/${routes.paths.frontend.users.root}/${owner._id}`
+              label: owner.firstname + ' ' + owner.lastname,
+              href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''
             };
             this.visibleOrders[orderIdx].obj['Editor'] = {
               label: editor ? editor.firstname + ' ' + editor.lastname : '',
-              href: editor ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
+              href: editor && this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
             };
             this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
             this.visibleOrders[orderIdx].obj['Device Type'] = { label: result.machine.type };

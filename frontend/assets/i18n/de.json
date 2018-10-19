@@ -168,7 +168,11 @@
             "printResolutionY": "Druckauflösung Y",
             "printResolutionZ": "Druckauflösung Z",
             "nozzleDiameter": "Durchmesser Düse(n)",
-            "numberOfExtruders": "Anzahl von Extrudern"
+            "numberOfExtruders": "Anzahl von Extrudern",
+            "street": "Straße",
+            "zipCode": "Postleitzahl",
+            "city": "Stadt",
+            "country": "Land"
         }
     },
     "userList": {

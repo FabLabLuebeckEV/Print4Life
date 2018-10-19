@@ -141,6 +141,16 @@ export class MachineDetailComponent implements OnInit {
       machineProps.forEach((key) => {
         const prop: any = this.machine[`${key}`];
         if (prop) {
+          if (prop.hasOwnProperty('address')) {
+            prop.city = prop.address.city;
+            prop.street = prop.address.street;
+            prop.zipCode = prop.address.zipCode;
+            prop.country = prop.address.country;
+            delete prop.address;
+          }
+          if (prop.hasOwnProperty('activated')) {
+            delete prop.activated;
+          }
           if (prop instanceof Object && !Array.isArray(prop)) {
             Object.keys(translations['machineDetail'].titles).forEach((k) => {
               if (k === key) {

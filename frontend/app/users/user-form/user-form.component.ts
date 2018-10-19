@@ -42,7 +42,7 @@ export class UserFormComponent implements OnInit {
   user: User = new User(
     undefined, undefined, undefined, undefined,
     undefined, undefined, undefined, this.address,
-    this.role, this.preferredLanguage, false);
+    this.role, this.preferredLanguage, false, undefined);
   translationFields = {
     title: '',
     shownRoles: [],
@@ -175,15 +175,19 @@ export class UserFormComponent implements OnInit {
         this.userService.updateUser(userCopy)
           .then(async res => {
             if (res && res.user) {
-              this.translateService.use(res.user.preferredLanguage.language).toPromise().then(() => {
-                this.userService.resetLocalUser();
+              if (this.profileView) {
+                this.translateService.use(res.user.preferredLanguage.language).toPromise().then(() => {
+                  this.userService.resetLocalUser();
+                  this._openSuccessMsg();
+                }).catch((err) => {
+                  const errorMsg = this.translationFields.modals.errorMessage;
+                  const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
+                  this._openMsgModal(this.translationFields.modals.errorHeader,
+                    'modal-header header-danger', errorMsg, okButton, undefined);
+                });
+              } else {
                 this._openSuccessMsg();
-              }).catch((err) => {
-                const errorMsg = this.translationFields.modals.errorMessage;
-                const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
-                this._openMsgModal(this.translationFields.modals.errorHeader,
-                  'modal-header header-danger', errorMsg, okButton, undefined);
-              });
+              }
             }
           })
           .catch(err => {
