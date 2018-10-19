@@ -126,7 +126,7 @@ export class NavigationComponent implements OnInit {
       if (this.user) {
         this.userDropdown.elements.push({
           name: translations['dropdown.users'].profile,
-          routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.update}/${this.user._id}`
+          routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.profile}`
         });
       }
 

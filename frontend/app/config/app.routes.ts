@@ -63,7 +63,8 @@ export const appRoutes: Routes = [
         runGuardsAndResolvers: 'always',
         children: [
             { path: routes.paths.frontend.users.signup, component: UserFormComponent },
-            { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent },
+            { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent, },
+            { path: routes.paths.frontend.users.profile, component: UserFormComponent },
             { path: ':id', component: UserDetailComponent }
         ]
     },

@@ -10,7 +10,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { GenericService } from '../../services/generic.service';
 import { FablabService } from 'frontend/app/services/fablab.service';
 import { ChangePasswdModalComponent } from '../change-passwd-modal/change-passwd-modal.component';
-import { lang } from 'moment';
 
 interface Dropdown {
   name: String;
@@ -30,10 +29,12 @@ export class UserFormComponent implements OnInit {
   validLanguages: Array<String> = [];
 
   editView: Boolean;
+  profileView: Boolean;
   userId: String;
   isAdmin: Boolean;
   loadingFablabs: Boolean;
   fablabs: Array<any>;
+  loggedInUser: User;
 
   address: Address = new Address(undefined, undefined, undefined, undefined);
   role: Role = new Role('user'); // default on register is user
@@ -109,9 +110,10 @@ export class UserFormComponent implements OnInit {
     private route: ActivatedRoute,
     private fablabService: FablabService
   ) {
-    this.router.events.subscribe(() => {
+    this.router.events.subscribe(async () => {
       const route = this.location.path();
       this.editView = route.indexOf(`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.update}`) >= 0;
+      this.profileView = route.indexOf(`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.profile}`) >= 0;
     });
     this.route.params.subscribe(params => {
       if (params.id) {
@@ -124,7 +126,20 @@ export class UserFormComponent implements OnInit {
     this.loadingFablabs = true;
     await this._loadRoles();
     await this._loadLanguages();
-    await this._initializeUser(this.userId);
+    this.loggedInUser = await this.userService.getUser();
+    if (this.profileView) {
+      this.user = this.loggedInUser;
+      if (!this.user.hasOwnProperty('address')) {
+        this.user.address = {
+          street: '',
+          zipCode: '',
+          city: '',
+          country: ''
+        };
+      }
+    } else {
+      await this._initializeUser(this.userId);
+    }
     this._loadFablabs();
     this.isAdmin = await this.userService.isAdmin();
     this._translate();
@@ -156,7 +171,7 @@ export class UserFormComponent implements OnInit {
         || !userCopy.address.street || !userCopy.address.zipCode) {
         delete userCopy.address;
       }
-      if (this.editView) {
+      if (this.editView || this.profileView) {
         this.userService.updateUser(userCopy)
           .then(async res => {
             if (res && res.user) {
@@ -345,7 +360,7 @@ export class UserFormComponent implements OnInit {
       }
 
       this.translationFields = {
-        title: !this.editView
+        title: !this.editView && !this.profileView
           ? translations['userForm'].createTitle
           : translations['userForm'].editTitle,
         shownRoles: shownRoles,
@@ -363,7 +378,7 @@ export class UserFormComponent implements OnInit {
           zipCode: translations['userForm'].labels.zipCode,
           city: translations['userForm'].labels.city,
           country: translations['userForm'].labels.country,
-          submit: !this.editView
+          submit: !this.editView && !this.profileView
             ? translations['userForm'].labels.createSubmit
             : translations['userForm'].labels.editSubmit,
           fablab: translations['userForm'].labels.fablab,
@@ -373,14 +388,14 @@ export class UserFormComponent implements OnInit {
         modals: {
           ok: translations['userForm'].modals.ok,
           okReturnValue: translations['userForm'].modals.okReturnValue,
-          successHeader: this.editView
+          successHeader: this.editView || this.profileView
             ? translations['userForm'].modals.updateSuccessHeader
             : translations['userForm'].modals.createSuccessHeader,
-          successMessage: this.editView
+          successMessage: this.editView || this.profileView
             ? translations['userForm'].modals.updateSuccess
             : translations['userForm'].modals.createSuccess,
           errorHeader: translations['userForm'].modals.errorHeader,
-          errorMessage: this.editView
+          errorMessage: this.editView || this.profileView
             ? translations['userForm'].modals.updateError
             : translations['userForm'].modals.createError,
           updatePasswordSuccessHeader: translations['userForm'].modals.updatePasswordSuccessHeader,

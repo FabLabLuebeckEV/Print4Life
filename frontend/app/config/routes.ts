@@ -45,7 +45,8 @@ export const routes = {
                 signup: 'signup',
                 login: 'login',
                 update: 'edit',
-                list: 'list'
+                list: 'list',
+                profile: 'profile'
             },
             orders: {
                 root: 'orders',
