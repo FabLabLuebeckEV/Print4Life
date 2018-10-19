@@ -26,8 +26,9 @@ export class OrderDetailComponent implements OnInit {
   deleteIcon: any;
   editLink: String;
   editor: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+  editorLink: String;
   owner: User = new User(undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined);
-
+  ownerLink: String;
   order: Order = new Order(
     undefined,
     undefined,
@@ -94,11 +95,21 @@ export class OrderDetailComponent implements OnInit {
         if (params && params.get('id')) {
           this.orderService.getOrderById(params.get('id')).then(async (result) => {
             this.order = result.order;
+            result.order.comments.forEach(async comment => {
+              const author = await this.userService.getProfile(comment.author);
+              comment['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
+            });
+            result.order.files.forEach(async file => {
+              const author = await this.userService.getProfile(file.author);
+              file['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
+            });
             this.owner = await this.userService.getProfile(this.order.owner);
             this.owner['fullname'] = this.owner.firstname + ' ' + this.owner.lastname;
+            this.ownerLink = `/${routes.paths.frontend.users.root}/${this.owner._id}`;
             if (this.order.editor) {
               this.editor = await this.userService.getProfile(this.order.editor);
               this.editor['fullname'] = this.editor.firstname + ' ' + this.editor.lastname;
+              this.editorLink = `${routes.paths.frontend.users.root}/${this.editor._id}`;
             }
             this.order.comments.forEach(async (comment) => {
               const author = await this.userService.getProfile(comment.author);

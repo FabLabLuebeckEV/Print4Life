@@ -26,11 +26,17 @@
         <tbody>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.owner}}</td>
-            <td class="align-middle text-center">{{owner.fullname}}</td>
+            <td class="align-middle text-center">
+              <a *ngIf=userIsLoggedIn [routerLink]="ownerLink">{{ owner.fullname }}</a>
+              <span *ngIf=!userIsLoggedIn>{{ owner.fullname }</span>
+            </td>
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.editor}}</td>
-            <td class="align-middle text-center">{{editor.fullname}}</td>
+            <td class="align-middle text-center">
+              <a *ngIf=userIsLoggedIn [routerLink]="editorLink">{{ editor.fullname }}</a>
+              <span *ngIf=!userIsLoggedIn>{{ editor.fullname }</span>
+            </td>
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.status}}</td>
@@ -78,7 +84,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let comment of order.comments">
-            <td class="align-middle text-center">{{comment.authorName}}</td>
+            <td class="align-middle text-center">
+              <a *ngIf="userIsLoggedIn" [routerLink]="comment.link">{{comment.authorName}}</a>
+              <span *ngIf="!userIsLoggedIn">{{comment.authorName}}</span>
+            </td>
             <td class="align-middle text-center">{{comment.content}}</td>
             <td class="align-middle text-center">{{comment.shownCreatedAt}}</td>
           </tr>
@@ -105,7 +114,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let file of order.files">
-            <td class="align-middle text-center">{{files.author}}</td>
+            <td class="align-middle text-center">
+              <a *ngIf="userIsLoggedIn" [routerLink]="file.link">{{file.author}}</a>
+              <span *ngIf="!userIsLoggedIn">{{file.author}}</span>
+            </td>
             <td class="align-middle text-center">{{files.content}}</td>
             <td class="align-middle text-center">{{files.timestamp | date:'short'}}</td>
           </tr>
