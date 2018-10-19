@@ -11,7 +11,7 @@ const machineFields = {
   },
   type: {
     type: String,
-    enum: ['printer', 'lasercutter', 'otherMachine', 'millingMachine'],
+    enum: ['3d-printer', 'lasercutter', 'otherMachine', 'millingMachine'],
     required: true
   },
   manufacturer: {
@@ -19,7 +19,7 @@ const machineFields = {
   }
 };
 
-function getFields () {
+function getFields() {
   const object = {};
   Object.keys(machineFields).forEach((prop) => {
     object[prop] = machineFields[prop];

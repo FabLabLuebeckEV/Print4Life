@@ -22,7 +22,8 @@ const testPrinter = {
   nozzleDiameter: 2,
   numberOfExtruders: 2,
   pictureURL: '',
-  comment: 'Create Test'
+  comment: 'Create Test',
+  type: '3d-printer'
 };
 
 describe('3D Printer Controller', () => {
@@ -40,12 +41,12 @@ describe('3D Printer Controller', () => {
       headers: { 'content-type': 'application/json' },
       json: true
     }, (error, response) => {
-      if (response.body && response.body.printers) {
-        const printers = response.body.printers;
+      if (response.body && response.body.printers3d) {
+        const printers3d = response.body.printers3d;
         expect(response.statusCode).toEqual(200);
-        expect(printers).toBeDefined();
-        expect(printers.length).toBeGreaterThan(-1);
-        expect(printers[0].type).toEqual('printer');
+        expect(printers3d).toBeDefined();
+        expect(printers3d.length).toBeGreaterThan(-1);
+        expect(printers3d[0].type).toEqual('3d-printer');
       } else {
         expect(response.statusCode).toEqual(204);
       }
@@ -54,17 +55,17 @@ describe('3D Printer Controller', () => {
   });
 
   // results to an error on gitlab ci
-  // it('gets printers (limit & skip)', (done) => {
+  // it('gets printers3d (limit & skip)', (done) => {
   //   request.get(`${endpoint}?limit=5&skip=5`, {
   //     headers: { 'content-type': 'application/json' },
   //     json: true
   //   }, (error, response) => {
-  //     const printers = response.body.printers;
+  //     const printers3d = response.body.printers3d;
   //     expect(response.statusCode).toEqual(206);
-  //     expect(printers).toBeDefined();
-  //     expect(printers.length).toBeGreaterThan(-1);
-  //     expect(printers.length).toBeLessThan(6);
-  //     expect(printers[0].type).toEqual('printer');
+  //     expect(printers3d).toBeDefined();
+  //     expect(printers3d.length).toBeGreaterThan(-1);
+  //     expect(printers3d.length).toBeLessThan(6);
+  //     expect(printers3d[0].type).toEqual('3d-printers');
   //     done();
   //   });
   // });
@@ -84,13 +85,13 @@ describe('3D Printer Controller', () => {
 
   it('create 3D printer (success)', (done) => {
     request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
-      const printer = response.body.printer;
+      const printer3d = response.body.printer3d;
       expect(response.statusCode).toEqual(201);
-      expect(printer).toBeDefined();
-      expect(printer.deviceName).toEqual(testPrinter.deviceName);
-      expect(printer.type).toEqual('printer');
-      expect(printer.manufacturer).toEqual(testPrinter.manufacturer);
-      expect(printer.fablabId).toEqual(testPrinter.fablabId);
+      expect(printer3d).toBeDefined();
+      expect(printer3d.deviceName).toEqual(testPrinter.deviceName);
+      expect(printer3d.type).toEqual('3d-printer');
+      expect(printer3d.manufacturer).toEqual(testPrinter.manufacturer);
+      expect(printer3d.fablabId).toEqual(testPrinter.fablabId);
       done();
     });
   });
@@ -124,16 +125,16 @@ describe('3D Printer Controller', () => {
 
   it('update 3D printer (success)', (done) => {
     request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
-      const printer = response.body.printer;
+      const printer = response.body.printer3d;
       expect(response.statusCode).toEqual(201);
       expect(printer).toBeDefined();
       expect(printer.deviceName).toEqual(testPrinter.deviceName);
-      expect(printer.type).toEqual('printer');
+      expect(printer.type).toEqual('3d-printer');
       expect(printer.manufacturer).toEqual(testPrinter.manufacturer);
       expect(printer.fablabId).toEqual(testPrinter.fablabId);
       printer.deviceName = 'Updated';
       request.put(`${endpoint}/${printer._id}`, { body: printer, json: true }, (error, response) => {
-        const updatedPrinter = response.body.printer;
+        const updatedPrinter = response.body.printer3d;
         expect(response.statusCode).toEqual(200);
         expect(updatedPrinter).toBeDefined();
         expect(updatedPrinter.deviceName).toEqual(printer.deviceName);
@@ -170,20 +171,20 @@ describe('3D Printer Controller', () => {
     let responseMachine;
     request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
-      responseMachine = response.body.printer;
-      request.delete(`${endpoint}/${response.body.printer._id}`, {
+      responseMachine = response.body.printer3d;
+      request.delete(`${endpoint}/${response.body.printer3d._id}`, {
         headers: { 'content-type': 'application/json' },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
-        expect(response.body.printer).toBeDefined();
-        expect(response.body.printer._id).toEqual(responseMachine._id);
+        expect(response.body.printer3d).toBeDefined();
+        expect(response.body.printer3d._id).toEqual(responseMachine._id);
         request.get(`${endpoint}/${responseMachine._id}`, {
           headers: { 'content-type': 'application/json' },
           json: true
         }, (error, response) => {
           expect(response.statusCode).toEqual(404);
-          expect(response.body.printer).toBeUndefined();
+          expect(response.body.printer3d).toBeUndefined();
           done();
         });
       });
@@ -215,7 +216,7 @@ describe('3D Printer Controller', () => {
   it('get 3D printer (success)', (done) => {
     request.post(`${endpoint}/`, { body: testPrinter, json: true }, (error, response) => {
       expect(response.statusCode).toEqual(201);
-      const id = response.body.printer._id;
+      const id = response.body.printer3d._id;
       request.get(`${endpoint}/${id}`, {
         headers: { 'content-type': 'application/json' },
         json: true
