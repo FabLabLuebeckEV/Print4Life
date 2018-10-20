@@ -140,7 +140,6 @@ function getAll (limit?: string, skip?: string) {
  * @apiParam {Number} workspaceY space volume of axis z
  * @apiParam {Number} maxResoultion resolution of lasercutter
  * @apiParam {String} laserPower power of the laser
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
@@ -156,7 +155,6 @@ function getAll (limit?: string, skip?: string) {
   "workspaceZ": 2,
   "maxResoultion": 2,
   "laserPower": "High",
-  "pictureURL": "",
   "comment": "Create Test"
 }
  *
@@ -179,7 +177,6 @@ function getAll (limit?: string, skip?: string) {
         "workspaceZ": 2,
         "maxResoultion": 2,
         "laserPower": "High",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "lasercutter",
         "__v": 0
@@ -278,7 +275,6 @@ function getLaserTypes () {
         "workspaceZ": 2,
         "maxResoultion": 2,
         "laserPower": "High",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "lasercutter",
         "__v": 0
@@ -330,7 +326,6 @@ function get (id) {
     "workspaceZ": 2,
     "maxResoultion": 2,
     "laserPower": "High",
-    "pictureURL": "",
     "comment": "Create Test",
     "type": "lasercutter",
     "__v": 0
@@ -394,7 +389,6 @@ function deleteById (id) {
  * @apiParam {Number} workspaceY space volume of axis z
  * @apiParam {Number} maxResoultion resolution of lasercutter
  * @apiParam {String} laserPower power of the laser
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  *
  * @apiParamExample {json} Request-Example:
@@ -415,7 +409,6 @@ function deleteById (id) {
     "workspaceZ" : 2,
     "maxResoultion" : 2,
     "laserPower" : "High",
-    "pictureURL" : "",
     "comment" : "Create Test",
     "type" : "lasercutter",
     "__v" : 0
@@ -440,7 +433,6 @@ function deleteById (id) {
         "workspaceZ": 2,
         "maxResoultion": 2,
         "laserPower": "High",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "lasercutter",
         "__v": 0

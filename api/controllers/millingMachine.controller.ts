@@ -116,7 +116,6 @@ function getAll (limit?: string, skip?: string) {
  * @apiParam {Number} workspaceY space volume of axis z
  * @apiParam {Number} movementSpeed speed of the milling machine
  * @apiParam {String} stepSize size of the steps
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
@@ -130,7 +129,6 @@ function getAll (limit?: string, skip?: string) {
   "workspaceZ": 2,
   "movementSpeed": 2,
   "stepSize": 2,
-  "pictureURL": "",
   "comment": "Create Test"
 }
  *
@@ -149,7 +147,6 @@ function getAll (limit?: string, skip?: string) {
         "workspaceZ": 2,
         "movementSpeed": 2,
         "stepSize": 2,
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "millingMachine",
         "__v": 0
@@ -210,7 +207,6 @@ function create (params) {
         "workspaceX": 2,
         "workspaceY": 2,
         "workspaceZ": 2,
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "millingMachine",
         "__v": 0
@@ -254,7 +250,6 @@ function get (id) {
     "workspaceX": 2,
     "workspaceY": 2,
     "workspaceZ": 2,
-    "pictureURL": "",
     "comment": "Create Test",
     "type": "millingMachine",
     "__v": 0
@@ -318,7 +313,6 @@ function deleteById (id) {
  * @apiParam {Number} workspaceY space volume of axis z
  * @apiParam {Number} movementSpeed speed of the milling machine
  * @apiParam {String} stepSize size of the steps
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  *
  * @apiParamExample {json} Request-Example:
@@ -331,7 +325,6 @@ function deleteById (id) {
     "workspaceX" : 2,
     "workspaceY" : 2,
     "workspaceZ" : 2,
-    "pictureURL" : "",
     "comment" : "Create Test",
     "type" : "millingMachine",
     "__v" : 0
@@ -348,7 +341,6 @@ function deleteById (id) {
         "workspaceX": 2,
         "workspaceY": 2,
         "workspaceZ": 2,
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "millingMachine",
         "__v": 0

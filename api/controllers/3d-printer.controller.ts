@@ -11,16 +11,16 @@ const machineType = '3d-printer';
  *
  * @apiParam (Query String) limit is the limit of objects to get
  * @apiParam (Query String) skip is the number of objects to skip
- * @apiSuccess {Array} 3d-printers an array of printer objects
+ * @apiSuccess {Array} printers3d an array of printer objects
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
-    "3d-printers": [
+    "printers3d": [
         {
             "_id": "5b55f7bf3fe0c8b01713b3fa",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "3d-printers",
+            "type": "3d-printer",
             "deviceName": "Ultimaker 2+",
             "manufacturer": "Ultimaker",
             "materials": [
@@ -38,14 +38,13 @@ const machineType = '3d-printer';
             "printResolutionZ": 0.5,
             "nozzleDiameter": 0.4,
             "numberOfExtruders": 1,
-            "pictureURL": "upload/59e5da27a317a.jpg",
             "comment": "",
             "__v": 0
         },
         {
             "_id": "5b55f7bf3fe0c8b01713b3fc",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "3d-printers",
+            "type": "3d-printer",
             "deviceName": "Zprinter 450",
             "manufacturer": "Zcorp",
             "materials": [
@@ -63,7 +62,6 @@ const machineType = '3d-printer';
             "printResolutionZ": 1,
             "nozzleDiameter": null,
             "numberOfExtruders": 0,
-            "pictureURL": "upload/59e5dc87040cc.jpg",
             "comment": "Full Color printer",
             "__v": 0
         }
@@ -75,11 +73,11 @@ const machineType = '3d-printer';
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 206 Partial Content
 {
-    "3d-printers": [
+    "printers3d": [
         {
             "_id": "5b55f7bf3fe0c8b01713b3fa",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "3d-printers",
+            "type": "3d-printer",
             "deviceName": "Ultimaker 2+",
             "manufacturer": "Ultimaker",
             "materials": [
@@ -97,14 +95,13 @@ const machineType = '3d-printer';
             "printResolutionZ": 0.5,
             "nozzleDiameter": 0.4,
             "numberOfExtruders": 1,
-            "pictureURL": "upload/59e5da27a317a.jpg",
             "comment": "",
             "__v": 0
         },
         {
             "_id": "5b55f7bf3fe0c8b01713b3fc",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "3d-printers",
+            "type": "3d-printer",
             "deviceName": "Zprinter 450",
             "manufacturer": "Zcorp",
             "materials": [
@@ -122,7 +119,6 @@ const machineType = '3d-printer';
             "printResolutionZ": 1,
             "nozzleDiameter": null,
             "numberOfExtruders": 0,
-            "pictureURL": "upload/59e5dc87040cc.jpg",
             "comment": "Full Color printer",
             "__v": 0
         }
@@ -159,7 +155,6 @@ function getAll (limit?: string, skip?: string) {
  * @apiParam {Number} printResolutionZ resolution of the print at axis z
  * @apiParam {Number} nozzleDiameter the nozzle diameter
  * @apiParam {Number} numberOfExtruders the number of extruders
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
@@ -180,7 +175,6 @@ function getAll (limit?: string, skip?: string) {
    "printResolutionZ": 2,
    "nozzleDiameter": 2,
    "numberOfExtruders": 2,
-   "pictureURL": "",
    "comment": "Create Test"
 }
  *
@@ -192,7 +186,7 @@ function getAll (limit?: string, skip?: string) {
         "_id": "5b571447d748f04e8a0581ab",
         "fablabId": "5b453ddb5cf4a9574849e98a",
         "deviceName": "Test Printer",
-        "type": "3d-printers",
+        "type": "3d-printer",
         "manufacturer": "Test Manufacturer",
         "materials": [
             {
@@ -209,7 +203,6 @@ function getAll (limit?: string, skip?: string) {
         "printResolutionZ": 2,
         "nozzleDiameter": 2,
         "numberOfExtruders": 2,
-        "pictureURL": "",
         "comment": "Create Test",
         "__v": 0
     }
@@ -281,9 +274,8 @@ function create (params) {
     "printResolutionZ": 2,
     "nozzleDiameter": 2,
     "numberOfExtruders": 2,
-    "pictureURL": "",
     "comment": "Create Test",
-    "type": "3d-printers",
+    "type": "3d-printer",
     "__v": 0
 }
  * @apiError 400 The request is malformed
@@ -361,9 +353,8 @@ function deleteById (id) {
         "printResolutionZ": 2,
         "nozzleDiameter": 2,
         "numberOfExtruders": 2,
-        "pictureURL": "",
         "comment": "Create Test",
-        "type": "3d-printers",
+        "type": "3d-printer",
         "__v": 0
     }
 }
@@ -407,7 +398,6 @@ function get (id) {
  * @apiParam {Number} printResolutionZ resolution of the print at axis z
  * @apiParam {Number} nozzleDiameter the nozzle diameter
  * @apiParam {Number} numberOfExtruders the number of extruders
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  *
  * @apiParamExample {json} Request-Example:
@@ -433,9 +423,8 @@ function get (id) {
     "printResolutionZ" : 2,
     "nozzleDiameter" : 2,
     "numberOfExtruders" : 2,
-    "pictureURL" : "",
     "comment" : "Create Test",
-    "type" : "3d-printers",
+    "type" : "3d-printer",
     "__v" : 0
 }
  * @apiSuccess {Object} printer the printer object
@@ -463,9 +452,8 @@ function get (id) {
         "printResolutionZ": 2,
         "nozzleDiameter": 2,
         "numberOfExtruders": 2,
-        "pictureURL": "",
         "comment": "Create Test",
-        "type": "3d-printers",
+        "type": "3d-printer",
         "__v": 0
     }
 }

@@ -318,7 +318,6 @@ function cleanDocuments () {
       if (err) { return err; } else if (printers) {
         printers.forEach((Printer) => {
           Printer.id = undefined;
-          Printer.pictureURL = undefined;
           Printer.fid = undefined;
           Printer.save();
         });
@@ -330,7 +329,6 @@ function cleanDocuments () {
       if (err) { return err; } else if (millingMachines) {
         millingMachines.forEach((millingMachine) => {
           millingMachine.id = undefined;
-          millingMachine.pictureURL = undefined;
           millingMachine.fid = undefined;
           millingMachine.save();
         });
@@ -352,7 +350,6 @@ function cleanDocuments () {
       if (err) { return err; } else if (laserCutters) {
         laserCutters.forEach((laserCutter) => {
           laserCutter.id = undefined;
-          laserCutter.pictureURL = undefined;
           laserCutter.fid = undefined;
           laserCutter.save();
         });
@@ -364,7 +361,6 @@ function cleanDocuments () {
       if (err) { return err; } else if (others) {
         others.forEach((other) => {
           other.id = undefined;
-          other.pictureURL = undefined;
           other.fid = undefined;
           other.save();
         });

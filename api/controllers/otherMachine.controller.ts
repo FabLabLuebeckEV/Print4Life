@@ -89,7 +89,6 @@ function getAll (limit?: string, skip?: string) {
  * @apiParam {String} deviceName name of the device (required)
  * @apiParam {String} manufacturer name of the manufacturer of the device
  * @apiParam {String} typeOfMachine the type of the machine
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
@@ -103,7 +102,6 @@ function getAll (limit?: string, skip?: string) {
   "workspaceZ": 2,
   "movementSpeed": 2,
   "stepSize": 2,
-  "pictureURL": "",
   "comment": "Create Test"
 }
  *
@@ -117,7 +115,6 @@ function getAll (limit?: string, skip?: string) {
         "deviceName": "Test Milling Machine",
         "manufacturer": "Test Manufacturer",
         "typeOfMachine": "Other Test Machine",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "otherMachine",
         "__v": 0
@@ -176,7 +173,6 @@ function create (params) {
         "deviceName": "Test Other Machine",
         "manufacturer": "Test Manufacturer",
         "typeOfMachine": "Test Machine",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "otherMachine",
         "__v": 0
@@ -220,7 +216,6 @@ function get (id) {
     "deviceName": "Updated",
     "manufacturer": "Test Manufacturer",
     "typeOfMachine": "Test Machine",
-    "pictureURL": "",
     "comment": "Create Test",
     "type": "otherMachine",
     "__v": 0
@@ -278,7 +273,6 @@ function deleteById (id) {
  * @apiParam {String} deviceName name of the device (required)
  * @apiParam {String} manufacturer name of the manufacturer of the device
  * @apiParam {String} typeOfMachine the type of the machine
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  *
  * @apiParamExample {json} Request-Example:
@@ -289,7 +283,6 @@ function deleteById (id) {
     "deviceName" : "Updated",
     "manufacturer" : "Test Manufacturer",
     "typeOfMachine" : "Test Machine",
-    "pictureURL" : "",
     "comment" : "Create Test",
     "type" : "otherMachine",
     "__v" : 0
@@ -304,7 +297,6 @@ function deleteById (id) {
         "deviceName": "Updated",
         "manufacturer": "Test Manufacturer",
         "typeOfMachine": "Test Machine",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "otherMachine",
         "__v": 0

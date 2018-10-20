@@ -21,7 +21,6 @@ const testPrinter = {
   printResolutionZ: 2,
   nozzleDiameter: 2,
   numberOfExtruders: 2,
-  pictureURL: '',
   comment: 'Create Test',
   type: '3d-printer'
 };

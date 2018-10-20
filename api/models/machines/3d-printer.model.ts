@@ -33,9 +33,6 @@ const attributes = {
     type: Number
   },
   // old db fields
-  pictureURL: {
-    type: String
-  },
   comment: {
     type: String
   }

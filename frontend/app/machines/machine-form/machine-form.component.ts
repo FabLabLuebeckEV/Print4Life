@@ -45,7 +45,6 @@ export class MachineFormComponent implements OnInit {
       printVolume: '',
       printResolution: '',
       numberOfExtruders: '',
-      pictureURL: '',
       comment: '',
       movementSpeed: '',
       stepSize: '',
@@ -222,18 +221,18 @@ export class MachineFormComponent implements OnInit {
         return new Printer3D(undefined, undefined, undefined,
           this.machineService.camelCaseTypes(type), undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined);
+          undefined);
       case 'Milling Machine':
         return new MillingMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined, undefined);
+          undefined, undefined);
       case 'Other Machine':
         return new OtherMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
-          undefined, undefined, undefined, undefined);
+          undefined, undefined, undefined);
       case 'Lasercutter':
         return new Lasercutter(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined, undefined, undefined);
+          undefined, undefined, undefined);
       default:
         return new Machine(undefined, undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined);
     }
@@ -277,7 +276,6 @@ export class MachineFormComponent implements OnInit {
           printVolume: translations['machineForm'].labels.printVolume,
           printResolution: translations['machineForm'].labels.printResolution,
           numberOfExtruders: translations['machineForm'].labels.numberOfExtruders,
-          pictureURL: translations['machineForm'].labels.pictureURL,
           comment: translations['machineForm'].labels.comment,
           movementSpeed: translations['machineForm'].labels.movementSpeed,
           stepSize: translations['machineForm'].labels.stepSize,

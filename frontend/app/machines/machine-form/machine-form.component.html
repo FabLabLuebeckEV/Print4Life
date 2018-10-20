@@ -110,17 +110,12 @@
           </div>
 
           <div class="form-group row">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label for="numberOfExtruders">{{translationFields.labels.numberOfExtruders}}</label>
               <input type="number" class="form-control" id="numberOfExtruders" [(ngModel)]="model.numberOfExtruders"
                 name="numberOfExtruders" #numberOfExtruders="ngModel">
             </div>
-            <div class="col-md-4">
-              <label for="pictureUrl">{{translationFields.labels.pictureURL}}</label>
-              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl"
-                #pictureUrl="ngModel">
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label for="comment">{{translationFields.labels.comment}}</label>
               <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment" #comment="ngModel">
             </div>
@@ -165,12 +160,7 @@
           </div>
 
           <div class="form-group row">
-            <div class="col-md-6">
-              <label for="pictureUrl">{{translationFields.labels.pictureURL}}</label>
-              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl"
-                #pictureUrl="ngModel">
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
               <label for="comment">{{translationFields.labels.comment}}</label>
               <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment" #comment="ngModel">
             </div>
@@ -179,7 +169,7 @@
 
         <div *ngIf="selectedType === 'Other Machine'">
           <div class="form-group row">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label for="typeOfMachine">{{translationFields.labels.typeOfMachine}}</label>
               <input type="text" class="form-control" id="typeOfMachine" required [(ngModel)]="model.typeOfMachine"
                 name="typeOfMachine" #typeOfMachine="ngModel">
@@ -187,12 +177,7 @@
                 {{translationFields.messages.typeOfMachine}}
               </div>
             </div>
-            <div class="col-md-4">
-              <label for="pictureUrl">{{translationFields.labels.pictureURL}}</label>
-              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl"
-                #pictureUrl="ngModel">
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label for="comment">{{translationFields.labels.comment}}</label>
               <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment" #comment="ngModel">
             </div>
@@ -239,17 +224,12 @@
           </div>
 
           <div class="form-group row">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label for="camSoftware">{{translationFields.labels.camSoftware}}</label>
               <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware"
                 #camSoftware="ngModel">
             </div>
-            <div class="col-md-4">
-              <label for="pictureUrl">{{translationFields.labels.pictureURL}}</label>
-              <input type="text" class="form-control" id="pictureUrl" [(ngModel)]="model.pictureUrl" name="pictureUrl"
-                #pictureUrl="ngModel">
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
               <label for="comment">{{translationFields.labels.comment}}</label>
               <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment" #comment="ngModel">
             </div>
