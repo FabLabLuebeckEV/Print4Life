@@ -175,7 +175,7 @@ export class UserFormComponent implements OnInit {
         this.userService.updateUser(userCopy)
           .then(async res => {
             if (res && res.user) {
-              if (this.profileView) {
+              if (this.loggedInUser._id === userCopy._id) {
                 this.translateService.use(res.user.preferredLanguage.language).toPromise().then(() => {
                   this.userService.resetLocalUser();
                   this._openSuccessMsg();
@@ -235,10 +235,17 @@ export class UserFormComponent implements OnInit {
 
   private async _initializeUser(id) {
     if (id !== undefined) {
-      this.user = await this.userService.getProfile(id);
-      this.user.address = this.user.hasOwnProperty('address') ? this.user.address : this.address;
-      this.user.role = this.user.hasOwnProperty('role') ? this.user.role : this.role;
-      this.user.preferredLanguage = this.user.hasOwnProperty('preferredLanguage') ? this.user.preferredLanguage : this.preferredLanguage;
+      try {
+        this.user = await this.userService.getProfile(id);
+        this.user.address = this.user.hasOwnProperty('address') ? this.user.address : this.address;
+        this.user.role = this.user.hasOwnProperty('role') ? this.user.role : this.role;
+        this.user.preferredLanguage = this.user.hasOwnProperty('preferredLanguage') ? this.user.preferredLanguage : this.preferredLanguage;
+      } catch (err) {
+        this.user = new User(
+          undefined, undefined, undefined, undefined,
+          undefined, undefined, undefined, this.address,
+          this.role, this.preferredLanguage, false, undefined);
+      }
     }
   }
 
@@ -251,6 +258,10 @@ export class UserFormComponent implements OnInit {
   private async _loadLanguages() {
     this.loadingLanguages = true;
     this.validLanguages = (await this.userService.getLanguages()).languages;
+    // FIXME: Remove filter if dk is implemented
+    this.validLanguages = this.validLanguages.filter((lang) => {
+      return lang !== 'dk';
+    });
     this.loadingLanguages = false;
   }
 

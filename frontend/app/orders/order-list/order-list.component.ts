@@ -22,6 +22,7 @@ import * as moment from 'moment';
 export class OrderListComponent implements OnInit {
   private config: any;
   private userIsLoggedIn: boolean;
+  private userIsAdmin: Boolean;
   createLink: String;
   orders: Array<TableItem> = [];
   visibleOrders: Array<TableItem> = [];
@@ -117,6 +118,7 @@ export class OrderListComponent implements OnInit {
       await this._loadStatus();
       await this._loadMachineTypes();
       this.userIsLoggedIn = await this.userService.isLoggedIn();
+      this.userIsAdmin = await this.userService.isAdmin();
       this._translate();
       this.init();
     }
@@ -193,6 +195,7 @@ export class OrderListComponent implements OnInit {
         for (const order of orders) {
           const item = new TableItem();
           const owner = await this.userService.getNamesOfUser(order.owner);
+          const loggedInUser = await this.userService.getUser();
           const editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
           item.obj['id'] = { label: order._id };
           item.obj['Created at'] = {
@@ -211,7 +214,8 @@ export class OrderListComponent implements OnInit {
           };
           item.obj['Status'] = { label: order.status };
           item.obj['Device Type'] = { label: order.machine.type };
-          if (this.userIsLoggedIn) {
+          if (this.userIsLoggedIn &&
+            (loggedInUser.role.role === 'editor' || this.userIsAdmin || loggedInUser._id === owner._id)) {
             item.button1.label = this.translationFields.buttons.updateLabel;
             item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
             item.button1.class = 'btn btn-warning spacing';

@@ -32,7 +32,8 @@ export class ErrorService {
     let modalRef;
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     if (!this.isOpen) {
-      if (err.hasOwnProperty('type') && err.type as ErrorType === ErrorType.TOKEN_EXPIRED as ErrorType) {
+      if (err.hasOwnProperty('type') && (err.type as ErrorType === ErrorType.TOKEN_EXPIRED as ErrorType ||
+        err.type as ErrorType === ErrorType.UNAUTHORIZED as ErrorType)) {
         this.userService.logout();
         this.router.navigate(['/']);
         modalRef = this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', err.stack,

@@ -28,6 +28,7 @@ export class NavigationComponent implements OnInit {
   private languageDropdown: Dropdown = { name: '', elements: [] };
   private userDropdown: Dropdown = { name: '', elements: [] };
   private userIsLoggedIn: Boolean;
+  private userIsAdmin: Boolean;
   private user: User;
 
   constructor(
@@ -42,6 +43,7 @@ export class NavigationComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.userIsAdmin = await this.userService.isAdmin();
     this._init();
   }
 
@@ -71,10 +73,7 @@ export class NavigationComponent implements OnInit {
       }];
       const machineDropdownAuthElements = [
         { name: translations['dropdown.machines'].listMachines, routerHref: routes.paths.frontend.machines.root },
-        {
-          name: translations['dropdown.machines'].createMachine,
-          routerHref: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.create}`
-        }];
+      ];
       const userDropdownAuthElements = [
         { name: translations['dropdown.users'].listUsers, routerHref: routes.paths.frontend.users.root }
       ];
@@ -134,6 +133,12 @@ export class NavigationComponent implements OnInit {
         this.machineDropdown.elements = this.machineDropdown.elements.concat(machineDropdownAuthElements);
         this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownAuthElements);
         this.userDropdown.elements = this.userDropdown.elements.concat(userDropdownAuthElements);
+        if (this.userIsAdmin) {
+          this.orderDropdown.elements = this.orderDropdown.elements.concat({
+            name: translations['dropdown.machines'].createMachine,
+            routerHref: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.create}`
+          });
+        }
       }
     }));
   }
