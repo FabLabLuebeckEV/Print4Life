@@ -10,7 +10,6 @@ const testOtherMachine = {
   deviceName: 'Test Other Machine',
   manufacturer: 'Test Manufacturer',
   typeOfMachine: 'Test Machine',
-  pictureURL: '',
   comment: 'Create Test'
 };
 

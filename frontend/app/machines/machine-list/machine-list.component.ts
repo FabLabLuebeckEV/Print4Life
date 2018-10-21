@@ -11,6 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { routes } from '../../config/routes';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
+import { UserService } from 'frontend/app/services/user.service';
 
 @Component({
   selector: 'app-machine-list',
@@ -32,6 +33,7 @@ export class MachineListComponent implements OnInit {
   jumpArrow: Icon;
   newLink: String;
   spinnerConfig: Object = {};
+  userIsAdmin: Boolean;
   paginationObj: any = {
     page: 1,
     totalItems: 0,
@@ -57,7 +59,7 @@ export class MachineListComponent implements OnInit {
         total: 0,
         lastItem: 0
       },
-      printer: {
+      '3d-printer': {
         selected: true,
         total: 0,
         lastItem: 0
@@ -88,7 +90,7 @@ export class MachineListComponent implements OnInit {
     private fablabService: FablabService, private router: Router,
     private location: Location, private modalService: NgbModal,
     private spinner: NgxSpinnerService, private configService: ConfigService,
-    private translateService: TranslateService) {
+    private translateService: TranslateService, private userService: UserService) {
     this.config = this.configService.getConfig();
     this.plusIcon = this.config.icons.add;
     this.jumpArrow = this.config.icons.forward;
@@ -105,6 +107,7 @@ export class MachineListComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.userIsAdmin = await this.userService.isAdmin();
     if (this.listView && !this.loadingMachineTypes) {
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
@@ -283,15 +286,17 @@ export class MachineListComponent implements OnInit {
         item.obj[`Manufacturer`] = { label: elem.manufacturer };
         item.obj[`Fablab`] = { label: fablab.name };
         item.obj[`Description`] = { label: '' };
-        item.button1.label = this.translationFields.buttons.updateLabel;
-        item.button1.href = `./${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
-        item.button1.class = 'btn btn-warning spacing';
-        item.button1.icon = this.config.icons.edit;
-        item.button2.label = this.translationFields.buttons.deleteLabel;
-        item.button2.eventEmitter = true;
-        item.button2.class = 'btn btn-danger spacing';
-        item.button2.icon = this.config.icons.delete;
-        item.button2.refId = elem._id;
+        if (this.userIsAdmin) {
+          item.button1.label = this.translationFields.buttons.updateLabel;
+          item.button1.href = `./${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
+          item.button1.class = 'btn btn-warning spacing';
+          item.button1.icon = this.config.icons.edit;
+          item.button2.label = this.translationFields.buttons.deleteLabel;
+          item.button2.eventEmitter = true;
+          item.button2.class = 'btn btn-danger spacing';
+          item.button2.icon = this.config.icons.delete;
+          item.button2.refId = elem._id;
+        }
         arr.push(item);
       }
     }

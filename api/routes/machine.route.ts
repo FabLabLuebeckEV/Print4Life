@@ -1,6 +1,6 @@
 import * as express from 'express';
 import machineCtrl from '../controllers/machine.controller';
-import printerRoute from '../routes/printer.route';
+import printer3DRoute from './3d-printer.route';
 import lasercutterRoute from '../routes/lasercutter.route';
 import otherMachineRoute from '../routes/otherMachine.route';
 import millingMachineRoute from '../routes/millingMachine.route';
@@ -197,7 +197,7 @@ router.route('/materials/:machine').get((req, res) => {
   });
 });
 
-router.use('/printers/', printerRoute);
+router.use('/3d-printers/', printer3DRoute);
 router.use('/millingMachines/', millingMachineRoute);
 router.use('/otherMachines/', otherMachineRoute);
 router.use('/lasercutters/', lasercutterRoute);

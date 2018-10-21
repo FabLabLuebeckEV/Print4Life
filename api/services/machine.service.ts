@@ -1,4 +1,4 @@
-import { Printer } from '../models/machines/printer.model';
+import { Printer3D } from '../models/machines/3d-printer.model';
 import { Other } from '../models/machines/other.machine.model';
 import { MillingMachine } from '../models/machines/milling.machine.model';
 import { Lasercutter } from '../models/machines/lasercutter.model';
@@ -14,12 +14,12 @@ function getMachineType (type: String, limit?: Number, skip?: Number) {
   const promises = [];
   let obj;
   switch (type) {
-    case 'printer':
+    case '3d-printer':
       obj = [];
       if (limit >= 0 && skip >= 0) {
-        promises.push(Printer.find().limit(limit).skip(skip));
+        promises.push(Printer3D.find().limit(limit).skip(skip));
       } else {
-        promises.push(Printer.find());
+        promises.push(Printer3D.find());
       }
       break;
     case 'lasercutter':
@@ -48,12 +48,12 @@ function getMachineType (type: String, limit?: Number, skip?: Number) {
       break;
     default:
       obj = {
-        printers: [],
+        printers3d: [],
         lasercutters: [],
         millingMachines: [],
         otherMachines: []
       };
-      promises.push(Printer.find());
+      promises.push(Printer3D.find());
       promises.push(Lasercutter.find());
       promises.push(Other.find());
       promises.push(MillingMachine.find());
@@ -91,8 +91,8 @@ function create (type, params) {
     params.type = type;
   }
   switch (type) {
-    case 'printer':
-      return (new Printer(params)).save();
+    case '3d-printer':
+      return (new Printer3D(params)).save();
     case 'lasercutter':
       return (new Lasercutter(params)).save();
     case 'otherMachine':
@@ -112,8 +112,8 @@ function create (type, params) {
  */
 function deleteById (type, _id) {
   switch (type) {
-    case 'printer':
-      return Printer.deleteOne({ _id });
+    case '3d-printer':
+      return Printer3D.deleteOne({ _id });
     case 'lasercutter':
       return Lasercutter.deleteOne({ _id });
     case 'otherMachine':
@@ -133,8 +133,8 @@ function deleteById (type, _id) {
  */
 function get (type, _id) {
   switch (type) {
-    case 'printer':
-      return Printer.findOne({ _id });
+    case '3d-printer':
+      return Printer3D.findOne({ _id });
     case 'lasercutter':
       return Lasercutter.findOne({ _id });
     case 'otherMachine':
@@ -156,11 +156,11 @@ function get (type, _id) {
 function update (type, _id, machine) {
   delete machine.__v;
   switch (type) {
-    case 'printer':
-      return Printer.update(
+    case '3d-printer':
+      return Printer3D.update(
         { _id },
         machine,
-        { upsert: true }).then(() => Printer.findOne({ _id }));
+        { upsert: true }).then(() => Printer3D.findOne({ _id }));
     case 'lasercutter':
       return Lasercutter.update(
         { _id },
@@ -188,8 +188,8 @@ function update (type, _id, machine) {
  */
 function count (type) {
   switch (type) {
-    case 'printer':
-      return Printer.countDocuments();
+    case '3d-printer':
+      return Printer3D.countDocuments();
     case 'lasercutter':
       return Lasercutter.countDocuments();
     case 'otherMachine':

@@ -17,7 +17,6 @@ const testMillingMachine = {
   workspaceZ: 2,
   maxResoultion: 2,
   laserPower: 'High',
-  pictureURL: '',
   comment: 'Create Test'
 };
 

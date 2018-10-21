@@ -44,7 +44,7 @@
         "lasercutter": "Lasercutter",
         "otherMachine": "Andere Machine",
         "millingMachine": "Fräßmaschine",
-        "printer": "3D Drucker"
+        "3d-printer": "3D Drucker"
     },
     "materialTypes": {
         "printerMaterial": "Drucker Material"
@@ -99,7 +99,6 @@
             "printVolume": "Druckvolumen",
             "printResolution": "Druckauflösung",
             "numberOfExtruders": "Anzahl von Extrudern",
-            "pictureURL": "Bild Url",
             "comment": "Kommentar",
             "movementSpeed": "Bewegungsgeschwindigkeit",
             "stepSize": "Schrittgröße",
@@ -150,7 +149,6 @@
             "workspaceZ": "Arbeitsfläche Z",
             "maxResolution": "Maximale Auflösung",
             "laserPower": "Leistung des Lasers",
-            "pictureURL": "Bild Url",
             "comment": "Kommentar",
             "name": "Name",
             "phone": "Telefon",

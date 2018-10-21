@@ -3,7 +3,7 @@ import * as request from 'request';
 import * as configs from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
 
-const endpoint = `${configs.configArr.prod.baseUrlBackend}machines/printers`;
+const endpoint = `${configs.configArr.prod.baseUrlBackend}machines/3d-printers`;
 
 const testPrinter = {
   fablabId: '5b453ddb5cf4a9574849e98a',
@@ -22,11 +22,11 @@ const testPrinter = {
   printResolutionZ: 2,
   nozzleDiameter: 2,
   numberOfExtruders: 2,
-  pictureURL: '',
-  comment: 'Create Test'
+  comment: 'Create Test',
+  type: '3d-printer'
 };
 
-describe('Printer Controller', () => {
+describe('3D Printer Controller', () => {
   let originalTimeout;
   const authorizationHeader = getTestUserToken();
   beforeEach(() => {
@@ -36,17 +36,17 @@ describe('Printer Controller', () => {
   afterEach(() => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   });
-  it('gets printers', (done) => {
+  it('gets 3D printers', (done) => {
     request.get(`${endpoint}`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
-      if (response.body && response.body.printers) {
-        const printers = response.body.printers;
+      if (response.body && response.body['3d-printers']) {
+        const printers3d = response.body['3d-printers'];
         expect(response.statusCode).toEqual(200);
-        expect(printers).toBeDefined();
-        expect(printers.length).toBeGreaterThan(-1);
-        expect(printers[0].type).toEqual('printer');
+        expect(printers3d).toBeDefined();
+        expect(printers3d.length).toBeGreaterThan(-1);
+        expect(printers3d[0].type).toEqual('3d-printer');
       } else {
         expect(response.statusCode).toEqual(204);
       }
@@ -55,22 +55,22 @@ describe('Printer Controller', () => {
   });
 
   // results to an error on gitlab ci
-  // it('gets printers (limit & skip)', (done) => {
+  // it('gets printers3d (limit & skip)', (done) => {
   //   request.get(`${endpoint}?limit=5&skip=5`, {
   //     headers: { 'content-type': 'application/json' },
   //     json: true
   //   }, (error, response) => {
-  //     const printers = response.body.printers;
+  //     const printers3d = response.body['3d-printers'];
   //     expect(response.statusCode).toEqual(206);
-  //     expect(printers).toBeDefined();
-  //     expect(printers.length).toBeGreaterThan(-1);
-  //     expect(printers.length).toBeLessThan(6);
-  //     expect(printers[0].type).toEqual('printer');
+  //     expect(printers3d).toBeDefined();
+  //     expect(printers3d.length).toBeGreaterThan(-1);
+  //     expect(printers3d.length).toBeLessThan(6);
+  //     expect(printers3d[0].type).toEqual('3d-printers');
   //     done();
   //   });
   // });
 
-  it('counts printers', (done) => {
+  it('counts 3D printers', (done) => {
     request.get(`${endpoint}/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
@@ -83,24 +83,24 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('create printer (success)', (done) => {
+  it('create 3D printer (success)', (done) => {
     request.post(`${endpoint}/`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       body: testPrinter,
       json: true
     }, (error, response) => {
-      const printer = response.body.printer;
+      const printer3d = response.body['3d-printer'];
       expect(response.statusCode).toEqual(201);
-      expect(printer).toBeDefined();
-      expect(printer.deviceName).toEqual(testPrinter.deviceName);
-      expect(printer.type).toEqual('printer');
-      expect(printer.manufacturer).toEqual(testPrinter.manufacturer);
-      expect(printer.fablabId).toEqual(testPrinter.fablabId);
+      expect(printer3d).toBeDefined();
+      expect(printer3d.deviceName).toEqual(testPrinter.deviceName);
+      expect(printer3d.type).toEqual('3d-printer');
+      expect(printer3d.manufacturer).toEqual(testPrinter.manufacturer);
+      expect(printer3d.fablabId).toEqual(testPrinter.fablabId);
       done();
     });
   });
 
-  it('create printer (missing fablabId)', (done) => {
+  it('create 3D printer (missing fablabId)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     delete testBody.fablabId;
     request.post(`${endpoint}/`, {
@@ -113,7 +113,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('create printer (fablabId too short)', (done) => {
+  it('create 3D printer (fablabId too short)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     testBody.fablabId = 'tooShortForMongoDB23';
     request.post(`${endpoint}/`, {
@@ -126,7 +126,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('create printer (fablabId too long)', (done) => {
+  it('create 3D printer (fablabId too long)', (done) => {
     const testBody = JSON.parse(JSON.stringify(testPrinter));
     testBody.fablabId = 'tooLongForMongoDBsObjectId1234567890';
     request.post(`${endpoint}/`, {
@@ -139,17 +139,17 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('update printer (success)', (done) => {
+  it('update 3D printer (success)', (done) => {
     request.post(`${endpoint}/`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       body: testPrinter,
       json: true
     }, (error, response) => {
-      const printer = response.body.printer;
+      const printer = response.body['3d-printer'];
       expect(response.statusCode).toEqual(201);
       expect(printer).toBeDefined();
       expect(printer.deviceName).toEqual(testPrinter.deviceName);
-      expect(printer.type).toEqual('printer');
+      expect(printer.type).toEqual('3d-printer');
       expect(printer.manufacturer).toEqual(testPrinter.manufacturer);
       expect(printer.fablabId).toEqual(testPrinter.fablabId);
       printer.deviceName = 'Updated';
@@ -158,7 +158,7 @@ describe('Printer Controller', () => {
         body: printer,
         json: true
       }, (error, response) => {
-        const updatedPrinter = response.body.printer;
+        const updatedPrinter = response.body['3d-printer'];
         expect(response.statusCode).toEqual(200);
         expect(updatedPrinter).toBeDefined();
         expect(updatedPrinter.deviceName).toEqual(printer.deviceName);
@@ -167,7 +167,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('update printer (id too short)', (done) => {
+  it('update 3D printer (id too short)', (done) => {
     const id = 'tooShortForMongoDB23';
     request.put(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -179,7 +179,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('update printer (id too long)', (done) => {
+  it('update 3D printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.put(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -191,7 +191,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('update printer (no body)', (done) => {
+  it('update 3D printer (no body)', (done) => {
     const id = '5b453ddb5cf4a9574849e98a';
     request.put(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -202,7 +202,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('delete printer (success)', (done) => {
+  it('delete 3D printer (success)', (done) => {
     let responseMachine;
     request.post(`${endpoint}/`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -210,27 +210,27 @@ describe('Printer Controller', () => {
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(201);
-      responseMachine = response.body.printer;
-      request.delete(`${endpoint}/${response.body.printer._id}`, {
+      responseMachine = response.body['3d-printer'];
+      request.delete(`${endpoint}/${response.body['3d-printer']._id}`, {
         headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
-        expect(response.body.printer).toBeDefined();
-        expect(response.body.printer._id).toEqual(responseMachine._id);
+        expect(response.body['3d-printer']).toBeDefined();
+        expect(response.body['3d-printer']._id).toEqual(responseMachine._id);
         request.get(`${endpoint}/${responseMachine._id}`, {
           headers: { 'content-type': 'application/json', authorization: authorizationHeader },
           json: true
         }, (error, response) => {
           expect(response.statusCode).toEqual(404);
-          expect(response.body.printer).toBeUndefined();
+          expect(response.body['3d-printer']).toBeUndefined();
           done();
         });
       });
     });
   });
 
-  it('delete printer (id too long)', (done) => {
+  it('delete 3D printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.delete(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -241,7 +241,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('delete printer (id too short)', (done) => {
+  it('delete 3D printer (id too short)', (done) => {
     const id = 'tooShort';
     request.delete(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -252,14 +252,14 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('get printer (success)', (done) => {
+  it('get 3D printer (success)', (done) => {
     request.post(`${endpoint}/`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       body: testPrinter,
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(201);
-      const id = response.body.printer._id;
+      const id = response.body['3d-printer']._id;
       request.get(`${endpoint}/${id}`, {
         headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true
@@ -270,7 +270,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('get printer (id too long)', (done) => {
+  it('get 3D printer (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.delete(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -281,7 +281,7 @@ describe('Printer Controller', () => {
     });
   });
 
-  it('get printer (id too short)', (done) => {
+  it('get 3D printer (id too short)', (done) => {
     const id = 'tooShort';
     request.delete(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },

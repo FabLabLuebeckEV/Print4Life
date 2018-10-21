@@ -1,6 +1,6 @@
 import machineService from '../services/machine.service';
 
-const machineType = 'printer';
+const machineType = '3d-printer';
 
 function getAll (limit?: string, skip?: string) {
   let l: Number;

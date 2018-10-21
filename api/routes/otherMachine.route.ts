@@ -132,7 +132,6 @@ router.route('/count').get((req, res) => {
  * @apiParam {String} deviceName name of the device (required)
  * @apiParam {String} manufacturer name of the manufacturer of the device
  * @apiParam {String} typeOfMachine the type of the machine
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
@@ -146,7 +145,6 @@ router.route('/count').get((req, res) => {
   "workspaceZ": 2,
   "movementSpeed": 2,
   "stepSize": 2,
-  "pictureURL": "",
   "comment": "Create Test"
 }
  *
@@ -160,7 +158,6 @@ router.route('/count').get((req, res) => {
         "deviceName": "Test Milling Machine",
         "manufacturer": "Test Manufacturer",
         "typeOfMachine": "Other Test Machine",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "otherMachine",
         "__v": 0
@@ -225,7 +222,6 @@ router.route('/').post((req, res) => {
     "deviceName": "Updated",
     "manufacturer": "Test Manufacturer",
     "typeOfMachine": "Test Machine",
-    "pictureURL": "",
     "comment": "Create Test",
     "type": "otherMachine",
     "__v": 0
@@ -334,7 +330,6 @@ router.route('/:id').delete((req, res) => {
         "deviceName": "Test Other Machine",
         "manufacturer": "Test Manufacturer",
         "typeOfMachine": "Test Machine",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "otherMachine",
         "__v": 0
@@ -392,7 +387,6 @@ router.route('/:id').get((req, res) => {
  * @apiParam {String} deviceName name of the device (required)
  * @apiParam {String} manufacturer name of the manufacturer of the device
  * @apiParam {String} typeOfMachine the type of the machine
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  *
  * @apiParamExample {json} Request-Example:
@@ -403,7 +397,6 @@ router.route('/:id').get((req, res) => {
     "deviceName" : "Updated",
     "manufacturer" : "Test Manufacturer",
     "typeOfMachine" : "Test Machine",
-    "pictureURL" : "",
     "comment" : "Create Test",
     "type" : "otherMachine",
     "__v" : 0
@@ -418,7 +411,6 @@ router.route('/:id').get((req, res) => {
         "deviceName": "Updated",
         "manufacturer": "Test Manufacturer",
         "typeOfMachine": "Test Machine",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "otherMachine",
         "__v": 0

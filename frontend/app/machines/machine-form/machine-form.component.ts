@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
-import { Machine, Printer, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
+import { Machine, Printer3D, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { ConfigService } from '../../config/config.service';
@@ -45,7 +45,6 @@ export class MachineFormComponent implements OnInit {
       printVolume: '',
       printResolution: '',
       numberOfExtruders: '',
-      pictureURL: '',
       comment: '',
       movementSpeed: '',
       stepSize: '',
@@ -218,22 +217,22 @@ export class MachineFormComponent implements OnInit {
 
   private _initModel(type) {
     switch (type) {
-      case 'Printer':
-        return new Printer(undefined, undefined, undefined,
+      case 'Printer3D':
+        return new Printer3D(undefined, undefined, undefined,
           this.machineService.camelCaseTypes(type), undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined);
+          undefined);
       case 'Milling Machine':
         return new MillingMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined, undefined);
+          undefined, undefined);
       case 'Other Machine':
         return new OtherMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
-          undefined, undefined, undefined, undefined);
+          undefined, undefined, undefined);
       case 'Lasercutter':
         return new Lasercutter(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined, undefined, undefined);
+          undefined, undefined, undefined);
       default:
         return new Machine(undefined, undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined);
     }
@@ -277,7 +276,6 @@ export class MachineFormComponent implements OnInit {
           printVolume: translations['machineForm'].labels.printVolume,
           printResolution: translations['machineForm'].labels.printResolution,
           numberOfExtruders: translations['machineForm'].labels.numberOfExtruders,
-          pictureURL: translations['machineForm'].labels.pictureURL,
           comment: translations['machineForm'].labels.comment,
           movementSpeed: translations['machineForm'].labels.movementSpeed,
           stepSize: translations['machineForm'].labels.stepSize,

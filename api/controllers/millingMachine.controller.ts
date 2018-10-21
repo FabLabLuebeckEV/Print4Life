@@ -16,7 +16,6 @@ function create (params) {
   return machineService.create(machineType, params);
 }
 
-
 function get (id) {
   return machineService.get(machineType, id);
 }

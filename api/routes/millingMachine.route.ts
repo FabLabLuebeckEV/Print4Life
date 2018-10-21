@@ -158,7 +158,6 @@ router.route('/count').get((req, res) => {
  * @apiParam {Number} workspaceY space volume of axis z
  * @apiParam {Number} movementSpeed speed of the milling machine
  * @apiParam {String} stepSize size of the steps
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
@@ -172,7 +171,6 @@ router.route('/count').get((req, res) => {
   "workspaceZ": 2,
   "movementSpeed": 2,
   "stepSize": 2,
-  "pictureURL": "",
   "comment": "Create Test"
 }
  *
@@ -191,7 +189,6 @@ router.route('/count').get((req, res) => {
         "workspaceZ": 2,
         "movementSpeed": 2,
         "stepSize": 2,
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "millingMachine",
         "__v": 0
@@ -257,7 +254,6 @@ router.route('/').post((req, res) => {
     "workspaceX": 2,
     "workspaceY": 2,
     "workspaceZ": 2,
-    "pictureURL": "",
     "comment": "Create Test",
     "type": "millingMachine",
     "__v": 0
@@ -373,7 +369,6 @@ router.route('/:id').delete((req, res) => {
         "workspaceX": 2,
         "workspaceY": 2,
         "workspaceZ": 2,
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "millingMachine",
         "__v": 0
@@ -434,7 +429,6 @@ router.route('/:id').get((req, res) => {
  * @apiParam {Number} workspaceY space volume of axis z
  * @apiParam {Number} movementSpeed speed of the milling machine
  * @apiParam {String} stepSize size of the steps
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  *
  * @apiParamExample {json} Request-Example:
@@ -447,7 +441,6 @@ router.route('/:id').get((req, res) => {
     "workspaceX" : 2,
     "workspaceY" : 2,
     "workspaceZ" : 2,
-    "pictureURL" : "",
     "comment" : "Create Test",
     "type" : "millingMachine",
     "__v" : 0
@@ -464,7 +457,6 @@ router.route('/:id').get((req, res) => {
         "workspaceX": 2,
         "workspaceY": 2,
         "workspaceZ": 2,
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "millingMachine",
         "__v": 0

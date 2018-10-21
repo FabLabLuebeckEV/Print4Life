@@ -220,7 +220,6 @@ router.route('/laserTypes').get((req, res) => {
  * @apiParam {Number} workspaceY space volume of axis z
  * @apiParam {Number} maxResoultion resolution of lasercutter
  * @apiParam {String} laserPower power of the laser
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
@@ -236,7 +235,6 @@ router.route('/laserTypes').get((req, res) => {
   "workspaceZ": 2,
   "maxResoultion": 2,
   "laserPower": "High",
-  "pictureURL": "",
   "comment": "Create Test"
 }
  *
@@ -259,7 +257,6 @@ router.route('/laserTypes').get((req, res) => {
         "workspaceZ": 2,
         "maxResoultion": 2,
         "laserPower": "High",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "lasercutter",
         "__v": 0
@@ -333,7 +330,6 @@ router.route('/').post((req, res) => {
     "workspaceZ": 2,
     "maxResoultion": 2,
     "laserPower": "High",
-    "pictureURL": "",
     "comment": "Create Test",
     "type": "lasercutter",
     "__v": 0
@@ -453,7 +449,6 @@ router.route('/:id').delete((req, res) => {
         "workspaceZ": 2,
         "maxResoultion": 2,
         "laserPower": "High",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "lasercutter",
         "__v": 0
@@ -514,7 +509,6 @@ router.route('/:id').get((req, res) => {
  * @apiParam {Number} workspaceY space volume of axis z
  * @apiParam {Number} maxResoultion resolution of lasercutter
  * @apiParam {String} laserPower power of the laser
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  *
  * @apiParamExample {json} Request-Example:
@@ -535,7 +529,6 @@ router.route('/:id').get((req, res) => {
     "workspaceZ" : 2,
     "maxResoultion" : 2,
     "laserPower" : "High",
-    "pictureURL" : "",
     "comment" : "Create Test",
     "type" : "lasercutter",
     "__v" : 0
@@ -560,7 +553,6 @@ router.route('/:id').get((req, res) => {
         "workspaceZ": 2,
         "maxResoultion": 2,
         "laserPower": "High",
-        "pictureURL": "",
         "comment": "Create Test",
         "type": "lasercutter",
         "__v": 0

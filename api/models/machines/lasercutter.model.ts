@@ -24,9 +24,6 @@ const attributes = {
     type: String
   },
   // old db fields
-  pictureURL: {
-    type: String
-  },
   comment: {
     type: String
   }

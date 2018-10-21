@@ -1,5 +1,5 @@
 import * as express from 'express';
-import printerCtrl from '../controllers/printer.controller';
+import printer3DCtrl from '../controllers/3d-printer.controller';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 import routerService from '../services/router.service';
@@ -9,24 +9,24 @@ const router = express.Router();
 router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 /**
- * @api {get} /api/v1/machines/printers Get printers
- * @apiName GetPrinters
+ * @api {get} /api/v1/machines/3d-printer Get 3d-printer
+ * @apiName Get3Dprinters
  * @apiVersion 1.0.0
  * @apiGroup Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam (Query String) limit is the limit of objects to get
  * @apiParam (Query String) skip is the number of objects to skip
- * @apiSuccess {Array} printers an array of printer objects
+ * @apiSuccess {Array} 3d-printers an array of printer objects
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
-    "printers": [
+    "3d-printers": [
         {
             "_id": "5b55f7bf3fe0c8b01713b3fa",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "printer",
+            "type": "3d-printer",
             "deviceName": "Ultimaker 2+",
             "manufacturer": "Ultimaker",
             "materials": [
@@ -44,14 +44,13 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
             "printResolutionZ": 0.5,
             "nozzleDiameter": 0.4,
             "numberOfExtruders": 1,
-            "pictureURL": "upload/59e5da27a317a.jpg",
             "comment": "",
             "__v": 0
         },
         {
             "_id": "5b55f7bf3fe0c8b01713b3fc",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "printer",
+            "type": "3d-printer",
             "deviceName": "Zprinter 450",
             "manufacturer": "Zcorp",
             "materials": [
@@ -69,7 +68,6 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
             "printResolutionZ": 1,
             "nozzleDiameter": null,
             "numberOfExtruders": 0,
-            "pictureURL": "upload/59e5dc87040cc.jpg",
             "comment": "Full Color printer",
             "__v": 0
         }
@@ -81,11 +79,11 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 206 Partial Content
 {
-    "printers": [
+    "3d-printers": [
         {
             "_id": "5b55f7bf3fe0c8b01713b3fa",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "printer",
+            "type": "3d-printer",
             "deviceName": "Ultimaker 2+",
             "manufacturer": "Ultimaker",
             "materials": [
@@ -103,14 +101,13 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
             "printResolutionZ": 0.5,
             "nozzleDiameter": 0.4,
             "numberOfExtruders": 1,
-            "pictureURL": "upload/59e5da27a317a.jpg",
             "comment": "",
             "__v": 0
         },
         {
             "_id": "5b55f7bf3fe0c8b01713b3fc",
             "fablabId": "5b453ddb5cf4a9574849e98b",
-            "type": "printer",
+            "type": "3d-printer",
             "deviceName": "Zprinter 450",
             "manufacturer": "Zcorp",
             "materials": [
@@ -128,7 +125,6 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
             "printResolutionZ": 1,
             "nozzleDiameter": null,
             "numberOfExtruders": 0,
-            "pictureURL": "upload/59e5dc87040cc.jpg",
             "comment": "Full Color printer",
             "__v": 0
         }
@@ -136,16 +132,16 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
     }
  */
 router.route('/').get((req, res) => {
-  printerCtrl.getAll(req.query.limit, req.query.skip).then((printers) => {
-    if ((printers && printers.length === 0) || !printers) {
-      logger.info('GET Printers with no result');
+  printer3DCtrl.getAll(req.query.limit, req.query.skip).then((printers3d) => {
+    if ((printers3d && printers3d.length === 0) || !printers3d) {
+      logger.info('GET 3D Printers with no result');
       res.status(204).send();
-    } else if (printers && req.query.limit && req.query.skip) {
-      logger.info(`GET Printers with partial result ${JSON.stringify(printers)}`);
-      res.status(206).send({ printers });
-    } else if (printers) {
-      logger.info(`GET Printers with result ${JSON.stringify(printers)}`);
-      res.status(200).send({ printers });
+    } else if (printers3d && req.query.limit && req.query.skip) {
+      logger.info(`GET 3D Printers with partial result ${JSON.stringify(printers3d)}`);
+      res.status(206).send({ '3d-printers': printers3d });
+    } else if (printers3d) {
+      logger.info(`GET 3D Printers with result ${JSON.stringify(printers3d)}`);
+      res.status(200).send({ '3d-printers': printers3d });
     }
   }).catch((err) => {
     const msg = { error: 'Error while trying to get all printers', stack: err };
@@ -155,13 +151,13 @@ router.route('/').get((req, res) => {
 });
 
 /**
- * @api {get} /api/v1/machines/printers/count Counts the Printers
+ * @api {get} /api/v1/machines/3d-printers/count Counts the 3D Printers
  * @apiName CountPrinters
  * @apiVersion 1.0.0
  * @apiGroup Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess {Object} count the number of printers
+ * @apiSuccess {Object} count the number of 3d-printers
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
  *
@@ -171,18 +167,18 @@ router.route('/').get((req, res) => {
  *
  */
 router.route('/count').get((req, res) => {
-  printerCtrl.count().then((count) => {
-    logger.info(`GET count printers with result ${JSON.stringify(count)}`);
+  printer3DCtrl.count().then((count) => {
+    logger.info(`GET count 3D printers with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
-    const msg = { error: 'Error while trying count all printers', stack: err };
+    const msg = { error: 'Error while trying count all 3D printers', stack: err };
     logger.error(msg);
     res.status(500).send(msg);
   });
 });
 
 /**
- * @api {post} /api/v1/machines/printers/ Create new Printer
+ * @api {post} /api/v1/machines/3d-printers/ Create new Printer
  * @apiName CreateNewPrinter
  * @apiVersion 1.0.0
  * @apiGroup Printers
@@ -201,7 +197,6 @@ router.route('/count').get((req, res) => {
  * @apiParam {Number} printResolutionZ resolution of the print at axis z
  * @apiParam {Number} nozzleDiameter the nozzle diameter
  * @apiParam {Number} numberOfExtruders the number of extruders
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  * @apiParamExample {json} Request-Example:
  *
@@ -222,7 +217,6 @@ router.route('/count').get((req, res) => {
    "printResolutionZ": 2,
    "nozzleDiameter": 2,
    "numberOfExtruders": 2,
-   "pictureURL": "",
    "comment": "Create Test"
 }
  *
@@ -230,11 +224,11 @@ router.route('/count').get((req, res) => {
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 201 OK
 {
-    "printer": {
+    "3d-printer": {
         "_id": "5b571447d748f04e8a0581ab",
         "fablabId": "5b453ddb5cf4a9574849e98a",
         "deviceName": "Test Printer",
-        "type": "printer",
+        "type": "3d-printer",
         "manufacturer": "Test Manufacturer",
         "materials": [
             {
@@ -251,7 +245,6 @@ router.route('/count').get((req, res) => {
         "printResolutionZ": 2,
         "nozzleDiameter": 2,
         "numberOfExtruders": 2,
-        "pictureURL": "",
         "comment": "Create Test",
         "__v": 0
     }
@@ -287,9 +280,9 @@ router.route('/count').get((req, res) => {
  *
  */
 router.route('/').post((req, res) => {
-  printerCtrl.create(req.body).then((printer) => {
-    logger.info(`POST Printers with result ${JSON.stringify(printer)}`);
-    res.status(201).send({ printer });
+  printer3DCtrl.create(req.body).then((printer3d) => {
+    logger.info(`POST 3D Printers with result ${JSON.stringify(printer3d)}`);
+    res.status(201).send({ '3d-printer': printer3d });
   }).catch((err) => {
     const msg = { err: 'Malformed request!', stack: err };
     logger.error(msg);
@@ -298,8 +291,8 @@ router.route('/').post((req, res) => {
 });
 
 /**
- * @api {delete} /api/v1/machines/printers/:id Deletes a Printer by a given id
- * @apiName DeletePrinterById
+ * @api {delete} /api/v1/machines/3d-printers/:id Deletes a Printer by a given id
+ * @apiName Delete3DPrinterById
  * @apiVersion 1.0.0
  * @apiGroup Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
@@ -330,9 +323,8 @@ router.route('/').post((req, res) => {
     "printResolutionZ": 2,
     "nozzleDiameter": 2,
     "numberOfExtruders": 2,
-    "pictureURL": "",
     "comment": "Create Test",
-    "type": "printer",
+    "type": "3d-printer",
     "__v": 0
 }
  * @apiError 400 The request is malformed
@@ -377,24 +369,24 @@ router.route('/:id').delete((req, res) => {
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    let printer;
-    printerCtrl.get(req.params.id).then((p) => {
+    let printer3d;
+    printer3DCtrl.get(req.params.id).then((p) => {
       if (p) {
-        printer = p;
-        printerCtrl.deleteById(req.params.id).then((result) => {
+        printer3d = p;
+        printer3DCtrl.deleteById(req.params.id).then((result) => {
           if (result) {
-            printerCtrl.get(req.params.id).then((result) => {
+            printer3DCtrl.get(req.params.id).then((result) => {
               if (!result) {
-                logger.info(`DELETE Printer with result ${JSON.stringify(printer)}`);
-                res.status(200).send({ printer });
+                logger.info(`DELETE 3D Printer with result ${JSON.stringify(printer3d)}`);
+                res.status(200).send({ '3d-printer': printer3d });
               }
             }).catch((err) => {
-              const msg = { err: `Error while trying to get the Printer by id ${req.params.id}`, stack: err };
+              const msg = { err: `Error while trying to get the 3D Printer by id ${req.params.id}`, stack: err };
               logger.error(msg);
               res.status(500).send(msg);
             });
           } else {
-            const msg = { err: `Error while trying to delete the Printer with id ${req.params.id}` };
+            const msg = { err: `Error while trying to delete the 3D Printer with id ${req.params.id}` };
             logger.error(msg);
             res.status(500).send(msg);
           }
@@ -404,12 +396,12 @@ router.route('/:id').delete((req, res) => {
           res.status(400).send(msg);
         });
       } else {
-        const msg = { err: `Printer by id ${req.params.id} not found!` };
+        const msg = { err: `3D Printer by id ${req.params.id} not found!` };
         logger.error(msg);
         res.status(404).send(msg);
       }
     }).catch((err) => {
-      const msg = { err: `Error while trying to get the Printer by id ${req.params.id}`, stack: err };
+      const msg = { err: `Error while trying to get the 3D Printer by id ${req.params.id}`, stack: err };
       logger.error(msg);
       res.status(500).send(msg);
     });
@@ -417,7 +409,7 @@ router.route('/:id').delete((req, res) => {
 });
 
 /**
- * @api {get} /api/v1/machines/printers/:id Gets a Printer by a given id
+ * @api {get} /api/v1/machines/3d-printers/:id Gets a Printer by a given id
  * @apiName GetPrinterById
  * @apiVersion 1.0.0
  * @apiGroup Printers
@@ -429,7 +421,7 @@ router.route('/:id').delete((req, res) => {
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
-    "printer": {
+    "3d-printers": {
         "_id": "5b61b2a1ed80e42748255735",
         "fablabId": "5b453ddb5cf4a9574849e98a",
         "deviceName": "Test Printer",
@@ -450,9 +442,8 @@ router.route('/:id').delete((req, res) => {
         "printResolutionZ": 2,
         "nozzleDiameter": 2,
         "numberOfExtruders": 2,
-        "pictureURL": "",
         "comment": "Create Test",
-        "type": "printer",
+        "type": "3d-printer",
         "__v": 0
     }
 }
@@ -477,14 +468,14 @@ router.route('/:id').get((req, res) => {
     logger.error({ error: checkId.error });
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    printerCtrl.get(req.params.id).then((printer) => {
-      if (!printer) {
-        const msg = { error: `Printer by id '${req.params.id}' not found` };
+    printer3DCtrl.get(req.params.id).then((printer3d) => {
+      if (!printer3d) {
+        const msg = { error: `3D Printer by id '${req.params.id}' not found` };
         logger.error(msg);
         res.status(404).send(msg);
       } else {
-        logger.info(`GET Printer by Id with result ${JSON.stringify(printer)}`);
-        res.status(200).send({ printer });
+        logger.info(`GET 3D Printer by Id with result ${JSON.stringify(printer3d)}`);
+        res.status(200).send({ '3d-printer': printer3d });
       }
     }).catch((err) => {
       const msg = { err: 'Malformed request!', stack: err };
@@ -495,7 +486,7 @@ router.route('/:id').get((req, res) => {
 });
 
 /**
- * @api {put} /api/v1/machines/printers/:id Updates a Printer by a given id
+ * @api {put} /api/v1/machines/3d-printers/:id Updates a Printer by a given id
  * @apiName UpdatePrinterByID
  * @apiVersion 1.0.0
  * @apiGroup Printers
@@ -515,7 +506,6 @@ router.route('/:id').get((req, res) => {
  * @apiParam {Number} printResolutionZ resolution of the print at axis z
  * @apiParam {Number} nozzleDiameter the nozzle diameter
  * @apiParam {Number} numberOfExtruders the number of extruders
- * @apiParam {String} pictureUrl url to a picture of this device
  * @apiParam {String} comment a comment about the device
  *
  * @apiParamExample {json} Request-Example:
@@ -541,16 +531,15 @@ router.route('/:id').get((req, res) => {
     "printResolutionZ" : 2,
     "nozzleDiameter" : 2,
     "numberOfExtruders" : 2,
-    "pictureURL" : "",
     "comment" : "Create Test",
-    "type" : "printer",
+    "type" : "3d-printer",
     "__v" : 0
 }
  * @apiSuccess {Object} printer the printer object
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
-    "printer": {
+    "3d-printer": {
         "_id": "5b66a9d7cdb16f0a3e528630",
         "fablabId": "5b453ddb5cf4a9574849e98a",
         "deviceName": "Test Printer (Updated)",
@@ -571,9 +560,8 @@ router.route('/:id').get((req, res) => {
         "printResolutionZ": 2,
         "nozzleDiameter": 2,
         "numberOfExtruders": 2,
-        "pictureURL": "",
         "comment": "Create Test",
-        "type": "printer",
+        "type": "3d-printer",
         "__v": 0
     }
 }
@@ -608,15 +596,15 @@ router.route('/:id').put((req, res) => {
     logger.error(msg);
     res.status(400).send(msg);
   } else {
-    printerCtrl.get(req.params.id).then((printer) => {
-      if (!printer) {
-        const msg = { error: `Printer by id '${req.params.id}' not found` };
+    printer3DCtrl.get(req.params.id).then((printer3d) => {
+      if (!printer3d) {
+        const msg = { error: `3D Printer by id '${req.params.id}' not found` };
         logger.error(msg);
         res.status(404).send(msg);
       } else {
-        printerCtrl.update(req.params.id, req.body).then((printer) => {
-          logger.info(`PUT Printer with result ${JSON.stringify(printer)}`);
-          res.status(200).send({ printer });
+        printer3DCtrl.update(req.params.id, req.body).then((printer3d) => {
+          logger.info(`PUT 3D Printer with result ${JSON.stringify(printer3d)}`);
+          res.status(200).send({ '3d-printer': printer3d });
         });
       }
     }).catch((err) => {
