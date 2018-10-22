@@ -112,6 +112,7 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
     }
 */
 router.route('/').get((req, res) => {
+  req.query = validatorService.checkQuery(req.query);
   orderCtrl.getOrders(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
       logger.info('GET Orders without result');
@@ -130,6 +131,7 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/search').post((req, res) => {
+  req.body.query = validatorService.checkQuery(req.body.query);
   orderCtrl.getOrders(req.body.query, req.body.limit, req.body.skip).then((orders) => {
     if (orders.length === 0) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, ` +
@@ -196,6 +198,7 @@ router.route('/search').post((req, res) => {
   }
 */
 router.route('/count').post((req, res) => {
+  req.body.query = validatorService.checkQuery(req.body.query);
   orderCtrl.count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });

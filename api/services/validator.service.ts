@@ -8,6 +8,20 @@ export interface TokenCheck {
   decoded: any;
 }
 
+// FIXME
+function checkQuery (query) {
+  if (query.$nor && query.$nor.length === 0) {
+    delete query.$nor;
+  }
+  if (query.$nor && query.$nor.length === 0) {
+    delete query.$or;
+  }
+  if (query.$nor && query.$nor.length === 0) {
+    delete query.$and;
+  }
+  return query;
+}
+
 function checkId (id: string) {
   let retObj;
   const valid = mongoose.Types.ObjectId.isValid(id);
@@ -40,5 +54,6 @@ async function checkToken (req): Promise<TokenCheck> {
 
 export default {
   checkId,
-  checkToken
+  checkToken,
+  checkQuery
 };

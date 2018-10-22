@@ -97,6 +97,7 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 }
  */
 router.route('/').get((req, res) => {
+  req.query = validatorService.checkQuery(req.query);
   millingMachineCtrl.getAll(req.query.limit, req.query.skip).then((millingMachines) => {
     if ((millingMachines && millingMachines.length === 0) || !millingMachines) {
       logger.info('GET Milling Machines with no result');

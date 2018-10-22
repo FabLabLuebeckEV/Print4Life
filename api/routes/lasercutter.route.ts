@@ -120,6 +120,7 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 }
  */
 router.route('/').get((req, res) => {
+  req.query = validatorService.checkQuery(req.query);
   lasercutterCtrl.getAll(req.query.limit, req.query.skip).then((lasercutters) => {
     if ((lasercutters && lasercutters.length === 0) || !lasercutters) {
       logger.info('GET Lasercutters with no result');
