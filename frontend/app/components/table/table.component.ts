@@ -108,7 +108,7 @@ export class TableComponent implements OnInit, DoCheck {
 
   private _translate() {
     this.visibleItems = [];
-    this.translateService.get(['tableComponent', 'deviceTypes', 'status']).subscribe((translations => {
+    this.translateService.get(['tableComponent', 'deviceTypes', 'status', 'roles']).subscribe((translations => {
       this.items.forEach((item) => {
         const itemCopy = JSON.parse(JSON.stringify(item));
         const visibleItem = new TableItem();
@@ -124,6 +124,10 @@ export class TableComponent implements OnInit, DoCheck {
               visibleItem.obj[`${translatedKey}`].label = translatedType;
             } else if (key === 'Status') {
               const translatedType = translations['status'][`${itemCopy.obj[`${key}`].label}`];
+              visibleItem.obj[`${translatedKey}`] = itemCopy.obj[`${key}`];
+              visibleItem.obj[`${translatedKey}`].label = translatedType;
+            } else if (key === 'Role') {
+              const translatedType = translations['roles'][`${itemCopy.obj[`${key}`].label}`];
               visibleItem.obj[`${translatedKey}`] = itemCopy.obj[`${key}`];
               visibleItem.obj[`${translatedKey}`].label = translatedType;
             } else {
