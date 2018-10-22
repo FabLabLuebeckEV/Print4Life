@@ -498,7 +498,7 @@ router.route('/search').post((req, res) => {
   }
  */
 router.route('/count').post((req, res) => {
-  req.body.query = validatorService.checkQuery(req.body.query);
+  req.body = validatorService.checkQuery(req.body);
   userCtrl.count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
