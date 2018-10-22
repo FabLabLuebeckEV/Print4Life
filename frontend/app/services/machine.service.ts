@@ -21,11 +21,16 @@ export class MachineService {
         split[i].length > 1 ? newStr += split[i] + ' ' : newStr += split[i];
       }
       return newStr.trim();
+    } else {
+      return str;
     }
   }
 
   public camelCaseTypes(type): String {
-    const split = type.split(' ');
+    const split = type ? type.split(' ') : '';
+    if (!split) {
+      return type;
+    }
     split[0] = split[0].charAt(0).toLowerCase() + split[0].slice(1);
     if (split.length === 2) {
       split[1] = split[1].charAt(0).toUpperCase() + split[1].slice(1);
