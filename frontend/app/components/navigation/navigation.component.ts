@@ -134,7 +134,7 @@ export class NavigationComponent implements OnInit {
         this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownAuthElements);
         this.userDropdown.elements = this.userDropdown.elements.concat(userDropdownAuthElements);
         if (this.userIsAdmin) {
-          this.orderDropdown.elements = this.orderDropdown.elements.concat({
+          this.machineDropdown.elements = this.machineDropdown.elements.concat({
             name: translations['dropdown.machines'].createMachine,
             routerHref: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.create}`
           });
