@@ -302,7 +302,7 @@ export class CreateOrderComponent implements OnInit {
         }
       });
       const machineId = this.order.machine._id;
-      this.machineTypeChanged(this.order.machine['shownType']);
+      await this.machineTypeChanged(this.order.machine['shownType']);
       this.order.machine._id = machineId;
     } else {
       this.order.owner = this.loggedInUser._id;
