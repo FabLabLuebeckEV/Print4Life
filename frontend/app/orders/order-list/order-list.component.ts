@@ -313,7 +313,7 @@ export class OrderListComponent implements OnInit {
                 };
                 this.orders[orderIdx].obj['Editor'] = {
                   label: editor ? editor.firstname + ' ' + editor.lastname : '',
-                  href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
+                  href: this.userIsLoggedIn && editor ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
                 };
                 this.orders[orderIdx].obj['Status'] = { label: result.status };
                 this.orders[orderIdx].obj['Device Type'] = { label: result.machine.type };
