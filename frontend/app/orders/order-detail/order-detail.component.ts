@@ -22,6 +22,7 @@ import { User } from 'frontend/app/models/user.model';
 export class OrderDetailComponent implements OnInit {
   private config: any;
   private userIsLoggedIn: boolean;
+  private loggedInUser: User;
   editIcon: any;
   deleteIcon: any;
   editLink: String;
@@ -87,7 +88,7 @@ export class OrderDetailComponent implements OnInit {
     this.deleteIcon = this.config.icons.delete;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
     });
@@ -131,6 +132,7 @@ export class OrderDetailComponent implements OnInit {
         }
       });
     this.userIsLoggedIn = this.userService.isLoggedIn();
+    this.loggedInUser = await this.userService.getUser();
   }
 
   public delete() {
