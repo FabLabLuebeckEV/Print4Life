@@ -76,6 +76,7 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 }
  */
 router.route('/').get((req, res) => {
+  req.query = validatorService.checkQuery(req.query);
   otherMachineCtrl.getAll(req.query.limit, req.query.skip).then((otherMachines) => {
     if ((otherMachines && otherMachines.length === 0) || !otherMachines) {
       logger.info('GET Other Machines with no result');

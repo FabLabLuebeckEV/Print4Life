@@ -132,6 +132,7 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
     }
  */
 router.route('/').get((req, res) => {
+  req.query = validatorService.checkQuery(req.query);
   printer3DCtrl.getAll(req.query.limit, req.query.skip).then((printers3d) => {
     if ((printers3d && printers3d.length === 0) || !printers3d) {
       logger.info('GET 3D Printers with no result');

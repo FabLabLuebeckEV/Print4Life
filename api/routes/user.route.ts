@@ -432,6 +432,7 @@ router.route('/:id').delete((req, res) => {
     }
 */
 router.route('/search').post((req, res) => {
+  req.body.query = validatorService.checkQuery(req.body.query);
   userCtrl.getUsers(req.body.query, req.body.limit, req.body.skip).then((users) => {
     if (users.length === 0) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
@@ -497,6 +498,7 @@ router.route('/search').post((req, res) => {
   }
  */
 router.route('/count').post((req, res) => {
+  req.body = validatorService.checkQuery(req.body);
   userCtrl.count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
