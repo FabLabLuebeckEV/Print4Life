@@ -1,6 +1,7 @@
 node_modules
 dist
-logs/*.log
+logs/*.log*
+logs/*-audit.json
 npm-debug.log*
 docs/api
 dev-mongo

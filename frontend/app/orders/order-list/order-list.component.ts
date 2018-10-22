@@ -11,6 +11,7 @@ import { routes } from '../../config/routes';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
+import { UserService } from '../../services/user.service';
 import * as moment from 'moment';
 
 @Component({
@@ -20,6 +21,8 @@ import * as moment from 'moment';
 })
 export class OrderListComponent implements OnInit {
   private config: any;
+  private userIsLoggedIn: boolean;
+  private userIsAdmin: Boolean;
   createLink: String;
   orders: Array<TableItem> = [];
   visibleOrders: Array<TableItem> = [];
@@ -84,7 +87,8 @@ export class OrderListComponent implements OnInit {
     private modalService: NgbModal,
     private configService: ConfigService,
     private spinner: NgxSpinnerService,
-    private translateService: TranslateService) {
+    private translateService: TranslateService,
+    private userService: UserService) {
     this.config = this.configService.getConfig();
     this.spinnerConfig = { 'loadingText': 'Loading Orders', ...this.config.spinnerConfig };
     this.createLink = `./${routes.paths.frontend.orders.create}`;
@@ -113,6 +117,8 @@ export class OrderListComponent implements OnInit {
       this.orders = [];
       await this._loadStatus();
       await this._loadMachineTypes();
+      this.userIsLoggedIn = await this.userService.isLoggedIn();
+      this.userIsAdmin = await this.userService.isAdmin();
       this._translate();
       this.init();
     }
@@ -183,11 +189,14 @@ export class OrderListComponent implements OnInit {
       query, this.paginationObj.perPage,
       (this.paginationObj.page - 1) * this.paginationObj.perPage);
     if (orders && orders.orders) {
-      this.translateService.get(['date']).subscribe((translations => {
+      this.translateService.get(['date']).subscribe((async translations => {
         orders = orders.orders;
         const arr = [];
         for (const order of orders) {
           const item = new TableItem();
+          const owner = await this.userService.getNamesOfUser(order.owner);
+          const loggedInUser = await this.userService.getUser();
+          const editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
           item.obj['id'] = { label: order._id };
           item.obj['Created at'] = {
             label: currentLang === 'de'
@@ -195,19 +204,28 @@ export class OrderListComponent implements OnInit {
               : moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat)
           };
           item.obj['Projectname'] = { label: order.projectname, href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
-          item.obj['Owner'] = { label: order.owner };
-          item.obj['Editor'] = { label: order.editor };
+          item.obj['Owner'] = {
+            label: owner.firstname + ' ' + owner.lastname,
+            href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''
+          };
+          item.obj['Editor'] = {
+            label: editor ? editor.firstname + ' ' + editor.lastname : '',
+            href: editor && this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
+          };
           item.obj['Status'] = { label: order.status };
           item.obj['Device Type'] = { label: order.machine.type };
-          item.button1.label = this.translationFields.buttons.updateLabel;
-          item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
-          item.button1.class = 'btn btn-warning spacing';
-          item.button1.icon = this.config.icons.edit;
-          item.button2.label = this.translationFields.buttons.deleteLabel;
-          item.button2.eventEmitter = true;
-          item.button2.class = 'btn btn-danger spacing';
-          item.button2.icon = this.config.icons.delete;
-          item.button2.refId = order._id;
+          if (this.userIsLoggedIn &&
+            (loggedInUser.role.role === 'editor' || this.userIsAdmin || loggedInUser._id === owner._id)) {
+            item.button1.label = this.translationFields.buttons.updateLabel;
+            item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
+            item.button1.class = 'btn btn-warning spacing';
+            item.button1.icon = this.config.icons.edit;
+            item.button2.label = this.translationFields.buttons.deleteLabel;
+            item.button2.eventEmitter = true;
+            item.button2.class = 'btn btn-danger spacing';
+            item.button2.icon = this.config.icons.delete;
+            item.button2.refId = order._id;
+          }
           arr.push(item);
         }
 
@@ -280,15 +298,23 @@ export class OrderListComponent implements OnInit {
         `${order.obj[`Projectname`].label} ${this.translationFields.modals.deleteQuestion2}`, deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
-          this.orderService.deleteOrder(order.obj.id.label).then((result) => {
+          this.orderService.deleteOrder(order.obj.id.label).then(async (result) => {
             result = result.order;
             const oldOrder = this.visibleOrders[orderIdx];
+            const owner = await this.userService.getNamesOfUser(result.owner);
+            const editor = result.editor ? await this.userService.getNamesOfUser(result.editor) : undefined;
             this.orders.forEach((item) => {
               if (oldOrder.obj.id.label === item.obj.id.label) {
                 this.orders[orderIdx].obj = {};
                 this.orders[orderIdx].obj['id'] = { label: result._id };
-                this.orders[orderIdx].obj['Owner'] = { label: result.owner };
-                this.orders[orderIdx].obj['Editor'] = { label: result.editor };
+                this.orders[orderIdx].obj['Owner'] = {
+                  label: owner.firstname + ' ' + owner.lastname,
+                  href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''
+                };
+                this.orders[orderIdx].obj['Editor'] = {
+                  label: editor ? editor.firstname + ' ' + editor.lastname : '',
+                  href: this.userIsLoggedIn && editor ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
+                };
                 this.orders[orderIdx].obj['Status'] = { label: result.status };
                 this.orders[orderIdx].obj['Device Type'] = { label: result.machine.type };
 
@@ -296,8 +322,14 @@ export class OrderListComponent implements OnInit {
             });
             this.visibleOrders[orderIdx].obj = {};
             this.visibleOrders[orderIdx].obj['id'] = { label: result._id };
-            this.visibleOrders[orderIdx].obj['Owner'] = { label: result.owner };
-            this.visibleOrders[orderIdx].obj['Editor'] = { label: result.editor };
+            this.visibleOrders[orderIdx].obj['Owner'] = {
+              label: owner.firstname + ' ' + owner.lastname,
+              href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''
+            };
+            this.visibleOrders[orderIdx].obj['Editor'] = {
+              label: editor ? editor.firstname + ' ' + editor.lastname : '',
+              href: editor && this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
+            };
             this.visibleOrders[orderIdx].obj['Status'] = { label: result.status };
             this.visibleOrders[orderIdx].obj['Device Type'] = { label: result.machine.type };
             if ((this.filter.selectedStatus && this.filter.selectedStatus.length > 0) ||

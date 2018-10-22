@@ -1,0 +1,11 @@
+p Hi #{adminName},
+if newUser
+    p a new user registered: #{userName} (#{userEmail})
+else 
+    p the user #{userName} (#{userEmail}) requests an activation.
+
+p The user is deactivated and can't login. You can #[a(href=url) activate] the user in the users profile page!
+
+p Kind Regards,
+p The System
+

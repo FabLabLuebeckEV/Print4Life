@@ -1,6 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { routes } from '../../config/routes';
+import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { LoginModalComponent } from '../../users/login-modal/login-modal.component';
+import { Router } from '@angular/router';
+import { User } from '../../models/user.model';
+
+interface Dropdown {
+  name: String;
+  elements: Array<Object>;
+}
 
 @Component({
   selector: 'app-navigation',
@@ -8,25 +18,33 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
-  title = 'Order Management';
-  isNavbarCollapsed: Boolean = false;
-  machineDropdown: Object = { name: '', elements: [] };
-  orderDropdown: Object = { name: '', elements: [] };
-  languageDropdown: Object = { name: '', elements: [] };
-  userDropdown: Object = {
-    name: 'User',
-    elements: [
-      { name: 'SignUp', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}` },
-      { name: 'SignIn', routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.login}` },
-      { name: 'Info', routerHref: `${routes.paths.frontend.users.root}/:id` }
-    ]
-  };
+  private title: String = 'Order Management';
+  private login: String = 'Login';
+  private logout: String = 'Logout';
+  private register: String = 'Register';
+  private isNavbarCollapsed: Boolean = false;
+  private machineDropdown: Dropdown = { name: '', elements: [] };
+  private orderDropdown: Dropdown = { name: '', elements: [] };
+  private languageDropdown: Dropdown = { name: '', elements: [] };
+  private userDropdown: Dropdown = { name: '', elements: [] };
+  private userIsLoggedIn: Boolean;
+  private userIsAdmin: Boolean;
+  private user: User;
 
-  constructor(private translateService: TranslateService) {
-    this._translate();
+  constructor(
+    private translateService: TranslateService,
+    private userService: UserService,
+    private modalService: NgbModal,
+    private router: Router
+  ) {
+    this.router.events.subscribe(async () => {
+      this._init();
+    });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.userIsAdmin = await this.userService.isAdmin();
+    this._init();
   }
 
   public switchLanguage(language) {
@@ -34,30 +52,42 @@ export class NavigationComponent implements OnInit {
     this._translate();
   }
 
+  private async _init() {
+    this.userIsLoggedIn = this.userService.isLoggedIn();
+    this.user = await this.userService.getUser();
+    this._translate();
+  }
+
   private _translate() {
     this.translateService.get(
       ['navigation', 'languages', 'dropdown.machines', 'dropdown.orders', 'dropdown.users']
     ).subscribe((translations => {
+      this.userIsLoggedIn = this.userService.isLoggedIn();
       this.title = translations['navigation'].title;
+      this.login = translations['navigation'].login;
+      this.logout = translations['navigation'].logout;
+      this.register = translations['navigation'].register;
+      const orderDropdownAuthElements = [{
+        name: translations['dropdown.orders'].createOrder,
+        routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.create}`
+      }];
+      const machineDropdownAuthElements = [
+        { name: translations['dropdown.machines'].listMachines, routerHref: routes.paths.frontend.machines.root },
+      ];
+      const userDropdownAuthElements = [
+        { name: translations['dropdown.users'].listUsers, routerHref: routes.paths.frontend.users.root }
+      ];
       this.machineDropdown = {
         name: translations['dropdown.machines'].title,
         elements: [
-          { name: translations['dropdown.machines'].listMachines, routerHref: routes.paths.frontend.machines.root },
-          {
-            name: translations['dropdown.machines'].createMachine,
-            routerHref: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.create}`
-          }
+
         ]
       };
 
       this.orderDropdown = {
         name: translations['dropdown.orders'].title,
         elements: [
-          { name: translations['dropdown.orders'].listOrders, routerHref: routes.paths.frontend.orders.root },
-          {
-            name: translations['dropdown.orders'].createOrder,
-            routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.create}`
-          }
+          { name: translations['dropdown.orders'].listOrders, routerHref: routes.paths.frontend.orders.root }
         ]
       };
 
@@ -86,23 +116,49 @@ export class NavigationComponent implements OnInit {
         ]
       };
 
+
       this.userDropdown = {
         name: translations['dropdown.users'].title,
-        elements: [
-          {
-            name: translations['dropdown.users'].signUp,
-            routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}`
-          },
-          {
-            name: translations['dropdown.users'].login,
-            routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.login}`
-          },
-          {
-            name: translations['dropdown.users'].info,
-            routerHref: `${routes.paths.frontend.users.root}/:id`
-          }
-        ]
+        elements: []
       };
+
+      if (this.user) {
+        this.userDropdown.elements.push({
+          name: translations['dropdown.users'].profile,
+          routerHref: `${routes.paths.frontend.users.root}/${routes.paths.frontend.users.profile}`
+        });
+      }
+
+      if (this.userIsLoggedIn) {
+        this.machineDropdown.elements = this.machineDropdown.elements.concat(machineDropdownAuthElements);
+        this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownAuthElements);
+        this.userDropdown.elements = this.userDropdown.elements.concat(userDropdownAuthElements);
+        if (this.userIsAdmin) {
+          this.machineDropdown.elements = this.machineDropdown.elements.concat({
+            name: translations['dropdown.machines'].createMachine,
+            routerHref: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.create}`
+          });
+        }
+      }
     }));
+  }
+
+  private _login() {
+    this.modalService.open(LoginModalComponent).result.then((login) => {
+      this.userIsLoggedIn = this.userService.isLoggedIn();
+      this.router.navigate([this.router.url]);
+    }).catch((err) => {
+      this.userIsLoggedIn = this.userService.isLoggedIn();
+    });
+  }
+
+  private _logout() {
+    this.userService.logout();
+    this.userIsLoggedIn = this.userService.isLoggedIn();
+    this.router.navigate(['/']);
+  }
+
+  private _register() {
+    this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}`]);
   }
 }

@@ -1,12 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
-
 .ng-valid[required],
 .ng-valid.required {
     border-left: 10px solid #42A948;
     /* green */
 }
 
-.ng-invalid:not(form) {
+.ng-invalid:not(form),
+.ng-invalid:not(form).ng-valid {
     border-left: 10px solid #a94442;
     /* red */
 }
@@ -21,4 +21,24 @@
 
 .spacing {
     margin: 10px;
+}
+
+.header-success {
+    background-color: green;
+    color: white;
+}
+
+.header-primary {
+    color: white;
+    background-color: #007bff;
+}
+
+.header-secondary {
+    color: white;
+    background-color: #6c757d;
+}
+
+.header-danger {
+    color: white;
+    background-color: #dc3545;
 }

@@ -3,7 +3,7 @@
 import * as mongoose from 'mongoose';
 import app from './App';
 import logger from './logger';
-import config from './config';
+import config from './config/config';
 
 function run (callback) {
   const port = process.env.PORT || 3000;

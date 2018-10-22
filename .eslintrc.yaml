@@ -47,3 +47,4 @@
     arrow-parens:
       - 2
       - always
+    no-undef: 0

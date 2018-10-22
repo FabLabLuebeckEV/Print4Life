@@ -11,6 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { routes } from '../../config/routes';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
+import { UserService } from 'frontend/app/services/user.service';
 
 @Component({
   selector: 'app-machine-list',
@@ -32,6 +33,7 @@ export class MachineListComponent implements OnInit {
   jumpArrow: Icon;
   newLink: String;
   spinnerConfig: Object = {};
+  userIsAdmin: Boolean;
   paginationObj: any = {
     page: 1,
     totalItems: 0,
@@ -57,7 +59,7 @@ export class MachineListComponent implements OnInit {
         total: 0,
         lastItem: 0
       },
-      printer: {
+      '3d-printer': {
         selected: true,
         total: 0,
         lastItem: 0
@@ -88,7 +90,7 @@ export class MachineListComponent implements OnInit {
     private fablabService: FablabService, private router: Router,
     private location: Location, private modalService: NgbModal,
     private spinner: NgxSpinnerService, private configService: ConfigService,
-    private translateService: TranslateService) {
+    private translateService: TranslateService, private userService: UserService) {
     this.config = this.configService.getConfig();
     this.plusIcon = this.config.icons.add;
     this.jumpArrow = this.config.icons.forward;
@@ -105,6 +107,7 @@ export class MachineListComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.userIsAdmin = await this.userService.isAdmin();
     if (this.listView && !this.loadingMachineTypes) {
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
@@ -188,25 +191,26 @@ export class MachineListComponent implements OnInit {
 
   private async _loadMachineTypes() {
     this.loadingMachineTypes = true;
-    this.filter.originMachineTypes = (await this.machineService.getAllMachineTypes()).types;
-    this.filter.originMachineTypes.forEach((type, idx) => {
-      this.filter.originMachineTypes[idx] = this.machineService.camelCaseTypes(type);
-    });
-    this.filter.machineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
-    this.filter.shownMachineTypes = JSON.parse(JSON.stringify(this.filter.machineTypes));
-    this.translateService.get(['deviceTypes']).subscribe((translations => {
-      this.filter.machineTypes.forEach((type, idx) => {
-        const translated = translations['deviceTypes'][`${type}`];
-        this.filter.machineTypes[idx] = translated;
+    const machineTypes = (await this.machineService.getAllMachineTypes());
+    if (machineTypes) {
+      this.filter.originMachineTypes = machineTypes.types;
+      this.filter.originMachineTypes.forEach((type, idx) => {
+        this.filter.originMachineTypes[idx] = this.machineService.camelCaseTypes(type);
       });
-      this.filter.shownMachineTypes.forEach((type, idx) => {
-        const translated = translations['deviceTypes'][`${type}`];
-        this.filter.shownMachineTypes[idx] = translated;
-      });
-    }));
-    // if (!this.filter.selectedMachineTypes) {
-    this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
-    // }
+      this.filter.machineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
+      this.filter.shownMachineTypes = JSON.parse(JSON.stringify(this.filter.machineTypes));
+      this.translateService.get(['deviceTypes']).subscribe((translations => {
+        this.filter.machineTypes.forEach((type, idx) => {
+          const translated = translations['deviceTypes'][`${type}`];
+          this.filter.machineTypes[idx] = translated;
+        });
+        this.filter.shownMachineTypes.forEach((type, idx) => {
+          const translated = translations['deviceTypes'][`${type}`];
+          this.filter.shownMachineTypes[idx] = translated;
+        });
+      }));
+      this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
+    }
     this.loadingMachineTypes = false;
   }
 
@@ -282,15 +286,17 @@ export class MachineListComponent implements OnInit {
         item.obj[`Manufacturer`] = { label: elem.manufacturer };
         item.obj[`Fablab`] = { label: fablab.name };
         item.obj[`Description`] = { label: '' };
-        item.button1.label = this.translationFields.buttons.updateLabel;
-        item.button1.href = `./${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
-        item.button1.class = 'btn btn-warning spacing';
-        item.button1.icon = this.config.icons.edit;
-        item.button2.label = this.translationFields.buttons.deleteLabel;
-        item.button2.eventEmitter = true;
-        item.button2.class = 'btn btn-danger spacing';
-        item.button2.icon = this.config.icons.delete;
-        item.button2.refId = elem._id;
+        if (this.userIsAdmin) {
+          item.button1.label = this.translationFields.buttons.updateLabel;
+          item.button1.href = `./${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
+          item.button1.class = 'btn btn-warning spacing';
+          item.button1.icon = this.config.icons.edit;
+          item.button2.label = this.translationFields.buttons.deleteLabel;
+          item.button2.eventEmitter = true;
+          item.button2.class = 'btn btn-danger spacing';
+          item.button2.icon = this.config.icons.delete;
+          item.button2.refId = elem._id;
+        }
         arr.push(item);
       }
     }

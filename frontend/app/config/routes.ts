@@ -7,7 +7,16 @@ export const routes = {
         backend: {
             users: {
                 root: 'users',
-                getRoles: 'roles'
+                getRoles: 'roles',
+                getLanguages: 'languages',
+                login: 'login',
+                findown: 'findown',
+                search: 'search',
+                count: 'count',
+                activationRequest: 'activationRequest',
+                resetPassword: 'resetPassword',
+                changePassword: 'changePassword',
+                getNames: 'getNames'
             },
             orders: {
                 root: 'orders',
@@ -36,7 +45,9 @@ export const routes = {
                 root: 'users',
                 signup: 'signup',
                 login: 'login',
-                update: 'edit'
+                update: 'edit',
+                list: 'list',
+                profile: 'profile'
             },
             orders: {
                 root: 'orders',

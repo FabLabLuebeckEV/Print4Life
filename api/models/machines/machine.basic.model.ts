@@ -11,7 +11,7 @@ const machineFields = {
   },
   type: {
     type: String,
-    enum: ['printer', 'lasercutter', 'otherMachine', 'millingMachine'],
+    enum: ['3d-printer', 'lasercutter', 'otherMachine', 'millingMachine'],
     required: true
   },
   manufacturer: {

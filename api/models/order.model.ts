@@ -9,11 +9,15 @@ const attributes = {
   },
   editor: {
     type: String,
-  }, // TODO: add user model
+    minlength: 24,
+    maxlength: 24
+  },
   owner: {
     type: String,
-    required: true
-  }, // TODO: add user model
+    required: true,
+    minlength: 24,
+    maxlength: 24
+  },
   files: [{
     data: Buffer,
     contentType: String

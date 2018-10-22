@@ -7,13 +7,19 @@
         "title": "Welcome to Fablab - Order Management! "
     },
     "navigation": {
-        "title": "Order Management"
+        "title": "Order Management",
+        "login": "Login",
+        "logout": "Logout",
+        "register": "Register"
     },
     "languages": {
         "title": "Languages",
         "german": "German",
         "english": "English",
-        "danish": "Danish"
+        "danish": "Danish",
+        "de": "German",
+        "en": "English",
+        "dk": "Danish"
     },
     "dropdown": {
         "machines": {
@@ -30,14 +36,15 @@
             "title": "Users",
             "signUp": "Sign up",
             "login": "Login",
-            "info": "Info"
+            "profile": "Show User Profile",
+            "listUsers": "List Users"
         }
     },
     "deviceTypes": {
         "lasercutter": "Lasercutter",
         "otherMachine": "Other Machine",
         "millingMachine": "Milling Machine",
-        "printer": "Printer"
+        "3d-printer": "3D Printer"
     },
     "materialTypes": {
         "printerMaterial": "Printer Material"
@@ -92,7 +99,6 @@
             "printVolume": "Print Volume",
             "printResolution": "Print Resolution",
             "numberOfExtruders": "Number of Extruders",
-            "pictureURL": "Picture Url",
             "comment": "Comment",
             "movementSpeed": "Movement Speed",
             "stepSize": "Step Size",
@@ -143,7 +149,6 @@
             "workspaceZ": "Workspace Z",
             "maxResolution": "Max Resolution",
             "laserPower": "Laser Power",
-            "pictureURL": "Picture Url",
             "comment": "Comment",
             "name": "Name",
             "phone": "Phone",
@@ -161,7 +166,36 @@
             "printResolutionY": "Print Resolution Y",
             "printResolutionZ": "Print Resolution Z",
             "nozzleDiameter": "Nozzle Diameter",
-            "numberOfExtruders": "Number of Extruders"
+            "numberOfExtruders": "Number of Extruders",
+            "street": "Street",
+            "zipCode": "Zipcode",
+            "city": "City",
+            "country": "Country"
+        }
+    },
+    "userList": {
+        "title": "Userlist",
+        "spinnerLoadingText": "Loading Users",
+        "paginationLabel": "Jump to Page",
+        "filterLabel": {
+            "roles": "Filter by Role:"
+        },
+        "buttons": {
+            "deleteLabel": "Delete",
+            "updateLabel": "Update"
+        },
+        "modals": {
+            "yes": "Yes",
+            "abort": "No",
+            "deleteValue": "Delete",
+            "abortValue": "Abort",
+            "deleteHeader": "Do you really want to deactivate this user?",
+            "deleteQuestion": "Are you sure you want to",
+            "deleteQuestion2": "deactivate?"
+        },
+        "badges": {
+            "active": "Active",
+            "inactive": "Inactive"
         }
     },
     "orderList": {
@@ -231,6 +265,37 @@
             "content": "Text is required"
         }
     },
+    "userDetail": {
+        "labels": {
+            "username": "Username",
+            "firstname": "Firstname",
+            "lastname": "Lastname",
+            "email": "Emailaddress",
+            "address": {
+                "title": "Address",
+                "street": "Street",
+                "city": "City",
+                "zipCode": "ZIP",
+                "country": "Country"
+            },
+            "activated": "Activated",
+            "role": "Role",
+            "preferredLanguage": "Preferred Language"
+        },
+        "modals": {
+            "ok": "Yes",
+            "abort": "No",
+            "deactivateReturnValue": "Deactivate",
+            "abortReturnValue": "Abort",
+            "deleteHeader": "Do you really want to deactivate this user?",
+            "deleteQuestion": "Are you sure you want to deactivate",
+            "deleteQuestion2": "?"
+        },
+        "badges": {
+            "active": "Active",
+            "inactive": "Inactive"
+        }
+    },
     "orderDetail": {
         "labels": {
             "owner": "Owner",
@@ -261,17 +326,21 @@
         "labels": {
             "username": "Username",
             "firstName": "First Name",
-            "secondName": "Secondname",
+            "secondName": "Last Name",
             "password": "Password",
             "passwordValidation": "Password validation",
             "email": "E-mail Address",
             "role": "Role",
+            "isActivated": "Account activated",
             "street": "Street",
             "zipCode": "Zip Code",
             "city": "City",
             "country": "Country",
             "createSubmit": "Register",
-            "editSubmit": "Edit"
+            "editSubmit": "Edit",
+            "fablab": "Fablab",
+            "changePassword": "Change Password",
+            "preferredLanguage": "Preferred Language"
         },
         "modals": {
             "ok": "Ok",
@@ -281,8 +350,12 @@
             "createSuccess": "The user was successfully created!",
             "updateSuccess": "The user was successfully updated!",
             "errorHeader": "Error",
-            "updateError": "Error while trying to update!",
-            "createError": "Error while trying to create!"
+            "updateError": "Error while trying to update the user!",
+            "createError": "Error while trying to create the user!",
+            "updatePasswordSuccessHeader": "Password updated",
+            "updatePasswordSuccess": "Use the new password from now on.",
+            "updatePasswordErrorHeader": "Failed",
+            "updatePassworderror": "The current password was wrong"
         },
         "messages": {
             "username": "Username is required",
@@ -290,12 +363,20 @@
             "secondName": "Second Name is required",
             "password": "Password is required",
             "passwordValidation": "Password validation is required",
+            "passwordValidationWrong": "Password and its entered Validation aren't the same!",
             "email": "E-mail Address is required",
             "role": "Role is required",
             "street": "Street is required",
             "zipCode": "Zip code is required",
             "city": "City is required",
-            "country": "Country is required"
+            "country": "Country is required",
+            "notAssigned": "Not assigned",
+            "preferredLanguage": "Preferred Language is required"
+        },
+        "buttons": {
+            "activatedTrue": "active",
+            "activatedFalse": "inactive",
+            "changePassword": "change"
         }
     },
     "tableComponent": {
@@ -308,6 +389,45 @@
         "Projectname": "Projectname",
         "Owner": "Owner",
         "Editor": "Editor",
-        "Status": "Status"
+        "Status": "Status",
+        "Username": "Username",
+        "Firstname": "Firstname",
+        "Lastname": "Lastname",
+        "Role": "Role",
+        "Active": "Active"
+    },
+    "loginModal": {
+        "title": "Login",
+        "labels": {
+            "username": "Username",
+            "password": "Password",
+            "login": "Login",
+            "resetPassword": "Reset Password"
+        },
+        "modals": {
+            "title": "Reset Password",
+            "inputLabel": "E-Mail Address",
+            "buttonLabel": "Reset",
+            "successHeader": "Password resetted!",
+            "successMessage": "Please check your e-mails to get the new password.",
+            "errorHeader": "Something went wrong",
+            "errorMessage": "Some error occured. We couldn't reset the password."
+        }
+    },
+    "changePasswdModal": {
+        "title": "Change Password",
+        "labels": {
+            "oldPassword": "Current Password",
+            "password": "New Password",
+            "password2": "Retype Password"
+        },
+        "modals": {
+            "title": "Change Password",
+            "buttonLabel": "Update",
+            "successHeader": "Done",
+            "successMessage": "Please use your new password from now on.",
+            "errorHeader": "Something went wrong",
+            "errorMessage": "Some error occured. We couldn't change the password."
+        }
     }
 }

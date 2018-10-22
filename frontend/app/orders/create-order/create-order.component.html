@@ -26,17 +26,20 @@
         <div class="col-md-12">
           <label for="owner">{{translationFields.labels.owner}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <input type="text" class="form-control" id="owner" required [(ngModel)]="order.owner" name="owner" #owner="ngModel">
-          <div [hidden]="owner.valid || owner.pristine" class="alert alert-danger">
-            {{translationFields.messages.owner}}
-          </div>
+          <input type="text" class="form-control" id="owner" required name="owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
+            disabled>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-12">
           <label for="editor">{{translationFields.labels.editor}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <input type="text" class="form-control" id="editor" [(ngModel)]="order.editor" name="editor" #editor="ngModel">
+          <ng-select [loading]="loadingEditors" [items]=editors bindValue="_id" bindLabel="shownName" [(ngModel)]="order.editor"
+            id="editor" name="editor" #editor="ngModel" groupBy="fablabName" [disabled]="!editView || !loggedInUser || !loggedInUser.role || !loggedInUser.role.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+            <ng-template ng-optgroup-tmp let-item="item">
+              {{item.fablabName || translationFields.messages.unnamedFablab}}
+            </ng-template>
+          </ng-select>
         </div>
       </div>
       <div class="form-group row">
@@ -71,7 +74,7 @@
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingMachinesForType" [items]=machines bindValue="_id" bindLabel="deviceName"
             [(ngModel)]="order.machine._id" id="selectedMachine" name="selectedMachine" #selectedMachine="ngModel"
-            groupBy="fablabName" (change)="machineSelected(selectedMachine)" required>
+            groupBy="fablabName" (change)="machineSelected(selectedMachine)" [virtualScroll]=true required>
             <ng-template ng-optgroup-tmp let-item="item">
               {{item.fablabName || translationFields.messages.unnamedFablab}}
             </ng-template>
@@ -103,11 +106,8 @@
         <div class="form-group row">
           <div class="col-md-12">
             <label for="author">{{translationFields.labels.author}}</label>
-            <input type="text" class="form-control" id="author" required [(ngModel)]="comment.author" name="author"
-              #author="ngModel">
-            <div [hidden]="author.valid || author.pristine" class="alert alert-danger">
-              {{translationFields.messages.author}}
-            </div>
+            <input type="text" class="form-control" id="author" required name="author" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
+              disabled>
           </div>
         </div>
 
@@ -145,7 +145,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let comment of order.comments">
-                <td class="align-middle text-center">{{comment.author}}</td>
+                <td class="align-middle text-center">{{comment.authorName}}</td>
                 <td class="align-middle text-center">{{comment.content}}</td>
                 <td class="align-middle text-center">{{comment['shownCreatedAt']}}</td>
               </tr>
@@ -166,11 +166,8 @@
       <div class="form-group row">
         <div class="col-md-12">
           <label for="author">{{translationFields.labels.author}}</label>
-          <input type="text" class="form-control" id="author" required [(ngModel)]="comment.author" name="author"
-            #author="ngModel">
-          <div [hidden]="author.valid || author.pristine" class="alert alert-danger">
-            {{translationFields.messages.author}}
-          </div>
+          <input type="text" class="form-control" id="author" required name="author" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
+            disabled>
         </div>
       </div>
       <div class="form-group row">

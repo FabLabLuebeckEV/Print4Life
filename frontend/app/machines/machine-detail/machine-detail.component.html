@@ -11,12 +11,12 @@
     </div>
     <div class="container text-left">
       <app-back-button class="spacing-right-xs"></app-back-button>
-      <a [routerLink]="editLink">
+      <a *ngIf="userIsLoggedIn" [routerLink]="editLink">
         <button type="button" class="btn btn-warning spacing-right-xs">
           <fa-icon [icon]="editIcon"></fa-icon>
         </button>
       </a>
-      <button (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
+      <button *ngIf="userIsLoggedIn" (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
         <fa-icon [icon]="deleteIcon"></fa-icon>
       </button>
     </div>

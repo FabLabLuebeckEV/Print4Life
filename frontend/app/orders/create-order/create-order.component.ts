@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
@@ -13,6 +13,8 @@ import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
+import { User } from 'frontend/app/models/user.model';
+import { UserService } from 'frontend/app/services/user.service';
 
 
 @Component({
@@ -28,7 +30,8 @@ export class CreateOrderComponent implements OnInit {
   routeChanged: Boolean;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
-  order: Order = new Order(undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined);
+  order: Order = new Order(
+    undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
 
@@ -43,6 +46,10 @@ export class CreateOrderComponent implements OnInit {
 
   loadingFablabs: Boolean;
   fablabs: Array<any>;
+  editors: Array<User>;
+  loadingEditors: Boolean;
+  loggedInUser: User = new User(
+    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
   translationFields = {
     title: '',
@@ -97,16 +104,19 @@ export class CreateOrderComponent implements OnInit {
     private modalService: NgbModal,
     private configService: ConfigService,
     private genericService: GenericService,
-    private translateService: TranslateService) {
+    private translateService: TranslateService,
+    private route: ActivatedRoute,
+    private userService: UserService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
     this._translate();
     this.router.events.subscribe(() => {
       const route = this.location.path();
       this.editView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0;
-      if (this.editView) {
-        const routeArr = route.split('/');
-        this.orderId = routeArr[routeArr.length - 1];
+    });
+    this.route.params.subscribe(params => {
+      if (params.id) {
+        this.orderId = params.id;
       }
     });
   }
@@ -126,26 +136,22 @@ export class CreateOrderComponent implements OnInit {
   onSubmitComment(form) {
     const errorMsg = this.translationFields.modals.createCommentError;
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
-
+    this.comment.author = this.loggedInUser._id;
+    this.comment['authorName'] = undefined;
     this.orderService.createComment(this.orderId, this.comment).then((result) => {
       if (result) {
         this._openMsgModal(this.translationFields.modals.createCommentSuccessHeader, 'modal-header header-success',
           this.translationFields.modals.createCommentSuccess, okButton, undefined).result.then((result) => {
             this.orderService.getOrderById(this.orderId).then((result) => {
-              this.order = result.order;
-              const author = JSON.parse(JSON.stringify(this.comment.author));
+              this.order.comments = result.order.comments;
               form.reset();
-              form.controls['author'].setValue(author);
-              this._translateMachineType(this.order.machine.type).then((shownType) => {
-                this.order.machine['shownType'] = shownType;
-                this._translateStatus(this.order.status).then((shownStatus) => {
-                  this.order['shownStatus'] = shownStatus;
-                }).catch((error) => {
-                  console.log(error);
-                });
-              }).catch((error) => {
-                console.log(error);
+              this.order.comments.forEach(async (comment) => {
+                const user = await this.userService.getNamesOfUser(comment.author);
+                if (user) {
+                  comment['authorName'] = user.firstname + ' ' + user.lastname;
+                }
               });
+              this._translate();
             });
             this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.orderId}`]);
           });
@@ -160,6 +166,7 @@ export class CreateOrderComponent implements OnInit {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
     let found = false;
     let orderCopy;
+    this.comment.author = this.loggedInUser._id;
     if (this.comment.author && this.comment.content) {
       if (!this.order.comments) {
         this.order.comments = [];
@@ -170,6 +177,7 @@ export class CreateOrderComponent implements OnInit {
         }
       });
       if (!found) {
+        this.comment['authorName'] = undefined;
         this.order.comments.push(this.comment);
       }
     }
@@ -245,16 +253,61 @@ export class CreateOrderComponent implements OnInit {
 
   // Private Functions
 
+  private async _loadEditors() {
+    const promises = [];
+    let editors = [];
+    this.loadingEditors = true;
+    try {
+      const result = await this.userService.getAllUsers({ 'role.role': 'editor', activated: true }, 0, 0);
+      if (result && result.users) {
+        editors = result.users;
+        editors.forEach(async (editor) => {
+          if (editor.fablabId) {
+            promises.push(this.fablabService.getFablab(editor.fablabId).then((res) => {
+              editor['fablabName'] = res.fablab.name;
+            }));
+          } else {
+            editor['fablabName'] = this.translationFields.messages.unnamedFablab;
+          }
+          editor['shownName'] = editor.firstname + ' ' + editor.lastname;
+        });
+      }
+    }
+    finally {
+      // because the ng-select needs to get all finished editors to render groupBy
+      Promise.all(promises).then(() => {
+        this.editors = editors;
+        this.loadingEditors = false;
+      }).catch(() => {
+        this.loadingEditors = false;
+      });
+    }
+  }
+
+
   private async _initializeOrder(id) {
+    this.loggedInUser = await this.userService.getUser();
     if (id !== undefined) {
+      await this._loadEditors();
       this.order = (await this.orderService.getOrderById(id)).order;
+      this.order.editor = this.order.editor && this.order.editor.length === 24 ?
+        (await this.userService.getNamesOfUser(this.order.editor)).user : undefined;
       this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
       this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
+      this.order.comments.forEach(async (comment) => {
+        const user = await this.userService.getNamesOfUser(comment.author);
+        if (user) {
+          comment['authorName'] = user.firstname + ' ' + user.lastname;
+        }
+      });
       const machineId = this.order.machine._id;
-      this.machineTypeChanged(this.order.machine['shownType']);
+      await this.machineTypeChanged(this.order.machine['shownType']);
       this.order.machine._id = machineId;
+    } else {
+      this.order.owner = this.loggedInUser._id;
     }
+
   }
 
   private async _loadStatus() {
@@ -271,7 +324,10 @@ export class CreateOrderComponent implements OnInit {
 
   private async _loadFablabs() {
     this.loadingFablabs = true;
-    this.fablabs = (await this.fablabService.getFablabs()).fablabs;
+    const result = await this.fablabService.getFablabs();
+    if (result && result.fablabs) {
+      this.fablabs = result.fablabs;
+    }
     this.loadingFablabs = false;
   }
 

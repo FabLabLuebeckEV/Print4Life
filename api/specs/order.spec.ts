@@ -1,14 +1,15 @@
 import 'jasmine';
 import * as request from 'request';
-import * as configs from '../config';
+import * as configs from '../config/config';
+import { getTestUserToken, newTimeout } from './global.spec';
 
 
 const endpoint = configs.configArr.prod.baseUrlBackend;
 const testOrder = {
   projectname: 'unscheinBar',
   comments: [],
-  editor: 'Mister Bar',
-  owner: 'Mister Foo',
+  editor: '12345678901234567890aaaa',
+  owner: '12345678901234567890aaaa',
   files: [],
   status: 'new',
   machine: {
@@ -18,19 +19,31 @@ const testOrder = {
 };
 
 describe('Order Controller', () => {
+  let originalTimeout;
+  const authorizationHeader = getTestUserToken();
+  beforeEach(() => {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = newTimeout;
+  });
+  afterEach(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
   it('gets orders', (done) => {
-    request.get(`${endpoint}orders/`, { headers: { 'content-type': 'application/json' }, json: true },
-      (error, response) => {
-        if (response.body && response.body.orders) {
-          const orders = response.body.orders;
-          expect(response.statusCode).toEqual(200);
-          expect(orders).toBeDefined();
-          expect(orders.length).toBeGreaterThan(-1);
-        } else {
-          expect(response.statusCode).toEqual(204);
-        }
-        done();
-      });
+    request.get(`${endpoint}orders/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    },
+    (error, response) => {
+      if (response.body && response.body.orders) {
+        const orders = response.body.orders;
+        expect(response.statusCode).toEqual(200);
+        expect(orders).toBeDefined();
+        expect(orders.length).toBeGreaterThan(-1);
+      } else {
+        expect(response.statusCode).toEqual(204);
+      }
+      done();
+    });
   });
 
   // it('gets orders (limit & skip)', (done) => {
@@ -46,10 +59,10 @@ describe('Order Controller', () => {
   // });
 
   it('counts orders', (done) => {
-    request.post(`${endpoint}orders//count`, {
-      headers: { 'content-type': 'application/json' },
+    request.post(`${endpoint}orders/count`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
-      body: { $or: [{ status: 'new' }, { status: 'deleted' }] }
+      body: { query: { $or: [{ status: 'new' }, { status: 'deleted' }] } }
     }, (error, response) => {
       const count = response.body.count;
       expect(response.statusCode).toEqual(200);
@@ -64,6 +77,7 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/`,
       method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
       body: testBody
     }, (error, response) => {
@@ -85,13 +99,14 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/`,
       method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
       body: testBody
     }, (error, response) => {
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'GET',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
@@ -110,20 +125,22 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/`,
       method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
       body: testBody
     }, (error, response) => {
-      response.body.order.owner = 'Hans Peter';
+      response.body.order.owner = 'aaa123456789012345678902';
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'PUT',
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true,
         body: response.body.order
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
         expect(response.body.order).toBeDefined();
 
-        expect(response.body.order.owner).toEqual('Hans Peter');
+        expect(response.body.order.owner).toEqual('aaa123456789012345678902');
 
         expect(response.body.order.token).toBeDefined();
         expect(response.body.order.editor).toEqual(testBody.editor);
@@ -138,13 +155,14 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/`,
       method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
       body: testBody
     }, (error, response) => {
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'DELETE',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true
       }, (error, response) => {
         expect(response.statusCode).toEqual(200);
@@ -163,7 +181,7 @@ describe('Order Controller', () => {
     request({
       uri: `${endpoint}orders/status`,
       method: 'GET',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
       expect(response.statusCode).toEqual(200);

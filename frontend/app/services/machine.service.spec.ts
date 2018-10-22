@@ -38,7 +38,6 @@ const createLasercutterTest = {
   'workspaceY': 610,
   'workspaceZ': 250,
   'laserPower': '75',
-  'pictureURL': 'upload/59e723ff82d3d.jpg',
   'comment': 'Test'
 };
 
@@ -54,7 +53,6 @@ const createMillingMachineTest = {
   'workspaceZ': 350,
   'movementSpeed': 12000,
   'stepSize': null,
-  'pictureURL': 'upload/59e727d098b4f.png',
   'comment': 'Test'
 };
 
@@ -65,7 +63,6 @@ const createOtherMachineTest = {
   'deviceName': 'createOtherMachineTest',
   'manufacturer': 'Test',
   'typeOfMachine': 'Cutting Plotter',
-  'pictureURL': 'upload/59e74a5970be0.jpg',
   'comment': 'Test'
 };
 
@@ -361,19 +358,6 @@ describe('MachineService', () => {
     expect(req.request.method).toEqual('GET');
 
     req.flush(printerMaterials);
-  }));
-
-  it('should get all laser types', inject([MachineService], (MachineService) => {
-    MachineService.getLaserTypes().then((laserTypes) => {
-      expect(laserTypes).toBeTruthy();
-      expect(laserTypes.length).toEqual(1);
-      expect(laserTypes[0].laserType).toEqual('CO2');
-    }, fail);
-
-    const req = httpTestingController.expectOne(routes.backendUrl + '/machines/laserTypes');
-    expect(req.request.method).toEqual('GET');
-
-    req.flush(laserTypes);
   }));
 
   it('should create printer', inject([MachineService], (MachineService) => {

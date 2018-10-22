@@ -10,7 +10,9 @@ import { MessageModalComponent, ModalButton } from '../../components/message-mod
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
+import { UserService } from '../../services/user.service';
 import * as moment from 'moment';
+import { User } from 'frontend/app/models/user.model';
 
 @Component({
   selector: 'app-order-detail',
@@ -19,10 +21,17 @@ import * as moment from 'moment';
 })
 export class OrderDetailComponent implements OnInit {
   private config: any;
+  private userIsLoggedIn: boolean;
+  private loggedInUser: User;
   editIcon: any;
   deleteIcon: any;
   editLink: String;
-
+  editor: User = new User(
+    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+  editorLink: String;
+  owner: User = new User(
+    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+  ownerLink: String;
   order: Order = new Order(
     undefined,
     undefined,
@@ -30,6 +39,7 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     undefined,
     [],
+    undefined,
     undefined,
     undefined,
     undefined
@@ -70,14 +80,15 @@ export class OrderDetailComponent implements OnInit {
     private configService: ConfigService,
     private modalService: NgbModal,
     private genericService: GenericService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private userService: UserService
   ) {
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
     this.deleteIcon = this.config.icons.delete;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
     });
@@ -85,8 +96,28 @@ export class OrderDetailComponent implements OnInit {
     this.route.paramMap
       .subscribe((params) => {
         if (params && params.get('id')) {
-          this.orderService.getOrderById(params.get('id')).then((result) => {
+          this.orderService.getOrderById(params.get('id')).then(async (result) => {
             this.order = result.order;
+            result.order.comments.forEach(async comment => {
+              const author = await this.userService.getNamesOfUser(comment.author);
+              comment['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
+            });
+            result.order.files.forEach(async file => {
+              const author = await this.userService.getNamesOfUser(file.author);
+              file['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
+            });
+            this.owner = await this.userService.getNamesOfUser(this.order.owner);
+            this.owner['fullname'] = this.owner.firstname + ' ' + this.owner.lastname;
+            this.ownerLink = `/${routes.paths.frontend.users.root}/${this.owner._id}`;
+            if (this.order.editor) {
+              this.editor = await this.userService.getNamesOfUser(this.order.editor);
+              this.editor['fullname'] = this.editor.firstname + ' ' + this.editor.lastname;
+              this.editorLink = `/${routes.paths.frontend.users.root}/${this.editor._id}`;
+            }
+            this.order.comments.forEach(async (comment) => {
+              const author = await this.userService.getNamesOfUser(comment.author);
+              comment['authorName'] = author.firstname + ' ' + author.lastname;
+            });
             this.editLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
             this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
               const type = this.machineService.camelCaseTypes(this.order.machine.type);
@@ -100,6 +131,8 @@ export class OrderDetailComponent implements OnInit {
           });
         }
       });
+    this.userIsLoggedIn = this.userService.isLoggedIn();
+    this.loggedInUser = await this.userService.getUser();
   }
 
   public delete() {
@@ -153,6 +186,11 @@ export class OrderDetailComponent implements OnInit {
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
+      if (this.order) {
+        let createdAt = moment(this.order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
+        createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
+        this.order['shownCreatedAt'] = createdAt;
+      }
       if (this.order && this.order.status) {
         this._translateStatus().then((shownStatus) => {
           this.order['shownStatus'] = shownStatus;

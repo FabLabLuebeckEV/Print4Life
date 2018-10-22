@@ -7,13 +7,19 @@
         "title": "Willkommen zur Fablab - Auftragsverwaltung!"
     },
     "navigation": {
-        "title": "Auftragsverwaltung"
+        "title": "Auftragsverwaltung",
+        "login": "Einloggen",
+        "logout": "Ausloggen",
+        "register": "Registrieren"
     },
     "languages": {
         "title": "Sprachauswahl",
         "german": "Deutsch",
         "english": "Englisch",
-        "danish": "Dänisch"
+        "danish": "Dänisch",
+        "de": "Deutsch",
+        "en": "Englisch",
+        "dk": "Dänisch"
     },
     "dropdown": {
         "machines": {
@@ -30,14 +36,15 @@
             "title": "Benutzer",
             "signUp": "Registrieren",
             "login": "Einloggen",
-            "info": "Info"
+            "profile": "Benutzerprofil anzeigen",
+            "listUsers": "Benutzerliste"
         }
     },
     "deviceTypes": {
         "lasercutter": "Lasercutter",
         "otherMachine": "Andere Machine",
         "millingMachine": "Fräßmaschine",
-        "printer": "3D Drucker"
+        "3d-printer": "3D Drucker"
     },
     "materialTypes": {
         "printerMaterial": "Drucker Material"
@@ -92,7 +99,6 @@
             "printVolume": "Druckvolumen",
             "printResolution": "Druckauflösung",
             "numberOfExtruders": "Anzahl von Extrudern",
-            "pictureURL": "Bild Url",
             "comment": "Kommentar",
             "movementSpeed": "Bewegungsgeschwindigkeit",
             "stepSize": "Schrittgröße",
@@ -143,7 +149,6 @@
             "workspaceZ": "Arbeitsfläche Z",
             "maxResolution": "Maximale Auflösung",
             "laserPower": "Leistung des Lasers",
-            "pictureURL": "Bild Url",
             "comment": "Kommentar",
             "name": "Name",
             "phone": "Telefon",
@@ -161,7 +166,36 @@
             "printResolutionY": "Druckauflösung Y",
             "printResolutionZ": "Druckauflösung Z",
             "nozzleDiameter": "Durchmesser Düse(n)",
-            "numberOfExtruders": "Anzahl von Extrudern"
+            "numberOfExtruders": "Anzahl von Extrudern",
+            "street": "Straße",
+            "zipCode": "Postleitzahl",
+            "city": "Stadt",
+            "country": "Land"
+        }
+    },
+    "userList": {
+        "title": "Benutzerliste",
+        "spinnerLoadingText": "Lade Benutzer",
+        "paginationLabel": "Springe zur Seite",
+        "filterLabel": {
+            "roles": "Filter nach Rolle:"
+        },
+        "buttons": {
+            "deleteLabel": "Deaktivieren",
+            "updateLabel": "Ändern"
+        },
+        "modals": {
+            "yes": "Ja",
+            "abort": "Nein",
+            "deleteValue": "Deaktivieren",
+            "abortValue": "Abbrechen",
+            "deleteHeader": "Möchten Sie den Nutzer wirklich deaktivieren?",
+            "deleteQuestion": "Sind Sie sicher, dass Sie",
+            "deleteQuestion2": "deaktivieren wollen?"
+        },
+        "badges": {
+            "active": "Aktiv",
+            "inactive": "Inaktiv"
         }
     },
     "orderList": {
@@ -231,6 +265,37 @@
             "content": "Der Inhalt des Kommentars wird benötigt"
         }
     },
+    "userDetail": {
+        "labels": {
+            "username": "Benutzername",
+            "firstname": "Vorname",
+            "lastname": "Nachnahme",
+            "email": "Emailadresse",
+            "address": {
+                "title": "Adresse",
+                "street": "Straße",
+                "city": "Stadt",
+                "zipCode": "PLZ",
+                "country": "Land"
+            },
+            "activated": "Aktiviert",
+            "role": "Rolle",
+            "preferredLanguage": "Bevorzugte Sprache"
+        },
+        "modals": {
+            "ok": "Ja",
+            "abort": "Nein",
+            "deactivateReturnValue": "Deaktivieren",
+            "abortReturnValue": "Abbrechen",
+            "deleteHeader": "Wollen Sie wirklich diesen Benutzer deaktivieren?",
+            "deleteQuestion": "Sind Sie sicher, dass Sie",
+            "deleteQuestion2": "den benutzer deaktivieren wollen?"
+        },
+        "badges": {
+            "active": "Aktiv",
+            "inactive": "Inaktiv"
+        }
+    },
     "orderDetail": {
         "labels": {
             "owner": "Ersteller",
@@ -264,14 +329,18 @@
             "secondName": "Nachname",
             "password": "Passwort",
             "passwordValidation": "Passwort Bestätigung",
-            "email": "E-mail Adresse",
+            "email": "E-Mail Adresse",
             "role": "Rolle",
+            "isActivated": "Account aktiviert",
             "street": "Straße",
             "zipCode": "PLZ",
             "city": "Stadt",
             "country": "Land",
             "createSubmit": "Registrieren",
-            "editSubmit": "Aktualisieren"
+            "editSubmit": "Aktualisieren",
+            "fablab": "Fablab",
+            "changePassword": "Passwort Ändern",
+            "preferredLanguage": "Bevorzugte Sprache"
         },
         "modals": {
             "ok": "Ok",
@@ -282,7 +351,11 @@
             "updateSuccess": "Der Benutzer wurde erfolgreich aktualisiert!",
             "errorHeader": "Fehler",
             "updateError": "Fehler beim Aktualisieren des Benutzers!",
-            "createError": "Fehler beim Registrieren des Benutzers!"
+            "createError": "Fehler beim Registrieren des Benutzers!",
+            "updatePasswordSuccessHeader": "Passwort aktualisiert",
+            "updatePasswordSuccess": "Benutzen Sie von nun an das neue Passwort.",
+            "updatePasswordErrorHeader": "Fehlgeschlagen",
+            "updatePassworderror": "Das aktuelle Passwort war falsch."
         },
         "messages": {
             "username": "Der Benutzername wird benötigt",
@@ -290,12 +363,20 @@
             "secondName": "Der Nachname wird benötigt",
             "password": "Das Passwort wird benötigt",
             "passwordValidation": "Das Passwort muss bestätigt werden",
+            "passwordValidationWrong": "Das Passwort und die Bestätigung stimmen nicht über ein!",
             "email": "Die E-Mail Adresse wird benötigt",
             "role": "Die Rolle wird benötigt",
             "street": "Die Straße wird benötigt",
             "zipCode": "Die Postleitzahl wird benötigt",
             "city": "Die Stadt wird benötigt",
-            "country": "Das Land wird benötigt"
+            "country": "Das Land wird benötigt",
+            "notAssigned": "Keine Zuweisung",
+            "preferredLanguage": "Eine bevorzugte Sprache wird benötigt"
+        },
+        "buttons": {
+            "activatedTrue": "Aktiv",
+            "activatedFalse": "Inaktiv",
+            "changePassword": "Ändern"
         }
     },
     "tableComponent": {
@@ -308,6 +389,45 @@
         "Projectname": "Projektname",
         "Owner": "Ersteller",
         "Editor": "Bearbeiter",
-        "Status": "Status"
+        "Status": "Status",
+        "Username": "Benutzername",
+        "Firstname": "Vorname",
+        "Lastname": "Nachname",
+        "Role": "Rolle",
+        "Active": "Aktiviert"
+    },
+    "loginModal": {
+        "title": "Einloggen",
+        "labels": {
+            "username": "Benutzername",
+            "password": "Passwort",
+            "login": "Einloggen",
+            "resetPassword": "Passwort zurücksetzen"
+        },
+        "modals": {
+            "title": "Passwort zurücksetzen",
+            "inputLabel": "E-Mail Adresse",
+            "buttonLabel": "Zurücksetzen",
+            "successHeader": "Password wurde zurückgesetzt!",
+            "successMessage": "Bitte überprüfen Sie Ihre E-Mails.",
+            "errorHeader": "Ein Fehler ist aufgetreten",
+            "errorMessage": "Wir konnten das Passwort nicht zurücksetzen."
+        }
+    },
+    "changePasswdModal": {
+        "title": "Passwort ändern",
+        "labels": {
+            "oldPassword": "Altes Password",
+            "password": "Passwort",
+            "password2": "Passwort bestätigen"
+        },
+        "modals": {
+            "title": "Passwort Ändern",
+            "buttonLabel": "Aktualisieren",
+            "successHeader": "Erldigt",
+            "successMessage": "Verwenden Sie von nun an Ihr neues Passwort.",
+            "errorHeader": "Ein Fehler ist aufgetreten",
+            "errorMessage": "Wir konnten das Passwort nicht ändern."
+        }
     }
 }

@@ -23,6 +23,7 @@ export class Order {
         public files: Array<any>,
         public status: String,
         public machine: SimpleMachine,
+        public createdAt: Date,
         token: String
     ) { }
 }

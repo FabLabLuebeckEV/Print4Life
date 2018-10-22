@@ -26,12 +26,18 @@ import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AuthGuard } from './config/app.routes';
+
 export function translateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }
 import { UserFormComponent } from './users/user-form/user-form.component';
-import { UserComponent } from './users/user/user.component';
 import { BackButtonComponent } from './components/back-button/back-button.component';
+import { LoginModalComponent } from './users/login-modal/login-modal.component';
+import { UserListComponent } from './users/user-list/user-list.component';
+import { InputModalComponent } from './components/input-modal/input-modal.component';
+import { ChangePasswdModalComponent } from './users/change-passwd-modal/change-passwd-modal.component';
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
 
 @NgModule({
     declarations: [
@@ -48,8 +54,12 @@ import { BackButtonComponent } from './components/back-button/back-button.compon
         MachineDetailComponent,
         OrderDetailComponent,
         UserFormComponent,
-        UserComponent,
-        BackButtonComponent
+        BackButtonComponent,
+        LoginModalComponent,
+        UserListComponent,
+        InputModalComponent,
+        ChangePasswdModalComponent,
+        UserDetailComponent
     ],
     imports: [
         BrowserModule,
@@ -59,7 +69,7 @@ import { BackButtonComponent } from './components/back-button/back-button.compon
         FontAwesomeModule,
         HttpClientModule,
         NgbModule.forRoot(),
-        RouterModule.forRoot(appRoutes),
+        RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' }),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -70,11 +80,14 @@ import { BackButtonComponent } from './components/back-button/back-button.compon
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }, // magic for cors
-        MachineService, FablabService, ConfigService
+        MachineService, FablabService, ConfigService, AuthGuard
     ],
     bootstrap: [AppComponent],
     entryComponents: [
-        MessageModalComponent
+        MessageModalComponent,
+        LoginModalComponent,
+        InputModalComponent,
+        ChangePasswdModalComponent
     ]
 })
 export class AppModule { }

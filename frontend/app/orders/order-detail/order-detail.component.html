@@ -6,11 +6,13 @@
     <div class="col-md-3 col-xl-2">
       <app-back-button class="spacing-right-xs"></app-back-button>
       <a [routerLink]="editLink">
-        <button type="button" class="btn btn-warning spacing-right-xs">
+        <button *ngIf="userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin'))"
+          type="button" class="btn btn-warning spacing-right-xs">
           <fa-icon [icon]="editIcon"></fa-icon>
         </button>
       </a>
-      <button (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
+      <button *ngIf="userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin'))"
+        (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
         <fa-icon [icon]="deleteIcon"></fa-icon>
       </button>
     </div>
@@ -26,11 +28,17 @@
         <tbody>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.owner}}</td>
-            <td class="align-middle text-center">{{order.owner}}</td>
+            <td class="align-middle text-center">
+              <a *ngIf=userIsLoggedIn [routerLink]="ownerLink">{{ owner.fullname }}</a>
+              <span *ngIf=!userIsLoggedIn>{{ owner.fullname }}</span>
+            </td>
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.editor}}</td>
-            <td class="align-middle text-center">{{order.editor}}</td>
+            <td class="align-middle text-center">
+              <a *ngIf=userIsLoggedIn [routerLink]="editorLink">{{ editor.fullname }}</a>
+              <span *ngIf=!userIsLoggedIn>{{ editor.fullname }}</span>
+            </td>
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.status}}</td>
@@ -40,12 +48,13 @@
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.createdAt}}</td>
-            <td class="align-middle text-center">{{order['shownCreatedAt']}}</td>
+            <td class="align-middle text-center">{{order.shownCreatedAt}}</td>
           </tr>
           <tr *ngIf="machine">
             <td class="align-middle text-center">{{translationFields.labels.machine}}</td>
             <td class="align-middle text-center">
-              <a [routerLink]="machine.detailView">{{ machine.deviceName }}</a>
+              <a *ngIf="userIsLoggedIn" [routerLink]="machine.detailView">{{ machine.deviceName }}</a>
+              <span *ngIf="!userIsLoggedIn">{{ machine.deviceName }}</span>
               <span class="badge badge-secondary spacing">{{machine.shownType}}</span>
             </td>
           </tr>
@@ -78,9 +87,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let comment of order.comments">
-            <td class="align-middle text-center">{{comment.author}}</td>
+            <td class="align-middle text-center">
+              <a *ngIf="userIsLoggedIn" [routerLink]="comment.link">{{comment.authorName}}</a>
+              <span *ngIf="!userIsLoggedIn">{{comment.authorName}}</span>
+            </td>
             <td class="align-middle text-center">{{comment.content}}</td>
-            <td class="align-middle text-center">{{comment['shownCreatedAt']}}</td>
+            <td class="align-middle text-center">{{comment.shownCreatedAt}}</td>
           </tr>
         </tbody>
       </table>
@@ -105,7 +117,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let file of order.files">
-            <td class="align-middle text-center">{{files.author}}</td>
+            <td class="align-middle text-center">
+              <a *ngIf="userIsLoggedIn" [routerLink]="file.link">{{file.author}}</a>
+              <span *ngIf="!userIsLoggedIn">{{file.author}}</span>
+            </td>
             <td class="align-middle text-center">{{files.content}}</td>
             <td class="align-middle text-center">{{files.timestamp | date:'short'}}</td>
           </tr>

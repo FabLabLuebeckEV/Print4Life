@@ -6,8 +6,10 @@ const attributes = {
     required: true
   },
   author: {
-    type: String, // TODO: add user model
-    required: true
+    type: String,
+    required: true,
+    minlength: 24,
+    maxlength: 24
   },
   createdAt: {
     type: Date,

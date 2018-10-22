@@ -24,3 +24,7 @@ If you use this boilerplate with VSCode you can run the debugger for node with `
 ## Run the app
 
 To run the app in dev mode you need to run ```npm run api-dev``` and ```npm run ng-dev```. The application will then run on localhost:4200 for the angular app and localhost:3000 for the node backend. These commands will rebuild the nodets and ng application on changed files. **Beaware that the backend server only starts when a debugger is attached to it**.
+
+### Admin User
+
+You can login to the initial admin user with *username:* **admin** and *password:* **E9bBs8UpeASq**
