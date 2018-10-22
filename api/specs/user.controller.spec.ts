@@ -162,7 +162,22 @@ describe('User Controller', () => {
     request.post(`${endpoint}users/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
-      body: { $or: [{ role: 'user' }, { role: 'admin' }] }
+      body: {
+        query: {
+          $or: [
+            {
+              role: {
+                role: 'user'
+              }
+            },
+            {
+              role: {
+                role: 'admin'
+              }
+            }
+          ]
+        }
+      }
     }, (error, response) => {
       const count = response.body.count;
       expect(response.statusCode).toEqual(200);

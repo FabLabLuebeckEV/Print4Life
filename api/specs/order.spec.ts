@@ -62,7 +62,7 @@ describe('Order Controller', () => {
     request.post(`${endpoint}orders/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
-      body: { $or: [{ status: 'new' }, { status: 'deleted' }] }
+      body: { query: { $or: [{ status: 'new' }, { status: 'deleted' }] } }
     }, (error, response) => {
       const count = response.body.count;
       expect(response.statusCode).toEqual(200);
