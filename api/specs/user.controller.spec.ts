@@ -171,4 +171,33 @@ describe('User Controller', () => {
       done();
     });
   });
+
+  it('user get name', (done) => {
+    testUser.username += `${Math.random().toString(36).substring(2, 15)}`;
+    testUser.firstname = 'Hello';
+    testUser.lastname = 'World!';
+    testUser.email += `${Math.random().toString(36).substring(2, 15)}`;
+    request.post(
+      `${endpoint}users/`, {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        json: true,
+        body: testUser
+      },
+      (error, response) => {
+        const user = response.body.user;
+        request.get(
+          `${endpoint}users/${user._id}/getNames`, {
+            headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+            json: true,
+          }, ((error, response) => {
+            const user = response.body.user;
+            expect(error).toBeNull();
+            expect(response).toBeDefined();
+            expect(user).toBeDefined();
+            expect(user.firstname).toEqual(testUser.firstname);
+            expect(user.lastname).toEqual(testUser.lastname);
+            done();
+          }));
+      });
+  });
 });
