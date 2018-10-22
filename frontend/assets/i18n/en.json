@@ -326,7 +326,7 @@
         "labels": {
             "username": "Username",
             "firstName": "First Name",
-            "secondName": "Secondname",
+            "secondName": "Last Name",
             "password": "Password",
             "passwordValidation": "Password validation",
             "email": "E-mail Address",
