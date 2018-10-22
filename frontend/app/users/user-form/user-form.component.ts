@@ -198,7 +198,9 @@ export class UserFormComponent implements OnInit {
       } else {
         this.userService.createUser(userCopy)
           .then(res => {
-            this._openSuccessMsg();
+            if (res) {
+              this._openSuccessMsg();
+            }
           })
           .catch(err => {
             const errorMsg = this.translationFields.modals.errorMessage;

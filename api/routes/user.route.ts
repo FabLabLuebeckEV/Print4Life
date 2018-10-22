@@ -73,22 +73,25 @@ router.post('/', async (req, res) => {
     logger.error(msg);
   }
 
-  try {
-    user = await userCtrl.getUsers({ email: req.body.email });
-    if (user && user.length > 0) {
-      const msg = {
-        type: ErrorType.EMAIL_EXISTS,
-        error: 'Malformed user. Email Address already exists!',
-        stack: undefined
-      };
+  if (!reject) {
+    try {
+      user = await userCtrl.getUsers({ email: req.body.email });
+      if (user && user.length > 0) {
+        const msg = {
+          type: ErrorType.EMAIL_EXISTS,
+          error: 'Malformed user. Email Address already exists!',
+          stack: undefined
+        };
+        logger.error(msg);
+        reject = true;
+        res.status(400).send(msg);
+      }
+    } catch (error) {
+      const msg = { error: `Error while getting the user by its email address (${req.body.email})`, stack: error };
       logger.error(msg);
-      reject = true;
-      res.status(400).send(msg);
     }
-  } catch (error) {
-    const msg = { error: `Error while getting the user by its email address (${req.body.email})`, stack: error };
-    logger.error(msg);
   }
+
   if (!reject) {
     userCtrl.signUp(req.body).then((user) => {
       userCtrl.informAdmins(user, true);
