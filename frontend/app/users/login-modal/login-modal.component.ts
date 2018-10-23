@@ -11,9 +11,9 @@ import { ModalButton, MessageModalComponent } from 'frontend/app/components/mess
   styleUrls: ['./login-modal.component.css']
 })
 export class LoginModalComponent implements OnInit {
-  private response: Object;
-  private loginData: Object = { username: '', password: '' };
-  private translationFields = {
+  response: Object;
+  loginData = { username: '', password: '' };
+  translationFields = {
     title: '',
     labels: {
       username: '',
@@ -73,6 +73,10 @@ export class LoginModalComponent implements OnInit {
         });
       }
     });
+  }
+
+  public closeModal(closeValue) {
+    this.activeModal.close(closeValue);
   }
 
   private _translate() {
