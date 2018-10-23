@@ -2,8 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
-import { InputModalComponent } from 'frontend/app/components/input-modal/input-modal.component';
-import { ModalButton, MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
 
 @Component({
   selector: 'app-change-passwd-modal',
@@ -12,9 +10,9 @@ import { ModalButton, MessageModalComponent } from 'frontend/app/components/mess
 })
 export class ChangePasswdModalComponent implements OnInit {
   private response: Object;
-  private passwords = { oldPassword: '', password: '', password2: '' };
+  passwords = { oldPassword: '', password: '', password2: '' };
   @Input() userId: String;
-  private translationFields = {
+  translationFields = {
     title: '',
     labels: {
       oldPassword: '',
@@ -48,6 +46,10 @@ export class ChangePasswdModalComponent implements OnInit {
   async changePassword() {
     this.response = await this.userService.changePassword(this.userId, this.passwords.oldPassword, this.passwords.password);
     this.activeModal.close(this.response);
+  }
+
+  closeModal(closeValue) {
+    this.activeModal.close(closeValue);
   }
 
   private _translate() {

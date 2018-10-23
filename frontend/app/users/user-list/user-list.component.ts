@@ -18,7 +18,7 @@ import { Location } from '@angular/common';
 })
 export class UserListComponent implements OnInit {
   private userIsAdmin: Boolean;
-  private listView: Boolean = false;
+  listView: Boolean = false;
   private loadingRoles: Boolean;
   private loadingUsers: Boolean;
   private users: Array<TableItem> = [];

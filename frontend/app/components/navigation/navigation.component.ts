@@ -18,18 +18,18 @@ interface Dropdown {
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
-  private title: String = 'Order Management';
-  private login: String = 'Login';
-  private logout: String = 'Logout';
-  private register: String = 'Register';
-  private isNavbarCollapsed: Boolean = false;
-  private machineDropdown: Dropdown = { name: '', elements: [] };
-  private orderDropdown: Dropdown = { name: '', elements: [] };
-  private languageDropdown: Dropdown = { name: '', elements: [] };
-  private userDropdown: Dropdown = { name: '', elements: [] };
-  private userIsLoggedIn: Boolean;
-  private userIsAdmin: Boolean;
-  private user: User;
+  title: String = 'Order Management';
+  login: String = 'Login';
+  logout: String = 'Logout';
+  register: String = 'Register';
+  isNavbarCollapsed: Boolean = false;
+  machineDropdown: Dropdown = { name: '', elements: [] };
+  orderDropdown: Dropdown = { name: '', elements: [] };
+  languageDropdown: Dropdown = { name: '', elements: [] };
+  userDropdown: Dropdown = { name: '', elements: [] };
+  userIsLoggedIn: Boolean;
+  userIsAdmin: Boolean;
+  user: User;
 
   constructor(
     private translateService: TranslateService,
