@@ -115,7 +115,7 @@ const prod = {
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `https://localhost:${port}${baseUrl}`,
+  baseUrlBackend: `http://localhost:${port}${baseUrl}`,
   baseUrlFrontend: `https://localhost:${ngPort}`,
   cors: {
     whitelist: [
