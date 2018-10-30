@@ -8,13 +8,13 @@ import config from './config/config';
 class App {
   public express;
 
-  constructor() {
+  constructor () {
     this.express = express();
     this.setCorsOptions();
     this.mountRoutes();
   }
 
-  private mountRoutes(): void {
+  private mountRoutes (): void {
     this.express.use(bodyParser.json());
     this.express.use(((req, res, next) => {
       if (req.get('Content-Type') === 'application/json') {
@@ -29,7 +29,7 @@ class App {
     });
   }
 
-  private setCorsOptions(): void {
+  private setCorsOptions (): void {
     if (config.cors) {
       config.cors.corsOptions.origin = function (origin, callback) {
         if (config.cors.whitelist.indexOf(origin) !== -1) {
