@@ -118,7 +118,11 @@ const prod = {
   baseUrlBackend: `https://localhost:${port}${baseUrl}`,
   baseUrlFrontend: `https://localhost:${ngPort}`,
   cors: {
-    whitelist: [`https://localhost:${ngPort}`, `https://212.83.56.107:${ngPort}`, `https://iot-fablab.ddns.net:${ngPort}`],
+    whitelist: [
+      `https://localhost:${ngPort}`,
+      `https://212.83.56.107:${ngPort}`,
+      `https://iot-fablab.ddns.net:${ngPort}`
+    ],
     corsOptions: {
       origin: undefined,
       credentials: true

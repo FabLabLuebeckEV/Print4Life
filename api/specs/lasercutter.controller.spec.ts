@@ -1,9 +1,9 @@
 import 'jasmine';
 import * as request from 'request';
-import * as configs from '../config/config';
+import config from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
 
-const endpoint = `${configs.configArr.prod.baseUrlBackend}machines/lasercutters`;
+const endpoint = `${config.baseUrlBackend}machines/lasercutters`;
 
 const testLasercutter = {
   fablabId: '5b453ddb5cf4a9574849e98a',

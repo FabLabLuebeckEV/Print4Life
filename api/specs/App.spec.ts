@@ -1,9 +1,9 @@
 import 'jasmine';
 import * as request from 'request';
-import * as configs from '../config/config';
+import config from '../config/config';
 import { getTestUserToken } from './global.spec';
 
-const endpoint = configs.configArr.prod.baseUrlBackend;
+const endpoint = config.baseUrlBackend;
 
 describe('App', () => {
   const token = getTestUserToken();

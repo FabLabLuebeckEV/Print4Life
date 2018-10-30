@@ -1,9 +1,9 @@
 import 'jasmine';
 import * as request from 'request';
-import * as configs from '../config/config';
+import config from '../config/config';
 import { testUser, getTestUserToken, newTimeout } from './global.spec';
 
-const endpoint = configs.configArr.prod.baseUrlBackend;
+const endpoint = config.baseUrlBackend;
 
 describe('User Controller', () => {
   let originalTimeout;

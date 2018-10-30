@@ -1,9 +1,9 @@
 import 'jasmine';
 import * as request from 'request';
-import * as configs from '../config/config';
+import config from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
 
-const endpoint = `${configs.configArr.prod.baseUrlBackend}machines/3d-printers`;
+const endpoint = `${config.baseUrlBackend}machines/3d-printers`;
 
 const testPrinter = {
   fablabId: '5b453ddb5cf4a9574849e98a',
