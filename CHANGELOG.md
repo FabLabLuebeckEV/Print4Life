@@ -8,6 +8,16 @@
 
 * upload of files (/LF0300/, /LF0330/)
 
+### Version 0.4.1
+
+* fix cors with https
+* fix specs and use env configs
+* use ecosystem.config.js file for pm2 
+* setup https backend server for prod
+* fix deploy scripts to include email-templates in dist build
+* fix duplicate orders in order list
+* fix user based switch language
+
 ### Version 0.4
 
 * user and role management implemented
