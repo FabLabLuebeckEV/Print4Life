@@ -1,14 +1,13 @@
 
 import * as jwt from 'jsonwebtoken';
 import * as request from 'request';
-import * as configs from '../config/config';
+import config from '../config/config';
 import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
 
 const Jasmine = require('jasmine');
 const server = require('../index');
 
-const env = process.env.NODE_ENV;
 const jasmineLib = new Jasmine();
 export const testUser = {
   id: '',
@@ -52,7 +51,7 @@ User.findOne({ username: testUser.username }).then(async (user) => {
     newUser = await newUser.save();
     testUser.id = newUser.id;
     await request.post(
-      `${configs.configArr.prod.baseUrlBackend}users/login`, {
+      `${config.baseUrlBackend}users/login`, {
         headers: { 'content-type': 'application/json' },
         json: true,
         body: { username: testUser.username, password: testUser.password }
@@ -76,7 +75,7 @@ User.findOne({ username: testUser.username }).then(async (user) => {
       createdAt: user.createdAt
     };
     testUser.id = user.id;
-    token = jwt.sign(signObj, configs.configArr[env].jwtSecret, { expiresIn: configs.configArr[env].jwtExpiryTime });
+    token = jwt.sign(signObj, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
     startJasmin();
   }
 });

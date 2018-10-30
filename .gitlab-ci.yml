@@ -97,4 +97,4 @@ deploy_staging:
    # Comment end
    # Delete old process if running, otherwise true and start process
    - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 delete $PROJECT_NAME || true"
-   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 start npm --name \"$PROJECT_NAME\" -- run api-serve"
+   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 start ecosystem.config.js"

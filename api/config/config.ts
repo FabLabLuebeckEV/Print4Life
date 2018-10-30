@@ -70,6 +70,10 @@ const publicRoutes = [
 const dev = {
   jwtSecret,
   jwtExpiryTime,
+  ssl: {
+    privateKeyPath: '',
+    certificatePath: ''
+  },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',
@@ -100,6 +104,10 @@ const dev = {
 const prod = {
   jwtSecret,
   jwtExpiryTime,
+  ssl: {
+    privateKeyPath: '/etc/letsencrypt/live/iot-fablab.ddns.net/privkey.pem',
+    certificatePath: '/etc/letsencrypt/live/iot-fablab.ddns.net/cert.pem'
+  },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',
@@ -115,20 +123,32 @@ const prod = {
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `http://localhost:${port}${baseUrl}`,
-  baseUrlFrontend: `http://localhost:${ngPort}`,
-  cors: {
-    whitelist: [`http://localhost:${ngPort}`, `http://212.83.56.107:${ngPort}`, `http://iot-fablab.ddns.net:${ngPort}`],
-    corsOptions: {
-      origin: undefined,
-      credentials: true
-    }
-  }
+  baseUrlBackend: `https://localhost:${port}${baseUrl}`,
+  baseUrlFrontend: 'https://iot-fablab.ddns.net',
+  // cors: {
+  //   whitelist: [
+  //     `https://localhost:${ngPort}`,
+  //     `https://212.83.56.107:${ngPort}`,
+  //     `https://iot-fablab.ddns.net:${ngPort}`,
+  //     `http://localhost:${ngPort}`,
+  //     `http://212.83.56.107:${ngPort}`,
+  //     `http://iot-fablab.ddns.net:${ngPort}`
+  //   ],
+  //   corsOptions: {
+  //     origin: undefined,
+  //     credentials: true
+  //   }
+  // }
+  cors: undefined
 };
 
 const test = {
   jwtSecret,
   jwtExpiryTime,
+  ssl: {
+    privateKeyPath: '',
+    certificatePath: ''
+  },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',
@@ -152,6 +172,10 @@ const test = {
 const testLocal = {
   jwtSecret,
   jwtExpiryTime,
+  ssl: {
+    privateKeyPath: '',
+    certificatePath: ''
+  },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',

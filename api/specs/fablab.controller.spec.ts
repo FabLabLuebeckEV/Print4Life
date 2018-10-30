@@ -1,9 +1,9 @@
 import 'jasmine';
 import * as request from 'request';
-import * as configs from '../config/config';
+import config from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
 
-const endpoint = `${configs.configArr.prod.baseUrlBackend}fablabs`;
+const endpoint = `${config.baseUrlBackend}fablabs`;
 
 const testFablab = {
   name: 'Fablab Ostsee e.V.',

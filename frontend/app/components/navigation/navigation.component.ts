@@ -147,6 +147,7 @@ export class NavigationComponent implements OnInit {
     this.modalService.open(LoginModalComponent).result.then((login) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.router.navigate([this.router.url]);
+      this._translate();
     }).catch((err) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
     });
@@ -156,6 +157,7 @@ export class NavigationComponent implements OnInit {
     this.userService.logout();
     this.userIsLoggedIn = this.userService.isLoggedIn();
     this.router.navigate(['/']);
+    this._translate();
   }
 
   private _register() {
