@@ -229,7 +229,7 @@ export class OrderListComponent implements OnInit {
           arr.push(item);
         }
 
-        this.orders = this.orders.concat(arr);
+        this.orders = [].concat(arr);
         this.visibleOrders = undefined;
         this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
       }));
