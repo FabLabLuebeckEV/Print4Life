@@ -11,7 +11,7 @@ import config from './config/config';
 let privateKey = '';
 let certificate = '';
 
-if (process.env.NODE_ENV === 'prod') {
+if (process.env.NODE_ENV && process.env.NODE_ENV === 'prod') {
   privateKey = fs.readFileSync(config.ssl.privateKeyPath, 'utf8');
   certificate = fs.readFileSync(config.ssl.certificatePath, 'utf8');
 }
@@ -24,7 +24,7 @@ const serverInstance = process.env && process.env.NODE_ENV === 'prod'
   ? https.createServer(credentials, app)
   : http.createServer(app);
 
-function run (callback) {
+function run(callback) {
   const port = process.env.PORT || 3000;
   const ngPort = process.env.NG_PORT || 4200;
   mongoose
