@@ -24,7 +24,7 @@ const serverInstance = process.env && process.env.NODE_ENV === 'prod'
   ? https.createServer(credentials, app)
   : http.createServer(app);
 
-function run(callback) {
+function run (callback) {
   const port = process.env.PORT || 3000;
   const ngPort = process.env.NG_PORT || 4200;
   mongoose
