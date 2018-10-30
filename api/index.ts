@@ -1,9 +1,28 @@
 
 
 import * as mongoose from 'mongoose';
+import * as fs from 'fs';
+import * as http from 'http';
+import * as https from 'https';
 import app from './App';
 import logger from './logger';
 import config from './config/config';
+
+let privateKey = '';
+let certificate = '';
+
+if (process.env.NODE_ENV === 'prod') {
+  privateKey = fs.readFileSync(config.ssl.privateKeyPath, 'utf8');
+  certificate = fs.readFileSync(config.ssl.certificatePath, 'utf8');
+}
+
+const credentials = { key: privateKey, cert: certificate };
+
+// your express configuration here
+
+const serverInstance = process.env && process.env.NODE_ENV === 'prod'
+  ? https.createServer(credentials, app)
+  : http.createServer(app);
 
 function run (callback) {
   const port = process.env.PORT || 3000;
@@ -17,7 +36,7 @@ function run (callback) {
     logger.error('DB Connection Error!');
   });
 
-  const server = app.listen(port, (err) => {
+  const server = serverInstance.listen(port, (err) => {
     if (err) {
       return logger.error(err);
     }

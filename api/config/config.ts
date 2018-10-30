@@ -70,6 +70,10 @@ const publicRoutes = [
 const dev = {
   jwtSecret,
   jwtExpiryTime,
+  ssl: {
+    privateKeyPath: '',
+    certificatePath: ''
+  },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',
@@ -100,6 +104,10 @@ const dev = {
 const prod = {
   jwtSecret,
   jwtExpiryTime,
+  ssl: {
+    privateKeyPath: '/etc/letsencrypt/live/privkey.pem',
+    certificatePath: '/etc/letsencrypt/live/cert.pem'
+  },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',
@@ -133,6 +141,10 @@ const prod = {
 const test = {
   jwtSecret,
   jwtExpiryTime,
+  ssl: {
+    privateKeyPath: '',
+    certificatePath: ''
+  },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',
@@ -156,6 +168,10 @@ const test = {
 const testLocal = {
   jwtSecret,
   jwtExpiryTime,
+  ssl: {
+    privateKeyPath: '',
+    certificatePath: ''
+  },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
     dirname: 'logs',

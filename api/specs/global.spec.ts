@@ -80,7 +80,7 @@ User.findOne({ username: testUser.username }).then(async (user) => {
   }
 });
 
-function startJasmin() {
+function startJasmin () {
   jasmineLib.loadConfig({
     spec_dir: 'dist/specs',
     spec_files: ['**/*[sS]pec.js']
