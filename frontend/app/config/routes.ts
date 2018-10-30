@@ -1,5 +1,5 @@
 import { environment } from '../../environments/environment';
-const backendUrl = !environment.production ? 'http://localhost:3000/api/v1' : 'http://iot-fablab.ddns.net:3000/api/v1';
+const backendUrl = !environment.production ? 'http://localhost:3000/api/v1' : 'https://iot-fablab.ddns.net:3000/api/v1';
 
 export const routes = {
     backendUrl: backendUrl,
