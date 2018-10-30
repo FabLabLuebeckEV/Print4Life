@@ -124,7 +124,7 @@ const prod = {
   rawBaseUrl: baseUrl,
   publicRoutes,
   baseUrlBackend: `https://localhost:${port}${baseUrl}`,
-  baseUrlFrontend: `https://iot-fablab.ddns.net:${ngPort}`,
+  baseUrlFrontend: `https://iot-fablab.ddns.net`,
   // cors: {
   //   whitelist: [
   //     `https://localhost:${ngPort}`,
