@@ -8,13 +8,13 @@ import config from './config/config';
 class App {
   public express;
 
-  constructor () {
+  constructor() {
     this.express = express();
     this.setCorsOptions();
     this.mountRoutes();
   }
 
-  private mountRoutes (): void {
+  private mountRoutes(): void {
     this.express.use(bodyParser.json());
     this.express.use(((req, res, next) => {
       if (req.get('Content-Type') === 'application/json') {
@@ -23,18 +23,13 @@ class App {
         res.status(400).send({ err: 'Only content-type \'application/json\' is accepted!' });
       }
     }));
-    this.express.use((req, res, next) => {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-      next();
-    });
     this.express.use('/api/v1/', routes);
     this.express.get('*', (req, res) => {
       res.redirect(`${config.baseUrlFrontend}`);
     });
   }
 
-  private setCorsOptions (): void {
+  private setCorsOptions(): void {
     if (config.cors) {
       config.cors.corsOptions.origin = function (origin, callback) {
         if (config.cors.whitelist.indexOf(origin) !== -1) {

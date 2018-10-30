@@ -17,7 +17,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         if (localStorage.getItem(this.userService.getLocalStorageTokenName())) {
             headers = headers.append('authorization', `${localStorage.getItem(this.userService.getLocalStorageTokenName())}`);
         }
-        request = request.clone({ headers, withCredentials: true });
+        request = request.clone({ headers, withCredentials: false });
         return handler.handle(request).pipe(catchError((error, caught) => {
             this.handleError(error);
             return of(error);
