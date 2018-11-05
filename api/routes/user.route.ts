@@ -438,18 +438,18 @@ router.route('/search').post((req, res) => {
   req.body.query = validatorService.checkQuery(req.body.query);
   userCtrl.getUsers(req.body.query, req.body.limit, req.body.skip).then((users) => {
     if (users.length === 0) {
-      logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
-        `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+      logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
       res.status(204).send({ users });
     } else if (req.body.limit && req.body.skip) {
-      logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
-        `limit ${req.body.limit} skip ${req.body.skip} ` +
-        `holds partial results ${JSON.stringify(users)}`);
+      logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds partial results ${JSON.stringify(users)}`);
       res.status(206).send({ users });
     } else {
-      logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, ` +
-        `limit ${req.body.limit} skip ${req.body.skip} ` +
-        `holds results ${JSON.stringify(users)}`);
+      logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds results ${JSON.stringify(users)}`);
       res.status(200).send({ users });
     }
   }).catch((err) => {
@@ -645,7 +645,9 @@ router.route('/login').post(async (req, res) => {
   try {
     login = await userCtrl.login(user, req.body.password);
   } catch (err) {
-    const msg = { type: err.type, error: err.msg, stack: err, data: undefined, login: { success: false } };
+    const msg = {
+      type: err.type, error: err.msg, stack: err, data: undefined, login: { success: false }
+    };
     logger.error(msg);
     if (err.type === ErrorType.USER_DEACTIVATED) {
       msg.data = err.data;

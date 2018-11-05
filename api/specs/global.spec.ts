@@ -61,7 +61,8 @@ User.findOne({ username: testUser.username }).then(async (user) => {
           await newUser.save();
           startJasmin();
         }
-      });
+      }
+    );
   } else {
     const signObj = {
       _id: user._id,

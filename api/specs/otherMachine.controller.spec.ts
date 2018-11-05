@@ -29,7 +29,7 @@ describe('Other Machine Controller', () => {
       json: true
     }, (error, response) => {
       if (response.body && response.body.otherMachines) {
-        const otherMachines = response.body.otherMachines;
+        const { otherMachines } = { otherMachines: response.body.otherMachines };
         expect(response.statusCode).toEqual(200);
         expect(otherMachines).toBeDefined();
         expect(otherMachines.length).toBeGreaterThan(-1);
@@ -62,7 +62,7 @@ describe('Other Machine Controller', () => {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
-      const count = response.body.count;
+      const { count } = { count: response.body.count };
       expect(response.statusCode).toEqual(200);
       expect(count).toBeDefined();
       expect(count).toBeGreaterThan(-1);
@@ -77,7 +77,7 @@ describe('Other Machine Controller', () => {
         body: testOtherMachine,
         json: true
       }, (error, response) => {
-        const otherMachine = response.body.otherMachine;
+        const { otherMachine } = { otherMachine: response.body.otherMachine };
         expect(response.statusCode).toEqual(201);
         expect(otherMachine).toBeDefined();
         expect(otherMachine.deviceName).toEqual(testOtherMachine.deviceName);
@@ -133,7 +133,7 @@ describe('Other Machine Controller', () => {
       body: testOtherMachine,
       json: true
     }, (error, response) => {
-      const otherMachine = response.body.otherMachine;
+      const { otherMachine } = { otherMachine: response.body.otherMachine };
       expect(response.statusCode).toEqual(201);
       expect(otherMachine).toBeDefined();
       expect(otherMachine.deviceName).toEqual(testOtherMachine.deviceName);

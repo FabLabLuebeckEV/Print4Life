@@ -196,7 +196,9 @@ const testLocal = {
   cors: undefined
 };
 
-export const configArr = { dev, prod, test, testLocal };
+export const configArr = {
+  dev, prod, test, testLocal
+};
 
 const config = configArr[env];
 

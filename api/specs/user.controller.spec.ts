@@ -25,7 +25,7 @@ describe('User Controller', () => {
         body: testUser
       },
       (error, response) => {
-        const user = response.body.user;
+        const { user } = { user: response.body.user };
         expect(response.statusCode).toEqual(200);
         expect(user).toBeDefined();
         expect(user.username).toEqual(testUser.username);
@@ -39,7 +39,8 @@ describe('User Controller', () => {
         expect(user.address.city).toEqual(testUser.address.city);
         expect(user.address.country).toEqual(testUser.address.country);
         done();
-      });
+      }
+    );
   });
 
   it('user login', (done) => {
@@ -52,7 +53,7 @@ describe('User Controller', () => {
         body: testUser
       },
       (error, response) => {
-        const user = response.body.user;
+        const { user } = { user: response.body.user };
         request.post(
           `${endpoint}users/login`, {
             headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -65,8 +66,10 @@ describe('User Controller', () => {
             expect(response.body.login.token).toBeDefined();
             expect(response.body.login.success).toBeTruthy();
             done();
-          }));
-      });
+          })
+        );
+      }
+    );
   });
 
   it('user reset password', (done) => {
@@ -79,7 +82,7 @@ describe('User Controller', () => {
         body: testUser
       },
       (error, response) => {
-        const user = response.body.user;
+        const { user } = { user: response.body.user };
         request.put(
           `${endpoint}users/${user._id}/changePassword`, {
             headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -90,8 +93,10 @@ describe('User Controller', () => {
             expect(response).toBeDefined();
             expect(response.body.msg).toBeDefined();
             done();
-          }));
-      });
+          })
+        );
+      }
+    );
   });
 
   it('user login fails', (done) => {
@@ -104,7 +109,7 @@ describe('User Controller', () => {
         body: testUser
       },
       (error, response) => {
-        const user = response.body.user;
+        const { user } = { user: response.body.user };
         request.post(
           `${endpoint}users/login`, {
             headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -117,8 +122,10 @@ describe('User Controller', () => {
             expect(response.body.login.token).toBeUndefined();
             expect(response.body.login.success).toBeFalsy();
             done();
-          }));
-      });
+          })
+        );
+      }
+    );
   });
 
   it('gets roles', (done) => {
@@ -179,7 +186,7 @@ describe('User Controller', () => {
         }
       }
     }, (error, response) => {
-      const count = response.body.count;
+      const { count } = { count: response.body.count };
       expect(response.statusCode).toEqual(200);
       expect(count).toBeDefined();
       expect(count).toBeGreaterThan(-1);
@@ -199,20 +206,22 @@ describe('User Controller', () => {
         body: testUser
       },
       (error, response) => {
-        const user = response.body.user;
+        const { user } = { user: response.body.user };
         request.get(
           `${endpoint}users/${user._id}/getNames`, {
             headers: { 'content-type': 'application/json', authorization: authorizationHeader },
             json: true,
           }, ((error, response) => {
-            const user = response.body.user;
+            const { user } = { user: response.body.user };
             expect(error).toBeNull();
             expect(response).toBeDefined();
             expect(user).toBeDefined();
             expect(user.firstname).toEqual(testUser.firstname);
             expect(user.lastname).toEqual(testUser.lastname);
             done();
-          }));
-      });
+          })
+        );
+      }
+    );
   });
 });

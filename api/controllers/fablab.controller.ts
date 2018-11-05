@@ -20,7 +20,8 @@ function update (_id, params) {
   return Fablab.update(
     { _id },
     params,
-    { upsert: true }).then(() => Fablab.findOne({ _id }));
+    { upsert: true }
+  ).then(() => Fablab.findOne({ _id }));
 }
 
 async function deleteById (id) {
@@ -29,4 +30,6 @@ async function deleteById (id) {
   return update(id, fablab);
 }
 
-export default { get, getAll, create, update, deleteById };
+export default {
+  get, getAll, create, update, deleteById
+};

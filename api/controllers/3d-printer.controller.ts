@@ -33,4 +33,6 @@ function count () {
 }
 
 
-export default { getAll, create, deleteById, get, update, count };
+export default {
+  getAll, create, deleteById, get, update, count
+};

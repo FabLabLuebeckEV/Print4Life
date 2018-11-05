@@ -35,7 +35,7 @@ describe('Order Controller', () => {
     },
     (error, response) => {
       if (response.body && response.body.orders) {
-        const orders = response.body.orders;
+        const { orders } = { orders: response.body.orders };
         expect(response.statusCode).toEqual(200);
         expect(orders).toBeDefined();
         expect(orders.length).toBeGreaterThan(-1);
@@ -64,7 +64,7 @@ describe('Order Controller', () => {
       json: true,
       body: { query: { $or: [{ status: 'new' }, { status: 'deleted' }] } }
     }, (error, response) => {
-      const count = response.body.count;
+      const { count } = { count: response.body.count };
       expect(response.statusCode).toEqual(200);
       expect(count).toBeDefined();
       expect(count).toBeGreaterThan(-1);

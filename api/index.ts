@@ -18,8 +18,6 @@ if (process.env.NODE_ENV && process.env.NODE_ENV === 'prod') {
 
 const credentials = { key: privateKey, cert: certificate };
 
-// your express configuration here
-
 const serverInstance = process.env && process.env.NODE_ENV === 'prod'
   ? https.createServer(credentials, app)
   : http.createServer(app);
@@ -28,7 +26,8 @@ function run (callback) {
   const port = process.env.PORT || 3000;
   const ngPort = process.env.NG_PORT || 4200;
   mongoose
-    .connect(config.connections.mongo.host + config.connections.mongo.database, { autoReconnect: true })
+    .connect(config.connections.mongo.host + config.connections.mongo.database,
+      { autoReconnect: true, useNewUrlParser: true })
     .catch((error) => logger.error(error));
   const db = mongoose.connection;
 
