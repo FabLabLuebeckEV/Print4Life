@@ -377,9 +377,9 @@ router.route('/:id').delete((req, res) => {
         printer3DCtrl.deleteById(req.params.id).then((result) => {
           if (result) {
             printer3DCtrl.get(req.params.id).then((result) => {
-              if (!result) {
+              if (result) {
                 logger.info(`DELETE 3D Printer with result ${JSON.stringify(printer3d)}`);
-                res.status(200).send({ '3d-printer': printer3d });
+                res.status(200).send({ '3d-printer': result });
               }
             }).catch((err) => {
               const msg = { err: `Error while trying to get the 3D Printer by id ${req.params.id}`, stack: err };

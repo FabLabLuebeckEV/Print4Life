@@ -9,6 +9,7 @@ const testLasercutter = {
   fablabId: '5b453ddb5cf4a9574849e98a',
   deviceName: 'Test Lasercutter',
   manufacturer: 'Test Manufacturer',
+  activated: true,
   laserTypes: [{
     laserType: 'CO2'
   }],
@@ -228,14 +229,8 @@ describe('Lasercutter Controller', async () => {
           expect(response.statusCode).toEqual(200);
           expect(response.body.lasercutter).toBeDefined();
           expect(response.body.lasercutter._id).toEqual(responseMachine._id);
-          request.get(`${endpoint}/${responseMachine._id}`, {
-            headers: { 'content-type': 'application/json', authorization: authorizationHeader },
-            json: true
-          }, (error, response) => {
-            expect(response.statusCode).toEqual(404);
-            expect(response.body.lasercutter).toBeUndefined();
-            done();
-          });
+          expect(response.body.lasercutter.activated).toEqual(false);
+          done();
         });
     });
   });

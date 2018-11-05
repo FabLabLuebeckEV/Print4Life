@@ -285,7 +285,7 @@ export class MachineListComponent implements OnInit {
         item.obj[`Device Name`] = { label: elem.deviceName, href: `./${elem.type}s/${elem._id}` };
         item.obj[`Manufacturer`] = { label: elem.manufacturer };
         item.obj[`Fablab`] = { label: fablab.name };
-        item.obj[`Description`] = { label: '' };
+        item.obj[`Description`] = { label: elem.comment };
         if (this.userIsAdmin) {
           item.button1.label = this.translationFields.buttons.updateLabel;
           item.button1.href = `./${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
@@ -294,7 +294,7 @@ export class MachineListComponent implements OnInit {
           item.button2.label = this.translationFields.buttons.deleteLabel;
           item.button2.eventEmitter = true;
           item.button2.class = 'btn btn-danger spacing';
-          item.button2.icon = this.config.icons.delete;
+          item.button2.icon = elem.activated ? this.config.icons.toggleOff : this.config.icons.toggleOn;
           item.button2.refId = elem._id;
         }
         arr.push(item);

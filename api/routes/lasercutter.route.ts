@@ -386,9 +386,9 @@ router.route('/:id').delete((req, res) => {
         lasercutterCtrl.deleteById(req.params.id).then((result) => {
           if (result) {
             lasercutterCtrl.get(req.params.id).then((result) => {
-              if (!result) {
-                logger.info(`DELETE Lasercutter with result ${JSON.stringify(lasercutter)}`);
-                res.status(200).send({ lasercutter });
+              if (result) {
+                logger.info(`DELETE Lasercutter with result ${JSON.stringify(result)}`);
+                res.status(200).send({ 'lasercutter': result });
               }
             }).catch((err) => {
               const msg = {

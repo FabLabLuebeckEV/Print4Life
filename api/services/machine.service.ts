@@ -105,24 +105,35 @@ function create (type, params) {
 }
 
 /**
- * This method deletes a specific type of machine by a given id and returns a promise with the success or failure
- * type is the type of machine to delete
+ * This method toggles the activation status of a specific type of machine by a given id and returns
+ * a promise with the success or failure type is the type of machine to delete
  * _id is the id of the machine
  * @returns a promise with the results
  */
 async function deleteById (type, _id) {
-  switch (type) {
-    case '3d-printer':
-      return Printer3D.updateOne({ _id, activated: !(await Printer3D.findOne({ _id })).activated });
-    case 'lasercutter':
-      const old2 = (await Printer3D.updateOne({ _id })).activated;
-      return Lasercutter.updateOne({ _id, activated: !(await Lasercutter.findOne({ _id })).activated });
-    case 'otherMachine':
-      return Other.updateOne({ _id, activated: !(await Other.findOne({ _id })).activated });
-    case 'millingMachine':
-      return MillingMachine.updateOne({ _id, activated: !(await MillingMachine.findOne({ _id })).activated });
-    default:
-      return Promise.reject('Machine Type not supported!');
+  try {
+    switch (type) {
+      case '3d-printer': {
+        const printer3d = await Printer3D.findOne({ _id });
+        return Printer3D.updateOne({ _id }, { activated: !printer3d.activated });
+      }
+      case 'lasercutter': {
+        const lasercutter = await Lasercutter.findOne({ _id });
+        return Lasercutter.updateOne({ _id }, { activated: !lasercutter.activated });
+      }
+      case 'otherMachine': {
+        const otherMachine = await Other.findOne({ _id });
+        return Other.updateOne({ _id }, { activated: !otherMachine.activated });
+      }
+      case 'millingMachine': {
+        const millingMachine = await MillingMachine.findOne({ _id });
+        return MillingMachine.updateOne({ _id }, { activated: !millingMachine.activated });
+      }
+      default:
+        return Promise.reject('Machine Type not supported!');
+    }
+  } catch (err) {
+    return Promise.reject('Machine not found!');
   }
 }
 

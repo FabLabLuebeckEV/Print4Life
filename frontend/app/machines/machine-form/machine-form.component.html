@@ -46,8 +46,20 @@
               {{translationFields.messages.manufacturer}}
             </div>
           </div>
-        </div>
 
+
+          <div class="col-md-6">
+            <label for="role">{{translationFields.labels.isActivated}}</label><br>
+            <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="model.activated">
+              <label ngbButtonLabel class="btn-secondary">
+                <input ngbButton type="radio" [value]="true">{{translationFields.buttons.activatedTrue}}
+              </label>
+              <label ngbButtonLabel class="btn-secondary">
+                <input ngbButton type="radio" [value]="false">{{translationFields.buttons.activatedFalse}}
+              </label>
+            </div>
+          </div>
+        </div>
         <h2 *ngIf="selectedType" class="col-md-12 header-left-bound">
           {{shownType}} {{translationFields.labels.data}}
         </h2>

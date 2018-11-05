@@ -6,8 +6,9 @@ export class Machine {
         public fablab: any,
         public deviceName: String,
         public type: String,
-        public manufacturer: String) {
-    }
+        public manufacturer: String,
+        public activated: Boolean
+    ) { }
 }
 
 export class Material {
@@ -31,6 +32,7 @@ export class Printer3D extends Machine {
         public deviceName: String,
         public type: String,
         public manufacturer: String,
+        public activated: Boolean,
         public materials: Array<Material>,
         public camSoftware: String,
         public printVolumeX: Number,
@@ -42,7 +44,7 @@ export class Printer3D extends Machine {
         public nozzleDiameter: String,
         public numberOfExtruders: Number,
         public comment: String
-    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer); }
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated); }
 }
 
 export class MillingMachine extends Machine {
@@ -52,6 +54,7 @@ export class MillingMachine extends Machine {
         public deviceName: String,
         public type: String,
         public manufacturer: String,
+        public activated: Boolean,
         public camSoftware: String,
         public workspaceX: Number,
         public workspaceY: Number,
@@ -59,7 +62,7 @@ export class MillingMachine extends Machine {
         public movementSpeed: Number,
         public stepSize: Number,
         public comment: String
-    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer); }
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated); }
 }
 
 export class OtherMachine extends Machine {
@@ -69,9 +72,10 @@ export class OtherMachine extends Machine {
         public deviceName: String,
         public type: String,
         public manufacturer: String,
+        public activated: Boolean,
         public typeOfMachine: String,
         public comment: String
-    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer); }
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated); }
 }
 
 export class Lasercutter extends Machine {
@@ -81,6 +85,7 @@ export class Lasercutter extends Machine {
         public deviceName: String,
         public type: String,
         public manufacturer: String,
+        public activated: Boolean,
         public laserTypes: Array<Lasertype>,
         public camSoftware: String,
         public workspaceX: Number,
@@ -89,5 +94,5 @@ export class Lasercutter extends Machine {
         public maxResoultion: Number,
         public laserPower: String,
         public comment: String
-    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer); }
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated); }
 }

@@ -106,7 +106,12 @@
             "laserTypes": "Lasertypen",
             "laserPower": "Leistung des Lasers",
             "maxResolution": "Maximale Auflösung",
-            "typeOfMachine": "Typ der Maschine"
+            "typeOfMachine": "Typ der Maschine",
+            "isActivated": "Status"
+        },
+        "buttons": {
+            "activatedTrue": "Aktiv",
+            "activatedFalse": "Inaktiv"
         },
         "modals": {
             "ok": "Ok",
