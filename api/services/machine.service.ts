@@ -110,16 +110,17 @@ function create (type, params) {
  * _id is the id of the machine
  * @returns a promise with the results
  */
-function deleteById (type, _id) {
+async function deleteById (type, _id) {
   switch (type) {
     case '3d-printer':
-      return Printer3D.deleteOne({ _id });
+      return Printer3D.updateOne({ _id, activated: !(await Printer3D.findOne({ _id })).activated });
     case 'lasercutter':
-      return Lasercutter.deleteOne({ _id });
+      const old2 = (await Printer3D.updateOne({ _id })).activated;
+      return Lasercutter.updateOne({ _id, activated: !(await Lasercutter.findOne({ _id })).activated });
     case 'otherMachine':
-      return Other.deleteOne({ _id });
+      return Other.updateOne({ _id, activated: !(await Other.findOne({ _id })).activated });
     case 'millingMachine':
-      return MillingMachine.deleteOne({ _id });
+      return MillingMachine.updateOne({ _id, activated: !(await MillingMachine.findOne({ _id })).activated });
     default:
       return Promise.reject('Machine Type not supported!');
   }
