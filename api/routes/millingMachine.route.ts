@@ -252,6 +252,7 @@ router.route('/').post((req, res) => {
     "fablabId": "5b453ddb5cf4a9574849e98a",
     "deviceName": "Test Milling Machine",
     "manufacturer": "Test Manufacturer",
+    "activated": false,
     "workspaceX": 2,
     "workspaceY": 2,
     "workspaceZ": 2,

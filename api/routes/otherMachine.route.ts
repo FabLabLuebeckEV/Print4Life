@@ -221,6 +221,7 @@ router.route('/').post((req, res) => {
     "_id": "5b66fefec92bc40cd9dcfef3",
     "fablabId": "5b453ddb5cf4a9574849e98a",
     "deviceName": "Updated",
+    "activated": false,
     "manufacturer": "Test Manufacturer",
     "typeOfMachine": "Test Machine",
     "comment": "Create Test",

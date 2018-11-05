@@ -320,6 +320,7 @@ router.route('/').post((req, res) => {
     "fablabId": "5b453ddb5cf4a9574849e98a",
     "deviceName": "Test Lasercutter",
     "manufacturer": "Test Manufacturer",
+    "activated": false,,
     "laserTypes": [
         {
             "_id": "5b695b6ff371a21d0c858f2b",

@@ -308,6 +308,7 @@ router.route('/').post((req, res) => {
     "fablabId": "5b453ddb5cf4a9574849e98a",
     "deviceName": "Test Printer",
     "manufacturer": "Test Manufacturer",
+    "activated": false,
     "materials": [
         {
             "_id": "5b66d17a250f8f3209d31578",
