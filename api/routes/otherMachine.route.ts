@@ -280,7 +280,7 @@ router.route('/:id').delete((req, res) => {
             otherMachineCtrl.get(req.params.id).then((result) => {
               if (result) {
                 logger.info(`DELETE Other Machine with result ${JSON.stringify(otherMachine)}`);
-                res.status(200).send({ 'otherMachine': result });
+                res.status(200).send({ otherMachine: result });
               }
             }).catch((err) => {
               const msg = {

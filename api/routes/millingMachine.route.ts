@@ -313,7 +313,7 @@ router.route('/:id').delete((req, res) => {
             millingMachineCtrl.get(req.params.id).then((result) => {
               if (result) {
                 logger.info(`DELETE Milling Machine with result ${JSON.stringify(millingMachine)}`);
-                res.status(200).send({ 'millingMachine': result });
+                res.status(200).send({ millingMachine: result });
               }
             }).catch((err) => {
               const msg = {

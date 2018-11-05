@@ -380,16 +380,14 @@ router.route('/:id').delete((req, res) => {
     logger.error({ error: checkId.error });
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    let lasercutter;
     lasercutterCtrl.get(req.params.id).then((l) => {
       if (l) {
-        lasercutter = l;
         lasercutterCtrl.deleteById(req.params.id).then((result) => {
           if (result) {
             lasercutterCtrl.get(req.params.id).then((result) => {
               if (result) {
                 logger.info(`DELETE Lasercutter with result ${JSON.stringify(result)}`);
-                res.status(200).send({ 'lasercutter': result });
+                res.status(200).send({ lasercutter: result });
               }
             }).catch((err) => {
               const msg = {
