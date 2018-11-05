@@ -16,7 +16,12 @@ const machineFields = {
   },
   manufacturer: {
     type: String
-  }
+  },
+  activated: {
+    type: Boolean,
+    required: true,
+    default: true
+  },
 };
 
 function getFields () {
