@@ -293,8 +293,8 @@ export class MachineListComponent implements OnInit {
           item.button1.icon = this.config.icons.edit;
           item.button2.label = this.translationFields.buttons.deleteLabel;
           item.button2.eventEmitter = true;
-          item.button2.class = 'btn btn-danger spacing';
-          item.button2.icon = elem.activated ? this.config.icons.toggleOff : this.config.icons.toggleOn;
+          item.button2.class = elem.activated ? 'btn btn-success spacing' : 'btn btn-danger spacing';
+          item.button2.icon = elem.activated ? this.config.icons.toggleOn : this.config.icons.toggleOff;
           item.button2.refId = elem._id;
         }
         arr.push(item);

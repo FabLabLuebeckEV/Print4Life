@@ -77,8 +77,8 @@
             "abort": "No",
             "deleteValue": "Delete",
             "abortValue": "Abort",
-            "deleteHeader": "Do you really want to delete the machine?",
-            "deleteQuestion": "Are you sure you want to delete",
+            "deleteHeader": "Do you really want toggle machine's status?",
+            "deleteQuestion": "Are you sure you want to toggle",
             "deleteQuestion2": "?"
         }
     },

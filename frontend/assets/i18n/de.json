@@ -75,11 +75,11 @@
         "modals": {
             "yes": "Ja",
             "abort": "Nein",
-            "deleteValue": "Löschen",
+            "deleteValue": "Deaktivieren",
             "abortValue": "Abbrechen",
-            "deleteHeader": "Möchten Sie wirklich diese Maschine löschen?",
+            "deleteHeader": "Möchten den Status der Maschine ändern?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "löschen wollen?"
+            "deleteQuestion2": "den Status wechseln wollen?"
         }
     },
     "machineForm": {

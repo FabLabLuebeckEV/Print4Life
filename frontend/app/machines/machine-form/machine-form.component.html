@@ -51,10 +51,10 @@
           <div class="col-md-6">
             <label for="role">{{translationFields.labels.isActivated}}</label><br>
             <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="model.activated">
-              <label ngbButtonLabel class="btn-secondary">
+              <label ngbButtonLabel class="ng-class: model.activated ? btn-success : btn-secondary">
                 <input ngbButton type="radio" [value]="true">{{translationFields.buttons.activatedTrue}}
               </label>
-              <label ngbButtonLabel class="btn-secondary">
+              <label ngbButtonLabel class="ng-class: !model.activated ? btn-danger : btn-secondary">
                 <input ngbButton type="radio" [value]="false">{{translationFields.buttons.activatedFalse}}
               </label>
             </div>
