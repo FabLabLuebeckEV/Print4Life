@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -16,6 +16,8 @@ import * as moment from 'moment';
 import { User } from 'frontend/app/models/user.model';
 import { UserService } from 'frontend/app/services/user.service';
 
+const localStorageOrderKey = 'orderManagementOrderFormOrder';
+const localStorageCommentKey = 'orderManagementOrderFormOrder';
 
 @Component({
   selector: 'app-create-order',
@@ -23,6 +25,8 @@ import { UserService } from 'frontend/app/services/user.service';
   styleUrls: ['./create-order.component.css']
 })
 export class CreateOrderComponent implements OnInit {
+  @ViewChild('createOrderForm') createOrderForm;
+  @ViewChild('commentContent') commentContentField;
   config: any;
   publicIcon: any;
   selectedType: String;
@@ -121,6 +125,7 @@ export class CreateOrderComponent implements OnInit {
     });
   }
 
+  // TODO: Set Order in Local Storage on create, delete on submit, same with comments
   async ngOnInit() {
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
@@ -131,6 +136,12 @@ export class CreateOrderComponent implements OnInit {
     await this._initializeOrder(this.orderId);
     this.machineSelected();
     this._translate();
+    if (this.createOrderForm && !this.editView) {
+      this.createOrderForm.form.valueChanges.subscribe((changes) => {
+        localStorage.setItem(localStorageOrderKey, JSON.stringify(this.order));
+        localStorage.setItem(localStorageCommentKey, changes.content);
+      });
+    }
   }
 
   onSubmitComment(form) {
@@ -198,6 +209,8 @@ export class CreateOrderComponent implements OnInit {
       const errorMsg = this.translationFields.modals.error;
       this.orderService.createOrder(orderCopy).then((result) => {
         if (result) {
+          localStorage.removeItem(localStorageOrderKey);
+          localStorage.removeItem(localStorageCommentKey);
           this._openSuccessMsg();
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
@@ -287,27 +300,34 @@ export class CreateOrderComponent implements OnInit {
 
   private async _initializeOrder(id) {
     this.loggedInUser = await this.userService.getUser();
-    if (id !== undefined) {
+    const order = localStorage.getItem(localStorageOrderKey);
+    if (order) {
+      this.order = JSON.parse(order) as Order;
+    } else if (id !== undefined) {
       await this._loadEditors();
       this.order = (await this.orderService.getOrderById(id)).order;
+    }
+
+    if (order || id !== undefined) {
       this.order.editor = this.order.editor && this.order.editor.length === 24 ?
         (await this.userService.getNamesOfUser(this.order.editor)).user : undefined;
       this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
       this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
-      this.order.comments.forEach(async (comment) => {
-        const user = await this.userService.getNamesOfUser(comment.author);
-        if (user) {
-          comment['authorName'] = user.firstname + ' ' + user.lastname;
-        }
-      });
+      if (this.order.comments) {
+        this.order.comments.forEach(async (comment) => {
+          const user = await this.userService.getNamesOfUser(comment.author);
+          if (user) {
+            comment['authorName'] = user.firstname + ' ' + user.lastname;
+          }
+        });
+      }
       const machineId = this.order.machine._id;
       await this.machineTypeChanged(this.order.machine['shownType']);
       this.order.machine._id = machineId;
     } else {
       this.order.owner = this.loggedInUser._id;
     }
-
   }
 
   private async _loadStatus() {
