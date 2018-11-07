@@ -132,6 +132,7 @@ deploy_production:
    - ssh-add <(echo "$PRODUCTION_PRIVATE_KEY" | base64 --decode)
    - npm install && npm run deploy-prod
   script:
+   - echo "$PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS with path /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME"
    - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "rm -rf /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && mkdir /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME"
    - rsync -rav -e ssh --exclude='.git/' --exclude='.gitlab-ci.yml' --exclude='node_modules' --delete-excluded ./ $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS:/home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME
    - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && rm -rf /var/www/html/* && cp -r dist/. /var/www/html"
