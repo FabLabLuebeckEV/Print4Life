@@ -75,7 +75,7 @@ describe('3D Printer Controller', () => {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
-      const count = response.body.count;
+      const { count } = { count: response.body.count };
       expect(response.statusCode).toEqual(200);
       expect(count).toBeDefined();
       expect(count).toBeGreaterThan(-1);

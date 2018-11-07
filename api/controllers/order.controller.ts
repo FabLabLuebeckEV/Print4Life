@@ -43,7 +43,8 @@ function updateOrder (order) {
   return Order.update(
     { _id: mongoose.Types.ObjectId(order._id) },
     order,
-    { upsert: true }).then(() => Order.findOne({ _id: order._id }));
+    { upsert: true }
+  ).then(() => Order.findOne({ _id: order._id }));
 }
 
 async function deleteOrder (id) {

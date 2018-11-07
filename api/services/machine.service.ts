@@ -2,6 +2,9 @@ import { Printer3D } from '../models/machines/3d-printer.model';
 import { Other } from '../models/machines/other.machine.model';
 import { MillingMachine } from '../models/machines/milling.machine.model';
 import { Lasercutter } from '../models/machines/lasercutter.model';
+/* eslint-disable no-unused-vars */
+import { IError, ErrorType } from './router.service';
+/* eslint-enable no-unused-vars */
 
 /**
  * This method gets a specific type of machine (or all) and returns a promise with the results
@@ -87,6 +90,7 @@ function getMachineType (type: String, limit?: Number, skip?: Number) {
  * @returns a promise with the results
  */
 function create (type, params) {
+  let error: IError;
   if (!params.type) {
     params.type = type;
   }
@@ -100,7 +104,12 @@ function create (type, params) {
     case 'millingMachine':
       return (new MillingMachine(params)).save();
     default:
-      return Promise.reject('Machine Type not supported!');
+      error = {
+        name: 'MACHINE_TYPE_NOT_SUPPORTED',
+        message: 'Machine Type not supported!',
+        type: ErrorType.MACHINE_TYPE_NOT_SUPPORTED
+      };
+      return Promise.reject(error);
   }
 }
 
@@ -111,6 +120,7 @@ function create (type, params) {
  * @returns a promise with the results
  */
 function deleteById (type, _id) {
+  let error: IError;
   switch (type) {
     case '3d-printer':
       return Printer3D.deleteOne({ _id });
@@ -121,7 +131,12 @@ function deleteById (type, _id) {
     case 'millingMachine':
       return MillingMachine.deleteOne({ _id });
     default:
-      return Promise.reject('Machine Type not supported!');
+      error = {
+        name: 'MACHINE_TYPE_NOT_SUPPORTED',
+        message: 'Machine Type not supported!',
+        type: ErrorType.MACHINE_TYPE_NOT_SUPPORTED
+      };
+      return Promise.reject(error);
   }
 }
 
@@ -132,6 +147,7 @@ function deleteById (type, _id) {
  * @returns a promise with the results
  */
 function get (type, _id) {
+  let error: IError;
   switch (type) {
     case '3d-printer':
       return Printer3D.findOne({ _id });
@@ -142,7 +158,12 @@ function get (type, _id) {
     case 'millingMachine':
       return MillingMachine.findOne({ _id });
     default:
-      return Promise.reject('Machine Type not supported!');
+      error = {
+        name: 'MACHINE_TYPE_NOT_SUPPORTED',
+        message: 'Machine Type not supported!',
+        type: ErrorType.MACHINE_TYPE_NOT_SUPPORTED
+      };
+      return Promise.reject(error);
   }
 }
 
@@ -154,30 +175,40 @@ function get (type, _id) {
  * @returns a promise with the result
  */
 function update (type, _id, machine) {
+  let error: IError;
   delete machine.__v;
   switch (type) {
     case '3d-printer':
       return Printer3D.update(
         { _id },
         machine,
-        { upsert: true }).then(() => Printer3D.findOne({ _id }));
+        { upsert: true }
+      ).then(() => Printer3D.findOne({ _id }));
     case 'lasercutter':
       return Lasercutter.update(
         { _id },
         machine,
-        { upsert: true }).then(() => Lasercutter.findOne({ _id }));
+        { upsert: true }
+      ).then(() => Lasercutter.findOne({ _id }));
     case 'otherMachine':
       return Other.update(
         { _id },
         machine,
-        { upsert: true }).then(() => Other.findOne({ _id }));
+        { upsert: true }
+      ).then(() => Other.findOne({ _id }));
     case 'millingMachine':
       return MillingMachine.update(
         { _id },
         machine,
-        { upsert: true }).then(() => MillingMachine.findOne({ _id }));
+        { upsert: true }
+      ).then(() => MillingMachine.findOne({ _id }));
     default:
-      return Promise.reject('Machine Type not supported!');
+      error = {
+        name: 'MACHINE_TYPE_NOT_SUPPORTED',
+        message: 'Machine Type not supported!',
+        type: ErrorType.MACHINE_TYPE_NOT_SUPPORTED
+      };
+      return Promise.reject(error);
   }
 }
 
@@ -187,6 +218,7 @@ function update (type, _id, machine) {
  * @returns a promise with the result
  */
 function count (type) {
+  let error: IError;
   switch (type) {
     case '3d-printer':
       return Printer3D.countDocuments();
@@ -197,7 +229,12 @@ function count (type) {
     case 'millingMachine':
       return MillingMachine.countDocuments();
     default:
-      return Promise.reject('Machine Type not supported!');
+      error = {
+        name: 'MACHINE_TYPE_NOT_SUPPORTED',
+        message: 'Machine Type not supported!',
+        type: ErrorType.MACHINE_TYPE_NOT_SUPPORTED
+      };
+      return Promise.reject(error);
   }
 }
 

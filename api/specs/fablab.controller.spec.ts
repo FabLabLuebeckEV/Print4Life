@@ -30,7 +30,7 @@ describe('Fablab Controller', () => {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
-      const fablabs = response.body.fablabs;
+      const { fablabs } = { fablabs: response.body.fablabs };
       expect(response.statusCode).toEqual(200);
       expect(fablabs).toBeDefined();
       expect(fablabs.length).toBeGreaterThan(0);
@@ -43,7 +43,7 @@ describe('Fablab Controller', () => {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
-      const fablab = response.body.fablab;
+      const { fablab } = { fablab: response.body.fablab };
       expect(response.statusCode).toEqual(200);
       expect(fablab).toBeDefined();
       done();
@@ -98,7 +98,7 @@ describe('Fablab Controller', () => {
       body: testFablab,
       json: true
     }, (error, response) => {
-      const fablab = response.body.fablab;
+      const { fablab } = { fablab: response.body.fablab };
       expect(response.statusCode).toEqual(201);
       expect(fablab).toBeDefined();
       expect(fablab.name).toEqual(testFablab.name);
@@ -143,7 +143,7 @@ describe('Fablab Controller', () => {
       body: testFablab,
       json: true
     }, (error, response) => {
-      const fablab = response.body.fablab;
+      const { fablab } = { fablab: response.body.fablab };
       expect(response.statusCode).toEqual(201);
       expect(fablab).toBeDefined();
       expect(fablab.name).toEqual(testFablab.name);

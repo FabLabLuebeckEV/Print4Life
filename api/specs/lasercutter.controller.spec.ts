@@ -36,7 +36,7 @@ describe('Lasercutter Controller', async () => {
       json: true
     }, (error, response) => {
       if (response.body && response.body.lasercutters) {
-        const lasercutters = response.body.lasercutters;
+        const { lasercutters } = { lasercutters: response.body.lasercutters };
         expect(response.statusCode).toEqual(200);
         expect(lasercutters).toBeDefined();
         expect(lasercutters.length).toBeGreaterThan(-1);
@@ -69,7 +69,7 @@ describe('Lasercutter Controller', async () => {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
-      const count = response.body.count;
+      const { count } = { count: response.body.count };
       expect(response.statusCode).toEqual(200);
       expect(count).toBeDefined();
       expect(count).toBeGreaterThan(-1);
@@ -82,7 +82,7 @@ describe('Lasercutter Controller', async () => {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
-      const laserTypes = response.body.laserTypes;
+      const { laserTypes } = { laserTypes: response.body.laserTypes };
       expect(response.statusCode).toEqual(200);
       expect(laserTypes).toBeDefined();
       expect(laserTypes.length).toBeGreaterThan(-1);
@@ -97,7 +97,7 @@ describe('Lasercutter Controller', async () => {
         body: testLasercutter,
         json: true
       }, (error, response) => {
-        const lasercutter = response.body.lasercutter;
+        const { lasercutter } = { lasercutter: response.body.lasercutter };
         expect(response.statusCode).toEqual(201);
         expect(lasercutter).toBeDefined();
         expect(lasercutter.deviceName).toEqual(testLasercutter.deviceName);
@@ -153,7 +153,7 @@ describe('Lasercutter Controller', async () => {
       body: testLasercutter,
       json: true
     }, (error, response) => {
-      const lasercutter = response.body.lasercutter;
+      const { lasercutter } = { lasercutter: response.body.lasercutter };
       expect(response.statusCode).toEqual(201);
       expect(lasercutter).toBeDefined();
       expect(lasercutter.deviceName).toEqual(testLasercutter.deviceName);

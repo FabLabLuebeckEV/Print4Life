@@ -2,7 +2,7 @@ import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 import config from './config/config';
 
-const loggerRotateOptions = config.loggerRotateOptions;
+const { loggerRotateOptions } = { loggerRotateOptions: config.loggerRotateOptions };
 
 
 /**
@@ -29,16 +29,19 @@ const logger = winston.createLogger(
           format: filterOnly('info'),
           level: 'info',
           ...loggerRotateOptions
-        }),
+        }
+      ),
       new DailyRotateFile(
         {
           filename: 'error.log',
           format: filterOnly('error'),
           level: 'error',
           ...loggerRotateOptions
-        }),
+        }
+      ),
       new winston.transports.Console()
     ]
-  });
+  }
+);
 
 export default logger;

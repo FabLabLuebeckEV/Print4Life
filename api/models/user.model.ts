@@ -4,7 +4,7 @@ import { addressSchema } from './address.model';
 import { roleSchema } from './role.model';
 import { languageSchema } from './language';
 
-const Schema = mongoose.Schema;
+const { Schema } = { Schema: mongoose.Schema };
 
 export const userSchema = new Schema({
   firstname: {
