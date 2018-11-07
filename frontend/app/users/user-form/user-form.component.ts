@@ -344,7 +344,7 @@ export class UserFormComponent implements OnInit {
   }
 
   private _translate() {
-    this.translateService.get(['userForm', 'roles', 'languages']).subscribe((translations => {
+    this.translateService.get(['userForm', 'roles', 'languages', 'address']).subscribe((translations => {
       const shownRoles = [];
       this.validRoles.forEach((role) => {
         const translated = translations['roles'][`${role}`];
@@ -392,10 +392,10 @@ export class UserFormComponent implements OnInit {
           email: translations['userForm'].labels.email,
           role: translations['userForm'].labels.role,
           isActivated: translations['userForm'].labels.isActivated,
-          street: translations['userForm'].labels.street,
-          zipCode: translations['userForm'].labels.zipCode,
-          city: translations['userForm'].labels.city,
-          country: translations['userForm'].labels.country,
+          street: translations['address'].street,
+          zipCode: translations['address'].zipCode,
+          city: translations['address'].city,
+          country: translations['address'].country,
           submit: !this.editView && !this.profileView
             ? translations['userForm'].labels.createSubmit
             : translations['userForm'].labels.editSubmit,

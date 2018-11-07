@@ -224,6 +224,12 @@
             "deleteQuestion2": "?"
         }
     },
+    "address": {
+        "street": "Street",
+        "zipCode": "Zip Code",
+        "city": "City",
+        "country": "Country"
+    },
     "orderForm": {
         "createTitle": "Create Order",
         "editTitle": "Edit Order",
@@ -337,10 +343,6 @@
             "email": "E-mail Address",
             "role": "Role",
             "isActivated": "Account activated",
-            "street": "Street",
-            "zipCode": "Zip Code",
-            "city": "City",
-            "country": "Country",
             "createSubmit": "Register",
             "editSubmit": "Edit",
             "fablab": "Fablab",

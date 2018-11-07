@@ -16,6 +16,7 @@ import * as moment from 'moment';
 import { User } from 'frontend/app/models/user.model';
 import { UserService } from 'frontend/app/services/user.service';
 import { Subscription } from 'rxjs';
+import { Address } from 'frontend/app/models/address.model';
 
 const localStorageOrderKey = 'orderManagementOrderFormOrder';
 const localStorageCommentKey = 'orderManagementOrderFormComment';
@@ -40,6 +41,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, undefined, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
+  shippingAddress: Address = new Address(undefined, undefined, undefined, undefined);
 
   loadingMachineTypes: Boolean;
   machineTypes: Array<String> = [];
@@ -77,6 +79,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       author: '',
       content: '',
       createdAt: '',
+      street: '',
+      zipCode: '',
+      city: '',
+      country: '',
     },
     modals: {
       ok: '',
@@ -437,7 +443,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
-    this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date']).subscribe((translations => {
+    this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date', 'address']).subscribe((translations => {
       const shownMachineTypes = [];
       const shownStatus = [];
       this.machineTypes.forEach((mType) => {
@@ -498,7 +504,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           newComment: translations['orderForm'].labels.newComment,
           author: translations['orderForm'].labels.author,
           content: translations['orderForm'].labels.content,
-          createdAt: translations['orderForm'].labels.createdAt
+          createdAt: translations['orderForm'].labels.createdAt,
+          street: translations['address'].street,
+          zipCode: translations['address'].zipCode,
+          city: translations['address'].city,
+          country: translations['address'].country,
         },
         modals: {
           ok: translations['orderForm'].modals.ok,
