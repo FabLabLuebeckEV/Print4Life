@@ -37,7 +37,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
   order: Order = new Order(
-    undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, undefined);
+    undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, undefined, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
 

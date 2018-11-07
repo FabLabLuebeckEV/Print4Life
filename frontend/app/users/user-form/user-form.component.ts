@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { User, Address, Role, Language } from '../../models/user.model';
+import { User, Role, Language } from '../../models/user.model';
+import { Address } from '../../models/address.model';
 import { UserService } from '../../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
