@@ -106,7 +106,7 @@ deploy_staging:
 deploy_production:
   stage: deploy
   environment:
-    name: staging
+    name: production
   variables: 
     NODE_ENV: "prod"
     DATABASE_HOST: "localhost"
