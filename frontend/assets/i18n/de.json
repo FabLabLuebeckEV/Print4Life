@@ -23,7 +23,7 @@
     },
     "dropdown": {
         "machines": {
-            "title": "Machinen",
+            "title": "Maschinen",
             "listMachines": "Maschinenliste",
             "createMachine": "Maschine anlegen"
         },
@@ -385,7 +385,7 @@
         }
     },
     "tableComponent": {
-        "Device Type": "Machinen Typ",
+        "Device Type": "Maschinen Typ",
         "Device Name": "Maschinen Name",
         "Manufacturer": "Hersteller",
         "Fablab": "Fablab",
