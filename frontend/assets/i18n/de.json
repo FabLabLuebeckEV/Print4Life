@@ -75,11 +75,11 @@
         "modals": {
             "yes": "Ja",
             "abort": "Nein",
-            "deleteValue": "Löschen",
+            "deleteValue": "Deaktivieren",
             "abortValue": "Abbrechen",
-            "deleteHeader": "Möchten Sie wirklich diese Maschine löschen?",
+            "deleteHeader": "Möchten den Status der Maschine ändern?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "löschen wollen?"
+            "deleteQuestion2": "den Status wechseln wollen?"
         }
     },
     "machineForm": {
@@ -106,7 +106,12 @@
             "laserTypes": "Lasertypen",
             "laserPower": "Leistung des Lasers",
             "maxResolution": "Maximale Auflösung",
-            "typeOfMachine": "Typ der Maschine"
+            "typeOfMachine": "Typ der Maschine",
+            "isActivated": "Status"
+        },
+        "buttons": {
+            "activatedTrue": "Aktiv",
+            "activatedFalse": "Inaktiv"
         },
         "modals": {
             "ok": "Ok",
@@ -385,6 +390,7 @@
         "Manufacturer": "Hersteller",
         "Fablab": "Fablab",
         "Description": "Beschreibung",
+        "Comment": "Kommentar",
         "Created at": "Erstellt am",
         "Projectname": "Projektname",
         "Owner": "Ersteller",

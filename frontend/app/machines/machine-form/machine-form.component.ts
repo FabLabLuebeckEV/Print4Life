@@ -52,7 +52,12 @@ export class MachineFormComponent implements OnInit {
       laserTypes: '',
       laserPower: '',
       maxResolution: '',
-      typeOfMachine: ''
+      typeOfMachine: '',
+      isActivated: ''
+    },
+    buttons: {
+      activatedTrue: '',
+      activatedFalse: ''
     },
     modals: {
       ok: '',
@@ -221,20 +226,20 @@ export class MachineFormComponent implements OnInit {
         return new Printer3D(undefined, undefined, undefined,
           this.machineService.camelCaseTypes(type), undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined);
+          undefined, undefined);
       case 'Milling Machine':
         return new MillingMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined);
+          undefined, undefined, undefined);
       case 'Other Machine':
         return new OtherMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
-          undefined, undefined, undefined);
+          undefined, undefined, undefined, undefined);
       case 'Lasercutter':
         return new Lasercutter(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined, undefined);
+          undefined, undefined, undefined, undefined);
       default:
-        return new Machine(undefined, undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined);
+        return new Machine(undefined, undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined, undefined);
     }
   }
 
@@ -264,6 +269,10 @@ export class MachineFormComponent implements OnInit {
             : translations['machineForm'].modals.creatingSuccessMsg,
           errorMessage: this.editView ? translations['machineForm'].modals.updatingError : ''
         },
+        buttons: {
+          activatedTrue: translations['machineForm'].buttons.activatedTrue,
+          activatedFalse: translations['machineForm'].buttons.activatedFalse
+        },
         labels: {
           submit: this.editView ? translations['machineForm'].labels.edit : translations['machineForm'].labels.create,
           deviceName: translations['machineForm'].labels.deviceName,
@@ -283,7 +292,8 @@ export class MachineFormComponent implements OnInit {
           laserTypes: translations['machineForm'].labels.laserTypes,
           laserPower: translations['machineForm'].labels.laserPower,
           maxResolution: translations['machineForm'].labels.maxResolution,
-          typeOfMachine: translations['machineForm'].labels.typeOfMachine
+          typeOfMachine: translations['machineForm'].labels.typeOfMachine,
+          isActivated: translations['machineForm'].labels.isActivated
         },
         messages: {
           deviceName: translations['machineForm'].messages.deviceName,

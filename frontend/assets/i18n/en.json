@@ -77,8 +77,8 @@
             "abort": "No",
             "deleteValue": "Delete",
             "abortValue": "Abort",
-            "deleteHeader": "Do you really want to delete the machine?",
-            "deleteQuestion": "Are you sure you want to delete",
+            "deleteHeader": "Do you really want toggle machine's status?",
+            "deleteQuestion": "Are you sure you want to toggle",
             "deleteQuestion2": "?"
         }
     },
@@ -106,7 +106,12 @@
             "laserTypes": "Laser Types",
             "laserPower": "Laserpower",
             "maxResolution": "Max Resolution",
-            "typeOfMachine": "Type of Machine"
+            "typeOfMachine": "Type of Machine",
+            "isActivated": "Status"
+        },
+        "buttons": {
+            "activatedTrue": "active",
+            "activatedFalse": "inactive"
         },
         "modals": {
             "ok": "Ok",
@@ -385,6 +390,7 @@
         "Manufacturer": "Manufacturer",
         "Fablab": "Fablab",
         "Description": "Description",
+        "Comment": "Comment",
         "Created at": "Created at",
         "Projectname": "Projectname",
         "Owner": "Owner",

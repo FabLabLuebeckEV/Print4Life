@@ -169,21 +169,52 @@ export class MachineListComponent implements OnInit {
       const abortButton = new ModalButton(this.translationFields.modals.abort,
         'btn btn-secondary', this.translationFields.modals.abortValue);
       const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
-        'modal-header header-danger',
+        'modal-header header-warning',
         `${this.translationFields.modals.deleteQuestion} ` +
         `${machine.obj[`Device Name`].label} ${this.translationFields.modals.deleteQuestion2}`
         , deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
           this.machineService.deleteMachine(
-            machine.obj[`Device Type`].label, machine.obj.id.label).then(() => {
-              this.displayedMachines.splice(machineIdx, 1);
+            machine.obj[`Device Type`].label, machine.obj.id.label).then(async (elem) => {
+              // this.displayedMachines.splice(machineIdx, 1);
               // XXX: Ugly Hack to trigger update of table component
+              this.displayedMachines[machineIdx] = await this._createTableItem(elem[machine.obj[`Device Type`].label]);
               const copy = JSON.parse(JSON.stringify(this.displayedMachines));
               this.displayedMachines = copy;
             });
         }
       });
+    }
+  }
+
+  private async _createTableItem(elem): Promise<TableItem> {
+    let fablab;
+    let item;
+    try {
+      const resFab = await this.fablabService.getFablab(elem.fablabId);
+      fablab = resFab.fablab;
+      elem.fablab = fablab;
+    } finally {
+      item = new TableItem();
+      item.obj['id'] = { label: elem._id };
+      item.obj[`Device Type`] = { label: elem.type };
+      item.obj[`Device Name`] = { label: elem.deviceName, href: `./${elem.type}s/${elem._id}` };
+      item.obj[`Manufacturer`] = { label: elem.manufacturer };
+      item.obj[`Fablab`] = { label: fablab.hasOwnProperty('name') ? fablab.name : '' };
+      item.obj[`Comment`] = { label: elem.comment };
+      if (this.userIsAdmin) {
+        item.button1.label = this.translationFields.buttons.updateLabel;
+        item.button1.href = `./${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
+        item.button1.class = 'btn btn-warning spacing';
+        item.button1.icon = this.config.icons.edit;
+        item.button2.label = this.translationFields.buttons.deleteLabel;
+        item.button2.eventEmitter = true;
+        item.button2.class = elem.activated ? 'btn btn-success spacing' : 'btn btn-danger spacing';
+        item.button2.icon = elem.activated ? this.config.icons.toggleOn : this.config.icons.toggleOff;
+        item.button2.refId = elem._id;
+      }
+      return item;
     }
   }
 
@@ -276,28 +307,7 @@ export class MachineListComponent implements OnInit {
 
     for (const type of Object.keys(machines)) {
       for (const elem of machines[type]) {
-        const resFab = await this.fablabService.getFablab(elem.fablabId);
-        const fablab = resFab.fablab;
-        elem.fablab = fablab;
-        const item = new TableItem();
-        item.obj['id'] = { label: elem._id };
-        item.obj[`Device Type`] = { label: elem.type };
-        item.obj[`Device Name`] = { label: elem.deviceName, href: `./${elem.type}s/${elem._id}` };
-        item.obj[`Manufacturer`] = { label: elem.manufacturer };
-        item.obj[`Fablab`] = { label: fablab.name };
-        item.obj[`Description`] = { label: '' };
-        if (this.userIsAdmin) {
-          item.button1.label = this.translationFields.buttons.updateLabel;
-          item.button1.href = `./${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
-          item.button1.class = 'btn btn-warning spacing';
-          item.button1.icon = this.config.icons.edit;
-          item.button2.label = this.translationFields.buttons.deleteLabel;
-          item.button2.eventEmitter = true;
-          item.button2.class = 'btn btn-danger spacing';
-          item.button2.icon = this.config.icons.delete;
-          item.button2.refId = elem._id;
-        }
-        arr.push(item);
+        arr.push(await this._createTableItem(elem));
       }
     }
     this.spinner.hide();

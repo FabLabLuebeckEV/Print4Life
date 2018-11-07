@@ -320,6 +320,7 @@ router.route('/').post((req, res) => {
     "fablabId": "5b453ddb5cf4a9574849e98a",
     "deviceName": "Test Lasercutter",
     "manufacturer": "Test Manufacturer",
+    "activated": false,,
     "laserTypes": [
         {
             "_id": "5b695b6ff371a21d0c858f2b",
@@ -379,16 +380,14 @@ router.route('/:id').delete((req, res) => {
     logger.error({ error: checkId.error });
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    let lasercutter;
     lasercutterCtrl.get(req.params.id).then((l) => {
       if (l) {
-        lasercutter = l;
         lasercutterCtrl.deleteById(req.params.id).then((result) => {
           if (result) {
             lasercutterCtrl.get(req.params.id).then((result) => {
-              if (!result) {
-                logger.info(`DELETE Lasercutter with result ${JSON.stringify(lasercutter)}`);
-                res.status(200).send({ lasercutter });
+              if (result) {
+                logger.info(`DELETE Lasercutter with result ${JSON.stringify(result)}`);
+                res.status(200).send({ lasercutter: result });
               }
             }).catch((err) => {
               const msg = {

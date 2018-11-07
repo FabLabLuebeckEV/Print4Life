@@ -114,29 +114,47 @@ function create (type, params) {
 }
 
 /**
- * This method deletes a specific type of machine by a given id and returns a promise with the success or failure
- * type is the type of machine to delete
+ * This method toggles the activation status of a specific type of machine by a given id and returns
+ * a promise with the success or failure type is the type of machine to delete
  * _id is the id of the machine
  * @returns a promise with the results
  */
-function deleteById (type, _id) {
+async function deleteById (type, _id) {
   let error: IError;
-  switch (type) {
-    case '3d-printer':
-      return Printer3D.deleteOne({ _id });
-    case 'lasercutter':
-      return Lasercutter.deleteOne({ _id });
-    case 'otherMachine':
-      return Other.deleteOne({ _id });
-    case 'millingMachine':
-      return MillingMachine.deleteOne({ _id });
-    default:
-      error = {
-        name: 'MACHINE_TYPE_NOT_SUPPORTED',
-        message: 'Machine Type not supported!',
-        type: ErrorType.MACHINE_TYPE_NOT_SUPPORTED
-      };
-      return Promise.reject(error);
+  try {
+    switch (type) {
+      case '3d-printer': {
+        const printer3d = await Printer3D.findOne({ _id });
+        return Printer3D.updateOne({ _id }, { activated: !printer3d.activated });
+      }
+      case 'lasercutter': {
+        const lasercutter = await Lasercutter.findOne({ _id });
+        return Lasercutter.updateOne({ _id }, { activated: !lasercutter.activated });
+      }
+      case 'otherMachine': {
+        const otherMachine = await Other.findOne({ _id });
+        return Other.updateOne({ _id }, { activated: !otherMachine.activated });
+      }
+      case 'millingMachine': {
+        const millingMachine = await MillingMachine.findOne({ _id });
+        return MillingMachine.updateOne({ _id }, { activated: !millingMachine.activated });
+      }
+      default:
+        error = {
+          name: 'MACHINE_TYPE_NOT_SUPPORTED',
+          message: 'Machine Type not supported!',
+          type: ErrorType.MACHINE_TYPE_NOT_SUPPORTED
+        };
+        return Promise.reject(error);
+    }
+  } catch (err) {
+    error = {
+      name: 'MACHINE_NOT_FOUND',
+      stack: err.stack,
+      message: 'Machine not found!',
+      type: ErrorType.MACHINE_NOT_FOUND
+    };
+    return Promise.reject(error);
   }
 }
 

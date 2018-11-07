@@ -1,5 +1,17 @@
 import { Injectable } from '@angular/core';
-import { faArrowLeft, faWrench, faTrashAlt, faPlus, faArrowRight, faGlobeAmericas, faFrown } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowLeft,
+  faWrench,
+  faTrashAlt,
+  faPlus,
+  faArrowRight,
+  faGlobeAmericas,
+  faFrown,
+  faToggleOn,
+  faToggleOff,
+  faCheckCircle,
+  faTimesCircle
+} from '@fortawesome/free-solid-svg-icons';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +24,8 @@ export class ConfigService {
       back: faArrowLeft,
       edit: faWrench,
       delete: faTrashAlt,
+      toggleOn: faCheckCircle,
+      toggleOff: faTimesCircle,
       disable: faFrown,
       add: faPlus,
       forward: faArrowRight,

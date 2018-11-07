@@ -252,6 +252,7 @@ router.route('/').post((req, res) => {
     "fablabId": "5b453ddb5cf4a9574849e98a",
     "deviceName": "Test Milling Machine",
     "manufacturer": "Test Manufacturer",
+    "activated": false,
     "workspaceX": 2,
     "workspaceY": 2,
     "workspaceZ": 2,
@@ -310,9 +311,9 @@ router.route('/:id').delete((req, res) => {
         millingMachineCtrl.deleteById(req.params.id).then((result) => {
           if (result) {
             millingMachineCtrl.get(req.params.id).then((result) => {
-              if (!result) {
+              if (result) {
                 logger.info(`DELETE Milling Machine with result ${JSON.stringify(millingMachine)}`);
-                res.status(200).send({ millingMachine });
+                res.status(200).send({ millingMachine: result });
               }
             }).catch((err) => {
               const msg = {

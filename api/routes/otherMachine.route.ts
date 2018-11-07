@@ -221,6 +221,7 @@ router.route('/').post((req, res) => {
     "_id": "5b66fefec92bc40cd9dcfef3",
     "fablabId": "5b453ddb5cf4a9574849e98a",
     "deviceName": "Updated",
+    "activated": false,
     "manufacturer": "Test Manufacturer",
     "typeOfMachine": "Test Machine",
     "comment": "Create Test",
@@ -277,9 +278,9 @@ router.route('/:id').delete((req, res) => {
         otherMachineCtrl.deleteById(req.params.id).then((result) => {
           if (result) {
             otherMachineCtrl.get(req.params.id).then((result) => {
-              if (!result) {
+              if (result) {
                 logger.info(`DELETE Other Machine with result ${JSON.stringify(otherMachine)}`);
-                res.status(200).send({ otherMachine });
+                res.status(200).send({ otherMachine: result });
               }
             }).catch((err) => {
               const msg = {

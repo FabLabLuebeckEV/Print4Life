@@ -9,6 +9,7 @@ const testOtherMachine = {
   fablabId: '5b453ddb5cf4a9574849e98a',
   deviceName: 'Test Other Machine',
   manufacturer: 'Test Manufacturer',
+  activated: true,
   typeOfMachine: 'Test Machine',
   comment: 'Create Test'
 };
@@ -206,14 +207,8 @@ describe('Other Machine Controller', () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body.otherMachine).toBeDefined();
         expect(response.body.otherMachine._id).toEqual(responseMachine._id);
-        request.get(`${endpoint}/${responseMachine._id}`, {
-          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
-          json: true
-        }, (error, response) => {
-          expect(response.statusCode).toEqual(404);
-          expect(response.body.otherMachine).toBeUndefined();
-          done();
-        });
+        expect(response.body.otherMachine.activated).toEqual(false);
+        done();
       });
     });
   });

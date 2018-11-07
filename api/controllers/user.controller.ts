@@ -54,6 +54,8 @@ async function getLanguages () {
 }
 
 function login (user, password): Promise<Object> {
+  let error: IError;
+
   return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
     if (isMatch && !err && user.activated) {
       const signObj = {
@@ -70,7 +72,7 @@ function login (user, password): Promise<Object> {
       const token = jwt.sign(signObj, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
       resolve({ success: true, token: `JWT ${token}` });
     } else if (!user.activated) {
-      const error: IError = {
+      error = {
         name: 'USER_DEACTIVATED',
         data: { userId: user._id },
         message: 'Your account is not activated.',
@@ -78,7 +80,7 @@ function login (user, password): Promise<Object> {
       };
       reject(error);
     } else {
-      const error: IError = {
+      error = {
         name: 'AUTHENTIFICATION_FAILED',
         message: 'Authentication failed. Wrong password.',
         type: ErrorType.AUTHENTIFICATION_FAILED
