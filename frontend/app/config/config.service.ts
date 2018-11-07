@@ -8,7 +8,9 @@ import {
   faGlobeAmericas,
   faFrown,
   faToggleOn,
-  faToggleOff
+  faToggleOff,
+  faCheckCircle,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 @Injectable({
@@ -22,8 +24,8 @@ export class ConfigService {
       back: faArrowLeft,
       edit: faWrench,
       delete: faTrashAlt,
-      toggleOn: faToggleOn,
-      toggleOff: faToggleOff,
+      toggleOn: faCheckCircle,
+      toggleOff: faTimesCircle,
       disable: faFrown,
       add: faPlus,
       forward: faArrowRight,

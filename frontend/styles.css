@@ -42,3 +42,8 @@
     color: white;
     background-color: #dc3545;
 }
+
+.header-warning {
+    color: black;
+    background-color: #ffc107;
+}

@@ -390,6 +390,7 @@
         "Manufacturer": "Manufacturer",
         "Fablab": "Fablab",
         "Description": "Description",
+        "Comment": "Comment",
         "Created at": "Created at",
         "Projectname": "Projectname",
         "Owner": "Owner",
