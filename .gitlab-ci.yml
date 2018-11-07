@@ -29,12 +29,15 @@ build_dev:
   
 build_prod:
   stage: build
+  before_script:
+    - npm install
   # artifacts:
   #   paths:
   #   - ./
   #   expire_in: 1 day
   script:
-    - npm run deploy
+    - npm run deploy-staging
+    - npm run deploy-prod
   only: 
     - master
     - fix/ci
