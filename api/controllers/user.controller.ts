@@ -5,7 +5,7 @@ import { Role, roleSchema } from '../models/role.model';
 import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import emailService, { EmailOptions } from '../services/email.service';
-import { ErrorType } from '../services/router.service';
+import { ErrorType, IError } from '../services/router.service';
 import logger from '../logger';
 import Language, { languageSchema } from '../models/language';
 
@@ -54,6 +54,8 @@ async function getLanguages () {
 }
 
 function login (user, password): Promise<Object> {
+  let error: IError;
+
   return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
     if (isMatch && !err && user.activated) {
       const signObj = {
@@ -70,15 +72,20 @@ function login (user, password): Promise<Object> {
       const token = jwt.sign(signObj, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
       resolve({ success: true, token: `JWT ${token}` });
     } else if (!user.activated) {
-      reject(
-        {
-          type: ErrorType.USER_DEACTIVATED,
-          success: false,
-          data: { userId: user._id },
-          msg: 'Your account is not activated.'
-        });
+      error = {
+        name: 'USER_DEACTIVATED',
+        data: { userId: user._id },
+        message: 'Your account is not activated.',
+        type: ErrorType.USER_DEACTIVATED
+      };
+      reject(error);
     } else {
-      reject({ success: false, msg: 'Authentication failed. Wrong password.' });
+      error = {
+        name: 'AUTHENTIFICATION_FAILED',
+        message: 'Authentication failed. Wrong password.',
+        type: ErrorType.AUTHENTIFICATION_FAILED
+      };
+      reject(error);
     }
   }));
 }
@@ -150,7 +157,8 @@ async function updateUser (user) {
   return User.update(
     { _id: user._id },
     user,
-    { upsert: true }).then(() => User.findOne({ _id: user._id }));
+    { upsert: true }
+  ).then(() => User.findOne({ _id: user._id }));
 }
 
 async function deleteUser (_id) {
@@ -166,12 +174,12 @@ async function changePassword (user, newPassword) {
 
 async function resetPassword (email: string) {
   const users = await getUsers({ email }, 1, 0);
-  let password;
+  let password: string;
   let user;
   if (users && users.length === 1) {
-    user = users[0];
+    ({ user } = { user: users[0] });
     user.password = `${Math.random().toString(36).substring(2, 15)}`;
-    password = user.password;
+    ({ password } = { password: `${user.password}` });
     try {
       await user.save();
       const options = {

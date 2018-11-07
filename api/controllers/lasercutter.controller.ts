@@ -37,4 +37,6 @@ function count () {
   return machineService.count(machineType);
 }
 
-export default { getAll, create, getLaserTypes, deleteById, get, update, count };
+export default {
+  getAll, create, getLaserTypes, deleteById, get, update, count
+};

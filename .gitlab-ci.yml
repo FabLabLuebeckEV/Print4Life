@@ -10,27 +10,29 @@ stages:
   - test
   - deploy
 
+before_script:
+  - npm install
+  - npm run build
+
 build_dev:
   stage: build
-  artifacts:
-    paths:
-    - ./
-    expire_in: 2h
-  script:
-    - npm install
-    - npm run build
+  # artifacts:
+  #   paths:
+  #   - ./
+  #   expire_in: 2h
+  script: 
+    - echo "done"
   except: 
     - master
     - fix/ci
   
 build_prod:
   stage: build
-  artifacts:
-    paths:
-    - ./
-    expire_in: 1 day
+  # artifacts:
+  #   paths:
+  #   - ./
+  #   expire_in: 1 day
   script:
-    - npm install
     - npm run deploy
   only: 
     - master
@@ -39,7 +41,6 @@ build_prod:
 test_build_api_docs:
   stage: apidocs
   script:
-    - npm install
     - npm run apidocs
 
 test:
@@ -62,7 +63,6 @@ test:
    - bash scripts/import.sh $DATABASE_HOST $DATABASE_PORT $DATABASE $DATABASE_DUMP
    - cd ..
    - NODE_ENV=$NODE_ENV
-   - npm install
    - npm run test
     
 deploy_staging:
@@ -88,6 +88,7 @@ deploy_staging:
    - eval $(ssh-agent -s)
    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
    - ssh-add <(echo "$STAGING_PRIVATE_KEY" | base64 --decode)
+   - npm install && npm run deploy
   script:
    - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "rm -rf /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && mkdir /home/$RUNNER_USERNAME/apps/$PROJECT_NAME"
    - rsync -rav -e ssh --exclude='.git/' --exclude='.gitlab-ci.yml' --exclude='node_modules' --delete-excluded ./ $RUNNER_USERNAME@$SERVER_ADDRESS:/home/$RUNNER_USERNAME/apps/$PROJECT_NAME

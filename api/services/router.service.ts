@@ -7,18 +7,25 @@ export enum ErrorType {
   USER_DEACTIVATED,
   UNAUTHORIZED,
   USERNAME_EXISTS,
-  EMAIL_EXISTS
+  EMAIL_EXISTS,
+  AUTHENTIFICATION_FAILED,
+  MACHINE_TYPE_NOT_SUPPORTED,
+  MACHINE_NOT_FOUND
 }
 
-export interface Error {
-  stack: any;
-  error: string;
+/* eslint-disable no-restricted-globals */
+export interface IError extends Error {
+  name: string;
+  stack?: string;
+  data?: any;
+  message: string;
   type: ErrorType;
 }
+/* eslint-enable no-restricted-globals */
 
 async function jwtValid (req, res, next) {
   let ret;
-  let error: Error;
+  let error: IError;
   const tc = await validatorService.checkToken(req);
   let msg = 'Unauthorized! Please login with a user who is allowed to use this route';
   if (_isPublicRoute(req.originalUrl, req.method) || (tc && tc.tokenOk)) {
@@ -26,11 +33,15 @@ async function jwtValid (req, res, next) {
   } else if (tc && !tc.tokenOk) {
     msg = 'Token expired. Please login again!';
     logger.error(`${tc.error.name}: ${msg}`);
-    error = { error: msg, stack: '', type: ErrorType.TOKEN_EXPIRED };
+    error = {
+      name: 'TOKEN_EXPIRED', message: msg, stack: '', type: ErrorType.TOKEN_EXPIRED
+    };
     ret = res.status(401).send(error);
   } else {
     logger.error(msg);
-    error = { error: msg, stack: '', type: ErrorType.UNAUTHORIZED };
+    error = {
+      name: 'UNAUTHORIZED', message: msg, stack: '', type: ErrorType.UNAUTHORIZED
+    };
     ret = res.status(403).send(error);
   }
   return ret;

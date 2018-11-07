@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -15,19 +15,25 @@ import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { User } from 'frontend/app/models/user.model';
 import { UserService } from 'frontend/app/services/user.service';
+import { Subscription } from 'rxjs';
 
+const localStorageOrderKey = 'orderManagementOrderFormOrder';
+const localStorageCommentKey = 'orderManagementOrderFormComment';
 
 @Component({
   selector: 'app-create-order',
   templateUrl: './create-order.component.html',
   styleUrls: ['./create-order.component.css']
 })
-export class CreateOrderComponent implements OnInit {
+export class CreateOrderComponent implements OnInit, OnDestroy {
+  @ViewChild('createOrderForm') createOrderForm;
+  @ViewChild('commentContent') commentContentField;
   config: any;
   publicIcon: any;
   selectedType: String;
   editView: Boolean = false;
   routeChanged: Boolean;
+  formSubscription: Subscription;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
   order: Order = new Order(
@@ -121,6 +127,12 @@ export class CreateOrderComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    if (this.formSubscription) {
+      this.formSubscription.unsubscribe();
+    }
+  }
+
   async ngOnInit() {
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
@@ -131,6 +143,20 @@ export class CreateOrderComponent implements OnInit {
     await this._initializeOrder(this.orderId);
     this.machineSelected();
     this._translate();
+    if (this.createOrderForm && !this.editView) {
+      this.formSubscription = this.createOrderForm.form.valueChanges.subscribe(async (changes) => {
+        try {
+          this.order.projectname = changes.projectname;
+          this.order.machine._id = changes.selectedMachine;
+          this.order.machine.type = await this._translateMachineType(this.order.machine['shownType']);
+          this.comment.content = changes.content;
+          localStorage.setItem(localStorageOrderKey, JSON.stringify(this.order));
+          localStorage.setItem(localStorageCommentKey, JSON.stringify(this.comment));
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    }
   }
 
   onSubmitComment(form) {
@@ -198,6 +224,8 @@ export class CreateOrderComponent implements OnInit {
       const errorMsg = this.translationFields.modals.error;
       this.orderService.createOrder(orderCopy).then((result) => {
         if (result) {
+          localStorage.removeItem(localStorageOrderKey);
+          localStorage.removeItem(localStorageCommentKey);
           this._openSuccessMsg();
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
@@ -287,27 +315,39 @@ export class CreateOrderComponent implements OnInit {
 
   private async _initializeOrder(id) {
     this.loggedInUser = await this.userService.getUser();
-    if (id !== undefined) {
+    const order = localStorage.getItem(localStorageOrderKey);
+    const comment = localStorage.getItem(localStorageCommentKey);
+    if (comment) {
+      this.comment = JSON.parse(comment) as Comment;
+    }
+
+    if (order) {
+      this.order = JSON.parse(order) as Order;
+    } else if (id !== undefined) {
       await this._loadEditors();
       this.order = (await this.orderService.getOrderById(id)).order;
+    }
+
+    if (order || id !== undefined) {
       this.order.editor = this.order.editor && this.order.editor.length === 24 ?
         (await this.userService.getNamesOfUser(this.order.editor)).user : undefined;
       this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
       this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
-      this.order.comments.forEach(async (comment) => {
-        const user = await this.userService.getNamesOfUser(comment.author);
-        if (user) {
-          comment['authorName'] = user.firstname + ' ' + user.lastname;
-        }
-      });
+      if (this.order.comments) {
+        this.order.comments.forEach(async (comment) => {
+          const user = await this.userService.getNamesOfUser(comment.author);
+          if (user) {
+            comment['authorName'] = user.firstname + ' ' + user.lastname;
+          }
+        });
+      }
       const machineId = this.order.machine._id;
       await this.machineTypeChanged(this.order.machine['shownType']);
       this.order.machine._id = machineId;
     } else {
       this.order.owner = this.loggedInUser._id;
     }
-
   }
 
   private async _loadStatus() {
@@ -445,7 +485,7 @@ export class CreateOrderComponent implements OnInit {
         shownStatus: shownStatus,
         publicHint: translations['orderForm'].publicHint,
         labels: {
-          submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.editSubmit,
+          submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.createSubmit,
           sendComment: translations['orderForm'].labels.sendComment,
           projectName: translations['orderForm'].labels.projectName,
           owner: translations['orderForm'].labels.owner,

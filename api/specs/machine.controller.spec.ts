@@ -21,7 +21,7 @@ describe('Machine Controller', () => {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
-      const machines = response.body.machines;
+      const { machines } = { machines: response.body.machines };
       expect(response.statusCode).toEqual(200);
       expect(machines).toBeDefined();
       expect(Object.keys(machines).length).toBeGreaterThan(0);
@@ -38,7 +38,7 @@ describe('Machine Controller', () => {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
-      const types = response.body.types;
+      const { types } = { types: response.body.types };
       expect(response.statusCode).toEqual(200);
       expect(types).toBeDefined();
       expect(Object.keys(types).length).toBeGreaterThan(0);

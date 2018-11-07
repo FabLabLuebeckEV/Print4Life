@@ -37,7 +37,7 @@ describe('Milling Machine Controller', () => {
       json: true
     }, (error, response) => {
       if (response.body && response.body.millingMachines) {
-        const millingMachines = response.body.millingMachines;
+        const { millingMachines } = { millingMachines: response.body.millingMachines };
         expect(response.statusCode).toEqual(200);
         expect(millingMachines).toBeDefined();
         expect(millingMachines.length).toBeGreaterThan(-1);
@@ -70,7 +70,7 @@ describe('Milling Machine Controller', () => {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
-      const count = response.body.count;
+      const { count } = { count: response.body.count };
       expect(response.statusCode).toEqual(200);
       expect(count).toBeDefined();
       expect(count).toBeGreaterThan(-1);
@@ -85,7 +85,7 @@ describe('Milling Machine Controller', () => {
         body: testMillingMachine,
         json: true
       }, (error, response) => {
-        const millingMachine = response.body.millingMachine;
+        const { millingMachine } = { millingMachine: response.body.millingMachine };
         expect(response.statusCode).toEqual(201);
         expect(millingMachine).toBeDefined();
         expect(millingMachine.deviceName).toEqual(testMillingMachine.deviceName);
@@ -141,7 +141,7 @@ describe('Milling Machine Controller', () => {
       body: testMillingMachine,
       json: true
     }, (error, response) => {
-      const millingMachine = response.body.millingMachine;
+      const { millingMachine } = { millingMachine: response.body.millingMachine };
       expect(response.statusCode).toEqual(201);
       expect(millingMachine).toBeDefined();
       expect(millingMachine.deviceName).toEqual(testMillingMachine.deviceName);

@@ -33,4 +33,6 @@ function count () {
   return machineService.count(machineType);
 }
 
-export default { getAll, create, get, deleteById, update, count };
+export default {
+  getAll, create, get, deleteById, update, count
+};

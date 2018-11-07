@@ -134,18 +134,18 @@ router.route('/search').post((req, res) => {
   req.body.query = validatorService.checkQuery(req.body.query);
   orderCtrl.getOrders(req.body.query, req.body.limit, req.body.skip).then((orders) => {
     if (orders.length === 0) {
-      logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, ` +
-                `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+      logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
+                + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
       res.status(204).send({ orders });
     } else if (req.body.limit && req.body.skip) {
-      logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, ` +
-                `limit ${req.body.limit} skip ${req.body.skip} ` +
-                `holds partial results ${JSON.stringify(orders)}`);
+      logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
+                + `limit ${req.body.limit} skip ${req.body.skip} `
+                + `holds partial results ${JSON.stringify(orders)}`);
       res.status(206).send({ orders });
     } else {
-      logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, ` +
-                `limit ${req.body.limit} skip ${req.body.skip} ` +
-                `holds results ${JSON.stringify(orders)}`);
+      logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
+                + `limit ${req.body.limit} skip ${req.body.skip} `
+                + `holds results ${JSON.stringify(orders)}`);
       res.status(200).send({ orders });
     }
   }).catch((err) => {
