@@ -7,11 +7,13 @@ import {
   faArrowRight,
   faGlobeAmericas,
   faFrown,
-  faToggleOn,
-  faToggleOff,
   faCheckCircle,
   faTimesCircle
 } from '@fortawesome/free-solid-svg-icons';
+
+export enum RUN_ENV {
+  DEV, PROD, STAGING
+}
 
 @Injectable({
   providedIn: 'root'
