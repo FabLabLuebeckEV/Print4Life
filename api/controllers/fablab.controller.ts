@@ -44,7 +44,7 @@ import validatorService from '../services/validator.service';
     ]
 }
  */
-function getAll(req, res) {
+function getAll (req, res) {
   _getAll().then((fablabs) => {
     logger.info(`GET Fablabs with result ${JSON.stringify(fablabs)}`);
     fablabs.forEach((fablab) => {
@@ -100,7 +100,7 @@ function getAll(req, res) {
  *     }
  *
  */
-function get(req, res) {
+function get (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     logger.error({ error: checkId.error });
@@ -171,7 +171,7 @@ function get(req, res) {
  *
  *
  */
-function create(req, res) {
+function create (req, res) {
   _create(req.body).then((fablab) => {
     logger.info(`POST Fablab with result ${JSON.stringify(fablab)}`);
     res.status(201).send({ fablab });
@@ -242,7 +242,7 @@ function create(req, res) {
  *
  *
  */
-function update(req, res) {
+function update (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     logger.error({ error: checkId.error });
@@ -305,7 +305,7 @@ function update(req, res) {
       }
   }
  */
-function deleteById(req, res) {
+function deleteById (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -320,21 +320,21 @@ function deleteById(req, res) {
   }
 }
 
-function getById(id) {
+function getById (id) {
   const _id = mongoose.Types.ObjectId(id);
   return Fablab.findOne({ _id });
 }
 
-function _getAll() {
+function _getAll () {
   return Fablab.find();
 }
 
-function _create(params) {
+function _create (params) {
   const fablab = new Fablab(params);
   return fablab.save();
 }
 
-function _update(_id, params) {
+function _update (_id, params) {
   return Fablab.update(
     { _id },
     params,
@@ -342,7 +342,7 @@ function _update(_id, params) {
   ).then(() => Fablab.findOne({ _id }));
 }
 
-async function _deleteById(id) {
+async function _deleteById (id) {
   const fablab = await getById(id);
   fablab.activated = false;
   return _update(id, fablab);

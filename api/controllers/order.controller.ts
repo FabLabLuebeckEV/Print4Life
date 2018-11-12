@@ -109,7 +109,7 @@ import validatorService from '../services/validator.service';
       ]
     }
 */
-function getAll(req, res) {
+function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
   _getAll(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
@@ -181,7 +181,7 @@ function getAll(req, res) {
       }
   }
 */
-function search(req, res) {
+function search (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query);
   _getAll(req.body.query, req.body.limit, req.body.skip).then((orders) => {
     if (orders.length === 0) {
@@ -248,7 +248,7 @@ function search(req, res) {
       }
   }
 */
-function count(req, res) {
+function count (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query);
   _count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
@@ -329,7 +329,7 @@ function count(req, res) {
       }
   }
  */
-function create(req, res) {
+function create (req, res) {
   _create(req.body).then((order) => {
     logger.info(`POST Order with result ${JSON.stringify(order)}`);
     res.status(201).send({ order });
@@ -410,7 +410,7 @@ function create(req, res) {
       }
   }
  */
-function update(req, res) {
+function update (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -470,7 +470,7 @@ function update(req, res) {
       }
   }
  */
-function deleteById(req, res) {
+function deleteById (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -520,7 +520,7 @@ function deleteById(req, res) {
       }
   }
  */
-function getStatus(req, res) {
+function getStatus (req, res) {
   _getStatus().then((status) => {
     if (!status) {
       logger.info('GET status without result');
@@ -580,7 +580,7 @@ function getStatus(req, res) {
       }
   }
  */
-function createComment(req, res) {
+function createComment (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -654,7 +654,7 @@ function createComment(req, res) {
       }
   }
  */
-function get(req, res) {
+function get (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -674,7 +674,7 @@ function get(req, res) {
   }
 }
 
-function _getAll(query?: any, limit?: any, skip?: any) {
+function _getAll (query?: any, limit?: any, skip?: any) {
   let l: Number;
   let s: Number;
   let promise;
@@ -688,11 +688,11 @@ function _getAll(query?: any, limit?: any, skip?: any) {
   return promise;
 }
 
-function _get(id) {
+function _get (id) {
   return Order.findOne({ _id: id });
 }
 
-function _create(order) {
+function _create (order) {
   order.token = uuid();
   order.createdAt = new Date();
   if (order.comments) {
@@ -705,7 +705,7 @@ function _create(order) {
   return Order(_rmDbVars(order)).save();
 }
 
-function _update(order) {
+function _update (order) {
   delete order.__v;
   if (!order.createdAt) {
     order.createdAt = new Date();
@@ -717,13 +717,13 @@ function _update(order) {
   ).then(() => Order.findOne({ _id: order._id }));
 }
 
-async function _deleteById(id) {
+async function _deleteById (id) {
   const order = await _get(id);
   order.status = 'deleted';
   return _update(order);
 }
 
-async function _getStatus() {
+async function _getStatus () {
   return new Promise((resolve, reject) => {
     const status = orderSchema.paths.status.enumValues;
     if (status === undefined) {
@@ -734,7 +734,7 @@ async function _getStatus() {
   });
 }
 
-async function _createComment(id, comment) {
+async function _createComment (id, comment) {
   let ret;
   const order = await _get(id);
   if (order) {
@@ -748,7 +748,7 @@ async function _createComment(id, comment) {
   return ret;
 }
 
-function _count(query) {
+function _count (query) {
   return Order.countDocuments(query);
 }
 
@@ -757,7 +757,7 @@ function _count(query) {
  * obj is the obj where the DbVars should be deleted
  * @returns obj is the cleaned object
  */
-function _rmDbVars(obj) {
+function _rmDbVars (obj) {
   delete obj.__v;
   delete obj._id;
   return obj;

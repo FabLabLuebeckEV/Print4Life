@@ -93,7 +93,7 @@ const machineType = 'millingMachine';
     ]
 }
  */
-function getAll(req, res) {
+function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
   _getAll(req.query.limit, req.query.skip).then((millingMachines) => {
     if ((millingMachines && millingMachines.length === 0) || !millingMachines) {
@@ -129,7 +129,7 @@ function getAll(req, res) {
 }
  *
  */
-function count(req, res) {
+function count (req, res) {
   _count().then((count) => {
     logger.info(`GET count milling machines with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
@@ -222,7 +222,7 @@ function count(req, res) {
  *
  *
  */
-function create(req, res) {
+function create (req, res) {
   _create(req.body).then((millingMachine) => {
     logger.info(`POST Milling Machine with result ${JSON.stringify(millingMachine)}`);
     res.status(201).send({ millingMachine });
@@ -295,7 +295,7 @@ function create(req, res) {
  *
  *
  */
-function deleteById(req, res) {
+function deleteById (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     logger.error({ error: checkId.error });
@@ -388,7 +388,7 @@ function deleteById(req, res) {
  *
  *
  */
-function get(req, res) {
+function get (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     logger.error({ error: checkId.error });
@@ -482,7 +482,7 @@ function get(req, res) {
  *
  *
  */
-function update(req, res) {
+function update (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     logger.error({ error: checkId.error });
@@ -511,7 +511,7 @@ function update(req, res) {
   }
 }
 
-function _getAll(limit?: string, skip?: string) {
+function _getAll (limit?: string, skip?: string) {
   let l: Number;
   let s: Number;
   if (limit && skip) {
@@ -521,23 +521,23 @@ function _getAll(limit?: string, skip?: string) {
   return machineService.getMachineType(machineType, l, s);
 }
 
-function _create(params) {
+function _create (params) {
   return machineService.create(machineType, params);
 }
 
-function _get(id) {
+function _get (id) {
   return machineService.get(machineType, id);
 }
 
-function _deleteById(id) {
+function _deleteById (id) {
   return machineService.deleteById(machineType, id);
 }
 
-function _update(id, machine) {
+function _update (id, machine) {
   return machineService.update(machineType, id, machine);
 }
 
-function _count() {
+function _count () {
   return machineService.count(machineType);
 }
 

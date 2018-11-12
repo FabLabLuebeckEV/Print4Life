@@ -93,7 +93,7 @@ import logger from '../logger';
 }
  */
 
-function getAllMachines(req, res) {
+function getAllMachines (req, res) {
   _getAllMachines().then((machines) => {
     logger.info('Get all machines');
     res.status(200).send({ machines });
@@ -124,7 +124,7 @@ function getAllMachines(req, res) {
     ]
 }
  */
-function getMachineTypes(req, res) {
+function getMachineTypes (req, res) {
   _getMachineTypes().then((types) => {
     logger.info(`Get all machine types: ${types}`);
     res.status(200).send({ types });
@@ -156,7 +156,7 @@ function getMachineTypes(req, res) {
     ]
 }
  */
-function getMaterialsByType(req, res) {
+function getMaterialsByType (req, res) {
   if (!req.params.machine) {
     const msg = { error: 'No machine given' };
     logger.error(msg);
@@ -189,11 +189,11 @@ function getMaterialsByType(req, res) {
   });
 }
 
-function _getAllMachines() {
+function _getAllMachines () {
   return machineService.getMachineType('all');
 }
 
-function _getMachineTypes() {
+function _getMachineTypes () {
   return new Promise((resolve, reject) => {
     fs.readdir('api/models/machines', ((err, files) => {
       if (err) {
@@ -219,7 +219,7 @@ function _getMachineTypes() {
   });
 }
 
-function _getMaterialsByType(type) {
+function _getMaterialsByType (type) {
   type += 'Material';
   return materialService.getMaterialByType(type);
 }

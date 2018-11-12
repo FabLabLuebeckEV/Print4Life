@@ -1,9 +1,6 @@
 import * as express from 'express';
 import userCtrl from '../controllers/user.controller';
-import logger from '../logger';
-import routerService, { ErrorType } from '../services/router.service';
-import validatorService from '../services/validator.service';
-import fablabCtrl from '../controllers/fablab.controller';
+import routerService from '../services/router.service';
 
 const router = express.Router();
 

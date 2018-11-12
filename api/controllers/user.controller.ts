@@ -53,7 +53,7 @@ import fablabController from './fablab.controller';
       }
   }
  */
-async function create(req, res) {
+async function create (req, res) {
   let user;
   let reject = false;
   try {
@@ -147,7 +147,7 @@ async function create(req, res) {
       }
   }
  */
-function update(req, res) {
+function update (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -203,7 +203,7 @@ function update(req, res) {
       }
   }
  */
-function deleteById(req, res) {
+function deleteById (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -437,7 +437,7 @@ function deleteById(req, res) {
       ]
     }
 */
-function search(req, res) {
+function search (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query);
   _search(req.body.query, req.body.limit, req.body.skip).then((users) => {
     if (users.length === 0) {
@@ -503,7 +503,7 @@ function search(req, res) {
       }
   }
  */
-function count(req, res) {
+function count (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query);
   _count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
@@ -546,7 +546,7 @@ function count(req, res) {
       }
   }
  */
-function getRoles(req, res) {
+function getRoles (req, res) {
   _getRoles().then((roles) => {
     if (!roles) {
       res.status(204).send();
@@ -591,7 +591,7 @@ function getRoles(req, res) {
       }
   }
  */
-function getLanguages(req, res) {
+function getLanguages (req, res) {
   _getLanguages().then((languages) => {
     if (!languages) {
       res.status(204).send();
@@ -632,7 +632,7 @@ function getLanguages(req, res) {
     }
 }
  */
-async function login(req, res) {
+async function login (req, res) {
   let user;
   try {
     user = await _getUserByUsername(req.body.username);
@@ -713,7 +713,7 @@ async function login(req, res) {
       }
   }
  */
-function findown(req, res) {
+function findown (req, res) {
   if (req.headers && req.headers.authorization && typeof req.headers.authorization === 'string') {
     const token = req.headers.authorization.split('JWT')[1].trim();
     _getUserByToken(token).then((user) => {
@@ -791,7 +791,7 @@ function findown(req, res) {
       }
   }
  */
-function get(req, res) {
+function get (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -853,7 +853,7 @@ function get(req, res) {
       }
   }
  */
-function getNames(req, res) {
+function getNames (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -917,7 +917,7 @@ function getNames(req, res) {
       }
   }
  */
-function sendActivationRequest(req, res) {
+function sendActivationRequest (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -968,7 +968,7 @@ function sendActivationRequest(req, res) {
       }
   }
  */
-function resetPassword(req, res) {
+function resetPassword (req, res) {
   if (!req.body.email) {
     res.status(400).send({ error: 'Malformed Request! No Email given.' });
   } else {
@@ -1040,7 +1040,7 @@ function resetPassword(req, res) {
       }
   }
  */
-function changePassword(req, res) {
+function changePassword (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -1076,7 +1076,7 @@ function changePassword(req, res) {
   }
 }
 
-async function _create(user) {
+async function _create (user) {
   delete user._id;
   delete user.__v;
   if (!user.preferredLanguage) {
@@ -1096,7 +1096,7 @@ async function _create(user) {
   return newUser.save();
 }
 
-async function _getRoles() {
+async function _getRoles () {
   return new Promise((resolve, reject) => {
     const roles = roleSchema.paths.role.enumValues;
     if (roles === undefined) {
@@ -1107,7 +1107,7 @@ async function _getRoles() {
   });
 }
 
-async function _getLanguages() {
+async function _getLanguages () {
   return new Promise((resolve, reject) => {
     const langs = languageSchema.paths.language.enumValues;
     if (langs === undefined) {
@@ -1118,7 +1118,7 @@ async function _getLanguages() {
   });
 }
 
-function _login(user, password): Promise<Object> {
+function _login (user, password): Promise<Object> {
   let error: IError;
 
   return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
@@ -1155,20 +1155,20 @@ function _login(user, password): Promise<Object> {
   }));
 }
 
-async function _getUserByUsername(username) {
+async function _getUserByUsername (username) {
   return User.findOne({ username });
 }
 
-async function _get(id) {
+async function _get (id) {
   return User.findById(id);
 }
 
-async function _getUserByToken(token) {
+async function _getUserByToken (token) {
   const decoded = await jwt.verify(token, config.jwtSecret);
   return _get(decoded._id);
 }
 
-function _informAdmins(user, newUser: boolean) {
+function _informAdmins (user, newUser: boolean) {
   let options: EmailOptions;
   if (!user.activated) {
     options = {
@@ -1196,7 +1196,7 @@ function _informAdmins(user, newUser: boolean) {
   }
 }
 
-function _search(query?: any, limit?: any, skip?: any) {
+function _search (query?: any, limit?: any, skip?: any) {
   let l: Number;
   let s: Number;
   let promise;
@@ -1210,11 +1210,11 @@ function _search(query?: any, limit?: any, skip?: any) {
   return promise;
 }
 
-function _count(query) {
+function _count (query) {
   return User.countDocuments(query);
 }
 
-async function _update(user) {
+async function _update (user) {
   delete user.__v;
   if (!user.createdAt) {
     user.createdAt = new Date();
@@ -1226,18 +1226,18 @@ async function _update(user) {
   ).then(() => User.findOne({ _id: user._id }));
 }
 
-async function _deleteById(_id) {
+async function _deleteById (_id) {
   const user = await _get(_id);
   user.activated = false;
   return _update(user);
 }
 
-async function _changePassword(user, newPassword) {
+async function _changePassword (user, newPassword) {
   user.password = newPassword;
   return user.save(user);
 }
 
-async function _resetPassword(email: string) {
+async function _resetPassword (email: string) {
   const users = await _search({ email }, 1, 0);
   let password: string;
   let user;
