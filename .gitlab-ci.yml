@@ -120,7 +120,6 @@ deploy_production:
   only:
    - master
    - fix/ci
-   - feature/101-deployment-itm
   before_script:
    - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
    - 'which mongorestore || (apt-get update -y && apt-get install mongodb -y)'
