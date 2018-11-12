@@ -860,7 +860,7 @@ router.route('/:id/getNames').get((req, res) => {
       if (user) {
         user.fablabName = '';
         if (user.fablabId) {
-          const fablab = await fablabCtrl.get(user.fablabId);
+          const fablab = await fablabCtrl.getById(user.fablabId);
           user.fablabName = fablab.name;
         }
         logger.info(`GET User by id with result ${user}`);
