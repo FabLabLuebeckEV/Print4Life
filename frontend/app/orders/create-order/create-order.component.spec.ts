@@ -12,6 +12,8 @@ import { BackButtonComponent } from '../../components/back-button/back-button.co
 import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
+import { UploadComponent } from 'frontend/app/components/upload/upload.component';
+import { ngfModule } from 'angular-file';
 
 describe('CreateOrderComponent', () => {
   let component: CreateOrderComponent;
@@ -19,9 +21,10 @@ describe('CreateOrderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CreateOrderComponent, BackButtonComponent],
+      declarations: [CreateOrderComponent, BackButtonComponent, UploadComponent],
       providers: [ConfigService, TranslateService],
       imports: [
+        ngfModule,
         RouterTestingModule,
         FormsModule,
         HttpClientTestingModule,

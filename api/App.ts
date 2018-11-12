@@ -17,10 +17,14 @@ class App {
   private mountRoutes (): void {
     this.express.use(bodyParser.json());
     this.express.use(((req, res, next) => {
-      if (req.get('Content-Type') === 'application/json') {
+      if (req.get('Content-Type') === 'application/json'
+        || (req.get('Content-Type') && req.get('Content-Type').includes('multipart/form-data'))) {
+        if (req.get('Content-Type') && req.get('Content-Type').includes('multipart/form-data')) {
+          this.express.use(bodyParser.urlencoded({ extended: true }));
+        }
         next();
       } else {
-        res.status(400).send({ err: 'Only content-type \'application/json\' is accepted!' });
+        res.status(400).send({ err: 'Only content-type \'application/json\' or \'multipart/form-data\' is accepted!' });
       }
     }));
     this.express.use('/api/v1/', routes);

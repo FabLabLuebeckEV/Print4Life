@@ -16,6 +16,9 @@ import * as moment from 'moment';
 import { User } from 'frontend/app/models/user.model';
 import { UserService } from 'frontend/app/services/user.service';
 import { Subscription } from 'rxjs';
+import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
+import { UploadComponent } from 'frontend/app/components/upload/upload.component';
+import { isObject } from 'util';
 
 const localStorageOrderKey = 'orderManagementOrderFormOrder';
 const localStorageCommentKey = 'orderManagementOrderFormComment';
@@ -28,6 +31,7 @@ const localStorageCommentKey = 'orderManagementOrderFormComment';
 export class CreateOrderComponent implements OnInit, OnDestroy {
   @ViewChild('createOrderForm') createOrderForm;
   @ViewChild('commentContent') commentContentField;
+  @ViewChild('fileUpload') fileUpload: UploadComponent;
   config: any;
   publicIcon: any;
   selectedType: String;
@@ -224,6 +228,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       const errorMsg = this.translationFields.modals.error;
       this.orderService.createOrder(orderCopy).then((result) => {
         if (result) {
+          this.fileUpload.uploadFilesToOrder(result.order._id);
           localStorage.removeItem(localStorageOrderKey);
           localStorage.removeItem(localStorageCommentKey);
           this._openSuccessMsg();
@@ -438,96 +443,101 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date']).subscribe((translations => {
-      const shownMachineTypes = [];
-      const shownStatus = [];
-      this.machineTypes.forEach((mType) => {
-        const camelType = this.machineService.camelCaseTypes(mType);
-        const translated = translations['deviceTypes'][`${camelType}`];
-        if (translated) {
-          shownMachineTypes.push(translated);
-        }
-      });
-
-      this.validStatus.forEach((status) => {
-        const translated = translations['status'][`${status}`];
-        if (translated) {
-          shownStatus.push(translated);
-        }
-      });
-      if (this.order && this.order.machine && this.order.machine['shownType']) {
-        this._translateMachineType(this.order.machine.type).then((shownType) => {
-          this.order.machine['shownType'] = shownType;
-        }).catch((error) => {
-          console.log(error);
-        });
-      }
-
-      if (this.order && this.order.status) {
-        this._translateStatus(this.order.status).then((shownStatus) => {
-          this.order['shownStatus'] = shownStatus;
-        }).catch((error) => {
-          console.log(error);
-        });
-      }
-
-      if (this.order && this.order.comments) {
-        this.order.comments.forEach((comment) => {
-          if (comment.createdAt) {
-            let createdAt = moment(comment.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
-            createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
-            comment['shownCreatedAt'] = createdAt;
+      if (translations.hasOwnProperty('orderForm') && isObject(translations.oderForm) &&
+        translations.hasOwnProperty('deviceTypes') && isObject(translations.deviceTypes) &&
+        translations.hasOwnProperty('status') && isObject(translations.status) &&
+        translations.hasOwnProperty('date') && isObject(translations.date)) {
+        const shownMachineTypes = [];
+        const shownStatus = [];
+        this.machineTypes.forEach((mType) => {
+          const camelType = this.machineService.camelCaseTypes(mType);
+          const translated = translations['deviceTypes'][`${camelType}`];
+          if (translated) {
+            shownMachineTypes.push(translated);
           }
         });
-      }
-      this.translationFields = {
-        title: this.editView ? translations['orderForm'].editTitle : translations['orderForm'].createTitle,
-        shownMachineTypes: shownMachineTypes,
-        shownStatus: shownStatus,
-        publicHint: translations['orderForm'].publicHint,
-        labels: {
-          submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.createSubmit,
-          sendComment: translations['orderForm'].labels.sendComment,
-          projectName: translations['orderForm'].labels.projectName,
-          owner: translations['orderForm'].labels.owner,
-          editor: translations['orderForm'].labels.editor,
-          status: translations['orderForm'].labels.status,
-          machineType: translations['orderForm'].labels.machineType,
-          selectedMachine: translations['orderForm'].labels.selectedMachine,
-          selectedMachineInfo: translations['orderForm'].labels.selectedMachineInfo,
-          comments: translations['orderForm'].labels.comments,
-          newComment: translations['orderForm'].labels.newComment,
-          author: translations['orderForm'].labels.author,
-          content: translations['orderForm'].labels.content,
-          createdAt: translations['orderForm'].labels.createdAt
-        },
-        modals: {
-          ok: translations['orderForm'].modals.ok,
-          okReturnValue: translations['orderForm'].modals.okReturnValue,
-          createCommentError: translations['orderForm'].modals.createCommentError,
-          createCommentSuccess: translations['orderForm'].modals.createCommentSuccess,
-          createCommentSuccessHeader: translations['orderForm'].modals.createCommentSuccessHeader,
-          orderSuccessHeader: this.editView
-            ? translations['orderForm'].modals.updateOrderSuccessHeader
-            : translations['orderForm'].modals.createOrderSuccessHeader,
-          orderSuccess: this.editView
-            ? translations['orderForm'].modals.updateOrderSuccess
-            : translations['orderForm'].modals.createOrderSuccess,
-          errorHeader: translations['orderForm'].modals.errorHeader,
-          error: this.editView
-            ? translations['orderForm'].modals.updateError
-            : translations['orderForm'].modals.createError,
-        },
-        messages: {
-          projectName: translations['orderForm'].messages.projectName,
-          owner: translations['orderForm'].messages.owner,
-          status: translations['orderForm'].messages.status,
-          machineType: translations['orderForm'].messages.machineType,
-          selectedMachine: translations['orderForm'].messages.selectedMachine,
-          unnamedFablab: translations['orderForm'].messages.unnamedFablab,
-          author: translations['orderForm'].messages.author,
-          content: translations['orderForm'].messages.content
+
+        this.validStatus.forEach((status) => {
+          const translated = translations['status'][`${status}`];
+          if (translated) {
+            shownStatus.push(translated);
+          }
+        });
+        if (this.order && this.order.machine && this.order.machine['shownType']) {
+          this._translateMachineType(this.order.machine.type).then((shownType) => {
+            this.order.machine['shownType'] = shownType;
+          }).catch((error) => {
+            console.log(error);
+          });
         }
-      };
+
+        if (this.order && this.order.status) {
+          this._translateStatus(this.order.status).then((shownStatus) => {
+            this.order['shownStatus'] = shownStatus;
+          }).catch((error) => {
+            console.log(error);
+          });
+        }
+
+        if (this.order && this.order.comments) {
+          this.order.comments.forEach((comment) => {
+            if (comment.createdAt) {
+              let createdAt = moment(comment.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
+              createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
+              comment['shownCreatedAt'] = createdAt;
+            }
+          });
+        }
+        this.translationFields = {
+          title: this.editView ? translations['orderForm'].editTitle : translations['orderForm'].createTitle,
+          shownMachineTypes: shownMachineTypes,
+          shownStatus: shownStatus,
+          publicHint: translations['orderForm'].publicHint,
+          labels: {
+            submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.createSubmit,
+            sendComment: translations['orderForm'].labels.sendComment,
+            projectName: translations['orderForm'].labels.projectName,
+            owner: translations['orderForm'].labels.owner,
+            editor: translations['orderForm'].labels.editor,
+            status: translations['orderForm'].labels.status,
+            machineType: translations['orderForm'].labels.machineType,
+            selectedMachine: translations['orderForm'].labels.selectedMachine,
+            selectedMachineInfo: translations['orderForm'].labels.selectedMachineInfo,
+            comments: translations['orderForm'].labels.comments,
+            newComment: translations['orderForm'].labels.newComment,
+            author: translations['orderForm'].labels.author,
+            content: translations['orderForm'].labels.content,
+            createdAt: translations['orderForm'].labels.createdAt
+          },
+          modals: {
+            ok: translations['orderForm'].modals.ok,
+            okReturnValue: translations['orderForm'].modals.okReturnValue,
+            createCommentError: translations['orderForm'].modals.createCommentError,
+            createCommentSuccess: translations['orderForm'].modals.createCommentSuccess,
+            createCommentSuccessHeader: translations['orderForm'].modals.createCommentSuccessHeader,
+            orderSuccessHeader: this.editView
+              ? translations['orderForm'].modals.updateOrderSuccessHeader
+              : translations['orderForm'].modals.createOrderSuccessHeader,
+            orderSuccess: this.editView
+              ? translations['orderForm'].modals.updateOrderSuccess
+              : translations['orderForm'].modals.createOrderSuccess,
+            errorHeader: translations['orderForm'].modals.errorHeader,
+            error: this.editView
+              ? translations['orderForm'].modals.updateError
+              : translations['orderForm'].modals.createError,
+          },
+          messages: {
+            projectName: translations['orderForm'].messages.projectName,
+            owner: translations['orderForm'].messages.owner,
+            status: translations['orderForm'].messages.status,
+            machineType: translations['orderForm'].messages.machineType,
+            selectedMachine: translations['orderForm'].messages.selectedMachine,
+            unnamedFablab: translations['orderForm'].messages.unnamedFablab,
+            author: translations['orderForm'].messages.author,
+            content: translations['orderForm'].messages.content
+          }
+        };
+      }
     }));
   }
 }

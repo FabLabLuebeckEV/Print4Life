@@ -97,6 +97,19 @@
       </div>
 
       <div *ngIf="!editView">
+
+        <!-- Files -->
+        <div class="form-group row table-spacing">
+          <div class="col-md-12 text-center">
+            <h4>{{translationFields.labels.files}}</h4>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <app-upload #fileUpload></app-upload>
+        </div>
+
+        <!-- Comments -->
         <div class="form-group row table-spacing">
           <div class="col-md-12 text-center">
             <h4>{{translationFields.labels.comments}}</h4>

@@ -39,7 +39,8 @@ export const routes = {
                 getOrder: 'getOrder',
                 comment: 'comment',
                 count: 'count',
-                search: 'search'
+                search: 'search',
+                upload: 'upload'
             },
             machines: {
                 root: 'machines',

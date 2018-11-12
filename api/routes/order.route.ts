@@ -1,10 +1,24 @@
 import * as express from 'express';
+import * as multer from 'multer';
+import * as path from 'path';
 import orderCtrl from '../controllers/order.controller';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 import routerService from '../services/router.service';
 
 const router = express.Router();
+
+const DIR = './uploads';
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, DIR);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}-${Date.now()}.${path.extname(file.originalname)}`);
+  }
+});
+const upload = multer({ storage });
 
 router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
@@ -287,6 +301,22 @@ router.route('/').post((req, res) => {
     res.status(400).send({ error: 'Malformed order, one or more parameters wrong or missing', stack: err });
   });
 });
+
+router.route('/:id/upload').post(
+  upload.array('file'),
+  // TODO: Implement Schema and Model for Attachments / Files and relate them to a specific order
+  // TODO: Handle upload of the same file (maybe method PUT? and check for filename and order id)
+  (req: any, res) => {
+    if (!req.files) {
+      return res.send({
+        success: false
+      });
+    }
+    return res.send({
+      success: true
+    });
+  }
+);
 
 /**
  * @api {put} /api/v1/orders/:id Updates an order or creates it, if it doesn't exists yet.
