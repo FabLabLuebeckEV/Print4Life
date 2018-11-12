@@ -100,7 +100,7 @@ export class MachineListComponent implements OnInit {
       if (!this.listView && route === `/${routes.paths.frontend.machines.root}`) {
         this.listView = true;
         this.ngOnInit();
-      } else if (route !== routes.paths.frontend.machines.root) {
+      } else if (route !== `/${routes.paths.frontend.machines.root}`) {
         this.listView = false;
       }
     });

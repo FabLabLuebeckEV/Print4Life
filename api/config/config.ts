@@ -101,7 +101,7 @@ const dev = {
   // cors: undefined // if testing backend routes in dev mode without using the frontend
 };
 
-const prod = {
+const staging = {
   jwtSecret,
   jwtExpiryTime,
   ssl: {
@@ -125,6 +125,47 @@ const prod = {
   publicRoutes,
   baseUrlBackend: `https://localhost:${port}${baseUrl}`,
   baseUrlFrontend: 'https://iot-fablab.ddns.net',
+  // cors: {
+  //   whitelist: [
+  //     `https://localhost:${ngPort}`,
+  //     `https://212.83.56.107:${ngPort}`,
+  //     `https://iot-fablab.ddns.net:${ngPort}`,
+  //     `http://localhost:${ngPort}`,
+  //     `http://212.83.56.107:${ngPort}`,
+  //     `http://iot-fablab.ddns.net:${ngPort}`
+  //   ],
+  //   corsOptions: {
+  //     origin: undefined,
+  //     credentials: true
+  //   }
+  // }
+  cors: undefined
+};
+
+const prod = {
+  jwtSecret,
+  jwtExpiryTime,
+  ssl: {
+    privateKeyPath: '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/private.pem',
+    certificatePath: '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/cert.pem'
+  },
+  loggerRotateOptions: {
+    datePattern: 'DD-MM-YYYY',
+    dirname: 'logs',
+    maxSize: '10m',
+    maxFiles: '30'
+  },
+  email,
+  connections: {
+    mongo: {
+      host: 'mongodb://127.0.0.1:27017/',
+      database: 'iot-fablab'
+    }
+  },
+  rawBaseUrl: baseUrl,
+  publicRoutes,
+  baseUrlBackend: `https://localhost:${port}${baseUrl}`,
+  baseUrlFrontend: 'https://fablab.itm.uni-luebeck.de',
   // cors: {
   //   whitelist: [
   //     `https://localhost:${ngPort}`,
@@ -197,7 +238,7 @@ const testLocal = {
 };
 
 export const configArr = {
-  dev, prod, test, testLocal
+  dev, prod, test, testLocal, staging
 };
 
 const config = configArr[env];

@@ -1,5 +1,20 @@
 import { environment } from '../../environments/environment';
-const backendUrl = !environment.production ? 'http://localhost:3000/api/v1' : 'https://iot-fablab.ddns.net:3000/api/v1';
+import { RUN_ENV } from './config.service';
+let backendUrl = '';
+switch (environment.env) {
+    case RUN_ENV.PROD:
+        backendUrl = 'https://fablab.itm.uni-luebeck.de:3000/api/v1';
+        break;
+    case RUN_ENV.STAGING:
+        backendUrl = 'https://iot-fablab.ddns.net:3000/api/v1';
+        break;
+    case RUN_ENV.DEV:
+    default:
+        backendUrl = 'http://localhost:3000/api/v1';
+        break;
+}
+
+
 
 export const routes = {
     backendUrl: backendUrl,

@@ -1,4 +1,4 @@
-image: node:latest
+image: node:10
   
 cache:
   paths:
@@ -28,12 +28,15 @@ build_dev:
   
 build_prod:
   stage: build
+  before_script:
+    - npm install
   # artifacts:
   #   paths:
   #   - ./
   #   expire_in: 1 day
   script:
-    - npm run deploy
+    - npm run deploy-staging
+    - npm run deploy-prod
   only: 
     - master
     - fix/ci
@@ -88,7 +91,7 @@ deploy_staging:
    - eval $(ssh-agent -s)
    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
    - ssh-add <(echo "$STAGING_PRIVATE_KEY" | base64 --decode)
-   - npm install && npm run deploy
+   - npm install && npm run deploy-staging
   script:
    - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "rm -rf /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && mkdir /home/$RUNNER_USERNAME/apps/$PROJECT_NAME"
    - rsync -rav -e ssh --exclude='.git/' --exclude='.gitlab-ci.yml' --exclude='node_modules' --delete-excluded ./ $RUNNER_USERNAME@$SERVER_ADDRESS:/home/$RUNNER_USERNAME/apps/$PROJECT_NAME
@@ -98,4 +101,41 @@ deploy_staging:
    # Comment end
    # Delete old process if running, otherwise true and start process
    - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 delete $PROJECT_NAME || true"
-   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 start ecosystem.config.js"
+   - ssh -p22 $RUNNER_USERNAME@$SERVER_ADDRESS "cd /home/$RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 start ecosystem-staging.config.js"
+
+
+deploy_production:
+  stage: deploy
+  environment:
+    name: production
+  variables: 
+    NODE_ENV: "prod"
+    DATABASE_HOST: "localhost"
+    DATABASE_PORT: "27017"
+    DATABASE: "iot-fablab"
+    DATABASE_DUMP: "dump/iot-fablab"
+  when: manual
+  only:
+   - master
+   - fix/ci
+  before_script:
+   - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
+   - 'which mongorestore || (apt-get update -y && apt-get install mongodb -y)'
+   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+   - 'which rsync || (apt-get update -y && apt-get install rsync -y)'
+   - mkdir -p ~/.ssh
+   - eval $(ssh-agent -s)
+   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+   - ssh-add <(echo "$PRODUCTION_PRIVATE_KEY" | base64 --decode)
+   - npm install && npm run deploy-prod
+  script:
+   - echo "$PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS with path /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME"
+   - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "rm -rf /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && mkdir /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME"
+   - rsync -rav -e ssh --exclude='.git/' --exclude='.gitlab-ci.yml' --exclude='node_modules' --delete-excluded ./ $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS:/home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME
+   - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && cp -r /var/www/html/essen /var/www/essen_bak && rm -rf /var/www/html/* && cp -r dist/. /var/www/html && cp -r /var/www/essen_bak /var/www/html/essen"
+   # Delete this line if the database shall not be dropped
+   - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "mongo iot-fablab-staging --eval \"db.dropDatabase()\" && cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME/db-seeds && bash scripts/import.sh $DATABASE_HOST $DATABASE_PORT $DATABASE $DATABASE_DUMP"
+   # Comment end
+   # Delete old process if running, otherwise true and start process
+   - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 delete $PROJECT_NAME || true"
+   - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 start ecosystem-prod.config.js"
