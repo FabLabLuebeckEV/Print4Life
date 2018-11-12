@@ -25,7 +25,6 @@ build_dev:
   except: 
     - master
     - fix/ci
-    - feature/101-deployment-itm
   
 build_prod:
   stage: build
@@ -41,7 +40,6 @@ build_prod:
   only: 
     - master
     - fix/ci
-    - feature/101-deployment-itm
 
 test_build_api_docs:
   stage: apidocs
