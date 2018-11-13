@@ -11,14 +11,14 @@ import config from './config/config';
 let privateKey = '';
 let certificate = '';
 
-if (process.env.NODE_ENV && process.env.NODE_ENV === 'prod') {
+if (process.env.NODE_ENV && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')) {
   privateKey = fs.readFileSync(config.ssl.privateKeyPath, 'utf8');
   certificate = fs.readFileSync(config.ssl.certificatePath, 'utf8');
 }
 
 const credentials = { key: privateKey, cert: certificate };
 
-const serverInstance = process.env && process.env.NODE_ENV === 'prod'
+const serverInstance = process.env && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')
   ? https.createServer(credentials, app)
   : http.createServer(app);
 
@@ -44,7 +44,10 @@ function run (callback) {
       callback();
     }
 
-    return logger.info(`server is listening on ${port} and angular (if started) on ${ngPort}`);
+    return logger.info(
+      `server is in ${process.env.NODE_ENV ? process.env.NODE_ENV : 'dev'} `
+      + `mode and listening on ${port}. Angular (if started) is listening on ${ngPort}`
+    );
   });
 
   server.on('close', () => {

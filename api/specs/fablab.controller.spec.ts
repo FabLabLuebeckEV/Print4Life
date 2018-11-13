@@ -197,7 +197,7 @@ describe('Fablab Controller', () => {
     });
   });
 
-  it('delete printer (success)', (done) => {
+  it('delete fablab (success)', (done) => {
     let responseFablab;
     request.post(`${endpoint}/`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -219,7 +219,7 @@ describe('Fablab Controller', () => {
     });
   });
 
-  it('delete printer (id too long)', (done) => {
+  it('delete fablab (id too long)', (done) => {
     const id = 'tooLongForMongoDBsObjectId1234567890';
     request.delete(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -230,7 +230,7 @@ describe('Fablab Controller', () => {
     });
   });
 
-  it('delete printer (id too short)', (done) => {
+  it('delete fablab (id too short)', (done) => {
     const id = 'tooShort';
     request.delete(`${endpoint}/${id}`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
