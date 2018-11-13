@@ -443,7 +443,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date']).subscribe((translations => {
-      if (translations.hasOwnProperty('orderForm') && isObject(translations.oderForm) &&
+      if (translations.hasOwnProperty('orderForm') && isObject(translations.orderForm) &&
         translations.hasOwnProperty('deviceTypes') && isObject(translations.deviceTypes) &&
         translations.hasOwnProperty('status') && isObject(translations.status) &&
         translations.hasOwnProperty('date') && isObject(translations.date)) {
