@@ -1,4 +1,4 @@
-image: node:latest
+image: node:10
   
 cache:
   paths:
@@ -25,20 +25,21 @@ build_dev:
   except: 
     - master
     - fix/ci
-    - feature/101-deployment-itm
   
 build_prod:
   stage: build
+  before_script:
+    - npm install
   # artifacts:
   #   paths:
   #   - ./
   #   expire_in: 1 day
   script:
-    - npm run deploy
+    - npm run deploy-staging
+    - npm run deploy-prod
   only: 
     - master
     - fix/ci
-    - feature/101-deployment-itm
 
 test_build_api_docs:
   stage: apidocs
@@ -106,7 +107,7 @@ deploy_staging:
 deploy_production:
   stage: deploy
   environment:
-    name: staging
+    name: production
   variables: 
     NODE_ENV: "prod"
     DATABASE_HOST: "localhost"
@@ -117,7 +118,6 @@ deploy_production:
   only:
    - master
    - fix/ci
-   - feature/101-deployment-itm
   before_script:
    - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
    - 'which mongorestore || (apt-get update -y && apt-get install mongodb -y)'
@@ -129,9 +129,10 @@ deploy_production:
    - ssh-add <(echo "$PRODUCTION_PRIVATE_KEY" | base64 --decode)
    - npm install && npm run deploy-prod
   script:
+   - echo "$PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS with path /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME"
    - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "rm -rf /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && mkdir /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME"
    - rsync -rav -e ssh --exclude='.git/' --exclude='.gitlab-ci.yml' --exclude='node_modules' --delete-excluded ./ $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS:/home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME
-   - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && rm -rf /var/www/html/* && cp -r dist/. /var/www/html"
+   - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && cp -r /var/www/html/essen /var/www/essen_bak && rm -rf /var/www/html/* && cp -r dist/. /var/www/html && cp -r /var/www/essen_bak /var/www/html/essen"
    # Delete this line if the database shall not be dropped
    - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "mongo iot-fablab-staging --eval \"db.dropDatabase()\" && cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME/db-seeds && bash scripts/import.sh $DATABASE_HOST $DATABASE_PORT $DATABASE $DATABASE_DUMP"
    # Comment end
