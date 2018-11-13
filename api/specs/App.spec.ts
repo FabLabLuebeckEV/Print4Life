@@ -8,7 +8,7 @@ const endpoint = config.baseUrlBackend;
 describe('App', () => {
   const token = getTestUserToken();
   it('root', (done) => {
-    request.get(endpoint, {
+    request.get(`${endpoint}/version`, {
       headers: { 'content-type': 'application/json', authorization: token },
       json: true
     }, (error, response) => {

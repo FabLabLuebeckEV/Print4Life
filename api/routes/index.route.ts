@@ -6,10 +6,6 @@ import fablabRoute from './fablab.route';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send({ health: 'alive' });
-});
-
 /**
  * @api {get} /api/v1/version Get version number of the software
  * @apiName GetVersion
