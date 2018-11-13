@@ -249,7 +249,12 @@
             "newComment": "Neuer Kommentar",
             "author": "Author",
             "content": "Inhalt",
-            "createdAt": "Erstellt am"
+            "createdAt": "Erstellt am",
+            "shippingAddresses": {
+                "userAddress": "Deine Adresse",
+                "fablabAddress": "Dein FabLab",
+                "shippingAddress": "Neue Adresse"
+            }
         },
         "modals": {
             "ok": "Ok",

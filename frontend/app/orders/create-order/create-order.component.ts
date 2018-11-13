@@ -83,6 +83,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       zipCode: '',
       city: '',
       country: '',
+      shippingAddresses: {
+        userAddress: '',
+        fablabAddress: '',
+        shippingAddress: ''
+      }
     },
     modals: {
       ok: '',
@@ -509,6 +514,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           zipCode: translations['address'].zipCode,
           city: translations['address'].city,
           country: translations['address'].country,
+          shippingAddresses: {
+            userAddress: translations['orderForm'].shippingAddresses.userAddress,
+            fablabAddress: translations['orderForm'].shippingAddresses.fablabAddress,
+            shippingAddress: translations['orderForm'].shippingAddresses.shippingAddress
+          }
         },
         modals: {
           ok: translations['orderForm'].modals.ok,
