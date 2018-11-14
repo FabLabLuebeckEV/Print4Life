@@ -1,22 +1,39 @@
 import * as express from 'express';
 import * as multer from 'multer';
-import * as path from 'path';
+import * as GridFsStorage from 'multer-gridfs-storage';
+import config from '../config/config';
+// import { Db } from 'mongodb';
 import orderCtrl from '../controllers/order.controller';
 import routerService from '../services/router.service';
 
 const router = express.Router();
 
-const DIR = './uploads';
+let upload = multer();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, DIR);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${file.fieldname}-${Date.now()}.${path.extname(file.originalname)}`);
+export function setUpOrderAttachmentStorage (db, mongo): any {
+  if (db && mongo) {
+    const storage = new GridFsStorage({
+      url: config.connections.mongo.host + config.connections.mongo.database,
+      cache: true,
+      file: (req, file) => {
+        const filename = `${file.filename}_${Date.now()}`;
+        return {
+          filename,
+          bucketName: 'orderAttachments',
+          metadata: (req, file) => {
+            const [originalname] = file.originalname;
+            return { filename, originalname };
+          }
+        };
+      }
+    });
+
+    upload = multer({
+      storage
+    });
   }
-});
-const upload = multer({ storage });
+}
+
 
 router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
@@ -28,8 +45,6 @@ router.route('/count').post(orderCtrl.count);
 
 router.route('/').post(orderCtrl.create);
 
-router.route('/:id/upload').post(upload.array('file'), orderCtrl.upload);
-
 router.route('/:id').put(orderCtrl.update);
 
 router.route('/:id').delete(orderCtrl.deleteById);
@@ -39,5 +54,7 @@ router.route('/status/').get(orderCtrl.getStatus);
 router.route('/:id/comment').post(orderCtrl.createComment);
 
 router.route('/:id').get(orderCtrl.get);
+
+router.route('/:id/upload').post(upload.array('file'), orderCtrl.upload);
 
 export default router;

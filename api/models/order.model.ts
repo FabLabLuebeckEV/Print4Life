@@ -18,10 +18,10 @@ const attributes = {
     minlength: 24,
     maxlength: 24
   },
-  files: [{
-    data: Buffer,
-    contentType: String
-  }],
+  files: {
+    type: Array,
+    default: []
+  },
   status: {
     enum: ['new', 'assigned', 'production', 'shipment', 'archived', 'representive', 'deleted'],
     type: String,

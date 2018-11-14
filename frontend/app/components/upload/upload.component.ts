@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { routes } from 'frontend/app/config/routes';
-import { UserService } from 'frontend/app/services/user.service';
 import { HttpClient, HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { ConfigService } from 'frontend/app/config/config.service';
@@ -36,7 +35,6 @@ export class UploadComponent implements OnInit {
   cancel() {
     this.progress = 0;
     if (this.httpEmitter) {
-      console.log('cancelled');
       this.httpEmitter.unsubscribe();
     }
   }
@@ -46,7 +44,6 @@ export class UploadComponent implements OnInit {
     const formData: FormData = new FormData();
     this.files.forEach(file => {
       formData.append('file', file, file.name);
-      console.log(formData);
     });
     const req = new HttpRequest<FormData>('POST', url, formData, {
       reportProgress: true// , responseType: 'text'
@@ -59,7 +56,6 @@ export class UploadComponent implements OnInit {
 
           if (event instanceof HttpResponse) {
             delete this.httpEmitter;
-            console.log('request done', event);
           }
         },
         error => console.log('Error Uploading', error)

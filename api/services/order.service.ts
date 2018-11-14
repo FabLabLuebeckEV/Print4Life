@@ -66,7 +66,7 @@ export class OrderService implements ModelService {
     if (!order.createdAt) {
       order.createdAt = new Date();
     }
-    return Order.update(
+    return Order.updateOne(
       { _id: mongoose.Types.ObjectId(order._id) },
       order,
       { upsert: true }
