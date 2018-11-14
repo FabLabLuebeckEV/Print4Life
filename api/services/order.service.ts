@@ -2,8 +2,11 @@ import * as uuid from 'uuid/v4';
 import * as mongoose from 'mongoose';
 import { isNumber } from 'util';
 import { Order, orderSchema } from '../models/order.model';
+/* eslint-disable no-unused-vars */
+import ModelService from './model.service';
+/* eslint-enable no-unused-vars */
 
-export class OrderService {
+export class OrderService implements ModelService {
   /* eslint-disable class-methods-use-this */
   /**
        * This method gets all orders. The result can be limited as well as some items skipped
@@ -116,7 +119,7 @@ export class OrderService {
   }
 
   /**
-       * This method counts all orders
+      * This method counts all orders
        * @returns a promise with the result
        */
   public count (query) {

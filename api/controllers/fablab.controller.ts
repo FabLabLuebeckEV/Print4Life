@@ -106,7 +106,7 @@ function get (req, res) {
     logger.error({ error: checkId.error });
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    fablabService.getById(req.params.id).then((fablab) => {
+    fablabService.get(req.params.id).then((fablab) => {
       if (!fablab) {
         logger.error({ error: `Fablab by id '${req.params.id}' not found` });
         res.status(404).send({ error: `Fablab by id '${req.params.id}' not found` });
@@ -252,7 +252,7 @@ function update (req, res) {
     logger.error(msg);
     res.status(400).send(msg);
   } else {
-    fablabService.getById(req.params.id).then((fablab) => {
+    fablabService.get(req.params.id).then((fablab) => {
       if (!fablab) {
         const msg = { error: `Fablab by id '${req.params.id}' not found` };
         logger.error(msg);

@@ -1,6 +1,9 @@
 import { MachineService } from './machine.service';
+/* eslint-disable no-unused-vars */
+import ModelService from './model.service';
+/* eslint-enable no-unused-vars */
 
-export class Printer3DService {
+export class Printer3DService implements ModelService {
   machineType = '3d-printer';
 
   machineService = new MachineService();
@@ -31,9 +34,9 @@ export class Printer3DService {
   }
 
   /**
- * This method deletes a 3d printer by its id
- * @returns a promise with the result
- */
+   * This method deletes a 3d printer by its id
+   * @returns a promise with the result
+   */
   public deleteById (id) {
     return this.machineService.deleteById(this.machineType, id);
   }

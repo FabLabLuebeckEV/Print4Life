@@ -1,10 +1,8 @@
-import { MachineService } from '../services/machine.service';
 import validatorService from '../services/validator.service';
 import logger from '../logger';
+import OtherMachineService from '../services/otherMachine.service';
 
-const machineType = 'otherMachine';
-
-const machineService = new MachineService();
+const otherMachineService = new OtherMachineService();
 
 /**
  * @api {get} /api/v1/machines/otherMachines Get other machines
@@ -75,7 +73,7 @@ const machineService = new MachineService();
  */
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
-  _getAll(req.query.limit, req.query.skip).then((otherMachines) => {
+  otherMachineService.getAll(req.query.limit, req.query.skip).then((otherMachines) => {
     if ((otherMachines && otherMachines.length === 0) || !otherMachines) {
       logger.info('GET Other Machines with no result');
       res.status(204).send();
@@ -110,7 +108,7 @@ function getAll (req, res) {
  *
  */
 function count (req, res) {
-  _count().then((count) => {
+  otherMachineService.count().then((count) => {
     logger.info(`GET count other machines with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
@@ -193,7 +191,7 @@ function count (req, res) {
  *
  */
 function create (req, res) {
-  _create(req.body).then((otherMachine) => {
+  otherMachineService.create(req.body).then((otherMachine) => {
     logger.info(`POST Other Machine with result ${JSON.stringify(otherMachine)}`);
     res.status(201).send({ otherMachine });
   }).catch((err) => {
@@ -270,12 +268,12 @@ function deleteById (req, res) {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
     let otherMachine;
-    _get(req.params.id).then((o) => {
+    otherMachineService.get(req.params.id).then((o) => {
       if (o) {
         otherMachine = o;
-        _deleteById(req.params.id).then((result) => {
+        otherMachineService.deleteById(req.params.id).then((result) => {
           if (result) {
-            _get(req.params.id).then((result) => {
+            otherMachineService.get(req.params.id).then((result) => {
               if (result) {
                 logger.info(`DELETE Other Machine with result ${JSON.stringify(otherMachine)}`);
                 res.status(200).send({ otherMachine: result });
@@ -358,7 +356,7 @@ function get (req, res) {
     logger.error(msg);
     res.status(checkId.status).send(msg);
   } else {
-    _get(req.params.id).then((otherMachine) => {
+    otherMachineService.get(req.params.id).then((otherMachine) => {
       if (!otherMachine) {
         const msg = { error: `Other Machine by id '${req.params.id}' not found` };
         logger.error(msg);
@@ -445,13 +443,13 @@ function update (req, res) {
   } else if (Object.keys(req.body).length === 0) {
     res.status(400).send({ error: 'No params to update given!' });
   } else {
-    _get(req.params.id).then((otherMachine) => {
+    otherMachineService.get(req.params.id).then((otherMachine) => {
       if (!otherMachine) {
         const msg = { error: `Other Machine by id '${req.params.id}' not found` };
         logger.error(msg);
         res.status(404).send(msg);
       } else {
-        _update(req.params.id, req.body).then((otherMachine) => {
+        otherMachineService.update(req.params.id, req.body).then((otherMachine) => {
           logger.info(`PUT Other Machine with result ${JSON.stringify(otherMachine)}`);
           res.status(200).send({ otherMachine });
         });
@@ -462,36 +460,6 @@ function update (req, res) {
       res.status(400).send(msg);
     });
   }
-}
-
-function _getAll (limit?: string, skip?: string) {
-  let l: Number;
-  let s: Number;
-  if (limit && skip) {
-    l = Number.parseInt(limit, 10);
-    s = Number.parseInt(skip, 10);
-  }
-  return machineService.getMachineType(machineType, l, s);
-}
-
-function _create (params) {
-  return machineService.create(machineType, params);
-}
-
-function _get (id) {
-  return machineService.get(machineType, id);
-}
-
-function _deleteById (id) {
-  return machineService.deleteById(machineType, id);
-}
-
-function _update (id, machine) {
-  return machineService.update(machineType, id, machine);
-}
-
-function _count () {
-  return machineService.count(machineType);
 }
 
 export default {

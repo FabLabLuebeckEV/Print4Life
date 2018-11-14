@@ -863,7 +863,7 @@ function getNames (req, res) {
       if (user) {
         user.fablabName = '';
         if (user.fablabId) {
-          const fablab = await fablabService.getById(user.fablabId);
+          const fablab = await fablabService.get(user.fablabId);
           user.fablabName = fablab.name;
         }
         logger.info(`GET User by id with result ${user}`);

@@ -1,15 +1,18 @@
 import * as mongoose from 'mongoose';
 import Fablab from '../models/fablab.model';
+/* eslint-disable no-unused-vars */
+import ModelService from './model.service';
+/* eslint-enable no-unused-vars */
 
 
-export class FablabService {
+export class FablabService implements ModelService {
   /* eslint-disable class-methods-use-this */
   /**
    * This method gets a fablab by its id
    * @param id is the id of the fablab
    * @returns a promise with the results
    */
-  public getById (id) {
+  public get (id) {
     const _id = mongoose.Types.ObjectId(id);
     return Fablab.findOne({ _id });
   }
@@ -52,9 +55,17 @@ export class FablabService {
    * @returns a promise with the result
    */
   public async deleteById (id) {
-    const fablab = await this.getById(id);
+    const fablab = await this.get(id);
     fablab.activated = false;
     return this.update(id, fablab);
+  }
+
+  /**
+   * This method counts all fablabs
+   * @returns a promise with the results
+   */
+  public count () {
+    return Fablab.countDocuments();
   }
   /* eslint-enable class-methods-use-this */
 }
