@@ -9,7 +9,7 @@ import { ErrorType, IError } from '../services/router.service';
 import logger from '../logger';
 import Language, { languageSchema } from '../models/language';
 import validatorService from '../services/validator.service';
-import fablabController from './fablab.controller';
+import FablabService from '../services/fablab.service';
 
 /* eslint-enable no-unused-vars */
 
@@ -854,6 +854,7 @@ function get (req, res) {
   }
  */
 function getNames (req, res) {
+  const fablabService = new FablabService();
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
@@ -862,7 +863,7 @@ function getNames (req, res) {
       if (user) {
         user.fablabName = '';
         if (user.fablabId) {
-          const fablab = await fablabController.getById(user.fablabId);
+          const fablab = await fablabService.getById(user.fablabId);
           user.fablabName = fablab.name;
         }
         logger.info(`GET User by id with result ${user}`);
