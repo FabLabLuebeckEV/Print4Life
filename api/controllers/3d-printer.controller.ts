@@ -1,8 +1,8 @@
-import machineService from '../services/machine.service';
 import validatorService from '../services/validator.service';
 import logger from '../logger';
+import { Printer3DService } from '../services/3d-printer.service';
 
-const machineType = '3d-printer';
+const printer3DService = new Printer3DService();
 
 /**
  * @api {get} /api/v1/machines/3d-printer Get 3d-printer
@@ -129,7 +129,7 @@ const machineType = '3d-printer';
  */
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
-  _getAll(req.query.limit, req.query.skip).then((printers3d) => {
+  printer3DService.getAll(req.query.limit, req.query.skip).then((printers3d) => {
     if ((printers3d && printers3d.length === 0) || !printers3d) {
       logger.info('GET 3D Printers with no result');
       res.status(204).send();
@@ -164,7 +164,7 @@ function getAll (req, res) {
  *
  */
 function count (req, res) {
-  _count().then((count) => {
+  printer3DService.count().then((count) => {
     logger.info(`GET count 3D printers with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
@@ -277,7 +277,7 @@ function count (req, res) {
  *
  */
 function create (req, res) {
-  _create(req.body).then((printer3d) => {
+  printer3DService.create(req.body).then((printer3d) => {
     logger.info(`POST 3D Printers with result ${JSON.stringify(printer3d)}`);
     res.status(201).send({ '3d-printer': printer3d });
   }).catch((err) => {
@@ -368,12 +368,12 @@ function deleteById (req, res) {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
     let printer3d;
-    _get(req.params.id).then((p) => {
+    printer3DService.get(req.params.id).then((p) => {
       if (p) {
         printer3d = p;
-        _deleteById(req.params.id).then((result) => {
+        printer3DService.deleteById(req.params.id).then((result) => {
           if (result) {
-            _get(req.params.id).then((result) => {
+            printer3DService.get(req.params.id).then((result) => {
               if (result) {
                 logger.info(`DELETE 3D Printer with result ${JSON.stringify(printer3d)}`);
                 res.status(200).send({ '3d-printer': result });
@@ -466,7 +466,7 @@ function get (req, res) {
     logger.error({ error: checkId.error });
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    _get(req.params.id).then((printer3d) => {
+    printer3DService.get(req.params.id).then((printer3d) => {
       if (!printer3d) {
         const msg = { error: `3D Printer by id '${req.params.id}' not found` };
         logger.error(msg);
@@ -594,13 +594,13 @@ function update (req, res) {
     logger.error(msg);
     res.status(400).send(msg);
   } else {
-    _get(req.params.id).then((printer3d) => {
+    printer3DService.get(req.params.id).then((printer3d) => {
       if (!printer3d) {
         const msg = { error: `3D Printer by id '${req.params.id}' not found` };
         logger.error(msg);
         res.status(404).send(msg);
       } else {
-        _update(req.params.id, req.body).then((printer3d) => {
+        printer3DService.update(req.params.id, req.body).then((printer3d) => {
           logger.info(`PUT 3D Printer with result ${JSON.stringify(printer3d)}`);
           res.status(200).send({ '3d-printer': printer3d });
         });
@@ -611,36 +611,6 @@ function update (req, res) {
       res.status(400).send(msg);
     });
   }
-}
-
-function _getAll (limit?: string, skip?: string) {
-  let l: Number;
-  let s: Number;
-  if (limit && skip) {
-    l = Number.parseInt(limit, 10);
-    s = Number.parseInt(skip, 10);
-  }
-  return machineService.getMachineType(machineType, l, s);
-}
-
-function _create (params) {
-  return machineService.create(machineType, params);
-}
-
-function _deleteById (id) {
-  return machineService.deleteById(machineType, id);
-}
-
-function _get (id) {
-  return machineService.get(machineType, id);
-}
-
-function _update (id, machine) {
-  return machineService.update(machineType, id, machine);
-}
-
-function _count () {
-  return machineService.count(machineType);
 }
 
 
