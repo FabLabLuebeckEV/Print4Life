@@ -1,39 +1,11 @@
 import * as express from 'express';
 import * as multer from 'multer';
-import * as GridFsStorage from 'multer-gridfs-storage';
-import config from '../config/config';
-// import { Db } from 'mongodb';
 import orderCtrl from '../controllers/order.controller';
 import routerService from '../services/router.service';
 
 const router = express.Router();
 
-let upload = multer();
-
-export function setUpOrderAttachmentStorage (db, mongo): any {
-  if (db && mongo) {
-    const storage = new GridFsStorage({
-      url: config.connections.mongo.host + config.connections.mongo.database,
-      cache: true,
-      file: (req, file) => {
-        const filename = `${file.filename}_${Date.now()}`;
-        return {
-          filename,
-          bucketName: 'orderAttachments',
-          metadata: (req, file) => {
-            const [originalname] = file.originalname;
-            return { filename, originalname };
-          }
-        };
-      }
-    });
-
-    upload = multer({
-      storage
-    });
-  }
-}
-
+const upload = multer();
 
 router.use((req, res, next) => routerService.jwtValid(req, res, next));
 

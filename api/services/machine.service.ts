@@ -202,25 +202,25 @@ export class MachineService {
     delete machine.__v;
     switch (type) {
       case '3d-printer':
-        return Printer3D.update(
+        return Printer3D.updateOne(
           { _id },
           machine,
           { upsert: true }
         ).then(() => Printer3D.findOne({ _id }));
       case 'lasercutter':
-        return Lasercutter.update(
+        return Lasercutter.updateOne(
           { _id },
           machine,
           { upsert: true }
         ).then(() => Lasercutter.findOne({ _id }));
       case 'otherMachine':
-        return Other.update(
+        return Other.updateOne(
           { _id },
           machine,
           { upsert: true }
         ).then(() => Other.findOne({ _id }));
       case 'millingMachine':
-        return MillingMachine.update(
+        return MillingMachine.updateOne(
           { _id },
           machine,
           { upsert: true }

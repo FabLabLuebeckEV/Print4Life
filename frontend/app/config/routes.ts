@@ -40,7 +40,8 @@ export const routes = {
                 comment: 'comment',
                 count: 'count',
                 search: 'search',
-                upload: 'upload'
+                upload: 'upload',
+                getFile: 'getFile'
             },
             machines: {
                 root: 'machines',

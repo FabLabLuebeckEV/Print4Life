@@ -10,7 +10,8 @@ export enum ErrorType {
   EMAIL_EXISTS,
   AUTHENTIFICATION_FAILED,
   MACHINE_TYPE_NOT_SUPPORTED,
-  MACHINE_NOT_FOUND
+  MACHINE_NOT_FOUND,
+  UPLOAD_FILE_ERROR
 }
 
 /* eslint-disable no-restricted-globals */

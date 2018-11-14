@@ -313,7 +313,8 @@
             "author": "Author",
             "content": "Content",
             "files": "Files",
-            "file": "File"
+            "file": "File",
+            "latestVersion": "Latest Version"
         },
         "modals": {
             "ok": "Yes",

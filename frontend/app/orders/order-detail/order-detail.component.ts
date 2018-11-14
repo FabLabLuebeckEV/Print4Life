@@ -25,6 +25,8 @@ export class OrderDetailComponent implements OnInit {
   private loggedInUser: User;
   editIcon: any;
   deleteIcon: any;
+  toggleOnIcon: any;
+  toggleOffIcon: any;
   editLink: String;
   editor: User = new User(
     undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
@@ -59,7 +61,8 @@ export class OrderDetailComponent implements OnInit {
       author: '',
       content: '',
       files: '',
-      file: ''
+      file: '',
+      latestVersion: ''
     },
     modals: {
       ok: '',
@@ -86,6 +89,8 @@ export class OrderDetailComponent implements OnInit {
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
     this.deleteIcon = this.config.icons.delete;
+    this.toggleOnIcon = this.config.icons.toggleOn;
+    this.toggleOffIcon = this.config.icons.toggleOff;
   }
 
   async ngOnInit() {
@@ -103,8 +108,9 @@ export class OrderDetailComponent implements OnInit {
               comment['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
             });
             result.order.files.forEach(async file => {
-              const author = await this.userService.getNamesOfUser(file.author);
-              file['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
+              file['link'] = `${routes.backendUrl}/` +
+                `${routes.paths.backend.orders.root}/${this.order._id}/` +
+                `${routes.paths.backend.orders.getFile}/${file.id}`;
             });
             this.owner = await this.userService.getNamesOfUser(this.order.owner);
             this.owner['fullname'] = this.owner.firstname + ' ' + this.owner.lastname;
@@ -190,6 +196,11 @@ export class OrderDetailComponent implements OnInit {
         let createdAt = moment(this.order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
         createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
         this.order['shownCreatedAt'] = createdAt;
+        this.order.files.forEach((file) => {
+          let createdAt = moment(file.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
+          createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
+          file['shownCreatedAt'] = createdAt;
+        });
       }
       if (this.order && this.order.status) {
         this._translateStatus().then((shownStatus) => {
@@ -225,7 +236,8 @@ export class OrderDetailComponent implements OnInit {
           author: translations['orderDetail'].labels.author,
           content: translations['orderDetail'].labels.content,
           files: translations['orderDetail'].labels.files,
-          file: translations['orderDetail'].labels.file
+          file: translations['orderDetail'].labels.file,
+          latestVersion: translations['orderDetail'].labels.latestVersion
         },
         modals: {
           ok: translations['orderDetail'].modals.ok,

@@ -1,11 +1,10 @@
-import * as mongodb from 'mongodb';
-import * as mongoose from 'mongoose';
-import { Readable } from 'stream';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 import { OrderService } from '../services/order.service';
+import FileService from '../services/file.service';
 
 const orderService = new OrderService();
+const fileService = new FileService();
 
 /**
  * @api {get} /api/v1/orders/ Request the list of orders
@@ -677,36 +676,14 @@ function get (req, res) {
 
 function upload (req, res) {
   const promises = [];
-  // TODO: Implement Schema and Model for Attachments / Files and relate them to a specific order
   // TODO: Handle upload of the same file (maybe method PUT? and check for filename and order id)
-  // TODO: Remove this code to file service
   // TODO: handle GET and DELETE File requests
-  // TODO: Handle other metadata for files
   if (!req.files) {
     return res.status(500).send({ message: 'Error uploading file' });
   }
 
   req.files.forEach(async (file) => {
-    promises.push(new Promise((resolve) => {
-      const readableTrackStream = new Readable();
-      readableTrackStream.push(file.buffer);
-      readableTrackStream.push(null);
-      const bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
-        bucketName: 'orderAttachments'
-      });
-      const uploadStream = bucket.openUploadStream(file.originalname);
-      readableTrackStream.pipe(uploadStream);
-
-      uploadStream.on('error', () => resolve({ success: false, message: 'Error uploading file' }));
-
-      uploadStream.on('finish',
-        () => {
-          const fileId = mongoose.Types.ObjectId(uploadStream.id).toString();
-          resolve({ success: true, fileId });
-        });
-    }));
-  }, (reject) => {
-    reject({ message: 'Error while uploading!' });
+    promises.push(fileService.uploadFile(file, 'orderAttachments', req.params.id));
   });
 
   return Promise.all(promises).then(async (results) => {
@@ -716,7 +693,14 @@ function upload (req, res) {
       if (!result.success) {
         error = true;
       } else {
-        files.push(result.fileId);
+        files.push(
+          {
+            id: result.fileId,
+            contentType: result.contentType,
+            filename: result.filename,
+            createdAt: result.createdAt
+          }
+        );
       }
     });
     if (error) {
@@ -728,38 +712,9 @@ function upload (req, res) {
       await orderService.update(order);
       return res.status(200).send({ success: true });
     } catch (error) {
-      return res.status(500).send({ message: 'Error while uploading!' });
+      return res.status(500).send({ message: 'Error while uploading!', stack: error.stack });
     }
-  });
-
-
-  // const gridfs = GridFS({
-  //   collection: 'orderAttachments',
-  //   model: 'Attachment',
-  //   mongooseConnection: mongoose.connection
-  // });
-
-  // const Attachment = gridfs.model;
-
-  // req.files.forEach((file) => {
-  //   const readStream = new streamBuffers.ReadableStreamBuffer({
-  //     frequency: 10, // in milliseconds.
-  //     chunkSize: 2048 // in bytes.
-  //   });
-  //   readStream.put(file.buffer);
-  //   Attachment.write({
-  //     filename: file.originalname,
-  //     contentType: 'text/plain'
-  //   },
-  //   readStream,
-  //   (error, createdFile) => {
-  //     if (error) {
-  //       logger.error(error);
-  //     } else {
-  //       logger.info(createdFile);
-  //     }
-  //   });
-  // });
+  }).catch((error) => res.status(500).send({ message: 'Error while uploading!', stack: error.stack }));
 }
 
 export default {

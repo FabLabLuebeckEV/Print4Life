@@ -110,7 +110,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.author}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields.labels.latestVersion}}</th>
             <th class="align-middle text-center" scope="col">{{translationFields.labels.file}}</th>
             <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
           </tr>
@@ -118,11 +118,12 @@
         <tbody>
           <tr *ngFor="let file of order.files">
             <td class="align-middle text-center">
-              <a *ngIf="userIsLoggedIn" [routerLink]="file.link">{{file.author}}</a>
-              <span *ngIf="!userIsLoggedIn">{{file.author}}</span>
+              <fa-icon class="text-success" *ngIf="!file.deprecated" [icon]="toggleOnIcon"></fa-icon>
+              <fa-icon class="text-danger" *ngIf="file.deprecated" [icon]="toggleOffIcon"></fa-icon>
             </td>
-            <td class="align-middle text-center">{{files.content}}</td>
-            <td class="align-middle text-center">{{files.timestamp | date:'short'}}</td>
+            <td *ngIf="userIsLoggedIn" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
+            <td *ngIf="!userIsLoggedIn" class="align-middle text-center">{{file.filename}}</td>
+            <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
           </tr>
         </tbody>
       </table>
