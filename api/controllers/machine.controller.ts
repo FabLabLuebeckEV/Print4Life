@@ -1,7 +1,7 @@
-import * as fs from 'fs';
-import machineService from '../services/machine.service';
-import materialService from '../services/material.service';
+import { MachineService } from '../services/machine.service';
 import logger from '../logger';
+
+const machineService = new MachineService();
 
 /**
  * @api {get} /api/v1/machines/ Get all machines
@@ -94,7 +94,7 @@ import logger from '../logger';
  */
 
 function getAllMachines (req, res) {
-  _getAllMachines().then((machines) => {
+  machineService.getAllMachines().then((machines) => {
     logger.info('Get all machines');
     res.status(200).send({ machines });
   }).catch((err) => {
@@ -125,7 +125,7 @@ function getAllMachines (req, res) {
 }
  */
 function getMachineTypes (req, res) {
-  _getMachineTypes().then((types) => {
+  machineService.getMachineTypes().then((types) => {
     logger.info(`Get all machine types: ${types}`);
     res.status(200).send({ types });
   }).catch((err) => {
@@ -163,7 +163,7 @@ function getMaterialsByType (req, res) {
     res.status(400).send(msg);
   }
 
-  _getMachineTypes().then((types) => {
+  machineService.getMachineTypes().then((types) => {
     let typeOk = false;
     Object.keys(types).forEach((type) => {
       const check = types[type].toLowerCase().replace(/ /g, '');
@@ -178,7 +178,7 @@ function getMaterialsByType (req, res) {
       res.status(404).send(msg);
     }
 
-    _getMaterialsByType(req.params.machine).then((materials) => {
+    machineService.getMaterialsByType(req.params.machine).then((materials) => {
       logger.info(`GET all machine materials: ${materials}`);
       res.status(200).send({ materials });
     }).catch((err) => {
@@ -187,41 +187,6 @@ function getMaterialsByType (req, res) {
       res.status(500).send(msg);
     });
   });
-}
-
-function _getAllMachines () {
-  return machineService.getMachineType('all');
-}
-
-function _getMachineTypes () {
-  return new Promise((resolve, reject) => {
-    fs.readdir('api/models/machines', ((err, files) => {
-      if (err) {
-        reject(err);
-      } else {
-        const types = [];
-        files.forEach((file) => {
-          if (!file.startsWith('machine.basic')) {
-            const split = file.split('.');
-            let type = '';
-            for (let i = 0; i < split.length; i += 1) {
-              if (split[i] !== 'ts' && split[i] !== 'model') {
-                split[i] = split[i].charAt(0).toUpperCase() + split[i].substring(1);
-                type += `${split[i]} `;
-              }
-            }
-            types.push(type.trim());
-          }
-        });
-        resolve(types);
-      }
-    }));
-  });
-}
-
-function _getMaterialsByType (type) {
-  type += 'Material';
-  return materialService.getMaterialByType(type);
 }
 
 export default { getAllMachines, getMachineTypes, getMaterialsByType };

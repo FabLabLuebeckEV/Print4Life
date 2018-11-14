@@ -1,10 +1,8 @@
-import * as uuid from 'uuid/v4';
-import * as mongoose from 'mongoose';
-import { isNumber } from 'util';
-
-import { Order, orderSchema } from '../models/order.model';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
+import { OrderService } from '../services/order.service';
+
+const orderService = new OrderService();
 
 /**
  * @api {get} /api/v1/orders/ Request the list of orders
@@ -111,7 +109,7 @@ import validatorService from '../services/validator.service';
 */
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
-  _getAll(undefined, req.query.limit, req.query.skip).then((orders) => {
+  orderService.getAll(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
       logger.info('GET Orders without result');
       res.status(204).send();
@@ -183,7 +181,7 @@ function getAll (req, res) {
 */
 function search (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query);
-  _getAll(req.body.query, req.body.limit, req.body.skip).then((orders) => {
+  orderService.getAll(req.body.query, req.body.limit, req.body.skip).then((orders) => {
     if (orders.length === 0) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
@@ -250,7 +248,7 @@ function search (req, res) {
 */
 function count (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query);
-  _count(req.body.query).then((count) => {
+  orderService.count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
@@ -330,7 +328,7 @@ function count (req, res) {
   }
  */
 function create (req, res) {
-  _create(req.body).then((order) => {
+  orderService.create(req.body).then((order) => {
     logger.info(`POST Order with result ${JSON.stringify(order)}`);
     res.status(201).send({ order });
   }).catch((err) => {
@@ -415,7 +413,7 @@ function update (req, res) {
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    _update(req.body).then((order) => {
+    orderService.update(req.body).then((order) => {
       logger.info(`PUT Order with result ${JSON.stringify(order)}`);
       res.status(200).send({ order });
     }).catch((err) => {
@@ -475,7 +473,7 @@ function deleteById (req, res) {
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    _deleteById(req.params.id).then((order) => {
+    orderService.deleteById(req.params.id).then((order) => {
       logger.info(`DELETE Order with result ${JSON.stringify(order)}`);
       res.status(200).send({ order });
     }).catch((err) => {
@@ -521,7 +519,7 @@ function deleteById (req, res) {
   }
  */
 function getStatus (req, res) {
-  _getStatus().then((status) => {
+  orderService.getStatus().then((status) => {
     if (!status) {
       logger.info('GET status without result');
       res.status(204).send();
@@ -585,7 +583,7 @@ function createComment (req, res) {
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    _createComment(req.params.id, { timestamp: new Date(), ...req.body }).then((comment) => {
+    orderService.createComment(req.params.id, { timestamp: new Date(), ...req.body }).then((comment) => {
       if (!comment) {
         logger.error({ error: `Could not find any Order with id ${req.params.id}` });
         res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
@@ -659,7 +657,7 @@ function get (req, res) {
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    _get(req.params.id).then((order) => {
+    orderService.get(req.params.id).then((order) => {
       if (!order) {
         logger.error({ error: `Could not find any Order with id ${req.params.id}` });
         res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
@@ -685,95 +683,6 @@ function upload (req, res) {
   return res.send({
     success: true
   });
-}
-
-function _getAll (query?: any, limit?: any, skip?: any) {
-  let l: Number;
-  let s: Number;
-  let promise;
-  if ((limit && skip) || (isNumber(limit) && isNumber(skip))) {
-    l = Number.parseInt(limit, 10);
-    s = Number.parseInt(skip, 10);
-    query ? promise = Order.find(query).limit(l).skip(s) : promise = Order.find(query).limit(l).skip(s);
-  } else {
-    query ? promise = Order.find(query) : promise = Order.find();
-  }
-  return promise;
-}
-
-function _get (id) {
-  return Order.findOne({ _id: id });
-}
-
-function _create (order) {
-  order.token = uuid();
-  order.createdAt = new Date();
-  if (order.comments) {
-    order.comments.forEach((comment) => {
-      if (!comment.createdAt) {
-        comment.createdAt = order.createdAt;
-      }
-    });
-  }
-  return Order(_rmDbVars(order)).save();
-}
-
-function _update (order) {
-  delete order.__v;
-  if (!order.createdAt) {
-    order.createdAt = new Date();
-  }
-  return Order.update(
-    { _id: mongoose.Types.ObjectId(order._id) },
-    order,
-    { upsert: true }
-  ).then(() => Order.findOne({ _id: order._id }));
-}
-
-async function _deleteById (id) {
-  const order = await _get(id);
-  order.status = 'deleted';
-  return _update(order);
-}
-
-async function _getStatus () {
-  return new Promise((resolve, reject) => {
-    const status = orderSchema.paths.status.enumValues;
-    if (status === undefined) {
-      reject();
-    } else {
-      resolve(status);
-    }
-  });
-}
-
-async function _createComment (id, comment) {
-  let ret;
-  const order = await _get(id);
-  if (order) {
-    comment.createdAt = new Date();
-    order.comments.push(comment);
-    await order.save();
-    ret = comment;
-  } else {
-    ret = undefined;
-  }
-  return ret;
-}
-
-function _count (query) {
-  return Order.countDocuments(query);
-}
-
-/**
- * Deletes the MongoDB vars not needed for updates etc.
- * obj is the obj where the DbVars should be deleted
- * @returns obj is the cleaned object
- */
-function _rmDbVars (obj) {
-  delete obj.__v;
-  delete obj._id;
-  return obj;
 }
 
 export default {
