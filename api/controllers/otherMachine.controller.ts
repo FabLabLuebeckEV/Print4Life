@@ -1,8 +1,10 @@
-import machineService from '../services/machine.service';
+import { MachineService } from '../services/machine.service';
 import validatorService from '../services/validator.service';
 import logger from '../logger';
 
 const machineType = 'otherMachine';
+
+const machineService = new MachineService();
 
 /**
  * @api {get} /api/v1/machines/otherMachines Get other machines

@@ -1,9 +1,10 @@
-import machineService from '../services/machine.service';
+import { MachineService } from '../services/machine.service';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 
 const machineType = 'millingMachine';
 
+const machineService = new MachineService();
 
 /**
  * @api {get} /api/v1/machines/millingMachines Get milling machines
