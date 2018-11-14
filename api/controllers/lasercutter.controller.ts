@@ -1,9 +1,8 @@
-import machineService from '../services/machine.service';
-import { LaserType } from '../models/lasertype.model';
 import validatorService from '../services/validator.service';
 import logger from '../logger';
+import LasercutterService from '../services/lasercutter.service';
 
-const machineType = 'lasercutter';
+const lasercutterService = new LasercutterService();
 
 /**
  * @api {get} /api/v1/machines/lasercutters Get lasercutters
@@ -118,7 +117,7 @@ const machineType = 'lasercutter';
  */
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
-  _getAll(req.query.limit, req.query.skip).then((lasercutters) => {
+  lasercutterService.getAll(req.query.limit, req.query.skip).then((lasercutters) => {
     if ((lasercutters && lasercutters.length === 0) || !lasercutters) {
       logger.info('GET Lasercutters with no result');
       res.status(204).send();
@@ -152,7 +151,7 @@ function getAll (req, res) {
  *
  */
 function count (req, res) {
-  _count().then((count) => {
+  lasercutterService.count().then((count) => {
     logger.info(`Count Lasercutters with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
@@ -188,7 +187,7 @@ function count (req, res) {
  *
  */
 function getLaserTypes (req, res) {
-  _getLaserTypes().then((laserTypes) => {
+  lasercutterService.getLaserTypes().then((laserTypes) => {
     if (laserTypes && laserTypes.length === 0) {
       logger.info('GET Lasertypes with no result');
       res.status(204).send();
@@ -291,7 +290,7 @@ function getLaserTypes (req, res) {
  *
  */
 function create (req, res) {
-  _create(req.body).then((lasercutter) => {
+  lasercutterService.create(req.body).then((lasercutter) => {
     logger.info(`POST Lasercutter with result ${JSON.stringify(lasercutter)}`);
     res.status(201).send({ lasercutter });
   }).catch((err) => {
@@ -377,11 +376,11 @@ function deleteById (req, res) {
     logger.error({ error: checkId.error });
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    _get(req.params.id).then((l) => {
+    lasercutterService.get(req.params.id).then((l) => {
       if (l) {
-        _deleteById(req.params.id).then((result) => {
+        lasercutterService.deleteById(req.params.id).then((result) => {
           if (result) {
-            _get(req.params.id).then((result) => {
+            lasercutterService.get(req.params.id).then((result) => {
               if (result) {
                 logger.info(`DELETE Lasercutter with result ${JSON.stringify(result)}`);
                 res.status(200).send({ lasercutter: result });
@@ -472,7 +471,7 @@ function get (req, res) {
     logger.error({ error: checkId.error });
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    _get(req.params.id).then((lasercutter) => {
+    lasercutterService.get(req.params.id).then((lasercutter) => {
       if (!lasercutter) {
         const msg = { error: `Lasercutter by id '${req.params.id}' not found` };
         logger.error(msg);
@@ -586,13 +585,13 @@ function update (req, res) {
     logger.error(msg);
     res.status(400).send(msg);
   } else {
-    _get(req.params.id).then((lasercutter) => {
+    lasercutterService.get(req.params.id).then((lasercutter) => {
       if (!lasercutter) {
         const msg = { error: `Lasercutter by id '${req.params.id}' not found` };
         logger.error(msg);
         res.status(404).send(msg);
       } else {
-        _update(req.params.id, req.body).then((lasercutter) => {
+        lasercutterService.update(req.params.id, req.body).then((lasercutter) => {
           logger.info(`PUT Lasercutter with result ${JSON.stringify(lasercutter)}`);
           res.status(200).send({ lasercutter });
         });
@@ -603,40 +602,6 @@ function update (req, res) {
       res.status(400).send(msg);
     });
   }
-}
-
-function _getAll (limit?: string, skip?: string) {
-  let l: Number;
-  let s: Number;
-  if (limit && skip) {
-    l = Number.parseInt(limit, 10);
-    s = Number.parseInt(skip, 10);
-  }
-  return machineService.getMachineType(machineType, l, s);
-}
-
-function _create (params) {
-  return machineService.create(machineType, params);
-}
-
-function _getLaserTypes () {
-  return LaserType.find();
-}
-
-function _get (id) {
-  return machineService.get(machineType, id);
-}
-
-function _deleteById (id) {
-  return machineService.deleteById(machineType, id);
-}
-
-function _update (id, machine) {
-  return machineService.update(machineType, id, machine);
-}
-
-function _count () {
-  return machineService.count(machineType);
 }
 
 export default {
