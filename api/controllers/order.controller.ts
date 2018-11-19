@@ -753,6 +753,12 @@ function uploadFile (req, res) {
     }
     try {
       const order = await orderService.get(req.params.id);
+      order.files.forEach((file) => {
+        const found = files.find((f) => file.filename === f.filename && file.contentType === f.contentType);
+        if (found) {
+          file.deprecated = true;
+        }
+      });
       order.files = order.files.concat(files);
       await orderService.update(order);
       return res.status(200).send({ success: true });

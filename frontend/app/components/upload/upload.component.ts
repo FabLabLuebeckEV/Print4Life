@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { routes } from 'frontend/app/config/routes';
 import { HttpClient, HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { ConfigService } from 'frontend/app/config/config.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-upload',
@@ -11,8 +12,11 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
   styleUrls: ['./upload.component.css']
 })
 export class UploadComponent implements OnInit {
+  @Output() uploadingEvent: EventEmitter<boolean> = new EventEmitter();
   accept = '*';
   files: File[] = [];
+  config: any;
+  spinnerConfig: Object;
   progress: number;
   hasBaseDropZoneOver = false;
   httpEmitter: Subscription;
@@ -22,14 +26,30 @@ export class UploadComponent implements OnInit {
   warningIcon: FaIconComponent;
   deleteIcon: FaIconComponent;
   uploadIcon: FaIconComponent;
+  translationFields = {
+    labels: {
+      title: '',
+      dropzone: '',
+      multiple: '',
+      name: '',
+      type: '',
+      size: '',
+      actions: '',
+      queueTitle: '',
+      removeAllButton: ''
+    }
+  };
 
-  constructor(public HttpClient: HttpClient, private configService: ConfigService) {
-    const config: any = this.configService.getConfig();
-    this.checkIcon = config.icons.toggleOn;
-    this.warningIcon = config.icons.warning;
-    this.deleteIcon = config.icons.delete;
-    this.uploadIcon = config.icons.upload;
-
+  constructor(
+    public HttpClient: HttpClient,
+    private configService: ConfigService,
+    private translateService: TranslateService
+  ) {
+    this.config = this.configService.getConfig();
+    this.checkIcon = this.config.icons.toggleOn;
+    this.warningIcon = this.config.icons.warning;
+    this.deleteIcon = this.config.icons.delete;
+    this.uploadIcon = this.config.icons.upload;
   }
 
   cancel() {
@@ -39,7 +59,7 @@ export class UploadComponent implements OnInit {
     }
   }
 
-  uploadFilesToOrder(id: string): Subscription {
+  uploadFilesToOrder(id: string, cb?: Function): Subscription {
     const url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/${id}/${routes.paths.backend.orders.upload}`;
     const formData: FormData = new FormData();
     this.files.forEach(file => {
@@ -49,16 +69,23 @@ export class UploadComponent implements OnInit {
       reportProgress: true// , responseType: 'text'
     });
 
+    this._emit(true);
+
     return this.httpEmitter = this.HttpClient.request(req)
       .subscribe(
         (event: HttpEvent<Event>) => {
           this.httpEvent = event;
-
           if (event instanceof HttpResponse) {
             delete this.httpEmitter;
           }
         },
-        error => console.log('Error Uploading', error)
+        error => console.log('Error Uploading', error),
+        () => {
+          this._emit(false);
+          if (cb) {
+            cb();
+          }
+        }
       );
   }
 
@@ -68,6 +95,34 @@ export class UploadComponent implements OnInit {
 
 
   ngOnInit() {
+    this.translateService.onLangChange.subscribe(() => {
+      this._translate();
+    });
+    this._translate();
+  }
+
+  public _emit(uploading) {
+    this.uploadingEvent.emit(uploading);
+  }
+
+  private _translate() {
+    this.translateService.get(['upload']).subscribe((translations => {
+      if (translations.hasOwnProperty('upload') && translations.upload.hasOwnProperty('labels')) {
+        this.translationFields = {
+          labels: {
+            title: translations['upload'].labels.title,
+            dropzone: translations['upload'].labels.dropzone,
+            multiple: translations['upload'].labels.multiple,
+            name: translations['upload'].labels.name,
+            type: translations['upload'].labels.type,
+            size: translations['upload'].labels.size,
+            actions: translations['upload'].labels.actions,
+            queueTitle: translations['upload'].labels.queueTitle,
+            removeAllButton: translations['upload'].labels.removeAllButton
+          }
+        };
+      }
+    }));
   }
 
 }

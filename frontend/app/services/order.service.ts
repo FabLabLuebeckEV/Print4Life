@@ -64,4 +64,17 @@ export class OrderService {
   public createComment(id, comment): Promise<any> {
     return this.http.post(`${this.p}/${id}/${routes.paths.backend.orders.comment}`, comment).toPromise();
   }
+
+  public sortFilesByDeprecated(files) {
+    files.sort((a: { deprecated: boolean }, b: { deprecated: boolean }) => {
+      if (!a.hasOwnProperty('deprecated') || !b.hasOwnProperty('deprecated')
+        && a.deprecated === b.deprecated) {
+        return 0;
+      } else if (a.deprecated === true) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+  }
 }

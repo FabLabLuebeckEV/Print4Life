@@ -4,18 +4,18 @@
 
     <div class="col-md-3">
 
-      <h3>Select files</h3>
+      <h3>{{translationFields.labels.title}}</h3>
 
       <div class="inline-block">
         <div ngfDrop [(validDrag)]="baseDropValid" (fileOver)="hasBaseDropZoneOver=$event" [(files)]="files" [accept]="accept"
           [maxSize]="maxSize" [(dragFiles)]="dragFiles" [(lastInvalids)]="lastInvalids" class="my-drop-zone"
           [class.invalid-drag]="baseDropValid===false" [class.valid-drag]="baseDropValid" (filesChange)="lastFileAt=getDate()">
-          Base drop zone
+          <div class="dropzone-label text-center">{{translationFields.labels.dropzone}}</div>
         </div>
       </div>
 
       <div class="inline-block spacing-top">
-        Multiple
+        {{translationFields.labels.multiple}}
         <input ngfSelect multiple type="file" [(files)]="files" [accept]="accept" [maxSize]="maxSize" [(lastInvalids)]="lastInvalids"
           (filesChange)="lastFileAt=getDate()" />
       </div>
@@ -24,14 +24,13 @@
     <div class="offset-md-1 col-md-8" style="margin-bottom: 40px">
 
       <div style="margin-bottom: 40px">
-        <h3>{{ files.length }} Qued Files</h3>
         <table class="table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Size</th>
-              <th>Actions</th>
+              <th>{{translationFields.labels.name}}</th>
+              <th>{{translationFields.labels.type}}</th>
+              <th>{{translationFields.labels.size}}</th>
+              <th>{{translationFields.labels.actions}}</th>
             </tr>
           </thead>
           <tbody>
@@ -58,20 +57,13 @@
         </table>
 
         <div>
-          <div>
-            Queue progress:
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': progress + '%' }"></div>
-            </div>
-          </div>
+          <h5 *ngIf="files.length">{{translationFields.labels.queueTitle}} {{ files.length }}</h5>
 
-          <ng-container *ngIf="lastFileAt">
+          <!-- <ng-container *ngIf="lastFileAt">
             <p>
               <strong>Last file(s) selected At:</strong> {{ lastFileAt | date : 'longTime' }}
             </p>
-          </ng-container>
-
-          <fa-icon *ngIf="progress == 100" [icon]="checkIcon"></fa-icon>
+          </ng-container> -->
 
           <!-- <button type="button" class="btn btn-success btn-s spacing-top spacing-right" (click)="uploadFiles()"
             [disabled]="!files.length">
@@ -83,7 +75,7 @@
           </button> -->
           <button type="button" class="btn btn-danger btn-s spacing-top spacing-right" (click)="files.length=0"
             [disabled]="!files.length">
-            <fa-icon [icon]="deleteIcon"></fa-icon> Remove all
+            <fa-icon [icon]="deleteIcon"></fa-icon> {{translationFields.labels.removeAllButton}}
           </button>
         </div>
       </div>

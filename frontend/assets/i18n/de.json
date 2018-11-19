@@ -6,6 +6,19 @@
     "dashboard": {
         "title": "Willkommen zur Fablab - Auftragsverwaltung!"
     },
+    "upload": {
+        "labels": {
+            "title": "Dateien auswählen",
+            "dropzone": "Dropzone",
+            "multiple": "Mehrere Dateien",
+            "name": "Name",
+            "type": "Typ",
+            "size": "Größe",
+            "actions": "Aktionen",
+            "queueTitle": "Gesamtanzahl an Dateien zum Upload: ",
+            "removeAllButton": "Alle aus Warteschlange entfernen"
+        }
+    },
     "navigation": {
         "title": "Auftragsverwaltung",
         "login": "Einloggen",
@@ -243,7 +256,11 @@
             "newComment": "Neuer Kommentar",
             "author": "Author",
             "content": "Inhalt",
-            "createdAt": "Erstellt am"
+            "createdAt": "Erstellt am",
+            "fileUpload": "Dateiupload",
+            "files": "Aktuelle Dateien",
+            "file": "Datei",
+            "latestVersion": "Aktuelle Version"
         },
         "modals": {
             "ok": "Ok",

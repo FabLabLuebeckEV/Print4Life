@@ -96,46 +96,80 @@
         </div>
       </div>
 
-      <div *ngIf="!editView">
+      <div>
 
         <!-- Files -->
         <div class="form-group row table-spacing">
           <div class="col-md-12 text-center">
-            <h4>{{translationFields.labels.files}}</h4>
+            <h4>{{translationFields.labels.fileUpload}}</h4>
           </div>
         </div>
 
         <div class="col-md-12">
-          <app-upload #fileUpload></app-upload>
+          <app-upload #fileUpload (uploadingEvent)="uploadingEventHandler($event)"></app-upload>
+        </div>
+
+        <!-- Print files of this order as a list -->
+        <div *ngIf="editView && order.files && order.files.length > 0">
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <h4>{{translationFields.labels.files}}</h4>
+            </div>
+            <div class="col-md-12 table-spacing-top table-spacing-bottom">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th class="align-middle text-center" scope="col">{{translationFields.labels.latestVersion}}</th>
+                    <th class="align-middle text-center" scope="col">{{translationFields.labels.file}}</th>
+                    <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let file of order.files">
+                    <td class="align-middle text-center">
+                      <fa-icon class="text-success" *ngIf="!file.deprecated" [icon]="toggleOnIcon"></fa-icon>
+                      <fa-icon class="text-danger" *ngIf="file.deprecated" [icon]="toggleOffIcon"></fa-icon>
+                    </td>
+                    <td class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
+                    <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
         <!-- Comments -->
-        <div class="form-group row table-spacing">
-          <div class="col-md-12 text-center">
-            <h4>{{translationFields.labels.comments}}</h4>
+        <div *ngIf="!editView">
+          <div class="form-group row table-spacing">
+            <div class="col-md-12 text-center">
+              <h4>{{translationFields.labels.comments}}</h4>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row">
-          <div class="col-md-12">
-            <label for="author">{{translationFields.labels.author}}</label>
-            <input type="text" class="form-control" id="author" required name="author" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
-              disabled>
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label for="author">{{translationFields.labels.author}}</label>
+              <input type="text" class="form-control" id="author" required name="author" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
+                disabled>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row">
-          <div class="col-md-12">
-            <label for="content">{{translationFields.labels.content}}</label>
-            <textarea type="text" class="form-control" id="content" required [(ngModel)]="comment.content" name="content"
-              #content="ngModel"></textarea>
-            <div [hidden]="content.valid || content.pristine" class="alert alert-danger">
-              {{translationFields.messages.content}}
+          <div class="form-group row">
+            <div class="col-md-12">
+              <label for="content">{{translationFields.labels.content}}</label>
+              <textarea type="text" class="form-control" id="content" required [(ngModel)]="comment.content" name="content"
+                #content="ngModel"></textarea>
+              <div [hidden]="content.valid || content.pristine" class="alert alert-danger">
+                {{translationFields.messages.content}}
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!createOrderForm.form.valid">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success" [disabled]="!createOrderForm.form.valid || submitting">{{translationFields.labels.submit}}
+      </button>
+
     </form>
 
     <!-- Print comments to this order as a table -->
@@ -193,7 +227,7 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!createCommentForm.form.valid">{{translationFields.labels.sendComment}}</button>
+      <button type="submit" class="btn btn-success" [disabled]="!createCommentForm.form.valid || submitting">{{translationFields.labels.sendComment}}</button>
     </form>
   </div>
 </div>

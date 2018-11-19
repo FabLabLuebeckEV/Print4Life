@@ -112,6 +112,8 @@ export class OrderDetailComponent implements OnInit {
                 `${routes.paths.backend.orders.root}/${this.order._id}/` +
                 `${routes.paths.backend.orders.download}/${file.id}`;
             });
+            // sort files to show deprecated last
+            this.orderService.sortFilesByDeprecated(result.order.files);
             this.owner = await this.userService.getNamesOfUser(this.order.owner);
             this.owner['fullname'] = this.owner.firstname + ' ' + this.owner.lastname;
             this.ownerLink = `/${routes.paths.frontend.users.root}/${this.owner._id}`;
@@ -193,13 +195,11 @@ export class OrderDetailComponent implements OnInit {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
       if (this.order) {
-        let createdAt = moment(this.order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
-        createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
-        this.order['shownCreatedAt'] = createdAt;
+        this.order['shownCreatedAt'] = this.genericService.translateCreatedAt(
+          this.order.createdAt, currentLang, translations['date'].dateTimeFormat);
         this.order.files.forEach((file) => {
-          let createdAt = moment(file.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
-          createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
-          file['shownCreatedAt'] = createdAt;
+          file['shownCreatedAt'] = this.genericService.translateCreatedAt(
+            file.createdAt, currentLang, translations['date'].dateTimeFormat);
         });
       }
       if (this.order && this.order.status) {
@@ -217,9 +217,8 @@ export class OrderDetailComponent implements OnInit {
       if (this.order && this.order.comments) {
         this.order.comments.forEach((comment) => {
           if (comment.createdAt) {
-            let createdAt = moment(comment.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
-            createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
-            comment['shownCreatedAt'] = createdAt;
+            comment['shownCreatedAt'] = this.genericService.translateCreatedAt(
+              comment.createdAt, currentLang, translations['date'].dateTimeFormat);
           }
         });
       }

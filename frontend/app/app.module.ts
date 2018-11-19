@@ -62,7 +62,7 @@ import { ngfModule } from 'angular-file';
         InputModalComponent,
         ChangePasswdModalComponent,
         UserDetailComponent,
-        UploadComponent
+        UploadComponent,
     ],
     imports: [
         BrowserModule,

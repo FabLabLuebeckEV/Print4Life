@@ -12,11 +12,9 @@ import { ConfigService } from '../../config/config.service';
 import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
 import { User } from 'frontend/app/models/user.model';
 import { UserService } from 'frontend/app/services/user.service';
 import { Subscription } from 'rxjs';
-import { faFileUpload } from '@fortawesome/free-solid-svg-icons';
 import { UploadComponent } from 'frontend/app/components/upload/upload.component';
 import { isObject } from 'util';
 
@@ -34,7 +32,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   @ViewChild('fileUpload') fileUpload: UploadComponent;
   config: any;
   publicIcon: any;
+  toggleOnIcon: any;
+  toggleOffIcon: any;
   selectedType: String;
+  submitting: Boolean = false;
   editView: Boolean = false;
   routeChanged: Boolean;
   formSubscription: Subscription;
@@ -81,6 +82,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       author: '',
       content: '',
       createdAt: '',
+      fileUpload: '',
+      files: '',
+      file: '',
+      latestVersion: ''
     },
     modals: {
       ok: '',
@@ -119,6 +124,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     private userService: UserService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
+    this.toggleOnIcon = this.config.icons.toggleOn;
+    this.toggleOffIcon = this.config.icons.toggleOff;
     this._translate();
     this.router.events.subscribe(() => {
       const route = this.location.path();
@@ -164,11 +171,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   onSubmitComment(form) {
+    this.submitting = true;
     const errorMsg = this.translationFields.modals.createCommentError;
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this.comment.author = this.loggedInUser._id;
     this.comment['authorName'] = undefined;
     this.orderService.createComment(this.orderId, this.comment).then((result) => {
+      this.submitting = false;
       if (result) {
         this._openMsgModal(this.translationFields.modals.createCommentSuccessHeader, 'modal-header header-success',
           this.translationFields.modals.createCommentSuccess, okButton, undefined).result.then((result) => {
@@ -187,12 +196,14 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           });
       }
     }).catch(() => {
+      this.submitting = false;
       this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg,
         okButton, undefined);
     });
   }
 
   onSubmit() {
+    this.submitting = true;
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
     let found = false;
     let orderCopy;
@@ -216,26 +227,34 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     if (this.editView) {
       const errorMsg = this.translationFields.modals.error;
       this.orderService.updateOrder(orderCopy).then((result) => {
+        this.submitting = false;
         if (result) {
-          this._openSuccessMsg();
+          this.fileUpload.uploadFilesToOrder(result.order._id, () => {
+            this._openSuccessMsg();
+          });
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
       }).catch(() => {
+        this.submitting = false;
         this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
       });
     } else {
       const errorMsg = this.translationFields.modals.error;
       this.orderService.createOrder(orderCopy).then((result) => {
+        this.submitting = false;
         if (result) {
-          this.fileUpload.uploadFilesToOrder(result.order._id);
-          localStorage.removeItem(localStorageOrderKey);
-          localStorage.removeItem(localStorageCommentKey);
-          this._openSuccessMsg();
+          this.fileUpload.uploadFilesToOrder(result.order._id, () => {
+            localStorage.removeItem(localStorageOrderKey);
+            localStorage.removeItem(localStorageCommentKey);
+            this._openSuccessMsg();
+          });
+
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
       }).catch(() => {
+        this.submitting = false;
         this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
       });
     }
@@ -347,6 +366,19 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           }
         });
       }
+      if (this.order.files) {
+        this.translateService.get(['date']).subscribe((translations => {
+          const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
+          this.order.files.forEach((file) => {
+            file['link'] = `${routes.backendUrl}/` +
+              `${routes.paths.backend.orders.root}/${this.order._id}/` +
+              `${routes.paths.backend.orders.download}/${file.id}`;
+            file['shownCreatedAt'] = this.genericService.translateCreatedAt(
+              file.createdAt, currentLang, translations['date'].dateTimeFormat);
+          });
+          this.orderService.sortFilesByDeprecated(this.order.files);
+        }));
+      }
       const machineId = this.order.machine._id;
       await this.machineTypeChanged(this.order.machine['shownType']);
       this.order.machine._id = machineId;
@@ -421,6 +453,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     });
   }
 
+  public uploadingEventHandler(event) {
+    this.submitting = event;
+  }
 
   private _openSuccessMsg() {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
@@ -442,7 +477,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
-    this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date']).subscribe((translations => {
+    this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date', 'upload']).subscribe((translations => {
       if (translations.hasOwnProperty('orderForm') && isObject(translations.orderForm) &&
         translations.hasOwnProperty('deviceTypes') && isObject(translations.deviceTypes) &&
         translations.hasOwnProperty('status') && isObject(translations.status) &&
@@ -482,10 +517,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         if (this.order && this.order.comments) {
           this.order.comments.forEach((comment) => {
             if (comment.createdAt) {
-              let createdAt = moment(comment.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
-              createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
-              comment['shownCreatedAt'] = createdAt;
+              comment['shownCreatedAt'] = this.genericService.translateCreatedAt(
+                comment.createdAt, currentLang, translations['date'].dateTimeFormat);
             }
+          });
+          this.order.files.forEach((file) => {
+            file['shownCreatedAt'] = this.genericService.translateCreatedAt(
+              file.createdAt, currentLang, translations['date'].dateTimeFormat);
           });
         }
         this.translationFields = {
@@ -507,7 +545,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             newComment: translations['orderForm'].labels.newComment,
             author: translations['orderForm'].labels.author,
             content: translations['orderForm'].labels.content,
-            createdAt: translations['orderForm'].labels.createdAt
+            createdAt: translations['orderForm'].labels.createdAt,
+            fileUpload: translations['orderForm'].labels.fileUpload,
+            files: translations['orderForm'].labels.files,
+            file: translations['orderForm'].labels.file,
+            latestVersion: translations['orderForm'].labels.latestVersion
           },
           modals: {
             ok: translations['orderForm'].modals.ok,

@@ -8,7 +8,7 @@ import { IError, ErrorType } from './router.service';
 /* eslint-disable class-methods-use-this */
 
 export class FileService {
-  public downloadFile(fileId, bucketName): Promise<Object> {
+  public downloadFile (fileId, bucketName): Promise<Object> {
     let error: IError;
     return new Promise((resolve, reject) => {
       let fileID;
@@ -44,7 +44,7 @@ export class FileService {
     });
   }
 
-  public uploadFile(file, bucketName, foreignId) {
+  public uploadFile (file, bucketName, foreignId) {
     return new Promise((resolve, reject) => {
       const readableTrackStream = new Readable();
       readableTrackStream.push(file.buffer);

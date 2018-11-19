@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { UploadComponent } from './upload.component';
 import { ngfModule } from 'angular-file';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 describe('UploadComponent', () => {
   let component: UploadComponent;
@@ -15,7 +16,8 @@ describe('UploadComponent', () => {
     TestBed.configureTestingModule({
       declarations: [UploadComponent],
       imports: [ngfModule, RouterTestingModule,
-        HttpClientTestingModule, FontAwesomeModule]
+        HttpClientTestingModule, FontAwesomeModule, TranslateModule.forRoot()],
+      providers: [TranslateService]
     })
       .compileComponents();
   }));
