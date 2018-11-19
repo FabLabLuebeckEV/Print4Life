@@ -2,6 +2,9 @@ import logger from '../logger';
 import validatorService from '../services/validator.service';
 import { OrderService } from '../services/order.service';
 import FileService from '../services/file.service';
+/* eslint-disable no-unused-vars */
+import { IError, ErrorType } from '../services/router.service';
+/* eslint-enable no-unused-vars */
 
 const orderService = new OrderService();
 const fileService = new FileService();
@@ -674,7 +677,49 @@ function get (req, res) {
   }
 }
 
-function upload (req, res) {
+async function downloadFile (req, res) {
+  let err: IError;
+  let file: any;
+  let downloadStream: any;
+  try {
+    const order = await orderService.get(req.params.id);
+    file = order.files.find((elem) => elem.id === req.params.fileId);
+  } catch (error) {
+    err = {
+      name: 'INVALID_ID',
+      message: 'Invalid fileID in URL parameter. '
+        + 'Must be a single String of 12 bytes or a string of 24 hex characters',
+      stack: error.stack,
+      type: ErrorType.INVALID_ID
+    };
+    return res.status(400).send(err);
+  }
+
+  try {
+    downloadStream = await fileService.downloadFile(req.params.fileId, 'orderAttachments');
+  } catch (err) {
+    let statusCode = 500;
+    if (err.type === ErrorType.INVALID_ID) {
+      statusCode = 400;
+    }
+    return res.status(statusCode).send(err.error);
+  }
+
+  res.set('content-type', file.contentType);
+  res.set('accept-ranges', 'bytes');
+  res.set({
+    'Content-Disposition': `attachment; filename="${file.filename}"`
+  });
+
+  downloadStream.on('end', () => {
+    logger.info(`Done sending file with id ${file.id} to Requester`);
+    res.end();
+  });
+
+  return downloadStream.pipe(res);
+}
+
+function uploadFile (req, res) {
   const promises = [];
   // TODO: Handle upload of the same file (maybe method PUT? and check for filename and order id)
   // TODO: handle GET and DELETE File requests
@@ -727,5 +772,6 @@ export default {
   createComment,
   count,
   search,
-  upload
+  uploadFile,
+  downloadFile
 };

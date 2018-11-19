@@ -41,7 +41,7 @@ export const routes = {
                 count: 'count',
                 search: 'search',
                 upload: 'upload',
-                getFile: 'getFile'
+                download: 'download'
             },
             machines: {
                 root: 'machines',

@@ -91,14 +91,14 @@ const dev = {
   publicRoutes,
   baseUrlBackend: `http://localhost:${port}${baseUrl}`,
   baseUrlFrontend: `http://localhost:${ngPort}`,
-  cors: {
-    whitelist: [`http://localhost:${ngPort}`],
-    corsOptions: {
-      origin: undefined,
-      credentials: true
-    }
-  }
-  // cors: undefined // if testing backend routes in dev mode without using the frontend
+  // cors: {
+  //   whitelist: [`http://localhost:${ngPort}`],
+  //   corsOptions: {
+  //     origin: undefined,
+  //     credentials: true
+  //   }
+  // }
+  cors: undefined // if testing backend routes in dev mode without using the frontend
 };
 
 const staging = {

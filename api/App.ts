@@ -17,7 +17,8 @@ class App {
   private mountRoutes (): void {
     this.express.use(bodyParser.json());
     this.express.use(((req, res, next) => {
-      if (req.get('Content-Type') === 'application/json'
+      const isDownloadRoute = req.originalUrl.includes('orders') && req.originalUrl.includes('download');
+      if (isDownloadRoute || req.get('Content-Type') === 'application/json'
         || (req.get('Content-Type') && req.get('Content-Type').includes('multipart/form-data'))) {
         if (req.get('Content-Type') && req.get('Content-Type').includes('multipart/form-data')) {
           this.express.use(bodyParser.urlencoded({ extended: true }));

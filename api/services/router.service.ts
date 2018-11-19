@@ -11,7 +11,9 @@ export enum ErrorType {
   AUTHENTIFICATION_FAILED,
   MACHINE_TYPE_NOT_SUPPORTED,
   MACHINE_NOT_FOUND,
-  UPLOAD_FILE_ERROR
+  UPLOAD_FILE_ERROR,
+  DOWNLOAD_FILE_ERROR,
+  INVALID_ID
 }
 
 /* eslint-disable no-restricted-globals */

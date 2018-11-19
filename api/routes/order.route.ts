@@ -27,6 +27,8 @@ router.route('/:id/comment').post(orderCtrl.createComment);
 
 router.route('/:id').get(orderCtrl.get);
 
-router.route('/:id/upload').post(upload.array('file'), orderCtrl.upload);
+router.route('/:id/upload').post(upload.array('file'), orderCtrl.uploadFile);
+
+router.route('/:id/download/:fileId').get(orderCtrl.downloadFile);
 
 export default router;

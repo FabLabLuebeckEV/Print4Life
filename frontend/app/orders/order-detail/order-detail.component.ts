@@ -110,7 +110,7 @@ export class OrderDetailComponent implements OnInit {
             result.order.files.forEach(async file => {
               file['link'] = `${routes.backendUrl}/` +
                 `${routes.paths.backend.orders.root}/${this.order._id}/` +
-                `${routes.paths.backend.orders.getFile}/${file.id}`;
+                `${routes.paths.backend.orders.download}/${file.id}`;
             });
             this.owner = await this.userService.getNamesOfUser(this.order.owner);
             this.owner['fullname'] = this.owner.firstname + ' ' + this.owner.lastname;
