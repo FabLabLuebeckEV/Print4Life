@@ -37,13 +37,23 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   formSubscription: Subscription;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
+  shippingAddress: Address = new Address(undefined, undefined, undefined, undefined);
   order: Order = new Order(
-    undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, undefined, undefined);
+    undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, this.shippingAddress, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
 
-  shippingAddresses: ['userAddress', 'fablabAddress', 'newAddress'];
-  shippingAddress: Address = new Address(undefined, undefined, undefined, undefined);
+  shippingAddresses: {
+    userAddress: Address,
+    fablabAddress: Address,
+    newAddress: Address
+  } = {
+      userAddress: undefined,
+      fablabAddress: undefined,
+      newAddress: this.shippingAddress
+    };
+  shippingAddressKeys: Array<String> = [];
+  selectedAddressKey = '';
 
   loadingMachineTypes: Boolean;
   machineTypes: Array<String> = [];
@@ -68,6 +78,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     title: '',
     shownMachineTypes: [],
     shownStatus: [],
+    shownShippingAddresses: [],
+    shownAddress: '',
     publicHint: '',
     labels: {
       submit: '',
@@ -90,7 +102,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       country: '',
       addressTitle: '',
     },
-    shownShippingAddresses: [],
     modals: {
       ok: '',
       okReturnValue: '',
@@ -128,6 +139,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     private userService: UserService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
+    this.shippingAddressKeys = ['userAddress', 'fablabAddress', 'newAddress'];
     this._translate();
     this.router.events.subscribe(() => {
       const route = this.location.path();
@@ -296,7 +308,35 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   // Private Functions
   private async _loadAddresses() {
     this.loadingAddresses = true;
-    const userProfile = this.userService.getProfile(this.loggedInUser._id);
+    let user;
+    let fablab;
+
+    if (this.order && this.order.shippingAddress) {
+      this.selectedAddressKey = 'newAddress';
+    }
+
+    try {
+      user = await this.userService.getUser();
+      this.shippingAddresses.userAddress = new Address(
+        user.address.street, user.address.zipCode, user.address.city, user.address.country);
+      if (this.shippingAddresses.userAddress.compare(this.order.shippingAddress)) {
+        this._selectAddress('userAddress');
+      }
+    } catch (err) {
+      this.shippingAddresses.userAddress = undefined;
+    }
+
+    try {
+      fablab = (await this.fablabService.getFablab(user.fablabId)).fablab;
+      this.shippingAddresses.fablabAddress = new Address(
+        fablab.address.street, fablab.address.zipCode, fablab.address.city, fablab.address.country);
+      if (this.shippingAddresses.fablabAddress.compare(this.order.shippingAddress)) {
+        this._selectAddress('fablabAddress');
+      }
+    } catch (err) {
+      this.shippingAddresses.fablabAddress = undefined;
+    }
+
     this.loadingAddresses = false;
   }
 
@@ -350,9 +390,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     if (order || id !== undefined) {
       this.order.editor = this.order.editor && this.order.editor.length === 24 ?
         (await this.userService.getNamesOfUser(this.order.editor)).user : undefined;
-      this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
-      this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
+      if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
+        this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
+        this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
+        await this.machineTypeChanged(this.order.machine['shownType']);
+      }
       if (this.order.comments) {
         this.order.comments.forEach(async (comment) => {
           const user = await this.userService.getNamesOfUser(comment.author);
@@ -362,7 +405,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         });
       }
       const machineId = this.order.machine._id;
-      await this.machineTypeChanged(this.order.machine['shownType']);
       this.order.machine._id = machineId;
     } else {
       this.order.owner = this.loggedInUser._id;
@@ -444,6 +486,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       });
   }
 
+  private _selectAddress(address) {
+    this.selectedAddressKey = address;
+    this.order.shippingAddress = this.shippingAddresses[`${address}`];
+  }
+
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent);
     modalRef.componentInstance.title = title;
@@ -469,12 +516,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         }
       });
 
-      // this.shippingAddresses.forEach((address) => {
-      //   const translated = translations['orderForm']['shippingAddresses'][`${address}`];
-      //   if (translated) {
-      //     shownShippingAddresses.push(translated);
-      //   }
-      // });
+      this.shippingAddressKeys.forEach((address) => {
+        const translated = translations['orderForm']['labels']['shippingAddresses'][`${address}`];
+        if (translated) {
+          shownShippingAddresses.push(translated);
+        }
+      });
 
       this.validStatus.forEach((status) => {
         const translated = translations['status'][`${status}`];
@@ -511,6 +558,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         title: this.editView ? translations['orderForm'].editTitle : translations['orderForm'].createTitle,
         shownMachineTypes: shownMachineTypes,
         shownStatus: shownStatus,
+        shownShippingAddresses: shownShippingAddresses,
+        shownAddress: 'TBA',
         publicHint: translations['orderForm'].publicHint,
         labels: {
           submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.createSubmit,
@@ -533,7 +582,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           country: translations['address'].country,
           addressTitle: translations['orderForm'].addressTitle,
         },
-        shownShippingAddresses: shownShippingAddresses,
         modals: {
           ok: translations['orderForm'].modals.ok,
           okReturnValue: translations['orderForm'].modals.okReturnValue,

@@ -99,11 +99,50 @@
           <h4>{{translationFields.labels.addressTitle}}</h4>
         </div>
       </div>
-      <div *ngIf="!editView" class="row">
+      <div class="row">
         <div class="col-md-6 offset-3">
           <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Shipping address selection">
-            <button *ngFor="let shippingAddress of translationFields.shownShippingAddresses" (click)="_selectAddress(shippingAddress)"
-              type="button" [class.active]="shippingAddress === translationFields.shownAddress" class="btn btn-secondary">{{shippingAddress}}</button>
+            <button *ngFor="let key of shippingAddressKeys; let index=index" (click)="_selectAddress(key)" type="button"
+              [class.active]="key === selectedAddressKey" class="btn btn-info">{{
+              translationFields.shownShippingAddresses[index] }}</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="street">{{translationFields.labels.street}}</label>
+            <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="street"
+              required [(ngModel)]="order.shippingAddress.street" name="street" #street="ngModel">
+            <div [hidden]="street.valid || street.pristine" class="alert alert-danger">
+              {{translationFields.messages.street}}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="city">{{translationFields.labels.city}}</label>
+            <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="city" required
+              [(ngModel)]="order.shippingAddress.city" name="city" #city="ngModel">
+            <div [hidden]="city.valid || city.pristine" class="alert alert-danger">
+              {{translationFields.messages.city}}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label for="zipCode">{{translationFields.labels.zipCode}}</label>
+            <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="zipCode"
+              required [(ngModel)]="order.shippingAddress.zipCode" name="zipCode" #zipCode="ngModel">
+            <div [hidden]="zipCode.valid || zipCode.pristine" class="alert alert-danger">
+              {{translationFields.messages.zipCode}}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="country">{{translationFields.labels.country}}</label>
+            <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="country"
+              required [(ngModel)]="order.shippingAddress.country" name="country" #country="ngModel">
+            <div [hidden]="country.valid || country.pristine" class="alert alert-danger">
+              {{translationFields.messages.country}}
+            </div>
           </div>
         </div>
       </div>
@@ -134,7 +173,7 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!createOrderForm.form.valid">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid">{{translationFields.labels.submit}}</button>
     </form>
 
     <!-- Print comments to this order as a table -->

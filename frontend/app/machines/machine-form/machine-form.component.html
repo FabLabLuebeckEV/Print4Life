@@ -12,7 +12,7 @@
       <div *ngIf="!editView" class="col-md-6 offset-3">
         <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Machine selection">
           <button *ngFor="let type of translationFields.shownMachineTypes" (click)="_selectType(type); machineForm.reset()"
-            type="button" [class.active]="type === translationFields.shownType" class="btn btn-secondary">{{type}}</button>
+            type="button" [class.active]="type === translationFields.shownType" class="btn btn-info">{{type}}</button>
         </div>
       </div>
       <form (ngSubmit)="onSubmit()" #machineForm="ngForm">
