@@ -16,7 +16,8 @@
             "size": "Größe",
             "actions": "Aktionen",
             "queueTitle": "Gesamtanzahl an Dateien zum Upload: ",
-            "removeAllButton": "Alle aus Warteschlange entfernen"
+            "removeAllButton": "Alle aus Warteschlange entfernen",
+            "spinnerLoadingText": "Dateien werden hochgeladen..."
         }
     },
     "navigation": {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ElementRef } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -17,6 +17,7 @@ import { UserService } from 'frontend/app/services/user.service';
 import { Subscription } from 'rxjs';
 import { UploadComponent } from 'frontend/app/components/upload/upload.component';
 import { isObject } from 'util';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 const localStorageOrderKey = 'orderManagementOrderFormOrder';
 const localStorageCommentKey = 'orderManagementOrderFormComment';
@@ -30,7 +31,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   @ViewChild('createOrderForm') createOrderForm;
   @ViewChild('commentContent') commentContentField;
   @ViewChild('fileUpload') fileUpload: UploadComponent;
+  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
   config: any;
+  spinnerConfig: any = {};
   publicIcon: any;
   toggleOnIcon: any;
   toggleOffIcon: any;
@@ -121,7 +124,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     private genericService: GenericService,
     private translateService: TranslateService,
     private route: ActivatedRoute,
-    private userService: UserService) {
+    private userService: UserService,
+    private spinner: NgxSpinnerService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
     this.toggleOnIcon = this.config.icons.toggleOn;
@@ -171,13 +175,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   onSubmitComment(form) {
-    this.submitting = true;
     const errorMsg = this.translationFields.modals.createCommentError;
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this.comment.author = this.loggedInUser._id;
     this.comment['authorName'] = undefined;
     this.orderService.createComment(this.orderId, this.comment).then((result) => {
-      this.submitting = false;
       if (result) {
         this._openMsgModal(this.translationFields.modals.createCommentSuccessHeader, 'modal-header header-success',
           this.translationFields.modals.createCommentSuccess, okButton, undefined).result.then((result) => {
@@ -196,14 +198,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           });
       }
     }).catch(() => {
-      this.submitting = false;
       this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg,
         okButton, undefined);
     });
   }
 
   onSubmit() {
-    this.submitting = true;
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
     let found = false;
     let orderCopy;
@@ -227,7 +227,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     if (this.editView) {
       const errorMsg = this.translationFields.modals.error;
       this.orderService.updateOrder(orderCopy).then((result) => {
-        this.submitting = false;
         if (result) {
           this.fileUpload.uploadFilesToOrder(result.order._id, () => {
             this._openSuccessMsg();
@@ -236,13 +235,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
       }).catch(() => {
-        this.submitting = false;
         this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
       });
     } else {
       const errorMsg = this.translationFields.modals.error;
       this.orderService.createOrder(orderCopy).then((result) => {
-        this.submitting = false;
         if (result) {
           this.fileUpload.uploadFilesToOrder(result.order._id, () => {
             localStorage.removeItem(localStorageOrderKey);
@@ -254,7 +251,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
       }).catch(() => {
-        this.submitting = false;
         this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
       });
     }
@@ -454,7 +450,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   public uploadingEventHandler(event) {
-    this.submitting = event;
+    if (event === true) {
+      this.spinner.show();
+      this.genericService.scrollIntoView(this.spinnerContainerRef);
+    } else {
+      this.spinner.hide();
+    }
   }
 
   private _openSuccessMsg() {
@@ -478,6 +479,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date', 'upload']).subscribe((translations => {
+      this.spinnerConfig = { 'loadingText': translations['upload'].spinnerLoadingText, ...this.config.spinnerConfig };
       if (translations.hasOwnProperty('orderForm') && isObject(translations.orderForm) &&
         translations.hasOwnProperty('deviceTypes') && isObject(translations.deviceTypes) &&
         translations.hasOwnProperty('status') && isObject(translations.status) &&

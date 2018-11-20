@@ -16,7 +16,8 @@
             "size": "Size",
             "actions": "Actions",
             "queueTitle": "Total Qued Files: ",
-            "removeAllButton": "Remove all from Queue"
+            "removeAllButton": "Remove all from Queue",
+            "spinnerLoadingText": "Uploading files..."
         }
     },
     "navigation": {

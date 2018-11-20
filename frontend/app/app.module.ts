@@ -73,7 +73,11 @@ import { ngfModule } from 'angular-file';
         HttpClientModule,
         ngfModule,
         NgbModule.forRoot(),
-        RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' }),
+        RouterModule.forRoot(appRoutes, {
+            scrollPositionRestoration: 'enabled',
+            anchorScrolling: 'enabled',
+            onSameUrlNavigation: 'reload'
+        }),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

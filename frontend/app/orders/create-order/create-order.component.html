@@ -1,3 +1,8 @@
+<div #spinnerContainer>
+  <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size"
+    [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+</div>
+
 <router-outlet></router-outlet>
 <ng-template #tipContent>{{translationFields.publicHint}}</ng-template>
 <div class="row spacing">

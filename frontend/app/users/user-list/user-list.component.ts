@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { ConfigService } from '../../config/config.service';
 import { UserService } from '../../services/user.service';
@@ -10,6 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { routes } from '../../config/routes';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { GenericService } from 'frontend/app/services/generic.service';
 
 @Component({
   selector: 'app-user-list',
@@ -17,6 +18,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
+  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
   private userIsAdmin: Boolean;
   listView: Boolean = false;
   private loadingRoles: Boolean;
@@ -75,7 +77,8 @@ export class UserListComponent implements OnInit {
     private configService: ConfigService,
     private router: Router,
     private location: Location,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private genericService: GenericService
   ) {
     this.config = this.configService.getConfig();
     this.jumpArrow = this.config.icons.forward;
@@ -119,6 +122,7 @@ export class UserListComponent implements OnInit {
     const arr = [];
     this.loadingUsers = true;
     this.spinner.show();
+    this.genericService.scrollIntoView(this.spinnerContainerRef);
     let countObj;
     let totalItems = 0;
     let query;

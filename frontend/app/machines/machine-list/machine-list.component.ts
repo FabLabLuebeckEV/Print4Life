@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
@@ -12,6 +12,7 @@ import { routes } from '../../config/routes';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'frontend/app/services/user.service';
+import { GenericService } from 'frontend/app/services/generic.service';
 
 @Component({
   selector: 'app-machine-list',
@@ -19,6 +20,7 @@ import { UserService } from 'frontend/app/services/user.service';
   styleUrls: ['./machine-list.component.css']
 })
 export class MachineListComponent implements OnInit {
+  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
   private config: any;
   filter: any = {
     originMachineTypes: [], // origin for backend containing all machine types
@@ -90,7 +92,8 @@ export class MachineListComponent implements OnInit {
     private fablabService: FablabService, private router: Router,
     private location: Location, private modalService: NgbModal,
     private spinner: NgxSpinnerService, private configService: ConfigService,
-    private translateService: TranslateService, private userService: UserService) {
+    private translateService: TranslateService, private userService: UserService,
+    private genericService: GenericService) {
     this.config = this.configService.getConfig();
     this.plusIcon = this.config.icons.add;
     this.jumpArrow = this.config.icons.forward;
@@ -269,6 +272,7 @@ export class MachineListComponent implements OnInit {
 
   private async _loadMachinesByTypes(machineTypes: Array<String>) {
     this.spinner.show();
+    this.genericService.scrollIntoView(this.spinnerContainerRef);
     const machines = [];
     const arr = [];
     let countObj;
