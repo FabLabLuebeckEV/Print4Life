@@ -16,7 +16,6 @@ export class UploadComponent implements OnInit {
   accept = '*';
   files: File[] = [];
   config: any;
-  spinnerConfig: Object;
   progress: number;
   hasBaseDropZoneOver = false;
   httpEmitter: Subscription;
@@ -26,6 +25,10 @@ export class UploadComponent implements OnInit {
   warningIcon: FaIconComponent;
   deleteIcon: FaIconComponent;
   uploadIcon: FaIconComponent;
+  maxSize: number;
+  lastInvalids: any;
+  baseDropValid: any;
+  dragFiles: any;
   translationFields = {
     labels: {
       title: '',

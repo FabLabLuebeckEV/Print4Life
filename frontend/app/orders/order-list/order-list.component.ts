@@ -14,6 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
 import * as moment from 'moment';
 import { GenericService } from 'frontend/app/services/generic.service';
+import { SpinnerConfig } from '../../config/config.service';
 
 @Component({
   selector: 'app-order-list',
@@ -47,7 +48,7 @@ export class OrderListComponent implements OnInit {
 
   loadingMachineTypes: Boolean;
 
-  spinnerConfig: Object;
+  spinnerConfig: SpinnerConfig;
   jumpArrow: Icon;
   paginationObj: any = {
     page: 1,
@@ -93,7 +94,9 @@ export class OrderListComponent implements OnInit {
     private userService: UserService,
     private genericService: GenericService) {
     this.config = this.configService.getConfig();
-    this.spinnerConfig = { 'loadingText': 'Loading Orders', ...this.config.spinnerConfig };
+    this.spinnerConfig = new SpinnerConfig(
+      'Loading Orders', this.config.spinnerConfig.bdColor,
+      this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.createLink = `./${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
     this.jumpArrow = this.config.icons.forward;
@@ -401,7 +404,9 @@ export class OrderListComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(['orderList', 'deviceTypes', 'status']).subscribe((translations => {
-      this.spinnerConfig = { 'loadingText': translations['orderList'].spinnerLoadingText, ...this.config.spinnerConfig };
+      this.spinnerConfig = new SpinnerConfig(
+        translations['orderList'].spinnerLoadingText, this.config.spinnerConfig.bdColor,
+        this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
       this.filter.machineTypes = [];
       this.filter.shownMachineTypes = [];
       this.filter.originalMachineTypes.forEach((mType) => {

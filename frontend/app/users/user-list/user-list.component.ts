@@ -11,6 +11,7 @@ import { routes } from '../../config/routes';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { GenericService } from 'frontend/app/services/generic.service';
+import { SpinnerConfig } from '../../config/config.service';
 
 @Component({
   selector: 'app-user-list',
@@ -25,7 +26,7 @@ export class UserListComponent implements OnInit {
   private loadingUsers: Boolean;
   private users: Array<TableItem> = [];
   private visibleUsers: Array<TableItem> = [];
-  spinnerConfig: Object;
+  spinnerConfig: SpinnerConfig;
   jumpArrow: Icon;
   translationFields = {
     paginationLabel: '',
@@ -91,7 +92,9 @@ export class UserListComponent implements OnInit {
         this.listView = false;
       }
     });
-    this.spinnerConfig = { 'loadingText': 'Loading Users', ...this.config.spinnerConfig };
+    this.spinnerConfig = new SpinnerConfig(
+      'Loading Users', this.config.spinnerConfig.bdColor,
+      this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.ngOnInit();
   }
 
@@ -279,7 +282,9 @@ export class UserListComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(['roles', 'userList']).subscribe((translations => {
-      this.spinnerConfig = { 'loadingText': translations['userList'].spinnerLoadingText, ...this.config.spinnerConfig };
+      this.spinnerConfig = new SpinnerConfig(
+        translations['userList'].spinnerLoadingText, this.config.spinnerConfig.bdColor,
+        this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
       this.filter.validRoles = [];
       this.filter.shownRoles = [];
       this.filter.originalRoles.forEach((role) => {
