@@ -1,8 +1,8 @@
-import * as mongoose from 'mongoose';
-
-import Fablab from '../models/fablab.model';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
+import FablabService from '../services/fablab.service';
+
+const fablabService = new FablabService();
 
 /**
  * @api {get} /api/v1/fablabs/ Get all fablabs
@@ -44,8 +44,8 @@ import validatorService from '../services/validator.service';
     ]
 }
  */
-function getAll (req, res) {
-  _getAll().then((fablabs) => {
+function getAll(req, res) {
+  fablabService.getAll().then((fablabs) => {
     logger.info(`GET Fablabs with result ${JSON.stringify(fablabs)}`);
     fablabs.forEach((fablab) => {
       delete fablab.password;
@@ -100,13 +100,13 @@ function getAll (req, res) {
  *     }
  *
  */
-function get (req, res) {
+function get(req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     logger.error({ error: checkId.error });
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    getById(req.params.id).then((fablab) => {
+    fablabService.get(req.params.id).then((fablab) => {
       if (!fablab) {
         logger.error({ error: `Fablab by id '${req.params.id}' not found` });
         res.status(404).send({ error: `Fablab by id '${req.params.id}' not found` });
@@ -171,8 +171,8 @@ function get (req, res) {
  *
  *
  */
-function create (req, res) {
-  _create(req.body).then((fablab) => {
+function create(req, res) {
+  fablabService.create(req.body).then((fablab) => {
     logger.info(`POST Fablab with result ${JSON.stringify(fablab)}`);
     res.status(201).send({ fablab });
   }).catch((err) => {
@@ -242,7 +242,7 @@ function create (req, res) {
  *
  *
  */
-function update (req, res) {
+function update(req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     logger.error({ error: checkId.error });
@@ -252,13 +252,13 @@ function update (req, res) {
     logger.error(msg);
     res.status(400).send(msg);
   } else {
-    getById(req.params.id).then((fablab) => {
+    fablabService.get(req.params.id).then((fablab) => {
       if (!fablab) {
         const msg = { error: `Fablab by id '${req.params.id}' not found` };
         logger.error(msg);
         res.status(404).send(msg);
       } else {
-        _update(req.params.id, req.body).then((fablab) => {
+        fablabService.update(req.params.id, req.body).then((fablab) => {
           logger.info(`PUT Fablab with result ${JSON.stringify(fablab)}`);
           res.status(200).send({ fablab });
         });
@@ -305,12 +305,12 @@ function update (req, res) {
       }
   }
  */
-function deleteById (req, res) {
+function deleteById(req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });
   } else {
-    _deleteById(req.params.id).then((fablab) => {
+    fablabService.deleteById(req.params.id).then((fablab) => {
       logger.info(`DELETE Fablab with result ${JSON.stringify(fablab)}`);
       res.status(200).send({ fablab });
     }).catch((err) => {
@@ -320,34 +320,6 @@ function deleteById (req, res) {
   }
 }
 
-function getById (id) {
-  const _id = mongoose.Types.ObjectId(id);
-  return Fablab.findOne({ _id });
-}
-
-function _getAll () {
-  return Fablab.find();
-}
-
-function _create (params) {
-  const fablab = new Fablab(params);
-  return fablab.save();
-}
-
-function _update (_id, params) {
-  return Fablab.update(
-    { _id },
-    params,
-    { upsert: true }
-  ).then(() => Fablab.findOne({ _id }));
-}
-
-async function _deleteById (id) {
-  const fablab = await getById(id);
-  fablab.activated = false;
-  return _update(id, fablab);
-}
-
 export default {
-  get, getAll, create, update, deleteById, getById
+  get, getAll, create, update, deleteById
 };
