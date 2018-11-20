@@ -131,12 +131,7 @@ export class UserFormComponent implements OnInit {
     if (this.profileView) {
       this.user = this.loggedInUser;
       if (!this.user.hasOwnProperty('address')) {
-        this.user.address = {
-          street: '',
-          zipCode: '',
-          city: '',
-          country: ''
-        };
+        this.user.address = new Address('', '', '', '');
       }
     } else {
       await this._initializeUser(this.userId);
