@@ -13,7 +13,7 @@
   "description": "An order-management for the fablab connected to an IBM Watson IoT Platform to connect their machinery to this order and planning process",
   "scripts": {
     "precommit": "npm run build && npm run test-local && npm run apidocs",
-    "precommit-prod": "npm run deploy && npm run test-local && npm run apidocs",
+    "precommit-prod": "npm run deploy-staging && npm run test-local && npm run apidocs",
     "apidocs": "shx rm -rf docs/api && apidoc -i api -o docs/api",
     "deploy-staging": "ng build --configuration=staging && npm run api-build",
     "deploy-prod": "ng build --configuration=production && npm run api-build",
@@ -41,8 +41,7 @@
     }
   },
   "keywords": [],
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Rene Kremer",
       "email": "renejon90@googlemail.com"
     },

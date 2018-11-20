@@ -8,7 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { Machine } from '../../models/machines.model';
 import { Order, Comment, SimpleMachine } from '../../models/order.model';
-import { ConfigService } from '../../config/config.service';
+import { ConfigService, SpinnerConfig } from '../../config/config.service';
 import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -33,7 +33,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   @ViewChild('fileUpload') fileUpload: UploadComponent;
   @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
   config: any;
-  spinnerConfig: any = {};
+  spinnerConfig: SpinnerConfig;
   publicIcon: any;
   toggleOnIcon: any;
   toggleOffIcon: any;
@@ -479,7 +479,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date', 'upload']).subscribe((translations => {
-      this.spinnerConfig = { 'loadingText': translations['upload'].spinnerLoadingText, ...this.config.spinnerConfig };
+      this.spinnerConfig = new SpinnerConfig(
+        translations['upload'].spinnerLoadingText, this.config.spinnerConfig.bdColor,
+        this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
       if (translations.hasOwnProperty('orderForm') && isObject(translations.orderForm) &&
         translations.hasOwnProperty('deviceTypes') && isObject(translations.deviceTypes) &&
         translations.hasOwnProperty('status') && isObject(translations.status) &&
