@@ -325,7 +325,8 @@
             "author": "Author",
             "content": "Content",
             "files": "Files",
-            "file": "File"
+            "file": "File",
+            "addressTitle": "Shippingaddress"
         },
         "modals": {
             "ok": "Yes",

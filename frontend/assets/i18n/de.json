@@ -325,7 +325,8 @@
             "author": "Author",
             "content": "Inhalt",
             "files": "Dateien",
-            "file": "Datei"
+            "file": "Datei",
+            "addressTitle": "Lieferadresse"
         },
         "modals": {
             "ok": "Ja",

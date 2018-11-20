@@ -33,6 +33,12 @@
               <span *ngIf=!userIsLoggedIn>{{ owner.fullname }}</span>
             </td>
           </tr>
+          <tr *ngIf="order.shippingAddress">
+            <td class="align-middle text-center">{{translationFields.labels.addressTitle}}</td>
+            <td class="align-middle text-center">{{order.shippingAddress.street}}<br>{{order.shippingAddress.zipCode
+              + " " +
+              order.shippingAddress.city}}<br>{{order.shippingAddress.country}}</td>
+          </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.editor}}</td>
             <td class="align-middle text-center">

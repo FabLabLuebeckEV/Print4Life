@@ -60,7 +60,8 @@ export class OrderDetailComponent implements OnInit {
       author: '',
       content: '',
       files: '',
-      file: ''
+      file: '',
+      addressTitle: ''
     },
     modals: {
       ok: '',
@@ -226,7 +227,8 @@ export class OrderDetailComponent implements OnInit {
           author: translations['orderDetail'].labels.author,
           content: translations['orderDetail'].labels.content,
           files: translations['orderDetail'].labels.files,
-          file: translations['orderDetail'].labels.file
+          file: translations['orderDetail'].labels.file,
+          addressTitle: translations['orderDetail'].labels.addressTitle
         },
         modals: {
           ok: translations['orderDetail'].modals.ok,
