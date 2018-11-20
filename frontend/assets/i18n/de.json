@@ -141,9 +141,9 @@
             "no": "Nein",
             "deleteReturnValue": "Löschen",
             "abortReturnValue": "Abbrechen",
-            "deleteHeader": "Wollen Sie wirklich diese Maschine löschen?",
-            "deleteMessage": "Sind Sie sicher, dass sie ",
-            "deleteMessage2": "löschen wollen?"
+            "deleteHeader": "Möchten den Status der Maschine ändern?",
+            "deleteMessage": "Sind Sie sicher, dass Sie",
+            "deleteMessage2": "den Status wechseln wollen?"
         },
         "props": {
             "deviceName": "Name der Maschine",

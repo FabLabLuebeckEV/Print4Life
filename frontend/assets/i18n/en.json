@@ -139,10 +139,10 @@
         "modals": {
             "yes": "Yes",
             "no": "No",
-            "deleteReturnValue": "Delete",
+            "deleteReturnValue": "Toggle",
             "abortReturnValue": "Abort",
-            "deleteHeader": "Do you really want to delete this machine?",
-            "deleteMessage": "Are you sure you want to delete",
+            "deleteHeader": "Do you really want toggle machine's status?",
+            "deleteMessage": "Are you sure you want to toggle",
             "deleteMessage2": "?"
         },
         "props": {
