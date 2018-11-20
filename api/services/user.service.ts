@@ -152,14 +152,14 @@ export class UserService implements ModelService {
         template: 'activateNewUser',
         to: '',
         locals:
-                {
-                  adminName: '',
-                  userName: `${user.firstname} ${user.lastname}`,
-                  userEmail: user.email,
-                  id: user._id,
-                  url: `${config.baseUrlFrontend}/users/edit/${user._id}`,
-                  newUser
-                }
+        {
+          adminName: '',
+          userName: `${user.firstname} ${user.lastname}`,
+          userEmail: user.email,
+          id: user._id,
+          url: `${config.baseUrlFrontend}/users/edit/${user._id}`,
+          newUser
+        }
       };
       User.find({ 'role.role': 'admin', activated: true }).then((admins) => {
         admins.forEach((admin) => {
@@ -212,7 +212,7 @@ export class UserService implements ModelService {
     if (!user.createdAt) {
       user.createdAt = new Date();
     }
-    return User.update(
+    return User.updateOne(
       { _id: user._id },
       user,
       { upsert: true }
@@ -261,11 +261,11 @@ export class UserService implements ModelService {
           template: 'resetPassword',
           to: user.email,
           locals:
-                    {
-                      userName: `${user.firstname} ${user.lastname}`,
-                      password,
-                      url: `${config.baseUrlFrontend}/`
-                    }
+          {
+            userName: `${user.firstname} ${user.lastname}`,
+            password,
+            url: `${config.baseUrlFrontend}/`
+          }
         };
         emailService.sendMail(options);
         return true;

@@ -6,6 +6,20 @@
     "dashboard": {
         "title": "Welcome to Fablab - Order Management! "
     },
+    "upload": {
+        "labels": {
+            "title": "Select Files",
+            "dropzone": "Dropzone",
+            "multiple": "Multiple Files",
+            "name": "Name",
+            "type": "Type",
+            "size": "Size",
+            "actions": "Actions",
+            "queueTitle": "Total Qued Files: ",
+            "removeAllButton": "Remove all from Queue",
+            "spinnerLoadingText": "Uploading files..."
+        }
+    },
     "navigation": {
         "title": "Order Management",
         "login": "Login",
@@ -255,7 +269,11 @@
                 "userAddress": "Your address",
                 "fablabAddress": "Your FabLab",
                 "newAddress": "New address"
-            }
+            },
+            "fileUpload": "File Upload",
+            "files": "Current Files",
+            "file": "File",
+            "latestVersion": "Latest Version"
         },
         "modals": {
             "ok": "Ok",
@@ -326,7 +344,8 @@
             "content": "Content",
             "files": "Files",
             "file": "File",
-            "addressTitle": "Shippingaddress"
+            "addressTitle": "Shippingaddress",
+            "latestVersion": "Latest Version"
         },
         "modals": {
             "ok": "Yes",

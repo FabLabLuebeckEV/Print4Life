@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { ConfigService } from '../../config/config.service';
 import { UserService } from '../../services/user.service';
@@ -10,6 +10,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { routes } from '../../config/routes';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { GenericService } from 'frontend/app/services/generic.service';
+import { SpinnerConfig } from '../../config/config.service';
 
 @Component({
   selector: 'app-user-list',
@@ -17,13 +19,14 @@ import { Location } from '@angular/common';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
+  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
   private userIsAdmin: Boolean;
   listView: Boolean = false;
   private loadingRoles: Boolean;
   private loadingUsers: Boolean;
   private users: Array<TableItem> = [];
   private visibleUsers: Array<TableItem> = [];
-  spinnerConfig: Object;
+  spinnerConfig: SpinnerConfig;
   jumpArrow: Icon;
   translationFields = {
     paginationLabel: '',
@@ -75,7 +78,8 @@ export class UserListComponent implements OnInit {
     private configService: ConfigService,
     private router: Router,
     private location: Location,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private genericService: GenericService
   ) {
     this.config = this.configService.getConfig();
     this.jumpArrow = this.config.icons.forward;
@@ -88,7 +92,9 @@ export class UserListComponent implements OnInit {
         this.listView = false;
       }
     });
-    this.spinnerConfig = { 'loadingText': 'Loading Users', ...this.config.spinnerConfig };
+    this.spinnerConfig = new SpinnerConfig(
+      'Loading Users', this.config.spinnerConfig.bdColor,
+      this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.ngOnInit();
   }
 
@@ -119,6 +125,7 @@ export class UserListComponent implements OnInit {
     const arr = [];
     this.loadingUsers = true;
     this.spinner.show();
+    this.genericService.scrollIntoView(this.spinnerContainerRef);
     let countObj;
     let totalItems = 0;
     let query;
@@ -275,7 +282,9 @@ export class UserListComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(['roles', 'userList']).subscribe((translations => {
-      this.spinnerConfig = { 'loadingText': translations['userList'].spinnerLoadingText, ...this.config.spinnerConfig };
+      this.spinnerConfig = new SpinnerConfig(
+        translations['userList'].spinnerLoadingText, this.config.spinnerConfig.bdColor,
+        this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
       this.filter.validRoles = [];
       this.filter.shownRoles = [];
       this.filter.originalRoles.forEach((role) => {

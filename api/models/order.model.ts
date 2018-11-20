@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { commentSchema } from './comment.model';
 import { addressSchema } from './address.model';
+import fileSchema from './file.model';
 
 const attributes = {
   comments: [commentSchema],
@@ -19,10 +20,7 @@ const attributes = {
     minlength: 24,
     maxlength: 24
   },
-  files: [{
-    data: Buffer,
-    contentType: String
-  }],
+  files: [fileSchema],
   status: {
     enum: ['new', 'assigned', 'production', 'shipment', 'archived', 'representive', 'deleted'],
     type: String,

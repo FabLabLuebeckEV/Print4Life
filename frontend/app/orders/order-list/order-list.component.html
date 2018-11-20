@@ -1,3 +1,7 @@
+<div #spinnerContainer>
+  <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size"
+    [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+</div>
 <router-outlet>
 </router-outlet>
 <div *ngIf="listView">
@@ -26,8 +30,6 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size"
-        [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
       <app-table (buttonEvent)="eventHandler($event)" [items]="visibleOrders"></app-table>
     </div>
   </div>

@@ -8,8 +8,26 @@ import {
   faGlobeAmericas,
   faFrown,
   faCheckCircle,
-  faTimesCircle
+  faTimesCircle,
+  faCloudUploadAlt,
+  faExclamationCircle
 } from '@fortawesome/free-solid-svg-icons';
+
+export class SpinnerConfig {
+  loadingText: string;
+  bdColor: string;
+  size: string;
+  color: string;
+  type: string;
+
+  constructor(loadingText: string, bdColor: string, size: string, color: string, type: string) {
+    this.loadingText = loadingText;
+    this.bdColor = bdColor;
+    this.size = size;
+    this.color = color;
+    this.type = type;
+  }
+}
 
 export enum RUN_ENV {
   DEV, PROD, STAGING
@@ -25,20 +43,17 @@ export class ConfigService {
     icons: {
       back: faArrowLeft,
       edit: faWrench,
+      warning: faExclamationCircle,
       delete: faTrashAlt,
       toggleOn: faCheckCircle,
       toggleOff: faTimesCircle,
       disable: faFrown,
       add: faPlus,
       forward: faArrowRight,
-      public: faGlobeAmericas
+      public: faGlobeAmericas,
+      upload: faCloudUploadAlt
     },
-    spinnerConfig: {
-      bdColor: 'rgba(51, 51, 51, 0.8)',
-      size: 'large',
-      color: '#fff',
-      type: 'ball-climbing-dot'
-    },
+    spinnerConfig: new SpinnerConfig('', 'rgba(51, 51, 51, 0.8)', 'large', '#fff', 'ball-climbing-dot')
   };
   constructor() { }
 

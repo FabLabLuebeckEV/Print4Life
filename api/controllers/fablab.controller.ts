@@ -278,7 +278,7 @@ function update (req, res) {
  * @apiGroup Fablabs
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { fablab } the deleted fablab
+ * @apiSuccess { Object } fablab the deleted fablab
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK

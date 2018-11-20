@@ -25,6 +25,8 @@ export class OrderDetailComponent implements OnInit {
   private loggedInUser: User;
   editIcon: any;
   deleteIcon: any;
+  toggleOnIcon: any;
+  toggleOffIcon: any;
   editLink: String;
   editor: User = new User(
     undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
@@ -61,7 +63,8 @@ export class OrderDetailComponent implements OnInit {
       content: '',
       files: '',
       file: '',
-      addressTitle: ''
+      addressTitle: '',
+      latestVersion: ''
     },
     modals: {
       ok: '',
@@ -88,6 +91,8 @@ export class OrderDetailComponent implements OnInit {
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
     this.deleteIcon = this.config.icons.delete;
+    this.toggleOnIcon = this.config.icons.toggleOn;
+    this.toggleOffIcon = this.config.icons.toggleOff;
   }
 
   async ngOnInit() {
@@ -105,9 +110,12 @@ export class OrderDetailComponent implements OnInit {
               comment['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
             });
             result.order.files.forEach(async file => {
-              const author = await this.userService.getNamesOfUser(file.author);
-              file['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
+              file['link'] = `${routes.backendUrl}/` +
+                `${routes.paths.backend.orders.root}/${this.order._id}/` +
+                `${routes.paths.backend.orders.download}/${file.id}`;
             });
+            // sort files to show deprecated last
+            this.orderService.sortFilesByDeprecated(result.order.files);
             this.owner = await this.userService.getNamesOfUser(this.order.owner);
             this.owner['fullname'] = this.owner.firstname + ' ' + this.owner.lastname;
             this.ownerLink = `/${routes.paths.frontend.users.root}/${this.owner._id}`;
@@ -189,9 +197,12 @@ export class OrderDetailComponent implements OnInit {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
       if (this.order) {
-        let createdAt = moment(this.order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
-        createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
-        this.order['shownCreatedAt'] = createdAt;
+        this.order['shownCreatedAt'] = this.genericService.translateCreatedAt(
+          this.order.createdAt, currentLang, translations['date'].dateTimeFormat);
+        this.order.files.forEach((file) => {
+          file['shownCreatedAt'] = this.genericService.translateCreatedAt(
+            file.createdAt, currentLang, translations['date'].dateTimeFormat);
+        });
       }
       if (this.order && this.order.status) {
         this._translateStatus().then((shownStatus) => {
@@ -208,9 +219,8 @@ export class OrderDetailComponent implements OnInit {
       if (this.order && this.order.comments) {
         this.order.comments.forEach((comment) => {
           if (comment.createdAt) {
-            let createdAt = moment(comment.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat);
-            createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
-            comment['shownCreatedAt'] = createdAt;
+            comment['shownCreatedAt'] = this.genericService.translateCreatedAt(
+              comment.createdAt, currentLang, translations['date'].dateTimeFormat);
           }
         });
       }
@@ -228,7 +238,8 @@ export class OrderDetailComponent implements OnInit {
           content: translations['orderDetail'].labels.content,
           files: translations['orderDetail'].labels.files,
           file: translations['orderDetail'].labels.file,
-          addressTitle: translations['orderDetail'].labels.addressTitle
+          addressTitle: translations['orderDetail'].labels.addressTitle,
+          latestVersion: translations['orderDetail'].labels.latestVersion
         },
         modals: {
           ok: translations['orderDetail'].modals.ok,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { TableItem } from '../../components/table/table.component';
@@ -13,6 +13,8 @@ import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
 import * as moment from 'moment';
+import { GenericService } from 'frontend/app/services/generic.service';
+import { SpinnerConfig } from '../../config/config.service';
 
 @Component({
   selector: 'app-order-list',
@@ -20,6 +22,7 @@ import * as moment from 'moment';
   styleUrls: ['./order-list.component.css']
 })
 export class OrderListComponent implements OnInit {
+  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
   private config: any;
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
@@ -45,7 +48,7 @@ export class OrderListComponent implements OnInit {
 
   loadingMachineTypes: Boolean;
 
-  spinnerConfig: Object;
+  spinnerConfig: SpinnerConfig;
   jumpArrow: Icon;
   paginationObj: any = {
     page: 1,
@@ -88,9 +91,12 @@ export class OrderListComponent implements OnInit {
     private configService: ConfigService,
     private spinner: NgxSpinnerService,
     private translateService: TranslateService,
-    private userService: UserService) {
+    private userService: UserService,
+    private genericService: GenericService) {
     this.config = this.configService.getConfig();
-    this.spinnerConfig = { 'loadingText': 'Loading Orders', ...this.config.spinnerConfig };
+    this.spinnerConfig = new SpinnerConfig(
+      'Loading Orders', this.config.spinnerConfig.bdColor,
+      this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.createLink = `./${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
     this.jumpArrow = this.config.icons.forward;
@@ -130,6 +136,7 @@ export class OrderListComponent implements OnInit {
     this.orders = new Array();
     this.visibleOrders = undefined;
     this.spinner.show();
+    this.genericService.scrollIntoView(this.spinnerContainerRef);
     let countObj;
     let totalItems = 0;
     let query;
@@ -397,7 +404,9 @@ export class OrderListComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(['orderList', 'deviceTypes', 'status']).subscribe((translations => {
-      this.spinnerConfig = { 'loadingText': translations['orderList'].spinnerLoadingText, ...this.config.spinnerConfig };
+      this.spinnerConfig = new SpinnerConfig(
+        translations['orderList'].spinnerLoadingText, this.config.spinnerConfig.bdColor,
+        this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
       this.filter.machineTypes = [];
       this.filter.shownMachineTypes = [];
       this.filter.originalMachineTypes.forEach((mType) => {

@@ -13,8 +13,8 @@
   "description": "An order-management for the fablab connected to an IBM Watson IoT Platform to connect their machinery to this order and planning process",
   "scripts": {
     "precommit": "npm run build && npm run test-local && npm run apidocs",
-    "precommit-prod": "npm run deploy && npm run test-local && npm run apidocs",
-    "apidocs": "apidoc -i api -o docs/api",
+    "precommit-prod": "npm run deploy-staging && npm run test-local && npm run apidocs",
+    "apidocs": "shx rm -rf docs/api && apidoc -i api -o docs/api",
     "deploy-staging": "ng build --configuration=staging && npm run api-build",
     "deploy-prod": "ng build --configuration=production && npm run api-build",
     "build": "ng build && npm run api-build",
@@ -41,8 +41,7 @@
     }
   },
   "keywords": [],
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Rene Kremer",
       "email": "renejon90@googlemail.com"
     },
@@ -72,6 +71,7 @@
     "@ngx-translate/core": "^10.0.2",
     "@ngx-translate/http-loader": "^3.0.1",
     "@types/nodemailer": "^4.6.5",
+    "angular-file": "^0.5.4",
     "bcrypt": "^3.0.2",
     "bluebird": "^3.5.2",
     "body-parser": "^1.18.3",
@@ -85,7 +85,10 @@
     "jquery": "^3.3.1",
     "jsonwebtoken": "^8.3.0",
     "moment": "^2.22.2",
-    "mongoose": "^5.3.9",
+    "mongodb": "^3.1.9",
+    "mongoose": "^5.3.11",
+    "multer": "^1.4.1",
+    "multer-gridfs-storage": "^3.2.3",
     "ngx-spinner": "^6.1.2",
     "nodemailer": "^4.6.8",
     "nodemon": "^1.18.5",

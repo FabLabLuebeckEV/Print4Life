@@ -1,0 +1,83 @@
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-md-3">
+
+      <h3>{{translationFields.labels.title}}</h3>
+
+      <div class="inline-block">
+        <div ngfDrop [(validDrag)]="baseDropValid" (fileOver)="hasBaseDropZoneOver=$event" [(files)]="files" [accept]="accept"
+          [maxSize]="maxSize" [(dragFiles)]="dragFiles" [(lastInvalids)]="lastInvalids" class="my-drop-zone"
+          [class.invalid-drag]="baseDropValid===false" [class.valid-drag]="baseDropValid" (filesChange)="lastFileAt=getDate()">
+          <div class="dropzone-label text-center">{{translationFields.labels.dropzone}}</div>
+        </div>
+      </div>
+
+      <div class="inline-block spacing-top">
+        {{translationFields.labels.multiple}}
+        <input ngfSelect multiple type="file" [(files)]="files" [accept]="accept" [maxSize]="maxSize" [(lastInvalids)]="lastInvalids"
+          (filesChange)="lastFileAt=getDate()" />
+      </div>
+    </div>
+
+    <div class="offset-md-1 col-md-8" style="margin-bottom: 40px">
+
+      <div style="margin-bottom: 40px">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{{translationFields.labels.name}}</th>
+              <th>{{translationFields.labels.type}}</th>
+              <th>{{translationFields.labels.size}}</th>
+              <th>{{translationFields.labels.actions}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of files;let i=index">
+              <td>
+                <!-- <div *ngIf="['image/gif','image/png','image/jpeg'].indexOf(item.type)>=0">
+                  <div class="previewIcon" [ngfBackground]="item"></div>
+                </div> -->
+                <strong>{{ item.name }}</strong>
+              </td>
+              <td nowrap>
+                {{ item.type }}
+              </td>
+              <td nowrap>
+                {{ item.size/1024/1024 | number:'.2' }} MB
+              </td>
+              <td nowrap>
+                <button type="button" class="btn btn-danger btn-xs" (click)="files.splice(i,1)">
+                  <fa-icon [icon]="deleteIcon"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div>
+          <h5 *ngIf="files.length">{{translationFields.labels.queueTitle}} {{ files.length }}</h5>
+
+          <!-- <ng-container *ngIf="lastFileAt">
+            <p>
+              <strong>Last file(s) selected At:</strong> {{ lastFileAt | date : 'longTime' }}
+            </p>
+          </ng-container> -->
+
+          <!-- <button type="button" class="btn btn-success btn-s spacing-top spacing-right" (click)="uploadFiles()"
+            [disabled]="!files.length">
+            <fa-icon [icon]="uploadIcon"></fa-icon> Upload all
+          </button>
+
+          <button type="button" class="btn btn-warning btn-s spacing-top spacing-right" (click)="cancel()" [disabled]="!httpEmitter">
+            <fa-icon [icon]="warningIcon"></fa-icon> Cancel all
+          </button> -->
+          <button type="button" class="btn btn-danger btn-s spacing-top spacing-right" (click)="files.length=0"
+            [disabled]="!files.length">
+            <fa-icon [icon]="deleteIcon"></fa-icon> {{translationFields.labels.removeAllButton}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

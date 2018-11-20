@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
@@ -6,12 +6,13 @@ import { TableItem } from '../../components/table/table.component';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
-import { ConfigService } from '../../config/config.service';
+import { ConfigService, SpinnerConfig } from '../../config/config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { routes } from '../../config/routes';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'frontend/app/services/user.service';
+import { GenericService } from 'frontend/app/services/generic.service';
 
 @Component({
   selector: 'app-machine-list',
@@ -19,6 +20,7 @@ import { UserService } from 'frontend/app/services/user.service';
   styleUrls: ['./machine-list.component.css']
 })
 export class MachineListComponent implements OnInit {
+  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
   private config: any;
   filter: any = {
     originMachineTypes: [], // origin for backend containing all machine types
@@ -32,7 +34,7 @@ export class MachineListComponent implements OnInit {
   plusIcon: Icon;
   jumpArrow: Icon;
   newLink: String;
-  spinnerConfig: Object = {};
+  spinnerConfig: SpinnerConfig;
   userIsAdmin: Boolean;
   paginationObj: any = {
     page: 1,
@@ -90,8 +92,12 @@ export class MachineListComponent implements OnInit {
     private fablabService: FablabService, private router: Router,
     private location: Location, private modalService: NgbModal,
     private spinner: NgxSpinnerService, private configService: ConfigService,
-    private translateService: TranslateService, private userService: UserService) {
+    private translateService: TranslateService, private userService: UserService,
+    private genericService: GenericService) {
     this.config = this.configService.getConfig();
+    this.spinnerConfig = new SpinnerConfig(
+      'Loading Machines', this.config.spinnerConfig.bdColor,
+      this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.plusIcon = this.config.icons.add;
     this.jumpArrow = this.config.icons.forward;
     this.newLink = `./${routes.paths.frontend.machines.create}`;
@@ -269,6 +275,7 @@ export class MachineListComponent implements OnInit {
 
   private async _loadMachinesByTypes(machineTypes: Array<String>) {
     this.spinner.show();
+    this.genericService.scrollIntoView(this.spinnerContainerRef);
     const machines = [];
     const arr = [];
     let countObj;
@@ -316,7 +323,10 @@ export class MachineListComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(['machineList', 'deviceTypes']).subscribe((translations => {
-      this.spinnerConfig = { 'loadingText': translations['machineList'].spinnerLoadingText, ...this.config.spinnerConfig };
+      this.spinnerConfig = new SpinnerConfig(
+        translations['machineList'].spinnerLoadingText, this.config.spinnerConfig.bdColor,
+        this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
+
       this.filter.machineTypes = [];
       this.filter.shownMachineTypes = [];
       this.filter.originMachineTypes.forEach((mType) => {
