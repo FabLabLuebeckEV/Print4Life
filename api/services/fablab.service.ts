@@ -42,7 +42,7 @@ export class FablabService implements ModelService {
    * @returns a promise with the results
    */
   public update (_id, params) {
-    return Fablab.update(
+    return Fablab.updateOne(
       { _id },
       params,
       { upsert: true }

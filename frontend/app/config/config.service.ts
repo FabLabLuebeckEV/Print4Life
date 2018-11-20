@@ -8,7 +8,9 @@ import {
   faGlobeAmericas,
   faFrown,
   faCheckCircle,
-  faTimesCircle
+  faTimesCircle,
+  faCloudUploadAlt,
+  faExclamationCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 export enum RUN_ENV {
@@ -25,13 +27,15 @@ export class ConfigService {
     icons: {
       back: faArrowLeft,
       edit: faWrench,
+      warning: faExclamationCircle,
       delete: faTrashAlt,
       toggleOn: faCheckCircle,
       toggleOff: faTimesCircle,
       disable: faFrown,
       add: faPlus,
       forward: faArrowRight,
-      public: faGlobeAmericas
+      public: faGlobeAmericas,
+      upload: faCloudUploadAlt
     },
     spinnerConfig: {
       bdColor: 'rgba(51, 51, 51, 0.8)',

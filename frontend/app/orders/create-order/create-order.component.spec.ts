@@ -12,6 +12,9 @@ import { BackButtonComponent } from '../../components/back-button/back-button.co
 import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
+import { UploadComponent } from 'frontend/app/components/upload/upload.component';
+import { ngfModule } from 'angular-file';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 
 describe('CreateOrderComponent', () => {
   let component: CreateOrderComponent;
@@ -19,16 +22,18 @@ describe('CreateOrderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CreateOrderComponent, BackButtonComponent],
-      providers: [ConfigService, TranslateService],
+      declarations: [CreateOrderComponent, BackButtonComponent, UploadComponent],
+      providers: [ConfigService, TranslateService, NgxSpinnerService],
       imports: [
+        ngfModule,
         RouterTestingModule,
         FormsModule,
         HttpClientTestingModule,
         NgSelectModule,
         NgbModule.forRoot(),
         FontAwesomeModule,
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        NgxSpinnerModule
       ]
     })
       .compileComponents();

@@ -6,6 +6,20 @@
     "dashboard": {
         "title": "Welcome to Fablab - Order Management! "
     },
+    "upload": {
+        "labels": {
+            "title": "Select Files",
+            "dropzone": "Dropzone",
+            "multiple": "Multiple Files",
+            "name": "Name",
+            "type": "Type",
+            "size": "Size",
+            "actions": "Actions",
+            "queueTitle": "Total Qued Files: ",
+            "removeAllButton": "Remove all from Queue",
+            "spinnerLoadingText": "Uploading files..."
+        }
+    },
     "navigation": {
         "title": "Order Management",
         "login": "Login",
@@ -243,7 +257,11 @@
             "newComment": "New Comment",
             "author": "Author",
             "content": "Content",
-            "createdAt": "Created at"
+            "createdAt": "Created at",
+            "fileUpload": "File Upload",
+            "files": "Current Files",
+            "file": "File",
+            "latestVersion": "Latest Version"
         },
         "modals": {
             "ok": "Ok",
@@ -313,7 +331,8 @@
             "author": "Author",
             "content": "Content",
             "files": "Files",
-            "file": "File"
+            "file": "File",
+            "latestVersion": "Latest Version"
         },
         "modals": {
             "ok": "Yes",

@@ -16,7 +16,7 @@ const userService = new UserService();
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { user } the new user object, if success
+ * @apiSuccess { Object } user the new user object, if success
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 201 Created
@@ -110,7 +110,7 @@ async function create (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { user } the new user object, if success
+ * @apiSuccess { Object } user the new user object, if success
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 201 Created
@@ -165,7 +165,7 @@ function update (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { user } the deactivated user object, if success
+ * @apiSuccess { Object } user the deactivated user object, if success
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 201 Created
@@ -470,7 +470,7 @@ function search (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { count } the number amount of user, if success
+ * @apiSuccess { Number } count the number amount of user, if success
  * @apiParam query is the query object for mongoose
  * @apiParamExample {json} Request-Example:
  *
@@ -517,7 +517,7 @@ function count (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { roles } a list of valid roles
+ * @apiSuccess { Array } roles a list of valid roles
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 204 No-Content
@@ -563,7 +563,7 @@ function getRoles (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { languages } a list of supported languages
+ * @apiSuccess { Array } languages a list of supported languages
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 204 No-Content
@@ -571,7 +571,7 @@ function getRoles (req, res) {
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
  *  {
-      "roles": [
+      "languages": [
           "german",
           "danish",
           "english",
@@ -608,7 +608,7 @@ function getLanguages (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { login } a login object with success and token
+ * @apiSuccess { Object } login a login object with success and token
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
 {
@@ -669,7 +669,7 @@ async function login (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { user } the user object, if success
+ * @apiSuccess { Object } user the user object, if success
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
@@ -740,7 +740,7 @@ function findown (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { user } the user object, if success
+ * @apiSuccess { Object } user the user object, if success
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
@@ -816,7 +816,7 @@ function get (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { user } the user object, if success
+ * @apiSuccess { Object } user the user object, if success
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
@@ -892,7 +892,7 @@ function getNames (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { object } an response object
+ * @apiSuccess { String } msg an response object
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
@@ -943,7 +943,7 @@ function sendActivationRequest (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { object } an response object
+ * @apiSuccess { String } msg an response object
  *
  * @apiParamExample {json} Request-Example:
  *
@@ -994,7 +994,7 @@ function resetPassword (req, res) {
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { object } a response message
+ * @apiSuccess { String } msg a response message
  *
  * @apiParamExample {json} Request-Example:
  *

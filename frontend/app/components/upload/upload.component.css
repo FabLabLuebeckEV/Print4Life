@@ -1,0 +1,25 @@
+.my-drop-zone {
+    border: dotted 3px lightgray;
+    height: 100px;
+}
+
+/* Default class applied to drop zones on over */
+.invalid-drag {
+    border: dotted 3px red;
+}
+
+.valid-drag {
+    border: dotted 3px green;
+}
+
+.spacing-top {
+    margin-top: 15px;
+}
+
+.spacing-right {
+    margin-right: 15px;
+}
+
+.dropzone-label {
+    margin-top: 12.5%;
+}

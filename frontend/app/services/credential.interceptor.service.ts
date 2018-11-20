@@ -12,8 +12,12 @@ export class HttpInterceptorService implements HttpInterceptor {
     }
     public intercept(request: HttpRequest<any>, handler: HttpHandler): Observable<HttpEvent<any>> {
         // intercept http requests and add with credentials for cors
-        let headers = request.headers
-            .append('content-type', 'application/json');
+        let headers = request.headers;
+        if (!request.url.includes('upload')) {
+            headers = headers
+                .append('content-type', 'application/json');
+        }
+
         if (localStorage.getItem(this.userService.getLocalStorageTokenName())) {
             headers = headers.append('authorization', `${localStorage.getItem(this.userService.getLocalStorageTokenName())}`);
         }

@@ -38,6 +38,8 @@ import { UserListComponent } from './users/user-list/user-list.component';
 import { InputModalComponent } from './components/input-modal/input-modal.component';
 import { ChangePasswdModalComponent } from './users/change-passwd-modal/change-passwd-modal.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { UploadComponent } from './components/upload/upload.component';
+import { ngfModule } from 'angular-file';
 
 @NgModule({
     declarations: [
@@ -59,7 +61,8 @@ import { UserDetailComponent } from './users/user-detail/user-detail.component';
         UserListComponent,
         InputModalComponent,
         ChangePasswdModalComponent,
-        UserDetailComponent
+        UserDetailComponent,
+        UploadComponent,
     ],
     imports: [
         BrowserModule,
@@ -68,8 +71,13 @@ import { UserDetailComponent } from './users/user-detail/user-detail.component';
         FormsModule,
         FontAwesomeModule,
         HttpClientModule,
+        ngfModule,
         NgbModule.forRoot(),
-        RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' }),
+        RouterModule.forRoot(appRoutes, {
+            scrollPositionRestoration: 'enabled',
+            anchorScrolling: 'enabled',
+            onSameUrlNavigation: 'reload'
+        }),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
