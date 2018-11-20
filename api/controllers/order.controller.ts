@@ -294,7 +294,7 @@ function count (req, res) {
         "owner": "Test"
 }
  *
- * @apiSuccess { order } the new order object, if success
+ * @apiSuccess { Object } order the new order object, if success
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 201 Created
@@ -383,7 +383,7 @@ function create (req, res) {
         "__v": 0
     }
 }
- * @apiSuccess { order } the updated order
+ * @apiSuccess { Object } order the updated order
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
@@ -435,7 +435,7 @@ function update (req, res) {
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { order } the deleted order
+ * @apiSuccess { Object } order the deleted order
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
@@ -495,7 +495,7 @@ function deleteById (req, res) {
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { status } a list of valid status
+ * @apiSuccess { Object } status a list of valid status
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 204 No-Content
@@ -554,7 +554,7 @@ function getStatus (req, res) {
     "content": "Blub"
 }
 
- * @apiSuccess { comment } the new comment object, if success
+ * @apiSuccess { Object } comment the new comment object, if success
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 201 Created
@@ -610,7 +610,7 @@ function createComment (req, res) {
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiSuccess { order } a single order
+ * @apiSuccess { Object } order a single order
  *
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
@@ -677,10 +677,62 @@ function get (req, res) {
   }
 }
 
+/**
+ * @api {get} /api/v1/orders/:id/download/:fileId Downloads a specific file of an order by its id
+ * @apiName getFileOfOrderById
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { Object } File the file as attachment
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+    <file_attachment>
+*
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 400 Bad Request
+  {
+    "err": {
+      "name": 'INVALID_ID',
+      "message": 'Invalid fileID in URL parameter. '
+        + 'Must be a single String of 12 bytes or a string of 24 hex characters',
+      "stack": {
+        ...
+      },
+      "type": "INVALID_ID"
+    }
+  }
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 404 Not Found
+  {
+      "error": "Could not find any Order with id 9999",
+      "stack": {
+          ...
+      }
+  }
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 500 Server Error
+  {
+        "error": {
+          "name": 'DOWNLOAD_FILE_ERROR',
+          "message": 'Invalid fileID in URL parameter. '
+            + 'Must be a single String of 12 bytes or a string of 24 hex characters',
+          "stack": {
+            ...
+          },
+          "type": "DOWNLOAD_FILE_ERROR"
+        };
+  }
+ */
 async function downloadFile (req, res) {
   let err: IError;
   let file: any;
   let downloadStream: any;
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
+  }
+
   try {
     const order = await orderService.get(req.params.id);
     file = order.files.find((elem) => elem.id === req.params.fileId);
@@ -719,12 +771,82 @@ async function downloadFile (req, res) {
   return downloadStream.pipe(res);
 }
 
+/**
+ * @api {post} /api/v1/orders/:id/upload Uploads file(s) to an order
+ * @apiName uploadFileToOrder
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type form-data/multipart
+ *
+ * @apiParam {String} file file object uploaded through form data.
+ * Can contain multiple files under the name 'file' (required)
+ * @apiParam {String} id the id of the order
+ *
+ * @apiParamExample {json} Request-Example:
+ {
+    "file": <File Object>,
+    "file": <File Object>
+}
+ * @apiSuccess { Object } uploaded the uploaded files
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "uploaded": {
+        "files": [
+            {
+                "id": "5bf3d4364b21bf21ee3be37b",
+                "contentType": "text/plain",
+                "filename": "Faust.txt",
+                "createdAt": "2018-11-20T09:30:30.000Z"
+            },
+            {
+                "id": "5bf3d4364b21bf21ee3be37c",
+                "contentType": "application/pdf",
+                "filename": "Dream-Walker.pdf",
+                "createdAt": "2018-11-20T09:30:30.000Z"
+            }
+        ],
+        "success": true
+    }
+}
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+  {
+      "error": "Could not find any Order with id 9999",
+      "stack": {
+          ...
+      }
+  }
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 404 Not Found
+  {
+      "error": "No files present"
+  }
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 500 Server Error
+  {
+      "message": "Error while uploading!"
+  }
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 500 Server Error
+  {
+      "message": "Error while uploading!",
+      "stack": {
+          ...
+      }
+  }
+ */
 function uploadFile (req, res) {
   const promises = [];
-  // TODO: Handle upload of the same file (maybe method PUT? and check for filename and order id)
-  // TODO: handle GET and DELETE File requests
+  const checkId = validatorService.checkId(req.params.id);
   if (!req.files) {
-    return res.status(500).send({ message: 'Error uploading file' });
+    return res.status(400).send({ message: 'No files present' });
+  }
+
+  if (checkId) {
+    res.status(checkId.status).send({ error: checkId.error });
   }
 
   req.files.forEach(async (file) => {
@@ -761,7 +883,12 @@ function uploadFile (req, res) {
       });
       order.files = order.files.concat(files);
       await orderService.update(order);
-      return res.status(200).send({ success: true });
+      return res.status(200).send({
+        uploaded: {
+          files,
+          success: true
+        }
+      });
     } catch (error) {
       return res.status(500).send({ message: 'Error while uploading!', stack: error.stack });
     }

@@ -14,7 +14,7 @@
   "scripts": {
     "precommit": "npm run build && npm run test-local && npm run apidocs",
     "precommit-prod": "npm run deploy && npm run test-local && npm run apidocs",
-    "apidocs": "apidoc -i api -o docs/api",
+    "apidocs": "shx rm -rf docs/api && apidoc -i api -o docs/api",
     "deploy-staging": "ng build --configuration=staging && npm run api-build",
     "deploy-prod": "ng build --configuration=production && npm run api-build",
     "build": "ng build && npm run api-build",
