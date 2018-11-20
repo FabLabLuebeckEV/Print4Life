@@ -41,10 +41,15 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, undefined, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
+
+  shippingAddresses: ['userAddress', 'fablabAddress', 'newAddress'];
   shippingAddress: Address = new Address(undefined, undefined, undefined, undefined);
 
   loadingMachineTypes: Boolean;
   machineTypes: Array<String> = [];
+
+  loadingAddresses: Boolean;
+  addresses: Array<Address> = [];
 
   loadingMachinesForType: Boolean;
   machines: Array<Machine> = [];
@@ -83,12 +88,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       zipCode: '',
       city: '',
       country: '',
-      shippingAddresses: {
-        userAddress: '',
-        fablabAddress: '',
-        shippingAddress: ''
-      }
+      addressTitle: '',
     },
+    shownShippingAddresses: [],
     modals: {
       ok: '',
       okReturnValue: '',
@@ -152,6 +154,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     await this._loadFablabs();
     await this._loadStatus();
     await this._initializeOrder(this.orderId);
+    await this._loadAddresses();
     this.machineSelected();
     this._translate();
     if (this.createOrderForm && !this.editView) {
@@ -291,6 +294,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   // Private Functions
+  private async _loadAddresses() {
+    this.loadingAddresses = true;
+    const userProfile = this.userService.getProfile(this.loggedInUser._id);
+    this.loadingAddresses = false;
+  }
 
   private async _loadEditors() {
     const promises = [];
@@ -451,6 +459,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date', 'address']).subscribe((translations => {
       const shownMachineTypes = [];
       const shownStatus = [];
+      const shownShippingAddresses = [];
+
       this.machineTypes.forEach((mType) => {
         const camelType = this.machineService.camelCaseTypes(mType);
         const translated = translations['deviceTypes'][`${camelType}`];
@@ -458,6 +468,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           shownMachineTypes.push(translated);
         }
       });
+
+      // this.shippingAddresses.forEach((address) => {
+      //   const translated = translations['orderForm']['shippingAddresses'][`${address}`];
+      //   if (translated) {
+      //     shownShippingAddresses.push(translated);
+      //   }
+      // });
 
       this.validStatus.forEach((status) => {
         const translated = translations['status'][`${status}`];
@@ -514,12 +531,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           zipCode: translations['address'].zipCode,
           city: translations['address'].city,
           country: translations['address'].country,
-          shippingAddresses: {
-            userAddress: translations['orderForm'].shippingAddresses.userAddress,
-            fablabAddress: translations['orderForm'].shippingAddresses.fablabAddress,
-            shippingAddress: translations['orderForm'].shippingAddresses.shippingAddress
-          }
+          addressTitle: translations['orderForm'].addressTitle,
         },
+        shownShippingAddresses: shownShippingAddresses,
         modals: {
           ok: translations['orderForm'].modals.ok,
           okReturnValue: translations['orderForm'].modals.okReturnValue,

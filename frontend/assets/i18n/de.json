@@ -250,10 +250,11 @@
             "author": "Author",
             "content": "Inhalt",
             "createdAt": "Erstellt am",
+            "addressTitle": "Lieferadresse",
             "shippingAddresses": {
                 "userAddress": "Deine Adresse",
                 "fablabAddress": "Dein FabLab",
-                "shippingAddress": "Neue Adresse"
+                "newAddress": "Neue Adresse"
             }
         },
         "modals": {

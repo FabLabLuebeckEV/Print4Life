@@ -44,7 +44,7 @@ const fablabService = new FablabService();
     ]
 }
  */
-function getAll(req, res) {
+function getAll (req, res) {
   fablabService.getAll().then((fablabs) => {
     logger.info(`GET Fablabs with result ${JSON.stringify(fablabs)}`);
     fablabs.forEach((fablab) => {
@@ -100,7 +100,7 @@ function getAll(req, res) {
  *     }
  *
  */
-function get(req, res) {
+function get (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     logger.error({ error: checkId.error });
@@ -171,7 +171,7 @@ function get(req, res) {
  *
  *
  */
-function create(req, res) {
+function create (req, res) {
   fablabService.create(req.body).then((fablab) => {
     logger.info(`POST Fablab with result ${JSON.stringify(fablab)}`);
     res.status(201).send({ fablab });
@@ -242,7 +242,7 @@ function create(req, res) {
  *
  *
  */
-function update(req, res) {
+function update (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     logger.error({ error: checkId.error });
@@ -305,7 +305,7 @@ function update(req, res) {
       }
   }
  */
-function deleteById(req, res) {
+function deleteById (req, res) {
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
     res.status(checkId.status).send({ error: checkId.error });

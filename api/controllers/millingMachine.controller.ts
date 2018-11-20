@@ -1,17 +1,10 @@
-<<<<<<< HEAD
-import machineService from '../services/machine.service';
-=======
 import { MachineService } from '../services/machine.service';
->>>>>>> master
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 
 const machineType = 'millingMachine';
 
-<<<<<<< HEAD
-=======
 const machineService = new MachineService();
->>>>>>> master
 
 /**
  * @api {get} /api/v1/machines/millingMachines Get milling machines
