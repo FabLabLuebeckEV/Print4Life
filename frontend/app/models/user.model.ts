@@ -1,11 +1,4 @@
-export class Address {
-    constructor(
-        public street: String,
-        public zipCode: String,
-        public city: String,
-        public country: String
-    ) { }
-}
+import { Address } from './address.model';
 
 export class Role {
     constructor(

@@ -153,10 +153,10 @@
         "modals": {
             "yes": "Yes",
             "no": "No",
-            "deleteReturnValue": "Delete",
+            "deleteReturnValue": "Toggle",
             "abortReturnValue": "Abort",
-            "deleteHeader": "Do you really want to delete this machine?",
-            "deleteMessage": "Are you sure you want to delete",
+            "deleteHeader": "Do you really want toggle machine's status?",
+            "deleteMessage": "Are you sure you want to toggle",
             "deleteMessage2": "?"
         },
         "props": {
@@ -238,6 +238,12 @@
             "deleteQuestion2": "?"
         }
     },
+    "address": {
+        "street": "Street",
+        "zipCode": "Zip Code",
+        "city": "City",
+        "country": "Country"
+    },
     "orderForm": {
         "createTitle": "Create Order",
         "editTitle": "Edit Order",
@@ -258,6 +264,12 @@
             "author": "Author",
             "content": "Content",
             "createdAt": "Created at",
+            "addressTitle": "Shippingaddress",
+            "shippingAddresses": {
+                "userAddress": "Your address",
+                "fablabAddress": "Your FabLab",
+                "newAddress": "New address"
+            },
             "fileUpload": "File Upload",
             "files": "Current Files",
             "file": "File",
@@ -332,6 +344,7 @@
             "content": "Content",
             "files": "Files",
             "file": "File",
+            "addressTitle": "Shippingaddress",
             "latestVersion": "Latest Version"
         },
         "modals": {
@@ -356,10 +369,6 @@
             "email": "E-mail Address",
             "role": "Role",
             "isActivated": "Account activated",
-            "street": "Street",
-            "zipCode": "Zip Code",
-            "city": "City",
-            "country": "Country",
             "createSubmit": "Register",
             "editSubmit": "Edit",
             "fablab": "Fablab",

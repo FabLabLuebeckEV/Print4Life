@@ -12,7 +12,7 @@
       <div *ngIf="!editView" class="col-md-6 offset-3">
         <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Machine selection">
           <button *ngFor="let type of translationFields.shownMachineTypes" (click)="_selectType(type); machineForm.reset()"
-            type="button" [class.active]="type === translationFields.shownType" class="btn btn-secondary">{{type}}</button>
+            type="button" [class.active]="type === translationFields.shownType" class="btn btn-outline-primary">{{type}}</button>
         </div>
       </div>
       <form (ngSubmit)="onSubmit()" #machineForm="ngForm">
@@ -47,14 +47,13 @@
             </div>
           </div>
 
-
           <div class="col-md-6">
             <label for="status">{{translationFields.labels.isActivated}}</label><br>
             <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="model.activated">
-              <label ngbButtonLabel class="ng-class: model.activated ? btn-success : btn-secondary">
+              <label ngbButtonLabel class="btn btn-outline-success" [class.active]="model.activated">
                 <input ngbButton type="radio" [value]="true">{{translationFields.buttons.activatedTrue}}
               </label>
-              <label ngbButtonLabel class="ng-class: !model.activated ? btn-danger : btn-secondary">
+              <label ngbButtonLabel class="btn btn-outline-danger" [class.active]="!model.activated">
                 <input ngbButton type="radio" [value]="false">{{translationFields.buttons.activatedFalse}}
               </label>
             </div>

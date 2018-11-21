@@ -44,6 +44,7 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     undefined,
     undefined,
+    undefined,
     undefined
   );
   machine: any;
@@ -62,6 +63,7 @@ export class OrderDetailComponent implements OnInit {
       content: '',
       files: '',
       file: '',
+      addressTitle: '',
       latestVersion: ''
     },
     modals: {
@@ -236,6 +238,7 @@ export class OrderDetailComponent implements OnInit {
           content: translations['orderDetail'].labels.content,
           files: translations['orderDetail'].labels.files,
           file: translations['orderDetail'].labels.file,
+          addressTitle: translations['orderDetail'].labels.addressTitle,
           latestVersion: translations['orderDetail'].labels.latestVersion
         },
         modals: {

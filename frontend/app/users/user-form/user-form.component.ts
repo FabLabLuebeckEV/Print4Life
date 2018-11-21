@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { User, Address, Role, Language } from '../../models/user.model';
+import { User, Role, Language } from '../../models/user.model';
+import { Address } from '../../models/address.model';
 import { UserService } from '../../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -130,12 +131,7 @@ export class UserFormComponent implements OnInit {
     if (this.profileView) {
       this.user = this.loggedInUser;
       if (!this.user.hasOwnProperty('address')) {
-        this.user.address = {
-          street: '',
-          zipCode: '',
-          city: '',
-          country: ''
-        };
+        this.user.address = new Address('', '', '', '');
       }
     } else {
       await this._initializeUser(this.userId);
@@ -343,7 +339,7 @@ export class UserFormComponent implements OnInit {
   }
 
   private _translate() {
-    this.translateService.get(['userForm', 'roles', 'languages']).subscribe((translations => {
+    this.translateService.get(['userForm', 'roles', 'languages', 'address']).subscribe((translations => {
       const shownRoles = [];
       this.validRoles.forEach((role) => {
         const translated = translations['roles'][`${role}`];
@@ -391,10 +387,10 @@ export class UserFormComponent implements OnInit {
           email: translations['userForm'].labels.email,
           role: translations['userForm'].labels.role,
           isActivated: translations['userForm'].labels.isActivated,
-          street: translations['userForm'].labels.street,
-          zipCode: translations['userForm'].labels.zipCode,
-          city: translations['userForm'].labels.city,
-          country: translations['userForm'].labels.country,
+          street: translations['address'].street,
+          zipCode: translations['address'].zipCode,
+          city: translations['address'].city,
+          country: translations['address'].country,
           submit: !this.editView && !this.profileView
             ? translations['userForm'].labels.createSubmit
             : translations['userForm'].labels.editSubmit,

@@ -9,6 +9,7 @@ import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
+import { SimpleMachine } from 'frontend/app/models/order.model';
 
 @Component({
   selector: 'app-machine-detail',
@@ -21,7 +22,8 @@ export class MachineDetailComponent implements OnInit {
   editLink: String;
   deleteLink: String;
   editIcon: any;
-  deleteIcon: any;
+  toggleOn: any;
+  toggleOff: any;
   objectKeys = Object.keys;
   machine: any;
   machineProps: Object = {
@@ -57,7 +59,8 @@ export class MachineDetailComponent implements OnInit {
 
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
-    this.deleteIcon = this.config.icons.delete;
+    this.toggleOn = this.config.icons.toggleOn;
+    this.toggleOff = this.config.icons.toggleOff;
   }
 
   ngOnInit() {
@@ -83,14 +86,14 @@ export class MachineDetailComponent implements OnInit {
     const abortButton = new ModalButton(this.translationFields.modals.no, 'btn btn-secondary',
       this.translationFields.modals.abortReturnValue);
     const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
-      'modal-header header-danger',
+      'modal-header header-warning',
       `${this.translationFields.modals.deleteMessage} ${this.machine.deviceName} ${this.translationFields.modals.deleteMessage2}`,
       deleteButton, abortButton);
     modalRef.result.then((result) => {
       if (result === deleteButton.returnValue) {
-        this.machineService.deleteMachine(this.machine.originType, this.machine._id).then(() => {
+        this.machineService.deleteMachine(this.machine.originType, this.machine._id).then((result) => {
           this.params = {};
-          this.genericService.back();
+          this.machine.activated = result[this.machine.originType].activated;
         });
       }
     });

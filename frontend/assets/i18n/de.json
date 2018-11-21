@@ -155,9 +155,9 @@
             "no": "Nein",
             "deleteReturnValue": "Löschen",
             "abortReturnValue": "Abbrechen",
-            "deleteHeader": "Wollen Sie wirklich diese Maschine löschen?",
-            "deleteMessage": "Sind Sie sicher, dass sie ",
-            "deleteMessage2": "löschen wollen?"
+            "deleteHeader": "Möchten den Status der Maschine ändern?",
+            "deleteMessage": "Sind Sie sicher, dass Sie",
+            "deleteMessage2": "den Status wechseln wollen?"
         },
         "props": {
             "deviceName": "Name der Maschine",
@@ -238,6 +238,12 @@
             "deleteQuestion2": "löschen wollen?"
         }
     },
+    "address": {
+        "street": "Straße",
+        "zipCode": "PLZ",
+        "city": "Stadt",
+        "country": "Land"
+    },
     "orderForm": {
         "createTitle": "Auftrag anlegen",
         "editTitle": "Auftrag bearbeiten",
@@ -258,6 +264,12 @@
             "author": "Author",
             "content": "Inhalt",
             "createdAt": "Erstellt am",
+            "addressTitle": "Lieferadresse",
+            "shippingAddresses": {
+                "userAddress": "Deine Adresse",
+                "fablabAddress": "Dein FabLab",
+                "newAddress": "Neue Adresse"
+            },
             "fileUpload": "Dateiupload",
             "files": "Aktuelle Dateien",
             "file": "Datei",
@@ -332,6 +344,7 @@
             "content": "Inhalt",
             "files": "Dateien",
             "file": "Datei",
+            "addressTitle": "Lieferadresse",
             "latestVersion": "Aktuelle Version"
         },
         "modals": {
@@ -356,10 +369,6 @@
             "email": "E-Mail Adresse",
             "role": "Rolle",
             "isActivated": "Account aktiviert",
-            "street": "Straße",
-            "zipCode": "PLZ",
-            "city": "Stadt",
-            "country": "Land",
             "createSubmit": "Registrieren",
             "editSubmit": "Aktualisieren",
             "fablab": "Fablab",

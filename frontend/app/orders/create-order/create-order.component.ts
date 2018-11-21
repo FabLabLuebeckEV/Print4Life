@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { User } from 'frontend/app/models/user.model';
 import { UserService } from 'frontend/app/services/user.service';
 import { Subscription } from 'rxjs';
+import { Address } from 'frontend/app/models/address.model';
 import { UploadComponent } from 'frontend/app/components/upload/upload.component';
 import { isObject } from 'util';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -44,13 +45,29 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   formSubscription: Subscription;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
+  shippingAddress: Address = new Address(undefined, undefined, undefined, undefined);
   order: Order = new Order(
-    undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, undefined);
+    undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, this.shippingAddress, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
 
+  shippingAddresses: {
+    userAddress: Address,
+    fablabAddress: Address,
+    newAddress: Address
+  } = {
+      userAddress: undefined,
+      fablabAddress: undefined,
+      newAddress: this.shippingAddress
+    };
+  shippingAddressKeys: Array<String> = [];
+  selectedAddressKey = '';
+
   loadingMachineTypes: Boolean;
   machineTypes: Array<String> = [];
+
+  loadingAddresses: Boolean;
+  addresses: Array<Address> = [];
 
   loadingMachinesForType: Boolean;
   machines: Array<Machine> = [];
@@ -69,6 +86,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     title: '',
     shownMachineTypes: [],
     shownStatus: [],
+    shownShippingAddresses: [],
+    shownAddress: '',
     publicHint: '',
     labels: {
       submit: '',
@@ -85,6 +104,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       author: '',
       content: '',
       createdAt: '',
+      street: '',
+      zipCode: '',
+      city: '',
+      country: '',
+      addressTitle: '',
       fileUpload: '',
       files: '',
       file: '',
@@ -128,6 +152,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     private spinner: NgxSpinnerService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
+    this.shippingAddressKeys = ['userAddress', 'fablabAddress', 'newAddress'];
     this.toggleOnIcon = this.config.icons.toggleOn;
     this.toggleOffIcon = this.config.icons.toggleOff;
     this._translate();
@@ -156,6 +181,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     await this._loadFablabs();
     await this._loadStatus();
     await this._initializeOrder(this.orderId);
+    await this._loadAddresses();
     this.machineSelected();
     this._translate();
     if (this.createOrderForm && !this.editView) {
@@ -300,6 +326,39 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   // Private Functions
+  private async _loadAddresses() {
+    this.loadingAddresses = true;
+    let user;
+    let fablab;
+
+    if (this.order && this.order.shippingAddress) {
+      this.selectedAddressKey = 'newAddress';
+    }
+
+    try {
+      user = await this.userService.getUser();
+      this.shippingAddresses.userAddress = new Address(
+        user.address.street, user.address.zipCode, user.address.city, user.address.country);
+      if (this.shippingAddresses.userAddress.compare(this.order.shippingAddress)) {
+        this._selectAddress('userAddress');
+      }
+    } catch (err) {
+      this.shippingAddresses.userAddress = undefined;
+    }
+
+    try {
+      fablab = (await this.fablabService.getFablab(user.fablabId)).fablab;
+      this.shippingAddresses.fablabAddress = new Address(
+        fablab.address.street, fablab.address.zipCode, fablab.address.city, fablab.address.country);
+      if (this.shippingAddresses.fablabAddress.compare(this.order.shippingAddress)) {
+        this._selectAddress('fablabAddress');
+      }
+    } catch (err) {
+      this.shippingAddresses.fablabAddress = undefined;
+    }
+
+    this.loadingAddresses = false;
+  }
 
   private async _loadEditors() {
     const promises = [];
@@ -351,9 +410,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     if (order || id !== undefined) {
       this.order.editor = this.order.editor && this.order.editor.length === 24 ?
         (await this.userService.getNamesOfUser(this.order.editor)).user : undefined;
-      this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
-      this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
+      if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
+        this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
+        this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
+        await this.machineTypeChanged(this.order.machine['shownType']);
+      }
       if (this.order.comments) {
         this.order.comments.forEach(async (comment) => {
           const user = await this.userService.getNamesOfUser(comment.author);
@@ -376,7 +438,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         }));
       }
       const machineId = this.order.machine._id;
-      await this.machineTypeChanged(this.order.machine['shownType']);
       this.order.machine._id = machineId;
     } else {
       this.order.owner = this.loggedInUser._id;
@@ -466,6 +527,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       });
   }
 
+  private _selectAddress(address) {
+    this.selectedAddressKey = address;
+    this.order.shippingAddress = this.shippingAddresses[`${address}`];
+  }
+
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent);
     modalRef.componentInstance.title = title;
@@ -478,7 +544,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
-    this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date', 'upload']).subscribe((translations => {
+    this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date', 'address', 'upload']).subscribe((translations => {
       this.spinnerConfig = new SpinnerConfig(
         translations['upload'].spinnerLoadingText, this.config.spinnerConfig.bdColor,
         this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
@@ -488,6 +554,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         translations.hasOwnProperty('date') && isObject(translations.date)) {
         const shownMachineTypes = [];
         const shownStatus = [];
+        const shownShippingAddresses = [];
+
         this.machineTypes.forEach((mType) => {
           const camelType = this.machineService.camelCaseTypes(mType);
           const translated = translations['deviceTypes'][`${camelType}`];
@@ -495,6 +563,27 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             shownMachineTypes.push(translated);
           }
         });
+
+        this.shippingAddressKeys.forEach((address) => {
+          const translated = translations['orderForm']['labels']['shippingAddresses'][`${address}`];
+          if (translated) {
+            shownShippingAddresses.push(translated);
+          }
+        });
+
+        this.validStatus.forEach((status) => {
+          const translated = translations['status'][`${status}`];
+          if (translated) {
+            shownStatus.push(translated);
+          }
+        });
+        if (this.order && this.order.machine && this.order.machine['shownType']) {
+          this._translateMachineType(this.order.machine.type).then((shownType) => {
+            this.order.machine['shownType'] = shownType;
+          }).catch((error) => {
+            console.log(error);
+          });
+        }
 
         this.validStatus.forEach((status) => {
           const translated = translations['status'][`${status}`];
@@ -534,6 +623,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           title: this.editView ? translations['orderForm'].editTitle : translations['orderForm'].createTitle,
           shownMachineTypes: shownMachineTypes,
           shownStatus: shownStatus,
+          shownShippingAddresses: shownShippingAddresses,
+          shownAddress: 'TBA',
           publicHint: translations['orderForm'].publicHint,
           labels: {
             submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.createSubmit,
@@ -550,6 +641,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             author: translations['orderForm'].labels.author,
             content: translations['orderForm'].labels.content,
             createdAt: translations['orderForm'].labels.createdAt,
+            street: translations['address'].street,
+            zipCode: translations['address'].zipCode,
+            city: translations['address'].city,
+            country: translations['address'].country,
+            addressTitle: translations['orderForm'].addressTitle,
             fileUpload: translations['orderForm'].labels.fileUpload,
             files: translations['orderForm'].labels.files,
             file: translations['orderForm'].labels.file,

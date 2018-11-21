@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import { commentSchema } from './comment.model';
+import { addressSchema } from './address.model';
 import fileSchema from './file.model';
 
 const attributes = {
@@ -31,6 +32,7 @@ const attributes = {
     unique: true,
     required: true
   },
+  shippingAddress: addressSchema,
   createdAt: {
     type: Date,
     required: true

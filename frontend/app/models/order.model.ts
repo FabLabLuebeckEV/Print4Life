@@ -1,3 +1,5 @@
+import { Address } from './address.model';
+
 export class Comment {
     constructor(
         public author: String,
@@ -24,6 +26,7 @@ export class Order {
         public status: String,
         public machine: SimpleMachine,
         public createdAt: Date,
+        public shippingAddress: Address,
         token: String
     ) { }
 }
