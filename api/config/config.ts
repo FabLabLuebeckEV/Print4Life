@@ -92,11 +92,7 @@ const dev = {
   baseUrlBackend: `http://localhost:${port}${baseUrl}`,
   baseUrlFrontend: `http://localhost:${ngPort}`,
   cors: {
-    whitelist: [`http://localhost:${ngPort}`],
-    corsOptions: {
-      origin: undefined,
-      credentials: true
-    }
+    whitelist: [`http://localhost:${ngPort}`]
   }
   // cors: undefined // if testing backend routes in dev mode without using the frontend
 };
@@ -125,21 +121,17 @@ const staging = {
   publicRoutes,
   baseUrlBackend: `https://localhost:${port}${baseUrl}`,
   baseUrlFrontend: 'https://iot-fablab.ddns.net',
-  // cors: {
-  //   whitelist: [
-  //     `https://localhost:${ngPort}`,
-  //     `https://212.83.56.107:${ngPort}`,
-  //     `https://iot-fablab.ddns.net:${ngPort}`,
-  //     `http://localhost:${ngPort}`,
-  //     `http://212.83.56.107:${ngPort}`,
-  //     `http://iot-fablab.ddns.net:${ngPort}`
-  //   ],
-  //   corsOptions: {
-  //     origin: undefined,
-  //     credentials: true
-  //   }
-  // }
-  cors: undefined
+  cors: {
+    whitelist: [
+      `https://localhost:${ngPort}`,
+      `https://212.83.56.107:${ngPort}`,
+      `https://iot-fablab.ddns.net:${ngPort}`,
+      `http://localhost:${ngPort}`,
+      `http://212.83.56.107:${ngPort}`,
+      `http://iot-fablab.ddns.net:${ngPort}`
+    ]
+  }
+  // cors: undefined
 };
 
 const prod = {
@@ -166,21 +158,17 @@ const prod = {
   publicRoutes,
   baseUrlBackend: `https://localhost:${port}${baseUrl}`,
   baseUrlFrontend: 'https://fablab.itm.uni-luebeck.de',
-  // cors: {
-  //   whitelist: [
-  //     `https://localhost:${ngPort}`,
-  //     `https://212.83.56.107:${ngPort}`,
-  //     `https://iot-fablab.ddns.net:${ngPort}`,
-  //     `http://localhost:${ngPort}`,
-  //     `http://212.83.56.107:${ngPort}`,
-  //     `http://iot-fablab.ddns.net:${ngPort}`
-  //   ],
-  //   corsOptions: {
-  //     origin: undefined,
-  //     credentials: true
-  //   }
-  // }
-  cors: undefined
+  cors: {
+    whitelist: [
+      `https://localhost:${ngPort}`,
+      `https://141.83.68.36:${ngPort}`,
+      `https://fablab.itm.uni-luebeck.de:${ngPort}`,
+      `http://localhost:${ngPort}`,
+      `http://141.83.68.36:${ngPort}`,
+      `http://fablab.itm.uni-luebeck.de:${ngPort}`
+    ]
+  }
+  // cors: undefined
 };
 
 const test = {
