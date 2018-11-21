@@ -4,6 +4,7 @@ import * as bodyParser from 'body-parser';
 
 import routes from './routes/index.route';
 import config from './config/config';
+import routerService from './services/router.service';
 
 class App {
   public express;
@@ -17,8 +18,7 @@ class App {
   private mountRoutes (): void {
     this.express.use(bodyParser.json());
     this.express.use(((req, res, next) => {
-      const isDownloadRoute = req.originalUrl.includes('orders') && req.originalUrl.includes('download');
-      if (isDownloadRoute || req.get('Content-Type') === 'application/json'
+      if (routerService.isDownloadRoute(req.originalUrl) || req.get('Content-Type') === 'application/json'
         || (req.get('Content-Type') && req.get('Content-Type').includes('multipart/form-data'))) {
         if (req.get('Content-Type') && req.get('Content-Type').includes('multipart/form-data')) {
           this.express.use(bodyParser.urlencoded({ extended: true }));
@@ -36,14 +36,16 @@ class App {
 
   private setCorsOptions (): void {
     if (config.cors) {
-      config.cors.corsOptions.origin = function (origin, callback) {
-        if (config.cors.whitelist.indexOf(origin) !== -1) {
+      const corsOptionsDelegate = function (req, callback) {
+        const origin = req.header('Origin');
+        if (routerService.isDownloadRoute(req.originalUrl)
+          || config.cors.whitelist.indexOf(origin) !== -1) {
           callback(null, true);
         } else {
           callback(new Error('Not allowed by CORS'));
         }
       };
-      this.express.use(cors(config.cors.corsOptions));
+      this.express.use(cors(corsOptionsDelegate));
     } else {
       this.express.use(cors());
     }

@@ -77,6 +77,10 @@ function _isPublicRoute (url, method) {
   return isPublic;
 }
 
+function isDownloadRoute (url) {
+  return url.includes('orders') && url.includes('download');
+}
+
 export default {
-  jwtValid
+  jwtValid, isDownloadRoute
 };
