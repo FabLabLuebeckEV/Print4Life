@@ -538,6 +538,35 @@ function getStatus (req, res) {
   });
 }
 
+/**
+ * @api {get} /api/v1/orders/status/outstanding Request the outstanding status
+ * @apiName getOutstandingStatus
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { Object } status a list containing the outstanding status
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ * {
+    "status": [
+        "representive"
+    ]
+}
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while trying to get the outstanding status!",
+      "stack": {
+          ...
+      }
+  }
+ */
 function getOutstandingStatus (req, res) {
   let found = false;
   let ret;
@@ -552,13 +581,14 @@ function getOutstandingStatus (req, res) {
       logger.info(`GET outstanding status with result ${JSON.stringify(ret)}`);
       res.status(200).send({ status: ret });
     } else {
-      const error = 'Outstanding Status not found!';
-      logger.error(error);
-      res.status(404).send({ error });
+      const msg = 'Outstanding Status not found!';
+      logger.info(msg);
+      res.status(204).send();
     }
   }).catch((err) => {
-    logger.error({ error: 'Error while trying to get the outstanding status!', stack: err });
-    res.status(500).send({ error: 'Error while trying to get the outstanding status!', stack: err });
+    const error = 'Error while trying to get the outstanding status!';
+    logger.error({ error, stack: err });
+    res.status(500).send({ error, stack: err });
   });
 }
 
