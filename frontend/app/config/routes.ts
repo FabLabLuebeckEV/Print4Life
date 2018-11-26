@@ -75,7 +75,14 @@ export const routes = {
                 getOrderById: 'getById',
                 getAllOrders: '',
                 getStatus: 'status',
-                getOrder: 'getOrder'
+                getOrder: 'getOrder',
+                shared: {
+                    root: 'shared',
+                    create: 'create',
+                    update: 'update',
+                    delete: 'delete',
+                    detail: 'detail'
+                }
             },
             machines: {
                 root: 'machines',

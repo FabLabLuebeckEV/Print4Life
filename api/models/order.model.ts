@@ -38,11 +38,9 @@ const attributes = {
     required: true
   },
   shared: {
-    type: {
-      type: Boolean,
-      required: true,
-      default: false
-    }
+    type: Boolean,
+    required: true,
+    default: false
   },
   machine: {
     type: {

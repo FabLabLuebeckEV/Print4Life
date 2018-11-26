@@ -87,7 +87,13 @@ export class NavigationComponent implements OnInit {
       this.orderDropdown = {
         name: translations['dropdown.orders'].title,
         elements: [
-          { name: translations['dropdown.orders'].listOrders, routerHref: routes.paths.frontend.orders.root }
+          { name: translations['dropdown.orders'].listOrders, routerHref: routes.paths.frontend.orders.root },
+          {
+            name: translations['dropdown.orders'].createShared,
+            routerHref: routes.paths.frontend.orders.root +
+              '/' + routes.paths.frontend.orders.shared.root +
+              '/' + routes.paths.frontend.orders.shared.create
+          }
         ]
       };
 
