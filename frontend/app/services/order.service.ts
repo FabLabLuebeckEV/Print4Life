@@ -42,11 +42,19 @@ export class OrderService {
     return this.http.post(`${this.p}/${routes.paths.backend.orders.count}`, { query: query }).toPromise();
   }
 
-  public createOrder(order): Promise<any> {
-    return this.http.post(`${this.p}`, order).toPromise();
+  public createOrder(order, shared?: boolean): Promise<any> {
+    if (shared) {
+      return this.http.post(`${this.p}/shared`, order).toPromise();
+    } else {
+      return this.http.post(`${this.p}`, order).toPromise();
+    }
   }
-  public updateOrder(order): Promise<any> {
-    return this.http.put(`${this.p}/${order._id}`, order).toPromise();
+  public updateOrder(order, shared?: boolean): Promise<any> {
+    if (shared) {
+      return this.http.put(`${this.p}/shared/${order._id}`, order).toPromise();
+    } else {
+      return this.http.put(`${this.p}/${order._id}`, order).toPromise();
+    }
   }
 
   public deleteOrder(id): Promise<any> {

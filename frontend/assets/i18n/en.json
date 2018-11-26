@@ -288,7 +288,9 @@
             "updateOrderSuccess": "The order was successfully updated!",
             "errorHeader": "Error",
             "updateError": "Error while trying to update!",
-            "createError": "Error while trying to create!"
+            "createError": "Error while trying to create!",
+            "orderSharedLinkSuccessHeader": "Save shared link",
+            "orderSharedLinkSuccess": "Please save the following link, to access this order: "
         },
         "messages": {
             "projectName": "Project name is required",
