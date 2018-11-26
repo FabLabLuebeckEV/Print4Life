@@ -44,7 +44,8 @@
         "orders": {
             "title": "Aufträge",
             "listOrders": "Auftragsliste",
-            "createOrder": "Auftrag anlegen"
+            "createOrder": "Auftrag anlegen",
+            "createShared": "Geteilten Auftrag anlegen"
         },
         "users": {
             "title": "Benutzer",
