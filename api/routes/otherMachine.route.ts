@@ -16,6 +16,8 @@ router.route('/:id').delete(otherMachineCtrl.deleteById);
 
 router.route('/:id').get(otherMachineCtrl.get);
 
+router.route('/:id/countSuccessfulOrders').get(otherMachineCtrl.countSuccessfulOrders);
+
 router.route('/:id').put(otherMachineCtrl.update);
 
 export default router;

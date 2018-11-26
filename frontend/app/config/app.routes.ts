@@ -45,7 +45,11 @@ export const appRoutes: Routes = [
             { path: `${routes.paths.frontend.machines.getById}`, component: MachineDetailComponent }
         ]
     },
-
+    {
+        path: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}`,
+        component: MachineListComponent,
+        runGuardsAndResolvers: 'always',
+    },
     {
         path: routes.paths.frontend.orders.root,
         component: OrderListComponent,

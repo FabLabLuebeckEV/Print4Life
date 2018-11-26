@@ -51,7 +51,8 @@ export const routes = {
                 machineTypes: 'types',
                 materials: 'materials',
                 laserTypes: 'laserTypes',
-                count: 'count'
+                count: 'count',
+                countSuccessfulOrders: 'countSuccessfulOrders'
             },
             fablabs: {
                 root: 'fablabs',
@@ -88,7 +89,8 @@ export const routes = {
                 getAll: '',
                 machineTypes: 'types',
                 materials: 'materials',
-                laserTypes: 'laserTypes'
+                laserTypes: 'laserTypes',
+                successfulOrders: 'countSuccessfulOrders'
             },
             fablabs: {
                 root: 'fablabs',

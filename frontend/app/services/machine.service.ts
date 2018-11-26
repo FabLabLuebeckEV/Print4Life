@@ -59,6 +59,11 @@ export class MachineService {
     return this.http.get(`${this.rootPath}/${type}s/${routes.paths.backend.machines.count}`).toPromise();
   }
 
+  public async countSuccessfulOrders(machineType: string, id: string): Promise<any> {
+    const type = this.camelCaseTypes(machineType);
+    return this.http.get(`${this.rootPath}/${type}s/${id}/${routes.paths.backend.machines.countSuccessfulOrders}`).toPromise();
+  }
+
   public create(machineType, obj) {
     const type = this.camelCaseTypes(machineType);
     return this.http.post(`${this.rootPath}/${type}s/`, obj).toPromise();
