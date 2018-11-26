@@ -31,6 +31,7 @@ export class OrderListComponent implements OnInit {
   visibleOrders: Array<TableItem> = [];
   id: String;
   listView: Boolean = false;
+  outstandingOrders: Boolean = false;
   plusIcon: any;
   loadingOrders: Boolean = false;
 
@@ -102,8 +103,13 @@ export class OrderListComponent implements OnInit {
     this.jumpArrow = this.config.icons.forward;
     this.router.events.subscribe(() => {
       const route = this.location.path();
-      if (route === `/${routes.paths.frontend.orders.root}` && !this.listView) {
+      if (route === `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}` && !this.outstandingOrders) {
+        this.outstandingOrders = true;
+        this.listView = false;
+        this.ngOnInit();
+      } else if (route === `/${routes.paths.frontend.orders.root}` && !this.listView) {
         this.listView = true;
+        this.outstandingOrders = false;
         this.ngOnInit();
       } else if (route !== `/${routes.paths.frontend.orders.root}`) {
         this.listView = false;
@@ -112,7 +118,7 @@ export class OrderListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if (this.listView && !this.loadingOrders) {
+    if ((this.listView || this.outstandingOrders) && !this.loadingOrders) {
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
         this.paginationObj.page = 1;
@@ -365,7 +371,17 @@ export class OrderListComponent implements OnInit {
 
   private async _loadStatus() {
     this.loadingStatus = true;
-    this.filter.originalValidStatus = (await this.orderService.getStatus()).status;
+    try {
+      const status = (await this.orderService.getStatus(this.outstandingOrders)).status;
+      if (Array.isArray(status)) {
+        this.filter.originalValidStatus = status;
+      } else {
+        this.filter.originalValidStatus = [status];
+      }
+    } catch (error) {
+      this.filter.originalValidStatus = [];
+    }
+
     this.translateService.get(['status']).subscribe((translations => {
       this.filter.validStatus.forEach((type, idx) => {
         const translated = translations['status'][`${type}`];

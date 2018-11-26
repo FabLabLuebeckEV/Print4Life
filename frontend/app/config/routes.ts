@@ -36,6 +36,7 @@ export const routes = {
             orders: {
                 root: 'orders',
                 getStatus: 'status',
+                getOutstandingStatus: 'outstanding',
                 getOrder: 'getOrder',
                 comment: 'comment',
                 count: 'count',
@@ -75,7 +76,8 @@ export const routes = {
                 getOrderById: 'getById',
                 getAllOrders: '',
                 getStatus: 'status',
-                getOrder: 'getOrder'
+                getOrder: 'getOrder',
+                outstandingOrders: 'outstanding'
             },
             machines: {
                 root: 'machines',

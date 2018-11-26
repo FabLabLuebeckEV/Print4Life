@@ -44,7 +44,8 @@
         "orders": {
             "title": "Aufträge",
             "listOrders": "Auftragsliste",
-            "createOrder": "Auftrag anlegen"
+            "createOrder": "Auftrag anlegen",
+            "outstandingOrders": "Herausragende Projekte"
         },
         "users": {
             "title": "Benutzer",

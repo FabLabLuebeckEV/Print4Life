@@ -4,22 +4,22 @@
 </div>
 <router-outlet>
 </router-outlet>
-<div *ngIf="listView">
+<div *ngIf="listView || outstandingOrders">
   <div class="row">
-    <div class="col-md-2">
-      <button *ngIf="userIsLoggedIn" type="button" class="btn btn-success  spacing-top-xxl spacing-left-xxl"
+    <div class="col-md-1 spacing-top-xxl">
+      <button *ngIf="userIsLoggedIn && listView" type="button" class="btn btn-success  spacing-top-xxl spacing-left-xxl"
         [routerLink]="createLink">
         <fa-icon [icon]="plusIcon"></fa-icon>
       </button>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-5" *ngIf="listView">
       <label for="status">{{translationFields.filterLabel.status}}</label>
       <ng-select [multiple]="true" [loading]="loadingStatus" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.validStatus
         bindLabel="status" [(ngModel)]="filter.shownStatus" id="status" (change)="changeHandlerStatus($event)" (close)="init()"
         (remove)="init()" (clear)="init()" name="status" #status="ngModel">
       </ng-select>
     </div>
-    <div class="col-md-5">
+    <div [class]="listView ? 'col-md-5' : 'col-md-9 offset-md-1'">
       <label for="machineType">{{translationFields.filterLabel.machines}}</label>
       <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false"
         [items]=filter.machineTypes bindLabel="machineType" [(ngModel)]="filter.shownMachineTypes" id="machineType"

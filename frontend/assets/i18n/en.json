@@ -44,7 +44,8 @@
         "orders": {
             "title": "Orders",
             "listOrders": "List Orders",
-            "createOrder": "Create Order"
+            "createOrder": "Create Order",
+            "outstandingOrders": "List Outstanding Orders"
         },
         "users": {
             "title": "Users",

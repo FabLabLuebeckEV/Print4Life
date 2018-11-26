@@ -538,6 +538,30 @@ function getStatus (req, res) {
   });
 }
 
+function getOutstandingStatus (req, res) {
+  let found = false;
+  let ret;
+  orderService.getStatus().then((status: Array<String>) => {
+    status.forEach((s) => {
+      if (s === 'representive') {
+        found = true;
+        ret = s;
+      }
+    });
+    if (found) {
+      logger.info(`GET outstanding status with result ${JSON.stringify(ret)}`);
+      res.status(200).send({ status: ret });
+    } else {
+      const error = 'Outstanding Status not found!';
+      logger.error(error);
+      res.status(404).send({ error });
+    }
+  }).catch((err) => {
+    logger.error({ error: 'Error while trying to get the outstanding status!', stack: err });
+    res.status(500).send({ error: 'Error while trying to get the outstanding status!', stack: err });
+  });
+}
+
 /**
  * @api {post} /api/v1/orders/:id/comment Adds a new comment to an order
  * @apiName createOrder
@@ -901,6 +925,7 @@ export default {
   update,
   get,
   deleteById,
+  getOutstandingStatus,
   getStatus,
   createComment,
   count,
