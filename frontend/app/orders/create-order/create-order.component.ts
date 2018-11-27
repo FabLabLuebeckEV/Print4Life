@@ -166,7 +166,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this._translate();
     this.router.events.subscribe(() => {
       const route = this.location.path();
-      this.editView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0;
+      this.editView =
+        route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0
+        || route.indexOf(
+          `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/${routes.paths.frontend.orders.shared.update}`
+        ) >= 0;
       this.sharedView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}`) >= 0;
     });
     this.route.params.subscribe(params => {
@@ -210,11 +214,15 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   onSubmitComment(form) {
+    const url = this.sharedView
+      ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
+      + `${routes.paths.frontend.orders.update}/${this.orderId}`
+      : `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.orderId}`;
     const errorMsg = this.translationFields.modals.createCommentError;
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this.comment.author = this.loggedInUser._id;
     this.comment['authorName'] = undefined;
-    this.orderService.createComment(this.orderId, this.comment).then((result) => {
+    this.orderService.createComment(this.orderId, this.comment, this.sharedView).then((result) => {
       if (result) {
         this._openMsgModal(this.translationFields.modals.createCommentSuccessHeader, 'modal-header header-success',
           this.translationFields.modals.createCommentSuccess, okButton, undefined).result.then((result) => {
@@ -229,7 +237,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
               });
               this._translate();
             });
-            this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.orderId}`]);
+            this.router.navigate([url]);
           });
       }
     }).catch(() => {
@@ -239,13 +247,15 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   async onSubmit() {
-    if (this.sharedView && !this.userService.isLoggedIn()) {
+    if (this.sharedView && !this.editView && !this.userService.isLoggedIn()) {
       this.order.shared = true;
       const guestPassword = Math.random().toString(36).substr(2, 9);
       const resUser = await this.userService.createUser(
         new User(
-          undefined, `${this.order.owner.trim().replace(' ', '')}-${Math.random().toString(36).substr(2, 9)}`, 'Gast',
-          'Nutzer', guestPassword, guestPassword,
+          undefined, `${this.order.owner.trim().replace(' ', '')}-${Math.random().toString(36).substr(2, 9)}`,
+          this.order.owner.trim().split(' ')[0],
+          (this.order.owner.trim().split(' ')[1] ? (this.order.owner.trim().split(' ')[1] + ' ') : '') + '(Gast)',
+          guestPassword, guestPassword,
           `${this.order.owner.trim().replace(' ', '')}-${Math.random().toString(36).substr(2, 9)}@gast.nutzer`,
           new Address(
             this.order.shippingAddress.street, this.order.shippingAddress.zipCode,
@@ -284,8 +294,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       this.orderService.updateOrder(orderCopy, this.sharedView).then((result) => {
         if (result) {
           this.fileUpload.uploadFilesToOrder(result.order._id, () => {
-            this._openSuccessMsg();
-          });
+            this._openSuccessMsg(result);
+          }, this.sharedView);
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
@@ -300,7 +310,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             localStorage.removeItem(localStorageOrderKey);
             localStorage.removeItem(localStorageCommentKey);
             this._openSuccessMsg(result);
-          });
+          }, this.sharedView);
 
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
@@ -425,20 +435,28 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       this.loggedInUser = await this.userService.getUser();
     }
 
-    const order = localStorage.getItem(localStorageOrderKey);
-    const comment = localStorage.getItem(localStorageCommentKey);
+    const order = this.editView ? undefined : localStorage.getItem(localStorageOrderKey);
+    const comment = this.editView ? undefined : localStorage.getItem(localStorageCommentKey);
     if (comment) {
       this.comment = JSON.parse(comment) as Comment;
     }
 
     if (order) {
+      if (!this.sharedView && !this.order.hasOwnProperty('owner')) {
+        this.order.owner = this.loggedInUser._id;
+      }
       this.order = JSON.parse(order) as Order;
     } else if (id !== undefined) {
-      await this._loadEditors();
+      if (!this.sharedView) {
+        await this._loadEditors();
+      }
       this.order = (await this.orderService.getOrderById(id)).order;
     }
 
     if (order || id !== undefined) {
+      if (this.sharedView && this.editView) {
+        this.loggedInUser = await this.userService.getNamesOfUser(this.order.owner);
+      }
       this.order.editor = this.order.editor && this.order.editor.length === 24 ?
         (await this.userService.getNamesOfUser(this.order.editor)).user : undefined;
       this.order['shownStatus'] = await this._translateStatus(this.order.status);

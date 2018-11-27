@@ -31,8 +31,10 @@
         <div class="col-md-6">
           <label for="owner">{{translationFields.labels.owner}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <input type="text" class="form-control" id="owner" required name="owner" [(ngModel)]="order.owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
-            [disabled]="!sharedView">
+          <input *ngIf="!sharedView!" type="text" class="form-control" id="owner" required name="owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
+            disabled>
+          <input *ngIf=sharedView type="text" class="form-control" id="owner" required name="owner" [(ngModel)]="order.owner"
+            [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" [disabled]="editView">
         </div>
         <div class="col-md-6">
           <label for="editor">{{translationFields.labels.editor}}</label>
@@ -51,7 +53,7 @@
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingStatus" [items]=translationFields.shownStatus bindValue="_id" bindLabel="name"
             [(ngModel)]="order.shownStatus" (change)="statusChanged(order.shownStatus)" id="status" name="status"
-            #status="ngModel" required>
+            #status="ngModel" required [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' || loggedInUser.role.role !== 'admin'">
           </ng-select>
           <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
             {{translationFields.messages.status}}

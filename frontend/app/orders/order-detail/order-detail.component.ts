@@ -130,7 +130,8 @@ export class OrderDetailComponent implements OnInit {
               comment['authorName'] = author.firstname + ' ' + author.lastname;
             });
             this.editLink = this.order.shared
-              ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/${routes.paths.frontend.orders.shared.update}/${this.order._id}/`
+              ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
+              + `${routes.paths.frontend.orders.shared.update}/${this.order._id}/`
               : `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
             this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
               const type = this.machineService.camelCaseTypes(this.order.machine.type);
