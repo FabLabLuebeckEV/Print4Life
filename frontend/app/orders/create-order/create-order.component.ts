@@ -584,8 +584,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(
       this.translationFields.modals.orderSharedLinkSuccessHeader, 'modal-header header-success',
-      `${this.translationFields.modals.orderSharedLinkSuccess} https://fablab.itm.uni-luebeck.de/orders/detail/${order._id}`,
-      okButton, undefined).result.then(() => {
+      `${this.translationFields.modals.orderSharedLinkSuccess}`,
+      okButton, undefined, `https://fablab.itm.uni-luebeck.de/orders/detail/${order._id}`).result.then(() => {
         this.genericService.back();
       });
   }
@@ -595,13 +595,16 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.order.shippingAddress = this.shippingAddresses[`${address}`];
   }
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton, link?: String) {
     const modalRef = this.modalService.open(MessageModalComponent);
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.titleClass = titleClass;
     modalRef.componentInstance.msg = msg;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
+    if (link) {
+      modalRef.componentInstance.link = link;
+    }
     return modalRef;
   }
 

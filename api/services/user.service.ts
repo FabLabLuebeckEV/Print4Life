@@ -18,7 +18,7 @@ export class UserService implements ModelService {
    * @param user are the params for the 3d printer
    * @returns a promise with the results
    */
-  public async create(user) {
+  public async create (user) {
     delete user._id;
     delete user.__v;
     if (!user.preferredLanguage) {
@@ -42,7 +42,7 @@ export class UserService implements ModelService {
      * This method gets all possible roles for users
      * @returns a promise with the result
      */
-  public async getRoles() {
+  public async getRoles () {
     return new Promise((resolve, reject) => {
       const roles = roleSchema.paths.role.enumValues;
       if (roles === undefined) {
@@ -57,7 +57,7 @@ export class UserService implements ModelService {
      * This method gets all available languages for users
      * @returns a promise with the result
      */
-  public async getLanguages() {
+  public async getLanguages () {
     return new Promise((resolve, reject) => {
       const langs = languageSchema.paths.language.enumValues;
       if (langs === undefined) {
@@ -74,7 +74,7 @@ export class UserService implements ModelService {
      * @param password is the password
      * @return a promise with the result
      */
-  public login(user, password): Promise<Object> {
+  public login (user, password): Promise<Object> {
     let error: IError;
 
     return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
@@ -116,7 +116,7 @@ export class UserService implements ModelService {
      * @param username the username to search for
      * @returns a promise with the result
      */
-  public async getUserByUsername(username) {
+  public async getUserByUsername (username) {
     return User.findOne({ username });
   }
 
@@ -125,7 +125,7 @@ export class UserService implements ModelService {
      * @param id is the id of the user
      * @returns a promise with the result
      */
-  public async get(id) {
+  public async get (id) {
     return User.findById(id);
   }
 
@@ -134,7 +134,7 @@ export class UserService implements ModelService {
      * @param token is the token to search the user by
      * @returns a promise with the result
      */
-  public async getUserByToken(token) {
+  public async getUserByToken (token) {
     const decoded = await jwt.verify(token, config.jwtSecret);
     return this.get(decoded._id);
   }
@@ -144,7 +144,7 @@ export class UserService implements ModelService {
      * @param user is the new user
      * @param newUser boolean to indicate if it is a new user or a reactivation
      */
-  public informAdmins(user, newUser: boolean) {
+  public informAdmins (user, newUser: boolean) {
     if (user.role.role !== 'guest') {
       let options: EmailOptions;
       if (!user.activated) {
@@ -181,7 +181,7 @@ export class UserService implements ModelService {
      * @param skip is the amount of items to skip (counted from the beginning)
      * @returns a promise with the results
      */
-  public search(query?: any, limit?: any, skip?: any) {
+  public search (query?: any, limit?: any, skip?: any) {
     let l: Number;
     let s: Number;
     let promise;
@@ -200,7 +200,7 @@ export class UserService implements ModelService {
      * @param query is the query to consider
      * @returns a promise with the results
      */
-  public count(query) {
+  public count (query) {
     return User.countDocuments(query);
   }
 
@@ -209,7 +209,7 @@ export class UserService implements ModelService {
      * @param user contains the new user params
      * @returns a promise with the results
      */
-  public async update(user) {
+  public async update (user) {
     delete user.__v;
     if (!user.createdAt) {
       user.createdAt = new Date();
@@ -226,7 +226,7 @@ export class UserService implements ModelService {
      * @param _id is the id of the user
      * @returns a promise with the result
      */
-  public async deleteById(_id) {
+  public async deleteById (_id) {
     const user = await this.get(_id);
     user.activated = false;
     return this.update(user);
@@ -238,7 +238,7 @@ export class UserService implements ModelService {
      * @param newPassword is the new password
      * @returns a promise with the result
      */
-  public async changePassword(user, newPassword) {
+  public async changePassword (user, newPassword) {
     user.password = newPassword;
     return user.save(user);
   }
@@ -248,7 +248,7 @@ export class UserService implements ModelService {
      * @param email is the email address of the user
      * @returns true or false depending on wether a user was found by the given email address or not
      */
-  public async resetPassword(email: string) {
+  public async resetPassword (email: string) {
     const users = await this.search({ email }, 1, 0);
     let password: string;
     let user;
@@ -282,7 +282,7 @@ export class UserService implements ModelService {
   /**
      * Not implemented yet
      */
-  public getAll() {
+  public getAll () {
     throw Error('Not implemented!');
   }
   /* eslint-enable class-methods-use-this */
