@@ -44,14 +44,14 @@ export class OrderService {
 
   public createOrder(order, shared?: boolean): Promise<any> {
     if (shared) {
-      return this.http.post(`${this.p}/shared`, order).toPromise();
+      return this.http.post(`${this.p}/${routes.paths.backend.orders.shared}`, order).toPromise();
     } else {
       return this.http.post(`${this.p}`, order).toPromise();
     }
   }
   public updateOrder(order, shared?: boolean): Promise<any> {
     if (shared) {
-      return this.http.put(`${this.p}/shared/${order._id}`, order).toPromise();
+      return this.http.put(`${this.p}/${routes.paths.backend.orders.shared}/${order._id}`, order).toPromise();
     } else {
       return this.http.put(`${this.p}/${order._id}`, order).toPromise();
     }
@@ -69,8 +69,13 @@ export class OrderService {
     return this.http.get(`${this.p}/${routes.paths.backend.orders.getStatus}`).toPromise();
   }
 
-  public createComment(id, comment): Promise<any> {
-    return this.http.post(`${this.p}/${id}/${routes.paths.backend.orders.comment}`, comment).toPromise();
+  public createComment(id, comment, shared?: boolean): Promise<any> {
+    if (shared) {
+      return this.http.post(
+        `${this.p}/${routes.paths.backend.orders.shared}/${id}/${routes.paths.backend.orders.comment}`, comment).toPromise();
+    } else {
+      return this.http.post(`${this.p}/${id}/${routes.paths.backend.orders.comment}`, comment).toPromise();
+    }
   }
 
   public sortFilesByDeprecated(files) {

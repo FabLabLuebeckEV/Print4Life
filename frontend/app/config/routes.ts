@@ -41,7 +41,8 @@ export const routes = {
                 count: 'count',
                 search: 'search',
                 upload: 'upload',
-                download: 'download'
+                download: 'download',
+                shared: 'shared'
             },
             machines: {
                 root: 'machines',
