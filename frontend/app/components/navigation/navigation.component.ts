@@ -91,14 +91,11 @@ export class NavigationComponent implements OnInit {
         name: translations['dropdown.orders'].title,
         elements: [
           { name: translations['dropdown.orders'].listOrders, routerHref: routes.paths.frontend.orders.root },
-<<<<<<< HEAD
-=======
           {
             name:
               translations['dropdown.orders'].outstandingOrders,
             routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}`
           }
->>>>>>> master
         ]
       };
 

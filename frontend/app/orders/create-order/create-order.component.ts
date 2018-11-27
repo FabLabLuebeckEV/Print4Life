@@ -498,7 +498,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   private async _loadStatus() {
     this.loadingStatus = true;
-    this.validStatus = (await this.orderService.getStatus()).status;
+    this.validStatus = (await this.orderService.getStatus(false)).status;
     this.loadingStatus = false;
   }
 

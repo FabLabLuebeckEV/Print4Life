@@ -58,7 +58,6 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent },
-<<<<<<< HEAD
             {
                 path:
                     routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.create,
@@ -69,8 +68,6 @@ export const appRoutes: Routes = [
                     routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.update + '/:id',
                 component: CreateOrderComponent
             }
-=======
->>>>>>> master
         ]
     },
     {
