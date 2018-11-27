@@ -36,6 +36,7 @@ export const routes = {
             orders: {
                 root: 'orders',
                 getStatus: 'status',
+                getOutstandingStatus: 'outstanding',
                 getOrder: 'getOrder',
                 comment: 'comment',
                 count: 'count',
@@ -50,7 +51,8 @@ export const routes = {
                 machineTypes: 'types',
                 materials: 'materials',
                 laserTypes: 'laserTypes',
-                count: 'count'
+                count: 'count',
+                countSuccessfulOrders: 'countSuccessfulOrders'
             },
             fablabs: {
                 root: 'fablabs',
@@ -75,7 +77,8 @@ export const routes = {
                 getOrderById: 'getById',
                 getAllOrders: '',
                 getStatus: 'status',
-                getOrder: 'getOrder'
+                getOrder: 'getOrder',
+                outstandingOrders: 'outstanding'
             },
             machines: {
                 root: 'machines',
@@ -86,7 +89,8 @@ export const routes = {
                 getAll: '',
                 machineTypes: 'types',
                 materials: 'materials',
-                laserTypes: 'laserTypes'
+                laserTypes: 'laserTypes',
+                successfulOrders: 'countSuccessfulOrders'
             },
             fablabs: {
                 root: 'fablabs',

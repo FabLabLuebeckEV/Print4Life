@@ -151,6 +151,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private spinner: NgxSpinnerService) {
     this.config = this.configService.getConfig();
+    this.spinnerConfig = new SpinnerConfig(
+      '', this.config.spinnerConfig.bdColor,
+      this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.publicIcon = this.config.icons.public;
     this.shippingAddressKeys = ['userAddress', 'fablabAddress', 'newAddress'];
     this.toggleOnIcon = this.config.icons.toggleOn;
@@ -414,7 +417,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
         this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
         this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
+        const machineId = this.order.machine._id;
         await this.machineTypeChanged(this.order.machine['shownType']);
+        this.order.machine._id = machineId;
       }
       if (this.order.comments) {
         this.order.comments.forEach(async (comment) => {
@@ -437,8 +442,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           this.orderService.sortFilesByDeprecated(this.order.files);
         }));
       }
-      const machineId = this.order.machine._id;
-      this.order.machine._id = machineId;
     } else {
       this.order.owner = this.loggedInUser._id;
     }
@@ -446,7 +449,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   private async _loadStatus() {
     this.loadingStatus = true;
-    this.validStatus = (await this.orderService.getStatus()).status;
+    this.validStatus = (await this.orderService.getStatus(false)).status;
     this.loadingStatus = false;
   }
 

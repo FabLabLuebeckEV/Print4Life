@@ -23,6 +23,8 @@ router.route('/:id').delete(orderCtrl.deleteById);
 
 router.route('/status/').get(orderCtrl.getStatus);
 
+router.route('/status/outstanding').get(orderCtrl.getOutstandingStatus);
+
 router.route('/:id/comment').post(orderCtrl.createComment);
 
 router.route('/:id').get(orderCtrl.get);

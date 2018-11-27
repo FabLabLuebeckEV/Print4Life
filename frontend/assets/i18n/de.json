@@ -39,12 +39,14 @@
         "machines": {
             "title": "Maschinen",
             "listMachines": "Maschinenliste",
-            "createMachine": "Maschine anlegen"
+            "createMachine": "Maschine anlegen",
+            "listSuccessfulOrders": "Machinenstatistik anzeigen"
         },
         "orders": {
             "title": "Aufträge",
             "listOrders": "Auftragsliste",
-            "createOrder": "Auftrag anlegen"
+            "createOrder": "Auftrag anlegen",
+            "outstandingOrders": "Herausragende Projekte"
         },
         "users": {
             "title": "Benutzer",
@@ -70,7 +72,8 @@
         "shipment": "Im Versand",
         "archived": "Archiviert",
         "representive": "Veröffentlicht",
-        "deleted": "Gelöscht"
+        "deleted": "Gelöscht",
+        "completed": "Abgeschlossen"
     },
     "roles": {
         "guest": "Gast",
@@ -148,7 +151,8 @@
             "machineProps": "Maschinen Daten",
             "laserTypes": "Laser Typen",
             "fablab": "Fablab",
-            "materials": "Materialien"
+            "materials": "Materialien",
+            "successfulOrders": "Erfolgreiche Aufträge"
         },
         "modals": {
             "yes": "Ja",
@@ -189,7 +193,8 @@
             "street": "Straße",
             "zipCode": "Postleitzahl",
             "city": "Stadt",
-            "country": "Land"
+            "country": "Land",
+            "projectname": "Projektname"
         }
     },
     "userList": {
@@ -428,7 +433,8 @@
         "Firstname": "Vorname",
         "Lastname": "Nachname",
         "Role": "Rolle",
-        "Active": "Aktiviert"
+        "Active": "Aktiviert",
+        "Successful Orders": "Erfolgreiche Aufträge"
     },
     "loginModal": {
         "title": "Einloggen",

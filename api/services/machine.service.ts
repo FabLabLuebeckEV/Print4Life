@@ -7,7 +7,9 @@ import { Lasercutter } from '../models/machines/lasercutter.model';
 import { IError, ErrorType } from './router.service';
 /* eslint-enable no-unused-vars */
 import materialService from '../services/material.service';
+import OrderService from './order.service';
 
+const orderService = new OrderService();
 
 export class MachineService {
   /* eslint-disable class-methods-use-this */
@@ -297,6 +299,13 @@ export class MachineService {
         }
       }));
     });
+  }
+
+  async countSuccessfulOrders (id: string) {
+    const orders: Array<Object> = await orderService.getAll(
+      { 'machine._id': id, $or: [{ status: 'representive' }, { status: 'completed' }] }
+    );
+    return orders;
   }
 
   /**

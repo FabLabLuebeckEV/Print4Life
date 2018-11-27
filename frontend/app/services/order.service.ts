@@ -57,7 +57,12 @@ export class OrderService {
     return this.http.get(`${this.p}/${id}`).toPromise();
   }
 
-  public getStatus(): Promise<any> {
+  public getStatus(outstanding: Boolean): Promise<any> {
+    if (outstanding) {
+      return this.http.get(
+        `${this.p}/${routes.paths.backend.orders.getStatus}/${routes.paths.backend.orders.getOutstandingStatus}`
+      ).toPromise();
+    }
     return this.http.get(`${this.p}/${routes.paths.backend.orders.getStatus}`).toPromise();
   }
 

@@ -1,8 +1,11 @@
 import validatorService from '../services/validator.service';
 import logger from '../logger';
 import OtherMachineService from '../services/otherMachine.service';
+import MachineService from '../services/machine.service';
 
 const otherMachineService = new OtherMachineService();
+
+const machineService = new MachineService();
 
 /**
  * @api {get} /api/v1/machines/otherMachines Get other machines
@@ -116,6 +119,61 @@ function count (req, res) {
     logger.error(msg);
     res.status(500).send(msg);
   });
+}
+
+/**
+ * @api {get} /api/v1/machines/otherMachines/:id/countSuccessfulOrders
+ * Counts the number of successful (representive and completed) orders of a other Machine by a given id
+ * @apiName CountSuccessfulOrdersOtherMachine
+ * @apiVersion 1.0.0
+ * @apiGroup OtherMachines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam id is the id of the other machine
+ *
+ * @apiSuccess {Object} machineId is the id of the other machine object
+ * @apiSuccess {number} successfulOrders is the number of successful orders
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "machineId": "5b55f7bf3fe0c8b01713b3ee",
+    "successfulOrders": 2
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Not Found
+ *     {
+ *       "error": "Could not get successful orders for machine Id 9999""
+ *     }
+ *
+ *
+ */
+async function countSuccessfulOrders (req, res) {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    logger.error({ error: checkId.error });
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    try {
+      const successfulOrders = await machineService.countSuccessfulOrders(req.params.id);
+      const orders = [];
+      successfulOrders.forEach((order: { id: string, projectname: string }) => {
+        orders.push({ id: order.id, projectname: order.projectname });
+      });
+      logger.info(`Successful Orders of machine with id ${req.param.id}: ${successfulOrders}`);
+      res.status(200).send({ machineId: req.params.id, orders, successfulOrders: successfulOrders.length });
+    } catch (err) {
+      const msg = { error: `Could not get successful orders for machine Id ${req.param.id}!`, stack: err };
+      logger.error(msg);
+      res.status(500).send(msg);
+    }
+  }
 }
 
 /**
@@ -463,5 +521,5 @@ function update (req, res) {
 }
 
 export default {
-  getAll, create, get, deleteById, update, count
+  getAll, create, get, deleteById, update, count, countSuccessfulOrders
 };

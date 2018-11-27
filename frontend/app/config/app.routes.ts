@@ -45,7 +45,11 @@ export const appRoutes: Routes = [
             { path: `${routes.paths.frontend.machines.getById}`, component: MachineDetailComponent }
         ]
     },
-
+    {
+        path: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}`,
+        component: MachineListComponent,
+        runGuardsAndResolvers: 'always',
+    },
     {
         path: routes.paths.frontend.orders.root,
         component: OrderListComponent,
@@ -53,10 +57,14 @@ export const appRoutes: Routes = [
         children: [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent, canActivate: [AuthGuard], },
-            { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent }
+            { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent },
         ]
     },
-
+    {
+        path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}`,
+        component: OrderListComponent,
+        runGuardsAndResolvers: 'always'
+    },
     {
         path: routes.paths.frontend.users.root,
         component: UserListComponent,
