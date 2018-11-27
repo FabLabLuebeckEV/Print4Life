@@ -107,8 +107,10 @@ export class MachineDetailComponent implements OnInit {
         this.machine = undefined;
         const machine = result[this.params.type];
         this.machine = machine;
-        this.fablabService.getFablab(machine.fablabId).then((result) => {
+        this.fablabService.getFablab(machine.fablabId).then(async (result) => {
           this.machine.fablab = result.fablab;
+          this.machine.successfulOrders = await this.machineService.countSuccessfulOrders(this.params.type, this.params.id);
+          this.machine.successfulOrders = this.machine.successfulOrders.orders;
           this.editLink = `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.update}/` +
             `${this.machine.type}s/${this.machine._id}`;
           this.machineProps = {
@@ -157,13 +159,31 @@ export class MachineDetailComponent implements OnInit {
           if (prop instanceof Object && !Array.isArray(prop)) {
             Object.keys(translations['machineDetail'].titles).forEach((k) => {
               if (k === key) {
-                this.machineSubObjects.push({ title: translations['machineDetail'].titles[`${k}`], obj: this._cleanPropObject(prop) });
+                this.machineSubObjects.push({
+                  originTitle: k,
+                  title: translations['machineDetail'].titles[`${k}`], obj: this._cleanPropObject(prop)
+                });
               }
             });
           } else if (prop instanceof Object && Array.isArray(prop)) {
             Object.keys(translations['machineDetail'].titles).forEach((k) => {
-              if (k === key) {
-                this.machineSubArrays.push({ title: translations['machineDetail'].titles[`${k}`], array: this._cleanPropObject(prop) });
+              if (k === key && key !== 'successfulOrders') {
+                this.machineSubArrays.push({
+                  originTitle: k,
+                  title: translations['machineDetail'].titles[`${k}`], array: this._cleanPropObject(prop)
+                });
+              } else if (k === key && key === 'successfulOrders') {
+                prop.forEach((order) => {
+                  order.projectname = {
+                    label: order.projectname,
+                    href: `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.detail}/${order.id}`
+                  };
+                  delete order.id;
+                });
+                this.machineSubArrays.push({
+                  originTitle: k,
+                  title: translations['machineDetail'].titles[`${k}`], array: this._cleanPropObject(prop)
+                });
               }
             });
           } else {

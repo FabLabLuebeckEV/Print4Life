@@ -1,14 +1,17 @@
 import validatorService from '../services/validator.service';
 import logger from '../logger';
 import { Printer3DService } from '../services/3d-printer.service';
+import MachineService from '../services/machine.service';
 
 const printer3DService = new Printer3DService();
+
+const machineService = new MachineService();
 
 /**
  * @api {get} /api/v1/machines/3d-printer Get 3d-printer
  * @apiName Get3Dprinters
  * @apiVersion 1.0.0
- * @apiGroup Printers
+ * @apiGroup 3D-Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam (Query String) limit is the limit of objects to get
@@ -151,7 +154,7 @@ function getAll (req, res) {
  * @api {get} /api/v1/machines/3d-printers/count Counts the 3D Printers
  * @apiName CountPrinters
  * @apiVersion 1.0.0
- * @apiGroup Printers
+ * @apiGroup 3D-Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiSuccess {Object} count the number of 3d-printers
@@ -175,10 +178,65 @@ function count (req, res) {
 }
 
 /**
+ * @api {get} /api/v1/machines/3d-printers/:id/countSuccessfulOrders
+ * Counts the number of successful (representive and completed) orders of a 3D Printer by a given id
+ * @apiName CountSuccessfulOrders3DPrinters
+ * @apiVersion 1.0.0
+ * @apiGroup 3D-Printers
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam id is the id of the 3D-Printer
+ *
+ * @apiSuccess {Object} machineId is the id of the 3D-Printer object
+ * @apiSuccess {number} successfulOrders is the number of successful orders
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "machineId": "5b55f7bf3fe0c8b01713b3ee",
+    "successfulOrders": 2
+}
+ * @apiError 400 The request is malformed
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "error": "Id needs to be a 24 character long hex string!"
+}
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Not Found
+ *     {
+ *       "error": "Could not get successful orders for machine Id 9999""
+ *     }
+ *
+ *
+ */
+async function countSuccessfulOrders (req, res) {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    logger.error({ error: checkId.error });
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    try {
+      const successfulOrders = await machineService.countSuccessfulOrders(req.params.id);
+      const orders = [];
+      successfulOrders.forEach((order: { id: string, projectname: string }) => {
+        orders.push({ id: order.id, projectname: order.projectname });
+      });
+      logger.info(`Successful Orders of machine with id ${req.param.id}: ${successfulOrders}`);
+      res.status(200).send({ machineId: req.params.id, orders, successfulOrders: successfulOrders.length });
+    } catch (err) {
+      const msg = { error: `Could not get successful orders for machine Id ${req.param.id}!`, stack: err };
+      logger.error(msg);
+      res.status(500).send(msg);
+    }
+  }
+}
+
+/**
  * @api {post} /api/v1/machines/3d-printers/ Create new Printer
  * @apiName CreateNewPrinter
  * @apiVersion 1.0.0
- * @apiGroup Printers
+ * @apiGroup 3D-Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {String} fablabId id of the corresponding fablab (required)
@@ -291,7 +349,7 @@ function create (req, res) {
  * @api {delete} /api/v1/machines/3d-printers/:id Deletes a Printer by a given id
  * @apiName Delete3DPrinterById
  * @apiVersion 1.0.0
- * @apiGroup Printers
+ * @apiGroup 3D-Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {id} is the id of the printer
@@ -410,7 +468,7 @@ function deleteById (req, res) {
  * @api {get} /api/v1/machines/3d-printers/:id Gets a Printer by a given id
  * @apiName GetPrinterById
  * @apiVersion 1.0.0
- * @apiGroup Printers
+ * @apiGroup 3D-Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam id is the id of the printer
@@ -487,7 +545,7 @@ function get (req, res) {
  * @api {put} /api/v1/machines/3d-printers/:id Updates a Printer by a given id
  * @apiName UpdatePrinterByID
  * @apiVersion 1.0.0
- * @apiGroup Printers
+ * @apiGroup 3D-Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
  * @apiParam {id} is the id of the printer
@@ -615,5 +673,5 @@ function update (req, res) {
 
 
 export default {
-  getAll, create, deleteById, get, update, count
+  getAll, create, deleteById, get, update, count, countSuccessfulOrders
 };

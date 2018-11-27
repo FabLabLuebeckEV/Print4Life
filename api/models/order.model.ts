@@ -22,7 +22,7 @@ const attributes = {
   },
   files: [fileSchema],
   status: {
-    enum: ['new', 'assigned', 'production', 'shipment', 'archived', 'representive', 'deleted'],
+    enum: ['new', 'assigned', 'production', 'shipment', 'archived', 'completed', 'representive', 'deleted'],
     type: String,
     default: 'new',
     required: true

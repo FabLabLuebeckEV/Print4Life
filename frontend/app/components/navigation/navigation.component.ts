@@ -80,7 +80,10 @@ export class NavigationComponent implements OnInit {
       this.machineDropdown = {
         name: translations['dropdown.machines'].title,
         elements: [
-
+          {
+            name: translations['dropdown.machines'].listSuccessfulOrders,
+            routerHref: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}`
+          }
         ]
       };
 
@@ -88,6 +91,14 @@ export class NavigationComponent implements OnInit {
         name: translations['dropdown.orders'].title,
         elements: [
           { name: translations['dropdown.orders'].listOrders, routerHref: routes.paths.frontend.orders.root },
+<<<<<<< HEAD
+=======
+          {
+            name:
+              translations['dropdown.orders'].outstandingOrders,
+            routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}`
+          }
+>>>>>>> master
         ]
       };
 

@@ -198,4 +198,18 @@ describe('Order Controller', () => {
       done();
     });
   });
+
+  it('gets outstanding status', (done) => {
+    request({
+      uri: `${endpoint}orders/status/outstanding`,
+      method: 'GET',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(200);
+      expect(response.body.status).toBeDefined();
+      expect(response.body.status).toEqual('representive');
+      done();
+    });
+  });
 });

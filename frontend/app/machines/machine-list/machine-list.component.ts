@@ -30,6 +30,7 @@ export class MachineListComponent implements OnInit {
   };
   displayedMachines: Array<TableItem> = [];
   listView: Boolean;
+  successList: Boolean;
   loadingMachineTypes: Boolean;
   plusIcon: Icon;
   jumpArrow: Icon;
@@ -103,8 +104,13 @@ export class MachineListComponent implements OnInit {
     this.newLink = `./${routes.paths.frontend.machines.create}`;
     this.router.events.subscribe(() => {
       const route = this.location.path();
-      if (!this.listView && route === `/${routes.paths.frontend.machines.root}`) {
+      if (route === `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}` && !this.successList) {
+        this.successList = true;
+        this.listView = false;
+        this.ngOnInit();
+      } else if (!this.listView && route === `/${routes.paths.frontend.machines.root}`) {
         this.listView = true;
+        this.successList = false;
         this.ngOnInit();
       } else if (route !== `/${routes.paths.frontend.machines.root}`) {
         this.listView = false;
@@ -114,7 +120,7 @@ export class MachineListComponent implements OnInit {
 
   async ngOnInit() {
     this.userIsAdmin = await this.userService.isAdmin();
-    if (this.listView && !this.loadingMachineTypes) {
+    if ((this.listView || this.successList) && !this.loadingMachineTypes) {
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
         this.changeFilterHandler(this.filter.shownMachineTypes);
@@ -205,13 +211,18 @@ export class MachineListComponent implements OnInit {
       item = new TableItem();
       item.obj['id'] = { label: elem._id };
       item.obj[`Device Type`] = { label: elem.type };
-      item.obj[`Device Name`] = { label: elem.deviceName, href: `./${elem.type}s/${elem._id}` };
+      item.obj[`Device Name`] = { label: elem.deviceName, href: `/${routes.paths.frontend.machines.root}/${elem.type}s/${elem._id}` };
       item.obj[`Manufacturer`] = { label: elem.manufacturer };
       item.obj[`Fablab`] = { label: fablab.hasOwnProperty('name') ? fablab.name : '' };
       item.obj[`Comment`] = { label: elem.comment };
+      if (this.successList) {
+        const successfulOrders: { machineId: string, successfulOrders: number }
+          = await this.machineService.countSuccessfulOrders(elem.type, elem._id);
+        item.obj['Successful Orders'] = { label: successfulOrders.successfulOrders };
+      }
       if (this.userIsAdmin) {
         item.button1.label = this.translationFields.buttons.updateLabel;
-        item.button1.href = `./${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
+        item.button1.href = `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
         item.button1.class = 'btn btn-warning spacing';
         item.button1.icon = this.config.icons.edit;
         item.button2.label = this.translationFields.buttons.deleteLabel;

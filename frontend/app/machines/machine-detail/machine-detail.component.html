@@ -80,7 +80,10 @@
                             {{elem}}:
                           </div>
                           <div class="col-md-6">
-                            {{item[elem]}}
+                            <!-- add href to projectname of successfulOrders -->
+                            <a *ngIf="key.originTitle === 'successfulOrders' && (elem === 'Projectname' || elem === 'Projektname')"
+                              [href]="item[elem].href">{{item[elem].label}}</a>
+                            <span *ngIf="elem !== 'Projectname' && elem !== 'Projektname'">{{item[elem]}}</span>
                           </div>
                         </div>
                       </li>

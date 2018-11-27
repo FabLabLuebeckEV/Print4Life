@@ -18,6 +18,8 @@ router.route('/:id').delete(lasercutterCtrl.deleteById);
 
 router.route('/:id').get(lasercutterCtrl.get);
 
+router.route('/:id/countSuccessfulOrders').get(lasercutterCtrl.countSuccessfulOrders);
+
 router.route('/:id').put(lasercutterCtrl.update);
 
 export default router;

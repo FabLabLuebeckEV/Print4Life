@@ -39,13 +39,15 @@
         "machines": {
             "title": "Machines",
             "listMachines": "List Machines",
-            "createMachine": "Create Machine"
+            "createMachine": "Create Machine",
+            "listSuccessfulOrders": "List Statistics"
         },
         "orders": {
             "title": "Orders",
             "listOrders": "List Orders",
             "createOrder": "Create Order",
-            "createShared": "Create Shared Order"
+            "createShared": "Create Shared Order",
+            "outstandingOrders": "List Outstanding Orders"
         },
         "users": {
             "title": "Users",
@@ -71,7 +73,8 @@
         "shipment": "shipment",
         "archived": "archived",
         "representive": "representive",
-        "deleted": "deleted"
+        "deleted": "deleted",
+        "completed": "completed"
     },
     "roles": {
         "guest": "guest",
@@ -149,7 +152,8 @@
             "machineProps": "Machine Data",
             "laserTypes": "Laser Types",
             "fablab": "Fablab",
-            "materials": "Materials"
+            "materials": "Materials",
+            "successfulOrders": "Successful Orders"
         },
         "modals": {
             "yes": "Yes",
@@ -190,7 +194,8 @@
             "street": "Street",
             "zipCode": "Zipcode",
             "city": "City",
-            "country": "Country"
+            "country": "Country",
+            "projectname": "Projectname"
         }
     },
     "userList": {
@@ -431,7 +436,8 @@
         "Firstname": "Firstname",
         "Lastname": "Lastname",
         "Role": "Role",
-        "Active": "Active"
+        "Active": "Active",
+        "Successful Orders": "Successful Orders"
     },
     "loginModal": {
         "title": "Login",
