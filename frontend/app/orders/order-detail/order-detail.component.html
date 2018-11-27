@@ -6,7 +6,7 @@
     <div class="col-md-3 col-xl-2">
       <app-back-button class="spacing-right-xs"></app-back-button>
       <a [routerLink]="editLink">
-        <button *ngIf="userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin'))"
+        <button *ngIf="order.shared || (userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')))"
           type="button" class="btn btn-warning spacing-right-xs">
           <fa-icon [icon]="editIcon"></fa-icon>
         </button>
