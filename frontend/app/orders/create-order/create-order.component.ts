@@ -238,24 +238,27 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSubmit() {
-    if (this.sharedView && !this.loggedInUser._id) {
-      this.userService.createUser(
+  async onSubmit() {
+    if (this.sharedView && !this.userService.isLoggedIn()) {
+      this.order.shared = true;
+      const guestPassword = Math.random().toString(36).substr(2, 9);
+      const resUser = await this.userService.createUser(
         new User(
-          undefined, `${this.order.owner}`, 'Gast',
-          'Nutzer', 'gastnutzer', 'gastnutzer', 'em@i.l',
+          undefined, `${this.order.owner.trim().replace(' ', '')}-${Math.random().toString(36).substr(2, 9)}`, 'Gast',
+          'Nutzer', guestPassword, guestPassword,
+          `${this.order.owner.trim().replace(' ', '')}-${Math.random().toString(36).substr(2, 9)}@gast.nutzer`,
           new Address(
-            this.shippingAddresses[this.selectedAddressKey].street, this.shippingAddresses[this.selectedAddressKey].zipCode,
-            this.shippingAddresses[this.selectedAddressKey].city, this.shippingAddresses[this.selectedAddressKey].country
+            this.order.shippingAddress.street, this.order.shippingAddress.zipCode,
+            this.order.shippingAddress.city, this.order.shippingAddress.country
           ),
           new Role('guest'),
-          new Language(localStorage.getItem('orderManagementLang')), false, undefined))
-        .then(resUser => {
-          this.loggedInUser = resUser;
-          this.order.owner = resUser;
-          this.comment.author = resUser.username;
-        });
+          new Language(localStorage.getItem('orderManagementLang')), false, undefined));
+      this.loggedInUser = resUser.user;
+      this.order.owner = resUser.user._id;
+      this.order.shippingAddress = resUser.user.address;
+      this.comment.author = resUser.user._id;
     }
+
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
     let found = false;
     let orderCopy;
@@ -296,7 +299,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           this.fileUpload.uploadFilesToOrder(result.order._id, () => {
             localStorage.removeItem(localStorageOrderKey);
             localStorage.removeItem(localStorageCommentKey);
-            this._openSuccessMsg();
+            this._openSuccessMsg(result);
           });
 
         } else {
@@ -547,24 +550,24 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _openSuccessMsg() {
+  private _openSuccessMsg(resultOrder) {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(this.translationFields.modals.orderSuccessHeader, 'modal-header header-success',
       this.translationFields.modals.orderSuccess, okButton, undefined).result.then((result) => {
-        if (this.sharedView) {
-          this._openLinkMsg(result);
+        if (resultOrder.order.shared) {
+          this._openLinkMsg(resultOrder.order);
         } else {
           this.genericService.back();
         }
       });
   }
 
-  private _openLinkMsg(result) {
+  private _openLinkMsg(order) {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(
       this.translationFields.modals.orderSharedLinkSuccessHeader, 'modal-header header-success',
-      `${this.translationFields.modals.orderSharedLinkSuccess} https://fablab.itm.uni-luebeck.de/orders/detail/${result._id}`,
-      okButton, undefined).result.then((result) => {
+      `${this.translationFields.modals.orderSharedLinkSuccess} https://fablab.itm.uni-luebeck.de/orders/detail/${order._id}`,
+      okButton, undefined).result.then(() => {
         this.genericService.back();
       });
   }

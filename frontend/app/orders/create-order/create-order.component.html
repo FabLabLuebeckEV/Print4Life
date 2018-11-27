@@ -31,7 +31,7 @@
         <div class="col-md-6">
           <label for="owner">{{translationFields.labels.owner}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <input type="text" class="form-control" id="owner" required name="owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
+          <input type="text" class="form-control" id="owner" required name="owner" [(ngModel)]="order.owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
             [disabled]="!sharedView">
         </div>
         <div class="col-md-6">
