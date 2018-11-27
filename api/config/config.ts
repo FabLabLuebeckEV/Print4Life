@@ -29,6 +29,14 @@ const publicRoutes = [
     methods: ['POST']
   },
   {
+    url: `${baseUrl}orders/shared/:id/upload`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}orders/shared/:id/comment`,
+    methods: ['POST']
+  },
+  {
     url: `${baseUrl}users/login`,
     methods: ['POST']
   },
