@@ -12,6 +12,8 @@
         <a *ngIf="item.obj[header].href && !item.obj[header].badge" [routerLink]="item.obj[header].href">{{item.obj[header].label}}</a>
         <span *ngIf="!item.obj[header].href && !item.obj[header].badge">{{item.obj[header].label}}</span>
         <span *ngIf="item.obj[header].badge && !item.obj[header].href" [class]="item.obj[header].class">{{item.obj[header].label}}</span>
+        <span *ngIf="item.obj[header].icon">&nbsp;</span>
+        <fa-icon *ngIf="item.obj[header].icon" [icon]="item.obj[header].icon"></fa-icon>
       </td>
       <td>
         <!-- Button 1 -->

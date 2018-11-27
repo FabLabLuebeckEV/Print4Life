@@ -26,6 +26,7 @@ export class OrderListComponent implements OnInit {
   private config: any;
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
+  publicIcon: any;
   createLink: String;
   orders: Array<TableItem> = [];
   visibleOrders: Array<TableItem> = [];
@@ -94,6 +95,7 @@ export class OrderListComponent implements OnInit {
     private userService: UserService,
     private genericService: GenericService) {
     this.config = this.configService.getConfig();
+    this.publicIcon = this.config.icons.public;
     this.spinnerConfig = new SpinnerConfig(
       'Loading Orders', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
@@ -131,6 +133,7 @@ export class OrderListComponent implements OnInit {
   }
 
   async init() {
+    const loggedInUser = await this.userService.getUser();
     this.loadingOrders = true;
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.orders = new Array();
@@ -200,9 +203,13 @@ export class OrderListComponent implements OnInit {
         orders = orders.orders;
         const arr = [];
         for (const order of orders) {
+          if (order.shared && !loggedInUser
+            || order.shared && loggedInUser && loggedInUser.role
+            && (loggedInUser.role.role !== 'admin' && loggedInUser.role.role !== 'editor')) {
+            continue;
+          }
           const item = new TableItem();
           const owner = await this.userService.getNamesOfUser(order.owner);
-          const loggedInUser = await this.userService.getUser();
           const editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
           item.obj['id'] = { label: order._id };
           item.obj['Created at'] = {
@@ -210,7 +217,11 @@ export class OrderListComponent implements OnInit {
               ? moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat) + ' Uhr'
               : moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat)
           };
-          item.obj['Projectname'] = { label: order.projectname, href: `./${routes.paths.frontend.orders.detail}/${order._id}` };
+          item.obj['Projectname'] = {
+            label: order.projectname,
+            href: `./${routes.paths.frontend.orders.detail}/${order._id}`,
+            icon: order.shared ? this.publicIcon : undefined
+          };
           item.obj['Owner'] = {
             label: owner.firstname + ' ' + owner.lastname,
             href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''

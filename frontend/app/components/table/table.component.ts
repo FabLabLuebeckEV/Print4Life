@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, KeyValueDiffers, DoCheck } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { icon } from '@fortawesome/fontawesome-svg-core';
 
 export class TableButton {
   icon: any = undefined;
@@ -14,7 +15,8 @@ export class TableButton {
 export class TableItem {
   obj: any = {
     label: String,
-    href: String
+    href: String,
+    icon: icon
   };
   button1: TableButton = new TableButton();
   button2: TableButton = new TableButton();
