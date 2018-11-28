@@ -16,6 +16,8 @@ router.route('/:id').delete(printer3DCtrl.deleteById);
 
 router.route('/:id').get(printer3DCtrl.get);
 
+router.route('/:id/schedules').get(printer3DCtrl.getSchedules);
+
 router.route('/:id/countSuccessfulOrders').get(printer3DCtrl.countSuccessfulOrders);
 
 router.route('/:id').put(printer3DCtrl.update);

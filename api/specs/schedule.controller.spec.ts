@@ -8,7 +8,7 @@ import logger from '../logger';
 
 
 const endpoint = config.baseUrlBackend;
-const testSchedule = {
+export const testSchedule = {
   startDate: new Date(),
   endDate: new Date(),
   machine: {
@@ -223,3 +223,5 @@ describe('Schedule Controller', () => {
     });
   });
 });
+
+export default testSchedule;
