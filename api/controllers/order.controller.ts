@@ -664,6 +664,7 @@ function createComment (req, res) {
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam {String} id is the id of the order (required)
  * @apiSuccess { Object } order a single order
  *
  * @apiSuccessExample Success-Response:
