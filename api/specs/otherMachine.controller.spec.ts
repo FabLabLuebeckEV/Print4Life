@@ -5,7 +5,7 @@ import { getTestUserToken, newTimeout } from './global.spec';
 
 const endpoint = `${config.baseUrlBackend}machines/otherMachines`;
 
-const testOtherMachine = {
+export const testOtherMachine = {
   fablabId: '5b453ddb5cf4a9574849e98a',
   deviceName: 'Test Other Machine',
   manufacturer: 'Test Manufacturer',
@@ -275,3 +275,5 @@ describe('Other Machine Controller', () => {
     });
   });
 });
+
+export default testOtherMachine;
