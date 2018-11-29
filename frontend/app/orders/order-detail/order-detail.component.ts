@@ -197,10 +197,10 @@ export class OrderDetailComponent implements OnInit {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
       if (this.order) {
-        this.order['shownCreatedAt'] = this.genericService.translateCreatedAt(
+        this.order['shownCreatedAt'] = this.genericService.translateDate(
           this.order.createdAt, currentLang, translations['date'].dateTimeFormat);
         this.order.files.forEach((file) => {
-          file['shownCreatedAt'] = this.genericService.translateCreatedAt(
+          file['shownCreatedAt'] = this.genericService.translateDate(
             file.createdAt, currentLang, translations['date'].dateTimeFormat);
         });
       }
@@ -219,7 +219,7 @@ export class OrderDetailComponent implements OnInit {
       if (this.order && this.order.comments) {
         this.order.comments.forEach((comment) => {
           if (comment.createdAt) {
-            comment['shownCreatedAt'] = this.genericService.translateCreatedAt(
+            comment['shownCreatedAt'] = this.genericService.translateDate(
               comment.createdAt, currentLang, translations['date'].dateTimeFormat);
           }
         });

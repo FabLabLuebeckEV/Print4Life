@@ -323,7 +323,10 @@
             "datePickerStart": "Start Day of Production",
             "datePickerEnd": "End Day of Production",
             "timePickerStart": "Start Time on Start Day",
-            "timePickerEnd": "End Time on End Day"
+            "timePickerEnd": "End Time on End Day",
+            "machineSchedule": "Machine Schedule",
+            "startDate": "Start Date",
+            "endDate": "End Date"
         },
         "modals": {
             "ok": "Ok",

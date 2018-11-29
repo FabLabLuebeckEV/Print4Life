@@ -44,6 +44,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   selectedType: String;
   submitting: Boolean = false;
   editView: Boolean = false;
+  isCollapsed = true;
   routeChanged: Boolean;
   formSubscription: Subscription;
 
@@ -75,6 +76,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   loadingMachinesForType: Boolean;
   machines: Array<Machine> = [];
+  machineSchedules: Array<Schedule> = [];
 
   loadingStatus: Boolean;
   validStatus: Array<String> = [];
@@ -120,7 +122,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       datePickerStart: '',
       datePickerEnd: '',
       timePickerStart: '',
-      timePickerEnd: ''
+      timePickerEnd: '',
+      machineSchedule: '',
+      startDate: '',
+      endDate: ''
     },
     modals: {
       ok: '',
@@ -467,6 +472,16 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         const machineId = this.order.machine._id;
         await this.machineTypeChanged(this.order.machine['shownType']);
         this.order.machine._id = machineId;
+        try {
+          const result: any =
+            await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
+          if (result && result.schedules) {
+            this.machineSchedules = result.schedules;
+          }
+        } catch (err) {
+          this.machineSchedules = [];
+        }
+
       }
       if (this.order.comments) {
         this.order.comments.forEach(async (comment) => {
@@ -483,7 +498,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             file['link'] = `${routes.backendUrl} /` +
               `${routes.paths.backend.orders.root}/${this.order._id}/` +
               `${routes.paths.backend.orders.download}/${file.id}`;
-            file['shownCreatedAt'] = this.genericService.translateCreatedAt(
+            file['shownCreatedAt'] = this.genericService.translateDate(
               file.createdAt, currentLang, translations['date'].dateTimeFormat);
           });
           this.orderService.sortFilesByDeprecated(this.order.files);
@@ -628,6 +643,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         const shownStatus = [];
         const shownShippingAddresses = [];
 
+        this.machineSchedules.forEach((schedule) => {
+          schedule['shownStartDate'] = this.genericService.translateDate(
+            schedule.startDate, currentLang, translations['date'].dateTimeFormat);
+          schedule['shownEndDate'] = this.genericService.translateDate(
+            schedule.endDate, currentLang, translations['date'].dateTimeFormat);
+        });
+
         this.machineTypes.forEach((mType) => {
           const camelType = this.machineService.camelCaseTypes(mType);
           const translated = translations['deviceTypes'][`${camelType}`];
@@ -682,12 +704,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         if (this.order && this.order.comments) {
           this.order.comments.forEach((comment) => {
             if (comment.createdAt) {
-              comment['shownCreatedAt'] = this.genericService.translateCreatedAt(
+              comment['shownCreatedAt'] = this.genericService.translateDate(
                 comment.createdAt, currentLang, translations['date'].dateTimeFormat);
             }
           });
           this.order.files.forEach((file) => {
-            file['shownCreatedAt'] = this.genericService.translateCreatedAt(
+            file['shownCreatedAt'] = this.genericService.translateDate(
               file.createdAt, currentLang, translations['date'].dateTimeFormat);
           });
         }
@@ -725,7 +747,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             datePickerStart: translations['orderForm'].labels.datePickerStart,
             datePickerEnd: translations['orderForm'].labels.datePickerEnd,
             timePickerStart: translations['orderForm'].labels.timePickerStart,
-            timePickerEnd: translations['orderForm'].labels.timePickerEnd
+            timePickerEnd: translations['orderForm'].labels.timePickerEnd,
+            machineSchedule: translations['orderForm'].labels.machineSchedule,
+            startDate: translations['orderForm'].labels.startDate,
+            endDate: translations['orderForm'].labels.endDate
           },
           modals: {
             ok: translations['orderForm'].modals.ok,

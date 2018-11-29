@@ -194,11 +194,45 @@
           </div>
 
         </div>
+
+
+        <!-- Print files of this order as a list -->
+        <div *ngIf="machineSchedules && machineSchedules.length > 0">
+          <div class="row table-spacing-top">
+            <div class="col-md-12 text-center">
+              <button type="button" class="btn btn-outline-secondary" (click)="isCollapsed = !isCollapsed"
+                [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+                <h4>{{translationFields.labels.machineSchedule}}</h4>
+              </button>
+            </div>
+            <div id="collapseExample" class="col-md-12 table-spacing-top table-spacing-bottom" [ngbCollapse]="isCollapsed">
+              <div>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th class="align-middle text-center" scope="col">{{translationFields.labels.startDate}}</th>
+                      <th class="align-middle text-center" scope="col">{{translationFields.labels.endDate}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let schedule of machineSchedules">
+                      <td class="align-middle text-center">
+                        <div>{{schedule.shownStartDate}}</div>
+                      </td>
+                      <td class="align-middle text-center">
+                        <div>{{schedule.shownEndDate}}</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
 
       <div>
-
         <!-- Files -->
         <div class="form-group row table-spacing">
           <div class="col-md-12 text-center">

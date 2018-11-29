@@ -323,7 +323,10 @@
             "datePickerStart": "Starttag der Bearbeitung",
             "datePickerEnd": "Endtag der Bearbeitung",
             "timePickerStart": "Starzeit am Starttag",
-            "timePickerEnd": "Endzeit am Endtag"
+            "timePickerEnd": "Endzeit am Endtag",
+            "machineSchedule": "Maschinenplanung",
+            "startDate": "Startdatum",
+            "endDate": "Enddatum"
         },
         "modals": {
             "ok": "Ok",

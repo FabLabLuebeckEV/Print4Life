@@ -101,4 +101,9 @@ export class MachineService {
     return this.http.get(`${this.rootPath}/${type}s/${id}`).toPromise();
   }
 
+  public getSchedules(machineType: string, id: string): Promise<Object> {
+    const type = this.camelCaseTypes(machineType);
+    return this.http.get(`${this.rootPath}/${type}s/${id}/schedules`).toPromise();
+  }
+
 }
