@@ -4,10 +4,12 @@ import { OrderService } from '../services/order.service';
 import FileService from '../services/file.service';
 /* eslint-disable no-unused-vars */
 import { IError, ErrorType } from '../services/router.service';
+import ScheduleService from '../services/schedule.service';
 /* eslint-enable no-unused-vars */
 
 const orderService = new OrderService();
 const fileService = new FileService();
+const scheduleService = new ScheduleService();
 
 /**
  * @api {get} /api/v1/orders/ Request the list of orders
@@ -733,6 +735,69 @@ function get (req, res) {
 }
 
 /**
+ * @api {get} /api/v1/orders/:id/schedule Gets the schedules of a specific order
+ * @apiName getScheduleOfOrder
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {String} id is the id of the order (required)
+ *
+ * @apiSuccess {Object} schedule the schedule object
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "schedule": {
+            "machine": {
+                "type": "otherMachine",
+                "id": "5bfe88759d1139444a95aa47"
+            },
+            "_id": "5bfe887e9d1139444a95aa7c",
+            "startDate": "2018-11-29T12:22:12.076Z",
+            "endDate": "2018-11-29T12:22:12.076Z",
+            "fablabId": "5b453ddb5cf4a9574849e98a",
+            "orderId": "5bfe88759d1139444a95aa48",
+            "__v": 0
+        },
+    }
+}
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiError 500 An Error occured
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ *     {
+ *       "error": "Error while trying to get schedules of Order!"
+ *     }
+ *
+ *
+ */
+async function getSchedule (req, res) {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    logger.error({ error: checkId.error });
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    try {
+      const schedules = await scheduleService.getAll({ orderId: req.params.id }, '1', '0');
+      logger.info(`GET schedules for Order with result ${JSON.stringify(schedules)}`);
+      if (schedules.length) {
+        res.status(200).send({ schedule: schedules[0] });
+      } else {
+        const msg = 'No Schedule for Order found';
+        logger.info(msg);
+        res.status(204).send();
+      }
+    } catch (err) {
+      const msg = 'Error while trying to get schedules of Order!';
+      logger.error({ msg, stack: err.stack });
+      res.status(500).send({ error: msg });
+    }
+  }
+}
+
+/**
  * @api {get} /api/v1/orders/:id/download/:fileId Downloads a specific file of an order by its id
  * @apiName getFileOfOrderById
  * @apiVersion 1.0.0
@@ -962,5 +1027,6 @@ export default {
   count,
   search,
   uploadFile,
-  downloadFile
+  downloadFile,
+  getSchedule
 };

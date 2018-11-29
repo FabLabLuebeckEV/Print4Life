@@ -19,6 +19,8 @@ import { Address } from 'frontend/app/models/address.model';
 import { UploadComponent } from 'frontend/app/components/upload/upload.component';
 import { isObject } from 'util';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Schedule } from 'frontend/app/models/schedule.model';
+import { ScheduleService } from 'frontend/app/services/schedule.service';
 
 const localStorageOrderKey = 'orderManagementOrderFormOrder';
 const localStorageCommentKey = 'orderManagementOrderFormComment';
@@ -36,6 +38,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   config: any;
   spinnerConfig: SpinnerConfig;
   publicIcon: any;
+  calendarIcon: any;
   toggleOnIcon: any;
   toggleOffIcon: any;
   selectedType: String;
@@ -50,6 +53,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, this.shippingAddress, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
+  schedule: Schedule = new Schedule('', undefined, undefined, '', { type: '', id: '' }, '');
 
   shippingAddresses: {
     userAddress: Address,
@@ -112,7 +116,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       fileUpload: '',
       files: '',
       file: '',
-      latestVersion: ''
+      latestVersion: '',
+      datePickerStart: '',
+      datePickerEnd: '',
+      timePickerStart: '',
+      timePickerEnd: ''
     },
     modals: {
       ok: '',
@@ -149,12 +157,14 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private route: ActivatedRoute,
     private userService: UserService,
-    private spinner: NgxSpinnerService) {
+    private spinner: NgxSpinnerService,
+    private scheduleService: ScheduleService) {
     this.config = this.configService.getConfig();
     this.spinnerConfig = new SpinnerConfig(
       '', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.publicIcon = this.config.icons.public;
+    this.calendarIcon = this.config.icons.calendar;
     this.shippingAddressKeys = ['userAddress', 'fablabAddress', 'newAddress'];
     this.toggleOnIcon = this.config.icons.toggleOn;
     this.toggleOffIcon = this.config.icons.toggleOff;
@@ -254,12 +264,42 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     orderCopy = JSON.parse(JSON.stringify(this.order));
     orderCopy.machine.type = this.machineService.camelCaseTypes(orderCopy.machine.type);
     if (this.editView) {
+      const promises = [];
       const errorMsg = this.translationFields.modals.error;
       this.orderService.updateOrder(orderCopy).then((result) => {
         if (result) {
-          this.fileUpload.uploadFilesToOrder(result.order._id, () => {
-            this._openSuccessMsg();
+          const machine = this.machines.find((machine) => {
+            return this.order.machine._id === machine._id;
           });
+          this.schedule.machine.type = machine.type as string;
+          this.schedule.machine.id = machine._id as string;
+          this.schedule.fablabId = machine.fablab._id;
+          this.schedule.orderId = this.order._id as string;
+          this.schedule.startDate = new Date(
+            this.schedule.startDay.year,
+            this.schedule.startDay.month,
+            this.schedule.startDay.day,
+            this.schedule.startTime.hour,
+            this.schedule.startTime.minute);
+          this.schedule.endDate = new Date(
+            this.schedule.endDay.year,
+            this.schedule.endDay.month,
+            this.schedule.endDay.day,
+            this.schedule.endTime.hour,
+            this.schedule.endTime.minute);
+          if (this.schedule.id) {
+            promises.push(this.scheduleService.update(this.schedule.id));
+          } else {
+            promises.push(this.scheduleService.create(this.schedule));
+          }
+          Promise.all(promises).then(() => {
+            this.fileUpload.uploadFilesToOrder(result.order._id, () => {
+              this._openSuccessMsg();
+            });
+          }).catch(() => {
+            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+          });
+
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
@@ -408,6 +448,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     } else if (id !== undefined) {
       await this._loadEditors();
       this.order = (await this.orderService.getOrderById(id)).order;
+      try {
+        const result = await this.orderService.getSchedule(id);
+        if (result) {
+          const schedule: Schedule = result.schedule;
+          this._decompressScheduleDates(schedule);
+        }
+      } catch (err) { }
     }
 
     if (order || id !== undefined) {
@@ -433,7 +480,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         this.translateService.get(['date']).subscribe((translations => {
           const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
           this.order.files.forEach((file) => {
-            file['link'] = `${routes.backendUrl}/` +
+            file['link'] = `${routes.backendUrl} /` +
               `${routes.paths.backend.orders.root}/${this.order._id}/` +
               `${routes.paths.backend.orders.download}/${file.id}`;
             file['shownCreatedAt'] = this.genericService.translateCreatedAt(
@@ -531,8 +578,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   private _selectAddress(address) {
+    this.createOrderForm.controls['street'].reset();
+    this.createOrderForm.controls['city'].reset();
+    this.createOrderForm.controls['zipCode'].reset();
+    this.createOrderForm.controls['country'].reset();
     this.selectedAddressKey = address;
-    this.order.shippingAddress = this.shippingAddresses[`${address}`];
+    this.order.shippingAddress = JSON.parse(JSON.stringify(this.shippingAddresses[`${address}`]));
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
@@ -543,6 +594,24 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;
+  }
+
+  private _decompressScheduleDates(schedule: Schedule) {
+    schedule.startDate = new Date(schedule.startDate);
+    schedule.endDate = new Date(schedule.endDate);
+    this.schedule = schedule;
+    this.schedule.startDay = {
+      year: schedule.startDate.getFullYear(),
+      month: schedule.startDate.getMonth(),
+      day: schedule.startDate.getDate()
+    };
+    this.schedule.endDay = {
+      year: schedule.endDate.getFullYear(),
+      month: schedule.endDate.getMonth(),
+      day: schedule.endDate.getDate()
+    };
+    this.schedule.startTime = { hour: schedule.startDate.getHours(), minute: schedule.startDate.getMinutes() };
+    this.schedule.endTime = { hour: schedule.endDate.getHours(), minute: schedule.endDate.getMinutes() };
   }
 
   private _translate() {
@@ -652,7 +721,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             fileUpload: translations['orderForm'].labels.fileUpload,
             files: translations['orderForm'].labels.files,
             file: translations['orderForm'].labels.file,
-            latestVersion: translations['orderForm'].labels.latestVersion
+            latestVersion: translations['orderForm'].labels.latestVersion,
+            datePickerStart: translations['orderForm'].labels.datePickerStart,
+            datePickerEnd: translations['orderForm'].labels.datePickerEnd,
+            timePickerStart: translations['orderForm'].labels.timePickerStart,
+            timePickerEnd: translations['orderForm'].labels.timePickerEnd
           },
           modals: {
             ok: translations['orderForm'].modals.ok,

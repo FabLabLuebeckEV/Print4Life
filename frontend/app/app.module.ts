@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { HttpInterceptorService } from './services/credential.interceptor.service';
@@ -40,6 +40,7 @@ import { ChangePasswdModalComponent } from './users/change-passwd-modal/change-p
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { ngfModule } from 'angular-file';
+import { DatePickerTranslationService } from './services/datepicker-translation.service';
 
 @NgModule({
     declarations: [
@@ -88,7 +89,8 @@ import { ngfModule } from 'angular-file';
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }, // magic for cors
-        MachineService, FablabService, ConfigService, AuthGuard
+        MachineService, FablabService, ConfigService, AuthGuard,
+        { provide: NgbDatepickerI18n, useClass: DatePickerTranslationService }
     ],
     bootstrap: [AppComponent],
     entryComponents: [

@@ -33,6 +33,9 @@ export const routes = {
                 changePassword: 'changePassword',
                 getNames: 'getNames'
             },
+            schedules: {
+                root: 'schedules',
+            },
             orders: {
                 root: 'orders',
                 getStatus: 'status',

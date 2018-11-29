@@ -3,6 +3,47 @@
         "dateFormat": "DD.MM.YYYY",
         "dateTimeFormat": "DD.MM.YYYY HH:mm"
     },
+    "weekdays": {
+        "short": {
+            "monday": "Mo",
+            "tuesday": "Di",
+            "wednesday": "Mi",
+            "thursday": "Do",
+            "friday": "Fr",
+            "saturday": "Sa",
+            "sunday": "So"
+        }
+    },
+    "months": {
+        "short": {
+            "january": "Jan",
+            "february": "Feb",
+            "march": "Mär",
+            "april": "Apr",
+            "may": "Mai",
+            "june": "Jun",
+            "july": "Jul",
+            "august": "Aug",
+            "september": "Sep",
+            "october": "Okt",
+            "november": "Nov",
+            "december": "Dez"
+        },
+        "long": {
+            "january": "Januar",
+            "february": "Februar",
+            "march": "März",
+            "april": "April",
+            "may": "Mai",
+            "june": "Juni",
+            "july": "Juli",
+            "august": "August",
+            "september": "September",
+            "october": "Oktober",
+            "november": "November",
+            "december": "Dezember"
+        }
+    },
     "dashboard": {
         "title": "Willkommen zur Fablab - Auftragsverwaltung!"
     },
@@ -278,7 +319,11 @@
             "fileUpload": "Dateiupload",
             "files": "Aktuelle Dateien",
             "file": "Datei",
-            "latestVersion": "Aktuelle Version"
+            "latestVersion": "Aktuelle Version",
+            "datePickerStart": "Starttag der Bearbeitung",
+            "datePickerEnd": "Endtag der Bearbeitung",
+            "timePickerStart": "Starzeit am Starttag",
+            "timePickerEnd": "Endzeit am Endtag"
         },
         "modals": {
             "ok": "Ok",
