@@ -225,7 +225,8 @@ export class OrderListComponent implements OnInit {
           };
           item.obj['Projectname'] = {
             label: order.projectname,
-            href: `./${routes.paths.frontend.orders.detail}/${order._id}`,
+            href: (order.shared ? `./${routes.paths.frontend.orders.shared.root}/` : `./`) +
+              `${routes.paths.frontend.orders.detail}/${order._id}`,
             icon: order.shared ? this.publicIcon : undefined
           };
           item.obj['Owner'] = {

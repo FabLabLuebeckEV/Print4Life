@@ -67,6 +67,11 @@ export const appRoutes: Routes = [
                 path:
                     routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.update + '/:id',
                 component: CreateOrderComponent
+            },
+            {
+                path:
+                    routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.detail + '/:id',
+                component: OrderDetailComponent
             }
         ]
     },
