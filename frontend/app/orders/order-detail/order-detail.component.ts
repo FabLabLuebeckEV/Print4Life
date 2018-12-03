@@ -112,7 +112,9 @@ export class OrderDetailComponent implements OnInit {
             });
             result.order.files.forEach(async file => {
               file['link'] = `${routes.backendUrl}/` +
-                `${routes.paths.backend.orders.root}/${this.order._id}/` +
+                `${routes.paths.backend.orders.root}/` +
+                (this.order.shared ? `${routes.paths.backend.orders.shared}/` : ``) +
+                `${this.order._id}/` +
                 `${routes.paths.backend.orders.download}/${file.id}`;
             });
             // sort files to show deprecated last
