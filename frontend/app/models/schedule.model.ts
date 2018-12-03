@@ -4,7 +4,7 @@ export class Schedule {
     public endDay: { year: number, month: number, day: number };
     public endTime: { hour: number, minute: number };
     constructor(
-        public id: string,
+        public _id: string,
         public startDate: Date,
         public endDate: Date,
         public fablabId: string,

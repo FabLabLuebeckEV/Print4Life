@@ -31,7 +31,8 @@ export class ScheduleService implements ModelService {
      * @param params are the params for the schedule
      * @returns a promise with the results
      */
-  create (schedule: object) {
+  create (schedule: { _id: string }) {
+    delete schedule._id;
     const newSchedule = new Schedule({
       ...schedule
     });

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { routes } from '../config/routes';
+import { Schedule } from '../models/schedule.model';
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +81,16 @@ export class OrderService {
         && a.deprecated === b.deprecated) {
         return 0;
       } else if (a.deprecated === true) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+  }
+
+  public sortSchedulesByStartDate(schedules: Array<Schedule>) {
+    return schedules.sort((a: Schedule, b: Schedule) => {
+      if (a.startDate >= b.startDate) {
         return 1;
       } else {
         return -1;

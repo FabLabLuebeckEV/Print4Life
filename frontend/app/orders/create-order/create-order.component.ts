@@ -282,18 +282,18 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           this.schedule.orderId = this.order._id as string;
           this.schedule.startDate = new Date(
             this.schedule.startDay.year,
-            this.schedule.startDay.month,
+            this.schedule.startDay.month - 1, // -1 to fix month index of javascript date object
             this.schedule.startDay.day,
             this.schedule.startTime.hour,
             this.schedule.startTime.minute);
           this.schedule.endDate = new Date(
             this.schedule.endDay.year,
-            this.schedule.endDay.month,
+            this.schedule.endDay.month - 1, // -1 to fix month index of javascript date object
             this.schedule.endDay.day,
             this.schedule.endTime.hour,
             this.schedule.endTime.minute);
-          if (this.schedule.id) {
-            promises.push(this.scheduleService.update(this.schedule.id));
+          if (this.schedule._id) {
+            promises.push(this.scheduleService.update(this.schedule));
           } else {
             promises.push(this.scheduleService.create(this.schedule));
           }
@@ -361,7 +361,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.loadingMachinesForType = false;
   }
 
-  machineSelected() {
+  async machineSelected() {
     if (this.order.machine.type && this.order.machine._id) {
       this.machines.forEach(element => {
         if (element._id === this.order.machine._id) {
@@ -370,6 +370,16 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       });
       const type = this.machineService.camelCaseTypes(this.order.machine.type);
       this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.order.machine._id}/`;
+      try {
+        const result: any =
+          await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
+        if (result && result.schedules) {
+          this.machineSchedules = this.orderService.sortSchedulesByStartDate(result.schedules);
+          this._translate();
+        }
+      } catch (err) {
+        this.machineSchedules = [];
+      }
     }
   }
 
@@ -476,7 +486,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           const result: any =
             await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
           if (result && result.schedules) {
-            this.machineSchedules = result.schedules;
+            this.machineSchedules = this.orderService.sortSchedulesByStartDate(result.schedules);
           }
         } catch (err) {
           this.machineSchedules = [];
@@ -617,12 +627,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.schedule = schedule;
     this.schedule.startDay = {
       year: schedule.startDate.getFullYear(),
-      month: schedule.startDate.getMonth(),
+      month: schedule.startDate.getMonth() + 1,
       day: schedule.startDate.getDate()
     };
     this.schedule.endDay = {
       year: schedule.endDate.getFullYear(),
-      month: schedule.endDate.getMonth(),
+      month: schedule.endDate.getMonth() + 1,
       day: schedule.endDate.getDate()
     };
     this.schedule.startTime = { hour: schedule.startDate.getHours(), minute: schedule.startDate.getMinutes() };

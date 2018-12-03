@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { routes } from '../config/routes';
+import { Schedule } from '../models/schedule.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class ScheduleService {
     return this.http.post(`${this.p}`, schedule).toPromise();
   }
 
-  public update(schedule): Promise<any> {
-    return this.http.put(`${this.p}/${schedule.id}`, schedule).toPromise();
+  public update(schedule: Schedule): Promise<any> {
+    return this.http.put(`${this.p}/${schedule._id}`, schedule).toPromise();
   }
 
   public deleteSchedule(id): Promise<any> {
