@@ -45,7 +45,6 @@ const publicRoutes = [
   },
   {
     url: `${baseUrl}orders/shared/:id/download/:fileId/`,
-    canChilds: true,
     methods: ['GET']
   },
   {
