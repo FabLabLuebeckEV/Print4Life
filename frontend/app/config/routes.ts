@@ -1,16 +1,20 @@
 import { environment } from '../../environments/environment';
 import { RUN_ENV } from './config.service';
 let backendUrl = '';
+let frontendUrl = '';
 switch (environment.env) {
     case RUN_ENV.PROD:
         backendUrl = 'https://fablab.itm.uni-luebeck.de:3000/api/v1';
+        frontendUrl = 'https://fablab.itm.uni-luebeck.de';
         break;
     case RUN_ENV.STAGING:
         backendUrl = 'https://iot-fablab.ddns.net:3000/api/v1';
+        frontendUrl = 'https://iot-fablab.ddns.net';
         break;
     case RUN_ENV.DEV:
     default:
         backendUrl = 'http://localhost:3000/api/v1';
+        frontendUrl = 'http://localhost:4200';
         break;
 }
 
@@ -18,6 +22,7 @@ switch (environment.env) {
 
 export const routes = {
     backendUrl: backendUrl,
+    frontendUrl: frontendUrl,
     paths: {
         backend: {
             users: {
@@ -45,7 +50,8 @@ export const routes = {
                 count: 'count',
                 search: 'search',
                 upload: 'upload',
-                download: 'download'
+                download: 'download',
+                shared: 'shared'
             },
             machines: {
                 root: 'machines',
@@ -81,6 +87,13 @@ export const routes = {
                 getAllOrders: '',
                 getStatus: 'status',
                 getOrder: 'getOrder',
+                shared: {
+                    root: 'shared',
+                    create: 'create',
+                    update: 'update',
+                    delete: 'delete',
+                    detail: 'detail'
+                },
                 outstandingOrders: 'outstanding'
             },
             machines: {

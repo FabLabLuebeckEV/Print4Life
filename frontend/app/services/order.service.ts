@@ -42,11 +42,19 @@ export class OrderService {
     return this.http.post(`${this.p}/${routes.paths.backend.orders.count}`, { query: query }).toPromise();
   }
 
-  public createOrder(order): Promise<any> {
-    return this.http.post(`${this.p}`, order).toPromise();
+  public createOrder(order, shared?: boolean): Promise<any> {
+    if (shared) {
+      return this.http.post(`${this.p}/${routes.paths.backend.orders.shared}`, order).toPromise();
+    } else {
+      return this.http.post(`${this.p}`, order).toPromise();
+    }
   }
-  public updateOrder(order): Promise<any> {
-    return this.http.put(`${this.p}/${order._id}`, order).toPromise();
+  public updateOrder(order, shared?: boolean): Promise<any> {
+    if (shared) {
+      return this.http.put(`${this.p}/${routes.paths.backend.orders.shared}/${order._id}`, order).toPromise();
+    } else {
+      return this.http.put(`${this.p}/${order._id}`, order).toPromise();
+    }
   }
 
   public deleteOrder(id): Promise<any> {
@@ -66,8 +74,13 @@ export class OrderService {
     return this.http.get(`${this.p}/${routes.paths.backend.orders.getStatus}`).toPromise();
   }
 
-  public createComment(id, comment): Promise<any> {
-    return this.http.post(`${this.p}/${id}/${routes.paths.backend.orders.comment}`, comment).toPromise();
+  public createComment(id, comment, shared?: boolean): Promise<any> {
+    if (shared) {
+      return this.http.post(
+        `${this.p}/${routes.paths.backend.orders.shared}/${id}/${routes.paths.backend.orders.comment}`, comment).toPromise();
+    } else {
+      return this.http.post(`${this.p}/${id}/${routes.paths.backend.orders.comment}`, comment).toPromise();
+    }
   }
 
   public getSchedule(id: string): Promise<any> {

@@ -193,7 +193,9 @@ export class MachineDetailComponent implements OnInit {
                 prop.forEach((order) => {
                   order.projectname = {
                     label: order.projectname,
-                    href: `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.detail}/${order.id}`
+                    href: `/${routes.paths.frontend.orders.root}/` +
+                      (order.shared ? `${routes.paths.backend.orders.shared}/` : ``) +
+                      `${routes.paths.frontend.orders.detail}/${order.id}`
                   };
                   delete order.id;
                 });
@@ -239,10 +241,17 @@ export class MachineDetailComponent implements OnInit {
           promises.push(new Promise(resolve => {
             this.orderService.getOrderById(schedule.orderId).then((result) => {
               if (result && result.order) {
-                s.projectname = {
-                  label: result.order.projectname,
-                  href: `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.detail}/${schedule.orderId}`
-                };
+                if (this.userIsLoggedIn) {
+                  s.projectname = {
+                    label: result.order.projectname,
+                    href: `/${routes.paths.frontend.orders.root}/` +
+                      (result.order.shared ? `${routes.paths.backend.orders.shared}/` : ``) +
+                      `${routes.paths.frontend.orders.detail}/${schedule.orderId}`
+                  };
+                } else {
+                  s.projectname = result.order.projectname;
+                }
+
                 s.startDate = new Date(schedule.startDate);
                 s.endDate = new Date(schedule.endDate);
                 scheduleCopy.push(s);

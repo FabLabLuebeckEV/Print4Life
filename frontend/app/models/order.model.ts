@@ -27,6 +27,7 @@ export class Order {
         public machine: SimpleMachine,
         public createdAt: Date,
         public shippingAddress: Address,
+        public shared: Boolean,
         token: String
     ) { }
 }

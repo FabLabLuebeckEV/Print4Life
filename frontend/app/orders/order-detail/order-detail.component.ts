@@ -46,6 +46,7 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     undefined,
     undefined,
+    undefined,
     undefined
   );
   schedule: Schedule;
@@ -115,7 +116,9 @@ export class OrderDetailComponent implements OnInit {
             });
             result.order.files.forEach(async file => {
               file['link'] = `${routes.backendUrl}/` +
-                `${routes.paths.backend.orders.root}/${this.order._id}/` +
+                `${routes.paths.backend.orders.root}/` +
+                (this.order.shared ? `${routes.paths.backend.orders.shared}/` : ``) +
+                `${this.order._id}/` +
                 `${routes.paths.backend.orders.download}/${file.id}`;
             });
             // sort files to show deprecated last
@@ -143,6 +146,10 @@ export class OrderDetailComponent implements OnInit {
             }
 
             this.editLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
+            this.editLink = this.order.shared
+              ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
+              + `${routes.paths.frontend.orders.shared.update}/${this.order._id}/`
+              : `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
             this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
               const type = this.machineService.camelCaseTypes(this.order.machine.type);
               this.machine = result[`${type}`];
@@ -211,10 +218,12 @@ export class OrderDetailComponent implements OnInit {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
       if (this.order) {
-        this.schedule['shownStartDate'] = this.genericService.translateDate(
-          this.schedule.startDate, currentLang, translations['date'].dateTimeFormat);
-        this.schedule['shownEndDate'] = this.genericService.translateDate(
-          this.schedule.endDate, currentLang, translations['date'].dateTimeFormat);
+        if (this.schedule) {
+          this.schedule['shownStartDate'] = this.genericService.translateDate(
+            this.schedule.startDate, currentLang, translations['date'].dateTimeFormat);
+          this.schedule['shownEndDate'] = this.genericService.translateDate(
+            this.schedule.endDate, currentLang, translations['date'].dateTimeFormat);
+        }
 
         this.order['shownCreatedAt'] = this.genericService.translateDate(
           this.order.createdAt, currentLang, translations['date'].dateTimeFormat);
