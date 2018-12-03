@@ -17,12 +17,19 @@ const email = {
 const publicRoutes = [
   {
     url: `${baseUrl}orders`,
-    canChilds: true,
     methods: ['GET']
   },
   {
     url: `${baseUrl}orders/count`,
     methods: ['POST']
+  },
+  {
+    url: `${baseUrl}orders/status`,
+    methods: ['GET']
+  },
+  {
+    url: `${baseUrl}orders/status/outstanding`,
+    methods: ['GET']
   },
   {
     url: `${baseUrl}orders/search`,
@@ -35,6 +42,11 @@ const publicRoutes = [
   {
     url: `${baseUrl}orders/shared/:id/comment`,
     methods: ['POST']
+  },
+  {
+    url: `${baseUrl}orders/shared/:id/download/:fileId/`,
+    canChilds: true,
+    methods: ['GET']
   },
   {
     url: `${baseUrl}users/login`,
