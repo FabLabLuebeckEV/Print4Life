@@ -46,6 +46,7 @@
             "title": "Aufträge",
             "listOrders": "Auftragsliste",
             "createOrder": "Auftrag anlegen",
+            "createShared": "Geteilten Auftrag anlegen",
             "outstandingOrders": "Herausragende Projekte"
         },
         "users": {
@@ -292,7 +293,9 @@
             "updateOrderSuccess": "Der Auftrag wurde erfolgreich aktualisiert!",
             "errorHeader": "Fehler",
             "updateError": "Ein Fehler ist beim Aktualisieren aufgetreten!",
-            "createError": "Ein Fehler ist beim Anlegen aufgetreten!"
+            "createError": "Ein Fehler ist beim Anlegen aufgetreten!",
+            "orderSharedLinkSuccessHeader": "Öffentlichen Link sichern",
+            "orderSharedLinkSuccess": "Sichern Sie die folgenden Link, um auf den Auftrag zuzugreifen: "
         },
         "messages": {
             "projectName": "Der Projektname wird benötigt",

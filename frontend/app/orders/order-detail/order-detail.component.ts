@@ -45,6 +45,7 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     undefined,
     undefined,
+    undefined,
     undefined
   );
   machine: any;
@@ -111,7 +112,9 @@ export class OrderDetailComponent implements OnInit {
             });
             result.order.files.forEach(async file => {
               file['link'] = `${routes.backendUrl}/` +
-                `${routes.paths.backend.orders.root}/${this.order._id}/` +
+                `${routes.paths.backend.orders.root}/` +
+                (this.order.shared ? `${routes.paths.backend.orders.shared}/` : ``) +
+                `${this.order._id}/` +
                 `${routes.paths.backend.orders.download}/${file.id}`;
             });
             // sort files to show deprecated last
@@ -128,7 +131,10 @@ export class OrderDetailComponent implements OnInit {
               const author = await this.userService.getNamesOfUser(comment.author);
               comment['authorName'] = author.firstname + ' ' + author.lastname;
             });
-            this.editLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
+            this.editLink = this.order.shared
+              ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
+              + `${routes.paths.frontend.orders.shared.update}/${this.order._id}/`
+              : `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
             this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
               const type = this.machineService.camelCaseTypes(this.order.machine.type);
               this.machine = result[`${type}`];

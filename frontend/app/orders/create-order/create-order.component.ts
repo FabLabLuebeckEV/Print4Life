@@ -12,7 +12,7 @@ import { ConfigService, SpinnerConfig } from '../../config/config.service';
 import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
-import { User } from 'frontend/app/models/user.model';
+import { User, Role, Language } from 'frontend/app/models/user.model';
 import { UserService } from 'frontend/app/services/user.service';
 import { Subscription } from 'rxjs';
 import { Address } from 'frontend/app/models/address.model';
@@ -41,13 +41,17 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   selectedType: String;
   submitting: Boolean = false;
   editView: Boolean = false;
+  sharedView = false;
   routeChanged: Boolean;
   formSubscription: Subscription;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
-  shippingAddress: Address = new Address(undefined, undefined, undefined, undefined);
+  shippingAddress: Address = new Address('', '', '', '');
   order: Order = new Order(
-    undefined, undefined, undefined, undefined, undefined, undefined, undefined, this.sMachine, undefined, this.shippingAddress, undefined);
+    undefined, undefined, undefined,
+    undefined, undefined, undefined,
+    undefined, this.sMachine, undefined,
+    this.shippingAddress, false, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
 
@@ -75,12 +79,14 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   loadingStatus: Boolean;
   validStatus: Array<String> = [];
 
+  owner: User;
+
   loadingFablabs: Boolean;
   fablabs: Array<any>;
   editors: Array<User>;
   loadingEditors: Boolean;
   loggedInUser: User = new User(
-    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+    undefined, '', '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
   translationFields = {
     title: '',
@@ -123,7 +129,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       orderSuccessHeader: '',
       orderSuccess: '',
       errorHeader: '',
-      error: ''
+      error: '',
+      orderSharedLinkSuccessHeader: '',
+      orderSharedLinkSuccess: ''
     },
     messages: {
       projectName: '',
@@ -161,7 +169,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this._translate();
     this.router.events.subscribe(() => {
       const route = this.location.path();
-      this.editView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0;
+      this.editView =
+        route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}`) >= 0
+        || route.indexOf(
+          `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/${routes.paths.frontend.orders.shared.update}`
+        ) >= 0;
+      this.sharedView = route.indexOf(`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}`) >= 0;
     });
     this.route.params.subscribe(params => {
       if (params.id) {
@@ -204,11 +217,15 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   onSubmitComment(form) {
+    const url = this.sharedView
+      ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
+      + `${routes.paths.frontend.orders.update}/${this.orderId}`
+      : `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.orderId}`;
     const errorMsg = this.translationFields.modals.createCommentError;
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this.comment.author = this.loggedInUser._id;
     this.comment['authorName'] = undefined;
-    this.orderService.createComment(this.orderId, this.comment).then((result) => {
+    this.orderService.createComment(this.orderId, this.comment, this.sharedView).then((result) => {
       if (result) {
         this._openMsgModal(this.translationFields.modals.createCommentSuccessHeader, 'modal-header header-success',
           this.translationFields.modals.createCommentSuccess, okButton, undefined).result.then((result) => {
@@ -223,7 +240,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
               });
               this._translate();
             });
-            this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.orderId}`]);
+            this.router.navigate([url]);
           });
       }
     }).catch(() => {
@@ -232,11 +249,33 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
+    if (this.sharedView && !this.editView && !this.userService.isLoggedIn()) {
+      this.order.shared = true;
+      const guestPassword = Math.random().toString(36).substr(2, 9);
+      const resUser = await this.userService.createUser(
+        new User(
+          undefined, `${this.order.owner.trim().replace(' ', '')}-${Math.random().toString(36).substr(2, 9)}`,
+          this.order.owner.trim().split(' ')[0],
+          (this.order.owner.trim().split(' ')[1] ? (this.order.owner.trim().split(' ')[1] + ' ') : '') + '(Gast)',
+          guestPassword, guestPassword,
+          `${this.order.owner.trim().replace(' ', '')}-${Math.random().toString(36).substr(2, 9)}@gast.nutzer`,
+          new Address(
+            this.order.shippingAddress.street, this.order.shippingAddress.zipCode,
+            this.order.shippingAddress.city, this.order.shippingAddress.country
+          ),
+          new Role('guest'),
+          new Language(localStorage.getItem('orderManagementLang')), false, undefined));
+      this.loggedInUser = resUser.user;
+      this.order.owner = resUser.user._id;
+      this.order.shippingAddress = resUser.user.address;
+      this.comment.author = resUser.user._id;
+    }
+
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
     let found = false;
     let orderCopy;
-    this.comment.author = this.loggedInUser._id;
+    this.comment.author = this.comment.author ? this.comment.author : this.loggedInUser._id;
     if (this.comment.author && this.comment.content) {
       if (!this.order.comments) {
         this.order.comments = [];
@@ -255,11 +294,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     orderCopy.machine.type = this.machineService.camelCaseTypes(orderCopy.machine.type);
     if (this.editView) {
       const errorMsg = this.translationFields.modals.error;
-      this.orderService.updateOrder(orderCopy).then((result) => {
+      this.orderService.updateOrder(orderCopy, this.sharedView).then((result) => {
         if (result) {
           this.fileUpload.uploadFilesToOrder(result.order._id, () => {
-            this._openSuccessMsg();
-          });
+            this._openSuccessMsg(result);
+          }, this.sharedView);
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
@@ -268,13 +307,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       });
     } else {
       const errorMsg = this.translationFields.modals.error;
-      this.orderService.createOrder(orderCopy).then((result) => {
+      this.orderService.createOrder(orderCopy, this.sharedView).then((result) => {
         if (result) {
           this.fileUpload.uploadFilesToOrder(result.order._id, () => {
             localStorage.removeItem(localStorageOrderKey);
             localStorage.removeItem(localStorageCommentKey);
-            this._openSuccessMsg();
-          });
+            this._openSuccessMsg(result);
+          }, this.sharedView);
 
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
@@ -359,7 +398,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     } catch (err) {
       this.shippingAddresses.fablabAddress = undefined;
     }
-
     this.loadingAddresses = false;
   }
 
@@ -396,21 +434,32 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
 
   private async _initializeOrder(id) {
-    this.loggedInUser = await this.userService.getUser();
-    const order = localStorage.getItem(localStorageOrderKey);
-    const comment = localStorage.getItem(localStorageCommentKey);
+    if (!this.sharedView) {
+      this.loggedInUser = await this.userService.getUser();
+    }
+
+    const order = this.editView ? undefined : localStorage.getItem(localStorageOrderKey);
+    const comment = this.editView ? undefined : localStorage.getItem(localStorageCommentKey);
     if (comment) {
       this.comment = JSON.parse(comment) as Comment;
     }
 
     if (order) {
+      if (!this.sharedView && !this.order.hasOwnProperty('owner')) {
+        this.order.owner = this.loggedInUser._id;
+      }
       this.order = JSON.parse(order) as Order;
     } else if (id !== undefined) {
-      await this._loadEditors();
+      if (!this.sharedView) {
+        await this._loadEditors();
+      }
       this.order = (await this.orderService.getOrderById(id)).order;
     }
 
     if (order || id !== undefined) {
+      if (this.sharedView && this.editView) {
+        this.loggedInUser = await this.userService.getNamesOfUser(this.order.owner);
+      }
       this.order.editor = this.order.editor && this.order.editor.length === 24 ?
         (await this.userService.getNamesOfUser(this.order.editor)).user : undefined;
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
@@ -522,10 +571,24 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _openSuccessMsg() {
+  private _openSuccessMsg(resultOrder) {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(this.translationFields.modals.orderSuccessHeader, 'modal-header header-success',
       this.translationFields.modals.orderSuccess, okButton, undefined).result.then((result) => {
+        if (resultOrder.order.shared) {
+          this._openLinkMsg(resultOrder.order);
+        } else {
+          this.genericService.back();
+        }
+      });
+  }
+
+  private _openLinkMsg(order) {
+    const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
+    this._openMsgModal(
+      this.translationFields.modals.orderSharedLinkSuccessHeader, 'modal-header header-success',
+      `${this.translationFields.modals.orderSharedLinkSuccess}`,
+      okButton, undefined, `https://fablab.itm.uni-luebeck.de/orders/detail/${order._id}`).result.then(() => {
         this.genericService.back();
       });
   }
@@ -535,13 +598,16 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.order.shippingAddress = this.shippingAddresses[`${address}`];
   }
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton, link?: String) {
     const modalRef = this.modalService.open(MessageModalComponent);
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.titleClass = titleClass;
     modalRef.componentInstance.msg = msg;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
+    if (link) {
+      modalRef.componentInstance.link = link;
+    }
     return modalRef;
   }
 
@@ -670,6 +736,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             error: this.editView
               ? translations['orderForm'].modals.updateError
               : translations['orderForm'].modals.createError,
+            orderSharedLinkSuccessHeader: translations['orderForm'].modals.orderSharedLinkSuccessHeader,
+            orderSharedLinkSuccess: translations['orderForm'].modals.orderSharedLinkSuccess
           },
           messages: {
             projectName: translations['orderForm'].messages.projectName,

@@ -145,30 +145,32 @@ export class UserService implements ModelService {
      * @param newUser boolean to indicate if it is a new user or a reactivation
      */
   public informAdmins (user, newUser: boolean) {
-    let options: EmailOptions;
-    if (!user.activated) {
-      options = {
-        preferredLanguage: '',
-        template: 'activateNewUser',
-        to: '',
-        locals:
-        {
-          adminName: '',
-          userName: `${user.firstname} ${user.lastname}`,
-          userEmail: user.email,
-          id: user._id,
-          url: `${config.baseUrlFrontend}/users/edit/${user._id}`,
-          newUser
-        }
-      };
-      User.find({ 'role.role': 'admin', activated: true }).then((admins) => {
-        admins.forEach((admin) => {
-          options.to = admin.email;
-          options.preferredLanguage = admin.preferredLanguage.language || 'en';
-          options.locals.adminName = `${admin.firstname} ${admin.lastname}`;
-          emailService.sendMail(options);
+    if (user.role.role !== 'guest') {
+      let options: EmailOptions;
+      if (!user.activated) {
+        options = {
+          preferredLanguage: '',
+          template: 'activateNewUser',
+          to: '',
+          locals:
+          {
+            adminName: '',
+            userName: `${user.firstname} ${user.lastname}`,
+            userEmail: user.email,
+            id: user._id,
+            url: `${config.baseUrlFrontend}/users/edit/${user._id}`,
+            newUser
+          }
+        };
+        User.find({ 'role.role': 'admin', activated: true }).then((admins) => {
+          admins.forEach((admin) => {
+            options.to = admin.email;
+            options.preferredLanguage = admin.preferredLanguage.language || 'en';
+            options.locals.adminName = `${admin.firstname} ${admin.lastname}`;
+            emailService.sendMail(options);
+          });
         });
-      });
+      }
     }
   }
 

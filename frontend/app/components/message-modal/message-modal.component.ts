@@ -5,6 +5,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class ModalButton {
   label: String;
   class: String;
+  link: String;
   returnValue: String;
 
   constructor(l: String, c: String, r: String) {
@@ -25,6 +26,7 @@ export class MessageModalComponent implements OnInit {
   @Input() msg: String;
   @Input() button1: ModalButton;
   @Input() button2: ModalButton;
+  @Input() link: String;
   constructor(public activeModal: NgbActiveModal) { }
 
   ngOnInit() {

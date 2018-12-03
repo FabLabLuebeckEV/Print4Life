@@ -41,7 +41,8 @@
     }
   },
   "keywords": [],
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Rene Kremer",
       "email": "renejon90@googlemail.com"
     },
@@ -91,7 +92,6 @@
     "multer-gridfs-storage": "^3.2.3",
     "ngx-spinner": "^6.1.2",
     "nodemailer": "^4.6.8",
-    "nodemon": "^1.18.5",
     "popper.js": "^1.14.4",
     "pug": "^2.0.3",
     "rxjs": "^6.3.3",
@@ -132,6 +132,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.4",
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "~0.2.2",
+    "nodemon": "^1.18.7",
     "protractor": "~5.4.1",
     "request": "^2.88.0",
     "shx": "^0.3.2",

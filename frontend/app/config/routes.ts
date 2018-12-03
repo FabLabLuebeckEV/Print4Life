@@ -42,7 +42,8 @@ export const routes = {
                 count: 'count',
                 search: 'search',
                 upload: 'upload',
-                download: 'download'
+                download: 'download',
+                shared: 'shared'
             },
             machines: {
                 root: 'machines',
@@ -78,6 +79,13 @@ export const routes = {
                 getAllOrders: '',
                 getStatus: 'status',
                 getOrder: 'getOrder',
+                shared: {
+                    root: 'shared',
+                    create: 'create',
+                    update: 'update',
+                    delete: 'delete',
+                    detail: 'detail'
+                },
                 outstandingOrders: 'outstanding'
             },
             machines: {

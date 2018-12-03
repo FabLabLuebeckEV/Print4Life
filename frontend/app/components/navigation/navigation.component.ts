@@ -99,6 +99,14 @@ export class NavigationComponent implements OnInit {
         ]
       };
 
+      if (!this.userIsLoggedIn) {
+        this.orderDropdown.elements.push({
+          name: translations['dropdown.orders'].createShared,
+          routerHref: routes.paths.frontend.orders.root +
+            '/' + routes.paths.frontend.orders.shared.root +
+            '/' + routes.paths.frontend.orders.shared.create
+        });
+      }
       this.languageDropdown = {
         name: translations['languages'].title,
         elements: [

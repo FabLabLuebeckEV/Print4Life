@@ -62,8 +62,14 @@ export class UploadComponent implements OnInit {
     }
   }
 
-  uploadFilesToOrder(id: string, cb?: Function): Subscription {
-    const url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/${id}/${routes.paths.backend.orders.upload}`;
+  uploadFilesToOrder(id: string, cb?: Function, shared?: boolean): Subscription {
+    let url;
+    if (shared) {
+      url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/`
+        + `${routes.paths.backend.orders.shared}/${id}/${routes.paths.backend.orders.upload}`;
+    } else {
+      url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/${id}/${routes.paths.backend.orders.upload}`;
+    }
     const formData: FormData = new FormData();
     this.files.forEach(file => {
       formData.append('file', file, file.name);

@@ -6,7 +6,7 @@
     <div class="col-md-3 col-xl-2">
       <app-back-button class="spacing-right-xs"></app-back-button>
       <a [routerLink]="editLink">
-        <button *ngIf="userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin'))"
+        <button *ngIf="order.shared || (userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')))"
           type="button" class="btn btn-warning spacing-right-xs">
           <fa-icon [icon]="editIcon"></fa-icon>
         </button>
@@ -127,8 +127,8 @@
               <fa-icon class="text-success" *ngIf="!file.deprecated" [icon]="toggleOnIcon"></fa-icon>
               <fa-icon class="text-danger" *ngIf="file.deprecated" [icon]="toggleOffIcon"></fa-icon>
             </td>
-            <td *ngIf="userIsLoggedIn" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
-            <td *ngIf="!userIsLoggedIn" class="align-middle text-center">{{file.filename}}</td>
+            <td *ngIf="userIsLoggedIn || order.shared" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
+            <td *ngIf="!userIsLoggedIn && !order.shared" class="align-middle text-center">{{file.filename}}</td>
             <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
           </tr>
         </tbody>
