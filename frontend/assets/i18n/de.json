@@ -398,7 +398,8 @@
             "files": "Dateien",
             "file": "Datei",
             "addressTitle": "Lieferadresse",
-            "latestVersion": "Aktuelle Version"
+            "latestVersion": "Aktuelle Version",
+            "scheduledFor": "Geplant für"
         },
         "modals": {
             "ok": "Ja",

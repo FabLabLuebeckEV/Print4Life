@@ -467,7 +467,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         const result = await this.orderService.getSchedule(id);
         if (result) {
           const schedule: Schedule = result.schedule;
-          this._decompressScheduleDates(schedule);
+          this.schedule = this.scheduleService.decompressScheduleDates(schedule);
         }
       } catch (err) { }
     }
@@ -621,23 +621,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     return modalRef;
   }
 
-  private _decompressScheduleDates(schedule: Schedule) {
-    schedule.startDate = new Date(schedule.startDate);
-    schedule.endDate = new Date(schedule.endDate);
-    this.schedule = schedule;
-    this.schedule.startDay = {
-      year: schedule.startDate.getFullYear(),
-      month: schedule.startDate.getMonth() + 1,
-      day: schedule.startDate.getDate()
-    };
-    this.schedule.endDay = {
-      year: schedule.endDate.getFullYear(),
-      month: schedule.endDate.getMonth() + 1,
-      day: schedule.endDate.getDate()
-    };
-    this.schedule.startTime = { hour: schedule.startDate.getHours(), minute: schedule.startDate.getMinutes() };
-    this.schedule.endTime = { hour: schedule.endDate.getHours(), minute: schedule.endDate.getMinutes() };
-  }
+
 
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();

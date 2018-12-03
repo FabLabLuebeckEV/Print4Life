@@ -11,8 +11,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
-import * as moment from 'moment';
 import { User } from 'frontend/app/models/user.model';
+import { Schedule } from 'frontend/app/models/schedule.model';
+import { ScheduleService } from 'frontend/app/services/schedule.service';
 
 @Component({
   selector: 'app-order-detail',
@@ -47,6 +48,7 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     undefined
   );
+  schedule: Schedule;
   machine: any;
   fablab: any;
 
@@ -64,7 +66,8 @@ export class OrderDetailComponent implements OnInit {
       files: '',
       file: '',
       addressTitle: '',
-      latestVersion: ''
+      latestVersion: '',
+      scheduledFor: ''
     },
     modals: {
       ok: '',
@@ -86,7 +89,8 @@ export class OrderDetailComponent implements OnInit {
     private modalService: NgbModal,
     private genericService: GenericService,
     private translateService: TranslateService,
-    private userService: UserService
+    private userService: UserService,
+    private scheduleService: ScheduleService
   ) {
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
@@ -128,6 +132,16 @@ export class OrderDetailComponent implements OnInit {
               const author = await this.userService.getNamesOfUser(comment.author);
               comment['authorName'] = author.firstname + ' ' + author.lastname;
             });
+            try {
+              const res = await this.orderService.getSchedule(this.order._id as string);
+              if (res) {
+                const schedule: Schedule = res.schedule;
+                this.schedule = this.scheduleService.decompressScheduleDates(schedule);
+              }
+            } catch (err) {
+              this.schedule = undefined;
+            }
+
             this.editLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
             this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
               const type = this.machineService.camelCaseTypes(this.order.machine.type);
@@ -197,6 +211,11 @@ export class OrderDetailComponent implements OnInit {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
       if (this.order) {
+        this.schedule['shownStartDate'] = this.genericService.translateDate(
+          this.schedule.startDate, currentLang, translations['date'].dateTimeFormat);
+        this.schedule['shownEndDate'] = this.genericService.translateDate(
+          this.schedule.endDate, currentLang, translations['date'].dateTimeFormat);
+
         this.order['shownCreatedAt'] = this.genericService.translateDate(
           this.order.createdAt, currentLang, translations['date'].dateTimeFormat);
         this.order.files.forEach((file) => {
@@ -239,7 +258,8 @@ export class OrderDetailComponent implements OnInit {
           files: translations['orderDetail'].labels.files,
           file: translations['orderDetail'].labels.file,
           addressTitle: translations['orderDetail'].labels.addressTitle,
-          latestVersion: translations['orderDetail'].labels.latestVersion
+          latestVersion: translations['orderDetail'].labels.latestVersion,
+          scheduledFor: translations['orderDetail'].labels.scheduledFor
         },
         modals: {
           ok: translations['orderDetail'].modals.ok,

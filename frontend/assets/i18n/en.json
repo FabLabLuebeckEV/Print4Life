@@ -398,7 +398,8 @@
             "files": "Files",
             "file": "File",
             "addressTitle": "Shippingaddress",
-            "latestVersion": "Latest Version"
+            "latestVersion": "Latest Version",
+            "scheduledFor": "Scheduled for"
         },
         "modals": {
             "ok": "Yes",

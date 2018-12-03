@@ -37,4 +37,24 @@ export class ScheduleService {
   public getScheduleById(id): Promise<any> {
     return this.http.get(`${this.p}/${id}`).toPromise();
   }
+
+  public decompressScheduleDates(schedule: Schedule) {
+    let newSchedule;
+    schedule.startDate = new Date(schedule.startDate);
+    schedule.endDate = new Date(schedule.endDate);
+    newSchedule = schedule;
+    newSchedule.startDay = {
+      year: schedule.startDate.getFullYear(),
+      month: schedule.startDate.getMonth() + 1,
+      day: schedule.startDate.getDate()
+    };
+    newSchedule.endDay = {
+      year: schedule.endDate.getFullYear(),
+      month: schedule.endDate.getMonth() + 1,
+      day: schedule.endDate.getDate()
+    };
+    newSchedule.startTime = { hour: schedule.startDate.getHours(), minute: schedule.startDate.getMinutes() };
+    newSchedule.endTime = { hour: schedule.endDate.getHours(), minute: schedule.endDate.getMinutes() };
+    return newSchedule;
+  }
 }
