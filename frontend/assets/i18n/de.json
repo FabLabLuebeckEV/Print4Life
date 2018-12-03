@@ -193,7 +193,8 @@
             "laserTypes": "Laser Typen",
             "fablab": "Fablab",
             "materials": "Materialien",
-            "successfulOrders": "Erfolgreiche Aufträge"
+            "successfulOrders": "Erfolgreiche Aufträge",
+            "schedules": "Maschinenplanung"
         },
         "modals": {
             "yes": "Ja",
@@ -235,7 +236,9 @@
             "zipCode": "Postleitzahl",
             "city": "Stadt",
             "country": "Land",
-            "projectname": "Projektname"
+            "projectname": "Projektname",
+            "shownStartDate": "Startdatum",
+            "shownEndDate": "Enddatum"
         }
     },
     "userList": {

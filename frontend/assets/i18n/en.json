@@ -193,7 +193,8 @@
             "laserTypes": "Laser Types",
             "fablab": "Fablab",
             "materials": "Materials",
-            "successfulOrders": "Successful Orders"
+            "successfulOrders": "Successful Orders",
+            "schedules": "Machine Schedule"
         },
         "modals": {
             "yes": "Yes",
@@ -235,7 +236,9 @@
             "zipCode": "Zipcode",
             "city": "City",
             "country": "Country",
-            "projectname": "Projectname"
+            "projectname": "Projectname",
+            "shownStartDate": "Start Date",
+            "shownEndDate": "End Date"
         }
     },
     "userList": {

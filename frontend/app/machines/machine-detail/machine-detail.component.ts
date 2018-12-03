@@ -9,7 +9,7 @@ import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
-import { SimpleMachine } from 'frontend/app/models/order.model';
+import { OrderService } from 'frontend/app/services/order.service';
 
 @Component({
   selector: 'app-machine-detail',
@@ -30,6 +30,7 @@ export class MachineDetailComponent implements OnInit {
     title: '',
     props: []
   };
+  machineSchedules: Array<Object>;
   machineSubObjects: Array<Object> = [];
   machineSubArrays: Array<Object> = [];
   loading: Boolean = true;
@@ -55,7 +56,8 @@ export class MachineDetailComponent implements OnInit {
     private genericService: GenericService,
     private modalService: NgbModal,
     private translateService: TranslateService,
-    private userService: UserService) {
+    private userService: UserService,
+    private orderService: OrderService) {
 
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
@@ -109,17 +111,32 @@ export class MachineDetailComponent implements OnInit {
         this.machine = machine;
         this.fablabService.getFablab(machine.fablabId).then(async (result) => {
           this.machine.fablab = result.fablab;
-          this.machine.successfulOrders = await this.machineService.countSuccessfulOrders(this.params.type, this.params.id);
-          this.machine.successfulOrders = this.machine.successfulOrders.orders;
           this.editLink = `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.update}/` +
             `${this.machine.type}s/${this.machine._id}`;
           this.machineProps = {
             title: '',
             props: []
           };
+
+          try {
+            const result: any = await this.machineService.getSchedules(this.params.type, this.params.id);
+            if (result && result.schedules) {
+              this.machine.schedules = this.machineService.sortSchedulesByStartDate(result.schedules);
+            }
+          } catch (err) {
+            delete this.machine.schedules;
+          }
+
+          try {
+            this.machine.successfulOrders = await this.machineService.countSuccessfulOrders(this.params.type, this.params.id);
+            this.machine.successfulOrders = this.machine.successfulOrders.orders;
+          } catch (err) {
+            delete this.machine.successfulOrders;
+          }
+
           this.machineSubObjects = [];
           this.machineSubArrays = [];
-          this._splitMachineProps();
+          await this._splitMachineProps();
           this._translate();
         });
       });
@@ -138,7 +155,7 @@ export class MachineDetailComponent implements OnInit {
     return modalRef;
   }
 
-  private _splitMachineProps() {
+  private async _splitMachineProps() {
     const machineProps = Object.keys(this.machine).filter((key) => {
       return key !== '_id' && key !== 'fablabId' && key !== '__v';
     });
@@ -166,8 +183,8 @@ export class MachineDetailComponent implements OnInit {
               }
             });
           } else if (prop instanceof Object && Array.isArray(prop)) {
-            Object.keys(translations['machineDetail'].titles).forEach((k) => {
-              if (k === key && key !== 'successfulOrders') {
+            Object.keys(translations['machineDetail'].titles).forEach(async (k) => {
+              if (k === key && key !== 'successfulOrders' && key !== 'schedules') {
                 this.machineSubArrays.push({
                   originTitle: k,
                   title: translations['machineDetail'].titles[`${k}`], array: this._cleanPropObject(prop)
@@ -184,6 +201,8 @@ export class MachineDetailComponent implements OnInit {
                   originTitle: k,
                   title: translations['machineDetail'].titles[`${k}`], array: this._cleanPropObject(prop)
                 });
+              } else if (k === key && key === 'schedules') {
+                await this._prepareScheduleProp(prop, key);
               }
             });
           } else {
@@ -203,6 +222,69 @@ export class MachineDetailComponent implements OnInit {
       });
       this.loading = false;
     });
+  }
+
+  private _prepareScheduleProp(schedules, k) {
+    let updated = false;
+    const promises = [];
+    const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
+    this.translateService.get(['machineDetail', 'date']).subscribe((translations) => {
+      if ((!this.machineSchedules || !this.machineSchedules.length) && schedules && schedules.length) {
+        const scheduleCopy = [];
+        schedules.forEach(async (schedule) => {
+          const s = {
+            projectname: { label: '', href: '' }, startDate: new Date(), endDate: new Date(),
+            shownStartDate: '', shownEndDate: ''
+          };
+          promises.push(new Promise(resolve => {
+            this.orderService.getOrderById(schedule.orderId).then((result) => {
+              if (result && result.order) {
+                s.projectname = {
+                  label: result.order.projectname,
+                  href: `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.detail}/${schedule.orderId}`
+                };
+                s.startDate = new Date(schedule.startDate);
+                s.endDate = new Date(schedule.endDate);
+                scheduleCopy.push(s);
+                resolve(s);
+              }
+            });
+          }));
+        });
+
+      }
+      Promise.all(promises).then((results) => {
+        if (results && results.length) {
+          this.machineSchedules = results;
+        }
+        if (this.machineSchedules && this.machineSchedules.length) {
+          const props = JSON.parse(JSON.stringify(this.machineSchedules));
+          props.forEach((prop) => {
+            delete prop.startDate;
+            delete prop.endDate;
+            prop.shownStartDate = this.genericService.translateDate(
+              prop.startDate, currentLang, translations['date'].dateTimeFormat);
+            prop.shownEndDate = this.genericService.translateDate(
+              prop.endDate, currentLang, translations['date'].dateTimeFormat);
+          });
+          this.machineSubArrays.forEach((subArray: { originTitle: string, title: string, array: Object }) => {
+            if (subArray.originTitle === k) {
+              subArray.array = this._cleanPropObject(props);
+              subArray.title = translations['machineDetail'].titles[`${k}`];
+              updated = true;
+            }
+          });
+
+          if (!updated) {
+            this.machineSubArrays.push({
+              originTitle: k,
+              title: translations['machineDetail'].titles[`${k}`], array: this._cleanPropObject(props)
+            });
+          }
+        }
+      });
+    });
+
   }
 
   private _cleanPropObject(prop: any): Object {
@@ -244,6 +326,8 @@ export class MachineDetailComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(['machineDetail', 'deviceTypes']).subscribe((translations => {
+      this._prepareScheduleProp(this.machineSchedules, 'schedules');
+
       this.translationFields = {
         modals: {
           deleteHeader: translations['machineDetail'].modals.deleteHeader,

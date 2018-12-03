@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { routes } from '../config/routes';
+import { Schedule } from '../models/schedule.model';
 
 @Injectable({
   providedIn: 'root'
@@ -104,6 +105,16 @@ export class MachineService {
   public getSchedules(machineType: string, id: string): Promise<Object> {
     const type = this.camelCaseTypes(machineType);
     return this.http.get(`${this.rootPath}/${type}s/${id}/schedules`).toPromise();
+  }
+
+  public sortSchedulesByStartDate(schedules: Array<Schedule>) {
+    return schedules.sort((a: Schedule, b: Schedule) => {
+      if (a.startDate >= b.startDate) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
   }
 
 }

@@ -374,7 +374,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         const result: any =
           await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
         if (result && result.schedules) {
-          this.machineSchedules = this.orderService.sortSchedulesByStartDate(result.schedules);
+          this.machineSchedules = this.machineService.sortSchedulesByStartDate(result.schedules);
           this._translate();
         }
       } catch (err) {
@@ -486,13 +486,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           const result: any =
             await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
           if (result && result.schedules) {
-            this.machineSchedules = this.orderService.sortSchedulesByStartDate(result.schedules);
+            this.machineSchedules = this.machineService.sortSchedulesByStartDate(result.schedules);
           }
         } catch (err) {
           this.machineSchedules = [];
         }
-
       }
+
       if (this.order.comments) {
         this.order.comments.forEach(async (comment) => {
           const user = await this.userService.getNamesOfUser(comment.author);
