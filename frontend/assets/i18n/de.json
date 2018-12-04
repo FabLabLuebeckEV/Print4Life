@@ -88,7 +88,8 @@
             "listOrders": "Auftragsliste",
             "createOrder": "Auftrag anlegen",
             "createShared": "Geteilten Auftrag anlegen",
-            "outstandingOrders": "Herausragende Projekte"
+            "outstandingOrders": "Herausragende Projekte",
+            "unfinishedOrders": "Offene Aufträge"
         },
         "users": {
             "title": "Benutzer",
@@ -271,7 +272,8 @@
         "paginationLabel": "Springe zur Seite",
         "filterLabel": {
             "machines": "Filter nach Maschinentyp:",
-            "status": "Filter nach Status:"
+            "status": "Filter nach Status:",
+            "fablabs": "Filter nach Fablab"
         },
         "spinnerLoadingText": "Lade Aufträge",
         "buttons": {

@@ -315,27 +315,32 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           const machine = this.machines.find((machine) => {
             return this.order.machine._id === machine._id;
           });
-          this.schedule.machine.type = machine.type as string;
-          this.schedule.machine.id = machine._id as string;
-          this.schedule.fablabId = machine.fablab._id;
-          this.schedule.orderId = this.order._id as string;
-          this.schedule.startDate = new Date(
-            this.schedule.startDay.year,
-            this.schedule.startDay.month - 1, // -1 to fix month index of javascript date object
-            this.schedule.startDay.day,
-            this.schedule.startTime.hour,
-            this.schedule.startTime.minute);
-          this.schedule.endDate = new Date(
-            this.schedule.endDay.year,
-            this.schedule.endDay.month - 1, // -1 to fix month index of javascript date object
-            this.schedule.endDay.day,
-            this.schedule.endTime.hour,
-            this.schedule.endTime.minute);
-          if (this.schedule._id) {
-            promises.push(this.scheduleService.update(this.schedule));
-          } else {
-            promises.push(this.scheduleService.create(this.schedule));
+          if (this.schedule.startDate && this.schedule.endDate &&
+            this.schedule.startDay && this.schedule.endDay &&
+            this.schedule.startTime && this.schedule.endTime) {
+            this.schedule.machine.type = machine.type as string;
+            this.schedule.machine.id = machine._id as string;
+            this.schedule.fablabId = machine.fablab._id;
+            this.schedule.orderId = this.order._id as string;
+            this.schedule.startDate = new Date(
+              this.schedule.startDay.year,
+              this.schedule.startDay.month - 1, // -1 to fix month index of javascript date object
+              this.schedule.startDay.day,
+              this.schedule.startTime.hour,
+              this.schedule.startTime.minute);
+            this.schedule.endDate = new Date(
+              this.schedule.endDay.year,
+              this.schedule.endDay.month - 1, // -1 to fix month index of javascript date object
+              this.schedule.endDay.day,
+              this.schedule.endTime.hour,
+              this.schedule.endTime.minute);
+            if (this.schedule._id) {
+              promises.push(this.scheduleService.update(this.schedule));
+            } else {
+              promises.push(this.scheduleService.create(this.schedule));
+            }
           }
+
           Promise.all(promises).then(() => {
             this.fileUpload.uploadFilesToOrder(result.order._id, () => {
               this._openSuccessMsg(result);
@@ -346,7 +351,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
-      }).catch(() => {
+      }).catch((err) => {
         this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
       });
     } else {

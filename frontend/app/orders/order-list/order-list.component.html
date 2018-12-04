@@ -4,7 +4,7 @@
 </div>
 <router-outlet>
 </router-outlet>
-<div *ngIf="listView || outstandingOrders">
+<div *ngIf="listView || outstandingOrders || unfinishedOrders">
   <div class="row">
     <div class="col-md-1 spacing-top-xxl">
       <button *ngIf="userIsLoggedIn && listView" type="button" class="btn btn-success  spacing-top-xxl spacing-left-xxl"
@@ -19,12 +19,19 @@
         (remove)="init()" (clear)="init()" name="status" #status="ngModel">
       </ng-select>
     </div>
-    <div [class]="listView ? 'col-md-5' : 'col-md-9 offset-md-1'">
+    <div *ngIf="!unfinishedOrders" [class]="listView || unfinishedOrders ? 'col-md-5' : 'col-md-9 offset-md-1'">
       <label for="machineType">{{translationFields.filterLabel.machines}}</label>
       <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false"
         [items]=filter.machineTypes bindLabel="machineType" [(ngModel)]="filter.shownMachineTypes" id="machineType"
         (change)="changeHandlerMachineType($event)" (close)="init()" (remove)="init()" (clear)="init()" name="machineType"
         #machineType="ngModel">
+      </ng-select>
+    </div>
+    <div [class]="col-md-5" *ngIf="unfinishedOrders">
+      <label for="fablabs">{{translationFields.filterLabel.fablabs}}</label>
+      <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.fablabs
+        bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabs" (change)="changeHandlerFablab($event)"
+        (close)="init()" (remove)="init()" (clear)="init()" name="fablabs" #fablabs="ngModel">
       </ng-select>
     </div>
   </div>

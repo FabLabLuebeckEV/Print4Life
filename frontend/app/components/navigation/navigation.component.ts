@@ -67,10 +67,17 @@ export class NavigationComponent implements OnInit {
       this.login = translations['navigation'].login;
       this.logout = translations['navigation'].logout;
       this.register = translations['navigation'].register;
-      const orderDropdownAuthElements = [{
-        name: translations['dropdown.orders'].createOrder,
-        routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.create}`
-      }];
+      const orderDropdownAuthElements = [
+        {
+          name: translations['dropdown.orders'].createOrder,
+          routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.create}`
+        },
+        {
+          name:
+            translations['dropdown.orders'].unfinishedOrders,
+          routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`
+        }
+      ];
       const machineDropdownAuthElements = [
         { name: translations['dropdown.machines'].listMachines, routerHref: routes.paths.frontend.machines.root },
       ];
@@ -95,7 +102,7 @@ export class NavigationComponent implements OnInit {
             name:
               translations['dropdown.orders'].outstandingOrders,
             routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}`
-          }
+          },
         ]
       };
 

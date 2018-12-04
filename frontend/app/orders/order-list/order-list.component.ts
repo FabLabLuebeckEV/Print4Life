@@ -15,6 +15,7 @@ import { UserService } from '../../services/user.service';
 import * as moment from 'moment';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { SpinnerConfig } from '../../config/config.service';
+import { FablabService } from 'frontend/app/services/fablab.service';
 
 @Component({
   selector: 'app-order-list',
@@ -33,8 +34,10 @@ export class OrderListComponent implements OnInit {
   id: String;
   listView: Boolean = false;
   outstandingOrders: Boolean = false;
+  unfinishedOrders: Boolean = false;
   plusIcon: any;
   loadingOrders: Boolean = false;
+  loadingFablabs: Boolean = false;
 
   loadingStatus: Boolean;
   filter: any = {
@@ -45,7 +48,9 @@ export class OrderListComponent implements OnInit {
     originalMachineTypes: [], // origin for backend containing all machine types
     machineTypes: [], // shown machine types after translation to select in filter
     shownMachineTypes: [], // selected and translated machine types in filter
-    selectedMachineTypes: [] // selected machine types but in origin backend language
+    selectedMachineTypes: [], // selected machine types but in origin backend language
+    fablabs: [],
+    selectedFablabs: []
   };
 
   loadingMachineTypes: Boolean;
@@ -67,6 +72,7 @@ export class OrderListComponent implements OnInit {
     filterLabel: {
       machines: '',
       status: '',
+      fablabs: ''
     },
     spinnerLoadingText: '',
     buttons: {
@@ -94,7 +100,8 @@ export class OrderListComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private translateService: TranslateService,
     private userService: UserService,
-    private genericService: GenericService) {
+    private genericService: GenericService,
+    private fablabService: FablabService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
     this.spinnerConfig = new SpinnerConfig(
@@ -113,6 +120,11 @@ export class OrderListComponent implements OnInit {
         this.listView = true;
         this.outstandingOrders = false;
         this.ngOnInit();
+      } else if (route === `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`
+        && !this.unfinishedOrders) {
+        this.unfinishedOrders = true;
+        this.listView = false;
+        this.outstandingOrders = false;
       } else if (route !== `/${routes.paths.frontend.orders.root}`) {
         this.listView = false;
       }
@@ -120,7 +132,7 @@ export class OrderListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if ((this.listView || this.outstandingOrders) && !this.loadingOrders) {
+    if ((this.listView || this.outstandingOrders || this.unfinishedOrders) && !this.loadingOrders) {
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
         this.paginationObj.page = 1;
@@ -129,6 +141,9 @@ export class OrderListComponent implements OnInit {
       this.loadingOrders = true;
       this.visibleOrders = [];
       this.orders = [];
+      if (this.unfinishedOrders) {
+        await this._loadFablabs();
+      }
       await this._loadStatus();
       await this._loadMachineTypes();
       this.userIsLoggedIn = await this.userService.isLoggedIn();
@@ -139,6 +154,7 @@ export class OrderListComponent implements OnInit {
   }
 
   async init() {
+    const promises = [];
     const loggedInUser = await this.userService.getUser();
     this.loadingOrders = true;
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
@@ -205,8 +221,30 @@ export class OrderListComponent implements OnInit {
       query, this.paginationObj.perPage,
       (this.paginationObj.page - 1) * this.paginationObj.perPage);
     if (orders && orders.orders) {
+      if (this.unfinishedOrders && this.filter.selectedFablabs && this.filter.selectedFablabs.length) {
+        orders.orders.forEach(async (order) => {
+          promises.push(new Promise(async resolve => {
+            const result = await this.machineService.get(order.machine.type, order.machine._id);
+            if (result && result[`${order.machine.type}`]) {
+              let found = false;
+              this.filter.selectedFablabs.forEach((fablab) => {
+                if (fablab._id === result[`${order.machine.type}`].fablabId) {
+                  found = true;
+                }
+              });
+              if (found) {
+                resolve(order);
+              } else {
+                resolve();
+              }
+            }
+            resolve();
+          }));
+        });
+      }
+      const results = await Promise.all(promises);
       this.translateService.get(['date']).subscribe((async translations => {
-        orders = orders.orders;
+        orders = this.unfinishedOrders && results && Array.isArray(results) ? results.filter((order) => order) : orders.orders;
         const arr = [];
         for (const order of orders) {
           if (order.shared && !loggedInUser
@@ -305,6 +343,10 @@ export class OrderListComponent implements OnInit {
     }));
   }
 
+  changeHandlerFablab(event: Array<String>) {
+    this.filter.selectedFablabs = event;
+  }
+
   eventHandler(event) {
     if (event.label === this.translationFields.buttons.deleteLabel) {
       let order: TableItem;
@@ -382,13 +424,20 @@ export class OrderListComponent implements OnInit {
   }
 
   private async _loadStatus() {
+    let status = [];
     this.loadingStatus = true;
     try {
-      const status = (await this.orderService.getStatus(this.outstandingOrders)).status;
+      status = (await this.orderService.getStatus(this.outstandingOrders)).status;
+
       if (Array.isArray(status)) {
         this.filter.originalValidStatus = status;
       } else {
         this.filter.originalValidStatus = [status];
+      }
+      if (this.unfinishedOrders) {
+        this.filter.originalValidStatus = this.filter.originalValidStatus.filter((status) => {
+          return !['archived', 'completed', 'representive', 'deleted'].includes(status);
+        });
       }
     } catch (error) {
       this.filter.originalValidStatus = [];
@@ -406,6 +455,23 @@ export class OrderListComponent implements OnInit {
     }));
     this.filter.selectedStatus = JSON.parse(JSON.stringify(this.filter.originalValidStatus));
     this.loadingStatus = false;
+  }
+
+  private async _loadFablabs() {
+    this.loadingFablabs = true;
+    try {
+      const result = await this.fablabService.getFablabs();
+      if (result && result.fablabs) {
+        this.filter.fablabs = result.fablabs.filter((fablab) => {
+          return fablab.activated;
+        });
+        this.filter.selectedFablabs = JSON.parse(JSON.stringify(this.filter.fablabs));
+      }
+    } catch (err) {
+      this.filter.fablabs = [];
+      this.filter.selectedFablabs = [];
+    }
+    this.loadingFablabs = false;
   }
 
   private async _loadMachineTypes() {
@@ -471,7 +537,8 @@ export class OrderListComponent implements OnInit {
         paginationLabel: translations['orderList'].paginationLabel,
         filterLabel: {
           machines: translations['orderList']['filterLabel'].machines,
-          status: translations['orderList']['filterLabel'].status
+          status: translations['orderList']['filterLabel'].status,
+          fablabs: translations['orderList']['filterLabel'].fablabs
         },
         spinnerLoadingText: translations['orderList'].spinnerLoadingText,
         buttons: {

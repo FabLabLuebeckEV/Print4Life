@@ -53,7 +53,7 @@
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingStatus" [items]=translationFields.shownStatus bindValue="_id" bindLabel="name"
             [(ngModel)]="order.shownStatus" (change)="statusChanged(order.shownStatus)" id="status" name="status"
-            #status="ngModel" required [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' || loggedInUser.role.role !== 'admin'">
+            #status="ngModel" required [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
           </ng-select>
           <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
             {{translationFields.messages.status}}

@@ -94,7 +94,8 @@ export const routes = {
                     delete: 'delete',
                     detail: 'detail'
                 },
-                outstandingOrders: 'outstanding'
+                outstandingOrders: 'outstanding',
+                unfinishedOrders: 'unfinished'
             },
             machines: {
                 root: 'machines',
