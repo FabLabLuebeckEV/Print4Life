@@ -161,11 +161,14 @@
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerStart" id="datePickerStart"
                 [(ngModel)]="schedule.startDay" ngbDatepicker #datePickerStart="ngbDatepicker" [required]="false"
-                [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
               <div class="input-group-append">
-                <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button" [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
                   <fa-icon [icon]="calendarIcon"></fa-icon>
                 </button>
+              </div>
+              <div [hidden]="!datePickerError" class="alert alert-danger">
+                {{translationFields.messages.datePicker}}
               </div>
             </div>
           </div>
@@ -173,18 +176,24 @@
           <div class="col-md-3">
             <label for="timePickerStart">{{translationFields.labels.timePickerStart}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerStart" id="timePickerStart" [spinners]="false"
-              [(ngModel)]="schedule.startTime" #timePickerStart="ngModel" [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
+              [(ngModel)]="schedule.startTime" #timePickerStart="ngModel" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
+            <div [hidden]="!timePickerError" class="alert alert-danger">
+              {{translationFields.messages.timePicker}}
+            </div>
           </div>
 
           <div class="col-md-3">
             <label for="datePickerEnd">{{translationFields.labels.datePickerEnd}}</label>
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd" [(ngModel)]="schedule.endDay"
-                ngbDatepicker #datePickerEnd="ngbDatepicker" [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                ngbDatepicker #datePickerEnd="ngbDatepicker" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
               <div class="input-group-append">
-                <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button" [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
                   <fa-icon [icon]="calendarIcon"></fa-icon>
                 </button>
+              </div>
+              <div [hidden]="!datePickerError" class="alert alert-danger">
+                {{translationFields.messages.datePicker}}
               </div>
             </div>
           </div>
@@ -192,9 +201,11 @@
           <div class="col-md-3">
             <label for="timePickerEnd">{{translationFields.labels.timePickerEnd}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerEnd" id="timePickerEnd" [spinners]="false" [(ngModel)]="schedule.endTime"
-              #timePickerEnd="ngModel" [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
+              #timePickerEnd="ngModel" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
+            <div [hidden]="!timePickerError" class="alert alert-danger">
+              {{translationFields.messages.timePicker}}
+            </div>
           </div>
-
         </div>
 
 
@@ -304,7 +315,7 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid || datePickerError">{{translationFields.labels.submit}}</button>
     </form>
 
     <!-- Print comments to this order as a table -->

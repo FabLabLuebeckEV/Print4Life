@@ -290,6 +290,9 @@
             "deleteHeader": "Do you really want to delete this order?",
             "deleteQuestion": "Are you sure you want to delete",
             "deleteQuestion2": "?"
+        },
+        "messages": {
+            "datePicker": "Start Date is greater than End Date"
         }
     },
     "address": {
@@ -360,7 +363,9 @@
             "selectedMachine": "Machine is required",
             "unnamedFablab": "Unnamed FabLab",
             "author": "Author name is required",
-            "content": "Text is required"
+            "content": "Text is required",
+            "datePicker": "Start Date is greater than End Date",
+            "timePicker": "The Start and End Time is wrong. Please check the Start and End Date and Times"
         }
     },
     "userDetail": {

@@ -12,10 +12,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
-import * as moment from 'moment';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { SpinnerConfig } from '../../config/config.service';
 import { FablabService } from 'frontend/app/services/fablab.service';
+import { ValidationService } from 'frontend/app/services/validation.service';
 
 @Component({
   selector: 'app-order-list',
@@ -40,6 +40,7 @@ export class OrderListComponent implements OnInit {
   plusIcon: any;
   loadingOrders: Boolean = false;
   loadingFablabs: Boolean = false;
+  datePickerError: Boolean = false;
 
   loadingStatus: Boolean;
   filter: any = {
@@ -92,6 +93,9 @@ export class OrderListComponent implements OnInit {
       deleteHeader: '',
       deleteQuestion: '',
       deleteQuestion2: ''
+    },
+    messages: {
+      datePicker: ''
     }
   };
 
@@ -106,7 +110,8 @@ export class OrderListComponent implements OnInit {
     private translateService: TranslateService,
     private userService: UserService,
     private genericService: GenericService,
-    private fablabService: FablabService) {
+    private fablabService: FablabService,
+    private validationService: ValidationService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
     this.spinnerConfig = new SpinnerConfig(
@@ -117,6 +122,7 @@ export class OrderListComponent implements OnInit {
     this.calendarIcon = this.config.icons.calendar;
     this.jumpArrow = this.config.icons.forward;
     this.trashIcon = this.config.icons.delete;
+
     this.router.events.subscribe(() => {
       const route = this.location.path();
       if (route === `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}` && !this.outstandingOrders) {
@@ -305,8 +311,9 @@ export class OrderListComponent implements OnInit {
           }
           item.obj['Projectname'] = {
             label: order.projectname,
-            href: (order.shared ? `./ ${routes.paths.frontend.orders.shared.root} /` : `./`) +
-              `${routes.paths.frontend.orders.detail} /${order._id}`,
+            href: (order.shared ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
+              : `/${routes.paths.frontend.orders.root}/`) +
+              `${routes.paths.frontend.orders.detail}/${order._id}`,
             icon: order.shared ? this.publicIcon : undefined
           };
           item.obj['Owner'] = {
@@ -390,13 +397,19 @@ export class OrderListComponent implements OnInit {
   }
 
   changeHandlerStartDay(event: { year: number, month: number, day: number }) {
-    this.filter.schedule.startDay = event;
-    this.init();
+    this.datePickerError = this.validationService.validateDate(event, this.filter.schedule.endDay);
+    if (!this.datePickerError) {
+      this.filter.schedule.startDay = event;
+      this.init();
+    }
   }
 
   changeHandlerEndDay(event: { year: number, month: number, day: number }) {
-    this.filter.schedule.endDay = event;
-    this.init();
+    this.datePickerError = this.validationService.validateDate(this.filter.schedule.startDay, event);
+    if (!this.datePickerError) {
+      this.filter.schedule.endDay = event;
+      this.init();
+    }
   }
 
   eventHandler(event) {
@@ -607,6 +620,9 @@ export class OrderListComponent implements OnInit {
           deleteHeader: translations['orderList'].modals.deleteHeader,
           deleteQuestion: translations['orderList'].modals.deleteQuestion,
           deleteQuestion2: translations['orderList'].modals.deleteQuestion2
+        },
+        messages: {
+          datePicker: translations['orderList'].messages.datePicker
         }
       };
     }));

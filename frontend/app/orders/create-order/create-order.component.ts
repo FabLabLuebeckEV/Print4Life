@@ -21,6 +21,7 @@ import { isObject } from 'util';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Schedule } from 'frontend/app/models/schedule.model';
 import { ScheduleService } from 'frontend/app/services/schedule.service';
+import { ValidationService } from 'frontend/app/services/validation.service';
 
 const localStorageOrderKey = 'orderManagementOrderFormOrder';
 const localStorageCommentKey = 'orderManagementOrderFormComment';
@@ -48,6 +49,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   sharedView = false;
   routeChanged: Boolean;
   formSubscription: Subscription;
+  datePickerError = false;
+  timePickerError = false;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
   shippingAddress: Address = new Address('', '', '', '');
@@ -154,7 +157,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       selectedMachine: '',
       unnamedFablab: '',
       author: '',
-      content: ''
+      content: '',
+      datePicker: '',
+      timePicker: ''
     }
   };
 
@@ -171,7 +176,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userService: UserService,
     private spinner: NgxSpinnerService,
-    private scheduleService: ScheduleService) {
+    private scheduleService: ScheduleService,
+    private validationService: ValidationService) {
     this.config = this.configService.getConfig();
     this.spinnerConfig = new SpinnerConfig(
       '', this.config.spinnerConfig.bdColor,
@@ -215,8 +221,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     await this._loadAddresses();
     this.machineSelected();
     this._translate();
-    if (this.createOrderForm && !this.editView) {
-      this.formSubscription = this.createOrderForm.form.valueChanges.subscribe(async (changes) => {
+
+    this.formSubscription = this.createOrderForm.form.valueChanges.subscribe(async (changes) => {
+      if (this.createOrderForm && !this.editView) {
         try {
           this.order.projectname = changes.projectname;
           this.order.machine._id = changes.selectedMachine;
@@ -227,8 +234,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         } catch (error) {
           console.log(error);
         }
-      });
-    }
+      } else if (this.createOrderForm && this.editView) {
+        const startDate = this.validationService.createCheckDate(changes.datePickerStart);
+        const endDate = this.validationService.createCheckDate(changes.datePickerError);
+        this.datePickerError = this.validationService.validateDate(changes.datePickerStart, changes.datePickerEnd);
+        this.timePickerError = this.validationService.validateTime(startDate, endDate, changes.timePickerStart, changes.timePickerEnd);
+      }
+    });
   }
 
   onSubmitComment(form) {
@@ -848,7 +860,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             selectedMachine: translations['orderForm'].messages.selectedMachine,
             unnamedFablab: translations['orderForm'].messages.unnamedFablab,
             author: translations['orderForm'].messages.author,
-            content: translations['orderForm'].messages.content
+            content: translations['orderForm'].messages.content,
+            datePicker: translations['orderForm'].messages.datePicker,
+            timePicker: translations['orderForm'].messages.timePicker
           }
         };
       }

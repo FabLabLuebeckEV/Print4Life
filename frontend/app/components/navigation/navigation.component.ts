@@ -69,13 +69,13 @@ export class NavigationComponent implements OnInit {
       this.register = translations['navigation'].register;
       const orderDropdownAuthElements = [
         {
-          name: translations['dropdown.orders'].createOrder,
-          routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.create}`
-        },
-        {
           name:
             translations['dropdown.orders'].unfinishedOrders,
           routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`
+        },
+        {
+          name: translations['dropdown.orders'].createOrder,
+          routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.create}`
         }
       ];
       const machineDropdownAuthElements = [

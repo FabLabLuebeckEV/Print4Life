@@ -17,6 +17,7 @@ import {
 
 import { OrderListComponent } from './order-list.component';
 import { ConfigService } from '../../config/config.service';
+import { ValidationService } from 'frontend/app/services/validation.service';
 
 describe('OrderListComponent', () => {
   let component: OrderListComponent;
@@ -39,9 +40,9 @@ describe('OrderListComponent', () => {
         NgxSpinnerModule,
         TranslateModule.forRoot()
       ],
-      providers: [NgxSpinnerService, ConfigService, TranslateService]
+      providers: [NgxSpinnerService, ConfigService, TranslateService, ValidationService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

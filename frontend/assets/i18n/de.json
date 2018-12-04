@@ -290,6 +290,9 @@
             "deleteHeader": "Möchten Sie wirklich diesen Auftrag löschen?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
             "deleteQuestion2": "löschen wollen?"
+        },
+        "messages": {
+            "datePicker": "Das Startdatum ist größer als das Enddatum"
         }
     },
     "address": {
@@ -360,7 +363,9 @@
             "selectedMachine": "Die Maschine wird benötigt",
             "unnamedFablab": "Unbekanntes FabLab",
             "author": "Der Name des Authors wird benötigt",
-            "content": "Der Inhalt des Kommentars wird benötigt"
+            "content": "Der Inhalt des Kommentars wird benötigt",
+            "datePicker": "Das Startdatum ist größer als das Enddatum",
+            "timePicker": "Die Start- und Endzeit ist falsch. Bitte das Datum und die Zeiten prüfen"
         }
     },
     "userDetail": {
