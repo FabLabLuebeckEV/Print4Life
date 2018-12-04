@@ -85,6 +85,7 @@
     "machineList": {
         "paginationLabel": "Jump to Page",
         "filterLabel": "Filter by Machine Type:",
+        "filterLabelFablab": "Filter by Fablab:",
         "spinnerLoadingText": "Loading Machines",
         "buttons": {
             "deleteLabel": "Delete",

@@ -26,13 +26,19 @@ export class MachineListComponent implements OnInit {
     originMachineTypes: [], // origin for backend containing all machine types
     machineTypes: [], // shown machine types after translation to select in filter
     shownMachineTypes: [], // selected and translated machine types in filter
-    selectedMachineTypes: [] // selected machine types but in origin backend language
+    selectedMachineTypes: [], // selected machine types but in origin backend language
+    fablabs: [], // origin for backend containing all fablabs
+    selectedFablabs: [], // contains only selected fablabs
+    activated: [] // show only activated machines
   };
   displayedMachines: Array<TableItem> = [];
   listView: Boolean;
   successList: Boolean;
   loadingMachineTypes: Boolean;
+  loadingFablabs: Boolean;
   plusIcon: Icon;
+  toggleOnIcon: Icon;
+  toggleOffIcon: Icon;
   jumpArrow: Icon;
   newLink: String;
   spinnerConfig: SpinnerConfig;
@@ -72,6 +78,7 @@ export class MachineListComponent implements OnInit {
   translationFields = {
     paginationLabel: '',
     filterLabel: '',
+    filterLabelFablab: '',
     spinnerLoadingText: '',
     buttons: {
       deleteLabel: '',
@@ -100,6 +107,8 @@ export class MachineListComponent implements OnInit {
       'Loading Machines', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.plusIcon = this.config.icons.add;
+    this.toggleOnIcon = this.config.icons.toggleOn;
+    this.toggleOffIcon = this.config.icons.toggleOff;
     this.jumpArrow = this.config.icons.forward;
     this.newLink = `./${routes.paths.frontend.machines.create}`;
     this.router.events.subscribe(() => {
@@ -128,6 +137,7 @@ export class MachineListComponent implements OnInit {
         this.filterHandler();
       });
       await this._loadMachineTypes();
+      await this._loadFablabs();
       this._translate();
       this._init();
     }
@@ -156,6 +166,14 @@ export class MachineListComponent implements OnInit {
     this.filter.selectedMachineTypes.forEach((type) => {
       this.paginationObj.machines[`${this.machineService.camelCaseTypes(type)}`].selected = true;
     });
+  }
+
+  changeFablabFilterHandler(event) {
+    this.filter.selectedFablabs = event;
+  }
+
+  private toggleActivateFilter() {
+    this.filter.activated = !this.filter.activated;
   }
 
   async filterHandler() {
@@ -236,7 +254,6 @@ export class MachineListComponent implements OnInit {
   }
 
   // Private Functions
-
   private async _loadMachineTypes() {
     this.loadingMachineTypes = true;
     const machineTypes = (await this.machineService.getAllMachineTypes());
@@ -260,6 +277,15 @@ export class MachineListComponent implements OnInit {
       this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
     }
     this.loadingMachineTypes = false;
+  }
+
+  private async _loadFablabs() {
+    this.loadingFablabs = true;
+    const result = await this.fablabService.getFablabs();
+    if (result && result.fablabs) {
+      this.filter.fablabs = result.fablabs;
+    }
+    this.loadingFablabs = false;
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
@@ -358,6 +384,7 @@ export class MachineListComponent implements OnInit {
       this.translationFields = {
         paginationLabel: translations['machineList'].paginationLabel,
         filterLabel: translations['machineList'].filterLabel,
+        filterLabelFablab: translations['machineList'].filterLabelFablab,
         spinnerLoadingText: translations['machineList'].spinnerLoadingText,
         buttons: {
           deleteLabel: translations['machineList'].buttons.deleteLabel,
