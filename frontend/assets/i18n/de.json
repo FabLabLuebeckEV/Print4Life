@@ -273,7 +273,9 @@
         "filterLabel": {
             "machines": "Filter nach Maschinentyp:",
             "status": "Filter nach Status:",
-            "fablabs": "Filter nach Fablab"
+            "fablabs": "Filter nach Fablab:",
+            "startDay": "Filter nach geplanten Start Tag:",
+            "endDay": "Filter nach geplanten End Tag:"
         },
         "spinnerLoadingText": "Lade Aufträge",
         "buttons": {
@@ -491,7 +493,9 @@
         "Lastname": "Nachname",
         "Role": "Rolle",
         "Active": "Aktiviert",
-        "Successful Orders": "Erfolgreiche Aufträge"
+        "Successful Orders": "Erfolgreiche Aufträge",
+        "Schedule Start Date": "Geplantes Start Datum",
+        "Schedule End Date": "Geplantes End Datum"
     },
     "loginModal": {
         "title": "Einloggen",

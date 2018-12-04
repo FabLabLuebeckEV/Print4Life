@@ -102,9 +102,27 @@ export class MachineService {
     return this.http.get(`${this.rootPath}/${type}s/${id}`).toPromise();
   }
 
-  public getSchedules(machineType: string, id: string): Promise<Object> {
+  public getSchedules(machineType: string, id: string, query?: {
+    startDay: { year: number, month: number, day: number },
+    endDay: { year: number, month: number, day: number }
+  }
+  ): Promise<Object> {
     const type = this.camelCaseTypes(machineType);
-    return this.http.get(`${this.rootPath}/${type}s/${id}/schedules`).toPromise();
+    if (query) {
+      if (!query.startDay || !query.startDay.year || !query.startDay.month || !query.startDay.day
+      ) {
+        query.startDay = { year: 1990, month: 1, day: 1 };
+      }
+      if (!query.endDay || !query.endDay.year || !query.endDay.month || !query.endDay.day) {
+        query.endDay = { year: 9999, month: 12, day: 31 };
+      }
+      let params = new HttpParams();
+      params = params.append('startDay', `${query.startDay.year}-${query.startDay.month}-${query.startDay.day}`);
+      params = params.append('endDay', `${query.endDay.year}-${query.endDay.month}-${query.endDay.day}`);
+      return this.http.get(`${this.rootPath}/${type}s/${id}/schedules`, { params: params }).toPromise();
+    } else {
+      return this.http.get(`${this.rootPath}/${type}s/${id}/schedules`).toPromise();
+    }
   }
 
   public sortSchedulesByStartDate(schedules: Array<Schedule>) {

@@ -6,7 +6,7 @@
 </router-outlet>
 <div *ngIf="listView || outstandingOrders || unfinishedOrders">
   <div class="row">
-    <div class="col-md-1 spacing-top-xxl">
+    <div *ngIf="listView" class="col-md-1 spacing-top-xxl">
       <button *ngIf="userIsLoggedIn && listView" type="button" class="btn btn-success  spacing-top-xxl spacing-left-xxl"
         [routerLink]="createLink">
         <fa-icon [icon]="plusIcon"></fa-icon>
@@ -27,12 +27,42 @@
         #machineType="ngModel">
       </ng-select>
     </div>
-    <div [class]="col-md-5" *ngIf="unfinishedOrders">
+    <div class="col-md-4 offset-md-1" *ngIf="unfinishedOrders">
       <label for="fablabs">{{translationFields.filterLabel.fablabs}}</label>
       <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.fablabs
         bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabs" (change)="changeHandlerFablab($event)"
         (close)="init()" (remove)="init()" (clear)="init()" name="fablabs" #fablabs="ngModel">
       </ng-select>
+    </div>
+    <div class="col-md-3" *ngIf="unfinishedOrders">
+      <label for="datePickerStart">{{translationFields.filterLabel.startDay}}</label>
+      <div class="input-group">
+        <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerStart" id="datePickerStart" [(ngModel)]="filter.schedule.startDay"
+          ngbDatepicker #datePickerStart="ngbDatepicker" (dateSelect)="changeHandlerStartDay($event)" [required]="false">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button">
+            <fa-icon [icon]="calendarIcon"></fa-icon>
+          </button>
+          <button class="btn btn-outline-danger" (click)="changeHandlerStartDay(undefined)" type="button">
+            <fa-icon [icon]="trashIcon"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3" *ngIf="unfinishedOrders">
+      <label for="datePickerEnd">{{translationFields.filterLabel.endDay}}</label>
+      <div class="input-group">
+        <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd" [(ngModel)]="filter.schedule.endDay"
+          ngbDatepicker #datePickerEnd="ngbDatepicker" (dateSelect)="changeHandlerEndDay($event)" [required]="false">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button">
+            <fa-icon [icon]="calendarIcon"></fa-icon>
+          </button>
+          <button class="btn btn-outline-danger" (click)="changeHandlerEndDay(undefined)" type="button">
+            <fa-icon [icon]="trashIcon"></fa-icon>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">

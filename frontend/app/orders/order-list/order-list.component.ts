@@ -28,6 +28,8 @@ export class OrderListComponent implements OnInit {
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
   publicIcon: any;
+  calendarIcon: any;
+  trashIcon: any;
   createLink: String;
   orders: Array<TableItem> = [];
   visibleOrders: Array<TableItem> = [];
@@ -50,7 +52,8 @@ export class OrderListComponent implements OnInit {
     shownMachineTypes: [], // selected and translated machine types in filter
     selectedMachineTypes: [], // selected machine types but in origin backend language
     fablabs: [],
-    selectedFablabs: []
+    selectedFablabs: [],
+    schedule: { startDay: undefined, endDay: undefined }
   };
 
   loadingMachineTypes: Boolean;
@@ -72,7 +75,9 @@ export class OrderListComponent implements OnInit {
     filterLabel: {
       machines: '',
       status: '',
-      fablabs: ''
+      fablabs: '',
+      startDay: '',
+      endDay: ''
     },
     spinnerLoadingText: '',
     buttons: {
@@ -109,7 +114,9 @@ export class OrderListComponent implements OnInit {
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.createLink = `./${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
+    this.calendarIcon = this.config.icons.calendar;
     this.jumpArrow = this.config.icons.forward;
+    this.trashIcon = this.config.icons.delete;
     this.router.events.subscribe(() => {
       const route = this.location.path();
       if (route === `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}` && !this.outstandingOrders) {
@@ -221,18 +228,43 @@ export class OrderListComponent implements OnInit {
       query, this.paginationObj.perPage,
       (this.paginationObj.page - 1) * this.paginationObj.perPage);
     if (orders && orders.orders) {
+      if (this.userIsLoggedIn && (this.userIsAdmin || loggedInUser.role.role === 'editor')) {
+        orders.orders.forEach(async (order) => {
+          const result = await this.orderService.getSchedule(order._id);
+          if (result && result.schedule) {
+            order.schedule = result.schedule;
+          }
+        });
+      }
+
       if (this.unfinishedOrders && this.filter.selectedFablabs && this.filter.selectedFablabs.length) {
         orders.orders.forEach(async (order) => {
           promises.push(new Promise(async resolve => {
+            const found = { fablab: false, schedule: false };
             const result = await this.machineService.get(order.machine.type, order.machine._id);
+            const resultSchedules = await this.machineService.getSchedules(order.machine.type, order.machine._id,
+              { startDay: this.filter.schedule.startDay, endDay: this.filter.schedule.endDay });
+            if ((!this.filter.schedule.startDay || !this.filter.schedule.startDay.year ||
+              !this.filter.schedule.startDay.month || !this.filter.schedule.startDay.day) &&
+              (!this.filter.schedule.endDay || !this.filter.schedule.endDay.year || !this.filter.schedule.endDay.month
+                || !this.filter.schedule.endDay.day)) {
+              found.schedule = true;
+            }
             if (result && result[`${order.machine.type}`]) {
-              let found = false;
+              if (resultSchedules && resultSchedules['schedules']) {
+                resultSchedules['schedules'].forEach((schedule) => {
+                  if (schedule.orderId === order._id) {
+                    found.schedule = true;
+                  }
+                });
+              }
               this.filter.selectedFablabs.forEach((fablab) => {
                 if (fablab._id === result[`${order.machine.type}`].fablabId) {
-                  found = true;
+                  found.fablab = true;
                 }
               });
-              if (found) {
+
+              if (found.fablab && found.schedule) {
                 resolve(order);
               } else {
                 resolve();
@@ -257,14 +289,24 @@ export class OrderListComponent implements OnInit {
           const editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
           item.obj['id'] = { label: order._id };
           item.obj['Created at'] = {
-            label: currentLang === 'de'
-              ? moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat) + ' Uhr'
-              : moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat)
+            label: `${this.genericService.translateDate(order.createdAt, currentLang, translations['date'].dateTimeFormat)}`
           };
+          if (this.userIsLoggedIn && (loggedInUser.role.role === 'editor' || this.userIsAdmin)) {
+            item.obj['Schedule Start Date'] = {
+              label: order.schedule && order.schedule.startDate ?
+                `${this.genericService.translateDate(order.schedule.startDate, currentLang, translations['date'].dateTimeFormat)}`
+                : '-'
+            };
+            item.obj['Schedule End Date'] = {
+              label: order.schedule && order.schedule.endDate ?
+                `${this.genericService.translateDate(order.schedule.endDate, currentLang, translations['date'].dateTimeFormat)}`
+                : '-'
+            };
+          }
           item.obj['Projectname'] = {
             label: order.projectname,
-            href: (order.shared ? `./${routes.paths.frontend.orders.shared.root}/` : `./`) +
-              `${routes.paths.frontend.orders.detail}/${order._id}`,
+            href: (order.shared ? `./ ${routes.paths.frontend.orders.shared.root} /` : `./`) +
+              `${routes.paths.frontend.orders.detail} /${order._id}`,
             icon: order.shared ? this.publicIcon : undefined
           };
           item.obj['Owner'] = {
@@ -345,6 +387,16 @@ export class OrderListComponent implements OnInit {
 
   changeHandlerFablab(event: Array<String>) {
     this.filter.selectedFablabs = event;
+  }
+
+  changeHandlerStartDay(event: { year: number, month: number, day: number }) {
+    this.filter.schedule.startDay = event;
+    this.init();
+  }
+
+  changeHandlerEndDay(event: { year: number, month: number, day: number }) {
+    this.filter.schedule.endDay = event;
+    this.init();
   }
 
   eventHandler(event) {
@@ -538,7 +590,9 @@ export class OrderListComponent implements OnInit {
         filterLabel: {
           machines: translations['orderList']['filterLabel'].machines,
           status: translations['orderList']['filterLabel'].status,
-          fablabs: translations['orderList']['filterLabel'].fablabs
+          fablabs: translations['orderList']['filterLabel'].fablabs,
+          startDay: translations['orderList']['filterLabel'].startDay,
+          endDay: translations['orderList']['filterLabel'].endDay
         },
         spinnerLoadingText: translations['orderList'].spinnerLoadingText,
         buttons: {
