@@ -136,37 +136,39 @@ export class UserDetailComponent implements OnInit {
           this.user['shownRole'] = shownRole;
         });
       }
-      this.translationFields = {
-        labels: {
-          username: translations['userDetail'].labels.username,
-          firstname: translations['userDetail'].labels.firstname,
-          lastname: translations['userDetail'].labels.lastname,
-          email: translations['userDetail'].labels.email,
-          address: {
-            title: translations['userDetail'].labels.address.title,
-            street: translations['userDetail'].labels.address.street,
-            city: translations['userDetail'].labels.address.city,
-            country: translations['userDetail'].labels.address.country,
-            zipCode: translations['userDetail'].labels.address.zipCode
+      if (translations['userDetail'].labels && translations['userDetail'].modals && translations['userDetail'].badges) {
+        this.translationFields = {
+          labels: {
+            username: translations['userDetail'].labels.username,
+            firstname: translations['userDetail'].labels.firstname,
+            lastname: translations['userDetail'].labels.lastname,
+            email: translations['userDetail'].labels.email,
+            address: {
+              title: translations['userDetail'].labels.address.title,
+              street: translations['userDetail'].labels.address.street,
+              city: translations['userDetail'].labels.address.city,
+              country: translations['userDetail'].labels.address.country,
+              zipCode: translations['userDetail'].labels.address.zipCode
+            },
+            activated: translations['userDetail'].labels.activated,
+            role: translations['userDetail'].labels.role,
+            preferredLanguage: translations['userDetail'].labels.preferredLanguage,
           },
-          activated: translations['userDetail'].labels.activated,
-          role: translations['userDetail'].labels.role,
-          preferredLanguage: translations['userDetail'].labels.preferredLanguage,
-        },
-        modals: {
-          ok: translations['userDetail'].modals.ok,
-          abort: translations['userDetail'].modals.abort,
-          deactivateReturnValue: translations['userDetail'].modals.deactivateReturnValue,
-          abortReturnValue: translations['userDetail'].modals.abortReturnValue,
-          deleteHeader: translations['userDetail'].modals.deleteHeader,
-          deleteQuestion: translations['userDetail'].modals.deleteQuestion,
-          deleteQuestion2: translations['userDetail'].modals.deleteQuestion2
-        },
-        badges: {
-          active: translations['userDetail'].badges.active,
-          inactive: translations['userDetail'].badges.inactive
-        }
-      };
+          modals: {
+            ok: translations['userDetail'].modals.ok,
+            abort: translations['userDetail'].modals.abort,
+            deactivateReturnValue: translations['userDetail'].modals.deactivateReturnValue,
+            abortReturnValue: translations['userDetail'].modals.abortReturnValue,
+            deleteHeader: translations['userDetail'].modals.deleteHeader,
+            deleteQuestion: translations['userDetail'].modals.deleteQuestion,
+            deleteQuestion2: translations['userDetail'].modals.deleteQuestion2
+          },
+          badges: {
+            active: translations['userDetail'].badges.active,
+            inactive: translations['userDetail'].badges.inactive
+          }
+        };
+      }
     });
   }
 }

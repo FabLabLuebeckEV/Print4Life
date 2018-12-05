@@ -19,6 +19,9 @@ import { Address } from 'frontend/app/models/address.model';
 import { UploadComponent } from 'frontend/app/components/upload/upload.component';
 import { isObject } from 'util';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { Schedule } from 'frontend/app/models/schedule.model';
+import { ScheduleService } from 'frontend/app/services/schedule.service';
+import { ValidationService } from 'frontend/app/services/validation.service';
 
 const localStorageOrderKey = 'orderManagementOrderFormOrder';
 const localStorageCommentKey = 'orderManagementOrderFormComment';
@@ -36,14 +39,18 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   config: any;
   spinnerConfig: SpinnerConfig;
   publicIcon: any;
+  calendarIcon: any;
   toggleOnIcon: any;
   toggleOffIcon: any;
   selectedType: String;
   submitting: Boolean = false;
   editView: Boolean = false;
+  isCollapsed = true;
   sharedView = false;
   routeChanged: Boolean;
   formSubscription: Subscription;
+  datePickerError = false;
+  timePickerError = false;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
   shippingAddress: Address = new Address('', '', '', '');
@@ -54,6 +61,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.shippingAddress, false, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
+  schedule: Schedule = new Schedule('', undefined, undefined, '', { type: '', id: '' }, '');
 
   shippingAddresses: {
     userAddress: Address,
@@ -75,6 +83,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   loadingMachinesForType: Boolean;
   machines: Array<Machine> = [];
+  machineSchedules: Array<Schedule> = [];
 
   loadingStatus: Boolean;
   validStatus: Array<String> = [];
@@ -118,7 +127,14 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       fileUpload: '',
       files: '',
       file: '',
-      latestVersion: ''
+      latestVersion: '',
+      datePickerStart: '',
+      datePickerEnd: '',
+      timePickerStart: '',
+      timePickerEnd: '',
+      machineSchedule: '',
+      startDate: '',
+      endDate: ''
     },
     modals: {
       ok: '',
@@ -141,7 +157,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       selectedMachine: '',
       unnamedFablab: '',
       author: '',
-      content: ''
+      content: '',
+      datePicker: '',
+      timePicker: ''
     }
   };
 
@@ -157,12 +175,15 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private route: ActivatedRoute,
     private userService: UserService,
-    private spinner: NgxSpinnerService) {
+    private spinner: NgxSpinnerService,
+    private scheduleService: ScheduleService,
+    private validationService: ValidationService) {
     this.config = this.configService.getConfig();
     this.spinnerConfig = new SpinnerConfig(
       '', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.publicIcon = this.config.icons.public;
+    this.calendarIcon = this.config.icons.calendar;
     this.shippingAddressKeys = ['userAddress', 'fablabAddress', 'newAddress'];
     this.toggleOnIcon = this.config.icons.toggleOn;
     this.toggleOffIcon = this.config.icons.toggleOff;
@@ -200,8 +221,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     await this._loadAddresses();
     this.machineSelected();
     this._translate();
-    if (this.createOrderForm && !this.editView) {
-      this.formSubscription = this.createOrderForm.form.valueChanges.subscribe(async (changes) => {
+
+    this.formSubscription = this.createOrderForm.form.valueChanges.subscribe(async (changes) => {
+      if (this.createOrderForm && !this.editView) {
         try {
           this.order.projectname = changes.projectname;
           this.order.machine._id = changes.selectedMachine;
@@ -212,8 +234,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         } catch (error) {
           console.log(error);
         }
-      });
-    }
+      } else if (this.createOrderForm && this.editView) {
+        const startDate = this.validationService.createCheckDate(changes.datePickerStart);
+        const endDate = this.validationService.createCheckDate(changes.datePickerError);
+        this.datePickerError = this.validationService.validateDate(changes.datePickerStart, changes.datePickerEnd);
+        this.timePickerError = this.validationService.validateTime(startDate, endDate, changes.timePickerStart, changes.timePickerEnd);
+      }
+    });
   }
 
   onSubmitComment(form) {
@@ -293,16 +320,50 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     orderCopy = JSON.parse(JSON.stringify(this.order));
     orderCopy.machine.type = this.machineService.camelCaseTypes(orderCopy.machine.type);
     if (this.editView) {
+      const promises = [];
       const errorMsg = this.translationFields.modals.error;
       this.orderService.updateOrder(orderCopy, this.sharedView).then((result) => {
         if (result) {
-          this.fileUpload.uploadFilesToOrder(result.order._id, () => {
-            this._openSuccessMsg(result);
-          }, this.sharedView);
+          const machine = this.machines.find((machine) => {
+            return this.order.machine._id === machine._id;
+          });
+          if (this.schedule.startDate && this.schedule.endDate &&
+            this.schedule.startDay && this.schedule.endDay &&
+            this.schedule.startTime && this.schedule.endTime) {
+            this.schedule.machine.type = machine.type as string;
+            this.schedule.machine.id = machine._id as string;
+            this.schedule.fablabId = machine.fablab._id;
+            this.schedule.orderId = this.order._id as string;
+            this.schedule.startDate = new Date(
+              this.schedule.startDay.year,
+              this.schedule.startDay.month - 1, // -1 to fix month index of javascript date object
+              this.schedule.startDay.day,
+              this.schedule.startTime.hour,
+              this.schedule.startTime.minute);
+            this.schedule.endDate = new Date(
+              this.schedule.endDay.year,
+              this.schedule.endDay.month - 1, // -1 to fix month index of javascript date object
+              this.schedule.endDay.day,
+              this.schedule.endTime.hour,
+              this.schedule.endTime.minute);
+            if (this.schedule._id) {
+              promises.push(this.scheduleService.update(this.schedule));
+            } else {
+              promises.push(this.scheduleService.create(this.schedule));
+            }
+          }
+
+          Promise.all(promises).then(() => {
+            this.fileUpload.uploadFilesToOrder(result.order._id, () => {
+              this._openSuccessMsg(result);
+            }, this.sharedView);
+          }).catch(() => {
+            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+          });
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
-      }).catch(() => {
+      }).catch((err) => {
         this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
       });
     } else {
@@ -314,7 +375,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             localStorage.removeItem(localStorageCommentKey);
             this._openSuccessMsg(result);
           }, this.sharedView);
-
         } else {
           this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
         }
@@ -355,7 +415,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.loadingMachinesForType = false;
   }
 
-  machineSelected() {
+  async machineSelected() {
     if (this.order.machine.type && this.order.machine._id) {
       this.machines.forEach(element => {
         if (element._id === this.order.machine._id) {
@@ -364,6 +424,16 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       });
       const type = this.machineService.camelCaseTypes(this.order.machine.type);
       this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.order.machine._id}/`;
+      try {
+        const result: any =
+          await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
+        if (result && result.schedules) {
+          this.machineSchedules = this.machineService.sortSchedulesByStartDate(result.schedules);
+          this._translate();
+        }
+      } catch (err) {
+        this.machineSchedules = [];
+      }
     }
   }
 
@@ -454,11 +524,22 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         await this._loadEditors();
       }
       this.order = (await this.orderService.getOrderById(id)).order;
+      try {
+        const result = await this.orderService.getSchedule(id);
+        if (result) {
+          const schedule: Schedule = result.schedule;
+          this.schedule = this.scheduleService.decompressScheduleDates(schedule);
+        }
+      } catch (err) { }
     }
 
     if (order || id !== undefined) {
       if (this.sharedView && this.editView) {
-        this.loggedInUser = await this.userService.getNamesOfUser(this.order.owner);
+        if (await this.userService.getUser()) {
+          this.loggedInUser = await this.userService.getUser();
+        } else {
+          this.loggedInUser = await this.userService.getNamesOfUser(this.order.owner);
+        }
       }
       this.order.editor = this.order.editor && this.order.editor.length === 24 ?
         (await this.userService.getNamesOfUser(this.order.editor)).user : undefined;
@@ -469,7 +550,17 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         const machineId = this.order.machine._id;
         await this.machineTypeChanged(this.order.machine['shownType']);
         this.order.machine._id = machineId;
+        try {
+          const result: any =
+            await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
+          if (result && result.schedules) {
+            this.machineSchedules = this.machineService.sortSchedulesByStartDate(result.schedules);
+          }
+        } catch (err) {
+          this.machineSchedules = [];
+        }
       }
+
       if (this.order.comments) {
         this.order.comments.forEach(async (comment) => {
           const user = await this.userService.getNamesOfUser(comment.author);
@@ -482,10 +573,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         this.translateService.get(['date']).subscribe((translations => {
           const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
           this.order.files.forEach((file) => {
-            file['link'] = `${routes.backendUrl}/` +
+            file['link'] = `${routes.backendUrl} /` +
               `${routes.paths.backend.orders.root}/${this.order._id}/` +
               `${routes.paths.backend.orders.download}/${file.id}`;
-            file['shownCreatedAt'] = this.genericService.translateCreatedAt(
+            file['shownCreatedAt'] = this.genericService.translateDate(
               file.createdAt, currentLang, translations['date'].dateTimeFormat);
           });
           this.orderService.sortFilesByDeprecated(this.order.files);
@@ -588,14 +679,20 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this._openMsgModal(
       this.translationFields.modals.orderSharedLinkSuccessHeader, 'modal-header header-success',
       `${this.translationFields.modals.orderSharedLinkSuccess}`,
-      okButton, undefined, `https://fablab.itm.uni-luebeck.de/orders/detail/${order._id}`).result.then(() => {
+      okButton, undefined, `${routes.frontendUrl}/${routes.paths.frontend.orders.root}/` +
+      `${routes.paths.frontend.orders.shared.root}/${routes.paths.frontend.orders.shared.detail}/` +
+      `${order._id}`).result.then(() => {
         this.genericService.back();
       });
   }
 
   private _selectAddress(address) {
+    this.createOrderForm.controls['street'].reset();
+    this.createOrderForm.controls['city'].reset();
+    this.createOrderForm.controls['zipCode'].reset();
+    this.createOrderForm.controls['country'].reset();
     this.selectedAddressKey = address;
-    this.order.shippingAddress = this.shippingAddresses[`${address}`];
+    this.order.shippingAddress = JSON.parse(JSON.stringify(this.shippingAddresses[`${address}`]));
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton, link?: String) {
@@ -611,6 +708,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     return modalRef;
   }
 
+
+
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.translateService.get(['orderForm', 'deviceTypes', 'status', 'date', 'address', 'upload']).subscribe((translations => {
@@ -624,6 +723,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         const shownMachineTypes = [];
         const shownStatus = [];
         const shownShippingAddresses = [];
+
+        this.machineSchedules.forEach((schedule) => {
+          schedule['shownStartDate'] = this.genericService.translateDate(
+            schedule.startDate, currentLang, translations['date'].dateTimeFormat);
+          schedule['shownEndDate'] = this.genericService.translateDate(
+            schedule.endDate, currentLang, translations['date'].dateTimeFormat);
+        });
 
         this.machineTypes.forEach((mType) => {
           const camelType = this.machineService.camelCaseTypes(mType);
@@ -679,12 +785,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         if (this.order && this.order.comments) {
           this.order.comments.forEach((comment) => {
             if (comment.createdAt) {
-              comment['shownCreatedAt'] = this.genericService.translateCreatedAt(
+              comment['shownCreatedAt'] = this.genericService.translateDate(
                 comment.createdAt, currentLang, translations['date'].dateTimeFormat);
             }
           });
           this.order.files.forEach((file) => {
-            file['shownCreatedAt'] = this.genericService.translateCreatedAt(
+            file['shownCreatedAt'] = this.genericService.translateDate(
               file.createdAt, currentLang, translations['date'].dateTimeFormat);
           });
         }
@@ -718,7 +824,14 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             fileUpload: translations['orderForm'].labels.fileUpload,
             files: translations['orderForm'].labels.files,
             file: translations['orderForm'].labels.file,
-            latestVersion: translations['orderForm'].labels.latestVersion
+            latestVersion: translations['orderForm'].labels.latestVersion,
+            datePickerStart: translations['orderForm'].labels.datePickerStart,
+            datePickerEnd: translations['orderForm'].labels.datePickerEnd,
+            timePickerStart: translations['orderForm'].labels.timePickerStart,
+            timePickerEnd: translations['orderForm'].labels.timePickerEnd,
+            machineSchedule: translations['orderForm'].labels.machineSchedule,
+            startDate: translations['orderForm'].labels.startDate,
+            endDate: translations['orderForm'].labels.endDate
           },
           modals: {
             ok: translations['orderForm'].modals.ok,
@@ -747,7 +860,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             selectedMachine: translations['orderForm'].messages.selectedMachine,
             unnamedFablab: translations['orderForm'].messages.unnamedFablab,
             author: translations['orderForm'].messages.author,
-            content: translations['orderForm'].messages.content
+            content: translations['orderForm'].messages.content,
+            datePicker: translations['orderForm'].messages.datePicker,
+            timePicker: translations['orderForm'].messages.timePicker
           }
         };
       }

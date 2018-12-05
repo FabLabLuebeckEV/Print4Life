@@ -53,7 +53,7 @@
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingStatus" [items]=translationFields.shownStatus bindValue="_id" bindLabel="name"
             [(ngModel)]="order.shownStatus" (change)="statusChanged(order.shownStatus)" id="status" name="status"
-            #status="ngModel" required [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' || loggedInUser.role.role !== 'admin'">
+            #status="ngModel" required [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
           </ng-select>
           <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
             {{translationFields.messages.status}}
@@ -107,7 +107,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6 offset-3">
+        <div class="col-md-8 offset-4">
           <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Shipping address selection">
             <button *ngFor="let key of shippingAddressKeys; let index=index" (click)="_selectAddress(key)" type="button"
               [class.active]="key === selectedAddressKey" [disabled]="shippingAddresses[key] === undefined" class="btn btn-outline-primary">{{
@@ -134,7 +134,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row spacing-top">
           <div class="col-md-6">
             <label for="zipCode">{{translationFields.labels.zipCode}}</label>
             <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="zipCode"
@@ -154,9 +154,98 @@
         </div>
       </div>
 
+      <div *ngIf="editView">
+        <div class="row spacing-top">
+          <div class="col-md-3">
+            <label for="datePickerStart">{{translationFields.labels.datePickerStart}}</label>
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerStart" id="datePickerStart"
+                [(ngModel)]="schedule.startDay" ngbDatepicker #datePickerStart="ngbDatepicker" [required]="false"
+                [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                  <fa-icon [icon]="calendarIcon"></fa-icon>
+                </button>
+              </div>
+              <div [hidden]="!datePickerError" class="alert alert-danger">
+                {{translationFields.messages.datePicker}}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <label for="timePickerStart">{{translationFields.labels.timePickerStart}}</label>
+            <ngb-timepicker class="spacing-top" name="timePickerStart" id="timePickerStart" [spinners]="false"
+              [(ngModel)]="schedule.startTime" #timePickerStart="ngModel" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
+            <div [hidden]="!timePickerError" class="alert alert-danger">
+              {{translationFields.messages.timePicker}}
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <label for="datePickerEnd">{{translationFields.labels.datePickerEnd}}</label>
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd" [(ngModel)]="schedule.endDay"
+                ngbDatepicker #datePickerEnd="ngbDatepicker" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                  <fa-icon [icon]="calendarIcon"></fa-icon>
+                </button>
+              </div>
+              <div [hidden]="!datePickerError" class="alert alert-danger">
+                {{translationFields.messages.datePicker}}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <label for="timePickerEnd">{{translationFields.labels.timePickerEnd}}</label>
+            <ngb-timepicker class="spacing-top" name="timePickerEnd" id="timePickerEnd" [spinners]="false" [(ngModel)]="schedule.endTime"
+              #timePickerEnd="ngModel" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
+            <div [hidden]="!timePickerError" class="alert alert-danger">
+              {{translationFields.messages.timePicker}}
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Print files of this order as a list -->
+        <div *ngIf="machineSchedules && machineSchedules.length > 0">
+          <div class="row table-spacing-top">
+            <div class="col-md-12 text-center">
+              <button type="button" class="btn btn-outline-secondary" (click)="isCollapsed = !isCollapsed"
+                [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
+                <h4>{{translationFields.labels.machineSchedule}}</h4>
+              </button>
+            </div>
+            <div id="collapseExample" class="col-md-12 table-spacing-top table-spacing-bottom" [ngbCollapse]="isCollapsed">
+              <div>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th class="align-middle text-center" scope="col">{{translationFields.labels.startDate}}</th>
+                      <th class="align-middle text-center" scope="col">{{translationFields.labels.endDate}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let schedule of machineSchedules">
+                      <td class="align-middle text-center">
+                        <div>{{schedule.shownStartDate}}</div>
+                      </td>
+                      <td class="align-middle text-center">
+                        <div>{{schedule.shownEndDate}}</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <div>
-
         <!-- Files -->
         <div class="form-group row table-spacing">
           <div class="col-md-12 text-center">
@@ -226,7 +315,7 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid || datePickerError">{{translationFields.labels.submit}}</button>
     </form>
 
     <!-- Print comments to this order as a table -->

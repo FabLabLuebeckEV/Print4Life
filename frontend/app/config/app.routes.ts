@@ -81,6 +81,11 @@ export const appRoutes: Routes = [
         runGuardsAndResolvers: 'always'
     },
     {
+        path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`,
+        component: OrderListComponent,
+        runGuardsAndResolvers: 'always'
+    },
+    {
         path: routes.paths.frontend.users.root,
         component: UserListComponent,
         runGuardsAndResolvers: 'always',

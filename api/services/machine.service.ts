@@ -8,8 +8,10 @@ import { IError, ErrorType } from './router.service';
 /* eslint-enable no-unused-vars */
 import materialService from '../services/material.service';
 import OrderService from './order.service';
+import ScheduleService from './schedule.service';
 
 const orderService = new OrderService();
+const scheduleService = new ScheduleService();
 
 export class MachineService {
   /* eslint-disable class-methods-use-this */
@@ -316,6 +318,35 @@ export class MachineService {
   public getMaterialsByType (type) {
     type += 'Material';
     return materialService.getMaterialByType(type);
+  }
+
+  /**
+   * Gets the schedules of a given id for a machine
+   * @param id is the id of the machine
+   * @param reqQuery is the request query. Might contain a start and end date to filter schedules
+   * @returns an array of schedule objects
+   */
+  public async getSchedules (id: string, reqQuery: { startDay: string, endDay: string }) {
+    if (reqQuery.startDay && reqQuery.endDay) {
+      const startDate = new Date((new Date(reqQuery.startDay)).setHours(0, 0, 0));
+      const endDate = new Date((new Date(reqQuery.endDay)).setHours(23, 59, 59));
+      const query = {
+        $and: [
+          {
+            startDate: {
+              $gte: startDate
+            }
+          },
+          {
+            endDate: {
+              $lte: endDate
+            }
+          }
+        ]
+      };
+      return scheduleService.getAll({ 'machine.id': id, ...query });
+    }
+    return scheduleService.getAll({ 'machine.id': id });
   }
   /* eslint-enable class-methods-use-this */
 }

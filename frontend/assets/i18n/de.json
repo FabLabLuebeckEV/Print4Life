@@ -3,6 +3,47 @@
         "dateFormat": "DD.MM.YYYY",
         "dateTimeFormat": "DD.MM.YYYY HH:mm"
     },
+    "weekdays": {
+        "short": {
+            "monday": "Mo",
+            "tuesday": "Di",
+            "wednesday": "Mi",
+            "thursday": "Do",
+            "friday": "Fr",
+            "saturday": "Sa",
+            "sunday": "So"
+        }
+    },
+    "months": {
+        "short": {
+            "january": "Jan",
+            "february": "Feb",
+            "march": "Mär",
+            "april": "Apr",
+            "may": "Mai",
+            "june": "Jun",
+            "july": "Jul",
+            "august": "Aug",
+            "september": "Sep",
+            "october": "Okt",
+            "november": "Nov",
+            "december": "Dez"
+        },
+        "long": {
+            "january": "Januar",
+            "february": "Februar",
+            "march": "März",
+            "april": "April",
+            "may": "Mai",
+            "june": "Juni",
+            "july": "Juli",
+            "august": "August",
+            "september": "September",
+            "october": "Oktober",
+            "november": "November",
+            "december": "Dezember"
+        }
+    },
     "dashboard": {
         "title": "Willkommen zur Fablab - Auftragsverwaltung!"
     },
@@ -47,7 +88,8 @@
             "listOrders": "Auftragsliste",
             "createOrder": "Auftrag anlegen",
             "createShared": "Geteilten Auftrag anlegen",
-            "outstandingOrders": "Herausragende Projekte"
+            "outstandingOrders": "Herausragende Projekte",
+            "unfinishedOrders": "Offene Aufträge"
         },
         "users": {
             "title": "Benutzer",
@@ -153,7 +195,8 @@
             "laserTypes": "Laser Typen",
             "fablab": "Fablab",
             "materials": "Materialien",
-            "successfulOrders": "Erfolgreiche Aufträge"
+            "successfulOrders": "Erfolgreiche Aufträge",
+            "schedules": "Maschinenplanung"
         },
         "modals": {
             "yes": "Ja",
@@ -195,7 +238,9 @@
             "zipCode": "Postleitzahl",
             "city": "Stadt",
             "country": "Land",
-            "projectname": "Projektname"
+            "projectname": "Projektname",
+            "shownStartDate": "Startdatum",
+            "shownEndDate": "Enddatum"
         }
     },
     "userList": {
@@ -227,7 +272,10 @@
         "paginationLabel": "Springe zur Seite",
         "filterLabel": {
             "machines": "Filter nach Maschinentyp:",
-            "status": "Filter nach Status:"
+            "status": "Filter nach Status:",
+            "fablabs": "Filter nach Fablab:",
+            "startDay": "Filter nach geplanten Start Tag:",
+            "endDay": "Filter nach geplanten End Tag:"
         },
         "spinnerLoadingText": "Lade Aufträge",
         "buttons": {
@@ -242,6 +290,9 @@
             "deleteHeader": "Möchten Sie wirklich diesen Auftrag löschen?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
             "deleteQuestion2": "löschen wollen?"
+        },
+        "messages": {
+            "datePicker": "Das Startdatum ist größer als das Enddatum"
         }
     },
     "address": {
@@ -279,7 +330,14 @@
             "fileUpload": "Dateiupload",
             "files": "Aktuelle Dateien",
             "file": "Datei",
-            "latestVersion": "Aktuelle Version"
+            "latestVersion": "Aktuelle Version",
+            "datePickerStart": "Starttag der Bearbeitung",
+            "datePickerEnd": "Endtag der Bearbeitung",
+            "timePickerStart": "Starzeit am Starttag",
+            "timePickerEnd": "Endzeit am Endtag",
+            "machineSchedule": "Maschinenplanung",
+            "startDate": "Startdatum",
+            "endDate": "Enddatum"
         },
         "modals": {
             "ok": "Ok",
@@ -305,7 +363,9 @@
             "selectedMachine": "Die Maschine wird benötigt",
             "unnamedFablab": "Unbekanntes FabLab",
             "author": "Der Name des Authors wird benötigt",
-            "content": "Der Inhalt des Kommentars wird benötigt"
+            "content": "Der Inhalt des Kommentars wird benötigt",
+            "datePicker": "Das Startdatum ist größer als das Enddatum",
+            "timePicker": "Die Start- und Endzeit ist falsch. Bitte das Datum und die Zeiten prüfen"
         }
     },
     "userDetail": {
@@ -353,7 +413,8 @@
             "files": "Dateien",
             "file": "Datei",
             "addressTitle": "Lieferadresse",
-            "latestVersion": "Aktuelle Version"
+            "latestVersion": "Aktuelle Version",
+            "scheduledFor": "Geplant für"
         },
         "modals": {
             "ok": "Ja",
@@ -437,7 +498,9 @@
         "Lastname": "Nachname",
         "Role": "Rolle",
         "Active": "Aktiviert",
-        "Successful Orders": "Erfolgreiche Aufträge"
+        "Successful Orders": "Erfolgreiche Aufträge",
+        "Schedule Start Date": "Geplantes Start Datum",
+        "Schedule End Date": "Geplantes End Datum"
     },
     "loginModal": {
         "title": "Einloggen",

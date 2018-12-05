@@ -34,6 +34,8 @@ router.route('/:id').get(orderCtrl.get);
 
 router.route('/:id/upload').post(upload.array('file'), orderCtrl.uploadFile);
 
+router.route('/:id/schedule').get(orderCtrl.getSchedule);
+
 router.route('/:id/download/:fileId').get(orderCtrl.downloadFile);
 
 export default router;

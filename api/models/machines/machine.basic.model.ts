@@ -17,6 +17,7 @@ const machineFields = {
   manufacturer: {
     type: String
   },
+  schedules: [], // id of schedules
   activated: {
     type: Boolean,
     required: true,

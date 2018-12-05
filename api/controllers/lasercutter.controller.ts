@@ -662,6 +662,82 @@ function update (req, res) {
   }
 }
 
+/**
+ * @api {get} /api/v1/machines/lasercutters/:id/schedules Gets the schedules of a specific lasercutter
+ * @apiName getScheduleOfLasercutters
+ * @apiVersion 1.0.0
+ * @apiGroup Lasercutters
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {String} id is the id of the lasercutter (required)
+ * @apiParam {String} startDay is the start day in this format YYYY-MM-DD (optional query param)
+ * @apiParam {String} endDay is the end day in this format YYYY-MM-DD (optional query param)
+ *
+ * @apiSuccess {Array} schedules an array containing the schedule objects
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "schedules": [
+        {
+            "machine": {
+                "type": "lasercutter",
+                "id": "5bfe88759d1139444a95aa47"
+            },
+            "_id": "5bfe887e9d1139444a95aa7c",
+            "startDate": "2018-11-29T12:22:12.076Z",
+            "endDate": "2018-11-29T12:22:12.076Z",
+            "fablabId": "5b453ddb5cf4a9574849e98a",
+            "orderId": "5bfe88759d1139444a95aa48",
+            "__v": 0
+        },
+        {
+            "machine": {
+                "type": "lasercutter",
+                "id": "5bfe88759d1139444a95aa47"
+            },
+            "_id": "5bfe888e10fc87448a4a76b1",
+            "startDate": "2018-11-28T12:22:34.777Z",
+            "endDate": "2018-11-28T12:22:34.777Z",
+            "fablabId": "5b453ddb5cf4a9574849e98a",
+            "orderId": "5bfe888a10fc87448a4a768a",
+            "__v": 0
+        }
+    ]
+}
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+
+ * @apiError 500 An Error occured
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ *     {
+ *       "error": "Error while trying to get schedules of Lasercutter!"
+ *     }
+ *
+ *
+ */
+async function getSchedules (req, res) {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    logger.error({ error: checkId.error });
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    try {
+      const schedules = await machineService.getSchedules(req.params.id, req.query);
+      logger.info(`GET schedules for Lasercutter with result ${JSON.stringify(schedules)}`);
+      if (schedules.length) {
+        res.status(200).send({ schedules });
+      } else {
+        res.status(204).send();
+      }
+    } catch (err) {
+      const msg = { error: 'Error while trying to get schedules of Lasercutter!' };
+      logger.error({ msg, stack: err.stack });
+      res.status(500).send(msg);
+    }
+  }
+}
+
 export default {
-  getAll, create, getLaserTypes, deleteById, get, update, count, countSuccessfulOrders
+  getAll, create, getLaserTypes, deleteById, get, update, count, countSuccessfulOrders, getSchedules
 };

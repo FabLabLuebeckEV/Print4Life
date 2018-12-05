@@ -83,6 +83,10 @@ export class OrderService {
     }
   }
 
+  public getSchedule(id: string): Promise<any> {
+    return this.http.get(`${this.p}/${id}/schedule`).toPromise();
+  }
+
   public sortFilesByDeprecated(files) {
     files.sort((a: { deprecated: boolean }, b: { deprecated: boolean }) => {
       if (!a.hasOwnProperty('deprecated') || !b.hasOwnProperty('deprecated')

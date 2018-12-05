@@ -16,6 +16,8 @@ router.route('/:id').delete(millingMachineCtrl.deleteById);
 
 router.route('/:id').get(millingMachineCtrl.get);
 
+router.route('/:id/schedules').get(millingMachineCtrl.getSchedules);
+
 router.route('/:id/countSuccessfulOrders').get(millingMachineCtrl.countSuccessfulOrders);
 
 router.route('/:id').put(millingMachineCtrl.update);

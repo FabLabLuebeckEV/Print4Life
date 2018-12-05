@@ -56,6 +56,10 @@
             <td class="align-middle text-center">{{translationFields.labels.createdAt}}</td>
             <td class="align-middle text-center">{{order.shownCreatedAt}}</td>
           </tr>
+          <tr *ngIf="schedule && schedule.startDate && schedule.endDate">
+            <td class="align-middle text-center">{{translationFields.labels.scheduledFor}}</td>
+            <td class="align-middle text-center">{{schedule.shownStartDate}} - {{schedule.shownEndDate}}</td>
+          </tr>
           <tr *ngIf="machine">
             <td class="align-middle text-center">{{translationFields.labels.machine}}</td>
             <td class="align-middle text-center">
