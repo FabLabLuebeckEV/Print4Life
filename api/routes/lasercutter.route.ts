@@ -8,7 +8,9 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.route('/').get(lasercutterCtrl.getAll);
 
-router.route('/count').get(lasercutterCtrl.count);
+router.route('/count').post(lasercutterCtrl.count);
+
+router.route('/search').post(lasercutterCtrl.search);
 
 router.route('/laserTypes').get(lasercutterCtrl.getLaserTypes);
 

@@ -8,7 +8,9 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.route('/').get(millingMachineCtrl.getAll);
 
-router.route('/count').get(millingMachineCtrl.count);
+router.route('/count').post(millingMachineCtrl.count);
+
+router.route('/search').post(millingMachineCtrl.search);
 
 router.route('/').post(millingMachineCtrl.create);
 

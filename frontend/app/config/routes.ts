@@ -61,7 +61,8 @@ export const routes = {
                 materials: 'materials',
                 laserTypes: 'laserTypes',
                 count: 'count',
-                countSuccessfulOrders: 'countSuccessfulOrders'
+                countSuccessfulOrders: 'countSuccessfulOrders',
+                search: 'search'
             },
             fablabs: {
                 root: 'fablabs',

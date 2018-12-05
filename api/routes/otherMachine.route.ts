@@ -8,7 +8,9 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.route('/').get(otherMachineCtrl.getAll);
 
-router.route('/count').get(otherMachineCtrl.count);
+router.route('/count').post(otherMachineCtrl.count);
+
+router.route('/search').post(otherMachineCtrl.search);
 
 router.route('/').post(otherMachineCtrl.create);
 

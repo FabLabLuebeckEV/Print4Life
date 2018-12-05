@@ -126,7 +126,10 @@
     },
     "machineList": {
         "paginationLabel": "Jump to Page",
-        "filterLabel": "Filter by Machine Type:",
+        "filterLabel": {
+            "type": "Filter by Machine Type:",
+            "search": "Search for:"
+        },
         "spinnerLoadingText": "Loading Machines",
         "buttons": {
             "deleteLabel": "Delete",
