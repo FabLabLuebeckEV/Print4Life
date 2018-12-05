@@ -11,7 +11,8 @@ import {
   faTimesCircle,
   faCloudUploadAlt,
   faExclamationCircle,
-  faCalendarAlt
+  faCalendarAlt,
+  faSearch
 } from '@fortawesome/free-solid-svg-icons';
 
 export class SpinnerConfig {
@@ -53,7 +54,8 @@ export class ConfigService {
       forward: faArrowRight,
       public: faGlobeAmericas,
       upload: faCloudUploadAlt,
-      calendar: faCalendarAlt
+      calendar: faCalendarAlt,
+      search: faSearch
     },
     spinnerConfig: new SpinnerConfig('', 'rgba(51, 51, 51, 0.8)', 'large', '#fff', 'ball-climbing-dot')
   };

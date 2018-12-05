@@ -248,7 +248,8 @@
         "spinnerLoadingText": "Lade Benutzer",
         "paginationLabel": "Springe zur Seite",
         "filterLabel": {
-            "roles": "Filter nach Rolle:"
+            "roles": "Filter nach Rolle:",
+            "search": "Suche nach:"
         },
         "buttons": {
             "deleteLabel": "Deaktivieren",

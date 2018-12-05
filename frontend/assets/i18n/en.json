@@ -248,7 +248,8 @@
         "spinnerLoadingText": "Loading Users",
         "paginationLabel": "Jump to Page",
         "filterLabel": {
-            "roles": "Filter by Role:"
+            "roles": "Filter by Role:",
+            "search": "Search for:"
         },
         "buttons": {
             "deleteLabel": "Delete",
