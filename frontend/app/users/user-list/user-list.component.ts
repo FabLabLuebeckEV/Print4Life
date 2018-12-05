@@ -125,6 +125,12 @@ export class UserListComponent implements OnInit {
     this._loadUsers();
   }
 
+  searchInit() {
+    this.paginationObj.page = 1;
+    this.paginationObj.totalItems = 0;
+    this.init();
+  }
+
   private async _loadUsers(): Promise<TableItem[]> {
     const arr = [];
     this.loadingUsers = true;

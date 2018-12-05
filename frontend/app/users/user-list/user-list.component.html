@@ -19,7 +19,7 @@
         <div class="input-group">
           <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search" #search="ngModel">
           <div class="input-group-append">
-            <button class="btn btn-outline-primary" (click)="init()" type="submit">
+            <button class="btn btn-outline-primary" (click)="searchInit()" type="submit">
               <fa-icon [icon]="searchIcon"></fa-icon>
             </button>
           </div>
