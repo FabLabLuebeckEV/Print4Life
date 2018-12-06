@@ -16,6 +16,7 @@ import { GenericService } from 'frontend/app/services/generic.service';
 import { SpinnerConfig } from '../../config/config.service';
 import { FablabService } from 'frontend/app/services/fablab.service';
 import { ValidationService } from 'frontend/app/services/validation.service';
+import { isArray } from 'util';
 
 @Component({
   selector: 'app-order-list',
@@ -27,9 +28,11 @@ export class OrderListComponent implements OnInit {
   private config: any;
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
-  publicIcon: any;
-  calendarIcon: any;
-  trashIcon: any;
+  publicIcon: Icon;
+  calendarIcon: Icon;
+  trashIcon: Icon;
+  searchIcon: Icon;
+  plusIcon: Icon;
   createLink: String;
   orders: Array<TableItem> = [];
   visibleOrders: Array<TableItem> = [];
@@ -37,7 +40,6 @@ export class OrderListComponent implements OnInit {
   listView: Boolean = false;
   outstandingOrders: Boolean = false;
   unfinishedOrders: Boolean = false;
-  plusIcon: any;
   loadingOrders: Boolean = false;
   loadingFablabs: Boolean = false;
   datePickerError: Boolean = false;
@@ -54,7 +56,8 @@ export class OrderListComponent implements OnInit {
     selectedMachineTypes: [], // selected machine types but in origin backend language
     fablabs: [],
     selectedFablabs: [],
-    schedule: { startDay: undefined, endDay: undefined }
+    schedule: { startDay: undefined, endDay: undefined },
+    searchTerm: ''
   };
 
   loadingMachineTypes: Boolean;
@@ -78,7 +81,8 @@ export class OrderListComponent implements OnInit {
       status: '',
       fablabs: '',
       startDay: '',
-      endDay: ''
+      endDay: '',
+      search: ''
     },
     spinnerLoadingText: '',
     buttons: {
@@ -114,6 +118,7 @@ export class OrderListComponent implements OnInit {
     private validationService: ValidationService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
+    this.searchIcon = this.config.icons.search;
     this.spinnerConfig = new SpinnerConfig(
       'Loading Orders', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
@@ -166,6 +171,13 @@ export class OrderListComponent implements OnInit {
     }
   }
 
+
+  searchInit() {
+    this.paginationObj.page = 1;
+    this.paginationObj.totalItems = 0;
+    this.init();
+  }
+
   async init() {
     const promises = [];
     const loggedInUser = await this.userService.getUser();
@@ -178,11 +190,12 @@ export class OrderListComponent implements OnInit {
     let countObj;
     let totalItems = 0;
     let query;
+
     if (this.filter.selectedStatus.length > 0 && this.filter.selectedMachineTypes.length > 0) {
       query = {
         $and: [
           { $or: [] },
-          { $or: [] }
+          { $or: [] },
         ]
       };
       this.filter.selectedStatus.forEach((status) => {
@@ -193,35 +206,58 @@ export class OrderListComponent implements OnInit {
       });
     } else if (this.filter.selectedStatus.length > 0 || this.filter.selectedMachineTypes.length > 0) {
       query = {
-        $or: [],
-        $nor: []
+        $and: [
+          { $or: [] },
+          { $nor: [] }
+        ]
       };
       if (this.filter.selectedStatus.length > 0) {
         this.filter.selectedStatus.forEach((status) => {
-          query.$or.push({ status: status });
+          query.$and[0].$or.push({ status: status });
         });
         this.filter.originalMachineTypes.forEach((type) => {
-          query.$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
+          query.$and[1].$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
         });
       } else if (this.filter.selectedMachineTypes.length > 0) {
         this.filter.selectedMachineTypes.forEach((type) => {
-          query.$or.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
+          query.$and[0].$or.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
         });
         this.filter.originalValidStatus.forEach((status) => {
-          query.$nor.push({ status });
+          query.$and[1].$nor.push({ status });
         });
       }
     } else {
       query = {
-        $nor: []
+        $and: [
+          { $nor: [] }
+        ]
       };
       this.filter.originalValidStatus.forEach((status) => {
-        query.$nor.push({ status });
+        query.$and[0].$nor.push({ status });
       });
       this.filter.originalMachineTypes.forEach((type) => {
-        query.$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
+        query.$and[0].$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
       });
     }
+
+
+    if (!query.$and) {
+      query.$and = [];
+    } else if (query.$and && isArray(query.$and)) {
+      // if search term is defined add to mongo query
+      if (this.filter.searchTerm) {
+        query.$and.push({ $text: { $search: this.filter.searchTerm } });
+      }
+
+      // if user is not editor, admin or logged in: do not show shared orders
+      if (!loggedInUser
+        || loggedInUser && loggedInUser.role
+        && (loggedInUser.role.role !== 'admin' && loggedInUser.role.role !== 'editor')) {
+        query.$and.push({ shared: false });
+      }
+    }
+
+
 
     countObj = await this.orderService.count(query);
     totalItems = countObj.count;
@@ -285,11 +321,6 @@ export class OrderListComponent implements OnInit {
         orders = this.unfinishedOrders && results && Array.isArray(results) ? results.filter((order) => order) : orders.orders;
         const arr = [];
         for (const order of orders) {
-          if (order.shared && !loggedInUser
-            || order.shared && loggedInUser && loggedInUser.role
-            && (loggedInUser.role.role !== 'admin' && loggedInUser.role.role !== 'editor')) {
-            continue;
-          }
           const item = new TableItem();
           const owner = await this.userService.getNamesOfUser(order.owner);
           const editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
@@ -605,7 +636,8 @@ export class OrderListComponent implements OnInit {
           status: translations['orderList']['filterLabel'].status,
           fablabs: translations['orderList']['filterLabel'].fablabs,
           startDay: translations['orderList']['filterLabel'].startDay,
-          endDay: translations['orderList']['filterLabel'].endDay
+          endDay: translations['orderList']['filterLabel'].endDay,
+          search: translations['orderList']['filterLabel'].search
         },
         spinnerLoadingText: translations['orderList'].spinnerLoadingText,
         buttons: {

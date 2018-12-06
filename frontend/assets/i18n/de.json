@@ -279,7 +279,8 @@
             "status": "Filter nach Status:",
             "fablabs": "Filter nach Fablab:",
             "startDay": "Filter nach geplanten Start Tag:",
-            "endDay": "Filter nach geplanten End Tag:"
+            "endDay": "Filter nach geplanten End Tag:",
+            "search": "Suche nach:"
         },
         "spinnerLoadingText": "Lade Aufträge",
         "buttons": {

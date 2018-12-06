@@ -279,7 +279,8 @@
             "status": "Filter by Status:",
             "fablabs": "Filter by Fablab:",
             "startDay": "Filter by scheduled Start Day:",
-            "endDay": "Filter by scheduled End Day:"
+            "endDay": "Filter by scheduled End Day:",
+            "search": "Search for:"
         },
         "spinnerLoadingText": "Loading Orders",
         "buttons": {
