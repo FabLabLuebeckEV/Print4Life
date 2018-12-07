@@ -131,8 +131,7 @@ const machineService = new MachineService();
     }
  */
 function getAll (req, res) {
-  req.query = validatorService.checkQuery(req.query);
-  printer3DService.getAll(req.query.limit, req.query.skip).then((printers3d) => {
+  printer3DService.getAll(undefined, req.query.limit, req.query.skip).then((printers3d) => {
     if ((printers3d && printers3d.length === 0) || !printers3d) {
       logger.info('GET 3D Printers with no result');
       res.status(204).send();
@@ -151,7 +150,167 @@ function getAll (req, res) {
 }
 
 /**
- * @api {get} /api/v1/machines/3d-printers/count Counts the 3D Printers
+ * @api {post} /api/v1/3d-printers/search Request the list of 3d printers by a given query
+ * @apiName Search3DPrinters
+ * @apiVersion 1.0.0
+ * @apiGroup 3D-Printers
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam (Query String) limit is the limit of objects to get
+ * @apiParam (Query String) skip is the number of objects to skip
+ * @apiSuccess {Array} users an array of 3d printer objects
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "3d-printers": [
+        {
+            "_id": "5b55f7bf3fe0c8b01713b3fa",
+            "fablabId": "5b453ddb5cf4a9574849e98b",
+            "type": "3d-printer",
+            "deviceName": "Ultimaker 2+",
+            "manufacturer": "Ultimaker",
+            "materials": [
+                {
+                    "material": "PLA",
+                    "type": "printerMaterial"
+                }
+            ],
+            "camSoftware": "Cura",
+            "printVolumeX": 210,
+            "printVolumeY": 210,
+            "printVolumeZ": 205,
+            "printResolutionX": 0.1,
+            "printResolutionY": 0.1,
+            "printResolutionZ": 0.5,
+            "nozzleDiameter": 0.4,
+            "numberOfExtruders": 1,
+            "comment": "",
+            "__v": 0
+        },
+        {
+            "_id": "5b55f7bf3fe0c8b01713b3fc",
+            "fablabId": "5b453ddb5cf4a9574849e98b",
+            "type": "3d-printer",
+            "deviceName": "Zprinter 450",
+            "manufacturer": "Zcorp",
+            "materials": [
+                {
+                    "material": "Plaster",
+                    "type": "printerMaterial"
+                }
+            ],
+            "camSoftware": "",
+            "printVolumeX": 200,
+            "printVolumeY": 200,
+            "printVolumeZ": 180,
+            "printResolutionX": 0.1,
+            "printResolutionY": 0.1,
+            "printResolutionZ": 1,
+            "nozzleDiameter": null,
+            "numberOfExtruders": 0,
+            "comment": "Full Color printer",
+            "__v": 0
+        }
+      ]
+    }
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 206 Partial Content
+{
+    "3d-printers": [
+        {
+            "_id": "5b55f7bf3fe0c8b01713b3fa",
+            "fablabId": "5b453ddb5cf4a9574849e98b",
+            "type": "3d-printer",
+            "deviceName": "Ultimaker 2+",
+            "manufacturer": "Ultimaker",
+            "materials": [
+                {
+                    "material": "PLA",
+                    "type": "printerMaterial"
+                }
+            ],
+            "camSoftware": "Cura",
+            "printVolumeX": 210,
+            "printVolumeY": 210,
+            "printVolumeZ": 205,
+            "printResolutionX": 0.1,
+            "printResolutionY": 0.1,
+            "printResolutionZ": 0.5,
+            "nozzleDiameter": 0.4,
+            "numberOfExtruders": 1,
+            "comment": "",
+            "__v": 0
+        },
+        {
+            "_id": "5b55f7bf3fe0c8b01713b3fc",
+            "fablabId": "5b453ddb5cf4a9574849e98b",
+            "type": "3d-printer",
+            "deviceName": "Zprinter 450",
+            "manufacturer": "Zcorp",
+            "materials": [
+                {
+                    "material": "Plaster",
+                    "type": "printerMaterial"
+                }
+            ],
+            "camSoftware": "",
+            "printVolumeX": 200,
+            "printVolumeY": 200,
+            "printVolumeZ": 180,
+            "printResolutionX": 0.1,
+            "printResolutionY": 0.1,
+            "printResolutionZ": 1,
+            "nozzleDiameter": null,
+            "numberOfExtruders": 0,
+            "comment": "Full Color printer",
+            "__v": 0
+        }
+      ]
+    }
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ * {
+ *   error: Error while trying to search for a specific 3d printer with query: {...},
+ *   stack: {...}
+ * }
+*/
+function search (req, res) {
+  req.body.query = validatorService.checkQuery(req.body.query);
+  printer3DService.getAll(req.body.query, req.body.limit, req.body.skip).then((printers3d) => {
+    if (printers3d.length === 0) {
+      logger.info(`POST search for 3d printers with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+      res.status(204).send({ '3d-printers': printers3d });
+    } else if (req.body.limit && req.body.skip) {
+      logger.info(`POST search for 3d printers with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds partial results ${JSON.stringify({ '3d-printers': printers3d })}`);
+      res.status(206).send({ '3d-printers': printers3d });
+    } else {
+      logger.info(`POST search for 3d printers with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds results ${JSON.stringify({ '3d-printers': printers3d })}`);
+      res.status(200).send({ '3d-printers': printers3d });
+    }
+  }).catch((err) => {
+    logger.error({
+      error: `Error while trying to search for a specific 3d printer with query: ${JSON.stringify(req.body.query)}`,
+      stack: err
+    });
+    res.status(500).send({
+      error: `Error while trying to search for a specific 3d printer with query: ${JSON.stringify(req.body.query)}`,
+      stack: err
+    });
+  });
+}
+
+/**
+ * @api {post} /api/v1/machines/3d-printers/count Counts the 3D Printers
  * @apiName CountPrinters
  * @apiVersion 1.0.0
  * @apiGroup 3D-Printers
@@ -167,7 +326,8 @@ function getAll (req, res) {
  *
  */
 function count (req, res) {
-  printer3DService.count().then((count) => {
+  req.body.query = validatorService.checkQuery(req.body.query);
+  printer3DService.count(req.body.query).then((count) => {
     logger.info(`GET count 3D printers with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
@@ -671,7 +831,83 @@ function update (req, res) {
   }
 }
 
+/**
+ * @api {get} /api/v1/machines/3d-printers/:id/schedules Gets the schedules of a specific 3d-printer
+ * @apiName getScheduleOf3DPrinters
+ * @apiVersion 1.0.0
+ * @apiGroup 3D-Printers
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {String} id is the id of the 3d-printer (required)
+ * @apiParam {String} startDay is the start day in this format YYYY-MM-DD (optional query param)
+ * @apiParam {String} endDay is the end day in this format YYYY-MM-DD (optional query param)
+ *
+ * @apiSuccess {Array} schedules an array containing the schedule objects
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "schedules": [
+        {
+            "machine": {
+                "type": "3d-printer",
+                "id": "5bfe88759d1139444a95aa47"
+            },
+            "_id": "5bfe887e9d1139444a95aa7c",
+            "startDate": "2018-11-29T12:22:12.076Z",
+            "endDate": "2018-11-29T12:22:12.076Z",
+            "fablabId": "5b453ddb5cf4a9574849e98a",
+            "orderId": "5bfe88759d1139444a95aa48",
+            "__v": 0
+        },
+        {
+            "machine": {
+                "type": "3d-printer",
+                "id": "5bfe88759d1139444a95aa47"
+            },
+            "_id": "5bfe888e10fc87448a4a76b1",
+            "startDate": "2018-11-28T12:22:34.777Z",
+            "endDate": "2018-11-28T12:22:34.777Z",
+            "fablabId": "5b453ddb5cf4a9574849e98a",
+            "orderId": "5bfe888a10fc87448a4a768a",
+            "__v": 0
+        }
+    ]
+}
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+
+ * @apiError 500 An Error occured
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ *     {
+ *       "error": "Error while trying to get schedules of 3D-Printer!"
+ *     }
+ *
+ *
+ */
+async function getSchedules (req, res) {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    logger.error({ error: checkId.error });
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    try {
+      const schedules = await machineService.getSchedules(req.params.id, req.query);
+      logger.info(`GET schedules for 3D-Printer with result ${JSON.stringify(schedules)}`);
+      if (schedules.length) {
+        res.status(200).send({ schedules });
+      } else {
+        res.status(204).send();
+      }
+    } catch (err) {
+      const msg = { error: 'Error while trying to get schedules of 3D-Printer!' };
+      logger.error({ msg, stack: err.stack });
+      res.status(500).send(msg);
+    }
+  }
+}
+
 
 export default {
-  getAll, create, deleteById, get, update, count, countSuccessfulOrders
+  getAll, create, deleteById, get, update, count, countSuccessfulOrders, getSchedules, search
 };

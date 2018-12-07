@@ -2,10 +2,11 @@ import 'jasmine';
 import * as request from 'request';
 import config from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
+import testSchedule from './schedule.controller.spec';
 
 const endpoint = `${config.baseUrlBackend}machines/otherMachines`;
 
-const testOtherMachine = {
+export const testOtherMachine = {
   fablabId: '5b453ddb5cf4a9574849e98a',
   deviceName: 'Test Other Machine',
   manufacturer: 'Test Manufacturer',
@@ -59,7 +60,7 @@ describe('Other Machine Controller', () => {
   // });
 
   it('counts other machines', (done) => {
-    request.get(`${endpoint}/count`, {
+    request.post(`${endpoint}/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
@@ -274,4 +275,61 @@ describe('Other Machine Controller', () => {
       done();
     });
   });
+
+  it('get schedules', (done) => {
+    request.post(`${endpoint}/`,
+      {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        body: testOtherMachine,
+        json: true
+      }, (error, response) => {
+        const { otherMachine } = { otherMachine: response.body.otherMachine };
+        expect(response.statusCode).toEqual(201);
+        expect(otherMachine).toBeDefined();
+        expect(otherMachine.deviceName).toEqual(otherMachine.deviceName);
+        expect(otherMachine.type).toEqual('otherMachine');
+        expect(otherMachine.manufacturer).toEqual(otherMachine.manufacturer);
+        expect(otherMachine.fablabId).toEqual(otherMachine.fablabId);
+        const testBody = JSON.parse(JSON.stringify(testSchedule));
+        const startDate = new Date();
+        testBody.startDate = startDate;
+        testBody.endDate = startDate;
+        testBody.endDate.setMinutes(startDate.getMinutes() + 1);
+        request({
+          uri: `${config.baseUrlBackend}schedules/`,
+          method: 'POST',
+          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+          json: true,
+          body: testBody
+        }, (error, response) => {
+          const scheduleResult = response.body.schedule;
+          expect(response.statusCode).toEqual(201);
+          expect(scheduleResult).toBeDefined();
+          expect(new Date(scheduleResult.startDate)).toEqual(testBody.startDate);
+          expect(new Date(scheduleResult.endDate)).toEqual(testBody.endDate);
+          expect(scheduleResult.orderId).toEqual(testBody.orderId);
+          expect(scheduleResult.fablabId).toEqual(testBody.fablabId);
+          expect(scheduleResult.machine).toBeDefined();
+          expect(scheduleResult.machine.type).toEqual(testBody.machine.type);
+          expect(scheduleResult.machine.id).toEqual(testBody.machine.id);
+          request.get(`${endpoint}/${otherMachine._id}/schedules`,
+            {
+              headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+              json: true
+            }, (error, response) => {
+              if (response.statusCode && response.statusCode !== 204) {
+                const { schedules } = { schedules: response.body.schedules };
+                expect(schedules).toBeDefined();
+                expect(response.statusCode).toEqual(200);
+                expect(schedules.length).toBeGreaterThan(0);
+              } else {
+                expect(response.statusCode).toEqual(204);
+              }
+              done();
+            });
+        });
+      });
+  });
 });
+
+export default testOtherMachine;

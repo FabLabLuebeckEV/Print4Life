@@ -12,9 +12,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
-import * as moment from 'moment';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { SpinnerConfig } from '../../config/config.service';
+import { FablabService } from 'frontend/app/services/fablab.service';
+import { ValidationService } from 'frontend/app/services/validation.service';
+import { isArray } from 'util';
 
 @Component({
   selector: 'app-order-list',
@@ -26,15 +28,21 @@ export class OrderListComponent implements OnInit {
   private config: any;
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
-  publicIcon: any;
+  publicIcon: Icon;
+  calendarIcon: Icon;
+  trashIcon: Icon;
+  searchIcon: Icon;
+  plusIcon: Icon;
   createLink: String;
   orders: Array<TableItem> = [];
   visibleOrders: Array<TableItem> = [];
   id: String;
   listView: Boolean = false;
   outstandingOrders: Boolean = false;
-  plusIcon: any;
+  unfinishedOrders: Boolean = false;
   loadingOrders: Boolean = false;
+  loadingFablabs: Boolean = false;
+  datePickerError: Boolean = false;
 
   loadingStatus: Boolean;
   filter: any = {
@@ -45,7 +53,11 @@ export class OrderListComponent implements OnInit {
     originalMachineTypes: [], // origin for backend containing all machine types
     machineTypes: [], // shown machine types after translation to select in filter
     shownMachineTypes: [], // selected and translated machine types in filter
-    selectedMachineTypes: [] // selected machine types but in origin backend language
+    selectedMachineTypes: [], // selected machine types but in origin backend language
+    fablabs: [],
+    selectedFablabs: [],
+    schedule: { startDay: undefined, endDay: undefined },
+    searchTerm: ''
   };
 
   loadingMachineTypes: Boolean;
@@ -67,6 +79,10 @@ export class OrderListComponent implements OnInit {
     filterLabel: {
       machines: '',
       status: '',
+      fablabs: '',
+      startDay: '',
+      endDay: '',
+      search: ''
     },
     spinnerLoadingText: '',
     buttons: {
@@ -81,6 +97,9 @@ export class OrderListComponent implements OnInit {
       deleteHeader: '',
       deleteQuestion: '',
       deleteQuestion2: ''
+    },
+    messages: {
+      datePicker: ''
     }
   };
 
@@ -94,15 +113,21 @@ export class OrderListComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private translateService: TranslateService,
     private userService: UserService,
-    private genericService: GenericService) {
+    private genericService: GenericService,
+    private fablabService: FablabService,
+    private validationService: ValidationService) {
     this.config = this.configService.getConfig();
     this.publicIcon = this.config.icons.public;
+    this.searchIcon = this.config.icons.search;
     this.spinnerConfig = new SpinnerConfig(
       'Loading Orders', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.createLink = `./${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
+    this.calendarIcon = this.config.icons.calendar;
     this.jumpArrow = this.config.icons.forward;
+    this.trashIcon = this.config.icons.delete;
+
     this.router.events.subscribe(() => {
       const route = this.location.path();
       if (route === `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}` && !this.outstandingOrders) {
@@ -113,6 +138,11 @@ export class OrderListComponent implements OnInit {
         this.listView = true;
         this.outstandingOrders = false;
         this.ngOnInit();
+      } else if (route === `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`
+        && !this.unfinishedOrders) {
+        this.unfinishedOrders = true;
+        this.listView = false;
+        this.outstandingOrders = false;
       } else if (route !== `/${routes.paths.frontend.orders.root}`) {
         this.listView = false;
       }
@@ -120,7 +150,7 @@ export class OrderListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if ((this.listView || this.outstandingOrders) && !this.loadingOrders) {
+    if ((this.listView || this.outstandingOrders || this.unfinishedOrders) && !this.loadingOrders) {
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
         this.paginationObj.page = 1;
@@ -129,6 +159,9 @@ export class OrderListComponent implements OnInit {
       this.loadingOrders = true;
       this.visibleOrders = [];
       this.orders = [];
+      if (this.unfinishedOrders) {
+        await this._loadFablabs();
+      }
       await this._loadStatus();
       await this._loadMachineTypes();
       this.userIsLoggedIn = await this.userService.isLoggedIn();
@@ -138,7 +171,15 @@ export class OrderListComponent implements OnInit {
     }
   }
 
+
+  searchInit() {
+    this.paginationObj.page = 1;
+    this.paginationObj.totalItems = 0;
+    this.init();
+  }
+
   async init() {
+    const promises = [];
     const loggedInUser = await this.userService.getUser();
     this.loadingOrders = true;
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
@@ -149,11 +190,12 @@ export class OrderListComponent implements OnInit {
     let countObj;
     let totalItems = 0;
     let query;
+
     if (this.filter.selectedStatus.length > 0 && this.filter.selectedMachineTypes.length > 0) {
       query = {
         $and: [
           { $or: [] },
-          { $or: [] }
+          { $or: [] },
         ]
       };
       this.filter.selectedStatus.forEach((status) => {
@@ -164,35 +206,58 @@ export class OrderListComponent implements OnInit {
       });
     } else if (this.filter.selectedStatus.length > 0 || this.filter.selectedMachineTypes.length > 0) {
       query = {
-        $or: [],
-        $nor: []
+        $and: [
+          { $or: [] },
+          { $nor: [] }
+        ]
       };
       if (this.filter.selectedStatus.length > 0) {
         this.filter.selectedStatus.forEach((status) => {
-          query.$or.push({ status: status });
+          query.$and[0].$or.push({ status: status });
         });
         this.filter.originalMachineTypes.forEach((type) => {
-          query.$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
+          query.$and[1].$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
         });
       } else if (this.filter.selectedMachineTypes.length > 0) {
         this.filter.selectedMachineTypes.forEach((type) => {
-          query.$or.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
+          query.$and[0].$or.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
         });
         this.filter.originalValidStatus.forEach((status) => {
-          query.$nor.push({ status });
+          query.$and[1].$nor.push({ status });
         });
       }
     } else {
       query = {
-        $nor: []
+        $and: [
+          { $nor: [] }
+        ]
       };
       this.filter.originalValidStatus.forEach((status) => {
-        query.$nor.push({ status });
+        query.$and[0].$nor.push({ status });
       });
       this.filter.originalMachineTypes.forEach((type) => {
-        query.$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
+        query.$and[0].$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
       });
     }
+
+
+    if (!query.$and) {
+      query.$and = [];
+    } else if (query.$and && isArray(query.$and)) {
+      // if search term is defined add to mongo query
+      if (this.filter.searchTerm) {
+        query.$and.push({ $text: { $search: this.filter.searchTerm } });
+      }
+
+      // if user is not editor, admin or logged in: do not show shared orders
+      if (!loggedInUser
+        || loggedInUser && loggedInUser.role
+        && (loggedInUser.role.role !== 'admin' && loggedInUser.role.role !== 'editor')) {
+        query.$and.push({ shared: false });
+      }
+    }
+
+
 
     countObj = await this.orderService.count(query);
     totalItems = countObj.count;
@@ -205,27 +270,80 @@ export class OrderListComponent implements OnInit {
       query, this.paginationObj.perPage,
       (this.paginationObj.page - 1) * this.paginationObj.perPage);
     if (orders && orders.orders) {
+      if (this.userIsLoggedIn && (this.userIsAdmin || loggedInUser.role.role === 'editor')) {
+        orders.orders.forEach(async (order) => {
+          const result = await this.orderService.getSchedule(order._id);
+          if (result && result.schedule) {
+            order.schedule = result.schedule;
+          }
+        });
+      }
+
+      if (this.unfinishedOrders && this.filter.selectedFablabs && this.filter.selectedFablabs.length) {
+        orders.orders.forEach(async (order) => {
+          promises.push(new Promise(async resolve => {
+            const found = { fablab: false, schedule: false };
+            const result = await this.machineService.get(order.machine.type, order.machine._id);
+            const resultSchedules = await this.machineService.getSchedules(order.machine.type, order.machine._id,
+              { startDay: this.filter.schedule.startDay, endDay: this.filter.schedule.endDay });
+            if ((!this.filter.schedule.startDay || !this.filter.schedule.startDay.year ||
+              !this.filter.schedule.startDay.month || !this.filter.schedule.startDay.day) &&
+              (!this.filter.schedule.endDay || !this.filter.schedule.endDay.year || !this.filter.schedule.endDay.month
+                || !this.filter.schedule.endDay.day)) {
+              found.schedule = true;
+            }
+            if (result && result[`${order.machine.type}`]) {
+              if (resultSchedules && resultSchedules['schedules']) {
+                resultSchedules['schedules'].forEach((schedule) => {
+                  if (schedule.orderId === order._id) {
+                    found.schedule = true;
+                  }
+                });
+              }
+              this.filter.selectedFablabs.forEach((fablab) => {
+                if (fablab._id === result[`${order.machine.type}`].fablabId) {
+                  found.fablab = true;
+                }
+              });
+
+              if (found.fablab && found.schedule) {
+                resolve(order);
+              } else {
+                resolve();
+              }
+            }
+            resolve();
+          }));
+        });
+      }
+      const results = await Promise.all(promises);
       this.translateService.get(['date']).subscribe((async translations => {
-        orders = orders.orders;
+        orders = this.unfinishedOrders && results && Array.isArray(results) ? results.filter((order) => order) : orders.orders;
         const arr = [];
         for (const order of orders) {
-          if (order.shared && !loggedInUser
-            || order.shared && loggedInUser && loggedInUser.role
-            && (loggedInUser.role.role !== 'admin' && loggedInUser.role.role !== 'editor')) {
-            continue;
-          }
           const item = new TableItem();
           const owner = await this.userService.getNamesOfUser(order.owner);
           const editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
           item.obj['id'] = { label: order._id };
           item.obj['Created at'] = {
-            label: currentLang === 'de'
-              ? moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat) + ' Uhr'
-              : moment(order.createdAt).locale(currentLang).format(translations['date'].dateTimeFormat)
+            label: `${this.genericService.translateDate(order.createdAt, currentLang, translations['date'].dateTimeFormat)}`
           };
+          if (this.userIsLoggedIn && (loggedInUser.role.role === 'editor' || this.userIsAdmin)) {
+            item.obj['Schedule Start Date'] = {
+              label: order.schedule && order.schedule.startDate ?
+                `${this.genericService.translateDate(order.schedule.startDate, currentLang, translations['date'].dateTimeFormat)}`
+                : '-'
+            };
+            item.obj['Schedule End Date'] = {
+              label: order.schedule && order.schedule.endDate ?
+                `${this.genericService.translateDate(order.schedule.endDate, currentLang, translations['date'].dateTimeFormat)}`
+                : '-'
+            };
+          }
           item.obj['Projectname'] = {
             label: order.projectname,
-            href: (order.shared ? `./${routes.paths.frontend.orders.shared.root}/` : `./`) +
+            href: (order.shared ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
+              : `/${routes.paths.frontend.orders.root}/`) +
               `${routes.paths.frontend.orders.detail}/${order._id}`,
             icon: order.shared ? this.publicIcon : undefined
           };
@@ -305,6 +423,26 @@ export class OrderListComponent implements OnInit {
     }));
   }
 
+  changeHandlerFablab(event: Array<String>) {
+    this.filter.selectedFablabs = event;
+  }
+
+  changeHandlerStartDay(event: { year: number, month: number, day: number }) {
+    this.datePickerError = this.validationService.validateDate(event, this.filter.schedule.endDay);
+    if (!this.datePickerError) {
+      this.filter.schedule.startDay = event;
+      this.init();
+    }
+  }
+
+  changeHandlerEndDay(event: { year: number, month: number, day: number }) {
+    this.datePickerError = this.validationService.validateDate(this.filter.schedule.startDay, event);
+    if (!this.datePickerError) {
+      this.filter.schedule.endDay = event;
+      this.init();
+    }
+  }
+
   eventHandler(event) {
     if (event.label === this.translationFields.buttons.deleteLabel) {
       let order: TableItem;
@@ -382,13 +520,20 @@ export class OrderListComponent implements OnInit {
   }
 
   private async _loadStatus() {
+    let status = [];
     this.loadingStatus = true;
     try {
-      const status = (await this.orderService.getStatus(this.outstandingOrders)).status;
+      status = (await this.orderService.getStatus(this.outstandingOrders)).status;
+
       if (Array.isArray(status)) {
         this.filter.originalValidStatus = status;
       } else {
         this.filter.originalValidStatus = [status];
+      }
+      if (this.unfinishedOrders) {
+        this.filter.originalValidStatus = this.filter.originalValidStatus.filter((status) => {
+          return !['archived', 'completed', 'representive', 'deleted'].includes(status);
+        });
       }
     } catch (error) {
       this.filter.originalValidStatus = [];
@@ -406,6 +551,23 @@ export class OrderListComponent implements OnInit {
     }));
     this.filter.selectedStatus = JSON.parse(JSON.stringify(this.filter.originalValidStatus));
     this.loadingStatus = false;
+  }
+
+  private async _loadFablabs() {
+    this.loadingFablabs = true;
+    try {
+      const result = await this.fablabService.getFablabs();
+      if (result && result.fablabs) {
+        this.filter.fablabs = result.fablabs.filter((fablab) => {
+          return fablab.activated;
+        });
+        this.filter.selectedFablabs = JSON.parse(JSON.stringify(this.filter.fablabs));
+      }
+    } catch (err) {
+      this.filter.fablabs = [];
+      this.filter.selectedFablabs = [];
+    }
+    this.loadingFablabs = false;
   }
 
   private async _loadMachineTypes() {
@@ -471,7 +633,11 @@ export class OrderListComponent implements OnInit {
         paginationLabel: translations['orderList'].paginationLabel,
         filterLabel: {
           machines: translations['orderList']['filterLabel'].machines,
-          status: translations['orderList']['filterLabel'].status
+          status: translations['orderList']['filterLabel'].status,
+          fablabs: translations['orderList']['filterLabel'].fablabs,
+          startDay: translations['orderList']['filterLabel'].startDay,
+          endDay: translations['orderList']['filterLabel'].endDay,
+          search: translations['orderList']['filterLabel'].search
         },
         spinnerLoadingText: translations['orderList'].spinnerLoadingText,
         buttons: {
@@ -486,6 +652,9 @@ export class OrderListComponent implements OnInit {
           deleteHeader: translations['orderList'].modals.deleteHeader,
           deleteQuestion: translations['orderList'].modals.deleteQuestion,
           deleteQuestion2: translations['orderList'].modals.deleteQuestion2
+        },
+        messages: {
+          datePicker: translations['orderList'].messages.datePicker
         }
       };
     }));

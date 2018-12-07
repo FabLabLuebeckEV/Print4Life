@@ -11,26 +11,43 @@
                 <fa-icon [icon]="plusIcon"></fa-icon>
             </button>
         </div>
-        <div class="col-md-5">
-            <label for="status">{{translationFields.filterLabel}}</label>
+        <div class="col-md-3">
+            <label for="status">{{translationFields.filterLabel.type}}</label>
             <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false"
-                [items]=filter.machineTypes bindLabel="machineTypeFilter" [(ngModel)]="filter.shownMachineTypes" id="machineTypeFilter"
-                (close)="filterHandler()" (remove)="filterHandler()" (clear)="filterHandler()" (change)="changeFilterHandler($event)"
-                name="machineTypeFilter" #machineTypeFilter="ngModel">
+                [items]=filter.machineTypes [(ngModel)]="filter.shownMachineTypes" id="machineTypeFilter" (close)="filterHandler()"
+                (remove)="filterHandler()" (clear)="filterHandler()" (change)="changeFilterHandler($event)" name="machineTypeFilter"
+                #machineTypeFilter="ngModel">
             </ng-select>
         </div>
-        <div class="col-md-5">
-            <label for="fablabFilter">{{translationFields.filterLabelFablab}}</label>
+        <div class="col-md-3">
+            <label for="fablabFilter">{{translationFields.filterLabel.fablab}}</label>
             <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false"
                 [items]=filter.fablabs bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabFilter" (close)="filterHandler()"
-                (remove)="filterHandler()" (clear)="filterHandler()" (change)="changeFablabFilterHandler($event)" name="fablabFilter"
+                (remove)="filterHandler()" (clear)="filterHandler()" (change)="filterHandler()" name="fablabFilter"
                 #fablabFilter="ngModel">
             </ng-select>
         </div>
-        <div class="col-md-1">
-            <button type="button" (click)="toggleActivateFilter()" [class]="filter.activated ? 'btn btn-success spacing-top-xxl spacing-left-xxl' : 'btn btn-danger spacing-top-xxl spacing-left-xxl'">
-                <fa-icon [icon]="filter.activated ? toggleOnIcon : toggleOffIcon"></fa-icon>
-            </button>
+        <div class="col-md-2">
+            <label for="activationFilter">{{translationFields.filterLabel.activation}}</label>
+            <ng-select [multiple]="true" [hideSelected]="true" [closeOnSelect]="false" [items]="filter.translatedActivated"
+                [(ngModel)]="filter.shownActivated" id="activationFilter" (close)="filterHandler()" (remove)="filterHandler()"
+                (clear)="filterHandler()" (change)="changeActivationFilterHandler($event)" name="activationFilter"
+                #activationFilter="ngModel">
+            </ng-select>
+        </div>
+        <div class="col-md-2">
+            <form>
+                <label for="search">{{translationFields.filterLabel.search}}</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search"
+                        #search="ngModel">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" (click)="searchInit()" type="submit">
+                            <fa-icon [icon]="searchIcon"></fa-icon>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     <div class="row">
@@ -56,9 +73,8 @@
                 </div>
             </form>
             <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems"
-                [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="filterHandler()"
-                [maxSize]="paginationObj.maxSize" [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks"
-                aria-label="Default pagination"></ngb-pagination>
+                [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="init()" [maxSize]="paginationObj.maxSize"
+                [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks" aria-label="Default pagination"></ngb-pagination>
         </div>
     </footer>
 </div>

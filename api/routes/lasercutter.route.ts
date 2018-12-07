@@ -8,7 +8,9 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.route('/').get(lasercutterCtrl.getAll);
 
-router.route('/count').get(lasercutterCtrl.count);
+router.route('/count').post(lasercutterCtrl.count);
+
+router.route('/search').post(lasercutterCtrl.search);
 
 router.route('/laserTypes').get(lasercutterCtrl.getLaserTypes);
 
@@ -17,6 +19,8 @@ router.route('/').post(lasercutterCtrl.create);
 router.route('/:id').delete(lasercutterCtrl.deleteById);
 
 router.route('/:id').get(lasercutterCtrl.get);
+
+router.route('/:id/schedules').get(lasercutterCtrl.getSchedules);
 
 router.route('/:id/countSuccessfulOrders').get(lasercutterCtrl.countSuccessfulOrders);
 

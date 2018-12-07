@@ -3,6 +3,7 @@ import machineRoute from './machine.route';
 import orderRoute from './order.route';
 import usersRoute from './user.route';
 import fablabRoute from './fablab.route';
+import scheduleRoute from './schedule.route';
 
 const router = express.Router();
 
@@ -29,5 +30,6 @@ router.use('/machines/', machineRoute);
 router.use('/orders/', orderRoute);
 router.use('/users/', usersRoute);
 router.use('/fablabs/', fablabRoute);
+router.use('/schedules/', scheduleRoute);
 
 export default router;

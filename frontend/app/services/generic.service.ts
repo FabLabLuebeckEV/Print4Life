@@ -14,8 +14,8 @@ export class GenericService {
     this.location.back();
   }
 
-  public translateCreatedAt(objCreatedAt, currentLang, dateTimeFormat) {
-    let createdAt = moment(objCreatedAt).locale(currentLang).format(dateTimeFormat);
+  public translateDate(objDate, currentLang, dateTimeFormat) {
+    let createdAt = moment(objDate).locale(currentLang).format(dateTimeFormat);
     createdAt = currentLang === 'de' ? createdAt + ' Uhr' : createdAt;
     return createdAt;
   }

@@ -8,13 +8,17 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.route('/').get(printer3DCtrl.getAll);
 
-router.route('/count').get(printer3DCtrl.count);
+router.route('/count').post(printer3DCtrl.count);
+
+router.route('/search').post(printer3DCtrl.search);
 
 router.route('/').post(printer3DCtrl.create);
 
 router.route('/:id').delete(printer3DCtrl.deleteById);
 
 router.route('/:id').get(printer3DCtrl.get);
+
+router.route('/:id/schedules').get(printer3DCtrl.getSchedules);
 
 router.route('/:id/countSuccessfulOrders').get(printer3DCtrl.countSuccessfulOrders);
 

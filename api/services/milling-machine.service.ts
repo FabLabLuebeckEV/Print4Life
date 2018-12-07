@@ -3,13 +3,14 @@ import { MachineService } from './machine.service';
 import ModelService from './model.service';
 /* eslint-enable no-unused-vars */
 
-export class Printer3DService implements ModelService {
-  machineType = '3d-printer';
+export class MillingMachineService implements ModelService {
+  machineType = 'millingMachine';
 
   machineService = new MachineService();
 
   /**
-   * This method gets all 3d printers. The result can be limited as well as some items skipped
+   * This method gets all milling machines. The result can be limited as well as some items skipped
+   * @param query is a mongodb query expression
    * @param limit is the limit of items to get
    * @param skip is the amount of items to skip (counted from the beginning)
    * @returns a promise with the results
@@ -25,8 +26,8 @@ export class Printer3DService implements ModelService {
   }
 
   /**
-   * This method creates a new 3d printer
-   * @param params are the params for the 3d printer
+   * This method creates a new milling machine
+   * @param params are the params for the milling machine
    * @returns a promise with the results
    */
   public create (params) {
@@ -34,7 +35,7 @@ export class Printer3DService implements ModelService {
   }
 
   /**
-   * This method deletes a 3d printer by its id
+   * This method deletes a milling machine by its id
    * @returns a promise with the result
    */
   public deleteById (id) {
@@ -42,8 +43,8 @@ export class Printer3DService implements ModelService {
   }
 
   /**
-   * This method gets a 3d printer by its id
-   * @param id is the id of the 3d printer
+   * This method gets a milling machine by its id
+   * @param id is the id of the milling machine
    * @returns a promise with the results
    */
   public get (id) {
@@ -51,9 +52,9 @@ export class Printer3DService implements ModelService {
   }
 
   /**
-   * This method updates a 3d printer
-   * @param id is the id of the 3d printer
-   * @param machine is the machine obj that updates the 3d printer
+   * This method updates a milling machine
+   * @param id is the id of the milling machine
+   * @param machine is the machine obj that updates the milling machine
    * @returns a promise with the results
    */
   public update (id, machine) {
@@ -61,7 +62,7 @@ export class Printer3DService implements ModelService {
   }
 
   /**
-   * This method counts all 3d printer
+   * This method counts all milling machine
    * @param query is a mongodb query expression
    * @returns a promise with the result
    */
@@ -70,4 +71,4 @@ export class Printer3DService implements ModelService {
   }
 }
 
-export default Printer3DService;
+export default MillingMachineService;

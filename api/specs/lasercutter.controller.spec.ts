@@ -2,6 +2,7 @@ import 'jasmine';
 import * as request from 'request';
 import config from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
+import testSchedule from './schedule.controller.spec';
 
 const endpoint = `${config.baseUrlBackend}machines/lasercutters`;
 
@@ -66,7 +67,7 @@ describe('Lasercutter Controller', async () => {
   // });
 
   it('counts lasercutters', (done) => {
-    request.get(`${endpoint}/count`, {
+    request.post(`${endpoint}/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
@@ -291,5 +292,60 @@ describe('Lasercutter Controller', async () => {
       expect(response.statusCode).toEqual(400);
       done();
     });
+  });
+
+  it('get schedules', (done) => {
+    request.post(`${endpoint}/`,
+      {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        body: testLasercutter,
+        json: true
+      }, (error, response) => {
+        const { lasercutter } = { lasercutter: response.body.lasercutter };
+        expect(response.statusCode).toEqual(201);
+        expect(lasercutter).toBeDefined();
+        expect(lasercutter.deviceName).toEqual(lasercutter.deviceName);
+        expect(lasercutter.type).toEqual('lasercutter');
+        expect(lasercutter.manufacturer).toEqual(lasercutter.manufacturer);
+        expect(lasercutter.fablabId).toEqual(lasercutter.fablabId);
+        const testBody = JSON.parse(JSON.stringify(testSchedule));
+        const startDate = new Date();
+        testBody.startDate = startDate;
+        testBody.endDate = startDate;
+        testBody.endDate.setMinutes(startDate.getMinutes() + 1);
+        request({
+          uri: `${config.baseUrlBackend}schedules/`,
+          method: 'POST',
+          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+          json: true,
+          body: testBody
+        }, (error, response) => {
+          const scheduleResult = response.body.schedule;
+          expect(response.statusCode).toEqual(201);
+          expect(scheduleResult).toBeDefined();
+          expect(new Date(scheduleResult.startDate)).toEqual(testBody.startDate);
+          expect(new Date(scheduleResult.endDate)).toEqual(testBody.endDate);
+          expect(scheduleResult.orderId).toEqual(testBody.orderId);
+          expect(scheduleResult.fablabId).toEqual(testBody.fablabId);
+          expect(scheduleResult.machine).toBeDefined();
+          expect(scheduleResult.machine.type).toEqual(testBody.machine.type);
+          expect(scheduleResult.machine.id).toEqual(testBody.machine.id);
+          request.get(`${endpoint}/${lasercutter._id}/schedules`,
+            {
+              headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+              json: true
+            }, (error, response) => {
+              if (response.statusCode && response.statusCode !== 204) {
+                const { schedules } = { schedules: response.body.schedules };
+                expect(schedules).toBeDefined();
+                expect(response.statusCode).toEqual(200);
+                expect(schedules.length).toBeGreaterThan(0);
+              } else {
+                expect(response.statusCode).toEqual(204);
+              }
+              done();
+            });
+        });
+      });
   });
 });

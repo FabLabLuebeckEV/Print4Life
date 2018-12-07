@@ -8,13 +8,17 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.route('/').get(otherMachineCtrl.getAll);
 
-router.route('/count').get(otherMachineCtrl.count);
+router.route('/count').post(otherMachineCtrl.count);
+
+router.route('/search').post(otherMachineCtrl.search);
 
 router.route('/').post(otherMachineCtrl.create);
 
 router.route('/:id').delete(otherMachineCtrl.deleteById);
 
 router.route('/:id').get(otherMachineCtrl.get);
+
+router.route('/:id/schedules').get(otherMachineCtrl.getSchedules);
 
 router.route('/:id/countSuccessfulOrders').get(otherMachineCtrl.countSuccessfulOrders);
 

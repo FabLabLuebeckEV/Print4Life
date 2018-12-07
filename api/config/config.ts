@@ -81,6 +81,22 @@ const publicRoutes = [
     methods: ['GET']
   },
   {
+    url: `${baseUrl}machines/3d-printers/count`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}machines/lasercutters/count`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}machines/millingMachines/count`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}machines/otherMachines/count`,
+    methods: ['POST']
+  },
+  {
     url: `${baseUrl}fablabs`,
     canChilds: true,
     methods: ['*']

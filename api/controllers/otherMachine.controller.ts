@@ -14,6 +14,7 @@ const machineService = new MachineService();
  * @apiGroup OtherMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam (Query String) query is a mongodb query expression
  * @apiParam (Query String) limit is the limit of objects to get
  * @apiParam (Query String) skip is the number of objects to skip
  * @apiSuccess {Array} otherMachines an array of other machine objects
@@ -76,7 +77,7 @@ const machineService = new MachineService();
  */
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
-  otherMachineService.getAll(req.query.limit, req.query.skip).then((otherMachines) => {
+  otherMachineService.getAll(req.query.query, req.query.limit, req.query.skip).then((otherMachines) => {
     if ((otherMachines && otherMachines.length === 0) || !otherMachines) {
       logger.info('GET Other Machines with no result');
       res.status(204).send();
@@ -95,7 +96,111 @@ function getAll (req, res) {
 }
 
 /**
- * @api {get} /api/v1/machines/otherMachines/count Counts the Other Machines
+ * @api {post} /api/v1/otherMachines/search Request the list of other machines by a given query
+ * @apiName SearchOtherMachines
+ * @apiVersion 1.0.0
+ * @apiGroup OtherMachines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam (Query String) limit is the limit of objects to get
+ * @apiParam (Query String) skip is the number of objects to skip
+ * @apiSuccess {Array} users an array of other machine objects
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "otherMachines": [
+        {
+            "_id": "5b51c25c1058dc218927273e",
+            "fablabId": 2,
+            "type": "otherMachine",
+            "deviceName": "Sign Maker BN-20",
+            "manufacturer": "Roland",
+            "typeOfMachine": "Cutting Plotter",
+            "comment": "",
+            "__v": 0
+        },
+        {
+            "_id": "5b51c25c1058dc2189272742",
+            "fablabId": 3,
+            "type": "otherMachine",
+            "deviceName": "NAO",
+            "manufacturer": "Softbank Robotics",
+            "typeOfMachine": "Humanoid Robot",
+            "comment": "",
+            "__v": 0
+        }
+    ]
+}
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 206 Partial Content
+{
+    "otherMachines": [
+        {
+            "_id": "5b51c25c1058dc218927273e",
+            "fablabId": 2,
+            "type": "otherMachine",
+            "deviceName": "Sign Maker BN-20",
+            "manufacturer": "Roland",
+            "typeOfMachine": "Cutting Plotter",
+            "comment": "",
+            "__v": 0
+        },
+        {
+            "_id": "5b51c25c1058dc2189272742",
+            "fablabId": 3,
+            "type": "otherMachine",
+            "deviceName": "NAO",
+            "manufacturer": "Softbank Robotics",
+            "typeOfMachine": "Humanoid Robot",
+            "comment": "",
+            "__v": 0
+        }
+    ]
+}
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ * {
+ *   error: Error while trying to search for a specific other machine with query: {...},
+ *   stack: {...}
+ * }
+*/
+function search (req, res) {
+  req.body.query = validatorService.checkQuery(req.body.query);
+  otherMachineService.getAll(req.body.query, req.body.limit, req.body.skip).then((otherMachines) => {
+    if (otherMachines.length === 0) {
+      logger.info(`POST search for other machines with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+      res.status(204).send({ otherMachines });
+    } else if (req.body.limit && req.body.skip) {
+      logger.info(`POST search for other machines with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds partial results ${JSON.stringify(otherMachines)}`);
+      res.status(206).send({ otherMachines });
+    } else {
+      logger.info(`POST search for other machines with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds results ${JSON.stringify(otherMachines)}`);
+      res.status(200).send({ otherMachines });
+    }
+  }).catch((err) => {
+    logger.error({
+      error: `Error while trying to search for a specific other machine with query: ${JSON.stringify(req.body.query)}`,
+      stack: err
+    });
+    res.status(500).send({
+      error: `Error while trying to search for a specific other machine with query: ${JSON.stringify(req.body.query)}`,
+      stack: err
+    });
+  });
+}
+
+/**
+ * @api {post} /api/v1/machines/otherMachines/count Counts the Other Machines
  * @apiName CountOtherMachines
  * @apiVersion 1.0.0
  * @apiGroup OtherMachines
@@ -111,7 +216,8 @@ function getAll (req, res) {
  *
  */
 function count (req, res) {
-  otherMachineService.count().then((count) => {
+  req.body.query = validatorService.checkQuery(req.body.query);
+  otherMachineService.count(req.body.query).then((count) => {
     logger.info(`GET count other machines with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
@@ -374,7 +480,7 @@ function deleteById (req, res) {
  * @apiGroup OtherMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiParam id is the id of the other machine
+ * @apiParam {String} id is the id of the other machine
  *
  * @apiSuccess {Object} otherMachine the milling machine object
  * @apiSuccessExample Success-Response:
@@ -438,7 +544,7 @@ function get (req, res) {
  * @apiGroup OtherMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
- * @apiParam {id} is the id of the other machine
+ * @apiParam {String} id is the id of the other machine
  * @apiParam {String} fablabId id of the corresponding fablab (required)
  * @apiParam {String} deviceName name of the device (required)
  * @apiParam {String} manufacturer name of the manufacturer of the device
@@ -520,6 +626,82 @@ function update (req, res) {
   }
 }
 
+/**
+ * @api {get} /api/v1/machines/otherMachines/:id/schedules Gets the schedules of a specific other machine
+ * @apiName getSchedulesOfOtherMachine
+ * @apiVersion 1.0.0
+ * @apiGroup OtherMachines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {String} id is the id of the other machine (required)
+ * @apiParam {String} startDay is the start day in this format YYYY-MM-DD (optional query param)
+ * @apiParam {String} endDay is the end day in this format YYYY-MM-DD (optional query param)
+ *
+ * @apiSuccess {Array} schedules an array containing the schedule objects
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "schedules": [
+        {
+            "machine": {
+                "type": "otherMachine",
+                "id": "5bfe88759d1139444a95aa47"
+            },
+            "_id": "5bfe887e9d1139444a95aa7c",
+            "startDate": "2018-11-29T12:22:12.076Z",
+            "endDate": "2018-11-29T12:22:12.076Z",
+            "fablabId": "5b453ddb5cf4a9574849e98a",
+            "orderId": "5bfe88759d1139444a95aa48",
+            "__v": 0
+        },
+        {
+            "machine": {
+                "type": "otherMachine",
+                "id": "5bfe88759d1139444a95aa47"
+            },
+            "_id": "5bfe888e10fc87448a4a76b1",
+            "startDate": "2018-11-28T12:22:34.777Z",
+            "endDate": "2018-11-28T12:22:34.777Z",
+            "fablabId": "5b453ddb5cf4a9574849e98a",
+            "orderId": "5bfe888a10fc87448a4a768a",
+            "__v": 0
+        }
+    ]
+}
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+
+ * @apiError 500 An Error occured
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ *     {
+ *       "error": "Error while trying to get schedules of Other Machine!"
+ *     }
+ *
+ *
+ */
+async function getSchedules (req, res) {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    logger.error({ error: checkId.error });
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    try {
+      const schedules = await machineService.getSchedules(req.params.id, req.query);
+      logger.info(`GET schedules for Other Machine with result ${JSON.stringify(schedules)}`);
+      if (schedules.length) {
+        res.status(200).send({ schedules });
+      } else {
+        res.status(204).send();
+      }
+    } catch (err) {
+      const msg = { error: 'Error while trying to get schedules of Other Machine!' };
+      logger.error({ msg, stack: err.stack });
+      res.status(500).send(msg);
+    }
+  }
+}
+
 export default {
-  getAll, create, get, deleteById, update, count, countSuccessfulOrders
+  getAll, create, get, deleteById, update, count, countSuccessfulOrders, getSchedules, search
 };

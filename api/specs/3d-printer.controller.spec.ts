@@ -2,6 +2,7 @@ import 'jasmine';
 import * as request from 'request';
 import config from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
+import testSchedule from './schedule.controller.spec';
 
 const endpoint = `${config.baseUrlBackend}machines/3d-printers`;
 
@@ -72,7 +73,7 @@ describe('3D Printer Controller', () => {
   // });
 
   it('counts 3D printers', (done) => {
-    request.get(`${endpoint}/count`, {
+    request.post(`${endpoint}/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
@@ -285,5 +286,60 @@ describe('3D Printer Controller', () => {
       expect(response.statusCode).toEqual(400);
       done();
     });
+  });
+
+  it('get schedules', (done) => {
+    request.post(`${endpoint}/`,
+      {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        body: testPrinter,
+        json: true
+      }, (error, response) => {
+        const { printer3d } = { printer3d: response.body['3d-printer'] };
+        expect(response.statusCode).toEqual(201);
+        expect(printer3d).toBeDefined();
+        expect(printer3d.deviceName).toEqual(printer3d.deviceName);
+        expect(printer3d.type).toEqual('3d-printer');
+        expect(printer3d.manufacturer).toEqual(printer3d.manufacturer);
+        expect(printer3d.fablabId).toEqual(printer3d.fablabId);
+        const testBody = JSON.parse(JSON.stringify(testSchedule));
+        const startDate = new Date();
+        testBody.startDate = startDate;
+        testBody.endDate = startDate;
+        testBody.endDate.setMinutes(startDate.getMinutes() + 1);
+        request({
+          uri: `${config.baseUrlBackend}schedules/`,
+          method: 'POST',
+          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+          json: true,
+          body: testBody
+        }, (error, response) => {
+          const scheduleResult = response.body.schedule;
+          expect(response.statusCode).toEqual(201);
+          expect(scheduleResult).toBeDefined();
+          expect(new Date(scheduleResult.startDate)).toEqual(testBody.startDate);
+          expect(new Date(scheduleResult.endDate)).toEqual(testBody.endDate);
+          expect(scheduleResult.orderId).toEqual(testBody.orderId);
+          expect(scheduleResult.fablabId).toEqual(testBody.fablabId);
+          expect(scheduleResult.machine).toBeDefined();
+          expect(scheduleResult.machine.type).toEqual(testBody.machine.type);
+          expect(scheduleResult.machine.id).toEqual(testBody.machine.id);
+          request.get(`${endpoint}/${printer3d._id}/schedules`,
+            {
+              headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+              json: true
+            }, (error, response) => {
+              if (response.statusCode && response.statusCode !== 204) {
+                const { schedules } = { schedules: response.body.schedules };
+                expect(schedules).toBeDefined();
+                expect(response.statusCode).toEqual(200);
+                expect(schedules.length).toBeGreaterThan(0);
+              } else {
+                expect(response.statusCode).toEqual(204);
+              }
+              done();
+            });
+        });
+      });
   });
 });

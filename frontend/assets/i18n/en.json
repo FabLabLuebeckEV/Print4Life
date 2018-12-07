@@ -3,6 +3,47 @@
         "dateFormat": "DD/MM/YYYY",
         "dateTimeFormat": "DD/MM/YYYY hh:mm a"
     },
+    "weekdays": {
+        "short": {
+            "monday": "Mon",
+            "tuesday": "Tue",
+            "wednesday": "Wed",
+            "thursday": "Thu",
+            "friday": "Fri",
+            "saturday": "Sat",
+            "sunday": "Sun"
+        }
+    },
+    "months": {
+        "short": {
+            "january": "Jan",
+            "february": "Feb",
+            "march": "Mar",
+            "april": "Apr",
+            "may": "May",
+            "june": "Jun",
+            "july": "Jul",
+            "august": "Aug",
+            "september": "Sep",
+            "october": "Oct",
+            "november": "Nov",
+            "december": "Dec"
+        },
+        "long": {
+            "january": "January",
+            "february": "February",
+            "march": "March",
+            "april": "April",
+            "may": "May",
+            "june": "June",
+            "july": "July",
+            "august": "August",
+            "september": "September",
+            "october": "October",
+            "november": "November",
+            "december": "December"
+        }
+    },
     "dashboard": {
         "title": "Welcome to Fablab - Order Management! "
     },
@@ -47,7 +88,8 @@
             "listOrders": "List Orders",
             "createOrder": "Create Order",
             "createShared": "Create Shared Order",
-            "outstandingOrders": "List Outstanding Orders"
+            "outstandingOrders": "List Outstanding Orders",
+            "unfinishedOrders": "List Unfinished Orders"
         },
         "users": {
             "title": "Users",
@@ -84,8 +126,12 @@
     },
     "machineList": {
         "paginationLabel": "Jump to Page",
-        "filterLabel": "Filter by Machine Type:",
-        "filterLabelFablab": "Filter by Fablab:",
+        "filterLabel": {
+            "type": "Filter by Machine Type:",
+            "search": "Search for:",
+            "fablab": "Filter by Fablab:",
+            "activation": "Filter by Activation:"
+        },
         "spinnerLoadingText": "Loading Machines",
         "buttons": {
             "deleteLabel": "Delete",
@@ -99,6 +145,10 @@
             "deleteHeader": "Do you really want toggle machine's status?",
             "deleteQuestion": "Are you sure you want to toggle",
             "deleteQuestion2": "?"
+        },
+        "activations": {
+            "active": "Active",
+            "inactive": "Inactive"
         }
     },
     "machineForm": {
@@ -154,7 +204,8 @@
             "laserTypes": "Laser Types",
             "fablab": "Fablab",
             "materials": "Materials",
-            "successfulOrders": "Successful Orders"
+            "successfulOrders": "Successful Orders",
+            "schedules": "Machine Schedule"
         },
         "modals": {
             "yes": "Yes",
@@ -196,7 +247,9 @@
             "zipCode": "Zipcode",
             "city": "City",
             "country": "Country",
-            "projectname": "Projectname"
+            "projectname": "Projectname",
+            "shownStartDate": "Start Date",
+            "shownEndDate": "End Date"
         }
     },
     "userList": {
@@ -204,7 +257,8 @@
         "spinnerLoadingText": "Loading Users",
         "paginationLabel": "Jump to Page",
         "filterLabel": {
-            "roles": "Filter by Role:"
+            "roles": "Filter by Role:",
+            "search": "Search for:"
         },
         "buttons": {
             "deleteLabel": "Delete",
@@ -228,7 +282,11 @@
         "paginationLabel": "Jump to Page",
         "filterLabel": {
             "machines": "Filter by Machine Type:",
-            "status": "Filter by Status:"
+            "status": "Filter by Status:",
+            "fablabs": "Filter by Fablab:",
+            "startDay": "Filter by scheduled Start Day:",
+            "endDay": "Filter by scheduled End Day:",
+            "search": "Search for:"
         },
         "spinnerLoadingText": "Loading Orders",
         "buttons": {
@@ -243,6 +301,9 @@
             "deleteHeader": "Do you really want to delete this order?",
             "deleteQuestion": "Are you sure you want to delete",
             "deleteQuestion2": "?"
+        },
+        "messages": {
+            "datePicker": "Start Date is greater than End Date"
         }
     },
     "address": {
@@ -280,7 +341,14 @@
             "fileUpload": "File Upload",
             "files": "Current Files",
             "file": "File",
-            "latestVersion": "Latest Version"
+            "latestVersion": "Latest Version",
+            "datePickerStart": "Start Day of Production",
+            "datePickerEnd": "End Day of Production",
+            "timePickerStart": "Start Time on Start Day",
+            "timePickerEnd": "End Time on End Day",
+            "machineSchedule": "Machine Schedule",
+            "startDate": "Start Date",
+            "endDate": "End Date"
         },
         "modals": {
             "ok": "Ok",
@@ -306,7 +374,9 @@
             "selectedMachine": "Machine is required",
             "unnamedFablab": "Unnamed FabLab",
             "author": "Author name is required",
-            "content": "Text is required"
+            "content": "Text is required",
+            "datePicker": "Start Date is greater than End Date",
+            "timePicker": "The Start and End Time is wrong. Please check the Start and End Date and Times"
         }
     },
     "userDetail": {
@@ -354,7 +424,8 @@
             "files": "Files",
             "file": "File",
             "addressTitle": "Shippingaddress",
-            "latestVersion": "Latest Version"
+            "latestVersion": "Latest Version",
+            "scheduledFor": "Scheduled for"
         },
         "modals": {
             "ok": "Yes",
@@ -438,7 +509,9 @@
         "Lastname": "Lastname",
         "Role": "Role",
         "Active": "Active",
-        "Successful Orders": "Successful Orders"
+        "Successful Orders": "Successful Orders",
+        "Schedule Start Date": "Scheduled Start Date",
+        "Schedule End Date": "Scheduled End Date"
     },
     "loginModal": {
         "title": "Login",

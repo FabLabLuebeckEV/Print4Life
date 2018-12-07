@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-dev.millingmachines"}],"uuid":"291a25b5196243da9c69b31652fe0d38"}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-dev.millingmachines"},{"v":2,"key":{"_fts":"text","_ftsx":1},"name":"text","ns":"iot-fablab-dev.millingmachines","background":true,"weights":{"deviceName":1,"manufacturer":1},"default_language":"english","language_override":"language","textIndexVersion":3}],"uuid":"fb1a39dd3a6d43f6b1b91ffd1018b2cd"}

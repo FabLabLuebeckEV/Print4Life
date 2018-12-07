@@ -6,12 +6,25 @@
 </router-outlet>
 <div *ngIf="listView">
   <div class="row">
-    <div class="col-md-6 offset-3">
+    <div class="col-md-6 offset-1">
       <label for="roles">{{translationFields.filterLabel.roles}}</label>
       <ng-select [multiple]="true" [loading]="loadingRoles" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.validRoles
         bindLabel="roles" [(ngModel)]="filter.shownRoles" id="roles" (change)="_changeHandlerRoles($event)" (close)="init()"
         (remove)="init()" (clear)="init()" name="roles" #roles="ngModel">
       </ng-select>
+    </div>
+    <div class="col-md-3">
+      <form>
+        <label for="search">{{translationFields.filterLabel.search}}</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search" #search="ngModel">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary" (click)="searchInit()" type="submit">
+              <fa-icon [icon]="searchIcon"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
   <div class="row">

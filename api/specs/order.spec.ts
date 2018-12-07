@@ -5,7 +5,7 @@ import { getTestUserToken, newTimeout } from './global.spec';
 
 
 const endpoint = config.baseUrlBackend;
-const testOrder = {
+export const testOrder = {
   projectname: 'unscheinBar',
   comments: [],
   editor: '12345678901234567890aaaa',
@@ -129,7 +129,7 @@ describe('Order Controller', () => {
       json: true,
       body: testBody
     }, (error, response) => {
-      response.body.order.owner = 'aaa123456789012345678902';
+      response.body.order.projectname = 'updated';
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'PUT',
@@ -140,7 +140,7 @@ describe('Order Controller', () => {
         expect(response.statusCode).toEqual(200);
         expect(response.body.order).toBeDefined();
 
-        expect(response.body.order.owner).toEqual('aaa123456789012345678902');
+        expect(response.body.order.projectname).toEqual('updated');
 
         expect(response.body.order.token).toBeDefined();
         expect(response.body.order.editor).toEqual(testBody.editor);
@@ -213,3 +213,5 @@ describe('Order Controller', () => {
     });
   });
 });
+
+export default testOrder;

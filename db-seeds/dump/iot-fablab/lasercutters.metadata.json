@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-dev.lasercutters"}],"uuid":"dc2b1050d8164ae4bd6ae1b88ce7036d"}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"iot-fablab-dev.lasercutters"},{"v":2,"key":{"_fts":"text","_ftsx":1},"name":"text","ns":"iot-fablab-dev.lasercutters","background":true,"weights":{"deviceName":1,"manufacturer":1},"default_language":"english","language_override":"language","textIndexVersion":3}],"uuid":"ad18698774af480e80471eca487c415e"}

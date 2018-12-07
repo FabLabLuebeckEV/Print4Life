@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { routes } from '../config/routes';
+import { Schedule } from '../models/schedule.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,21 +43,40 @@ export class MachineService {
     return machine.trim();
   }
 
-  public getAll(machineType, limit?, skip?) {
+  public getAll(machineType: string, query?: any, limit?: number, skip?: number) {
     const type = this.camelCaseTypes(machineType);
+    let params = new HttpParams();
+    if (query) {
+      return this.search(machineType, query, limit, skip);
+    }
     if (limit >= 0 && skip >= 0) {
-      let params = new HttpParams();
-      params = params.append('limit', limit);
-      params = params.append('skip', skip);
+      params = params.append('limit', limit.toString());
+      params = params.append('skip', skip.toString());
+    }
+    if (limit >= 0 && skip >= 0 || query) {
       return this.http.get(`${this.rootPath}/${type}s`, { params: params }).toPromise();
     } else {
       return this.http.get(`${this.rootPath}/${type}s`).toPromise();
     }
   }
 
-  public count(machineType) {
+  public search(type: string, query: any, limit?: number, skip?: number) {
+    const body = {
+      query: query,
+      limit: undefined,
+      skip: undefined
+    };
+
+    if (limit >= 0 && skip >= 0) {
+      body.limit = limit;
+      body.skip = skip;
+    }
+    return this.http.post(`${this.rootPath}/${type}s/${routes.paths.backend.machines.search}`, body).toPromise();
+  }
+
+  public count(machineType: string, query?: any) {
     const type = this.camelCaseTypes(machineType);
-    return this.http.get(`${this.rootPath}/${type}s/${routes.paths.backend.machines.count}`).toPromise();
+    return this.http.post(`${this.rootPath}/${type}s/${routes.paths.backend.machines.count}`, { query }).toPromise();
   }
 
   public async countSuccessfulOrders(machineType: string, id: string): Promise<any> {
@@ -99,6 +119,39 @@ export class MachineService {
   public get(machineType, id) {
     const type = this.camelCaseTypes(machineType);
     return this.http.get(`${this.rootPath}/${type}s/${id}`).toPromise();
+  }
+
+  public getSchedules(machineType: string, id: string, query?: {
+    startDay: { year: number, month: number, day: number },
+    endDay: { year: number, month: number, day: number }
+  }
+  ): Promise<Object> {
+    const type = this.camelCaseTypes(machineType);
+    if (query) {
+      if (!query.startDay || !query.startDay.year || !query.startDay.month || !query.startDay.day
+      ) {
+        query.startDay = { year: 1990, month: 1, day: 1 };
+      }
+      if (!query.endDay || !query.endDay.year || !query.endDay.month || !query.endDay.day) {
+        query.endDay = { year: 9999, month: 12, day: 31 };
+      }
+      let params = new HttpParams();
+      params = params.append('startDay', `${query.startDay.year}-${query.startDay.month}-${query.startDay.day}`);
+      params = params.append('endDay', `${query.endDay.year}-${query.endDay.month}-${query.endDay.day}`);
+      return this.http.get(`${this.rootPath}/${type}s/${id}/schedules`, { params: params }).toPromise();
+    } else {
+      return this.http.get(`${this.rootPath}/${type}s/${id}/schedules`).toPromise();
+    }
+  }
+
+  public sortSchedulesByStartDate(schedules: Array<Schedule>) {
+    return schedules.sort((a: Schedule, b: Schedule) => {
+      if (a.startDate >= b.startDate) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
   }
 
 }

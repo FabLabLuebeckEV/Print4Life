@@ -119,8 +119,7 @@ const machineService = new MachineService();
 }
  */
 function getAll (req, res) {
-  req.query = validatorService.checkQuery(req.query);
-  lasercutterService.getAll(req.query.limit, req.query.skip).then((lasercutters) => {
+  lasercutterService.getAll(undefined, req.query.limit, req.query.skip).then((lasercutters) => {
     if ((lasercutters && lasercutters.length === 0) || !lasercutters) {
       logger.info('GET Lasercutters with no result');
       res.status(204).send();
@@ -138,7 +137,155 @@ function getAll (req, res) {
 }
 
 /**
- * @api {get} /api/v1/machines/lasercutters/count Counts the Lasercutters
+ * @api {post} /api/v1/lasercutters/search Request the list of lasercutters by a given query
+ * @apiName SearchLasercutters
+ * @apiVersion 1.0.0
+ * @apiGroup Lasercutters
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam (Query String) limit is the limit of objects to get
+ * @apiParam (Query String) skip is the number of objects to skip
+ * @apiSuccess {Array} users an array of lasercutter objects
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "lasercutters": [
+        {
+            "_id": "5b51c25c1058dc2189272724",
+            "fablabId": 2,
+            "type": "lasercutter",
+            "deviceName": "Helix",
+            "manufacturer": "Epilog",
+            "laserTypes": [
+                {
+                    "_id": "5b51c25c1058dc2189272723",
+                    "laserType": "CO2",
+                    "id": 1
+                }
+            ],
+            "camSoftware": "",
+            "workspaceX": 600,
+            "workspaceY": 450,
+            "workspaceZ": 350,
+            "laserPower": "40",
+            "comment": "",
+            "__v": 0
+        },
+        {
+            "_id": "5b51c25c1058dc2189272728",
+            "fablabId": 4,
+            "type": "lasercutter",
+            "deviceName": "MARS-130",
+            "manufacturer": "Thunderlaser",
+            "laserTypes": [
+                {
+                    "_id": "5b51c25c1058dc2189272727",
+                    "laserType": "CO2",
+                    "id": 1
+                }
+            ],
+            "camSoftware": "RD-Works",
+            "workspaceX": 1500,
+            "workspaceY": 900,
+            "workspaceZ": 250,
+            "laserPower": "100",
+            "comment": "",
+            "__v": 0
+        }
+    ]
+}
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 206 Partial Content
+{
+    "lasercutters": [
+        {
+            "_id": "5b51c25c1058dc2189272724",
+            "fablabId": 2,
+            "type": "lasercutter",
+            "deviceName": "Helix",
+            "manufacturer": "Epilog",
+            "laserTypes": [
+                {
+                    "_id": "5b51c25c1058dc2189272723",
+                    "laserType": "CO2",
+                    "id": 1
+                }
+            ],
+            "camSoftware": "",
+            "workspaceX": 600,
+            "workspaceY": 450,
+            "workspaceZ": 350,
+            "laserPower": "40",
+            "comment": "",
+            "__v": 0
+        },
+        {
+            "_id": "5b51c25c1058dc2189272728",
+            "fablabId": 4,
+            "type": "lasercutter",
+            "deviceName": "MARS-130",
+            "manufacturer": "Thunderlaser",
+            "laserTypes": [
+                {
+                    "_id": "5b51c25c1058dc2189272727",
+                    "laserType": "CO2",
+                    "id": 1
+                }
+            ],
+            "camSoftware": "RD-Works",
+            "workspaceX": 1500,
+            "workspaceY": 900,
+            "workspaceZ": 250,
+            "laserPower": "100",
+            "comment": "",
+            "__v": 0
+        }
+    ]
+}
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ * {
+ *   error: Error while trying to search for a specific lasercutter with query: {...},
+ *   stack: {...}
+ * }
+*/
+function search (req, res) {
+  req.body.query = validatorService.checkQuery(req.body.query);
+  lasercutterService.getAll(req.body.query, req.body.limit, req.body.skip).then((lasercutters) => {
+    if (lasercutters.length === 0) {
+      logger.info(`POST search for lasercutters with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+      res.status(204).send({ lasercutters });
+    } else if (req.body.limit && req.body.skip) {
+      logger.info(`POST search for lasercutters with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds partial results ${JSON.stringify(lasercutters)}`);
+      res.status(206).send({ lasercutters });
+    } else {
+      logger.info(`POST search for lasercutters with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds results ${JSON.stringify(lasercutters)}`);
+      res.status(200).send({ lasercutters });
+    }
+  }).catch((err) => {
+    logger.error({
+      error: `Error while trying to search for a specific lasercutter with query: ${JSON.stringify(req.body.query)}`,
+      stack: err
+    });
+    res.status(500).send({
+      error: `Error while trying to search for a specific lasercutter with query: ${JSON.stringify(req.body.query)}`,
+      stack: err
+    });
+  });
+}
+
+/**
+ * @api {post} /api/v1/machines/lasercutters/count Counts the Lasercutters
  * @apiName CountLasercutter
  * @apiVersion 1.0.0
  * @apiGroup Lasercutters
@@ -154,7 +301,8 @@ function getAll (req, res) {
  *
  */
 function count (req, res) {
-  lasercutterService.count().then((count) => {
+  req.body.query = validatorService.checkQuery(req.body.query);
+  lasercutterService.count(req.body.query).then((count) => {
     logger.info(`Count Lasercutters with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
@@ -662,6 +810,82 @@ function update (req, res) {
   }
 }
 
+/**
+ * @api {get} /api/v1/machines/lasercutters/:id/schedules Gets the schedules of a specific lasercutter
+ * @apiName getScheduleOfLasercutters
+ * @apiVersion 1.0.0
+ * @apiGroup Lasercutters
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {String} id is the id of the lasercutter (required)
+ * @apiParam {String} startDay is the start day in this format YYYY-MM-DD (optional query param)
+ * @apiParam {String} endDay is the end day in this format YYYY-MM-DD (optional query param)
+ *
+ * @apiSuccess {Array} schedules an array containing the schedule objects
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "schedules": [
+        {
+            "machine": {
+                "type": "lasercutter",
+                "id": "5bfe88759d1139444a95aa47"
+            },
+            "_id": "5bfe887e9d1139444a95aa7c",
+            "startDate": "2018-11-29T12:22:12.076Z",
+            "endDate": "2018-11-29T12:22:12.076Z",
+            "fablabId": "5b453ddb5cf4a9574849e98a",
+            "orderId": "5bfe88759d1139444a95aa48",
+            "__v": 0
+        },
+        {
+            "machine": {
+                "type": "lasercutter",
+                "id": "5bfe88759d1139444a95aa47"
+            },
+            "_id": "5bfe888e10fc87448a4a76b1",
+            "startDate": "2018-11-28T12:22:34.777Z",
+            "endDate": "2018-11-28T12:22:34.777Z",
+            "fablabId": "5b453ddb5cf4a9574849e98a",
+            "orderId": "5bfe888a10fc87448a4a768a",
+            "__v": 0
+        }
+    ]
+}
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+
+ * @apiError 500 An Error occured
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ *     {
+ *       "error": "Error while trying to get schedules of Lasercutter!"
+ *     }
+ *
+ *
+ */
+async function getSchedules (req, res) {
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    logger.error({ error: checkId.error });
+    res.status(checkId.status).send({ error: checkId.error });
+  } else {
+    try {
+      const schedules = await machineService.getSchedules(req.params.id, req.query);
+      logger.info(`GET schedules for Lasercutter with result ${JSON.stringify(schedules)}`);
+      if (schedules.length) {
+        res.status(200).send({ schedules });
+      } else {
+        res.status(204).send();
+      }
+    } catch (err) {
+      const msg = { error: 'Error while trying to get schedules of Lasercutter!' };
+      logger.error({ msg, stack: err.stack });
+      res.status(500).send(msg);
+    }
+  }
+}
+
 export default {
-  getAll, create, getLaserTypes, deleteById, get, update, count, countSuccessfulOrders
+  getAll, create, getLaserTypes, deleteById, get, update, count, countSuccessfulOrders, getSchedules, search
 };

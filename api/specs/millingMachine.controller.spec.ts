@@ -2,6 +2,7 @@ import 'jasmine';
 import * as request from 'request';
 import config from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
+import testSchedule from './schedule.controller.spec';
 
 const endpoint = `${config.baseUrlBackend}machines/millingMachines`;
 
@@ -66,7 +67,7 @@ describe('Milling Machine Controller', () => {
   // });
 
   it('counts milling machines', (done) => {
-    request.get(`${endpoint}/count`, {
+    request.post(`${endpoint}/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {
@@ -280,5 +281,60 @@ describe('Milling Machine Controller', () => {
       expect(response.statusCode).toEqual(400);
       done();
     });
+  });
+
+  it('get schedules', (done) => {
+    request.post(`${endpoint}/`,
+      {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        body: testMillingMachine,
+        json: true
+      }, (error, response) => {
+        const { millingMachine } = { millingMachine: response.body.millingMachine };
+        expect(response.statusCode).toEqual(201);
+        expect(millingMachine).toBeDefined();
+        expect(millingMachine.deviceName).toEqual(testMillingMachine.deviceName);
+        expect(millingMachine.type).toEqual('millingMachine');
+        expect(millingMachine.manufacturer).toEqual(testMillingMachine.manufacturer);
+        expect(millingMachine.fablabId).toEqual(testMillingMachine.fablabId);
+        const testBody = JSON.parse(JSON.stringify(testSchedule));
+        const startDate = new Date();
+        testBody.startDate = startDate;
+        testBody.endDate = startDate;
+        testBody.endDate.setMinutes(startDate.getMinutes() + 1);
+        request({
+          uri: `${config.baseUrlBackend}schedules/`,
+          method: 'POST',
+          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+          json: true,
+          body: testBody
+        }, (error, response) => {
+          const scheduleResult = response.body.schedule;
+          expect(response.statusCode).toEqual(201);
+          expect(scheduleResult).toBeDefined();
+          expect(new Date(scheduleResult.startDate)).toEqual(testBody.startDate);
+          expect(new Date(scheduleResult.endDate)).toEqual(testBody.endDate);
+          expect(scheduleResult.orderId).toEqual(testBody.orderId);
+          expect(scheduleResult.fablabId).toEqual(testBody.fablabId);
+          expect(scheduleResult.machine).toBeDefined();
+          expect(scheduleResult.machine.type).toEqual(testBody.machine.type);
+          expect(scheduleResult.machine.id).toEqual(testBody.machine.id);
+          request.get(`${endpoint}/${millingMachine._id}/schedules`,
+            {
+              headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+              json: true
+            }, (error, response) => {
+              if (response.statusCode && response.statusCode !== 204) {
+                const { schedules } = { schedules: response.body.schedules };
+                expect(schedules).toBeDefined();
+                expect(response.statusCode).toEqual(200);
+                expect(schedules.length).toBeGreaterThan(0);
+              } else {
+                expect(response.statusCode).toEqual(204);
+              }
+              done();
+            });
+        });
+      });
   });
 });
