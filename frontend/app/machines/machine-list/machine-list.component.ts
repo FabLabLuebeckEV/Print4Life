@@ -393,8 +393,6 @@ export class MachineListComponent implements OnInit {
         machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
       }
 
-      console.log(JSON.stringify(query, null, 2));
-
       machineTypes.forEach(async (type) => {
         promises.push(new Promise(async resolve => {
           countObj = await this.machineService.count(type as string, query);
