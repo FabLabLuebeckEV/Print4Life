@@ -14,14 +14,14 @@ export class Printer3DService implements ModelService {
    * @param skip is the amount of items to skip (counted from the beginning)
    * @returns a promise with the results
    */
-  public getAll (limit?: string, skip?: string) {
+  public getAll (query?: any, limit?: string, skip?: string) {
     let l: Number;
     let s: Number;
     if (limit && skip) {
       l = Number.parseInt(limit, 10);
       s = Number.parseInt(skip, 10);
     }
-    return this.machineService.getMachineType(this.machineType, l, s);
+    return this.machineService.getMachineType(this.machineType, query, l, s);
   }
 
   /**
@@ -62,10 +62,11 @@ export class Printer3DService implements ModelService {
 
   /**
    * This method counts all 3d printer
+   * @param query is a mongodb query expression
    * @returns a promise with the result
    */
-  public count () {
-    return this.machineService.count(this.machineType);
+  public count (query: any) {
+    return this.machineService.count(this.machineType, query);
   }
 }
 

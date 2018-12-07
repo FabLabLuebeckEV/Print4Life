@@ -11,13 +11,27 @@
                 <fa-icon [icon]="plusIcon"></fa-icon>
             </button>
         </div>
-        <div class="col-md-6 offset-1">
-            <label for="status">{{translationFields.filterLabel}}</label>
+        <div class="col-md-6">
+            <label for="status">{{translationFields.filterLabel.type}}</label>
             <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false"
                 [items]=filter.machineTypes bindLabel="machineTypeFilter" [(ngModel)]="filter.shownMachineTypes" id="machineTypeFilter"
                 (close)="filterHandler()" (remove)="filterHandler()" (clear)="filterHandler()" (change)="changeFilterHandler($event)"
                 name="machineTypeFilter" #machineTypeFilter="ngModel">
             </ng-select>
+        </div>
+        <div class="col-md-3">
+            <form>
+                <label for="search">{{translationFields.filterLabel.search}}</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search"
+                        #search="ngModel">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" (click)="searchInit()" type="submit">
+                            <fa-icon [icon]="searchIcon"></fa-icon>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     <div class="row">
@@ -43,9 +57,8 @@
                 </div>
             </form>
             <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems"
-                [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="filterHandler()"
-                [maxSize]="paginationObj.maxSize" [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks"
-                aria-label="Default pagination"></ngb-pagination>
+                [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="init()" [maxSize]="paginationObj.maxSize"
+                [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks" aria-label="Default pagination"></ngb-pagination>
         </div>
     </footer>
 </div>

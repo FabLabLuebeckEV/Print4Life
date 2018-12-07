@@ -14,6 +14,7 @@ const millingMachineService = new MillingMachineService();
  * @apiGroup MillingMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam (Query String) query is a mongodb query expression
  * @apiParam (Query String) limit is the limit of objects to get
  * @apiParam (Query String) skip is the number of objects to skip
  * @apiSuccess {Array} millingMachines an array of milling machine objects
@@ -102,7 +103,7 @@ const millingMachineService = new MillingMachineService();
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
   millingMachineService
-    .getAll(req.query.limit, req.query.skip).then((millingMachines) => {
+    .getAll(req.query.query, req.query.limit, req.query.skip).then((millingMachines) => {
       if ((millingMachines && millingMachines.length === 0) || !millingMachines) {
         logger.info('GET Milling Machines with no result');
         res.status(204).send();
@@ -121,7 +122,138 @@ function getAll (req, res) {
 }
 
 /**
- * @api {get} /api/v1/machines/millingMachines/count Counts the Milling Machines
+ * @api {post} /api/v1/millingMachines/search Request the list of milling machines by a given query
+ * @apiName SearchMillingMachines
+ * @apiVersion 1.0.0
+ * @apiGroup MillingMachines
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam (Query String) limit is the limit of objects to get
+ * @apiParam (Query String) skip is the number of objects to skip
+ * @apiSuccess {Array} users an array of milling machine objects
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "millingMachines": [
+        {
+            "_id": "5b51c25c1058dc218927272e",
+            "fablabId": 3,
+            "type": "millingMachineService
+          ",
+            "deviceName": "High-Z S-720T",
+            "manufacturer": "CNC-Step",
+            "camSoftware": "",
+            "workspaceX": 720,
+            "workspaceY": 420,
+            "workspaceZ": 110,
+            "movementSpeed": 0,
+            "stepSize": null,
+            "comment": "",
+            "__v": 0
+        },
+        {
+            "_id": "5b51c25c1058dc218927272d",
+            "fablabId": 2,
+            "type": "millingMachineService
+          ",
+            "deviceName": "PRSALPHA",
+            "manufacturer": "SHOPBOT",
+            "camSoftware": "",
+            "workspaceX": 2550,
+            "workspaceY": 1500,
+            "workspaceZ": 200,
+            "movementSpeed": 12000,
+            "stepSize": null,
+            "comment": "",
+            "__v": 0
+        }
+    ]
+}
+
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 206 Partial Content
+{
+    "millingMachines": [
+        {
+            "_id": "5b51c25c1058dc218927272e",
+            "fablabId": 3,
+            "type": "millingMachineService
+          ",
+            "deviceName": "High-Z S-720T",
+            "manufacturer": "CNC-Step",
+            "camSoftware": "",
+            "workspaceX": 720,
+            "workspaceY": 420,
+            "workspaceZ": 110,
+            "movementSpeed": 0,
+            "stepSize": null,
+            "comment": "",
+            "__v": 0
+        },
+        {
+            "_id": "5b51c25c1058dc218927272d",
+            "fablabId": 2,
+            "type": "millingMachineService
+          ",
+            "deviceName": "PRSALPHA",
+            "manufacturer": "SHOPBOT",
+            "camSoftware": "",
+            "workspaceX": 2550,
+            "workspaceY": 1500,
+            "workspaceZ": 200,
+            "movementSpeed": 12000,
+            "stepSize": null,
+            "comment": "",
+            "__v": 0
+        }
+    ]
+}
+ * @apiError 500 Server Error
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ * {
+ *   error: Error while trying to search for a specific milling machine with query: {...},
+ *   stack: {...}
+ * }
+*/
+function search (req, res) {
+  req.body.query = validatorService.checkQuery(req.body.query);
+  millingMachineService.getAll(req.body.query, req.body.limit, req.body.skip).then((millingMachines) => {
+    if (millingMachines.length === 0) {
+      logger.info(`POST search for milling machines with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+      res.status(204).send({ millingMachines });
+    } else if (req.body.limit && req.body.skip) {
+      logger.info(`POST search for milling machines with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds partial results ${JSON.stringify(millingMachines)}`);
+      res.status(206).send({ millingMachines });
+    } else {
+      logger.info(`POST search for milling machines with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds results ${JSON.stringify(millingMachines)}`);
+      res.status(200).send({ millingMachines });
+    }
+  }).catch((err) => {
+    logger.error({
+      error: 'Error while trying to search for a specific milling machine with query: '
+        + `${JSON.stringify(req.body.query)}`,
+      stack: err
+    });
+    res.status(500).send({
+      error: 'Error while trying to search for a specific milling machine with query: '
+        + `${JSON.stringify(req.body.query)}`,
+      stack: err
+    });
+  });
+}
+
+/**
+ * @api {post} /api/v1/machines/millingMachines/count Counts the Milling Machines
  * @apiName CountMillingMachine
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines
@@ -137,8 +269,9 @@ function getAll (req, res) {
  *
  */
 function count (req, res) {
+  req.body.query = validatorService.checkQuery(req.body.query);
   millingMachineService
-    .count().then((count) => {
+    .count(req.body.query).then((count) => {
       logger.info(`GET count milling machines with result ${JSON.stringify(count)}`);
       res.status(200).send({ count });
     }).catch((err) => {
@@ -688,5 +821,6 @@ export default {
   update,
   count,
   countSuccessfulOrders,
-  getSchedules
+  getSchedules,
+  search
 };

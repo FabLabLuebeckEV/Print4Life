@@ -67,7 +67,7 @@ describe('Milling Machine Controller', () => {
   // });
 
   it('counts milling machines', (done) => {
-    request.get(`${endpoint}/count`, {
+    request.post(`${endpoint}/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {

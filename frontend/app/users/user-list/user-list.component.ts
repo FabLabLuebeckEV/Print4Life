@@ -28,10 +28,12 @@ export class UserListComponent implements OnInit {
   private visibleUsers: Array<TableItem> = [];
   spinnerConfig: SpinnerConfig;
   jumpArrow: Icon;
+  searchIcon: Icon;
   translationFields = {
     paginationLabel: '',
     filterLabel: {
-      roles: ''
+      roles: '',
+      search: ''
     },
     spinnerLoadingText: '',
     buttons: {
@@ -57,7 +59,8 @@ export class UserListComponent implements OnInit {
     validRoles: [],
     originalRoles: [],
     selectedRoles: [],
-    shownRoles: []
+    shownRoles: [],
+    searchTerm: ''
   };
   private config: any;
   paginationObj: any = {
@@ -83,6 +86,7 @@ export class UserListComponent implements OnInit {
   ) {
     this.config = this.configService.getConfig();
     this.jumpArrow = this.config.icons.forward;
+    this.searchIcon = this.config.icons.search;
     this.router.events.subscribe(() => {
       const route = this.location.path();
       if (route === `/${routes.paths.frontend.users.root}` && !this.listView) {
@@ -121,6 +125,12 @@ export class UserListComponent implements OnInit {
     this._loadUsers();
   }
 
+  searchInit() {
+    this.paginationObj.page = 1;
+    this.paginationObj.totalItems = 0;
+    this.init();
+  }
+
   private async _loadUsers(): Promise<TableItem[]> {
     const arr = [];
     this.loadingUsers = true;
@@ -131,18 +141,25 @@ export class UserListComponent implements OnInit {
     let query;
     if (this.filter.selectedRoles.length > 0) {
       query = {
-        $or: []
+        $and: [
+          { $or: [] }
+        ]
       };
       this.filter.selectedRoles.forEach((role) => {
-        query.$or.push({ 'role.role': role });
+        query.$and[0].$or.push({ 'role.role': role });
       });
     } else {
       query = {
-        $nor: []
+        $and: [
+          { $nor: [] }
+        ]
       };
       this.filter.originalRoles.forEach((role) => {
-        query.$nor.push({ role: { role } }); /// role role im backend
+        query.$and[0].$nor.push({ role: { role } }); /// role role im backend
       });
+    }
+    if (this.filter.searchTerm) {
+      query.$and[1] = { $text: { $search: this.filter.searchTerm } };
     }
 
     countObj = await this.userService.count(query);
@@ -304,7 +321,8 @@ export class UserListComponent implements OnInit {
       this.translationFields = {
         paginationLabel: translations['userList'].paginationLabel,
         filterLabel: {
-          roles: translations['userList']['filterLabel'].roles
+          roles: translations['userList']['filterLabel'].roles,
+          search: translations['userList']['filterLabel'].search
         },
         spinnerLoadingText: translations['userList'].spinnerLoadingText,
         buttons: {

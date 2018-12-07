@@ -26,14 +26,17 @@ export class MachineListComponent implements OnInit {
     originMachineTypes: [], // origin for backend containing all machine types
     machineTypes: [], // shown machine types after translation to select in filter
     shownMachineTypes: [], // selected and translated machine types in filter
-    selectedMachineTypes: [] // selected machine types but in origin backend language
+    selectedMachineTypes: [], // selected machine types but in origin backend language
+    searchTerm: ''
   };
   displayedMachines: Array<TableItem> = [];
   listView: Boolean;
   successList: Boolean;
   loadingMachineTypes: Boolean;
+  loadingMachines: Boolean;
   plusIcon: Icon;
   jumpArrow: Icon;
+  searchIcon: Icon;
   newLink: String;
   spinnerConfig: SpinnerConfig;
   userIsAdmin: Boolean;
@@ -71,7 +74,10 @@ export class MachineListComponent implements OnInit {
   };
   translationFields = {
     paginationLabel: '',
-    filterLabel: '',
+    filterLabel: {
+      type: '',
+      search: ''
+    },
     spinnerLoadingText: '',
     buttons: {
       deleteLabel: '',
@@ -101,6 +107,7 @@ export class MachineListComponent implements OnInit {
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.plusIcon = this.config.icons.add;
     this.jumpArrow = this.config.icons.forward;
+    this.searchIcon = this.config.icons.search;
     this.newLink = `./${routes.paths.frontend.machines.create}`;
     this.router.events.subscribe(() => {
       const route = this.location.path();
@@ -129,11 +136,19 @@ export class MachineListComponent implements OnInit {
       });
       await this._loadMachineTypes();
       this._translate();
-      this._init();
+      this.init();
     }
   }
 
   // Event handler
+
+  searchInit() {
+    this.changeFilterHandler(this.filter.shownMachineTypes);
+    this.paginationObj.page = 1;
+    this.paginationObj.totalItems = 0;
+    this.filterHandler();
+    this.init();
+  }
 
   changeFilterHandler(event) {
     this.filter.selectedMachineTypes = [];
@@ -159,12 +174,9 @@ export class MachineListComponent implements OnInit {
   }
 
   async filterHandler() {
-    const copy = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
-    if (copy.length > 0) {
-      this.displayedMachines = copy;
-    } else {
-      this.displayedMachines = undefined;
-    }
+    this.paginationObj.page = 1;
+    this.paginationObj.totalItems = 0;
+    this.init();
   }
 
   eventHandler(event) {
@@ -191,7 +203,7 @@ export class MachineListComponent implements OnInit {
             machine.obj[`Device Type`].label, machine.obj.id.label).then(async (elem) => {
               // this.displayedMachines.splice(machineIdx, 1);
               // XXX: Ugly Hack to trigger update of table component
-              this.displayedMachines[machineIdx] = await this._createTableItem(elem[machine.obj[`Device Type`].label]);
+              this.displayedMachines[machineIdx] = await this._createTableItem(elem[machine.obj[`Device Type`].label]) as TableItem;
               const copy = JSON.parse(JSON.stringify(this.displayedMachines));
               this.displayedMachines = copy;
             });
@@ -275,9 +287,9 @@ export class MachineListComponent implements OnInit {
   }
 
 
-  private async _init() {
+  public async init() {
     const arr = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
-    if (arr.length > 0) {
+    if (arr && arr.length > 0) {
       this.displayedMachines = JSON.parse(JSON.stringify(arr));
     } else {
       this.displayedMachines = undefined;
@@ -285,51 +297,88 @@ export class MachineListComponent implements OnInit {
   }
 
   private async _loadMachinesByTypes(machineTypes: Array<String>) {
-    this.spinner.show();
-    this.genericService.scrollIntoView(this.spinnerContainerRef);
-    const machines = [];
-    const arr = [];
-    let countObj;
-    let totalItems = 0;
-    let maxPerPage = this.paginationObj.perPage;
+    if (!this.loadingMachines) {
+      this.loadingMachines = true;
+      this.spinner.show();
+      this.genericService.scrollIntoView(this.spinnerContainerRef);
+      const machines = [];
+      const arr = [];
+      let promises = [];
+      let countObj;
+      let totalItems = 0;
+      let maxPerPage = this.paginationObj.perPage;
 
-    for (let i = 0; i < machineTypes.length; i++) {
-      machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
-    }
-
-    for (const type of machineTypes) {
-      countObj = await this.machineService.count(type);
-      this.paginationObj.machines[`${type}`].selected = true;
-      this.paginationObj.machines[`${type}`].total = countObj.count;
-      if (this.paginationObj.page === 1) {
-        this.paginationObj.machines[`${type}`].lastItem = 0;
+      for (let i = 0; i < machineTypes.length; i++) {
+        machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
       }
-      totalItems += countObj.count;
-    }
 
-    if (totalItems !== this.paginationObj.totalItems) {
-      this.paginationObj.totalItems = totalItems;
-    }
+      machineTypes.forEach(async (type) => {
+        promises.push(new Promise(async resolve => {
+          const query = this.filter.searchTerm ? { $text: { $search: this.filter.searchTerm } } : undefined;
+          countObj = await this.machineService.count(type as string, query);
+          this.paginationObj.machines[`${type}`].selected = true;
+          this.paginationObj.machines[`${type}`].total = countObj.count;
+          if (this.paginationObj.page === 1) {
+            this.paginationObj.machines[`${type}`].lastItem = 0;
+          }
+          resolve(countObj.count);
+        }));
+      });
 
-    for (const type of machineTypes) {
-      if (this.paginationObj.machines[`${type}`].selected &&
-        this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0) {
-        const resMach = await this.machineService.getAll(type, maxPerPage, this.paginationObj.machines[`${type}`].lastItem);
-        if (resMach) {
-          maxPerPage -= resMach[`${type}s`].length;
-          this.paginationObj.machines[`${type}`].lastItem += resMach[`${type}s`].length;
-          machines.push(resMach[`${type}s`]);
+      let result = await Promise.all(promises);
+      promises = [];
+      if (result && result.length) {
+        result.forEach((c) => {
+          totalItems += c;
+        });
+      }
+
+      if (totalItems !== this.paginationObj.totalItems) {
+        this.paginationObj.totalItems = totalItems;
+      }
+
+      for (const type of machineTypes) {
+        machines[`${type}`] = await this._resolveMachines(type, maxPerPage);
+      }
+
+      for (const type of Object.keys(machines)) {
+        if (this.paginationObj.machines[`${type}`].selected &&
+          this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0
+          && machines[`${type}`]) {
+          for (const machine of machines[`${type}`]) {
+            if (this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0) {
+              maxPerPage -= 1;
+              this.paginationObj.machines[`${type}`].lastItem += 1;
+              promises.push(this._createTableItem(machine));
+            }
+          }
         }
       }
-    }
-
-    for (const type of Object.keys(machines)) {
-      for (const elem of machines[type]) {
-        arr.push(await this._createTableItem(elem));
+      result = await Promise.all(promises);
+      if (result && result.length) {
+        result.forEach((r) => {
+          arr.push(r);
+        });
       }
+
+      this.spinner.hide();
+      this.loadingMachines = false;
+      return arr;
     }
-    this.spinner.hide();
-    return arr;
+  }
+
+  private async _resolveMachines(type: String, maxPerPage: number) {
+    const query = this.filter.searchTerm ? { $text: { $search: this.filter.searchTerm } } : undefined;
+    if (this.paginationObj.machines[`${type}`].selected &&
+      this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0) {
+      const resMach = await this.machineService.getAll(type as string,
+        query, maxPerPage, this.paginationObj.machines[`${type}`].lastItem);
+      if (resMach && resMach[`${type}s`]) {
+        return resMach[`${type}s`];
+      }
+    } else {
+      return [];
+    }
   }
 
   private _translate() {
@@ -357,7 +406,10 @@ export class MachineListComponent implements OnInit {
 
       this.translationFields = {
         paginationLabel: translations['machineList'].paginationLabel,
-        filterLabel: translations['machineList'].filterLabel,
+        filterLabel: {
+          type: translations['machineList'].filterLabel.type,
+          search: translations['machineList'].filterLabel.search,
+        },
         spinnerLoadingText: translations['machineList'].spinnerLoadingText,
         buttons: {
           deleteLabel: translations['machineList'].buttons.deleteLabel,

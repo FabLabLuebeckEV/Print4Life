@@ -9,6 +9,9 @@ export interface TokenCheck {
 }
 
 function checkQuery (query) {
+  if (!query) {
+    return {};
+  }
   if (query.$nor && query.$nor.length === 0) {
     delete query.$nor;
   }

@@ -60,7 +60,7 @@ describe('Other Machine Controller', () => {
   // });
 
   it('counts other machines', (done) => {
-    request.get(`${endpoint}/count`, {
+    request.post(`${endpoint}/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true
     }, (error, response) => {

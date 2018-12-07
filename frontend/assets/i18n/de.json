@@ -126,7 +126,10 @@
     },
     "machineList": {
         "paginationLabel": "",
-        "filterLabel": "Filter nach Maschinentyp:",
+        "filterLabel": {
+            "type": "Filter nach Maschinentyp:",
+            "search": "Suche nach:"
+        },
         "spinnerLoadingText": "Lade Maschinen",
         "buttons": {
             "deleteLabel": "Löschen",
@@ -248,7 +251,8 @@
         "spinnerLoadingText": "Lade Benutzer",
         "paginationLabel": "Springe zur Seite",
         "filterLabel": {
-            "roles": "Filter nach Rolle:"
+            "roles": "Filter nach Rolle:",
+            "search": "Suche nach:"
         },
         "buttons": {
             "deleteLabel": "Deaktivieren",
@@ -275,7 +279,8 @@
             "status": "Filter nach Status:",
             "fablabs": "Filter nach Fablab:",
             "startDay": "Filter nach geplanten Start Tag:",
-            "endDay": "Filter nach geplanten End Tag:"
+            "endDay": "Filter nach geplanten End Tag:",
+            "search": "Suche nach:"
         },
         "spinnerLoadingText": "Lade Aufträge",
         "buttons": {

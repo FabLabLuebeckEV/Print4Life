@@ -17,45 +17,50 @@ export class MachineService {
   /* eslint-disable class-methods-use-this */
   /**
    * This method gets a specific type of machine (or all) and returns a promise with the results
-   * type is the type of machine to get
-   * limit is the number of items to get
-   * skip is the number of items to skip
+   * @param type is the type of machine to get
+   * @param query is a specific mongdb query expression
+   * @param limit is the number of items to get
+   * @param skip is the number of items to skip
    * @returns a promise with the results
    */
-  public getMachineType (type: String, limit?: Number, skip?: Number) {
+  public getMachineType (type: String, query?: any, limit?: Number, skip?: Number) {
     const promises = [];
     let obj;
     switch (type) {
       case '3d-printer':
         obj = [];
         if (limit >= 0 && skip >= 0) {
-          promises.push(Printer3D.find().limit(limit).skip(skip));
+          query ? promises.push(Printer3D.find(query).limit(limit).skip(skip))
+            : promises.push(Printer3D.find().limit(limit).skip(skip));
         } else {
-          promises.push(Printer3D.find());
+          query ? promises.push(Printer3D.find(query)) : promises.push(Printer3D.find());
         }
         break;
       case 'lasercutter':
         obj = [];
         if (limit >= 0 && skip >= 0) {
-          promises.push(Lasercutter.find().limit(limit).skip(skip));
+          query ? promises.push(Lasercutter.find(query).limit(limit).skip(skip))
+            : promises.push(Lasercutter.find().limit(limit).skip(skip));
         } else {
-          promises.push(Lasercutter.find());
+          query ? promises.push(Lasercutter.find(query).limit(limit).skip(skip)) : promises.push(Lasercutter.find());
         }
         break;
       case 'otherMachine':
         obj = [];
         if (limit >= 0 && skip >= 0) {
-          promises.push(Other.find().limit(limit).skip(skip));
+          query ? promises.push(Other.find(query).limit(limit).skip(skip))
+            : promises.push(Other.find().limit(limit).skip(skip));
         } else {
-          promises.push(Other.find());
+          query ? promises.push(Other.find(query)) : promises.push(Other.find());
         }
         break;
       case 'millingMachine':
         obj = [];
         if (limit >= 0 && skip >= 0) {
-          promises.push(MillingMachine.find().limit(limit).skip(skip));
+          query ? promises.push(MillingMachine.find(query).limit(limit).skip(skip))
+            : promises.push(MillingMachine.find().limit(limit).skip(skip));
         } else {
-          promises.push(MillingMachine.find());
+          query ? promises.push(MillingMachine.find(query)) : promises.push(MillingMachine.find());
         }
         break;
       default:
@@ -241,20 +246,21 @@ export class MachineService {
 
   /**
    * This method counts a specific type of machine returns a promise with the result
-   * type is the type of machine to count
+   * @param query is a mongodb query expression
+   * @param type is the type of machine to count
    * @returns a promise with the result
    */
-  public count (type) {
+  public count (type: string, query: any) {
     let error: IError;
     switch (type) {
       case '3d-printer':
-        return Printer3D.countDocuments();
+        return query ? Printer3D.countDocuments(query) : Printer3D.countDocuments();
       case 'lasercutter':
-        return Lasercutter.countDocuments();
+        return query ? Lasercutter.countDocuments(query) : Lasercutter.countDocuments();
       case 'otherMachine':
-        return Other.countDocuments();
+        return query ? Other.countDocuments(query) : Other.countDocuments();
       case 'millingMachine':
-        return MillingMachine.countDocuments();
+        return query ? MillingMachine.countDocuments(query) : MillingMachine.countDocuments();
       default:
         error = {
           name: 'MACHINE_TYPE_NOT_SUPPORTED',
