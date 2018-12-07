@@ -56,5 +56,6 @@ const attributes = {
 
 export const orderSchema = mongoose.Schema(attributes);
 export const Order = mongoose.model('Order', orderSchema);
+export const searchableTextFields = ['projectname'];
 
 export default Order;

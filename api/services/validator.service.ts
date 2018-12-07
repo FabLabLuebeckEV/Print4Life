@@ -8,7 +8,7 @@ export interface TokenCheck {
   decoded: any;
 }
 
-function checkQuery (query: any, fields?: Array<String>) {
+function checkQuery(query: any, fields?: Array<String>) {
   if (!query) {
     return {};
   }
@@ -45,11 +45,10 @@ function checkQuery (query: any, fields?: Array<String>) {
       query.$and.splice(index, 1);
     }
   }
-  console.log(JSON.stringify(query, null, 2));
   return query;
 }
 
-function checkId (id: string) {
+function checkId(id: string) {
   let retObj;
   const valid = mongoose.Types.ObjectId.isValid(id);
   if (!valid) {
@@ -60,7 +59,7 @@ function checkId (id: string) {
   return retObj;
 }
 
-async function checkToken (req): Promise<TokenCheck> {
+async function checkToken(req): Promise<TokenCheck> {
   let ret: TokenCheck;
   let token;
   let split;
