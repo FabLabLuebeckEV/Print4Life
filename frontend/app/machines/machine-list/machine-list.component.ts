@@ -370,13 +370,33 @@ export class MachineListComponent implements OnInit {
       let totalItems = 0;
       let maxPerPage = this.paginationObj.perPage;
 
+      const query = { $and: [] };
+
+      if (this.filter.selectedFablabs && this.filter.selectedFablabs.length > 0) {
+        query.$and.push({ $or: [] });
+        this.filter.selectedFablabs.forEach(fablab => {
+          query.$and[query.$and.length - 1].$or.push({ fablabId: fablab._id });
+        });
+      }
+
+      if (this.filter.selectedActivated && this.filter.selectedActivated.length > 0) {
+        query.$and.push({ $or: [] });
+        this.filter.selectedActivated.forEach(activation => {
+          query.$and[query.$and.length - 1].$or.push({ activated: activation === 'active' });
+        });
+      }
+
+      if (this.filter.searchTerm) {
+        query.$and.push({ $text: { $search: this.filter.searchTerm } });
+      }
       for (let i = 0; i < machineTypes.length; i++) {
         machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
       }
 
+      console.log(JSON.stringify(query, null, 2));
+
       machineTypes.forEach(async (type) => {
         promises.push(new Promise(async resolve => {
-          const query = this.filter.searchTerm ? { $text: { $search: this.filter.searchTerm } } : undefined;
           countObj = await this.machineService.count(type as string, query);
           this.paginationObj.machines[`${type}`].selected = true;
           this.paginationObj.machines[`${type}`].total = countObj.count;
@@ -400,7 +420,7 @@ export class MachineListComponent implements OnInit {
       }
 
       for (const type of machineTypes) {
-        machines[`${type}`] = await this._resolveMachines(type, maxPerPage);
+        machines[`${type}`] = await this._resolveMachines(type, maxPerPage, query);
       }
 
       for (const type of Object.keys(machines)) {
@@ -429,8 +449,7 @@ export class MachineListComponent implements OnInit {
     }
   }
 
-  private async _resolveMachines(type: String, maxPerPage: number) {
-    const query = this.filter.searchTerm ? { $text: { $search: this.filter.searchTerm } } : undefined;
+  private async _resolveMachines(type: String, maxPerPage: number, query?: any) {
     if (this.paginationObj.machines[`${type}`].selected &&
       this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0) {
       const resMach = await this.machineService.getAll(type as string,
