@@ -799,12 +799,15 @@ async function getSchedule (req, res) {
 }
 
 /**
- * @api {get} /api/v1/orders/:id/download/:fileId Downloads a specific file of an order by its id
+ * @api {get} /api/v1/orders/:id/download/:fileId?token=:jwtToken Downloads a specific file of an order by its id
  * @apiName getFileOfOrderById
  * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam {String} id is the id of the order (required)
+ * @apiParam {String} fileId is the id of the file (required)
+ * @apiParam {String} jwtToken is the jwt bearer token of the logged in user (required as query param)
  * @apiSuccess { Object } File the file as attachment
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
