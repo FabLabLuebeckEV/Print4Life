@@ -236,7 +236,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         }
       } else if (this.createOrderForm && this.editView) {
         const startDate = this.validationService.createCheckDate(changes.datePickerStart);
-        const endDate = this.validationService.createCheckDate(changes.datePickerError);
+        const endDate = this.validationService.createCheckDate(changes.datePickerEnd);
         this.datePickerError = this.validationService.validateDate(changes.datePickerStart, changes.datePickerEnd);
         this.timePickerError = this.validationService.validateTime(startDate, endDate, changes.timePickerStart, changes.timePickerEnd);
       }
@@ -327,8 +327,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           const machine = this.machines.find((machine) => {
             return this.order.machine._id === machine._id;
           });
-          if (this.schedule.startDate && this.schedule.endDate &&
-            this.schedule.startDay && this.schedule.endDay &&
+          if (this.schedule.startDay && this.schedule.endDay &&
             this.schedule.startTime && this.schedule.endTime) {
             this.schedule.machine.type = machine.type as string;
             this.schedule.machine.id = machine._id as string;
