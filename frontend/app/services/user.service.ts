@@ -141,7 +141,6 @@ export class UserService {
 
   public async getUser(): Promise<User> {
     if (this.user) {
-      this._setUserLanguage();
       return this.user;
     } else if (this.token) {
       const user = await this.findOwn();
