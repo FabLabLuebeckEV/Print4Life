@@ -96,9 +96,12 @@ export class MachineDetailComponent implements OnInit {
       deleteButton, abortButton);
     modalRef.result.then((result) => {
       if (result === deleteButton.returnValue) {
-        this.machineService.deleteMachine(this.machine.originType, this.machine._id).then((result) => {
-          this.params = {};
-          this.machine.activated = result[this.machine.originType].activated;
+        this.machineService.deleteMachine(this.machine.originType, this.machine._id).then(async (result) => {
+          if (result && result[this.machine.originType]) {
+            this.params = { id: result[this.machine.originType]._id, type: result[this.machine.originType].type };
+            this.machineActive = result[this.machine.originType].activated;
+            this._initMachine();
+          }
         });
       }
     });

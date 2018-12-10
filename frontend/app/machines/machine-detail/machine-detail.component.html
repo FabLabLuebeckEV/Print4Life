@@ -16,10 +16,10 @@
           <fa-icon [icon]="editIcon"></fa-icon>
         </button>
       </a>
-      <button *ngIf="userIsLoggedIn && !machine.activated" (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
+      <button *ngIf="userIsLoggedIn && !machineActive" (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
         <fa-icon [icon]="toggleOff"></fa-icon>
       </button>
-      <button *ngIf="userIsLoggedIn && machine.activated" (click)="delete()" type="button" class="btn btn-success spacing-right-xs">
+      <button *ngIf="userIsLoggedIn && machineActive" (click)="delete()" type="button" class="btn btn-success spacing-right-xs">
         <fa-icon [icon]="toggleOn"></fa-icon>
       </button>
     </div>
