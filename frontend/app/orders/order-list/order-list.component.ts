@@ -240,6 +240,29 @@ export class OrderListComponent implements OnInit {
       });
     }
 
+    // filter only valid status and not one of the others
+    if (this.outstandingOrders) {
+      try {
+        const result = await this.orderService.getStatus(false);
+        if (result && result.status && this.filter.originalValidStatus.length) {
+          query.$and.push({ $nor: [] });
+          let statusArr = [];
+          if (isArray(result.status)) {
+            statusArr = result.status.filter((status) => {
+              return !this.filter.originalValidStatus.includes(status);
+            });
+          } else {
+            statusArr = this.filter.originalValidStatus.filter((status) => {
+              return status !== result.status;
+            });
+          }
+          statusArr.forEach((status) => {
+            query.$and[query.$and.length - 1].$nor.push({ status });
+          });
+        }
+      } catch (err) { }
+    }
+
 
     if (!query.$and) {
       query.$and = [];
@@ -301,6 +324,7 @@ export class OrderListComponent implements OnInit {
               this.filter.selectedFablabs.forEach((fablab) => {
                 if (fablab._id === result[`${order.machine.type}`].fablabId) {
                   found.fablab = true;
+                  order.fablabId = fablab._id;
                 }
               });
 
@@ -319,6 +343,15 @@ export class OrderListComponent implements OnInit {
         orders = this.unfinishedOrders && results && Array.isArray(results) ? results.filter((order) => order) : orders.orders;
         const arr = [];
         for (const order of orders) {
+          let fablab;
+          if (order.fablabId) {
+            try {
+              const result = await this.fablabService.getFablab(order.fablabId);
+              if (result && result.fablab) {
+                fablab = result.fablab;
+              }
+            } catch (err) { }
+          }
           const item = new TableItem();
           const owner = await this.userService.getNamesOfUser(order.owner);
           const editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
@@ -326,7 +359,7 @@ export class OrderListComponent implements OnInit {
           item.obj['Created at'] = {
             label: `${this.genericService.translateDate(order.createdAt, currentLang, translations['date'].dateTimeFormat)}`
           };
-          if (this.userIsLoggedIn && (loggedInUser.role.role === 'editor' || this.userIsAdmin)) {
+          if (this.userIsLoggedIn && (loggedInUser.role.role === 'editor' || this.userIsAdmin) || this.unfinishedOrders) {
             item.obj['Schedule Start Date'] = {
               label: order.schedule && order.schedule.startDate ?
                 `${this.genericService.translateDate(order.schedule.startDate, currentLang, translations['date'].dateTimeFormat)}`
@@ -336,6 +369,9 @@ export class OrderListComponent implements OnInit {
               label: order.schedule && order.schedule.endDate ?
                 `${this.genericService.translateDate(order.schedule.endDate, currentLang, translations['date'].dateTimeFormat)}`
                 : '-'
+            };
+            item.obj['Fablab'] = {
+              label: fablab ? fablab.name : '-'
             };
           }
           item.obj['Projectname'] = {

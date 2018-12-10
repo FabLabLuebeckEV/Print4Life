@@ -456,14 +456,19 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       this.shippingAddresses.userAddress = undefined;
     }
 
-    try {
-      fablab = (await this.fablabService.getFablab(this.loggedInUser.fablabId)).fablab;
-      this.shippingAddresses.fablabAddress = new Address(
-        fablab.address.street, fablab.address.zipCode, fablab.address.city, fablab.address.country);
-      if (this.shippingAddresses.fablabAddress.compare(this.order.shippingAddress)) {
-        this.selectedAddressKey = 'fablabAddress';
+    if (this.loggedInUser && this.loggedInUser.fablabId) {
+      try {
+
+        fablab = (await this.fablabService.getFablab(this.loggedInUser.fablabId)).fablab;
+        this.shippingAddresses.fablabAddress = new Address(
+          fablab.address.street, fablab.address.zipCode, fablab.address.city, fablab.address.country);
+        if (this.shippingAddresses.fablabAddress.compare(this.order.shippingAddress)) {
+          this.selectedAddressKey = 'fablabAddress';
+        }
+      } catch (err) {
+        this.shippingAddresses.fablabAddress = undefined;
       }
-    } catch (err) {
+    } else {
       this.shippingAddresses.fablabAddress = undefined;
     }
     this.loadingAddresses = false;

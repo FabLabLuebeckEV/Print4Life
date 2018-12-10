@@ -20,6 +20,10 @@ const publicRoutes = [
     methods: ['GET']
   },
   {
+    url: `${baseUrl}orders/:id`,
+    methods: ['GET']
+  },
+  {
     url: `${baseUrl}orders/count`,
     methods: ['POST']
   },

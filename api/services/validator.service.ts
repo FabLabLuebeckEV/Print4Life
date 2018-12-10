@@ -40,6 +40,10 @@ function checkQuery (query: any, fields?: Array<String>) {
           obj[`${field}`] = { $regex: elem.$text.$search, $options: 'i' };
           query.$and[query.$and.length - 1].$or.push(obj);
         });
+      } else if (elem.$or && !elem.$or.length) {
+        delete elem.$or;
+      } else if (elem.$nor && !elem.$nor.length) {
+        delete elem.$nor;
       }
     });
     if (found) {
