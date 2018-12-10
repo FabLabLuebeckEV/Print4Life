@@ -26,7 +26,7 @@
 
 * fix cors with https
 * fix specs and use env configs
-* use ecosystem.config.js file for pm2 
+* use ecosystem.config.js file for pm2
 * setup https backend server for prod
 * fix deploy scripts to include email-templates in dist build
 * fix duplicate orders in order list
@@ -46,7 +46,7 @@
 * comments, owner and editors are now based on user objects instead of strings
 * fablab is now an entity with an address assignable to users as an optional field
 * renaming printers to 3d-printers
-* guests (not logged in users) now can only see the order list 
+* guests (not logged in users) now can only see the order list
 
 ## Version 0.3.2
 
