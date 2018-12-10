@@ -13,6 +13,7 @@ import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'frontend/app/services/user.service';
 import { GenericService } from 'frontend/app/services/generic.service';
+import { User } from 'frontend/app/models/user.model';
 
 @Component({
   selector: 'app-machine-list',
@@ -49,6 +50,7 @@ export class MachineListComponent implements OnInit {
   newLink: String;
   spinnerConfig: SpinnerConfig;
   userIsAdmin: Boolean;
+  user: User;
   paginationObj: any = {
     page: 1,
     totalItems: 0,
@@ -140,6 +142,7 @@ export class MachineListComponent implements OnInit {
 
   async ngOnInit() {
     this.userIsAdmin = await this.userService.isAdmin();
+    this.user = await this.userService.getUser();
     if ((this.listView || this.successList) && !this.loadingMachineTypes) {
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
@@ -249,10 +252,8 @@ export class MachineListComponent implements OnInit {
   private async _createTableItem(elem): Promise<TableItem> {
     let fablab;
     let item;
-    let user;
     try {
       const resFab = await this.fablabService.getFablab(elem.fablabId);
-      user = await this.userService.getUser();
       fablab = resFab.fablab;
       elem.fablab = fablab;
     } finally {
@@ -261,7 +262,7 @@ export class MachineListComponent implements OnInit {
       item.obj[`Device Type`] = { label: elem.type };
       item.obj[`Device Name`] = {
         label: elem.deviceName,
-        href: user ? `/${routes.paths.frontend.machines.root}/${elem.type}s/${elem._id}` : undefined
+        href: this.user ? `/${routes.paths.frontend.machines.root}/${elem.type}s/${elem._id}` : undefined
       };
       item.obj[`Manufacturer`] = { label: elem.manufacturer };
       item.obj[`Fablab`] = { label: fablab.hasOwnProperty('name') ? fablab.name : '' };
