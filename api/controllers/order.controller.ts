@@ -881,7 +881,7 @@ async function downloadFile (req, res) {
   res.set('content-type', file.contentType);
   res.set('accept-ranges', 'bytes');
   res.set({
-    'Content-Disposition': `attachment; filename="${file.filename}"`
+    'Content-Disposition': `attachment; filename="${encodeURIComponent(file.filename)}"`
   });
 
   downloadStream.on('end', () => {

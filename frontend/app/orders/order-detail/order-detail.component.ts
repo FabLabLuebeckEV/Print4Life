@@ -119,7 +119,7 @@ export class OrderDetailComponent implements OnInit {
                 `${routes.paths.backend.orders.root}/` +
                 (this.order.shared ? `${routes.paths.backend.orders.shared}/` : ``) +
                 `${this.order._id}/` +
-                `${routes.paths.backend.orders.download}/${file.id}`;
+                `${routes.paths.backend.orders.download}/${file.id}?token=${this.userService.getToken()}`;
             });
             // sort files to show deprecated last
             this.orderService.sortFilesByDeprecated(result.order.files);

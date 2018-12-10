@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 import config from '../config/config';
+import routerService from './router.service';
 
 export interface TokenCheck {
   tokenOk: boolean;
@@ -66,13 +67,16 @@ async function checkToken (req): Promise<TokenCheck> {
   if (req.headers && req.headers.authorization) {
     split = req.headers.authorization.split('JWT');
     token = split && split.length > 1 ? split[1].trim() : undefined;
-    if (token) {
-      try {
-        const decoded = await jwt.verify(token, config.jwtSecret);
-        ret = { tokenOk: true, error: undefined, decoded };
-      } catch (error) {
-        ret = { tokenOk: false, error, decoded: undefined };
-      }
+  } else if (routerService.isDownloadRoute(req.originalUrl) && req.query && req.query.token) {
+    split = req.query.token.split('JWT');
+    token = split && split.length > 1 ? split[1].trim() : undefined;
+  }
+  if (token) {
+    try {
+      const decoded = await jwt.verify(token, config.jwtSecret);
+      ret = { tokenOk: true, error: undefined, decoded };
+    } catch (error) {
+      ret = { tokenOk: false, error, decoded: undefined };
     }
   }
   return ret;
