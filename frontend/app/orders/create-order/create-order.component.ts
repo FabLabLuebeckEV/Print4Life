@@ -440,7 +440,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   // Private Functions
   private async _loadAddresses() {
     this.loadingAddresses = true;
-    let user;
     let fablab;
 
     if (this.order && this.order.shippingAddress) {
@@ -448,9 +447,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     }
 
     try {
-      user = await this.userService.getUser();
       this.shippingAddresses.userAddress = new Address(
-        user.address.street, user.address.zipCode, user.address.city, user.address.country);
+        this.loggedInUser.address.street, this.loggedInUser.address.zipCode,
+        this.loggedInUser.address.city, this.loggedInUser.address.country);
       if (this.shippingAddresses.userAddress.compare(this.order.shippingAddress)) {
         this._selectAddress('userAddress');
       }
@@ -459,7 +458,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     }
 
     try {
-      fablab = (await this.fablabService.getFablab(user.fablabId)).fablab;
+      fablab = (await this.fablabService.getFablab(this.loggedInUser.fablabId)).fablab;
       this.shippingAddresses.fablabAddress = new Address(
         fablab.address.street, fablab.address.zipCode, fablab.address.city, fablab.address.country);
       if (this.shippingAddresses.fablabAddress.compare(this.order.shippingAddress)) {
@@ -775,12 +774,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           });
         }
 
-        this.validStatus.forEach((status) => {
-          const translated = translations['status'][`${status}`];
-          if (translated) {
-            shownStatus.push(translated);
-          }
-        });
         if (this.order && this.order.machine && this.order.machine['shownType']) {
           this._translateMachineType(this.order.machine.type).then((shownType) => {
             this.order.machine['shownType'] = shownType;
@@ -804,10 +797,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
                 comment.createdAt, currentLang, translations['date'].dateTimeFormat);
             }
           });
-          this.order.files.forEach((file) => {
-            file['shownCreatedAt'] = this.genericService.translateDate(
-              file.createdAt, currentLang, translations['date'].dateTimeFormat);
-          });
+          if (this.order.files) {
+            this.order.files.forEach((file) => {
+              file['shownCreatedAt'] = this.genericService.translateDate(
+                file.createdAt, currentLang, translations['date'].dateTimeFormat);
+            });
+          }
         }
         this.translationFields = {
           title: this.editView ? translations['orderForm'].editTitle : translations['orderForm'].createTitle,
