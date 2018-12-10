@@ -519,6 +519,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         this.order.owner = this.loggedInUser._id;
       }
       this.order = JSON.parse(order) as Order;
+      if (!this.order.owner) {
+        this.order.owner = this.loggedInUser._id;
+      }
     } else if (id !== undefined) {
       if (!this.sharedView) {
         await this._loadEditors();
