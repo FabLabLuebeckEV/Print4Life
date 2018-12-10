@@ -249,15 +249,20 @@ export class MachineListComponent implements OnInit {
   private async _createTableItem(elem): Promise<TableItem> {
     let fablab;
     let item;
+    let user;
     try {
       const resFab = await this.fablabService.getFablab(elem.fablabId);
+      user = await this.userService.getUser();
       fablab = resFab.fablab;
       elem.fablab = fablab;
     } finally {
       item = new TableItem();
       item.obj['id'] = { label: elem._id };
       item.obj[`Device Type`] = { label: elem.type };
-      item.obj[`Device Name`] = { label: elem.deviceName, href: `/${routes.paths.frontend.machines.root}/${elem.type}s/${elem._id}` };
+      item.obj[`Device Name`] = {
+        label: elem.deviceName,
+        href: user ? `/${routes.paths.frontend.machines.root}/${elem.type}s/${elem._id}` : undefined
+      };
       item.obj[`Manufacturer`] = { label: elem.manufacturer };
       item.obj[`Fablab`] = { label: fablab.hasOwnProperty('name') ? fablab.name : '' };
       item.obj[`Comment`] = { label: elem.comment };

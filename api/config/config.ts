@@ -93,6 +93,22 @@ const publicRoutes = [
     methods: ['POST']
   },
   {
+    url: `${baseUrl}machines/otherMachines/search`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}machines/3d-printers/search`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}machines/lasercutters/search`,
+    methods: ['POST']
+  },
+  {
+    url: `${baseUrl}machines/millingMachines/search`,
+    methods: ['POST']
+  },
+  {
     url: `${baseUrl}machines/otherMachines/count`,
     methods: ['POST']
   },
