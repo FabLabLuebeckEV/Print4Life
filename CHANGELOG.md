@@ -7,7 +7,7 @@
 ### Version 0.5
 
 * implemented upload of files (/LF0300/, /LF0330/)
-* implemetend unfinsihed orders list (/LF0270/)
+* implemented unfinsihed orders list (/LF0270/)
 * implemented success history for orders (/LF0280/)
 * implemented machine statistics (currently successful orders; /LF0280/)
 * implemented shared orders to allow guests to create, edit and view orders (/LF0360/)
