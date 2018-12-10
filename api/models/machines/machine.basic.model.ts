@@ -33,4 +33,6 @@ function getFields () {
   return object;
 }
 
+export const searchableTextFields = ['deviceName', 'manufacturer'];
+
 export default getFields;

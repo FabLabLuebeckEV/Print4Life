@@ -5,21 +5,37 @@
 <router-outlet></router-outlet>
 <div *ngIf="listView || successList">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-1">
             <button *ngIf="userIsAdmin" type="button" class="btn btn-success spacing-top-xxl spacing-left-xxl"
                 [routerLink]="newLink">
                 <fa-icon [icon]="plusIcon"></fa-icon>
             </button>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
             <label for="status">{{translationFields.filterLabel.type}}</label>
             <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false"
-                [items]=filter.machineTypes bindLabel="machineTypeFilter" [(ngModel)]="filter.shownMachineTypes" id="machineTypeFilter"
-                (close)="filterHandler()" (remove)="filterHandler()" (clear)="filterHandler()" (change)="changeFilterHandler($event)"
-                name="machineTypeFilter" #machineTypeFilter="ngModel">
+                [items]=filter.machineTypes [(ngModel)]="filter.shownMachineTypes" id="machineTypeFilter" (close)="filterHandler()"
+                (remove)="filterHandler()" (clear)="filterHandler()" (change)="changeFilterHandler($event)" name="machineTypeFilter"
+                #machineTypeFilter="ngModel">
             </ng-select>
         </div>
         <div class="col-md-3">
+            <label for="fablabFilter">{{translationFields.filterLabel.fablab}}</label>
+            <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false"
+                [items]=filter.fablabs bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabFilter" (close)="filterHandler()"
+                (remove)="filterHandler()" (clear)="filterHandler()" (change)="filterHandler()" name="fablabFilter"
+                #fablabFilter="ngModel">
+            </ng-select>
+        </div>
+        <div class="col-md-2">
+            <label for="activationFilter">{{translationFields.filterLabel.activation}}</label>
+            <ng-select [multiple]="true" [hideSelected]="true" [closeOnSelect]="false" [items]="filter.translatedActivated"
+                [(ngModel)]="filter.shownActivated" id="activationFilter" (close)="filterHandler()" (remove)="filterHandler()"
+                (clear)="filterHandler()" (change)="changeActivationFilterHandler($event)" name="activationFilter"
+                #activationFilter="ngModel">
+            </ng-select>
+        </div>
+        <div class="col-md-2">
             <form>
                 <label for="search">{{translationFields.filterLabel.search}}</label>
                 <div class="input-group">

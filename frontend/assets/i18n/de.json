@@ -128,7 +128,9 @@
         "paginationLabel": "",
         "filterLabel": {
             "type": "Filter nach Maschinentyp:",
-            "search": "Suche nach:"
+            "search": "Suche nach:",
+            "fablab": "Filter nach Fablab:",
+            "activation": "Filter nach Aktivierung:"
         },
         "spinnerLoadingText": "Lade Maschinen",
         "buttons": {
@@ -143,6 +145,10 @@
             "deleteHeader": "Möchten den Status der Maschine ändern?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
             "deleteQuestion2": "den Status wechseln wollen?"
+        },
+        "activations": {
+            "active": "Aktive",
+            "inactive": "Inaktive"
         }
     },
     "machineForm": {

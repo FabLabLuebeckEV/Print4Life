@@ -6,7 +6,21 @@
 
 ### Version 0.5
 
-* upload of files (/LF0300/, /LF0330/)
+* implemented upload of files (/LF0300/, /LF0330/)
+* implemented unfinsihed orders list (/LF0270/)
+* implemented success history for orders (/LF0280/)
+* implemented machine statistics (currently successful orders; /LF0280/)
+* implemented shared orders to allow guests to create, edit and view orders (/LF0360/)
+* added shipping address to orders (selectable via user address, custom address, fablab (of user) address)
+* refactored backend controller to use own services
+* routes decoupled from controller functions
+* added search for username, firstname, lastname and email of users in user list
+* added search for projectname of orders in order lists
+* added search for devicename and manufacturer of machine in machine lists
+* added scheduling for orders and machines
+* deleting machines results to state deactivate instead of a hard deletion
+* added deployment to production server
+* create oder form now uses local storage to contain some information on changing views
 
 ### Version 0.4.1
 

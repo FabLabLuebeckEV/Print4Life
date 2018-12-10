@@ -541,8 +541,20 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           this.loggedInUser = await this.userService.getNamesOfUser(this.order.owner);
         }
       }
-      this.order.editor = this.order.editor && this.order.editor.length === 24 ?
-        (await this.userService.getNamesOfUser(this.order.editor)).user : undefined;
+
+      if (this.order.editor && this.order.editor.length === 24) {
+        try {
+          const result = await this.userService.getNamesOfUser(this.order.editor);
+          if (result && result.fullname) {
+            this.order.editor = result._id;
+          }
+        } catch (err) {
+          this.order.editor = undefined;
+        }
+      } else {
+        this.order.editor = undefined;
+      }
+
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
       if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
         this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);

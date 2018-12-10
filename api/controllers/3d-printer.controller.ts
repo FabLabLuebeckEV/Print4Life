@@ -2,6 +2,7 @@ import validatorService from '../services/validator.service';
 import logger from '../logger';
 import { Printer3DService } from '../services/3d-printer.service';
 import MachineService from '../services/machine.service';
+import { searchableTextFields } from '../models/machines/machine.basic.model';
 
 const printer3DService = new Printer3DService();
 
@@ -280,7 +281,7 @@ function getAll (req, res) {
  * }
 */
 function search (req, res) {
-  req.body.query = validatorService.checkQuery(req.body.query);
+  req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   printer3DService.getAll(req.body.query, req.body.limit, req.body.skip).then((printers3d) => {
     if (printers3d.length === 0) {
       logger.info(`POST search for 3d printers with query ${JSON.stringify(req.body.query)}, `
@@ -326,7 +327,7 @@ function search (req, res) {
  *
  */
 function count (req, res) {
-  req.body.query = validatorService.checkQuery(req.body.query);
+  req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   printer3DService.count(req.body.query).then((count) => {
     logger.info(`GET count 3D printers with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });

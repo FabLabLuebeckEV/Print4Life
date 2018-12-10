@@ -8,7 +8,7 @@ export interface TokenCheck {
   decoded: any;
 }
 
-function checkQuery (query) {
+function checkQuery (query: any, fields?: Array<String>) {
   if (!query) {
     return {};
   }
@@ -20,6 +20,30 @@ function checkQuery (query) {
   }
   if (query.$and && query.$and.length === 0) {
     delete query.$and;
+  }
+  // if $text operator is used, use regex for partial word search and remove $text operator
+  if (query.$and && query.$and.length && fields && fields.length) {
+    let created = false;
+    let found = false;
+    let index;
+    query.$and.forEach((elem, idx) => {
+      if (elem.$text && elem.$text.$search) {
+        found = true;
+        if (!created) {
+          index = idx;
+          query.$and.push({ $or: [] });
+          created = true;
+        }
+        fields.forEach((field) => {
+          const obj = {};
+          obj[`${field}`] = { $regex: elem.$text.$search, $options: 'i' };
+          query.$and[query.$and.length - 1].$or.push(obj);
+        });
+      }
+    });
+    if (found) {
+      query.$and.splice(index, 1);
+    }
   }
   return query;
 }

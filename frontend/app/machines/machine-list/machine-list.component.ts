@@ -27,14 +27,23 @@ export class MachineListComponent implements OnInit {
     machineTypes: [], // shown machine types after translation to select in filter
     shownMachineTypes: [], // selected and translated machine types in filter
     selectedMachineTypes: [], // selected machine types but in origin backend language
+    fablabs: [], // origin for backend containing all fablabs
+    selectedFablabs: [], // contains only selected fablabs
+    selectedActivated: [], // show only activated machines
+    shownActivated: [],
+    translatedActivated: [],
+    originActivated: ['active', 'inactive'],
     searchTerm: ''
   };
   displayedMachines: Array<TableItem> = [];
   listView: Boolean;
   successList: Boolean;
   loadingMachineTypes: Boolean;
+  loadingFablabs: Boolean;
   loadingMachines: Boolean;
   plusIcon: Icon;
+  toggleOnIcon: Icon;
+  toggleOffIcon: Icon;
   jumpArrow: Icon;
   searchIcon: Icon;
   newLink: String;
@@ -76,7 +85,9 @@ export class MachineListComponent implements OnInit {
     paginationLabel: '',
     filterLabel: {
       type: '',
-      search: ''
+      search: '',
+      fablab: '',
+      activation: ''
     },
     spinnerLoadingText: '',
     buttons: {
@@ -106,6 +117,8 @@ export class MachineListComponent implements OnInit {
       'Loading Machines', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.plusIcon = this.config.icons.add;
+    this.toggleOnIcon = this.config.icons.toggleOn;
+    this.toggleOffIcon = this.config.icons.toggleOff;
     this.jumpArrow = this.config.icons.forward;
     this.searchIcon = this.config.icons.search;
     this.newLink = `./${routes.paths.frontend.machines.create}`;
@@ -131,10 +144,14 @@ export class MachineListComponent implements OnInit {
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
         this.changeFilterHandler(this.filter.shownMachineTypes);
+        this.changeActivationFilterHandler(this.filter.shownActivated);
         this.paginationObj.page = 1;
         this.filterHandler();
       });
       await this._loadMachineTypes();
+      await this._loadFablabs();
+      this.filter.selectedActivated = JSON.parse(JSON.stringify(this.filter.originActivated));
+      this.filter.translatedActivated = JSON.parse(JSON.stringify(this.filter.originActivated));
       this._translate();
       this.init();
     }
@@ -212,6 +229,23 @@ export class MachineListComponent implements OnInit {
     }
   }
 
+  changeActivationFilterHandler(event) {
+    this.filter.selectedActivated = [];
+    this.filter.shownActivated = event;
+    this.translateService.get(['machineList']).subscribe((translations => {
+      this.filter.originActivated.forEach((activation) => {
+        const translated = translations['machineList'].activations[activation];
+        if (translated) {
+          this.filter.shownActivated.forEach((selectedActivation) => {
+            if (selectedActivation === translated) {
+              this.filter.selectedActivated.push(activation);
+            }
+          });
+        }
+      });
+    }));
+  }
+
   private async _createTableItem(elem): Promise<TableItem> {
     let fablab;
     let item;
@@ -248,7 +282,6 @@ export class MachineListComponent implements OnInit {
   }
 
   // Private Functions
-
   private async _loadMachineTypes() {
     this.loadingMachineTypes = true;
     const machineTypes = (await this.machineService.getAllMachineTypes());
@@ -272,6 +305,35 @@ export class MachineListComponent implements OnInit {
       this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
     }
     this.loadingMachineTypes = false;
+  }
+
+  private async _loadFablabs() {
+    this.loadingFablabs = true;
+    this.filter.selectedFablabs = [];
+
+    const result = await this.fablabService.getFablabs();
+    if (result && result.fablabs) {
+      this.filter.fablabs = result.fablabs;
+      try {
+        const loggedInUser = await this.userService.getUser();
+        if (!loggedInUser.fablabId) {
+          throw Error('User has no Fablab set.');
+        }
+
+        const userFablab = this.filter.fablabs.find(elem => {
+          return elem._id === loggedInUser.fablabId;
+        });
+
+        if (userFablab) {
+          this.filter.selectedFablabs = [userFablab];
+        } else {
+          throw Error('User Fablab not found.');
+        }
+      } catch (err) {
+        this.filter.selectedFablabs = JSON.parse(JSON.stringify(this.filter.fablabs));
+      }
+    }
+    this.loadingFablabs = false;
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
@@ -308,13 +370,31 @@ export class MachineListComponent implements OnInit {
       let totalItems = 0;
       let maxPerPage = this.paginationObj.perPage;
 
+      const query = { $and: [] };
+
+      if (this.filter.selectedFablabs && this.filter.selectedFablabs.length > 0) {
+        query.$and.push({ $or: [] });
+        this.filter.selectedFablabs.forEach(fablab => {
+          query.$and[query.$and.length - 1].$or.push({ fablabId: fablab._id });
+        });
+      }
+
+      if (this.filter.selectedActivated && this.filter.selectedActivated.length > 0) {
+        query.$and.push({ $or: [] });
+        this.filter.selectedActivated.forEach(activation => {
+          query.$and[query.$and.length - 1].$or.push({ activated: activation === 'active' });
+        });
+      }
+
+      if (this.filter.searchTerm) {
+        query.$and.push({ $text: { $search: this.filter.searchTerm } });
+      }
       for (let i = 0; i < machineTypes.length; i++) {
         machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
       }
 
       machineTypes.forEach(async (type) => {
         promises.push(new Promise(async resolve => {
-          const query = this.filter.searchTerm ? { $text: { $search: this.filter.searchTerm } } : undefined;
           countObj = await this.machineService.count(type as string, query);
           this.paginationObj.machines[`${type}`].selected = true;
           this.paginationObj.machines[`${type}`].total = countObj.count;
@@ -338,7 +418,7 @@ export class MachineListComponent implements OnInit {
       }
 
       for (const type of machineTypes) {
-        machines[`${type}`] = await this._resolveMachines(type, maxPerPage);
+        machines[`${type}`] = await this._resolveMachines(type, maxPerPage, query);
       }
 
       for (const type of Object.keys(machines)) {
@@ -367,8 +447,7 @@ export class MachineListComponent implements OnInit {
     }
   }
 
-  private async _resolveMachines(type: String, maxPerPage: number) {
-    const query = this.filter.searchTerm ? { $text: { $search: this.filter.searchTerm } } : undefined;
+  private async _resolveMachines(type: String, maxPerPage: number, query?: any) {
     if (this.paginationObj.machines[`${type}`].selected &&
       this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0) {
       const resMach = await this.machineService.getAll(type as string,
@@ -389,6 +468,9 @@ export class MachineListComponent implements OnInit {
 
       this.filter.machineTypes = [];
       this.filter.shownMachineTypes = [];
+      this.filter.translatedActivated = [];
+      this.filter.shownActivated = [];
+
       this.filter.originMachineTypes.forEach((mType) => {
         const camelType = this.machineService.camelCaseTypes(mType);
         const translated = translations['deviceTypes'][`${camelType}`];
@@ -403,12 +485,26 @@ export class MachineListComponent implements OnInit {
           this.filter.shownMachineTypes.push(translated);
         }
       });
+      this.filter.originActivated.forEach((oAct) => {
+        const translated = translations['machineList'].activations[oAct];
+        if (translated) {
+          this.filter.translatedActivated.push(translated);
+        }
+      });
+      this.filter.selectedActivated.forEach((sAct) => {
+        const translated = translations['machineList'].activations[sAct];
+        if (translated) {
+          this.filter.shownActivated.push(translated);
+        }
+      });
 
       this.translationFields = {
         paginationLabel: translations['machineList'].paginationLabel,
         filterLabel: {
           type: translations['machineList'].filterLabel.type,
           search: translations['machineList'].filterLabel.search,
+          fablab: translations['machineList'].filterLabel.fablab,
+          activation: translations['machineList'].filterLabel.activation
         },
         spinnerLoadingText: translations['machineList'].spinnerLoadingText,
         buttons: {

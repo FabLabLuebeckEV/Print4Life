@@ -4,6 +4,7 @@ import logger from '../logger';
 import validatorService from '../services/validator.service';
 import FablabService from '../services/fablab.service';
 import UserService from '../services/user.service';
+import { searchableTextFields } from '../models/user.model';
 
 /* eslint-enable no-unused-vars */
 
@@ -434,7 +435,7 @@ function deleteById (req, res) {
     }
 */
 function search (req, res) {
-  req.body.query = validatorService.checkQuery(req.body.query);
+  req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   userService.search(req.body.query, req.body.limit, req.body.skip).then((users) => {
     if (users.length === 0) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
@@ -500,7 +501,7 @@ function search (req, res) {
   }
  */
 function count (req, res) {
-  req.body.query = validatorService.checkQuery(req.body.query);
+  req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   userService.count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });

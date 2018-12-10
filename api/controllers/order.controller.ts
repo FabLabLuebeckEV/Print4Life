@@ -5,6 +5,7 @@ import FileService from '../services/file.service';
 /* eslint-disable no-unused-vars */
 import { IError, ErrorType } from '../services/router.service';
 import ScheduleService from '../services/schedule.service';
+import { searchableTextFields } from '../models/order.model';
 /* eslint-enable no-unused-vars */
 
 const orderService = new OrderService();
@@ -115,7 +116,7 @@ const scheduleService = new ScheduleService();
     }
 */
 function getAll (req, res) {
-  req.query = validatorService.checkQuery(req.query);
+  req.query = validatorService.checkQuery(req.query, searchableTextFields);
   orderService.getAll(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
       logger.info('GET Orders without result');
@@ -187,7 +188,7 @@ function getAll (req, res) {
   }
 */
 function search (req, res) {
-  req.body.query = validatorService.checkQuery(req.body.query);
+  req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   orderService.getAll(req.body.query, req.body.limit, req.body.skip).then((orders) => {
     if (orders.length === 0) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
@@ -254,7 +255,7 @@ function search (req, res) {
   }
 */
 function count (req, res) {
-  req.body.query = validatorService.checkQuery(req.body.query);
+  req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   orderService.count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });

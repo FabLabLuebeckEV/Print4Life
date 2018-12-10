@@ -128,7 +128,9 @@
         "paginationLabel": "Jump to Page",
         "filterLabel": {
             "type": "Filter by Machine Type:",
-            "search": "Search for:"
+            "search": "Search for:",
+            "fablab": "Filter by Fablab:",
+            "activation": "Filter by Activation:"
         },
         "spinnerLoadingText": "Loading Machines",
         "buttons": {
@@ -143,6 +145,10 @@
             "deleteHeader": "Do you really want toggle machine's status?",
             "deleteQuestion": "Are you sure you want to toggle",
             "deleteQuestion2": "?"
+        },
+        "activations": {
+            "active": "Active",
+            "inactive": "Inactive"
         }
     },
     "machineForm": {

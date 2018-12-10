@@ -6,6 +6,8 @@ import { languageSchema } from './language';
 
 const { Schema } = { Schema: mongoose.Schema };
 
+export const searchableTextFields = ['username', 'firstname', 'lastname', 'email'];
+
 export const userSchema = new Schema({
   firstname: {
     type: String,

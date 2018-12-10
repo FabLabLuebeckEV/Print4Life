@@ -360,7 +360,7 @@ export class OrderListComponent implements OnInit {
           if (this.userIsLoggedIn &&
             (loggedInUser.role.role === 'editor' || this.userIsAdmin || loggedInUser._id === owner._id)) {
             item.button1.label = this.translationFields.buttons.updateLabel;
-            item.button1.href = `./${routes.paths.frontend.orders.update}/${order._id}`;
+            item.button1.href = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${order._id}`;
             item.button1.class = 'btn btn-warning spacing';
             item.button1.icon = this.config.icons.edit;
             item.button2.label = this.translationFields.buttons.deleteLabel;
