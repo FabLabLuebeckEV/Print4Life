@@ -199,6 +199,10 @@
         }
     },
     "machineDetail": {
+        "labels": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
         "titles": {
             "machineProps": "Machine Data",
             "laserTypes": "Laser Types",
@@ -217,6 +221,7 @@
             "deleteMessage2": "?"
         },
         "props": {
+            "activated": "Active-Status",
             "deviceName": "Device Name",
             "type": "Type",
             "manufacturer": "Manufacturer",

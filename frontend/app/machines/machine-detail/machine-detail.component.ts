@@ -26,6 +26,7 @@ export class MachineDetailComponent implements OnInit {
   toggleOff: any;
   objectKeys = Object.keys;
   machine: any;
+  machineActive: boolean;
   machineProps: Object = {
     title: '',
     props: []
@@ -65,19 +66,21 @@ export class MachineDetailComponent implements OnInit {
     this.toggleOff = this.config.icons.toggleOff;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.route.paramMap
-      .subscribe((params) => {
+      .subscribe(async (params) => {
         if (params && params.get('id') && params.get('type')) {
           this.params = {
             id: params.get('id'),
             type: params.get('type').substr(0, params.get('type').length - 1)
           };
-          this._initMachine();
+          await this._initMachine();
         }
       });
-    this.translateService.onLangChange.subscribe(() => {
-      this._initMachine();
+    this.translateService.onLangChange.subscribe(async () => {
+      if (!this.loading) {
+        await this._initMachine();
+      }
     });
     this.userIsLoggedIn = this.userService.isLoggedIn();
   }
@@ -103,12 +106,13 @@ export class MachineDetailComponent implements OnInit {
 
   // Private Functions
 
-  private _initMachine() {
+  private async _initMachine() {
     if (this.params && this.params.type && this.params.id) {
       this.machineService.get(this.params.type, this.params.id).then((result) => {
         this.machine = undefined;
         const machine = result[this.params.type];
         this.machine = machine;
+        this.machineActive = this.machine.activated;
         this.fablabService.getFablab(machine.fablabId).then(async (result) => {
           this.machine.fablab = result.fablab;
           this.editLink = `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.update}/` +
@@ -128,14 +132,16 @@ export class MachineDetailComponent implements OnInit {
           }
 
           try {
-            this.machine.successfulOrders = await this.machineService.countSuccessfulOrders(this.params.type, this.params.id);
-            this.machine.successfulOrders = this.machine.successfulOrders.orders;
+            const result = await this.machineService.countSuccessfulOrders(this.params.type, this.params.id);
+            if (result && result.orders && result.orders.length) {
+              this.machine.successfulOrders = result.orders;
+            } else {
+              delete this.machine.successfulOrders;
+            }
           } catch (err) {
             delete this.machine.successfulOrders;
           }
 
-          this.machineSubObjects = [];
-          this.machineSubArrays = [];
           await this._splitMachineProps();
           this._translate();
         });
@@ -156,13 +162,18 @@ export class MachineDetailComponent implements OnInit {
   }
 
   private async _splitMachineProps() {
+    this.machineSubObjects = [];
+    this.machineSubArrays = [];
     const machineProps = Object.keys(this.machine).filter((key) => {
       return key !== '_id' && key !== 'fablabId' && key !== '__v';
     });
-    this.translateService.get(['machineDetail', 'deviceTypes']).subscribe((translations) => {
+    this.translateService.get(['machineDetail', 'deviceTypes', 'labels']).subscribe((translations) => {
+      this.machine.activated = this.machineActive === true
+        ? translations['machineDetail'].labels.active
+        : translations['machineDetail'].labels.inactive;
       machineProps.forEach((key) => {
         const prop: any = this.machine[`${key}`];
-        if (prop) {
+        if (prop || key === 'activated') {
           if (prop.hasOwnProperty('address')) {
             prop.city = prop.address.city;
             prop.street = prop.address.street;
@@ -171,7 +182,10 @@ export class MachineDetailComponent implements OnInit {
             delete prop.address;
           }
           if (prop.hasOwnProperty('activated')) {
-            delete prop.activated;
+            prop.activated = prop.activated === true
+              ? translations['machineDetail'].labels.active
+              : translations['machineDetail'].labels.inactive;
+            // delete prop.activated;
           }
           if (prop instanceof Object && !Array.isArray(prop)) {
             Object.keys(translations['machineDetail'].titles).forEach((k) => {
