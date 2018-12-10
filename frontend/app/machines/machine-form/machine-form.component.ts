@@ -99,11 +99,9 @@ export class MachineFormComponent implements OnInit {
     });
     this.router.events.subscribe(() => {
       const route = this.location.path();
-      if (route.indexOf('/update') >= 0 && !this.editView) {
+      if (route.indexOf('/update') >= 0) {
         this.editView = true;
       } else {
-        if (this.editView) {
-        }
         this.editView = false;
       }
       this._loadMachineTypes();
