@@ -343,7 +343,7 @@ export class MachineListComponent implements OnInit {
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent);
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     if (titleClass) {
       modalRef.componentInstance.titleClass = titleClass;

@@ -451,7 +451,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         this.loggedInUser.address.street, this.loggedInUser.address.zipCode,
         this.loggedInUser.address.city, this.loggedInUser.address.country);
       if (this.shippingAddresses.userAddress.compare(this.order.shippingAddress)) {
-        this._selectAddress('userAddress');
+        this.selectedAddressKey = 'userAddress';
       }
     } catch (err) {
       this.shippingAddresses.userAddress = undefined;
@@ -462,7 +462,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       this.shippingAddresses.fablabAddress = new Address(
         fablab.address.street, fablab.address.zipCode, fablab.address.city, fablab.address.country);
       if (this.shippingAddresses.fablabAddress.compare(this.order.shippingAddress)) {
-        this._selectAddress('fablabAddress');
+        this.selectedAddressKey = 'fablabAddress';
       }
     } catch (err) {
       this.shippingAddresses.fablabAddress = undefined;
@@ -710,7 +710,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton, link?: String) {
-    const modalRef = this.modalService.open(MessageModalComponent);
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.titleClass = titleClass;
     modalRef.componentInstance.msg = msg;

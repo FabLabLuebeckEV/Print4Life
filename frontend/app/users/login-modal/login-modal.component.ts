@@ -56,20 +56,20 @@ export class LoginModalComponent implements OnInit {
   }
 
   async resetPassword() {
-    const modalRef = this.modalService.open(InputModalComponent);
+    const modalRef = this.modalService.open(InputModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = this.translationFields.modals.title;
     modalRef.componentInstance.inputLabel = this.translationFields.modals.inputLabel;
     modalRef.componentInstance.button1 = new ModalButton(this.translationFields.modals.buttonLabel, 'btn btn-primary', 'Ok');
     modalRef.result.then((email) => {
       if (email && email !== 'dismiss') {
         this.userService.resetPassword({ email }).then(() => {
-          const msgModalRef = this.modalService.open(MessageModalComponent);
+          const msgModalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
           msgModalRef.componentInstance.title = this.translationFields.modals.successHeader;
           msgModalRef.componentInstance.titleClass = 'modal-header header-success';
           msgModalRef.componentInstance.msg = this.translationFields.modals.successMessage;
           msgModalRef.componentInstance.button1 = new ModalButton('OK', 'btn btn-primary', 'Ok');
         }).catch(() => {
-          const msgModalRef = this.modalService.open(MessageModalComponent);
+          const msgModalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
           msgModalRef.componentInstance.title = this.translationFields.modals.errorHeader;
           msgModalRef.componentInstance.titleClass = 'modal-header header-danger';
           msgModalRef.componentInstance.msg = this.translationFields.modals.errorMessage;

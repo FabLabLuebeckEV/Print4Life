@@ -71,7 +71,7 @@ export class ErrorService {
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent);
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.titleClass = titleClass;
     modalRef.componentInstance.msg = msg;

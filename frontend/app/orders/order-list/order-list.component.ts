@@ -189,7 +189,7 @@ export class OrderListComponent implements OnInit {
     this.genericService.scrollIntoView(this.spinnerContainerRef);
     let countObj;
     let totalItems = 0;
-    let query;
+    let query = { $and: [] };
 
     if (this.filter.selectedStatus.length > 0 && this.filter.selectedMachineTypes.length > 0) {
       query = {
@@ -226,7 +226,7 @@ export class OrderListComponent implements OnInit {
           query.$and[1].$nor.push({ status });
         });
       }
-    } else {
+    } else if (this.filter.originalValidStatus.length && this.filter.originalMachineTypes.length) {
       query = {
         $and: [
           { $nor: [] }
@@ -256,8 +256,6 @@ export class OrderListComponent implements OnInit {
         query.$and.push({ shared: false });
       }
     }
-
-
 
     countObj = await this.orderService.count(query);
     totalItems = countObj.count;
@@ -508,7 +506,7 @@ export class OrderListComponent implements OnInit {
   // Private Functions
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent);
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     if (titleClass) {
       modalRef.componentInstance.titleClass = titleClass;

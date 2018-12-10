@@ -272,7 +272,7 @@ export class UserFormComponent implements OnInit {
   }
 
   private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent);
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.titleClass = titleClass;
     modalRef.componentInstance.msg = msg;
@@ -326,7 +326,7 @@ export class UserFormComponent implements OnInit {
   }
 
   private _changePassword() {
-    const modalRef = this.modalService.open(ChangePasswdModalComponent);
+    const modalRef = this.modalService.open(ChangePasswdModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.userId = this.user._id;
     modalRef.result.then((result) => {
       if (result.msg) {
