@@ -49,14 +49,16 @@ export class ErrorService {
           this.isOpen = false;
         });
       } else {
+        const activateRequestResult = 'Send Activate Request';
         if (err.hasOwnProperty('type') && err.type as ErrorType === ErrorType.USER_DEACTIVATED as ErrorType) {
-          secondButton = new ModalButton('Send Activate Request', 'btn btn-success', 'Send Activate Request');
+          secondButton = new ModalButton(activateRequestResult, 'btn btn-success', activateRequestResult);
+          err.stack = err.stack ? err.stack : 'The User is deactivated. Please request an Activation!';
         }
-        modalRef = this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', err.stack,
-          okButton, secondButton);
+        modalRef = this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger',
+          err.stack, okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then((result) => {
-          if (result === 'Send Activate Request') {
+          if (result === activateRequestResult) {
             this.userService.claimActivation(err.data.userId).then(() => {
               this._openMsgModal(`Activation Request sent!`, 'modal-header header-success',
                 'An Admin was informed that you wish an activation of your user account!', okButton, undefined);

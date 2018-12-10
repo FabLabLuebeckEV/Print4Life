@@ -47,8 +47,12 @@ export class LoginModalComponent implements OnInit {
   }
 
   async login() {
-    this.response = await this.userService.login(this.loginData);
-    this.activeModal.close(this.response);
+    try {
+      this.response = await this.userService.login(this.loginData);
+      this.activeModal.close(this.response);
+    } catch (err) {
+      this.activeModal.close(err);
+    }
   }
 
   async resetPassword() {
