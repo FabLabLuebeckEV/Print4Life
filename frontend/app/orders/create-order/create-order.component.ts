@@ -542,13 +542,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         }
       }
 
-      // FIXME: the editor gets overwritten
       if (this.order.editor && this.order.editor.length === 24) {
         try {
           const result = await this.userService.getNamesOfUser(this.order.editor);
           if (result && result.fullname) {
-            this.order.editor = result;
-            this.order.editor['shownName'] = result.fullname;
+            this.order.editor = result._id;
           }
         } catch (err) {
           this.order.editor = undefined;
