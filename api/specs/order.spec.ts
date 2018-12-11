@@ -10,6 +10,7 @@ export const testOrder = {
   comments: [],
   editor: '12345678901234567890aaaa',
   owner: '12345678901234567890aaaa',
+  fablabId: '12345678901234567890aaaa',
   files: [],
   status: 'new',
   machine: {
