@@ -154,7 +154,9 @@ export class NavigationComponent implements OnInit {
 
       if (this.userIsLoggedIn) {
         this.machineDropdown.elements = this.machineDropdown.elements.concat(machineDropdownAuthElements);
-        this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownAuthElements);
+        if (this.user && this.user.role && this.user.role.role && this.user.role.role === 'editor' || this.userIsAdmin) {
+          this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownAuthElements);
+        }
         this.userDropdown.elements = this.userDropdown.elements.concat(userDropdownAuthElements);
         if (this.userIsAdmin) {
           this.machineDropdown.elements = this.machineDropdown.elements.concat({
@@ -167,18 +169,24 @@ export class NavigationComponent implements OnInit {
   }
 
   private _login() {
-    this.modalService.open(LoginModalComponent, { backdrop: 'static' }).result.then((login) => {
+    this.modalService.open(LoginModalComponent, { backdrop: 'static' }).result.then(async (login) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
+      this.user = await this.userService.getUser();
+      this.userIsAdmin = await this.userService.isAdmin();
       this.router.navigate([this.router.url]);
       this._translate();
     }).catch((err) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
+      this.user = undefined;
+      this.userIsAdmin = false;
     });
   }
 
   private _logout() {
     this.userService.logout();
     this.userIsLoggedIn = this.userService.isLoggedIn();
+    this.user = undefined;
+    this.userIsAdmin = false;
     this.router.navigate(['/']);
     this._translate();
   }
