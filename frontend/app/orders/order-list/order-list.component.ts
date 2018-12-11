@@ -304,9 +304,14 @@ export class OrderListComponent implements OnInit {
         orders.orders.forEach(async (order) => {
           promises.push(new Promise(async resolve => {
             const found = { fablab: false, schedule: false };
-            const result = await this.machineService.get(order.machine.type, order.machine._id);
-            const resultSchedules = await this.machineService.getSchedules(order.machine.type, order.machine._id,
-              { startDay: this.filter.schedule.startDay, endDay: this.filter.schedule.endDay });
+            let result;
+            let resultSchedules;
+            if (order.machine.type.toLowerCase() !== 'unknown') {
+              result = await this.machineService.get(order.machine.type, order.machine._id);
+              resultSchedules = await this.machineService.getSchedules(order.machine.type, order.machine._id,
+                { startDay: this.filter.schedule.startDay, endDay: this.filter.schedule.endDay });
+            }
+
             if ((!this.filter.schedule.startDay || !this.filter.schedule.startDay.year ||
               !this.filter.schedule.startDay.month || !this.filter.schedule.startDay.day) &&
               (!this.filter.schedule.endDay || !this.filter.schedule.endDay.year || !this.filter.schedule.endDay.month
@@ -324,7 +329,6 @@ export class OrderListComponent implements OnInit {
               this.filter.selectedFablabs.forEach((fablab) => {
                 if (fablab._id === result[`${order.machine.type}`].fablabId) {
                   found.fablab = true;
-                  order.fablabId = fablab._id;
                 }
               });
 
@@ -610,6 +614,7 @@ export class OrderListComponent implements OnInit {
     this.filter.originalMachineTypes.forEach((type, idx) => {
       this.filter.originalMachineTypes[idx] = this.machineService.camelCaseTypes(type);
     });
+    this.filter.originalMachineTypes = this.filter.originalMachineTypes.concat(['unknown']);
     this.filter.machineTypes = JSON.parse(JSON.stringify(this.filter.originalMachineTypes));
     this.filter.shownMachineTypes = JSON.parse(JSON.stringify(this.filter.machineTypes));
     this.translateService.get(['deviceTypes']).subscribe((translations => {

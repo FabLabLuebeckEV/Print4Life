@@ -17,7 +17,7 @@ import { UserService } from 'frontend/app/services/user.service';
 import { Subscription } from 'rxjs';
 import { Address } from 'frontend/app/models/address.model';
 import { UploadComponent } from 'frontend/app/components/upload/upload.component';
-import { isObject } from 'util';
+import { isObject, isArray } from 'util';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Schedule } from 'frontend/app/models/schedule.model';
 import { ScheduleService } from 'frontend/app/services/schedule.service';
@@ -56,7 +56,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
   shippingAddress: Address = new Address('', '', '', '');
   order: Order = new Order(
-    undefined, undefined, undefined,
+    undefined, undefined, undefined, undefined,
     undefined, undefined, undefined,
     undefined, this.sMachine, undefined,
     this.shippingAddress, false, false, undefined);
@@ -328,31 +328,33 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       const errorMsg = this.translationFields.modals.error;
       this.orderService.updateOrder(orderCopy, this.sharedView).then((result) => {
         if (result) {
-          const machine = this.machines.find((machine) => {
-            return this.order.machine._id === machine._id;
-          });
-          if (this.schedule.startDay && this.schedule.endDay &&
-            this.schedule.startTime && this.schedule.endTime) {
-            this.schedule.machine.type = machine.type as string;
-            this.schedule.machine.id = machine._id as string;
-            this.schedule.fablabId = machine.fablab._id;
-            this.schedule.orderId = this.order._id as string;
-            this.schedule.startDate = new Date(
-              this.schedule.startDay.year,
-              this.schedule.startDay.month - 1, // -1 to fix month index of javascript date object
-              this.schedule.startDay.day,
-              this.schedule.startTime.hour,
-              this.schedule.startTime.minute);
-            this.schedule.endDate = new Date(
-              this.schedule.endDay.year,
-              this.schedule.endDay.month - 1, // -1 to fix month index of javascript date object
-              this.schedule.endDay.day,
-              this.schedule.endTime.hour,
-              this.schedule.endTime.minute);
-            if (this.schedule._id) {
-              promises.push(this.scheduleService.update(this.schedule));
-            } else {
-              promises.push(this.scheduleService.create(this.schedule));
+          if (this.machines && isArray(this.machines)) {
+            const machine = this.machines.find((machine) => {
+              return this.order.machine._id === machine._id;
+            });
+            if (this.schedule.startDay && this.schedule.endDay &&
+              this.schedule.startTime && this.schedule.endTime) {
+              this.schedule.machine.type = machine.type as string;
+              this.schedule.machine.id = machine._id as string;
+              this.schedule.fablabId = machine.fablab._id;
+              this.schedule.orderId = this.order._id as string;
+              this.schedule.startDate = new Date(
+                this.schedule.startDay.year,
+                this.schedule.startDay.month - 1, // -1 to fix month index of javascript date object
+                this.schedule.startDay.day,
+                this.schedule.startTime.hour,
+                this.schedule.startTime.minute);
+              this.schedule.endDate = new Date(
+                this.schedule.endDay.year,
+                this.schedule.endDay.month - 1, // -1 to fix month index of javascript date object
+                this.schedule.endDay.day,
+                this.schedule.endTime.hour,
+                this.schedule.endTime.minute);
+              if (this.schedule._id) {
+                promises.push(this.scheduleService.update(this.schedule));
+              } else {
+                promises.push(this.scheduleService.create(this.schedule));
+              }
             }
           }
 
@@ -405,20 +407,27 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       this.order.machine['shownType'] = type;
       type = await this._translateMachineType(this.order.machine['shownType']);
       type = this.machineService.camelCaseTypes(type);
-      this.order.machine.type = type;
-      machineObj = await this.machineService.getAll(type, fablab ? { fablabId: fablab } : undefined, undefined);
-      machineObj = (machineObj && machineObj[`${this.machineService.camelCaseTypes(type)}s`]) ?
-        machineObj[`${this.machineService.camelCaseTypes(type)}s`] : undefined;
-      if (machineObj) {
-        for (let i = 0; i < machineObj.length; i++) {
-          const resFab = await this.fablabService.getFablab(machineObj[i].fablabId);
-          const fablab = resFab.fablab;
-          machineObj[i].fablab = fablab;
-          machineObj[i].fablabName = fablab.name;
-        }
-        this.machines = machineObj;
+      if (type.toLowerCase() === 'unknown') {
+        delete this.order.machine['detailView'];
+        delete this.order.machine['deviceName'];
+        this.order.machine.type = type;
+        this.machines = undefined;
       } else {
-        this.machines = [];
+        this.order.machine.type = type;
+        machineObj = await this.machineService.getAll(type, fablab ? { fablabId: fablab } : undefined, undefined);
+        machineObj = (machineObj && machineObj[`${this.machineService.camelCaseTypes(type)}s`]) ?
+          machineObj[`${this.machineService.camelCaseTypes(type)}s`] : undefined;
+        if (machineObj) {
+          for (let i = 0; i < machineObj.length; i++) {
+            const resFab = await this.fablabService.getFablab(machineObj[i].fablabId);
+            const fablab = resFab.fablab;
+            machineObj[i].fablab = fablab;
+            machineObj[i].fablabName = fablab.name;
+          }
+          this.machines = machineObj;
+        } else {
+          this.machines = [];
+        }
       }
 
       this.loadingMachinesForType = false;
@@ -433,16 +442,18 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         }
       });
       const type = this.machineService.camelCaseTypes(this.order.machine.type);
-      this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.order.machine._id}/`;
-      try {
-        const result: any =
-          await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
-        if (result && result.schedules) {
-          this.machineSchedules = this.machineService.sortSchedulesByStartDate(result.schedules);
-          this._translate();
+      if (type.toLowerCase() !== 'unknown') {
+        this.order.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.order.machine._id}/`;
+        try {
+          const result: any =
+            await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
+          if (result && result.schedules) {
+            this.machineSchedules = this.machineService.sortSchedulesByStartDate(result.schedules);
+            this._translate();
+          }
+        } catch (err) {
+          this.machineSchedules = [];
         }
-      } catch (err) {
-        this.machineSchedules = [];
       }
     }
   }
@@ -558,30 +569,26 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       }
 
       if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
-        try {
-          const result: any = await this.machineService.get(this.order.machine.type as string, this.order.machine._id as string);
-          if (result) {
-            this.order['fablab'] = result[`${this.order.machine.type}`].fablabId;
-          }
-        } catch (err) { }
         this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
         this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
-        try {
-          const result: any =
-            await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
-          if (result && result.schedules) {
-            this.machineSchedules = this.machineService.sortSchedulesByStartDate(result.schedules);
+        if (this.order.machine.type.toLowerCase() !== 'unknown') {
+          try {
+            const result: any =
+              await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
+            if (result && result.schedules) {
+              this.machineSchedules = this.machineService.sortSchedulesByStartDate(result.schedules);
+            }
+          } catch (err) {
+            this.machineSchedules = [];
           }
-        } catch (err) {
-          this.machineSchedules = [];
         }
         const machineId = this.order.machine._id;
-        await this.machineTypeChanged(this.order.machine['shownType'], this.order['fablab']);
+        await this.machineTypeChanged(this.order.machine['shownType'], this.order.fablabId);
         this.order.machine._id = machineId;
       }
 
       if (!this.sharedView) {
-        await this._loadEditors(this.order['fablab']);
+        await this._loadEditors(this.order.fablabId);
       }
 
       if (this.order.editor && this.order.editor.length === 24) {
@@ -622,7 +629,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       }
     } else {
       this.order.owner = this.loggedInUser._id;
-      this.order['fablab'] = this.loggedInUser.fablabId;
+      this.order.fablabId = this.loggedInUser.fablabId;
     }
   }
 
@@ -635,6 +642,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   private async _loadMachineTypes() {
     this.loadingMachineTypes = true;
     this.machineTypes = (await this.machineService.getAllMachineTypes()).types;
+    this.machineTypes = this.machineTypes.concat(['Unknown']);
     this.loadingMachineTypes = false;
   }
 

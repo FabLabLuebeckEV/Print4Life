@@ -32,6 +32,7 @@ const scheduleService = new ScheduleService();
                 "_id": "5b55f7bf3fe0c8b01713b3ff",
                 "type": "Printer"
             },
+            "fablabId": "5b73f77739bbd845df0cb2df",
             "status": "new",
             "_id": "5b73f77739bbd845df0cb2df",
             "projectname": "Comment Test",
@@ -62,6 +63,7 @@ const scheduleService = new ScheduleService();
                 "_id": "5b55f7bf3fe0c8b01713b3e5",
                 "type": "Lasercutter"
             },
+            "fablabId": "5b73f77739bbd845df0cb2df",
             "status": "new",
             "_id": "5b73f81f39bbd845df0cb2e2",
             "projectname": "Test 2 ",
@@ -287,6 +289,7 @@ function count (req, res) {
             "_id": "5b55f7bf3fe0c8b01713b3e5",
             "type": "Lasercutter"
         },
+        "fablabId": "5b73f77739bbd845df0cb2df",
         "projectname": "Test 2 ",
         "comments": [
             {
@@ -371,6 +374,7 @@ function create (req, res) {
             "_id": "5b55f7bf3fe0c8b01713b3e5",
             "type": "Lasercutter"
         },
+        "fablabId": "5b73f77739bbd845df0cb2df",
         "status": "new",
         "_id": "5b73ff2e88ccd44a93dda7db",
         "projectname": "Test 2 ",
@@ -454,6 +458,7 @@ function update (req, res) {
             "_id": "5b55f7bf3fe0c8b01713b3e5",
             "type": "Lasercutter"
         },
+        "fablabId": "5b73f77739bbd845df0cb2df",
         "status": "deleted",
         "_id": "5b73ff2e88ccd44a93dda7db",
         "projectname": "Test 2 ",
@@ -685,6 +690,7 @@ function createComment (req, res) {
             "_id": "5b55f7bf3fe0c8b01713b3e5",
             "type": "Lasercutter"
         },
+        "fablabId": "5b73f77739bbd845df0cb2df",
         "status": "new",
         "_id": "5b73f81f39bbd845df0cb2e2",
         "projectname": "Test 2 ",

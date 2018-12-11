@@ -38,6 +38,7 @@ export class OrderDetailComponent implements OnInit {
   order: Order = new Order(
     undefined,
     undefined,
+    undefined,
     [],
     undefined,
     undefined,
@@ -151,14 +152,17 @@ export class OrderDetailComponent implements OnInit {
               ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
               + `${routes.paths.frontend.orders.shared.update}/${this.order._id}/`
               : `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
-            this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
-              const type = this.machineService.camelCaseTypes(this.order.machine.type);
-              this.machine = result[`${type}`];
-              this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
-              this.fablabService.getFablab(this.machine.fablabId).then(result => {
-                this.fablab = result.fablab;
-                this._translate();
-              });
+            this.fablabService.getFablab(this.order.fablabId).then(async result => {
+              this.fablab = result.fablab;
+              if (this.order.machine.type.toLowerCase() !== 'unknown') {
+                const result = await this.machineService.get(this.order.machine.type, this.order.machine._id);
+                const type = this.machineService.camelCaseTypes(this.order.machine.type);
+                this.machine = result[`${type}`];
+                this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
+              } else {
+                this.machine = { type: this.order.machine.type.toLowerCase() };
+              }
+              this._translate();
             });
           });
         }

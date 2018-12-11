@@ -103,7 +103,8 @@
         "lasercutter": "Lasercutter",
         "otherMachine": "Other Machine",
         "millingMachine": "Milling Machine",
-        "3d-printer": "3D Printer"
+        "3d-printer": "3D Printer",
+        "unknown": "Unknown"
     },
     "materialTypes": {
         "printerMaterial": "Printer Material"

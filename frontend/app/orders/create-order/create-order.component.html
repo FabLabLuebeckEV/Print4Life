@@ -31,8 +31,8 @@
         <div class="col-md-6">
           <label for="fablab">{{translationFields.labels.fablab}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name" [(ngModel)]="order.fablab"
-            id="fablab" name="fablab" #fablab="ngModel" (change)="machineTypeChanged(order.machine['shownType'], order.fablab)">
+          <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name" [(ngModel)]="order.fablabId"
+            id="fablab" name="fablab" #fablab="ngModel" (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)">
             <ng-template ng-optgroup-tmp let-item="item">
               {{item.fablabName || translationFields.messages.unnamedFablab}}
             </ng-template>
@@ -43,8 +43,8 @@
           <label for="selectedMachineType">{{translationFields.labels.machineType}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingMachineTypes" [items]=translationFields.shownMachineTypes [(ngModel)]="order.machine['shownType']"
-            id="selectedMachineType" name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine['shownType'], order.fablab)"
-            required [disabled]="!order.fablab">
+            id="selectedMachineType" name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)"
+            required [disabled]="!order.fablabId">
           </ng-select>
           <div [hidden]="selectedMachineType.valid || selectedMachineType.pristine" class="alert alert-danger">
             {{translationFields.messages.machineType}}
@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <div *ngIf="order.machine.type" class="form-group row">
+      <div *ngIf="order.machine.type && machines && machines.length >= 0" class="form-group row">
         <div class="col-md-6">
           <label for="selectedMachine">{{translationFields.labels.selectedMachine}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
@@ -106,7 +106,7 @@
           <label for="editor">{{translationFields.labels.editor}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingEditors" [items]=editors bindValue="_id" bindLabel="shownName" [(ngModel)]="order.editor"
-            id="editor" name="editor" #editor="ngModel" groupBy="fablabName" [disabled]="!order.fablab && !editView || !loggedInUser || !loggedInUser.role || !loggedInUser.role.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+            id="editor" name="editor" #editor="ngModel" groupBy="fablabName" [disabled]="!order.fablabId && !editView || !loggedInUser || !loggedInUser.role || !loggedInUser.role.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
             <ng-template ng-optgroup-tmp let-item="item">
               {{item.fablabName || translationFields.messages.unnamedFablab}}
             </ng-template>

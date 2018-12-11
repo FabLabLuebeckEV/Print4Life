@@ -18,6 +18,7 @@ export class SimpleMachine {
 export class Order {
     constructor(
         public _id: String,
+        public fablabId: String,
         public projectname: String,
         public comments: Array<Comment>,
         public editor: String,
