@@ -15,7 +15,8 @@ export enum ErrorType {
   MACHINE_NOT_FOUND,
   UPLOAD_FILE_ERROR,
   DOWNLOAD_FILE_ERROR,
-  INVALID_ID
+  INVALID_ID,
+  FORBIDDEN
 }
 
 export interface Error {

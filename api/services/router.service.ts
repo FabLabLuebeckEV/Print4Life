@@ -13,7 +13,8 @@ export enum ErrorType {
   MACHINE_NOT_FOUND,
   UPLOAD_FILE_ERROR,
   DOWNLOAD_FILE_ERROR,
-  INVALID_ID
+  INVALID_ID,
+  FORBIDDEN
 }
 
 /* eslint-disable no-restricted-globals */

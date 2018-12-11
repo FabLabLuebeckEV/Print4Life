@@ -840,13 +840,22 @@ async function getSchedule (req, res) {
       "type": "INVALID_ID"
     }
   }
+
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 403 Forbidden
+  {
+    name: 'FORBIDDEN',
+    message: 'Forbidden! You are not allowed to use this route.',
+    type: ErrorType.FORBIDDEN
+  }
 * @apiErrorExample {json} Error-Response:
 *     HTTP/1.1 404 Not Found
   {
-      "error": "Could not find any Order with id 9999",
-      "stack": {
-          ...
-      }
+    "err": {
+      "name": "FORBIDDEN",
+      "message": "Forbidden! You are not allowed to use this route.",
+      "type": "FORBIDDEN"
+    }
   }
 * @apiErrorExample {json} Error-Response:
 *     HTTP/1.1 500 Server Error
@@ -873,6 +882,19 @@ async function downloadFile (req, res) {
 
   try {
     const order = await orderService.get(req.params.id);
+    if (!order.shared) {
+      const tokenCheck = await validatorService.checkToken(req);
+      if (!tokenCheck || !tokenCheck.decoded
+        || (order.owner !== tokenCheck.decoded._id && tokenCheck.decoded.role.role !== 'admin'
+          && tokenCheck.decoded.role.role !== 'editor')) {
+        err = {
+          name: 'FORBIDDEN',
+          message: 'Forbidden! You are not allowed to use this route.',
+          type: ErrorType.FORBIDDEN
+        };
+        return res.status(403).send(err);
+      }
+    }
     file = order.files.find((elem) => elem.id === req.params.fileId);
   } catch (error) {
     err = {
@@ -884,6 +906,7 @@ async function downloadFile (req, res) {
     };
     return res.status(400).send(err);
   }
+
 
   try {
     downloadStream = await fileService.downloadFile(req.params.fileId, 'orderAttachments');

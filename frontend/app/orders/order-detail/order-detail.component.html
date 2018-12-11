@@ -132,8 +132,8 @@
               <fa-icon class="text-success" *ngIf="!file.deprecated" [icon]="toggleOnIcon"></fa-icon>
               <fa-icon class="text-danger" *ngIf="file.deprecated" [icon]="toggleOffIcon"></fa-icon>
             </td>
-            <td *ngIf="userIsLoggedIn || order.shared" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
-            <td *ngIf="!userIsLoggedIn && !order.shared" class="align-middle text-center">{{file.filename}}</td>
+            <td *ngIf="userCanDownload" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
+            <td *ngIf="!userCanDownload" class="align-middle text-center">{{file.filename}}</td>
             <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
           </tr>
         </tbody>
