@@ -311,6 +311,11 @@ export class OrderListComponent implements OnInit {
               resultSchedules = await this.machineService.getSchedules(order.machine.type, order.machine._id,
                 { startDay: this.filter.schedule.startDay, endDay: this.filter.schedule.endDay });
             }
+            this.filter.selectedFablabs.forEach((fablab) => {
+              if (fablab._id === order.fablabId) {
+                found.fablab = true;
+              }
+            });
 
             if ((!this.filter.schedule.startDay || !this.filter.schedule.startDay.year ||
               !this.filter.schedule.startDay.month || !this.filter.schedule.startDay.day) &&
@@ -326,17 +331,14 @@ export class OrderListComponent implements OnInit {
                   }
                 });
               }
-              this.filter.selectedFablabs.forEach((fablab) => {
-                if (fablab._id === result[`${order.machine.type}`].fablabId) {
-                  found.fablab = true;
-                }
-              });
 
               if (found.fablab && found.schedule) {
                 resolve(order);
               } else {
                 resolve();
               }
+            } else if (order.machine.type.toLowerCase() === 'unknown') {
+              resolve(order);
             }
             resolve();
           }));

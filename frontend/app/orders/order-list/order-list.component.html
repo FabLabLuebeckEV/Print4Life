@@ -19,7 +19,7 @@
         (remove)="init()" (clear)="init()" name="status" #status="ngModel">
       </ng-select>
     </div>
-    <div *ngIf="!unfinishedOrders" [class]="listView || unfinishedOrders ? 'col-md-3' : 'col-md-6 offset-md-1'">
+    <div [class]="listView ? 'col-md-3' : unfinishedOrders ? 'col-md-2 offset-md-1' : 'col-md-6 offset-md-1'">
       <label for="machineType">{{translationFields.filterLabel.machines}}</label>
       <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false"
         [items]=filter.machineTypes bindLabel="machineType" [(ngModel)]="filter.shownMachineTypes" id="machineType"
@@ -27,7 +27,7 @@
         #machineType="ngModel">
       </ng-select>
     </div>
-    <div *ngIf="unfinishedOrders" class="col-md-4 offset-md-1">
+    <div *ngIf="unfinishedOrders" class="col-md-3">
       <label for="fablabs">{{translationFields.filterLabel.fablabs}}</label>
       <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.fablabs
         bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabs" (change)="changeHandlerFablab($event)"
@@ -72,7 +72,7 @@
       </div>
     </div>
 
-    <div class="col-md-3">
+    <div [class]="unfinishedOrders ? 'col-md-2' : 'col-md-3'">
       <form>
         <label for="search">{{translationFields.filterLabel.search}}</label>
         <div class="input-group">
