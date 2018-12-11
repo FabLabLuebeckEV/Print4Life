@@ -354,7 +354,8 @@
             "machineSchedule": "Maschinenplanung",
             "startDate": "Startdatum",
             "endDate": "Enddatum",
-            "copyright": "Urheberrecht vorhanden?"
+            "copyright": "Urheberrecht vorhanden?",
+            "fablab": "Fablab"
         },
         "modals": {
             "ok": "Ok",

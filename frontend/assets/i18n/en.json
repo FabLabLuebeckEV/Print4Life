@@ -354,7 +354,8 @@
             "machineSchedule": "Machine Schedule",
             "startDate": "Start Date",
             "endDate": "End Date",
-            "copyright": "Are you the owner of the files and have their copyright?"
+            "copyright": "Are you the owner of the files and have their copyright?",
+            "fablab": "Fablab"
         },
         "modals": {
             "ok": "Ok",

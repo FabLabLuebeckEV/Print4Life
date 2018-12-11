@@ -136,7 +136,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       machineSchedule: '',
       startDate: '',
       endDate: '',
-      copyright: ''
+      copyright: '',
+      fablab: ''
     },
     modals: {
       ok: '',
@@ -394,27 +395,34 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.order.status = status;
   }
 
-  async machineTypeChanged(type) {
+  async machineTypeChanged(type, fablab) {
     let machineObj;
-    this.loadingMachinesForType = true;
-    this.order.machine._id = '';
-    this.order.machine['detailView'] = '';
-    this.order.machine['deviceName'] = '';
-    this.order.machine['shownType'] = type;
-    type = await this._translateMachineType(this.order.machine['shownType']);
-    this.order.machine.type = type;
-    machineObj = await this.machineService.getAll(type, undefined, undefined);
-    machineObj = (machineObj && machineObj[`${this.machineService.camelCaseTypes(type)}s`]) ?
-      machineObj[`${this.machineService.camelCaseTypes(type)}s`] : undefined;
-    for (let i = 0; i < machineObj.length; i++) {
-      const resFab = await this.fablabService.getFablab(machineObj[i].fablabId);
-      const fablab = resFab.fablab;
-      machineObj[i].fablab = fablab;
-      machineObj[i].fablabName = fablab.name;
-    }
-    this.machines = machineObj;
+    if (type) {
+      this.loadingMachinesForType = true;
+      this.order.machine._id = '';
+      this.order.machine['detailView'] = '';
+      this.order.machine['deviceName'] = '';
+      this.order.machine['shownType'] = type;
+      type = await this._translateMachineType(this.order.machine['shownType']);
+      type = this.machineService.camelCaseTypes(type);
+      this.order.machine.type = type;
+      machineObj = await this.machineService.getAll(type, fablab ? { fablabId: fablab } : undefined, undefined);
+      machineObj = (machineObj && machineObj[`${this.machineService.camelCaseTypes(type)}s`]) ?
+        machineObj[`${this.machineService.camelCaseTypes(type)}s`] : undefined;
+      if (machineObj) {
+        for (let i = 0; i < machineObj.length; i++) {
+          const resFab = await this.fablabService.getFablab(machineObj[i].fablabId);
+          const fablab = resFab.fablab;
+          machineObj[i].fablab = fablab;
+          machineObj[i].fablabName = fablab.name;
+        }
+        this.machines = machineObj;
+      } else {
+        this.machines = [];
+      }
 
-    this.loadingMachinesForType = false;
+      this.loadingMachinesForType = false;
+    }
   }
 
   async machineSelected() {
@@ -566,11 +574,14 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
       if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
+        try {
+          const result: any = await this.machineService.get(this.order.machine.type as string, this.order.machine._id as string);
+          if (result) {
+            this.order['fablab'] = result[`${this.order.machine.type}`].fablabId;
+          }
+        } catch (err) { }
         this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
         this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
-        const machineId = this.order.machine._id;
-        await this.machineTypeChanged(this.order.machine['shownType']);
-        this.order.machine._id = machineId;
         try {
           const result: any =
             await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
@@ -580,6 +591,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         } catch (err) {
           this.machineSchedules = [];
         }
+        const machineId = this.order.machine._id;
+        await this.machineTypeChanged(this.order.machine['shownType'], this.order['fablab']);
+        this.order.machine._id = machineId;
       }
 
       if (this.order.comments) {
@@ -605,6 +619,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       }
     } else {
       this.order.owner = this.loggedInUser._id;
+      this.order['fablab'] = this.loggedInUser.fablabId;
     }
   }
 
@@ -853,7 +868,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             machineSchedule: translations['orderForm'].labels.machineSchedule,
             startDate: translations['orderForm'].labels.startDate,
             endDate: translations['orderForm'].labels.endDate,
-            copyright: translations['orderForm'].labels.copyright
+            copyright: translations['orderForm'].labels.copyright,
+            fablab: translations['orderForm'].labels.fablab
           },
           modals: {
             ok: translations['orderForm'].modals.ok,
