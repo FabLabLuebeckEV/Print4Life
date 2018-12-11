@@ -485,12 +485,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.loadingAddresses = false;
   }
 
-  private async _loadEditors() {
+  private async _loadEditors(fablab) {
     const promises = [];
     let editors = [];
     this.loadingEditors = true;
+    const query = fablab ? { 'role.role': 'editor', fablabId: fablab, activated: true } : { 'role.role': 'editor', activated: true };
     try {
-      const result = await this.userService.getAllUsers({ 'role.role': 'editor', activated: true }, 0, 0);
+      const result = await this.userService.getAllUsers(query, 0, 0);
       if (result && result.users) {
         editors = result.users;
         editors.forEach(async (editor) => {
@@ -537,9 +538,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         this.order.owner = this.loggedInUser._id;
       }
     } else if (id !== undefined) {
-      if (!this.sharedView) {
-        await this._loadEditors();
-      }
       this.order = (await this.orderService.getOrderById(id)).order;
       try {
         const result = await this.orderService.getSchedule(id);
@@ -559,20 +557,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.order.editor && this.order.editor.length === 24) {
-        try {
-          const result = await this.userService.getNamesOfUser(this.order.editor);
-          if (result && result.fullname) {
-            this.order.editor = result._id;
-          }
-        } catch (err) {
-          this.order.editor = undefined;
-        }
-      } else {
-        this.order.editor = undefined;
-      }
-
-      this.order['shownStatus'] = await this._translateStatus(this.order.status);
       if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
         try {
           const result: any = await this.machineService.get(this.order.machine.type as string, this.order.machine._id as string);
@@ -595,6 +579,25 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         await this.machineTypeChanged(this.order.machine['shownType'], this.order['fablab']);
         this.order.machine._id = machineId;
       }
+
+      if (!this.sharedView) {
+        await this._loadEditors(this.order['fablab']);
+      }
+
+      if (this.order.editor && this.order.editor.length === 24) {
+        try {
+          const result = await this.userService.getNamesOfUser(this.order.editor);
+          if (result && result.fullname) {
+            this.order.editor = result._id;
+          }
+        } catch (err) {
+          this.order.editor = undefined;
+        }
+      } else {
+        this.order.editor = undefined;
+      }
+
+      this.order['shownStatus'] = await this._translateStatus(this.order.status);
 
       if (this.order.comments) {
         this.order.comments.forEach(async (comment) => {
