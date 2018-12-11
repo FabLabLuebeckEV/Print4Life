@@ -254,7 +254,7 @@
         </div>
 
         <div class="col-md-12">
-          <app-upload #fileUpload (uploadingEvent)="uploadingEventHandler($event)"></app-upload>
+          <app-upload #fileUpload (uploadingEvent)="uploadingEventHandler($event)" (fileChangeEvent)="fileChangeEventHandler($event)"></app-upload>
         </div>
 
         <!-- Print files of this order as a list -->
@@ -313,6 +313,15 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="form-check spacing-top">
+        <input type="checkbox" class="form-check-input" id="copyright" required [(ngModel)]="order.fileCopyright" name="copyright"
+          #copyright="ngModel" [disabled]="order.files && !order.files.length || !inUploadQueue" />
+        <label class="form-check-label spacing-right-xs" for="copyright">{{translationFields.labels.copyright}}</label>
+        <div [hidden]="copyright.valid || copyright.pristine" class="alert alert-danger">
+          {{translationFields.messages.copyright}}
         </div>
       </div>
       <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid || datePickerError">{{translationFields.labels.submit}}</button>

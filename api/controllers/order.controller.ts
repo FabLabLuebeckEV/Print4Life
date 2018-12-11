@@ -54,6 +54,7 @@ const scheduleService = new ScheduleService();
             "token": "87250a41-2587-40bf-8b09-bcd2a32b2c2d",
             "createdAt": "2018-08-15T09:50:47.475Z",
             "files": [],
+            "fileCopyright": false,
             "__v": 1
         },
         {
@@ -77,6 +78,7 @@ const scheduleService = new ScheduleService();
             "token": "e9a42f99-5689-4563-98ec-721abb754ba5",
             "createdAt": "2018-08-15T09:53:35.043Z",
             "files": [],
+            "fileCopyright": false,
             "__v": 0
         }
     ]
@@ -102,6 +104,7 @@ const scheduleService = new ScheduleService();
             files: {[
                 ...
             ]},
+            "fileCopyright": false,
             status: "production",
             comments: [{
                     content: "Please print this.",
@@ -323,6 +326,7 @@ function count (req, res) {
         "token": "e6ae7bef-657e-48e7-9c3b-960407cd7164",
         "createdAt": "2018-08-15T10:43:52.291Z",
         "files": [],
+        "fileCopyright": false,
         "__v": 0
     }
 }
@@ -383,6 +387,7 @@ function create (req, res) {
         "token": "66b0997a-b467-49fd-a769-242fc37ce78d",
         "createdAt": "2018-08-15T10:23:42.852Z",
         "files": [],
+        "fileCopyright": false,
         "__v": 0
     }
 }
@@ -391,21 +396,22 @@ function create (req, res) {
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
   {
-  'order'; : {
-      'status'; : 'new',
-      '_id'; : '5b55cf9730b4aa4bbeaf6f68',
-      'comments'; : [
+  'order' : {
+      'status' : 'new',
+      '_id' : '5b55cf9730b4aa4bbeaf6f68',
+      'comments' : [
           {
               '_id': '5b583da5514fac1bb10832b6',
               'author': 'Mister Foo',
               'content': 'Hello there, could you print this?'
           }
       ],
-      'editor'; : 'Mister Bar',
-      'owner'; : 'Mister X',
-      'files'; : [],
-      'token'; : '42',
-      '__v'; : 0;
+      'editor' : 'Mister Bar',
+      'owner' : 'Mister X',
+      'files' : [],
+      'fileCopyright': false,
+      'token' : '42',
+      '__v' : 0;
   }
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
@@ -464,6 +470,7 @@ function update (req, res) {
         "token": "66b0997a-b467-49fd-a769-242fc37ce78d",
         "createdAt": "2018-08-15T10:23:42.852Z",
         "files": [],
+        "fileCopyright": false,
         "__v": 0
     }
 }
@@ -694,6 +701,7 @@ function createComment (req, res) {
         "token": "e9a42f99-5689-4563-98ec-721abb754ba5",
         "createdAt": "2018-08-15T09:53:35.043Z",
         "files": [],
+        "fileCopyright": false,
         "__v": 0
     }
 }

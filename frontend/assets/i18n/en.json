@@ -353,7 +353,8 @@
             "timePickerEnd": "End Time on End Day",
             "machineSchedule": "Machine Schedule",
             "startDate": "Start Date",
-            "endDate": "End Date"
+            "endDate": "End Date",
+            "copyright": "Are you the owner of the files and have their copyright?"
         },
         "modals": {
             "ok": "Ok",
@@ -381,7 +382,8 @@
             "author": "Author name is required",
             "content": "Text is required",
             "datePicker": "Start Date is greater than End Date",
-            "timePicker": "The Start and End Time is wrong. Please check the Start and End Date and Times"
+            "timePicker": "The Start and End Time is wrong. Please check the Start and End Date and Times",
+            "copyright": "If you want to upload or have uploaded files, you need to confirm that they are your data and you have the copyright for them."
         }
     },
     "userDetail": {

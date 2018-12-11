@@ -51,6 +51,10 @@ const attributes = {
       type: String,
       required: true
     }
+  },
+  fileCopyright: {
+    type: Boolean,
+    default: false
   }
 };
 

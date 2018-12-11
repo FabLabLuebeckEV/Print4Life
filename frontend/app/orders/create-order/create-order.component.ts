@@ -51,6 +51,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   formSubscription: Subscription;
   datePickerError = false;
   timePickerError = false;
+  inUploadQueue = false;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
   shippingAddress: Address = new Address('', '', '', '');
@@ -58,7 +59,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     undefined, undefined, undefined,
     undefined, undefined, undefined,
     undefined, this.sMachine, undefined,
-    this.shippingAddress, false, undefined);
+    this.shippingAddress, false, false, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
   schedule: Schedule = new Schedule('', undefined, undefined, '', { type: '', id: '' }, '');
@@ -134,7 +135,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       timePickerEnd: '',
       machineSchedule: '',
       startDate: '',
-      endDate: ''
+      endDate: '',
+      copyright: ''
     },
     modals: {
       ok: '',
@@ -159,7 +161,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       author: '',
       content: '',
       datePicker: '',
-      timePicker: ''
+      timePicker: '',
+      copyright: ''
     }
   };
 
@@ -680,6 +683,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  public fileChangeEventHandler(event) {
+    this.inUploadQueue = event && event > 0;
+  }
+
   private _openSuccessMsg(resultOrder) {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(this.translationFields.modals.orderSuccessHeader, 'modal-header header-success',
@@ -845,7 +852,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             timePickerEnd: translations['orderForm'].labels.timePickerEnd,
             machineSchedule: translations['orderForm'].labels.machineSchedule,
             startDate: translations['orderForm'].labels.startDate,
-            endDate: translations['orderForm'].labels.endDate
+            endDate: translations['orderForm'].labels.endDate,
+            copyright: translations['orderForm'].labels.copyright
           },
           modals: {
             ok: translations['orderForm'].modals.ok,
@@ -876,7 +884,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             author: translations['orderForm'].messages.author,
             content: translations['orderForm'].messages.content,
             datePicker: translations['orderForm'].messages.datePicker,
-            timePicker: translations['orderForm'].messages.timePicker
+            timePicker: translations['orderForm'].messages.timePicker,
+            copyright: translations['orderForm'].messages.copyright
           }
         };
       }

@@ -28,7 +28,8 @@ export class Order {
         public createdAt: Date,
         public shippingAddress: Address,
         public shared: Boolean,
-        token: String
+        public fileCopyright: Boolean,
+        public token: String
     ) { }
 }
 
