@@ -80,7 +80,8 @@ export class OrderDetailComponent implements OnInit {
       abortReturnValue: '',
       deleteHeader: '',
       deleteQuestion: '',
-      deleteQuestion2: ''
+      deleteQuestion2: '',
+      deleteWarning: ''
     }
   };
 
@@ -184,7 +185,8 @@ export class OrderDetailComponent implements OnInit {
       this.translationFields.modals.abortReturnValue);
     const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
       'modal-header header-danger',
-      `${this.translationFields.modals.deleteQuestion} ${this.order.projectname} ${this.translationFields.modals.deleteQuestion2}`,
+      [`${this.translationFields.modals.deleteQuestion} ${this.order.projectname} ${this.translationFields.modals.deleteQuestion2}`,
+      `${this.translationFields.modals.deleteWarning}`],
       deleteButton, abortButton);
     modalRef.result.then((result) => {
       if (result === deleteButton.returnValue) {
@@ -197,13 +199,13 @@ export class OrderDetailComponent implements OnInit {
 
   // Private Functions
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     if (titleClass) {
       modalRef.componentInstance.titleClass = titleClass;
     }
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;
@@ -288,7 +290,8 @@ export class OrderDetailComponent implements OnInit {
           abortReturnValue: translations['orderDetail'].modals.abortReturnValue,
           deleteHeader: translations['orderDetail'].modals.deleteHeader,
           deleteQuestion: translations['orderDetail'].modals.deleteQuestion,
-          deleteQuestion2: translations['orderDetail'].modals.deleteQuestion2
+          deleteQuestion2: translations['orderDetail'].modals.deleteQuestion2,
+          deleteWarning: translations['orderDetail'].modals.deleteWarning
         }
       };
     }));

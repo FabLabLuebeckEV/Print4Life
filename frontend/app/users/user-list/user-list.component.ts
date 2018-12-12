@@ -251,8 +251,8 @@ export class UserListComponent implements OnInit {
       const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
         this.translationFields.modals.abortValue);
       const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
-        'modal-header header-danger', `${this.translationFields.modals.deleteQuestion} ` +
-        `${user.obj[`Username`].label} ${this.translationFields.modals.deleteQuestion2}`, deleteButton, abortButton);
+        'modal-header header-danger', [`${this.translationFields.modals.deleteQuestion} ` +
+          `${user.obj[`Username`].label} ${this.translationFields.modals.deleteQuestion2}`], deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
           this.userService.deleteUser(user.obj.id.label).then((result) => {
@@ -363,13 +363,13 @@ export class UserListComponent implements OnInit {
     }));
   }
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     if (titleClass) {
       modalRef.componentInstance.titleClass = titleClass;
     }
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;

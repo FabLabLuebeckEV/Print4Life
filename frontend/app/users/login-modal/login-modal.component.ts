@@ -66,13 +66,13 @@ export class LoginModalComponent implements OnInit {
           const msgModalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
           msgModalRef.componentInstance.title = this.translationFields.modals.successHeader;
           msgModalRef.componentInstance.titleClass = 'modal-header header-success';
-          msgModalRef.componentInstance.msg = this.translationFields.modals.successMessage;
+          msgModalRef.componentInstance.messages = [this.translationFields.modals.successMessage];
           msgModalRef.componentInstance.button1 = new ModalButton('OK', 'btn btn-primary', 'Ok');
         }).catch(() => {
           const msgModalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
           msgModalRef.componentInstance.title = this.translationFields.modals.errorHeader;
           msgModalRef.componentInstance.titleClass = 'modal-header header-danger';
-          msgModalRef.componentInstance.msg = this.translationFields.modals.errorMessage;
+          msgModalRef.componentInstance.messages = [this.translationFields.modals.errorMessage];
           msgModalRef.componentInstance.button1 = new ModalButton('OK', 'btn btn-primary', 'Ok');
         });
       }

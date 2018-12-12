@@ -43,7 +43,7 @@ export class ErrorService {
         err.type as ErrorType === ErrorType.UNAUTHORIZED as ErrorType)) {
         this.userService.logout();
         this.router.navigate(['/']);
-        modalRef = this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', err.stack,
+        modalRef = this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', [err.stack],
           okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then(() => {
@@ -56,13 +56,13 @@ export class ErrorService {
           err.stack = err.stack ? err.stack : 'The User is deactivated. Please request an Activation!';
         }
         modalRef = this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger',
-          err.stack, okButton, secondButton);
+          [err.stack], okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then((result) => {
           if (result === activateRequestResult) {
             this.userService.claimActivation(err.data.userId).then(() => {
               this._openMsgModal(`Activation Request sent!`, 'modal-header header-success',
-                'An Admin was informed that you wish an activation of your user account!', okButton, undefined);
+                ['An Admin was informed that you wish an activation of your user account!'], okButton, undefined);
             });
           }
           this.isOpen = false;
@@ -71,11 +71,11 @@ export class ErrorService {
     }
   }
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.titleClass = titleClass;
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;

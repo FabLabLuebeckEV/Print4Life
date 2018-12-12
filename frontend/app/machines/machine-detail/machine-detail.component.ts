@@ -92,7 +92,7 @@ export class MachineDetailComponent implements OnInit {
       this.translationFields.modals.abortReturnValue);
     const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
       'modal-header header-warning',
-      `${this.translationFields.modals.deleteMessage} ${this.machine.deviceName} ${this.translationFields.modals.deleteMessage2}`,
+      [`${this.translationFields.modals.deleteMessage} ${this.machine.deviceName} ${this.translationFields.modals.deleteMessage2}`],
       deleteButton, abortButton);
     modalRef.result.then((result) => {
       if (result === deleteButton.returnValue) {
@@ -152,13 +152,13 @@ export class MachineDetailComponent implements OnInit {
     }
   }
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     if (titleClass) {
       modalRef.componentInstance.titleClass = titleClass;
     }
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;

@@ -267,7 +267,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.orderService.createComment(this.orderId, this.comment, this.sharedView).then((result) => {
       if (result) {
         this._openMsgModal(this.translationFields.modals.createCommentSuccessHeader, 'modal-header header-success',
-          this.translationFields.modals.createCommentSuccess, okButton, undefined).result.then((result) => {
+          [this.translationFields.modals.createCommentSuccess], okButton, undefined).result.then((result) => {
             this.orderService.getOrderById(this.orderId).then((result) => {
               this.order.comments = result.order.comments;
               form.reset();
@@ -283,7 +283,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           });
       }
     }).catch(() => {
-      this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg,
+      this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg],
         okButton, undefined);
     });
   }
@@ -389,13 +389,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
               this._openSuccessMsg(result);
             }, this.sharedView);
           }).catch(() => {
-            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
           });
         } else {
-          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
         }
       }).catch((err) => {
-        this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+        this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
       });
     } else {
       const errorMsg = this.translationFields.modals.error;
@@ -407,10 +407,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             this._openSuccessMsg(result);
           }, this.sharedView);
         } else {
-          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
         }
       }).catch(() => {
-        this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+        this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
       });
     }
   }
@@ -751,7 +751,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   private _openSuccessMsg(resultOrder) {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(this.translationFields.modals.orderSuccessHeader, 'modal-header header-success',
-      this.translationFields.modals.orderSuccess, okButton, undefined).result.then((result) => {
+      [this.translationFields.modals.orderSuccess], okButton, undefined).result.then((result) => {
         if (resultOrder.order.shared) {
           this._openLinkMsg(resultOrder.order);
         } else {
@@ -764,7 +764,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(
       this.translationFields.modals.orderSharedLinkSuccessHeader, 'modal-header header-success',
-      `${this.translationFields.modals.orderSharedLinkSuccess}`,
+      [`${this.translationFields.modals.orderSharedLinkSuccess}`],
       okButton, undefined, `${routes.frontendUrl}/${routes.paths.frontend.orders.root}/` +
       `${routes.paths.frontend.orders.shared.root}/${routes.paths.frontend.orders.shared.detail}/` +
       `${order._id}`).result.then(() => {
@@ -781,11 +781,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.order.shippingAddress = JSON.parse(JSON.stringify(this.shippingAddresses[`${address}`]));
   }
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton, link?: String) {
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>,
+    button1: ModalButton, button2: ModalButton, link?: String) {
     const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.titleClass = titleClass;
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     if (link) {

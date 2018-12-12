@@ -23,7 +23,7 @@ export class ModalButton {
 export class MessageModalComponent implements OnInit {
   @Input() title: String;
   @Input() titleClass: String;
-  @Input() msg: String;
+  @Input() messages: Array<String>;
   @Input() button1: ModalButton;
   @Input() button2: ModalButton;
   @Input() link: String;

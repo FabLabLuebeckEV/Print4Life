@@ -96,7 +96,8 @@ export class OrderListComponent implements OnInit {
       abortValue: '',
       deleteHeader: '',
       deleteQuestion: '',
-      deleteQuestion2: ''
+      deleteQuestion2: '',
+      deleteWarning: ''
     },
     messages: {
       datePicker: ''
@@ -497,8 +498,9 @@ export class OrderListComponent implements OnInit {
       const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
         this.translationFields.modals.abortValue);
       const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
-        'modal-header header-danger', `${this.translationFields.modals.deleteQuestion} ` +
-        `${order.obj[`Projectname`].label} ${this.translationFields.modals.deleteQuestion2}`, deleteButton, abortButton);
+        'modal-header header-danger', [`${this.translationFields.modals.deleteQuestion} ` +
+          `${order.obj[`Projectname`].label} ${this.translationFields.modals.deleteQuestion2}`,
+        `${this.translationFields.modals.deleteWarning}`], deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
           this.orderService.deleteOrder(order.obj.id.label).then(async (result) => {
@@ -547,13 +549,13 @@ export class OrderListComponent implements OnInit {
 
   // Private Functions
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     if (titleClass) {
       modalRef.componentInstance.titleClass = titleClass;
     }
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;
@@ -692,7 +694,8 @@ export class OrderListComponent implements OnInit {
           abortValue: translations['orderList'].modals.abortValue,
           deleteHeader: translations['orderList'].modals.deleteHeader,
           deleteQuestion: translations['orderList'].modals.deleteQuestion,
-          deleteQuestion2: translations['orderList'].modals.deleteQuestion2
+          deleteQuestion2: translations['orderList'].modals.deleteQuestion2,
+          deleteWarning: translations['orderList'].modals.deleteWarning
         },
         messages: {
           datePicker: translations['orderList'].messages.datePicker

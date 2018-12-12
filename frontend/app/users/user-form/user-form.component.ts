@@ -179,7 +179,7 @@ export class UserFormComponent implements OnInit {
                   const errorMsg = this.translationFields.modals.errorMessage;
                   const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
                   this._openMsgModal(this.translationFields.modals.errorHeader,
-                    'modal-header header-danger', errorMsg, okButton, undefined);
+                    'modal-header header-danger', [errorMsg], okButton, undefined);
                 });
               } else {
                 this._openSuccessMsg();
@@ -189,7 +189,7 @@ export class UserFormComponent implements OnInit {
           .catch(err => {
             const errorMsg = this.translationFields.modals.errorMessage;
             const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
-            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
           });
       } else {
         this.userService.createUser(userCopy)
@@ -201,7 +201,7 @@ export class UserFormComponent implements OnInit {
           .catch(err => {
             const errorMsg = this.translationFields.modals.errorMessage;
             const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
-            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
           });
       }
     }));
@@ -266,16 +266,16 @@ export class UserFormComponent implements OnInit {
   private _openSuccessMsg() {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(this.translationFields.modals.successHeader, 'modal-header header-success',
-      this.translationFields.modals.successMessage, okButton, undefined).result.then((result) => {
+      [this.translationFields.modals.successMessage], okButton, undefined).result.then((result) => {
         this.genericService.back();
       });
   }
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.titleClass = titleClass;
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;

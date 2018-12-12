@@ -306,7 +306,8 @@
             "abortValue": "Abort",
             "deleteHeader": "Do you really want to delete this order?",
             "deleteQuestion": "Are you sure you want to delete",
-            "deleteQuestion2": "? The deletion of this order will delete all old and deprecated files. Only the latest files will remain!"
+            "deleteQuestion2": "?",
+            "deleteWarning": "The deletion of this order will delete all old and deprecated files. Only the latest files will remain!"
         },
         "messages": {
             "datePicker": "Start Date is greater than End Date"
@@ -444,7 +445,8 @@
             "abortReturnValue": "Abort",
             "deleteHeader": "Do you really want to delete this order?",
             "deleteQuestion": "Are you sure you want to delete",
-            "deleteQuestion2": "? The deletion of this order will delete all old and deprecated files. Only the latest files will remain!"
+            "deleteQuestion2": "?",
+            "deleteWarning": "The deletion of this order will delete all old and deprecated files. Only the latest files will remain!"
         }
     },
     "userForm": {

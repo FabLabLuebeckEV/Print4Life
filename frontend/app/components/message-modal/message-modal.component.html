@@ -5,7 +5,9 @@
   </button>
 </div>
 <div class="modal-body">
-  <p>{{msg}}</p>
+  <div *ngFor="let msg of messages">
+    <p>{{msg}}</p>
+  </div>
   <a href="{{link}}" style="word-break: break-word;">{{link}}</a>
 </div>
 <div class="modal-footer">
