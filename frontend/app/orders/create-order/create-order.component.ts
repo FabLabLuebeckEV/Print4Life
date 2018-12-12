@@ -341,14 +341,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     if (this.editView) {
       const promises = [];
       const errorMsg = this.translationFields.modals.error;
-      if (this.doneStatus.original.includes(orderCopy.status)) {
-        const deprecated = orderCopy.files.filter((elem) => elem.deprecated);
-        deprecated.forEach((elem) => {
-          if (!this.deleteFilesQueue.includes(elem.id)) {
-            this.deleteFilesQueue.push(elem.id);
-          }
-        });
-      }
       // delete files first
       for (const fileId of this.deleteFilesQueue) {
         const result = await this.orderService.deleteFile(orderCopy._id, fileId, this.userService.getToken() as string, orderCopy.shared);

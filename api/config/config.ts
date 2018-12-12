@@ -8,6 +8,7 @@ const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
  * see https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback)
  */
 const jwtExpiryTime = '2h';
+const attachmentBucket = 'orderAttachments';
 const baseUrl = '/api/v1/';
 const email = {
   service: 'gmail',
@@ -125,6 +126,7 @@ const publicRoutes = [
 const dev = {
   jwtSecret,
   jwtExpiryTime,
+  attachmentBucket,
   ssl: {
     privateKeyPath: '',
     certificatePath: ''
@@ -155,6 +157,7 @@ const dev = {
 const staging = {
   jwtSecret,
   jwtExpiryTime,
+  attachmentBucket,
   ssl: {
     privateKeyPath: '/etc/letsencrypt/live/iot-fablab.ddns.net/privkey.pem',
     certificatePath: '/etc/letsencrypt/live/iot-fablab.ddns.net/cert.pem'
@@ -192,6 +195,7 @@ const staging = {
 const prod = {
   jwtSecret,
   jwtExpiryTime,
+  attachmentBucket,
   ssl: {
     privateKeyPath: '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/private.pem',
     certificatePath: '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/cert.pem'
@@ -229,6 +233,7 @@ const prod = {
 const test = {
   jwtSecret,
   jwtExpiryTime,
+  attachmentBucket,
   ssl: {
     privateKeyPath: '',
     certificatePath: ''
@@ -256,6 +261,7 @@ const test = {
 const testLocal = {
   jwtSecret,
   jwtExpiryTime,
+  attachmentBucket,
   ssl: {
     privateKeyPath: '',
     certificatePath: ''

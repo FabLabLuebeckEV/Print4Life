@@ -2,6 +2,7 @@ import logger from '../logger';
 import validatorService from '../services/validator.service';
 import { OrderService } from '../services/order.service';
 import FileService from '../services/file.service';
+import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import { IError, ErrorType } from '../services/router.service';
 import ScheduleService from '../services/schedule.service';
@@ -900,7 +901,7 @@ async function downloadFile (req, res) {
 
 
   try {
-    downloadStream = await fileService.downloadFile(req.params.fileId, 'orderAttachments');
+    downloadStream = await fileService.downloadFile(req.params.fileId, config.attachmentBucket);
   } catch (err) {
     let statusCode = 500;
     if (err.type === ErrorType.INVALID_ID) {
@@ -1010,7 +1011,7 @@ async function deleteFile (req, res) {
 
 
   try {
-    result = await fileService.deleteFile(req.params.fileId, 'orderAttachments', order);
+    result = await fileService.deleteFile(req.params.fileId, config.attachmentBucket, order);
   } catch (err) {
     let statusCode = 500;
     if (err.type === ErrorType.INVALID_ID) {
@@ -1110,7 +1111,7 @@ function uploadFile (req, res) {
   }
 
   req.files.forEach(async (file) => {
-    promises.push(fileService.uploadFile(file, 'orderAttachments', req.params.id));
+    promises.push(fileService.uploadFile(file, config.attachmentBucket, req.params.id));
   });
 
   return Promise.all(promises).then(async (results) => {

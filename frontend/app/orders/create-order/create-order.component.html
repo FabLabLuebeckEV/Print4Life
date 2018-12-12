@@ -299,7 +299,7 @@
                     </td>
                     <td *ngIf="!userCanDownload" class="align-middle text-center">{{file.filename}}</td>
                     <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
-                    <td *ngIf="userCanDownload" class="align-middle text-center">
+                    <td *ngIf="userCanDownload && !orderIsDone" class="align-middle text-center">
                       <button class="btn btn-danger" (click)="deleteFile(file.id)" type="button">
                         <fa-icon [icon]="deleteIcon"></fa-icon>
                       </button>
