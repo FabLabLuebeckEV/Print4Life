@@ -13,7 +13,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     public intercept(request: HttpRequest<any>, handler: HttpHandler): Observable<HttpEvent<any>> {
         // intercept http requests and add with credentials for cors
         let headers = request.headers;
-        if (!request.url.includes('upload')) {
+        if (!request.url.includes('files') || request.method !== 'POST') {
             headers = headers
                 .append('content-type', 'application/json');
         }

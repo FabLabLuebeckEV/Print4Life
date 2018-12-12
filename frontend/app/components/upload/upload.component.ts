@@ -67,9 +67,9 @@ export class UploadComponent implements OnInit {
     let url;
     if (shared) {
       url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/`
-        + `${routes.paths.backend.orders.shared}/${id}/${routes.paths.backend.orders.upload}`;
+        + `${routes.paths.backend.orders.shared}/${id}/${routes.paths.backend.orders.files}`;
     } else {
-      url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/${id}/${routes.paths.backend.orders.upload}`;
+      url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/${id}/${routes.paths.backend.orders.files}`;
     }
     const formData: FormData = new FormData();
     this.files.forEach(file => {

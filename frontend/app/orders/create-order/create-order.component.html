@@ -283,6 +283,7 @@
                     <th class="align-middle text-center" scope="col">{{translationFields.labels.latestVersion}}</th>
                     <th class="align-middle text-center" scope="col">{{translationFields.labels.file}}</th>
                     <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
+                    <th *ngIf="userCanDownload" class="align-middle text-center" scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -291,8 +292,15 @@
                       <fa-icon class="text-success" *ngIf="!file.deprecated" [icon]="toggleOnIcon"></fa-icon>
                       <fa-icon class="text-danger" *ngIf="file.deprecated" [icon]="toggleOffIcon"></fa-icon>
                     </td>
-                    <td class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
+                    <td *ngIf="userCanDownload" class="align-middle text-center"> <a [href]="file.link">{{file.filename}}</a>
+                    </td>
+                    <td *ngIf="!userCanDownload" class="align-middle text-center">{{file.filename}}</td>
                     <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
+                    <td *ngIf="userCanDownload" class="align-middle text-center">
+                      <button class="btn btn-danger" (click)="deleteFile(file.id)" type="button">
+                        <fa-icon [icon]="deleteIcon"></fa-icon>
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>

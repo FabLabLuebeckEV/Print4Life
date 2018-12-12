@@ -813,7 +813,7 @@ async function getSchedule (req, res) {
 }
 
 /**
- * @api {get} /api/v1/orders/:id/download/:fileId?token=:jwtToken Downloads a specific file of an order by its id
+ * @api {get} /api/v1/orders/:id/files/:fileId?token=:jwtToken Downloads a specific file of an order by its id
  * @apiName getFileOfOrderById
  * @apiVersion 1.0.0
  * @apiGroup Orders
@@ -849,15 +849,6 @@ async function getSchedule (req, res) {
     type: ErrorType.FORBIDDEN
   }
 * @apiErrorExample {json} Error-Response:
-*     HTTP/1.1 404 Not Found
-  {
-    "err": {
-      "name": "FORBIDDEN",
-      "message": "Forbidden! You are not allowed to use this route.",
-      "type": "FORBIDDEN"
-    }
-  }
-* @apiErrorExample {json} Error-Response:
 *     HTTP/1.1 500 Server Error
   {
         "error": {
@@ -877,7 +868,7 @@ async function downloadFile (req, res) {
   let downloadStream: any;
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
+    return res.status(checkId.status).send({ error: checkId.error });
   }
 
   try {
@@ -933,7 +924,115 @@ async function downloadFile (req, res) {
 }
 
 /**
- * @api {post} /api/v1/orders/:id/upload Uploads file(s) to an order
+ * @api {delete} /api/v1/orders/:id/files/:fileId?token=:jwtToken Deletes a specific file of an order by its id
+ * @apiName deleteFileOfOrder
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {String} id is the id of the order (required)
+ * @apiParam {String} fileId is the id of the file (required)
+ * @apiParam {String} jwtToken is the jwt bearer token of the logged in user (required as query param)
+ * @apiSuccess { Object } File the file as attachment
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+  {
+    "order": {
+      ...
+    }
+  }
+*
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 400 Bad Request
+  {
+    "err": {
+      "name": 'INVALID_ID',
+      "message": 'Invalid fileID in URL parameter. '
+        + 'Must be a single String of 12 bytes or a string of 24 hex characters',
+      "stack": {
+        ...
+      },
+      "type": "INVALID_ID"
+    }
+  }
+
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 403 Forbidden
+  {
+    name: 'FORBIDDEN',
+    message: 'Forbidden! You are not allowed to use this route.',
+    type: ErrorType.FORBIDDEN
+  }
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 500 Server Error
+  {
+        "error": {
+          "name": "DELETE_FILE_ERROR",
+          "message": "Something went wrong while deleting the file with id adskamkdw13213ew" ,
+          "type": "DELETE_FILE_ERROR"
+        };
+  }
+ */
+async function deleteFile (req, res) {
+  let err: IError;
+  let order: any;
+  let result: { order: any };
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    return res.status(checkId.status).send({ error: checkId.error });
+  }
+
+  try {
+    order = await orderService.get(req.params.id);
+    if (!order.shared) {
+      const tokenCheck = await validatorService.checkToken(req);
+      if (!tokenCheck || !tokenCheck.decoded
+        || (order.owner !== tokenCheck.decoded._id && tokenCheck.decoded.role.role !== 'admin'
+          && tokenCheck.decoded.role.role !== 'editor')) {
+        err = {
+          name: 'FORBIDDEN',
+          message: 'Forbidden! You are not allowed to use this route.',
+          type: ErrorType.FORBIDDEN
+        };
+        return res.status(403).send(err);
+      }
+    }
+  } catch (error) {
+    err = {
+      name: 'INVALID_ID',
+      message: 'Invalid fileID in URL parameter. '
+        + 'Must be a single String of 12 bytes or a string of 24 hex characters',
+      stack: error.stack,
+      type: ErrorType.INVALID_ID
+    };
+    return res.status(400).send(err);
+  }
+
+
+  try {
+    result = await fileService.deleteFile(req.params.fileId, 'orderAttachments', order);
+  } catch (err) {
+    let statusCode = 500;
+    if (err.type === ErrorType.INVALID_ID) {
+      statusCode = 400;
+    }
+    return res.status(statusCode).send(err.error);
+  }
+
+  if (result && result.order) {
+    await orderService.update(order);
+    return res.status(200).send({ order });
+  }
+  err = {
+    name: 'DELETE_FILE_ERROR',
+    message: `Something went wrong while deleting the file with id ${req.params.fileId}`,
+    type: ErrorType.DELETE_FILE_ERROR
+  };
+  return res.status(500).send(err);
+}
+
+/**
+ * @api {post} /api/v1/orders/:id/files Uploads file(s) to an order
  * @apiName uploadFileToOrder
  * @apiVersion 1.0.0
  * @apiGroup Orders
@@ -1069,5 +1168,6 @@ export default {
   search,
   uploadFile,
   downloadFile,
+  deleteFile,
   getSchedule
 };

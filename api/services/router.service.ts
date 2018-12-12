@@ -13,6 +13,7 @@ export enum ErrorType {
   MACHINE_NOT_FOUND,
   UPLOAD_FILE_ERROR,
   DOWNLOAD_FILE_ERROR,
+  DELETE_FILE_ERROR,
   INVALID_ID,
   FORBIDDEN
 }
@@ -78,8 +79,8 @@ function _isPublicRoute (url, method) {
   return isPublic;
 }
 
-function isDownloadRoute (url) {
-  return url.includes('orders') && url.includes('download');
+function isDownloadRoute (url: string, method: string) {
+  return url.includes('orders') && url.includes('files') && method === 'GET';
 }
 
 export default {

@@ -22,6 +22,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Schedule } from 'frontend/app/models/schedule.model';
 import { ScheduleService } from 'frontend/app/services/schedule.service';
 import { ValidationService } from 'frontend/app/services/validation.service';
+import { Icon } from '@fortawesome/fontawesome-svg-core';
 
 const localStorageOrderKey = 'orderManagementOrderFormOrder';
 const localStorageCommentKey = 'orderManagementOrderFormComment';
@@ -38,10 +39,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
   config: any;
   spinnerConfig: SpinnerConfig;
-  publicIcon: any;
-  calendarIcon: any;
-  toggleOnIcon: any;
-  toggleOffIcon: any;
+  publicIcon: Icon;
+  calendarIcon: Icon;
+  toggleOnIcon: Icon;
+  toggleOffIcon: Icon;
+  deleteIcon: Icon;
   selectedType: String;
   submitting: Boolean = false;
   editView: Boolean = false;
@@ -88,6 +90,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   loadingStatus: Boolean;
   validStatus: Array<String> = [];
+  deleteFilesQueue: Array<string> = [];
 
   owner: User;
 
@@ -97,7 +100,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   loadingEditors: Boolean;
   loggedInUser: User = new User(
     undefined, '', '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
-
+  userCanDownload: boolean;
   translationFields = {
     title: '',
     shownMachineTypes: [],
@@ -188,6 +191,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.publicIcon = this.config.icons.public;
     this.calendarIcon = this.config.icons.calendar;
+    this.deleteIcon = this.config.icons.delete;
     this.shippingAddressKeys = ['userAddress', 'fablabAddress', 'newAddress'];
     this.toggleOnIcon = this.config.icons.toggleOn;
     this.toggleOffIcon = this.config.icons.toggleOff;
@@ -329,6 +333,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     if (this.editView) {
       const promises = [];
       const errorMsg = this.translationFields.modals.error;
+      // delete files first
+      for (const fileId of this.deleteFilesQueue) {
+        const result = await this.orderService.deleteFile(orderCopy._id, fileId, this.userService.getToken() as string);
+        if (result && result.order) {
+          orderCopy.files = result.order.files;
+        }
+      }
       this.orderService.updateOrder(orderCopy, this.sharedView).then((result) => {
         if (result) {
           if (this.machines && isArray(this.machines)) {
@@ -458,6 +469,24 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         this.machineSchedules = [];
       }
     }
+  }
+
+  public uploadingEventHandler(event) {
+    if (event === true) {
+      this.spinner.show();
+      this.genericService.scrollIntoView(this.spinnerContainerRef);
+    } else {
+      this.spinner.hide();
+    }
+  }
+
+  public fileChangeEventHandler(event) {
+    this.inUploadQueue = event && event > 0;
+  }
+
+  public deleteFile(fileId: string) {
+    this.deleteFilesQueue.push(fileId);
+    this.order.files = this.order.files.filter(elem => elem.id !== fileId);
   }
 
   // Private Functions
@@ -617,12 +646,15 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         });
       }
       if (this.order.files) {
+        this.userCanDownload = this.order.shared as boolean || (this.loggedInUser && this.loggedInUser.role &&
+          this.loggedInUser.role.role && (this.loggedInUser.role.role === 'editor' || this.loggedInUser.role.role === 'admin'
+            || this.loggedInUser._id === this.order.owner));
         this.translateService.get(['date']).subscribe((translations => {
           const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
           this.order.files.forEach((file) => {
-            file['link'] = `${routes.backendUrl} /` +
+            file['link'] = `${routes.backendUrl}/` +
               `${routes.paths.backend.orders.root}/${this.order._id}/` +
-              `${routes.paths.backend.orders.download}/${file.id}`;
+              `${routes.paths.backend.orders.files}/${file.id}?token=${this.userService.getToken()}`;
             file['shownCreatedAt'] = this.genericService.translateDate(
               file.createdAt, currentLang, translations['date'].dateTimeFormat);
           });
@@ -702,19 +734,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  public uploadingEventHandler(event) {
-    if (event === true) {
-      this.spinner.show();
-      this.genericService.scrollIntoView(this.spinnerContainerRef);
-    } else {
-      this.spinner.hide();
-    }
-  }
-
-  public fileChangeEventHandler(event) {
-    this.inUploadQueue = event && event > 0;
-  }
-
   private _openSuccessMsg(resultOrder) {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(this.translationFields.modals.orderSuccessHeader, 'modal-header header-success',
@@ -760,8 +779,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     }
     return modalRef;
   }
-
-
 
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();

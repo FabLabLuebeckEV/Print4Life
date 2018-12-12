@@ -71,7 +71,7 @@ async function checkToken (req): Promise<TokenCheck> {
   if (req.headers && req.headers.authorization) {
     split = req.headers.authorization.split('JWT');
     token = split && split.length > 1 ? split[1].trim() : undefined;
-  } else if (routerService.isDownloadRoute(req.originalUrl) && req.query && req.query.token) {
+  } else if (routerService.isDownloadRoute(req.originalUrl, req.method) && req.query && req.query.token) {
     split = req.query.token.split('JWT');
     token = split && split.length > 1 ? split[1].trim() : undefined;
   }

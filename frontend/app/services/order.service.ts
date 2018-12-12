@@ -87,6 +87,10 @@ export class OrderService {
     return this.http.get(`${this.p}/${id}/schedule`).toPromise();
   }
 
+  public deleteFile(orderId: string, fileId: string, token: string): Promise<any> {
+    return this.http.delete(`${this.p}/${orderId}/files/${fileId}?token=${token}`).toPromise();
+  }
+
   public sortFilesByDeprecated(files) {
     files.sort((a: { deprecated: boolean }, b: { deprecated: boolean }) => {
       if (!a.hasOwnProperty('deprecated') || !b.hasOwnProperty('deprecated')
