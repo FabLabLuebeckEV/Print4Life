@@ -54,7 +54,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   datePickerError = false;
   timePickerError = false;
   inUploadQueue = false;
-  doneStatus = ['representive', 'completed', 'archived', 'deleted'];
+  doneStatus = {
+    original: ['representive', 'completed', 'archived', 'deleted'],
+    translated: []
+  };
   orderIsDone: boolean;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
@@ -229,7 +232,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     await this._loadFablabs();
     await this._loadStatus();
     await this._initializeOrder(this.orderId);
-    this.orderIsDone = this.doneStatus.includes(this.order.status as string);
+    this.orderIsDone = this.doneStatus.original.includes(this.order.status as string);
     await this._loadAddresses();
     this.machineSelected();
     this._translate();
@@ -247,6 +250,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       } else if (this.createOrderForm && this.editView) {
+        this.orderIsDone = this.doneStatus.translated.includes(changes.status as string);
         const startDate = this.validationService.createCheckDate(changes.datePickerStart);
         const endDate = this.validationService.createCheckDate(changes.datePickerEnd);
         this.datePickerError = this.validationService.validateDate(changes.datePickerStart, changes.datePickerEnd);
@@ -337,7 +341,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     if (this.editView) {
       const promises = [];
       const errorMsg = this.translationFields.modals.error;
-      if (this.doneStatus.includes(orderCopy.status)) {
+      if (this.doneStatus.original.includes(orderCopy.status)) {
         const deprecated = orderCopy.files.filter((elem) => elem.deprecated);
         deprecated.forEach((elem) => {
           if (!this.deleteFilesQueue.includes(elem.id)) {
@@ -812,6 +816,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         const shownMachineTypes = [];
         const shownStatus = [];
         const shownShippingAddresses = [];
+        this.doneStatus.translated = [];
 
         this.machineSchedules.forEach((schedule) => {
           schedule['shownStartDate'] = this.genericService.translateDate(
@@ -839,6 +844,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           const translated = translations['status'][`${status}`];
           if (translated) {
             shownStatus.push(translated);
+          }
+        });
+
+        this.doneStatus.original.forEach((status) => {
+          const translated = translations['status'][`${status}`];
+          if (translated) {
+            this.doneStatus.translated.push(translated);
           }
         });
         if (this.order && this.order.machine && this.order.machine['shownType']) {
