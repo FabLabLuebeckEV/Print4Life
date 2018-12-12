@@ -61,7 +61,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   shippingAddress: Address = new Address('', '', '', '');
   order: Order = new Order(
     undefined, undefined, undefined, undefined,
-    undefined, undefined, undefined,
+    undefined, undefined, [],
     undefined, this.sMachine, undefined,
     this.shippingAddress, false, false, undefined);
   orderId: String;
@@ -385,10 +385,14 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           }
 
           Promise.all(promises).then(() => {
-            this.fileUpload.uploadFilesToOrder(result.order._id, () => {
+            if (this.fileUpload) {
+              this.fileUpload.uploadFilesToOrder(result.order._id, () => {
+                this._openSuccessMsg(result);
+              }, this.sharedView);
+            } else {
               this._openSuccessMsg(result);
-            }, this.sharedView);
-          }).catch(() => {
+            }
+          }).catch((err) => {
             this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
           });
         } else {

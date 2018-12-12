@@ -342,7 +342,7 @@
 
       <div class="form-check spacing-top">
         <input type="checkbox" class="form-check-input" id="copyright" required [(ngModel)]="order.fileCopyright" name="copyright"
-          #copyright="ngModel" [disabled]="order.files && !order.files.length || !inUploadQueue" />
+          #copyright="ngModel" [disabled]="!inUploadQueue && order.files && !order.files.length " />
         <label class="form-check-label spacing-right-xs" for="copyright">{{translationFields.labels.copyright}}</label>
         <div [hidden]="copyright.valid || copyright.pristine" class="alert alert-danger">
           {{translationFields.messages.copyright}}
