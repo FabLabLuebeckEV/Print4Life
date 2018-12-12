@@ -90,6 +90,9 @@
           <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
             {{translationFields.messages.status}}
           </div>
+          <div [hidden]="!doneStatus.includes(order.status)" class="alert alert-warning">
+            {{translationFields.messages.statusDeprecated}}
+          </div>
         </div>
       </div>
       <div class="form-group row">
@@ -174,7 +177,7 @@
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerStart" id="datePickerStart"
                 [(ngModel)]="schedule.startDay" ngbDatepicker #datePickerStart="ngbDatepicker" [required]="false"
-                [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
                   <fa-icon [icon]="calendarIcon"></fa-icon>
@@ -189,7 +192,7 @@
           <div class="col-md-3">
             <label for="timePickerStart">{{translationFields.labels.timePickerStart}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerStart" id="timePickerStart" [spinners]="false"
-              [(ngModel)]="schedule.startTime" #timePickerStart="ngModel" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
+              [(ngModel)]="schedule.startTime" #timePickerStart="ngModel" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
             <div [hidden]="!timePickerError" class="alert alert-danger">
               {{translationFields.messages.timePicker}}
             </div>
@@ -199,7 +202,7 @@
             <label for="datePickerEnd">{{translationFields.labels.datePickerEnd}}</label>
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd" [(ngModel)]="schedule.endDay"
-                ngbDatepicker #datePickerEnd="ngbDatepicker" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                ngbDatepicker #datePickerEnd="ngbDatepicker" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
                   <fa-icon [icon]="calendarIcon"></fa-icon>
@@ -214,7 +217,7 @@
           <div class="col-md-3">
             <label for="timePickerEnd">{{translationFields.labels.timePickerEnd}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerEnd" id="timePickerEnd" [spinners]="false" [(ngModel)]="schedule.endTime"
-              #timePickerEnd="ngModel" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
+              #timePickerEnd="ngModel" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
             <div [hidden]="!timePickerError" class="alert alert-danger">
               {{translationFields.messages.timePicker}}
             </div>
@@ -222,8 +225,8 @@
         </div>
 
 
-        <!-- Print files of this order as a list -->
-        <div *ngIf="machineSchedules && machineSchedules.length > 0">
+        <!-- Print schedules of this order as a list -->
+        <div *ngIf="machineSchedules && machineSchedules.length > 0 && !orderIsDone">
           <div class="row table-spacing-top">
             <div class="col-md-12 text-center">
               <button type="button" class="btn btn-outline-secondary" (click)="isCollapsed = !isCollapsed"
@@ -266,7 +269,7 @@
           </div>
         </div>
 
-        <div class="col-md-12">
+        <div *ngIf="!orderIsDone" class="col-md-12">
           <app-upload #fileUpload (uploadingEvent)="uploadingEventHandler($event)" (fileChangeEvent)="fileChangeEventHandler($event)"></app-upload>
         </div>
 
@@ -378,14 +381,14 @@
       </div>
 
       <!-- Submit Comment Form -->
-      <div class="row">
+      <div *ngIf="!orderIsDone" class="row">
         <div class="col-md-12 text-center">
           <h5>{{translationFields.labels.newComment}}</h5>
         </div>
       </div>
     </div>
 
-    <form *ngIf="editView" (ngSubmit)="onSubmitComment(createCommentForm)" #createCommentForm="ngForm">
+    <form *ngIf="editView && !orderIsDone" (ngSubmit)="onSubmitComment(createCommentForm)" #createCommentForm="ngForm">
       <div class="form-group row">
         <div class="col-md-12">
           <label for="author">{{translationFields.labels.author}}</label>

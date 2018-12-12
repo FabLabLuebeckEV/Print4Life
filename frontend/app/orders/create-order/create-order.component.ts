@@ -54,6 +54,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   datePickerError = false;
   timePickerError = false;
   inUploadQueue = false;
+  doneStatus = ['representive', 'completed', 'archived', 'deleted'];
+  orderIsDone: boolean;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
   shippingAddress: Address = new Address('', '', '', '');
@@ -159,6 +161,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       projectName: '',
       owner: '',
       status: '',
+      statusDeprecated: '',
       machineType: '',
       selectedMachine: '',
       unnamedFablab: '',
@@ -226,6 +229,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     await this._loadFablabs();
     await this._loadStatus();
     await this._initializeOrder(this.orderId);
+    this.orderIsDone = this.doneStatus.includes(this.order.status as string);
     await this._loadAddresses();
     this.machineSelected();
     this._translate();
@@ -333,6 +337,14 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     if (this.editView) {
       const promises = [];
       const errorMsg = this.translationFields.modals.error;
+      if (this.doneStatus.includes(orderCopy.status)) {
+        const deprecated = orderCopy.files.filter((elem) => elem.deprecated);
+        deprecated.forEach((elem) => {
+          if (!this.deleteFilesQueue.includes(elem.id)) {
+            this.deleteFilesQueue.push(elem.id);
+          }
+        });
+      }
       // delete files first
       for (const fileId of this.deleteFilesQueue) {
         const result = await this.orderService.deleteFile(orderCopy._id, fileId, this.userService.getToken() as string);
@@ -485,7 +497,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   public deleteFile(fileId: string) {
-    this.deleteFilesQueue.push(fileId);
+    if (!this.deleteFilesQueue.includes(fileId)) {
+      this.deleteFilesQueue.push(fileId);
+    }
     this.order.files = this.order.files.filter(elem => elem.id !== fileId);
   }
 
@@ -924,6 +938,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             projectName: translations['orderForm'].messages.projectName,
             owner: translations['orderForm'].messages.owner,
             status: translations['orderForm'].messages.status,
+            statusDeprecated: translations['orderForm'].messages.statusDeprecated,
             machineType: translations['orderForm'].messages.machineType,
             selectedMachine: translations['orderForm'].messages.selectedMachine,
             unnamedFablab: translations['orderForm'].messages.unnamedFablab,

@@ -306,7 +306,7 @@
             "abortValue": "Abbrechen",
             "deleteHeader": "Möchten Sie wirklich diesen Auftrag löschen?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "löschen wollen?"
+            "deleteQuestion2": "löschen wollen? Das Löschen des Auftrags entfernt auch alle alten Dateien und behält nur die letzten aktuellen Dateien!"
         },
         "messages": {
             "datePicker": "Das Startdatum ist größer als das Enddatum"
@@ -378,6 +378,7 @@
             "projectName": "Der Projektname wird benötigt",
             "owner": "Der Name des Erstellers wird benötigt",
             "status": "Der Status wird benötigt",
+            "statusDeprecated": "Achtung! Bei diesem Status werden alle alten und nicht aktuellen Dateien aus diesem Auftrag gelöscht!",
             "machineType": "Der Maschinentyp wird benötigt",
             "selectedMachine": "Die Maschine wird benötigt",
             "unnamedFablab": "Unbekanntes FabLab",
@@ -443,7 +444,7 @@
             "abortReturnValue": "Abbrechen",
             "deleteHeader": "Wollen Sie wirklich diesen Auftrag löschen?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "löschen wollen?"
+            "deleteQuestion2": "löschen wollen? Das Löschen des Auftrags entfernt auch alle alten Dateien und behält nur die letzten aktuellen Dateien!"
         }
     },
     "userForm": {

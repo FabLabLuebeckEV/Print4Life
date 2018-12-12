@@ -306,7 +306,7 @@
             "abortValue": "Abort",
             "deleteHeader": "Do you really want to delete this order?",
             "deleteQuestion": "Are you sure you want to delete",
-            "deleteQuestion2": "?"
+            "deleteQuestion2": "? The deletion of this order will delete all old and deprecated files. Only the latest files will remain!"
         },
         "messages": {
             "datePicker": "Start Date is greater than End Date"
@@ -378,6 +378,7 @@
             "projectName": "Project name is required",
             "owner": "Owner name is required",
             "status": "Status is required",
+            "statusDeprecated": "Warning! This status leads to the deletion of all deprecated and therefore old files. Only the latest files will be available for this order!",
             "machineType": "Machine Type is required",
             "selectedMachine": "Machine is required",
             "unnamedFablab": "Unnamed FabLab",
@@ -443,7 +444,7 @@
             "abortReturnValue": "Abort",
             "deleteHeader": "Do you really want to delete this order?",
             "deleteQuestion": "Are you sure you want to delete",
-            "deleteQuestion2": "?"
+            "deleteQuestion2": "? The deletion of this order will delete all old and deprecated files. Only the latest files will remain!"
         }
     },
     "userForm": {
