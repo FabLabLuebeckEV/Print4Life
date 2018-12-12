@@ -347,7 +347,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       }
       // delete files first
       for (const fileId of this.deleteFilesQueue) {
-        const result = await this.orderService.deleteFile(orderCopy._id, fileId, this.userService.getToken() as string);
+        const result = await this.orderService.deleteFile(orderCopy._id, fileId, this.userService.getToken() as string, orderCopy.shared);
         if (result && result.order) {
           orderCopy.files = result.order.files;
         }

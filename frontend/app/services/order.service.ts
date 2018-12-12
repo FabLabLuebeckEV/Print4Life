@@ -87,8 +87,12 @@ export class OrderService {
     return this.http.get(`${this.p}/${id}/schedule`).toPromise();
   }
 
-  public deleteFile(orderId: string, fileId: string, token: string): Promise<any> {
-    return this.http.delete(`${this.p}/${orderId}/files/${fileId}?token=${token}`).toPromise();
+  public deleteFile(orderId: string, fileId: string, token: string, shared?: boolean): Promise<any> {
+    if (!shared) {
+      return this.http.delete(`${this.p}/${orderId}/files/${fileId}?token=${token}`).toPromise();
+    } else {
+      return this.http.delete(`${this.p}/${routes.paths.backend.orders.shared}/${orderId}/files/${fileId}`).toPromise();
+    }
   }
 
   public sortFilesByDeprecated(files) {
