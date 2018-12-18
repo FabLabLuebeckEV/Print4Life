@@ -19,6 +19,7 @@ import { OrderService } from 'frontend/app/services/order.service';
 export class MachineDetailComponent implements OnInit {
   private config: any;
   private userIsLoggedIn: boolean;
+  userIsAdmin: boolean;
   editLink: String;
   deleteLink: String;
   editIcon: any;
@@ -83,6 +84,7 @@ export class MachineDetailComponent implements OnInit {
       }
     });
     this.userIsLoggedIn = this.userService.isLoggedIn();
+    this.userIsAdmin = await this.userService.isAdmin() as boolean;
   }
 
   public delete() {
