@@ -18,8 +18,10 @@ router.route('/:id/comment').post(orderCtrl.createComment);
 
 router.route('/:id').get(orderCtrl.get);
 
-router.route('/:id/upload').post(upload.array('file'), orderCtrl.uploadFile);
+router.route('/:id/files').post(upload.array('file'), orderCtrl.uploadFile);
 
-router.route('/:id/download/:fileId').get(orderCtrl.downloadFile);
+router.route('/:id/files/:fileId').get(orderCtrl.downloadFile);
+
+router.route('/:id/files/:fileId').delete(orderCtrl.deleteFile);
 
 export default router;

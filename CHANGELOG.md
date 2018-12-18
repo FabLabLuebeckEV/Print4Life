@@ -21,12 +21,19 @@
 * deleting machines results to state deactivate instead of a hard deletion
 * added deployment to production server
 * create oder form now uses local storage to contain some information on changing views
+* adding checkbox for copyright question on uploaded files
+* adding unknown machine type on create order for users that don't know the correct machine type
+* order form now only shows machines of a specific fablab (choosing a fablab is a mandatory field now)
+* order form now only shows editors of a specific fablab
+* download of files is only allowed for owner, editors and admins
+* files are now deletable and deprecated files are deleted if order status switches to 'completed', 'representive', 'archived' or 'deleted'
+* unfinished order list can now be filtered by machine types
 
 ### Version 0.4.1
 
 * fix cors with https
 * fix specs and use env configs
-* use ecosystem.config.js file for pm2 
+* use ecosystem.config.js file for pm2
 * setup https backend server for prod
 * fix deploy scripts to include email-templates in dist build
 * fix duplicate orders in order list
@@ -46,7 +53,7 @@
 * comments, owner and editors are now based on user objects instead of strings
 * fablab is now an entity with an address assignable to users as an optional field
 * renaming printers to 3d-printers
-* guests (not logged in users) now can only see the order list 
+* guests (not logged in users) now can only see the order list
 
 ## Version 0.3.2
 

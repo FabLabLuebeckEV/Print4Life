@@ -29,51 +29,30 @@
       </div>
       <div class="form-group row">
         <div class="col-md-6">
-          <label for="owner">{{translationFields.labels.owner}}</label>
+          <label for="fablab">{{translationFields.labels.fablab}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <input *ngIf="!sharedView!" type="text" class="form-control" id="owner" required name="owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
-            disabled>
-          <input *ngIf=sharedView type="text" class="form-control" id="owner" required name="owner" [(ngModel)]="order.owner"
-            [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" [disabled]="editView">
-        </div>
-        <div class="col-md-6">
-          <label for="editor">{{translationFields.labels.editor}}</label>
-          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingEditors" [items]=editors bindValue="_id" bindLabel="shownName" [(ngModel)]="order.editor"
-            id="editor" name="editor" #editor="ngModel" groupBy="fablabName" [disabled]="!editView || !loggedInUser || !loggedInUser.role || !loggedInUser.role.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+          <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name" [(ngModel)]="order.fablabId"
+            id="fablab" name="fablab" #fablab="ngModel" (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)">
             <ng-template ng-optgroup-tmp let-item="item">
               {{item.fablabName || translationFields.messages.unnamedFablab}}
             </ng-template>
           </ng-select>
         </div>
-      </div>
-      <div class="form-group row">
-        <div *ngIf="editView" class="col-md-12">
-          <label for="status">{{translationFields.labels.status}}</label>
-          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingStatus" [items]=translationFields.shownStatus bindValue="_id" bindLabel="name"
-            [(ngModel)]="order.shownStatus" (change)="statusChanged(order.shownStatus)" id="status" name="status"
-            #status="ngModel" required [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
-          </ng-select>
-          <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
-            {{translationFields.messages.status}}
-          </div>
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-md-12">
+
+        <div class="col-md-6">
           <label for="selectedMachineType">{{translationFields.labels.machineType}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingMachineTypes" [items]=translationFields.shownMachineTypes [(ngModel)]="order.machine['shownType']"
-            id="selectedMachineType" name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine['shownType'])"
-            required>
+            id="selectedMachineType" name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)"
+            required [disabled]="!order.fablabId">
           </ng-select>
           <div [hidden]="selectedMachineType.valid || selectedMachineType.pristine" class="alert alert-danger">
             {{translationFields.messages.machineType}}
           </div>
         </div>
       </div>
-      <div *ngIf="order.machine.type" class="form-group row">
+
+      <div *ngIf="order.machine.type && machines && machines.length >= 0" class="form-group row">
         <div class="col-md-6">
           <label for="selectedMachine">{{translationFields.labels.selectedMachine}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
@@ -91,13 +70,50 @@
             {{translationFields.messages.selectedMachine}}
           </div>
         </div>
-        <div *ngIf="order.machine && order.machine.deviceName" class="col-md-4 offset-1">
+        <div *ngIf="order.machine && order.machine.deviceName" class="col-md-4">
           <label for="selectedMachineDetailView">{{translationFields.labels.selectedMachineInfo}}:</label>
           <div>
             <a [routerLink]="order.machine.detailView" name="selectedMachineDetailView">
               <button type="button" class="btn btn-primary">{{ order.machine.deviceName }}</button>
             </a>
           </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div *ngIf="editView" class="col-md-12">
+          <label for="status">{{translationFields.labels.status}}</label>
+          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
+          <ng-select [loading]="loadingStatus" [items]=translationFields.shownStatus bindValue="_id" bindLabel="name"
+            [(ngModel)]="order.shownStatus" (change)="statusChanged(order.shownStatus)" id="status" name="status"
+            #status="ngModel" required [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+          </ng-select>
+          <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
+            {{translationFields.messages.status}}
+          </div>
+          <div [hidden]="!doneStatus.original.includes(order.status)" class="alert alert-warning">
+            {{translationFields.messages.statusDeprecated}}
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-6">
+          <label for="owner">{{translationFields.labels.owner}}</label>
+          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
+          <input *ngIf="!sharedView!" type="text" class="form-control" id="owner" required name="owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
+            disabled>
+          <input *ngIf=sharedView type="text" class="form-control" id="owner" required name="owner" [(ngModel)]="order.owner"
+            [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" [disabled]="editView">
+        </div>
+
+        <div class="col-md-6">
+          <label for="editor">{{translationFields.labels.editor}}</label>
+          <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
+          <ng-select [loading]="loadingEditors" [items]=editors bindValue="_id" bindLabel="shownName" [(ngModel)]="order.editor"
+            id="editor" name="editor" #editor="ngModel" groupBy="fablabName" [disabled]="!order.fablabId && !editView || !loggedInUser || !loggedInUser.role || !loggedInUser.role.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+            <ng-template ng-optgroup-tmp let-item="item">
+              {{item.fablabName || translationFields.messages.unnamedFablab}}
+            </ng-template>
+          </ng-select>
         </div>
       </div>
 
@@ -161,7 +177,7 @@
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerStart" id="datePickerStart"
                 [(ngModel)]="schedule.startDay" ngbDatepicker #datePickerStart="ngbDatepicker" [required]="false"
-                [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
                   <fa-icon [icon]="calendarIcon"></fa-icon>
@@ -176,7 +192,7 @@
           <div class="col-md-3">
             <label for="timePickerStart">{{translationFields.labels.timePickerStart}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerStart" id="timePickerStart" [spinners]="false"
-              [(ngModel)]="schedule.startTime" #timePickerStart="ngModel" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
+              [(ngModel)]="schedule.startTime" #timePickerStart="ngModel" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
             <div [hidden]="!timePickerError" class="alert alert-danger">
               {{translationFields.messages.timePicker}}
             </div>
@@ -186,7 +202,7 @@
             <label for="datePickerEnd">{{translationFields.labels.datePickerEnd}}</label>
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd" [(ngModel)]="schedule.endDay"
-                ngbDatepicker #datePickerEnd="ngbDatepicker" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                ngbDatepicker #datePickerEnd="ngbDatepicker" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
                   <fa-icon [icon]="calendarIcon"></fa-icon>
@@ -201,7 +217,7 @@
           <div class="col-md-3">
             <label for="timePickerEnd">{{translationFields.labels.timePickerEnd}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerEnd" id="timePickerEnd" [spinners]="false" [(ngModel)]="schedule.endTime"
-              #timePickerEnd="ngModel" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
+              #timePickerEnd="ngModel" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
             <div [hidden]="!timePickerError" class="alert alert-danger">
               {{translationFields.messages.timePicker}}
             </div>
@@ -209,8 +225,8 @@
         </div>
 
 
-        <!-- Print files of this order as a list -->
-        <div *ngIf="machineSchedules && machineSchedules.length > 0">
+        <!-- Print schedules of this order as a list -->
+        <div *ngIf="machineSchedules && machineSchedules.length > 0 && !orderIsDone">
           <div class="row table-spacing-top">
             <div class="col-md-12 text-center">
               <button type="button" class="btn btn-outline-secondary" (click)="isCollapsed = !isCollapsed"
@@ -247,19 +263,19 @@
 
       <div>
         <!-- Files -->
-        <div class="form-group row table-spacing">
+        <div *ngIf="!orderIsDone" class="form-group row table-spacing">
           <div class="col-md-12 text-center">
             <h4>{{translationFields.labels.fileUpload}}</h4>
           </div>
         </div>
 
-        <div class="col-md-12">
-          <app-upload #fileUpload (uploadingEvent)="uploadingEventHandler($event)"></app-upload>
+        <div *ngIf="!orderIsDone" class="col-md-12">
+          <app-upload #fileUpload (uploadingEvent)="uploadingEventHandler($event)" (fileChangeEvent)="fileChangeEventHandler($event)"></app-upload>
         </div>
 
         <!-- Print files of this order as a list -->
         <div *ngIf="editView && order.files && order.files.length > 0">
-          <div class="row">
+          <div class="row table-spacing">
             <div class="col-md-12 text-center">
               <h4>{{translationFields.labels.files}}</h4>
             </div>
@@ -270,6 +286,7 @@
                     <th class="align-middle text-center" scope="col">{{translationFields.labels.latestVersion}}</th>
                     <th class="align-middle text-center" scope="col">{{translationFields.labels.file}}</th>
                     <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
+                    <th *ngIf="userCanDownload" class="align-middle text-center" scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -278,8 +295,15 @@
                       <fa-icon class="text-success" *ngIf="!file.deprecated" [icon]="toggleOnIcon"></fa-icon>
                       <fa-icon class="text-danger" *ngIf="file.deprecated" [icon]="toggleOffIcon"></fa-icon>
                     </td>
-                    <td class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
+                    <td *ngIf="userCanDownload" class="align-middle text-center"> <a [href]="file.link">{{file.filename}}</a>
+                    </td>
+                    <td *ngIf="!userCanDownload" class="align-middle text-center">{{file.filename}}</td>
                     <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
+                    <td *ngIf="userCanDownload && !orderIsDone" class="align-middle text-center">
+                      <button class="btn btn-danger" (click)="deleteFile(file.id)" type="button">
+                        <fa-icon [icon]="deleteIcon"></fa-icon>
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -315,6 +339,15 @@
           </div>
         </div>
       </div>
+
+      <div class="form-check spacing-top">
+        <input type="checkbox" class="form-check-input" id="copyright" required [(ngModel)]="order.fileCopyright" name="copyright"
+          #copyright="ngModel" [disabled]="!inUploadQueue && order.files && !order.files.length " />
+        <label class="form-check-label spacing-right-xs" for="copyright">{{translationFields.labels.copyright}}</label>
+        <div [hidden]="copyright.valid || copyright.pristine" class="alert alert-danger">
+          {{translationFields.messages.copyright}}
+        </div>
+      </div>
       <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid || datePickerError">{{translationFields.labels.submit}}</button>
     </form>
 
@@ -348,14 +381,14 @@
       </div>
 
       <!-- Submit Comment Form -->
-      <div class="row">
+      <div *ngIf="!orderIsDone" class="row">
         <div class="col-md-12 text-center">
           <h5>{{translationFields.labels.newComment}}</h5>
         </div>
       </div>
     </div>
 
-    <form *ngIf="editView" (ngSubmit)="onSubmitComment(createCommentForm)" #createCommentForm="ngForm">
+    <form *ngIf="editView && !orderIsDone" (ngSubmit)="onSubmitComment(createCommentForm)" #createCommentForm="ngForm">
       <div class="form-group row">
         <div class="col-md-12">
           <label for="author">{{translationFields.labels.author}}</label>

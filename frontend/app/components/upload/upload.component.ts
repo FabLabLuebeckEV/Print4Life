@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class UploadComponent implements OnInit {
   @Output() uploadingEvent: EventEmitter<boolean> = new EventEmitter();
+  @Output() fileChangeEvent: EventEmitter<number> = new EventEmitter();
   accept = '*';
   files: File[] = [];
   config: any;
@@ -66,9 +67,9 @@ export class UploadComponent implements OnInit {
     let url;
     if (shared) {
       url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/`
-        + `${routes.paths.backend.orders.shared}/${id}/${routes.paths.backend.orders.upload}`;
+        + `${routes.paths.backend.orders.shared}/${id}/${routes.paths.backend.orders.files}`;
     } else {
-      url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/${id}/${routes.paths.backend.orders.upload}`;
+      url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/${id}/${routes.paths.backend.orders.files}`;
     }
     const formData: FormData = new FormData();
     this.files.forEach(file => {
@@ -78,7 +79,7 @@ export class UploadComponent implements OnInit {
       reportProgress: true// , responseType: 'text'
     });
 
-    this._emit(true);
+    this.emit(true);
 
     return this.httpEmitter = this.HttpClient.request(req)
       .subscribe(
@@ -90,7 +91,7 @@ export class UploadComponent implements OnInit {
         },
         error => console.log('Error Uploading', error),
         () => {
-          this._emit(false);
+          this.emit(false);
           if (cb) {
             cb();
           }
@@ -110,8 +111,16 @@ export class UploadComponent implements OnInit {
     this._translate();
   }
 
-  public _emit(uploading) {
+  public emit(uploading) {
     this.uploadingEvent.emit(uploading);
+  }
+
+  public emitFileChange(files) {
+    if (files && files.length) {
+      this.fileChangeEvent.emit(files.length);
+    } else {
+      this.fileChangeEvent.emit(0);
+    }
   }
 
   private _translate() {

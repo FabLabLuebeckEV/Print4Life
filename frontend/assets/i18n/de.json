@@ -103,7 +103,8 @@
         "lasercutter": "Lasercutter",
         "otherMachine": "Andere Machine",
         "millingMachine": "Fräßmaschine",
-        "3d-printer": "3D Drucker"
+        "3d-printer": "3D Drucker",
+        "unknown": "Unbekannt"
     },
     "materialTypes": {
         "printerMaterial": "Drucker Material"
@@ -199,6 +200,10 @@
         }
     },
     "machineDetail": {
+        "labels": {
+            "active": "Aktiv",
+            "inactive": "Inaktiv"
+        },
         "titles": {
             "machineProps": "Maschinen Daten",
             "laserTypes": "Laser Typen",
@@ -217,6 +222,7 @@
             "deleteMessage2": "den Status wechseln wollen?"
         },
         "props": {
+            "activated": "Aktiv-Status",
             "deviceName": "Name der Maschine",
             "type": "Typ",
             "manufacturer": "Hersteller",
@@ -300,7 +306,8 @@
             "abortValue": "Abbrechen",
             "deleteHeader": "Möchten Sie wirklich diesen Auftrag löschen?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "löschen wollen?"
+            "deleteQuestion2": "löschen wollen?",
+            "deleteWarning": "Das Löschen des Auftrags entfernt auch alle alten Dateien und behält nur die letzten aktuellen Dateien!"
         },
         "messages": {
             "datePicker": "Das Startdatum ist größer als das Enddatum"
@@ -348,7 +355,9 @@
             "timePickerEnd": "Endzeit am Endtag",
             "machineSchedule": "Maschinenplanung",
             "startDate": "Startdatum",
-            "endDate": "Enddatum"
+            "endDate": "Enddatum",
+            "copyright": "Urheberrecht vorhanden?",
+            "fablab": "Fablab"
         },
         "modals": {
             "ok": "Ok",
@@ -370,13 +379,15 @@
             "projectName": "Der Projektname wird benötigt",
             "owner": "Der Name des Erstellers wird benötigt",
             "status": "Der Status wird benötigt",
+            "statusDeprecated": "Achtung! Bei diesem Status werden alle alten und nicht aktuellen Dateien aus diesem Auftrag gelöscht!",
             "machineType": "Der Maschinentyp wird benötigt",
             "selectedMachine": "Die Maschine wird benötigt",
             "unnamedFablab": "Unbekanntes FabLab",
             "author": "Der Name des Authors wird benötigt",
             "content": "Der Inhalt des Kommentars wird benötigt",
             "datePicker": "Das Startdatum ist größer als das Enddatum",
-            "timePicker": "Die Start- und Endzeit ist falsch. Bitte das Datum und die Zeiten prüfen"
+            "timePicker": "Die Start- und Endzeit ist falsch. Bitte das Datum und die Zeiten prüfen",
+            "copyright": "Wenn Sie Dateien hochladen wollen oder hochgeladen haben, müssen Sie bestätigen, dass sie der Urheber der Daten sind."
         }
     },
     "userDetail": {
@@ -434,7 +445,8 @@
             "abortReturnValue": "Abbrechen",
             "deleteHeader": "Wollen Sie wirklich diesen Auftrag löschen?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "löschen wollen?"
+            "deleteQuestion2": "löschen wollen?",
+            "deleteWarning": "Das Löschen des Auftrags entfernt auch alle alten Dateien und behält nur die letzten aktuellen Dateien!"
         }
     },
     "userForm": {

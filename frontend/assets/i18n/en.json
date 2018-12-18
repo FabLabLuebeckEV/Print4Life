@@ -103,7 +103,8 @@
         "lasercutter": "Lasercutter",
         "otherMachine": "Other Machine",
         "millingMachine": "Milling Machine",
-        "3d-printer": "3D Printer"
+        "3d-printer": "3D Printer",
+        "unknown": "Unknown"
     },
     "materialTypes": {
         "printerMaterial": "Printer Material"
@@ -199,6 +200,10 @@
         }
     },
     "machineDetail": {
+        "labels": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
         "titles": {
             "machineProps": "Machine Data",
             "laserTypes": "Laser Types",
@@ -217,6 +222,7 @@
             "deleteMessage2": "?"
         },
         "props": {
+            "activated": "Active-Status",
             "deviceName": "Device Name",
             "type": "Type",
             "manufacturer": "Manufacturer",
@@ -300,7 +306,8 @@
             "abortValue": "Abort",
             "deleteHeader": "Do you really want to delete this order?",
             "deleteQuestion": "Are you sure you want to delete",
-            "deleteQuestion2": "?"
+            "deleteQuestion2": "?",
+            "deleteWarning": "The deletion of this order will delete all old and deprecated files. Only the latest files will remain!"
         },
         "messages": {
             "datePicker": "Start Date is greater than End Date"
@@ -348,7 +355,9 @@
             "timePickerEnd": "End Time on End Day",
             "machineSchedule": "Machine Schedule",
             "startDate": "Start Date",
-            "endDate": "End Date"
+            "endDate": "End Date",
+            "copyright": "Are you the owner of the files and have their copyright?",
+            "fablab": "Fablab"
         },
         "modals": {
             "ok": "Ok",
@@ -370,13 +379,15 @@
             "projectName": "Project name is required",
             "owner": "Owner name is required",
             "status": "Status is required",
+            "statusDeprecated": "Warning! This status leads to the deletion of all deprecated and therefore old files. Only the latest files will be available for this order!",
             "machineType": "Machine Type is required",
             "selectedMachine": "Machine is required",
             "unnamedFablab": "Unnamed FabLab",
             "author": "Author name is required",
             "content": "Text is required",
             "datePicker": "Start Date is greater than End Date",
-            "timePicker": "The Start and End Time is wrong. Please check the Start and End Date and Times"
+            "timePicker": "The Start and End Time is wrong. Please check the Start and End Date and Times",
+            "copyright": "If you want to upload or have uploaded files, you need to confirm that they are your data and you have the copyright for them."
         }
     },
     "userDetail": {
@@ -434,7 +445,8 @@
             "abortReturnValue": "Abort",
             "deleteHeader": "Do you really want to delete this order?",
             "deleteQuestion": "Are you sure you want to delete",
-            "deleteQuestion2": "?"
+            "deleteQuestion2": "?",
+            "deleteWarning": "The deletion of this order will delete all old and deprecated files. Only the latest files will remain!"
         }
     },
     "userForm": {

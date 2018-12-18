@@ -13,6 +13,7 @@ import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'frontend/app/services/user.service';
 import { GenericService } from 'frontend/app/services/generic.service';
+import { User } from 'frontend/app/models/user.model';
 
 @Component({
   selector: 'app-machine-list',
@@ -49,6 +50,7 @@ export class MachineListComponent implements OnInit {
   newLink: String;
   spinnerConfig: SpinnerConfig;
   userIsAdmin: Boolean;
+  user: User;
   paginationObj: any = {
     page: 1,
     totalItems: 0,
@@ -140,6 +142,7 @@ export class MachineListComponent implements OnInit {
 
   async ngOnInit() {
     this.userIsAdmin = await this.userService.isAdmin();
+    this.user = await this.userService.getUser();
     if ((this.listView || this.successList) && !this.loadingMachineTypes) {
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
@@ -211,8 +214,8 @@ export class MachineListComponent implements OnInit {
         'btn btn-secondary', this.translationFields.modals.abortValue);
       const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
         'modal-header header-warning',
-        `${this.translationFields.modals.deleteQuestion} ` +
-        `${machine.obj[`Device Name`].label} ${this.translationFields.modals.deleteQuestion2}`
+        [`${this.translationFields.modals.deleteQuestion} ` +
+          `${machine.obj[`Device Name`].label} ${this.translationFields.modals.deleteQuestion2}`]
         , deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
@@ -257,7 +260,10 @@ export class MachineListComponent implements OnInit {
       item = new TableItem();
       item.obj['id'] = { label: elem._id };
       item.obj[`Device Type`] = { label: elem.type };
-      item.obj[`Device Name`] = { label: elem.deviceName, href: `/${routes.paths.frontend.machines.root}/${elem.type}s/${elem._id}` };
+      item.obj[`Device Name`] = {
+        label: elem.deviceName,
+        href: this.user ? `/${routes.paths.frontend.machines.root}/${elem.type}s/${elem._id}` : undefined
+      };
       item.obj[`Manufacturer`] = { label: elem.manufacturer };
       item.obj[`Fablab`] = { label: fablab.hasOwnProperty('name') ? fablab.name : '' };
       item.obj[`Comment`] = { label: elem.comment };
@@ -336,13 +342,13 @@ export class MachineListComponent implements OnInit {
     this.loadingFablabs = false;
   }
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent);
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     if (titleClass) {
       modalRef.componentInstance.titleClass = titleClass;
     }
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;

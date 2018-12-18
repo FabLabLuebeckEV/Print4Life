@@ -18,6 +18,7 @@ export class SimpleMachine {
 export class Order {
     constructor(
         public _id: String,
+        public fablabId: String,
         public projectname: String,
         public comments: Array<Comment>,
         public editor: String,
@@ -28,7 +29,8 @@ export class Order {
         public createdAt: Date,
         public shippingAddress: Address,
         public shared: Boolean,
-        token: String
+        public fileCopyright: Boolean,
+        public token: String
     ) { }
 }
 

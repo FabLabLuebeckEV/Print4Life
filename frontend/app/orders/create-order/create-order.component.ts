@@ -17,11 +17,12 @@ import { UserService } from 'frontend/app/services/user.service';
 import { Subscription } from 'rxjs';
 import { Address } from 'frontend/app/models/address.model';
 import { UploadComponent } from 'frontend/app/components/upload/upload.component';
-import { isObject } from 'util';
+import { isObject, isArray } from 'util';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Schedule } from 'frontend/app/models/schedule.model';
 import { ScheduleService } from 'frontend/app/services/schedule.service';
 import { ValidationService } from 'frontend/app/services/validation.service';
+import { Icon } from '@fortawesome/fontawesome-svg-core';
 
 const localStorageOrderKey = 'orderManagementOrderFormOrder';
 const localStorageCommentKey = 'orderManagementOrderFormComment';
@@ -38,10 +39,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
   config: any;
   spinnerConfig: SpinnerConfig;
-  publicIcon: any;
-  calendarIcon: any;
-  toggleOnIcon: any;
-  toggleOffIcon: any;
+  publicIcon: Icon;
+  calendarIcon: Icon;
+  toggleOnIcon: Icon;
+  toggleOffIcon: Icon;
+  deleteIcon: Icon;
   selectedType: String;
   submitting: Boolean = false;
   editView: Boolean = false;
@@ -51,14 +53,20 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   formSubscription: Subscription;
   datePickerError = false;
   timePickerError = false;
+  inUploadQueue = false;
+  doneStatus = {
+    original: ['representive', 'completed', 'archived', 'deleted'],
+    translated: []
+  };
+  orderIsDone: boolean;
 
   sMachine: SimpleMachine = new SimpleMachine(undefined, undefined);
   shippingAddress: Address = new Address('', '', '', '');
   order: Order = new Order(
-    undefined, undefined, undefined,
-    undefined, undefined, undefined,
+    undefined, undefined, undefined, undefined,
+    undefined, undefined, [],
     undefined, this.sMachine, undefined,
-    this.shippingAddress, false, undefined);
+    this.shippingAddress, false, false, undefined);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
   schedule: Schedule = new Schedule('', undefined, undefined, '', { type: '', id: '' }, '');
@@ -87,6 +95,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   loadingStatus: Boolean;
   validStatus: Array<String> = [];
+  deleteFilesQueue: Array<string> = [];
 
   owner: User;
 
@@ -96,7 +105,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   loadingEditors: Boolean;
   loggedInUser: User = new User(
     undefined, '', '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
-
+  userCanDownload: boolean;
   translationFields = {
     title: '',
     shownMachineTypes: [],
@@ -134,7 +143,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       timePickerEnd: '',
       machineSchedule: '',
       startDate: '',
-      endDate: ''
+      endDate: '',
+      copyright: '',
+      fablab: ''
     },
     modals: {
       ok: '',
@@ -153,13 +164,15 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       projectName: '',
       owner: '',
       status: '',
+      statusDeprecated: '',
       machineType: '',
       selectedMachine: '',
       unnamedFablab: '',
       author: '',
       content: '',
       datePicker: '',
-      timePicker: ''
+      timePicker: '',
+      copyright: ''
     }
   };
 
@@ -184,6 +197,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.publicIcon = this.config.icons.public;
     this.calendarIcon = this.config.icons.calendar;
+    this.deleteIcon = this.config.icons.delete;
     this.shippingAddressKeys = ['userAddress', 'fablabAddress', 'newAddress'];
     this.toggleOnIcon = this.config.icons.toggleOn;
     this.toggleOffIcon = this.config.icons.toggleOff;
@@ -218,6 +232,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     await this._loadFablabs();
     await this._loadStatus();
     await this._initializeOrder(this.orderId);
+    this.orderIsDone = this.doneStatus.original.includes(this.order.status as string);
     await this._loadAddresses();
     this.machineSelected();
     this._translate();
@@ -235,8 +250,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       } else if (this.createOrderForm && this.editView) {
+        this.orderIsDone = this.doneStatus.translated.includes(changes.status as string);
         const startDate = this.validationService.createCheckDate(changes.datePickerStart);
-        const endDate = this.validationService.createCheckDate(changes.datePickerError);
+        const endDate = this.validationService.createCheckDate(changes.datePickerEnd);
         this.datePickerError = this.validationService.validateDate(changes.datePickerStart, changes.datePickerEnd);
         this.timePickerError = this.validationService.validateTime(startDate, endDate, changes.timePickerStart, changes.timePickerEnd);
       }
@@ -255,7 +271,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.orderService.createComment(this.orderId, this.comment, this.sharedView).then((result) => {
       if (result) {
         this._openMsgModal(this.translationFields.modals.createCommentSuccessHeader, 'modal-header header-success',
-          this.translationFields.modals.createCommentSuccess, okButton, undefined).result.then((result) => {
+          [this.translationFields.modals.createCommentSuccess], okButton, undefined).result.then((result) => {
             this.orderService.getOrderById(this.orderId).then((result) => {
               this.order.comments = result.order.comments;
               form.reset();
@@ -271,7 +287,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           });
       }
     }).catch(() => {
-      this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg,
+      this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg],
         okButton, undefined);
     });
   }
@@ -319,52 +335,67 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     }
     orderCopy = JSON.parse(JSON.stringify(this.order));
     orderCopy.machine.type = this.machineService.camelCaseTypes(orderCopy.machine.type);
+    if (orderCopy.machine && orderCopy.machine.type.toLowerCase() === 'unknown') {
+      orderCopy.machine._id = 'unknown'; // save unknown machine into order
+    }
     if (this.editView) {
       const promises = [];
       const errorMsg = this.translationFields.modals.error;
+      // delete files first
+      for (const fileId of this.deleteFilesQueue) {
+        const result = await this.orderService.deleteFile(orderCopy._id, fileId, this.userService.getToken() as string, orderCopy.shared);
+        if (result && result.order) {
+          orderCopy.files = result.order.files;
+        }
+      }
       this.orderService.updateOrder(orderCopy, this.sharedView).then((result) => {
         if (result) {
-          const machine = this.machines.find((machine) => {
-            return this.order.machine._id === machine._id;
-          });
-          if (this.schedule.startDate && this.schedule.endDate &&
-            this.schedule.startDay && this.schedule.endDay &&
-            this.schedule.startTime && this.schedule.endTime) {
-            this.schedule.machine.type = machine.type as string;
-            this.schedule.machine.id = machine._id as string;
-            this.schedule.fablabId = machine.fablab._id;
-            this.schedule.orderId = this.order._id as string;
-            this.schedule.startDate = new Date(
-              this.schedule.startDay.year,
-              this.schedule.startDay.month - 1, // -1 to fix month index of javascript date object
-              this.schedule.startDay.day,
-              this.schedule.startTime.hour,
-              this.schedule.startTime.minute);
-            this.schedule.endDate = new Date(
-              this.schedule.endDay.year,
-              this.schedule.endDay.month - 1, // -1 to fix month index of javascript date object
-              this.schedule.endDay.day,
-              this.schedule.endTime.hour,
-              this.schedule.endTime.minute);
-            if (this.schedule._id) {
-              promises.push(this.scheduleService.update(this.schedule));
-            } else {
-              promises.push(this.scheduleService.create(this.schedule));
+          if (this.machines && isArray(this.machines)) {
+            const machine = this.machines.find((machine) => {
+              return this.order.machine._id === machine._id;
+            });
+            if (this.schedule.startDay && this.schedule.endDay &&
+              this.schedule.startTime && this.schedule.endTime) {
+              this.schedule.machine.type = machine.type as string;
+              this.schedule.machine.id = machine._id as string;
+              this.schedule.fablabId = machine.fablab._id;
+              this.schedule.orderId = this.order._id as string;
+              this.schedule.startDate = new Date(
+                this.schedule.startDay.year,
+                this.schedule.startDay.month - 1, // -1 to fix month index of javascript date object
+                this.schedule.startDay.day,
+                this.schedule.startTime.hour,
+                this.schedule.startTime.minute);
+              this.schedule.endDate = new Date(
+                this.schedule.endDay.year,
+                this.schedule.endDay.month - 1, // -1 to fix month index of javascript date object
+                this.schedule.endDay.day,
+                this.schedule.endTime.hour,
+                this.schedule.endTime.minute);
+              if (this.schedule._id) {
+                promises.push(this.scheduleService.update(this.schedule));
+              } else {
+                promises.push(this.scheduleService.create(this.schedule));
+              }
             }
           }
 
           Promise.all(promises).then(() => {
-            this.fileUpload.uploadFilesToOrder(result.order._id, () => {
+            if (this.fileUpload) {
+              this.fileUpload.uploadFilesToOrder(result.order._id, () => {
+                this._openSuccessMsg(result);
+              }, this.sharedView);
+            } else {
               this._openSuccessMsg(result);
-            }, this.sharedView);
-          }).catch(() => {
-            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+            }
+          }).catch((err) => {
+            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
           });
         } else {
-          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
         }
       }).catch((err) => {
-        this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+        this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
       });
     } else {
       const errorMsg = this.translationFields.modals.error;
@@ -376,10 +407,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             this._openSuccessMsg(result);
           }, this.sharedView);
         } else {
-          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+          this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
         }
       }).catch(() => {
-        this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', errorMsg, okButton, undefined);
+        this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
       });
     }
   }
@@ -392,31 +423,46 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.order.status = status;
   }
 
-  async machineTypeChanged(type) {
+  async machineTypeChanged(type, fablab) {
     let machineObj;
-    this.loadingMachinesForType = true;
-    this.order.machine._id = '';
-    this.order.machine['detailView'] = '';
-    this.order.machine['deviceName'] = '';
-    this.order.machine['shownType'] = type;
-    type = await this._translateMachineType(this.order.machine['shownType']);
-    this.order.machine.type = type;
-    machineObj = await this.machineService.getAll(type, undefined, undefined);
-    machineObj = (machineObj && machineObj[`${this.machineService.camelCaseTypes(type)}s`]) ?
-      machineObj[`${this.machineService.camelCaseTypes(type)}s`] : undefined;
-    for (let i = 0; i < machineObj.length; i++) {
-      const resFab = await this.fablabService.getFablab(machineObj[i].fablabId);
-      const fablab = resFab.fablab;
-      machineObj[i].fablab = fablab;
-      machineObj[i].fablabName = fablab.name;
-    }
-    this.machines = machineObj;
+    if (type) {
+      this.loadingMachinesForType = true;
+      this.order.machine._id = '';
+      this.order.machine['detailView'] = '';
+      this.order.machine['deviceName'] = '';
+      this.order.machine['shownType'] = type;
+      type = await this._translateMachineType(this.order.machine['shownType']);
+      type = this.machineService.camelCaseTypes(type);
+      if (type.toLowerCase() === 'unknown') {
+        delete this.order.machine['detailView'];
+        delete this.order.machine['deviceName'];
+        this.order.machine.type = type;
+        this.machines = undefined;
+      } else {
+        this.order.machine.type = type;
+        machineObj = await this.machineService.getAll(type, fablab ? { fablabId: fablab } : undefined, undefined);
+        machineObj = (machineObj && machineObj[`${this.machineService.camelCaseTypes(type)}s`]) ?
+          machineObj[`${this.machineService.camelCaseTypes(type)}s`] : undefined;
+        if (machineObj) {
+          for (let i = 0; i < machineObj.length; i++) {
+            const resFab = await this.fablabService.getFablab(machineObj[i].fablabId);
+            const fablab = resFab.fablab;
+            machineObj[i].fablab = fablab;
+            machineObj[i].fablabName = fablab.name;
+          }
+          this.machines = machineObj;
+        } else {
+          this.machines = [];
+        }
+      }
 
-    this.loadingMachinesForType = false;
+      this.loadingMachinesForType = false;
+    }
   }
 
   async machineSelected() {
-    if (this.order.machine.type && this.order.machine._id) {
+    if (this.order.machine.type && this.order.machine.type.toLowerCase() !== 'unknown'
+      && this.order.machine._id) {
       this.machines.forEach(element => {
         if (element._id === this.order.machine._id) {
           this.order.machine['deviceName'] = element.deviceName;
@@ -437,10 +483,29 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     }
   }
 
+  public uploadingEventHandler(event) {
+    if (event === true) {
+      this.spinner.show();
+      this.genericService.scrollIntoView(this.spinnerContainerRef);
+    } else {
+      this.spinner.hide();
+    }
+  }
+
+  public fileChangeEventHandler(event) {
+    this.inUploadQueue = event && event > 0;
+  }
+
+  public deleteFile(fileId: string) {
+    if (!this.deleteFilesQueue.includes(fileId)) {
+      this.deleteFilesQueue.push(fileId);
+    }
+    this.order.files = this.order.files.filter(elem => elem.id !== fileId);
+  }
+
   // Private Functions
   private async _loadAddresses() {
     this.loadingAddresses = true;
-    let user;
     let fablab;
 
     if (this.order && this.order.shippingAddress) {
@@ -448,35 +513,41 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     }
 
     try {
-      user = await this.userService.getUser();
       this.shippingAddresses.userAddress = new Address(
-        user.address.street, user.address.zipCode, user.address.city, user.address.country);
+        this.loggedInUser.address.street, this.loggedInUser.address.zipCode,
+        this.loggedInUser.address.city, this.loggedInUser.address.country);
       if (this.shippingAddresses.userAddress.compare(this.order.shippingAddress)) {
-        this._selectAddress('userAddress');
+        this.selectedAddressKey = 'userAddress';
       }
     } catch (err) {
       this.shippingAddresses.userAddress = undefined;
     }
 
-    try {
-      fablab = (await this.fablabService.getFablab(user.fablabId)).fablab;
-      this.shippingAddresses.fablabAddress = new Address(
-        fablab.address.street, fablab.address.zipCode, fablab.address.city, fablab.address.country);
-      if (this.shippingAddresses.fablabAddress.compare(this.order.shippingAddress)) {
-        this._selectAddress('fablabAddress');
+    if (this.loggedInUser && this.loggedInUser.fablabId) {
+      try {
+
+        fablab = (await this.fablabService.getFablab(this.loggedInUser.fablabId)).fablab;
+        this.shippingAddresses.fablabAddress = new Address(
+          fablab.address.street, fablab.address.zipCode, fablab.address.city, fablab.address.country);
+        if (this.shippingAddresses.fablabAddress.compare(this.order.shippingAddress)) {
+          this.selectedAddressKey = 'fablabAddress';
+        }
+      } catch (err) {
+        this.shippingAddresses.fablabAddress = undefined;
       }
-    } catch (err) {
+    } else {
       this.shippingAddresses.fablabAddress = undefined;
     }
     this.loadingAddresses = false;
   }
 
-  private async _loadEditors() {
+  private async _loadEditors(fablab) {
     const promises = [];
     let editors = [];
     this.loadingEditors = true;
+    const query = fablab ? { 'role.role': 'editor', fablabId: fablab, activated: true } : { 'role.role': 'editor', activated: true };
     try {
-      const result = await this.userService.getAllUsers({ 'role.role': 'editor', activated: true }, 0, 0);
+      const result = await this.userService.getAllUsers(query, 0, 0);
       if (result && result.users) {
         editors = result.users;
         editors.forEach(async (editor) => {
@@ -519,10 +590,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         this.order.owner = this.loggedInUser._id;
       }
       this.order = JSON.parse(order) as Order;
-    } else if (id !== undefined) {
-      if (!this.sharedView) {
-        await this._loadEditors();
+      if (!this.order.owner) {
+        this.order.owner = this.loggedInUser._id;
       }
+    } else if (id !== undefined) {
       this.order = (await this.orderService.getOrderById(id)).order;
       try {
         const result = await this.orderService.getSchedule(id);
@@ -542,6 +613,29 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         }
       }
 
+      if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
+        this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
+        this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
+        if (this.order.machine.type.toLowerCase() !== 'unknown') {
+          try {
+            const result: any =
+              await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
+            if (result && result.schedules) {
+              this.machineSchedules = this.machineService.sortSchedulesByStartDate(result.schedules);
+            }
+          } catch (err) {
+            this.machineSchedules = [];
+          }
+        }
+        const machineId = this.order.machine._id;
+        await this.machineTypeChanged(this.order.machine['shownType'], this.order.fablabId);
+        this.order.machine._id = machineId;
+      }
+
+      if (!this.sharedView) {
+        await this._loadEditors(this.order.fablabId);
+      }
+
       if (this.order.editor && this.order.editor.length === 24) {
         try {
           const result = await this.userService.getNamesOfUser(this.order.editor);
@@ -556,22 +650,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       }
 
       this.order['shownStatus'] = await this._translateStatus(this.order.status);
-      if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
-        this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
-        this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
-        const machineId = this.order.machine._id;
-        await this.machineTypeChanged(this.order.machine['shownType']);
-        this.order.machine._id = machineId;
-        try {
-          const result: any =
-            await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
-          if (result && result.schedules) {
-            this.machineSchedules = this.machineService.sortSchedulesByStartDate(result.schedules);
-          }
-        } catch (err) {
-          this.machineSchedules = [];
-        }
-      }
 
       if (this.order.comments) {
         this.order.comments.forEach(async (comment) => {
@@ -582,12 +660,15 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         });
       }
       if (this.order.files) {
+        this.userCanDownload = this.order.shared as boolean || (this.loggedInUser && this.loggedInUser.role &&
+          this.loggedInUser.role.role && (this.loggedInUser.role.role === 'editor' || this.loggedInUser.role.role === 'admin'
+            || this.loggedInUser._id === this.order.owner));
         this.translateService.get(['date']).subscribe((translations => {
           const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
           this.order.files.forEach((file) => {
-            file['link'] = `${routes.backendUrl} /` +
+            file['link'] = `${routes.backendUrl}/` +
               `${routes.paths.backend.orders.root}/${this.order._id}/` +
-              `${routes.paths.backend.orders.download}/${file.id}`;
+              `${routes.paths.backend.orders.files}/${file.id}?token=${this.userService.getToken()}`;
             file['shownCreatedAt'] = this.genericService.translateDate(
               file.createdAt, currentLang, translations['date'].dateTimeFormat);
           });
@@ -596,6 +677,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       }
     } else {
       this.order.owner = this.loggedInUser._id;
+      this.order.fablabId = this.loggedInUser.fablabId;
     }
   }
 
@@ -608,6 +690,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   private async _loadMachineTypes() {
     this.loadingMachineTypes = true;
     this.machineTypes = (await this.machineService.getAllMachineTypes()).types;
+    this.machineTypes = this.machineTypes.concat(['Unknown']);
     this.loadingMachineTypes = false;
   }
 
@@ -665,19 +748,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  public uploadingEventHandler(event) {
-    if (event === true) {
-      this.spinner.show();
-      this.genericService.scrollIntoView(this.spinnerContainerRef);
-    } else {
-      this.spinner.hide();
-    }
-  }
-
   private _openSuccessMsg(resultOrder) {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(this.translationFields.modals.orderSuccessHeader, 'modal-header header-success',
-      this.translationFields.modals.orderSuccess, okButton, undefined).result.then((result) => {
+      [this.translationFields.modals.orderSuccess], okButton, undefined).result.then((result) => {
         if (resultOrder.order.shared) {
           this._openLinkMsg(resultOrder.order);
         } else {
@@ -690,7 +764,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
     this._openMsgModal(
       this.translationFields.modals.orderSharedLinkSuccessHeader, 'modal-header header-success',
-      `${this.translationFields.modals.orderSharedLinkSuccess}`,
+      [`${this.translationFields.modals.orderSharedLinkSuccess}`],
       okButton, undefined, `${routes.frontendUrl}/${routes.paths.frontend.orders.root}/` +
       `${routes.paths.frontend.orders.shared.root}/${routes.paths.frontend.orders.shared.detail}/` +
       `${order._id}`).result.then(() => {
@@ -707,11 +781,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.order.shippingAddress = JSON.parse(JSON.stringify(this.shippingAddresses[`${address}`]));
   }
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton, link?: String) {
-    const modalRef = this.modalService.open(MessageModalComponent);
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>,
+    button1: ModalButton, button2: ModalButton, link?: String) {
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.titleClass = titleClass;
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     if (link) {
@@ -719,8 +794,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     }
     return modalRef;
   }
-
-
 
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
@@ -735,6 +808,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         const shownMachineTypes = [];
         const shownStatus = [];
         const shownShippingAddresses = [];
+        this.doneStatus.translated = [];
 
         this.machineSchedules.forEach((schedule) => {
           schedule['shownStartDate'] = this.genericService.translateDate(
@@ -764,6 +838,13 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             shownStatus.push(translated);
           }
         });
+
+        this.doneStatus.original.forEach((status) => {
+          const translated = translations['status'][`${status}`];
+          if (translated) {
+            this.doneStatus.translated.push(translated);
+          }
+        });
         if (this.order && this.order.machine && this.order.machine['shownType']) {
           this._translateMachineType(this.order.machine.type).then((shownType) => {
             this.order.machine['shownType'] = shownType;
@@ -772,12 +853,6 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           });
         }
 
-        this.validStatus.forEach((status) => {
-          const translated = translations['status'][`${status}`];
-          if (translated) {
-            shownStatus.push(translated);
-          }
-        });
         if (this.order && this.order.machine && this.order.machine['shownType']) {
           this._translateMachineType(this.order.machine.type).then((shownType) => {
             this.order.machine['shownType'] = shownType;
@@ -801,10 +876,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
                 comment.createdAt, currentLang, translations['date'].dateTimeFormat);
             }
           });
-          this.order.files.forEach((file) => {
-            file['shownCreatedAt'] = this.genericService.translateDate(
-              file.createdAt, currentLang, translations['date'].dateTimeFormat);
-          });
+          if (this.order.files) {
+            this.order.files.forEach((file) => {
+              file['shownCreatedAt'] = this.genericService.translateDate(
+                file.createdAt, currentLang, translations['date'].dateTimeFormat);
+            });
+          }
         }
         this.translationFields = {
           title: this.editView ? translations['orderForm'].editTitle : translations['orderForm'].createTitle,
@@ -843,7 +920,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             timePickerEnd: translations['orderForm'].labels.timePickerEnd,
             machineSchedule: translations['orderForm'].labels.machineSchedule,
             startDate: translations['orderForm'].labels.startDate,
-            endDate: translations['orderForm'].labels.endDate
+            endDate: translations['orderForm'].labels.endDate,
+            copyright: translations['orderForm'].labels.copyright,
+            fablab: translations['orderForm'].labels.fablab
           },
           modals: {
             ok: translations['orderForm'].modals.ok,
@@ -868,13 +947,15 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             projectName: translations['orderForm'].messages.projectName,
             owner: translations['orderForm'].messages.owner,
             status: translations['orderForm'].messages.status,
+            statusDeprecated: translations['orderForm'].messages.statusDeprecated,
             machineType: translations['orderForm'].messages.machineType,
             selectedMachine: translations['orderForm'].messages.selectedMachine,
             unnamedFablab: translations['orderForm'].messages.unnamedFablab,
             author: translations['orderForm'].messages.author,
             content: translations['orderForm'].messages.content,
             datePicker: translations['orderForm'].messages.datePicker,
-            timePicker: translations['orderForm'].messages.timePicker
+            timePicker: translations['orderForm'].messages.timePicker,
+            copyright: translations['orderForm'].messages.copyright
           }
         };
       }

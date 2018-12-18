@@ -99,11 +99,9 @@ export class MachineFormComponent implements OnInit {
     });
     this.router.events.subscribe(() => {
       const route = this.location.path();
-      if (route.indexOf('/update') >= 0 && !this.editView) {
+      if (route.indexOf('/update') >= 0) {
         this.editView = true;
       } else {
-        if (this.editView) {
-        }
         this.editView = false;
       }
       this._loadMachineTypes();
@@ -156,7 +154,7 @@ export class MachineFormComponent implements OnInit {
     const msgHeader = this.translationFields.modals.successHeader;
     const msg = this.translationFields.modals.successMessage;
     this._openMsgModal(msgHeader, 'modal-header header-success',
-      msg, okButton, undefined).result.then(() => {
+      [msg], okButton, undefined).result.then(() => {
         this.genericService.back();
       });
   }
@@ -170,11 +168,11 @@ export class MachineFormComponent implements OnInit {
       okButton, undefined);
   }
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent);
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     modalRef.componentInstance.titleClass = titleClass;
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;

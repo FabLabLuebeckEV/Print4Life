@@ -49,8 +49,7 @@ export const routes = {
                 comment: 'comment',
                 count: 'count',
                 search: 'search',
-                upload: 'upload',
-                download: 'download',
+                files: 'files',
                 shared: 'shared'
             },
             machines: {

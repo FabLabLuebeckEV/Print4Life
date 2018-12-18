@@ -24,6 +24,7 @@ export class OrderDetailComponent implements OnInit {
   private config: any;
   private userIsLoggedIn: boolean;
   private loggedInUser: User;
+  userCanDownload: boolean;
   editIcon: any;
   deleteIcon: any;
   toggleOnIcon: any;
@@ -38,15 +39,17 @@ export class OrderDetailComponent implements OnInit {
   order: Order = new Order(
     undefined,
     undefined,
-    [],
-    undefined,
     undefined,
     [],
     undefined,
     undefined,
+    [],
     undefined,
     undefined,
     undefined,
+    undefined,
+    undefined,
+    false,
     undefined
   );
   schedule: Schedule;
@@ -77,7 +80,8 @@ export class OrderDetailComponent implements OnInit {
       abortReturnValue: '',
       deleteHeader: '',
       deleteQuestion: '',
-      deleteQuestion2: ''
+      deleteQuestion2: '',
+      deleteWarning: ''
     }
   };
 
@@ -106,64 +110,72 @@ export class OrderDetailComponent implements OnInit {
     });
 
     this.route.paramMap
-      .subscribe((params) => {
+      .subscribe(async (params) => {
         if (params && params.get('id')) {
           this.orderService.getOrderById(params.get('id')).then(async (result) => {
-            this.order = result.order;
-            result.order.comments.forEach(async comment => {
-              const author = await this.userService.getNamesOfUser(comment.author);
-              comment['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
-            });
-            result.order.files.forEach(async file => {
-              file['link'] = `${routes.backendUrl}/` +
-                `${routes.paths.backend.orders.root}/` +
-                (this.order.shared ? `${routes.paths.backend.orders.shared}/` : ``) +
-                `${this.order._id}/` +
-                `${routes.paths.backend.orders.download}/${file.id}`;
-            });
-            // sort files to show deprecated last
-            this.orderService.sortFilesByDeprecated(result.order.files);
-            this.owner = await this.userService.getNamesOfUser(this.order.owner);
-            this.owner['fullname'] = this.owner.firstname + ' ' + this.owner.lastname;
-            this.ownerLink = `/${routes.paths.frontend.users.root}/${this.owner._id}`;
-            if (this.order.editor) {
-              this.editor = await this.userService.getNamesOfUser(this.order.editor);
-              this.editor['fullname'] = this.editor.firstname + ' ' + this.editor.lastname;
-              this.editorLink = `/${routes.paths.frontend.users.root}/${this.editor._id}`;
-            }
-            this.order.comments.forEach(async (comment) => {
-              const author = await this.userService.getNamesOfUser(comment.author);
-              comment['authorName'] = author.firstname + ' ' + author.lastname;
-            });
-            try {
-              const res = await this.orderService.getSchedule(this.order._id as string);
-              if (res) {
-                const schedule: Schedule = res.schedule;
-                this.schedule = this.scheduleService.decompressScheduleDates(schedule);
+            if (result && result.order) {
+              this.order = result.order;
+              this.userIsLoggedIn = this.userService.isLoggedIn();
+              this.loggedInUser = await this.userService.getUser();
+              this.userCanDownload = this.order.shared as boolean || (this.loggedInUser && this.loggedInUser.role &&
+                this.loggedInUser.role.role && (this.loggedInUser.role.role === 'editor' || this.loggedInUser.role.role === 'admin'
+                  || this.loggedInUser._id === this.order.owner));
+              result.order.comments.forEach(async comment => {
+                const author = await this.userService.getNamesOfUser(comment.author);
+                comment['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
+              });
+              result.order.files.forEach(async file => {
+                file['link'] = `${routes.backendUrl}/` +
+                  `${routes.paths.backend.orders.root}/` +
+                  (this.order.shared ? `${routes.paths.backend.orders.shared}/` : ``) +
+                  `${this.order._id}/` +
+                  `${routes.paths.backend.orders.files}/${file.id}?token=${this.userService.getToken()}`;
+              });
+              // sort files to show deprecated last
+              this.orderService.sortFilesByDeprecated(result.order.files);
+              this.owner = await this.userService.getNamesOfUser(this.order.owner);
+              this.owner['fullname'] = this.owner.firstname + ' ' + this.owner.lastname;
+              this.ownerLink = `/${routes.paths.frontend.users.root}/${this.owner._id}`;
+              if (this.order.editor) {
+                this.editor = await this.userService.getNamesOfUser(this.order.editor);
+                this.editor['fullname'] = this.editor.firstname + ' ' + this.editor.lastname;
+                this.editorLink = `/${routes.paths.frontend.users.root}/${this.editor._id}`;
               }
-            } catch (err) {
-              this.schedule = undefined;
-            }
+              this.order.comments.forEach(async (comment) => {
+                const author = await this.userService.getNamesOfUser(comment.author);
+                comment['authorName'] = author.firstname + ' ' + author.lastname;
+              });
+              try {
+                const res = await this.orderService.getSchedule(this.order._id as string);
+                if (res) {
+                  const schedule: Schedule = res.schedule;
+                  this.schedule = this.scheduleService.decompressScheduleDates(schedule);
+                }
+              } catch (err) {
+                this.schedule = undefined;
+              }
 
-            this.editLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
-            this.editLink = this.order.shared
-              ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
-              + `${routes.paths.frontend.orders.shared.update}/${this.order._id}/`
-              : `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
-            this.machineService.get(this.order.machine.type, this.order.machine._id).then(result => {
-              const type = this.machineService.camelCaseTypes(this.order.machine.type);
-              this.machine = result[`${type}`];
-              this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
-              this.fablabService.getFablab(this.machine.fablabId).then(result => {
+              this.editLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
+              this.editLink = this.order.shared
+                ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
+                + `${routes.paths.frontend.orders.shared.update}/${this.order._id}/`
+                : `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
+              this.fablabService.getFablab(this.order.fablabId).then(async result => {
                 this.fablab = result.fablab;
+                if (this.order.machine.type.toLowerCase() !== 'unknown') {
+                  const result = await this.machineService.get(this.order.machine.type, this.order.machine._id);
+                  const type = this.machineService.camelCaseTypes(this.order.machine.type);
+                  this.machine = result[`${type}`];
+                  this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
+                } else {
+                  this.machine = { type: this.order.machine.type.toLowerCase() };
+                }
                 this._translate();
               });
-            });
+            }
           });
         }
       });
-    this.userIsLoggedIn = this.userService.isLoggedIn();
-    this.loggedInUser = await this.userService.getUser();
   }
 
   public delete() {
@@ -173,7 +185,8 @@ export class OrderDetailComponent implements OnInit {
       this.translationFields.modals.abortReturnValue);
     const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
       'modal-header header-danger',
-      `${this.translationFields.modals.deleteQuestion} ${this.order.projectname} ${this.translationFields.modals.deleteQuestion2}`,
+      [`${this.translationFields.modals.deleteQuestion} ${this.order.projectname} ${this.translationFields.modals.deleteQuestion2}`,
+      `${this.translationFields.modals.deleteWarning}`],
       deleteButton, abortButton);
     modalRef.result.then((result) => {
       if (result === deleteButton.returnValue) {
@@ -186,13 +199,13 @@ export class OrderDetailComponent implements OnInit {
 
   // Private Functions
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent);
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     if (titleClass) {
       modalRef.componentInstance.titleClass = titleClass;
     }
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;
@@ -277,7 +290,8 @@ export class OrderDetailComponent implements OnInit {
           abortReturnValue: translations['orderDetail'].modals.abortReturnValue,
           deleteHeader: translations['orderDetail'].modals.deleteHeader,
           deleteQuestion: translations['orderDetail'].modals.deleteQuestion,
-          deleteQuestion2: translations['orderDetail'].modals.deleteQuestion2
+          deleteQuestion2: translations['orderDetail'].modals.deleteQuestion2,
+          deleteWarning: translations['orderDetail'].modals.deleteWarning
         }
       };
     }));

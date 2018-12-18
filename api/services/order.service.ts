@@ -2,9 +2,14 @@ import * as uuid from 'uuid/v4';
 import * as mongoose from 'mongoose';
 import { isNumber } from 'util';
 import { Order, orderSchema } from '../models/order.model';
+import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import ModelService from './model.service';
+import FileService from './file.service';
 /* eslint-enable no-unused-vars */
+
+const doneStatus: String[] = ['deleted', 'completed', 'archived', 'representive'];
+const fileService = new FileService();
 
 export class OrderService implements ModelService {
   /* eslint-disable class-methods-use-this */
@@ -61,10 +66,33 @@ export class OrderService implements ModelService {
        * @param machine is the machine obj that updates the order
        * @returns a promise with the results
        */
-  public update (order) {
+  public async update (order) {
+    let isDone;
     delete order.__v;
     if (!order.createdAt) {
       order.createdAt = new Date();
+    }
+    doneStatus.forEach((status) => {
+      if (status === order.status) {
+        isDone = true;
+      }
+    });
+    // delete deprecated files if order is done (archived, representive, completed, deleted)
+    if (isDone && order.files) {
+      let latestFiles = order.files;
+      /* eslint-disable no-restricted-syntax */
+      /* eslint-disable no-await-in-loop */
+      for (const file of order.files) {
+        if (file.deprecated) {
+          const result = await fileService.deleteFile(file.id, config.attachmentBucket, order);
+          if (result && result.order) {
+            latestFiles = result.order.files;
+          }
+        }
+      }
+      /* eslint-enable no-restricted-syntax */
+      /* eslint-enable no-await-in-loop */
+      order.files = latestFiles;
     }
     return Order.updateOne(
       { _id: mongoose.Types.ObjectId(order._id) },

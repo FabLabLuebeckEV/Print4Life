@@ -96,7 +96,8 @@ export class OrderListComponent implements OnInit {
       abortValue: '',
       deleteHeader: '',
       deleteQuestion: '',
-      deleteQuestion2: ''
+      deleteQuestion2: '',
+      deleteWarning: ''
     },
     messages: {
       datePicker: ''
@@ -189,7 +190,7 @@ export class OrderListComponent implements OnInit {
     this.genericService.scrollIntoView(this.spinnerContainerRef);
     let countObj;
     let totalItems = 0;
-    let query;
+    let query = { $and: [] };
 
     if (this.filter.selectedStatus.length > 0 && this.filter.selectedMachineTypes.length > 0) {
       query = {
@@ -226,7 +227,7 @@ export class OrderListComponent implements OnInit {
           query.$and[1].$nor.push({ status });
         });
       }
-    } else {
+    } else if (this.filter.originalValidStatus.length && this.filter.originalMachineTypes.length) {
       query = {
         $and: [
           { $nor: [] }
@@ -238,6 +239,29 @@ export class OrderListComponent implements OnInit {
       this.filter.originalMachineTypes.forEach((type) => {
         query.$and[0].$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
       });
+    }
+
+    // filter only valid status and not one of the others
+    if (this.outstandingOrders) {
+      try {
+        const result = await this.orderService.getStatus(false);
+        if (result && result.status && this.filter.originalValidStatus.length) {
+          query.$and.push({ $nor: [] });
+          let statusArr = [];
+          if (isArray(result.status)) {
+            statusArr = result.status.filter((status) => {
+              return !this.filter.originalValidStatus.includes(status);
+            });
+          } else {
+            statusArr = this.filter.originalValidStatus.filter((status) => {
+              return status !== result.status;
+            });
+          }
+          statusArr.forEach((status) => {
+            query.$and[query.$and.length - 1].$nor.push({ status });
+          });
+        }
+      } catch (err) { }
     }
 
 
@@ -256,8 +280,6 @@ export class OrderListComponent implements OnInit {
         query.$and.push({ shared: false });
       }
     }
-
-
 
     countObj = await this.orderService.count(query);
     totalItems = countObj.count;
@@ -283,9 +305,19 @@ export class OrderListComponent implements OnInit {
         orders.orders.forEach(async (order) => {
           promises.push(new Promise(async resolve => {
             const found = { fablab: false, schedule: false };
-            const result = await this.machineService.get(order.machine.type, order.machine._id);
-            const resultSchedules = await this.machineService.getSchedules(order.machine.type, order.machine._id,
-              { startDay: this.filter.schedule.startDay, endDay: this.filter.schedule.endDay });
+            let result;
+            let resultSchedules;
+            if (order.machine.type.toLowerCase() !== 'unknown') {
+              result = await this.machineService.get(order.machine.type, order.machine._id);
+              resultSchedules = await this.machineService.getSchedules(order.machine.type, order.machine._id,
+                { startDay: this.filter.schedule.startDay, endDay: this.filter.schedule.endDay });
+            }
+            this.filter.selectedFablabs.forEach((fablab) => {
+              if (fablab._id === order.fablabId) {
+                found.fablab = true;
+              }
+            });
+
             if ((!this.filter.schedule.startDay || !this.filter.schedule.startDay.year ||
               !this.filter.schedule.startDay.month || !this.filter.schedule.startDay.day) &&
               (!this.filter.schedule.endDay || !this.filter.schedule.endDay.year || !this.filter.schedule.endDay.month
@@ -300,17 +332,14 @@ export class OrderListComponent implements OnInit {
                   }
                 });
               }
-              this.filter.selectedFablabs.forEach((fablab) => {
-                if (fablab._id === result[`${order.machine.type}`].fablabId) {
-                  found.fablab = true;
-                }
-              });
 
               if (found.fablab && found.schedule) {
                 resolve(order);
               } else {
                 resolve();
               }
+            } else if (order.machine.type.toLowerCase() === 'unknown') {
+              resolve(order);
             }
             resolve();
           }));
@@ -321,6 +350,15 @@ export class OrderListComponent implements OnInit {
         orders = this.unfinishedOrders && results && Array.isArray(results) ? results.filter((order) => order) : orders.orders;
         const arr = [];
         for (const order of orders) {
+          let fablab;
+          if (order.fablabId) {
+            try {
+              const result = await this.fablabService.getFablab(order.fablabId);
+              if (result && result.fablab) {
+                fablab = result.fablab;
+              }
+            } catch (err) { }
+          }
           const item = new TableItem();
           const owner = await this.userService.getNamesOfUser(order.owner);
           const editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
@@ -328,7 +366,7 @@ export class OrderListComponent implements OnInit {
           item.obj['Created at'] = {
             label: `${this.genericService.translateDate(order.createdAt, currentLang, translations['date'].dateTimeFormat)}`
           };
-          if (this.userIsLoggedIn && (loggedInUser.role.role === 'editor' || this.userIsAdmin)) {
+          if (this.userIsLoggedIn && (loggedInUser.role.role === 'editor' || this.userIsAdmin) || this.unfinishedOrders) {
             item.obj['Schedule Start Date'] = {
               label: order.schedule && order.schedule.startDate ?
                 `${this.genericService.translateDate(order.schedule.startDate, currentLang, translations['date'].dateTimeFormat)}`
@@ -338,6 +376,9 @@ export class OrderListComponent implements OnInit {
               label: order.schedule && order.schedule.endDate ?
                 `${this.genericService.translateDate(order.schedule.endDate, currentLang, translations['date'].dateTimeFormat)}`
                 : '-'
+            };
+            item.obj['Fablab'] = {
+              label: fablab ? fablab.name : '-'
             };
           }
           item.obj['Projectname'] = {
@@ -457,8 +498,9 @@ export class OrderListComponent implements OnInit {
       const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
         this.translationFields.modals.abortValue);
       const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
-        'modal-header header-danger', `${this.translationFields.modals.deleteQuestion} ` +
-        `${order.obj[`Projectname`].label} ${this.translationFields.modals.deleteQuestion2}`, deleteButton, abortButton);
+        'modal-header header-danger', [`${this.translationFields.modals.deleteQuestion} ` +
+          `${order.obj[`Projectname`].label} ${this.translationFields.modals.deleteQuestion2}`,
+        `${this.translationFields.modals.deleteWarning}`], deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
           this.orderService.deleteOrder(order.obj.id.label).then(async (result) => {
@@ -507,13 +549,13 @@ export class OrderListComponent implements OnInit {
 
   // Private Functions
 
-  private _openMsgModal(title: String, titleClass: String, msg: String, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent);
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
     modalRef.componentInstance.title = title;
     if (titleClass) {
       modalRef.componentInstance.titleClass = titleClass;
     }
-    modalRef.componentInstance.msg = msg;
+    modalRef.componentInstance.messages = messages;
     modalRef.componentInstance.button1 = button1;
     modalRef.componentInstance.button2 = button2;
     return modalRef;
@@ -576,6 +618,7 @@ export class OrderListComponent implements OnInit {
     this.filter.originalMachineTypes.forEach((type, idx) => {
       this.filter.originalMachineTypes[idx] = this.machineService.camelCaseTypes(type);
     });
+    this.filter.originalMachineTypes = this.filter.originalMachineTypes.concat(['unknown']);
     this.filter.machineTypes = JSON.parse(JSON.stringify(this.filter.originalMachineTypes));
     this.filter.shownMachineTypes = JSON.parse(JSON.stringify(this.filter.machineTypes));
     this.translateService.get(['deviceTypes']).subscribe((translations => {
@@ -651,7 +694,8 @@ export class OrderListComponent implements OnInit {
           abortValue: translations['orderList'].modals.abortValue,
           deleteHeader: translations['orderList'].modals.deleteHeader,
           deleteQuestion: translations['orderList'].modals.deleteQuestion,
-          deleteQuestion2: translations['orderList'].modals.deleteQuestion2
+          deleteQuestion2: translations['orderList'].modals.deleteQuestion2,
+          deleteWarning: translations['orderList'].modals.deleteWarning
         },
         messages: {
           datePicker: translations['orderList'].messages.datePicker

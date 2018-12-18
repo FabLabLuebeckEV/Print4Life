@@ -5,6 +5,10 @@ import fileSchema from './file.model';
 
 const attributes = {
   comments: [commentSchema],
+  fablabId: {
+    type: String,
+    required: true
+  },
   projectname: {
     type: String,
     required: true
@@ -51,6 +55,10 @@ const attributes = {
       type: String,
       required: true
     }
+  },
+  fileCopyright: {
+    type: Boolean,
+    default: false
   }
 };
 

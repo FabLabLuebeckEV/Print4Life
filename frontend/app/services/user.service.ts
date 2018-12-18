@@ -146,6 +146,7 @@ export class UserService {
       const user = await this.findOwn();
       if (user) {
         this.user = user;
+        this._setUserLanguage();
         return this.user;
       } else {
         return undefined;

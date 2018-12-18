@@ -11,15 +11,15 @@
     </div>
     <div class="container text-left">
       <app-back-button class="spacing-right-xs"></app-back-button>
-      <a *ngIf="userIsLoggedIn" [routerLink]="editLink">
+      <a *ngIf="userIsAdmin" [routerLink]="editLink">
         <button type="button" class="btn btn-warning spacing-right-xs">
           <fa-icon [icon]="editIcon"></fa-icon>
         </button>
       </a>
-      <button *ngIf="userIsLoggedIn && !machine.activated" (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
+      <button *ngIf="userIsAdmin && !machineActive" (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
         <fa-icon [icon]="toggleOff"></fa-icon>
       </button>
-      <button *ngIf="userIsLoggedIn && machine.activated" (click)="delete()" type="button" class="btn btn-success spacing-right-xs">
+      <button *ngIf="userIsAdmin && machineActive" (click)="delete()" type="button" class="btn btn-success spacing-right-xs">
         <fa-icon [icon]="toggleOn"></fa-icon>
       </button>
     </div>

@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 import config from '../config/config';
+import routerService from './router.service';
 
 export interface TokenCheck {
   tokenOk: boolean;
@@ -39,6 +40,10 @@ function checkQuery (query: any, fields?: Array<String>) {
           obj[`${field}`] = { $regex: elem.$text.$search, $options: 'i' };
           query.$and[query.$and.length - 1].$or.push(obj);
         });
+      } else if (elem.$or && !elem.$or.length) {
+        delete elem.$or;
+      } else if (elem.$nor && !elem.$nor.length) {
+        delete elem.$nor;
       }
     });
     if (found) {
@@ -66,13 +71,16 @@ async function checkToken (req): Promise<TokenCheck> {
   if (req.headers && req.headers.authorization) {
     split = req.headers.authorization.split('JWT');
     token = split && split.length > 1 ? split[1].trim() : undefined;
-    if (token) {
-      try {
-        const decoded = await jwt.verify(token, config.jwtSecret);
-        ret = { tokenOk: true, error: undefined, decoded };
-      } catch (error) {
-        ret = { tokenOk: false, error, decoded: undefined };
-      }
+  } else if (routerService.isDownloadRoute(req.originalUrl, req.method) && req.query && req.query.token) {
+    split = req.query.token.split('JWT');
+    token = split && split.length > 1 ? split[1].trim() : undefined;
+  }
+  if (token) {
+    try {
+      const decoded = await jwt.verify(token, config.jwtSecret);
+      ret = { tokenOk: true, error: undefined, decoded };
+    } catch (error) {
+      ret = { tokenOk: false, error, decoded: undefined };
     }
   }
   return ret;

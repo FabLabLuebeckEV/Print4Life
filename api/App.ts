@@ -18,7 +18,7 @@ class App {
   private mountRoutes (): void {
     this.express.use(bodyParser.json());
     this.express.use(((req, res, next) => {
-      if (routerService.isDownloadRoute(req.originalUrl) || req.get('Content-Type') === 'application/json'
+      if (routerService.isDownloadRoute(req.originalUrl, req.method) || req.get('Content-Type') === 'application/json'
         || (req.get('Content-Type') && req.get('Content-Type').includes('multipart/form-data'))) {
         if (req.get('Content-Type') && req.get('Content-Type').includes('multipart/form-data')) {
           this.express.use(bodyParser.urlencoded({ extended: true }));
@@ -38,7 +38,7 @@ class App {
     if (config.cors) {
       const corsOptionsDelegate = function (req, callback) {
         const origin = req.header('Origin');
-        if (routerService.isDownloadRoute(req.originalUrl)
+        if (routerService.isDownloadRoute(req.originalUrl, req.method)
           || config.cors.whitelist.indexOf(origin) !== -1) {
           callback(null, true);
         } else {

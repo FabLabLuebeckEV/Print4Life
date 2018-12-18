@@ -9,7 +9,7 @@
       <div class="inline-block">
         <div ngfDrop [(validDrag)]="baseDropValid" (fileOver)="hasBaseDropZoneOver=$event" [(files)]="files" [accept]="accept"
           [maxSize]="maxSize" [(dragFiles)]="dragFiles" [(lastInvalids)]="lastInvalids" class="my-drop-zone"
-          [class.invalid-drag]="baseDropValid===false" [class.valid-drag]="baseDropValid" (filesChange)="lastFileAt=getDate()">
+          [class.invalid-drag]="baseDropValid===false" [class.valid-drag]="baseDropValid" (filesChange)="lastFileAt=getDate(); emitFileChange(files);">
           <div class="dropzone-label text-center">{{translationFields.labels.dropzone}}</div>
         </div>
       </div>
@@ -17,7 +17,7 @@
       <div class="inline-block spacing-top">
         {{translationFields.labels.multiple}}
         <input ngfSelect multiple type="file" [(files)]="files" [accept]="accept" [maxSize]="maxSize" [(lastInvalids)]="lastInvalids"
-          (filesChange)="lastFileAt=getDate()" />
+          (filesChange)="lastFileAt=getDate(); emitFileChange(files);" />
       </div>
     </div>
 
@@ -48,7 +48,7 @@
                 {{ item.size/1024/1024 | number:'.2' }} MB
               </td>
               <td nowrap>
-                <button type="button" class="btn btn-danger btn-xs" (click)="files.splice(i,1)">
+                <button type="button" class="btn btn-danger btn-xs" (click)="files.splice(i,1); emitFileChange(files);">
                   <fa-icon [icon]="deleteIcon"></fa-icon>
                 </button>
               </td>
@@ -73,7 +73,7 @@
           <button type="button" class="btn btn-warning btn-s spacing-top spacing-right" (click)="cancel()" [disabled]="!httpEmitter">
             <fa-icon [icon]="warningIcon"></fa-icon> Cancel all
           </button> -->
-          <button type="button" class="btn btn-danger btn-s spacing-top spacing-right" (click)="files.length=0"
+          <button type="button" class="btn btn-danger btn-s spacing-top spacing-right" (click)="files.length=0; emitFileChange(files);"
             [disabled]="!files.length">
             <fa-icon [icon]="deleteIcon"></fa-icon> {{translationFields.labels.removeAllButton}}
           </button>

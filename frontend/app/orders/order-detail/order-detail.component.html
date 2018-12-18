@@ -63,8 +63,9 @@
           <tr *ngIf="machine">
             <td class="align-middle text-center">{{translationFields.labels.machine}}</td>
             <td class="align-middle text-center">
-              <a *ngIf="userIsLoggedIn" [routerLink]="machine.detailView">{{ machine.deviceName }}</a>
-              <span *ngIf="!userIsLoggedIn">{{ machine.deviceName }}</span>
+              <a *ngIf="userIsLoggedIn && machine.deviceName" [routerLink]="machine.detailView">{{ machine.deviceName
+                }}</a>
+              <span *ngIf="!userIsLoggedIn && machine.deviceName">{{ machine.deviceName }}</span>
               <span class="badge badge-secondary spacing">{{machine.shownType}}</span>
             </td>
           </tr>
@@ -131,8 +132,8 @@
               <fa-icon class="text-success" *ngIf="!file.deprecated" [icon]="toggleOnIcon"></fa-icon>
               <fa-icon class="text-danger" *ngIf="file.deprecated" [icon]="toggleOffIcon"></fa-icon>
             </td>
-            <td *ngIf="userIsLoggedIn || order.shared" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
-            <td *ngIf="!userIsLoggedIn && !order.shared" class="align-middle text-center">{{file.filename}}</td>
+            <td *ngIf="userCanDownload" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
+            <td *ngIf="!userCanDownload" class="align-middle text-center">{{file.filename}}</td>
             <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
           </tr>
         </tbody>

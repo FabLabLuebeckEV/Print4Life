@@ -2,6 +2,7 @@ import logger from '../logger';
 import validatorService from '../services/validator.service';
 import { OrderService } from '../services/order.service';
 import FileService from '../services/file.service';
+import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import { IError, ErrorType } from '../services/router.service';
 import ScheduleService from '../services/schedule.service';
@@ -32,6 +33,7 @@ const scheduleService = new ScheduleService();
                 "_id": "5b55f7bf3fe0c8b01713b3ff",
                 "type": "Printer"
             },
+            "fablabId": "5b73f77739bbd845df0cb2df",
             "status": "new",
             "_id": "5b73f77739bbd845df0cb2df",
             "projectname": "Comment Test",
@@ -54,6 +56,7 @@ const scheduleService = new ScheduleService();
             "token": "87250a41-2587-40bf-8b09-bcd2a32b2c2d",
             "createdAt": "2018-08-15T09:50:47.475Z",
             "files": [],
+            "fileCopyright": false,
             "__v": 1
         },
         {
@@ -61,6 +64,7 @@ const scheduleService = new ScheduleService();
                 "_id": "5b55f7bf3fe0c8b01713b3e5",
                 "type": "Lasercutter"
             },
+            "fablabId": "5b73f77739bbd845df0cb2df",
             "status": "new",
             "_id": "5b73f81f39bbd845df0cb2e2",
             "projectname": "Test 2 ",
@@ -77,6 +81,7 @@ const scheduleService = new ScheduleService();
             "token": "e9a42f99-5689-4563-98ec-721abb754ba5",
             "createdAt": "2018-08-15T09:53:35.043Z",
             "files": [],
+            "fileCopyright": false,
             "__v": 0
         }
     ]
@@ -102,6 +107,7 @@ const scheduleService = new ScheduleService();
             files: {[
                 ...
             ]},
+            "fileCopyright": false,
             status: "production",
             comments: [{
                     content: "Please print this.",
@@ -284,6 +290,7 @@ function count (req, res) {
             "_id": "5b55f7bf3fe0c8b01713b3e5",
             "type": "Lasercutter"
         },
+        "fablabId": "5b73f77739bbd845df0cb2df",
         "projectname": "Test 2 ",
         "comments": [
             {
@@ -323,6 +330,7 @@ function count (req, res) {
         "token": "e6ae7bef-657e-48e7-9c3b-960407cd7164",
         "createdAt": "2018-08-15T10:43:52.291Z",
         "files": [],
+        "fileCopyright": false,
         "__v": 0
     }
 }
@@ -367,6 +375,7 @@ function create (req, res) {
             "_id": "5b55f7bf3fe0c8b01713b3e5",
             "type": "Lasercutter"
         },
+        "fablabId": "5b73f77739bbd845df0cb2df",
         "status": "new",
         "_id": "5b73ff2e88ccd44a93dda7db",
         "projectname": "Test 2 ",
@@ -383,6 +392,7 @@ function create (req, res) {
         "token": "66b0997a-b467-49fd-a769-242fc37ce78d",
         "createdAt": "2018-08-15T10:23:42.852Z",
         "files": [],
+        "fileCopyright": false,
         "__v": 0
     }
 }
@@ -391,21 +401,22 @@ function create (req, res) {
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
   {
-  'order'; : {
-      'status'; : 'new',
-      '_id'; : '5b55cf9730b4aa4bbeaf6f68',
-      'comments'; : [
+  'order' : {
+      'status' : 'new',
+      '_id' : '5b55cf9730b4aa4bbeaf6f68',
+      'comments' : [
           {
               '_id': '5b583da5514fac1bb10832b6',
               'author': 'Mister Foo',
               'content': 'Hello there, could you print this?'
           }
       ],
-      'editor'; : 'Mister Bar',
-      'owner'; : 'Mister X',
-      'files'; : [],
-      'token'; : '42',
-      '__v'; : 0;
+      'editor' : 'Mister Bar',
+      'owner' : 'Mister X',
+      'files' : [],
+      'fileCopyright': false,
+      'token' : '42',
+      '__v' : 0;
   }
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
@@ -448,6 +459,7 @@ function update (req, res) {
             "_id": "5b55f7bf3fe0c8b01713b3e5",
             "type": "Lasercutter"
         },
+        "fablabId": "5b73f77739bbd845df0cb2df",
         "status": "deleted",
         "_id": "5b73ff2e88ccd44a93dda7db",
         "projectname": "Test 2 ",
@@ -464,6 +476,7 @@ function update (req, res) {
         "token": "66b0997a-b467-49fd-a769-242fc37ce78d",
         "createdAt": "2018-08-15T10:23:42.852Z",
         "files": [],
+        "fileCopyright": false,
         "__v": 0
     }
 }
@@ -678,6 +691,7 @@ function createComment (req, res) {
             "_id": "5b55f7bf3fe0c8b01713b3e5",
             "type": "Lasercutter"
         },
+        "fablabId": "5b73f77739bbd845df0cb2df",
         "status": "new",
         "_id": "5b73f81f39bbd845df0cb2e2",
         "projectname": "Test 2 ",
@@ -694,6 +708,7 @@ function createComment (req, res) {
         "token": "e9a42f99-5689-4563-98ec-721abb754ba5",
         "createdAt": "2018-08-15T09:53:35.043Z",
         "files": [],
+        "fileCopyright": false,
         "__v": 0
     }
 }
@@ -799,12 +814,15 @@ async function getSchedule (req, res) {
 }
 
 /**
- * @api {get} /api/v1/orders/:id/download/:fileId Downloads a specific file of an order by its id
+ * @api {get} /api/v1/orders/:id/files/:fileId?token=:jwtToken Downloads a specific file of an order by its id
  * @apiName getFileOfOrderById
  * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
  *
+ * @apiParam {String} id is the id of the order (required)
+ * @apiParam {String} fileId is the id of the file (required)
+ * @apiParam {String} jwtToken is the jwt bearer token of the logged in user (required as query param)
  * @apiSuccess { Object } File the file as attachment
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
@@ -823,13 +841,13 @@ async function getSchedule (req, res) {
       "type": "INVALID_ID"
     }
   }
+
 * @apiErrorExample {json} Error-Response:
-*     HTTP/1.1 404 Not Found
+*     HTTP/1.1 403 Forbidden
   {
-      "error": "Could not find any Order with id 9999",
-      "stack": {
-          ...
-      }
+    name: 'FORBIDDEN',
+    message: 'Forbidden! You are not allowed to use this route.',
+    type: ErrorType.FORBIDDEN
   }
 * @apiErrorExample {json} Error-Response:
 *     HTTP/1.1 500 Server Error
@@ -851,11 +869,24 @@ async function downloadFile (req, res) {
   let downloadStream: any;
   const checkId = validatorService.checkId(req.params.id);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
+    return res.status(checkId.status).send({ error: checkId.error });
   }
 
   try {
     const order = await orderService.get(req.params.id);
+    if (!order.shared) {
+      const tokenCheck = await validatorService.checkToken(req);
+      if (!tokenCheck || !tokenCheck.decoded
+        || (order.owner !== tokenCheck.decoded._id && tokenCheck.decoded.role.role !== 'admin'
+          && tokenCheck.decoded.role.role !== 'editor')) {
+        err = {
+          name: 'FORBIDDEN',
+          message: 'Forbidden! You are not allowed to use this route.',
+          type: ErrorType.FORBIDDEN
+        };
+        return res.status(403).send(err);
+      }
+    }
     file = order.files.find((elem) => elem.id === req.params.fileId);
   } catch (error) {
     err = {
@@ -868,8 +899,9 @@ async function downloadFile (req, res) {
     return res.status(400).send(err);
   }
 
+
   try {
-    downloadStream = await fileService.downloadFile(req.params.fileId, 'orderAttachments');
+    downloadStream = await fileService.downloadFile(req.params.fileId, config.attachmentBucket);
   } catch (err) {
     let statusCode = 500;
     if (err.type === ErrorType.INVALID_ID) {
@@ -881,7 +913,7 @@ async function downloadFile (req, res) {
   res.set('content-type', file.contentType);
   res.set('accept-ranges', 'bytes');
   res.set({
-    'Content-Disposition': `attachment; filename="${file.filename}"`
+    'Content-Disposition': `attachment; filename="${encodeURIComponent(file.filename)}"`
   });
 
   downloadStream.on('end', () => {
@@ -893,7 +925,115 @@ async function downloadFile (req, res) {
 }
 
 /**
- * @api {post} /api/v1/orders/:id/upload Uploads file(s) to an order
+ * @api {delete} /api/v1/orders/:id/files/:fileId?token=:jwtToken Deletes a specific file of an order by its id
+ * @apiName deleteFileOfOrder
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiParam {String} id is the id of the order (required)
+ * @apiParam {String} fileId is the id of the file (required)
+ * @apiParam {String} jwtToken is the jwt bearer token of the logged in user (required as query param)
+ * @apiSuccess { Object } File the file as attachment
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+  {
+    "order": {
+      ...
+    }
+  }
+*
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 400 Bad Request
+  {
+    "err": {
+      "name": 'INVALID_ID',
+      "message": 'Invalid fileID in URL parameter. '
+        + 'Must be a single String of 12 bytes or a string of 24 hex characters',
+      "stack": {
+        ...
+      },
+      "type": "INVALID_ID"
+    }
+  }
+
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 403 Forbidden
+  {
+    name: 'FORBIDDEN',
+    message: 'Forbidden! You are not allowed to use this route.',
+    type: ErrorType.FORBIDDEN
+  }
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 500 Server Error
+  {
+        "error": {
+          "name": "DELETE_FILE_ERROR",
+          "message": "Something went wrong while deleting the file with id adskamkdw13213ew" ,
+          "type": "DELETE_FILE_ERROR"
+        };
+  }
+ */
+async function deleteFile (req, res) {
+  let err: IError;
+  let order: any;
+  let result: { order: any };
+  const checkId = validatorService.checkId(req.params.id);
+  if (checkId) {
+    return res.status(checkId.status).send({ error: checkId.error });
+  }
+
+  try {
+    order = await orderService.get(req.params.id);
+    if (!order.shared) {
+      const tokenCheck = await validatorService.checkToken(req);
+      if (!tokenCheck || !tokenCheck.decoded
+        || (order.owner !== tokenCheck.decoded._id && tokenCheck.decoded.role.role !== 'admin'
+          && tokenCheck.decoded.role.role !== 'editor')) {
+        err = {
+          name: 'FORBIDDEN',
+          message: 'Forbidden! You are not allowed to use this route.',
+          type: ErrorType.FORBIDDEN
+        };
+        return res.status(403).send(err);
+      }
+    }
+  } catch (error) {
+    err = {
+      name: 'INVALID_ID',
+      message: 'Invalid fileID in URL parameter. '
+        + 'Must be a single String of 12 bytes or a string of 24 hex characters',
+      stack: error.stack,
+      type: ErrorType.INVALID_ID
+    };
+    return res.status(400).send(err);
+  }
+
+
+  try {
+    result = await fileService.deleteFile(req.params.fileId, config.attachmentBucket, order);
+  } catch (err) {
+    let statusCode = 500;
+    if (err.type === ErrorType.INVALID_ID) {
+      statusCode = 400;
+    }
+    return res.status(statusCode).send(err.error);
+  }
+
+  if (result && result.order) {
+    await orderService.update(order);
+    return res.status(200).send({ order });
+  }
+  err = {
+    name: 'DELETE_FILE_ERROR',
+    message: `Something went wrong while deleting the file with id ${req.params.fileId}`,
+    type: ErrorType.DELETE_FILE_ERROR
+  };
+  return res.status(500).send(err);
+}
+
+/**
+ * @api {post} /api/v1/orders/:id/files Uploads file(s) to an order
  * @apiName uploadFileToOrder
  * @apiVersion 1.0.0
  * @apiGroup Orders
@@ -971,7 +1111,7 @@ function uploadFile (req, res) {
   }
 
   req.files.forEach(async (file) => {
-    promises.push(fileService.uploadFile(file, 'orderAttachments', req.params.id));
+    promises.push(fileService.uploadFile(file, config.attachmentBucket, req.params.id));
   });
 
   return Promise.all(promises).then(async (results) => {
@@ -1029,5 +1169,6 @@ export default {
   search,
   uploadFile,
   downloadFile,
+  deleteFile,
   getSchedule
 };
