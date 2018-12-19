@@ -184,11 +184,11 @@ const staging = {
       `https://localhost:${ngPort}`,
       `https://212.83.56.107:${ngPort}`,
       `https://iot-fablab.ddns.net:${ngPort}`,
-      `https://iot-fablab.ddns.net`,
+      'https://iot-fablab.ddns.net',
       `http://localhost:${ngPort}`,
       `http://212.83.56.107:${ngPort}`,
       `http://iot-fablab.ddns.net:${ngPort}`,
-      `http://iot-fablab.ddns.net`
+      'http://iot-fablab.ddns.net'
     ]
   }
   // cors: undefined
