@@ -4,6 +4,11 @@
 
 * multilanguage support for English, German and Danish (/LF0380/)
 
+### Version 0.5.1
+
+* fix cors to enable non port urls
+* add timePickError as reason why to disable the submit button in create order view
+
 ### Version 0.5
 
 * implemented upload of files (/LF0300/, /LF0330/)

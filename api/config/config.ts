@@ -184,9 +184,11 @@ const staging = {
       `https://localhost:${ngPort}`,
       `https://212.83.56.107:${ngPort}`,
       `https://iot-fablab.ddns.net:${ngPort}`,
+      'https://iot-fablab.ddns.net',
       `http://localhost:${ngPort}`,
       `http://212.83.56.107:${ngPort}`,
-      `http://iot-fablab.ddns.net:${ngPort}`
+      `http://iot-fablab.ddns.net:${ngPort}`,
+      'http://iot-fablab.ddns.net'
     ]
   }
   // cors: undefined
@@ -222,9 +224,11 @@ const prod = {
       `https://localhost:${ngPort}`,
       `https://141.83.68.36:${ngPort}`,
       `https://fablab.itm.uni-luebeck.de:${ngPort}`,
+      'https://fablab.itm.uni-luebeck.de',
       `http://localhost:${ngPort}`,
       `http://141.83.68.36:${ngPort}`,
-      `http://fablab.itm.uni-luebeck.de:${ngPort}`
+      `http://fablab.itm.uni-luebeck.de:${ngPort}`,
+      'http://fablab.itm.uni-luebeck.de'
     ]
   }
   // cors: undefined
