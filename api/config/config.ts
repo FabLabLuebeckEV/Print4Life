@@ -224,9 +224,11 @@ const prod = {
       `https://localhost:${ngPort}`,
       `https://141.83.68.36:${ngPort}`,
       `https://fablab.itm.uni-luebeck.de:${ngPort}`,
+      'https://fablab.itm.uni-luebeck.de',
       `http://localhost:${ngPort}`,
       `http://141.83.68.36:${ngPort}`,
-      `http://fablab.itm.uni-luebeck.de:${ngPort}`
+      `http://fablab.itm.uni-luebeck.de:${ngPort}`,
+      'http://fablab.itm.uni-luebeck.de'
     ]
   }
   // cors: undefined

@@ -348,7 +348,7 @@
           {{translationFields.messages.copyright}}
         </div>
       </div>
-      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid || datePickerError">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid || datePickerError || timePickerError">{{translationFields.labels.submit}}</button>
     </form>
 
     <!-- Print comments to this order as a table -->
