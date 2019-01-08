@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { SpinnerConfig } from '../../config/config.service';
+import { FablabService } from 'frontend/app/services/fablab.service';
 
 @Component({
   selector: 'app-user-list',
@@ -82,7 +83,8 @@ export class UserListComponent implements OnInit {
     private router: Router,
     private location: Location,
     private modalService: NgbModal,
-    private genericService: GenericService
+    private genericService: GenericService,
+    private fablabService: FablabService
   ) {
     this.config = this.configService.getConfig();
     this.jumpArrow = this.config.icons.forward;
@@ -175,10 +177,19 @@ export class UserListComponent implements OnInit {
     if (users && users.users) {
       users = users.users;
       for (const user of users) {
+        if (user.fablabId) {
+          const result = await this.fablabService.getFablab(user.fablabId);
+          if (result && result.fablab) {
+            user.fablab = result.fablab;
+          }
+        }
         const item = new TableItem();
         item.obj['Username'] = { label: user.username, href: `./${user._id}` };
         item.obj['Firstname'] = { label: user.firstname };
         item.obj['Lastname'] = { label: user.lastname };
+        item.obj['Fablab'] = {
+          label: user.fablab && user.fablab.name ? user.fablab.name : '-'
+        };
         item.obj['Role'] = { label: user.role.role };
         item.obj['Active'] = {
           label: user.activated && user.activated === true ?
@@ -265,6 +276,9 @@ export class UserListComponent implements OnInit {
                 this.users[userIdx].obj['Username'] = { label: result.username };
                 this.users[userIdx].obj['Firstname'] = { label: result.firstname };
                 this.users[userIdx].obj['Lastname'] = { label: result.lastname };
+                this.users[userIdx].obj['Fablab'] = {
+                  label: result.fablab && result.fablab.name ? result.fablab.name : '-'
+                };
                 this.users[userIdx].obj['Role'] = { label: result.role.role };
                 this.users[userIdx].obj['Active'] = {
                   label: result.activated && result.activated === true ?
@@ -280,6 +294,9 @@ export class UserListComponent implements OnInit {
             this.users[userIdx].obj['Username'] = { label: result.username };
             this.users[userIdx].obj['Firstname'] = { label: result.firstname };
             this.users[userIdx].obj['Lastname'] = { label: result.lastname };
+            this.users[userIdx].obj['Fablab'] = {
+              label: result.fablab && result.fablab.name ? result.fablab.name : '-'
+            };
             this.users[userIdx].obj['Role'] = { label: result.role.role };
             this.users[userIdx].obj['Active'] = {
               label: result.activated && result.activated === true ?
