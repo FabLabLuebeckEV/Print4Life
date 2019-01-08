@@ -24,6 +24,10 @@
             <td class="align-middle text-center">{{translationFields.labels.lastname}}</td>
             <td class="align-middle text-center">{{user.lastname}}</td>
           </tr>
+          <tr *ngIf="user.fablab && user.fablab.name">
+            <td class="align-middle text-center">{{translationFields.labels.fablab}}</td>
+            <td class="align-middle text-center">{{user.fablab.name}}</td>
+          </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.role}}</td>
             <td class="align-middle text-center">

@@ -264,6 +264,7 @@
         "paginationLabel": "Springe zur Seite",
         "filterLabel": {
             "roles": "Filter nach Rolle:",
+            "fablabs": "Filter nach Fablab:",
             "search": "Suche nach:"
         },
         "buttons": {
@@ -405,7 +406,8 @@
             },
             "activated": "Aktiviert",
             "role": "Rolle",
-            "preferredLanguage": "Bevorzugte Sprache"
+            "preferredLanguage": "Bevorzugte Sprache",
+            "fablab": "Fablab"
         },
         "modals": {
             "ok": "Ja",
