@@ -8,6 +8,7 @@ import { ConfigService } from 'frontend/app/config/config.service';
 import { User } from 'frontend/app/models/user.model';
 import { ModalButton, MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
 import { routes } from 'frontend/app/config/routes';
+import { FablabService } from 'frontend/app/services/fablab.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -39,7 +40,8 @@ export class UserDetailComponent implements OnInit {
       },
       activated: '',
       role: '',
-      preferredLanguage: ''
+      preferredLanguage: '',
+      fablab: ''
     },
     modals: {
       ok: '',
@@ -62,7 +64,8 @@ export class UserDetailComponent implements OnInit {
     private genericService: GenericService,
     private translateService: TranslateService,
     private configService: ConfigService,
-    private userService: UserService
+    private userService: UserService,
+    private fablabService: FablabService
   ) {
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
@@ -78,6 +81,12 @@ export class UserDetailComponent implements OnInit {
     this.route.paramMap.subscribe(async params => {
       if (params && params.get('id')) {
         this.user = await this.userService.getProfile(params.get('id'));
+        if (this.user.fablabId) {
+          const result = await this.fablabService.getFablab(this.user.fablabId);
+          if (result && result.fablab) {
+            this.user['fablab'] = result.fablab;
+          }
+        }
         this._translate();
       }
       this.editLink = `/${routes.paths.frontend.users.root}/${routes.paths.frontend.users.update}/${this.user._id}/`;
@@ -153,6 +162,7 @@ export class UserDetailComponent implements OnInit {
             activated: translations['userDetail'].labels.activated,
             role: translations['userDetail'].labels.role,
             preferredLanguage: translations['userDetail'].labels.preferredLanguage,
+            fablab: translations['userDetail'].labels.fablab
           },
           modals: {
             ok: translations['userDetail'].modals.ok,

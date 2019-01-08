@@ -405,7 +405,8 @@
             },
             "activated": "Aktiviert",
             "role": "Rolle",
-            "preferredLanguage": "Bevorzugte Sprache"
+            "preferredLanguage": "Bevorzugte Sprache",
+            "fablab": "Fablab"
         },
         "modals": {
             "ok": "Ja",
