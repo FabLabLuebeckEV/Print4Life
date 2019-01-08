@@ -7,11 +7,13 @@ import logger from '../logger';
 const env = process.env.NODE_ENV;
 let email;
 
-const transporter = Nodemailer.createTransport({
-  service: config.email.service,
-  auth: {
-    user: config.email.address,
-    pass: config.email.password
+const transporter = Nodemailer.createTransport(config.email);
+
+transporter.verify((error, success) => {
+  if (error) {
+    logger.info(error);
+  } else if (success) {
+    logger.info('Server is ready to take our messages');
   }
 });
 

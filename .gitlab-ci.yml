@@ -25,6 +25,7 @@ build_dev:
   except: 
     - master
     - fix/ci
+    - fix/emails
   
 build_prod:
   stage: build
@@ -40,6 +41,7 @@ build_prod:
   only: 
     - master
     - fix/ci
+    - fix/emails
 
 test_build_api_docs:
   stage: apidocs
@@ -82,6 +84,7 @@ deploy_staging:
   only:
    - master
    - fix/ci
+   - fix/emails
   before_script:
    - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
    - 'which mongorestore || (apt-get update -y && apt-get install mongodb -y)'
