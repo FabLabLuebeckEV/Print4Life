@@ -6,11 +6,18 @@
 </router-outlet>
 <div *ngIf="listView">
   <div class="row">
-    <div class="col-md-6 offset-1">
+    <div class="col-md-4 offset-1">
       <label for="roles">{{translationFields.filterLabel.roles}}</label>
       <ng-select [multiple]="true" [loading]="loadingRoles" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.validRoles
-        bindLabel="roles" [(ngModel)]="filter.shownRoles" id="roles" (change)="_changeHandlerRoles($event)" (close)="init()"
-        (remove)="init()" (clear)="init()" name="roles" #roles="ngModel">
+        [(ngModel)]="filter.shownRoles" id="roles" (change)="_changeHandlerRoles($event)" (close)="init()" (remove)="init()"
+        (clear)="init()" name="roles" #roles="ngModel">
+      </ng-select>
+    </div>
+    <div class="col-md-3">
+      <label for="fablabs">{{translationFields.filterLabel.fablabs}}</label>
+      <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false" [items]=filter.allFablabs
+        bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabs" (close)="init()" (remove)="init()" (clear)="init()"
+        name="fablabs" #fablabs="ngModel">
       </ng-select>
     </div>
     <div class="col-md-3">

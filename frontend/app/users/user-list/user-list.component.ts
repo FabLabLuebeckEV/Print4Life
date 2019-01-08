@@ -25,6 +25,7 @@ export class UserListComponent implements OnInit {
   listView: Boolean = false;
   private loadingRoles: Boolean;
   private loadingUsers: Boolean;
+  private loadingFablabs: Boolean;
   private users: Array<TableItem> = [];
   private visibleUsers: Array<TableItem> = [];
   spinnerConfig: SpinnerConfig;
@@ -34,6 +35,7 @@ export class UserListComponent implements OnInit {
     paginationLabel: '',
     filterLabel: {
       roles: '',
+      fablabs: '',
       search: ''
     },
     spinnerLoadingText: '',
@@ -61,7 +63,9 @@ export class UserListComponent implements OnInit {
     originalRoles: [],
     selectedRoles: [],
     shownRoles: [],
-    searchTerm: ''
+    searchTerm: '',
+    allFablabs: [],
+    selectedFablabs: []
   };
   private config: any;
   paginationObj: any = {
@@ -115,6 +119,7 @@ export class UserListComponent implements OnInit {
       this.visibleUsers = [];
       this.users = [];
       await this._loadRoles();
+      await this._loadFablabs();
       this.userIsAdmin = await this.userService.isAdmin();
       this._translate();
       this.init();
@@ -140,28 +145,38 @@ export class UserListComponent implements OnInit {
     this.genericService.scrollIntoView(this.spinnerContainerRef);
     let countObj;
     let totalItems = 0;
-    let query;
+    const query = {
+      $and: []
+    };
     if (this.filter.selectedRoles.length > 0) {
-      query = {
-        $and: [
-          { $or: [] }
-        ]
-      };
+      const $or = [];
+      // query = {
+      //   $and: [
+      //     { $or: [] }
+      //   ]
+      // };
       this.filter.selectedRoles.forEach((role) => {
-        query.$and[0].$or.push({ 'role.role': role });
+        $or.push({ 'role.role': role });
       });
+      query.$and.push({ $or });
     } else {
-      query = {
-        $and: [
-          { $nor: [] }
-        ]
-      };
+      const $nor = [];
       this.filter.originalRoles.forEach((role) => {
-        query.$and[0].$nor.push({ role: { role } }); /// role role im backend
+        $nor.push({ role: { role } }); /// role role in backend
       });
+      query.$and.push({ $nor });
     }
+
+    if (this.filter.selectedFablabs.length > 0) {
+      const $or = [];
+      this.filter.selectedFablabs.forEach((fablab) => {
+        $or.push({ fablabId: fablab });
+      });
+      query.$and.push({ $or });
+    }
+
     if (this.filter.searchTerm) {
-      query.$and[1] = { $text: { $search: this.filter.searchTerm } };
+      query.$and.push({ $text: { $search: this.filter.searchTerm } });
     }
 
     countObj = await this.userService.count(query);
@@ -222,17 +237,30 @@ export class UserListComponent implements OnInit {
     return arr;
   }
 
+  private async _loadFablabs() {
+    this.loadingFablabs = true;
+    const result = await this.fablabService.getFablabs();
+    if (result && result.fablabs) {
+      this.filter.allFablabs = result.fablabs;
+    }
+    this.loadingFablabs = false;
+  }
+
   private async _loadRoles() {
     this.loadingRoles = true;
     this.filter.originalRoles = (await this.userService.getRoles()).roles;
     this.translateService.get(['roles']).subscribe((translations => {
-      this.filter.validRoles.forEach((type, idx) => {
+      this.filter.originalRoles.forEach((type, idx) => {
         const translated = translations['roles'][`${type}`];
         this.filter.validRoles[idx] = translated;
       });
-      this.filter.shownRoles = JSON.parse(JSON.stringify(this.filter.validRoles));
+      if (!this.filter.shownRoles.length) {
+        this.filter.shownRoles = JSON.parse(JSON.stringify(this.filter.validRoles));
+      }
     }));
-    this.filter.selectedRoles = JSON.parse(JSON.stringify(this.filter.originalRoles));
+    if (!this.filter.selectedRoles.length) {
+      this.filter.selectedRoles = JSON.parse(JSON.stringify(this.filter.originalRoles));
+    }
     this.loadingRoles = false;
   }
 
@@ -339,6 +367,7 @@ export class UserListComponent implements OnInit {
         paginationLabel: translations['userList'].paginationLabel,
         filterLabel: {
           roles: translations['userList']['filterLabel'].roles,
+          fablabs: translations['userList']['filterLabel'].fablabs,
           search: translations['userList']['filterLabel'].search
         },
         spinnerLoadingText: translations['userList'].spinnerLoadingText,

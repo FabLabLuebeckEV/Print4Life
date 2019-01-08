@@ -264,6 +264,7 @@
         "paginationLabel": "Jump to Page",
         "filterLabel": {
             "roles": "Filter by Role:",
+            "fablabs": "Filter by Fablab:",
             "search": "Search for:"
         },
         "buttons": {

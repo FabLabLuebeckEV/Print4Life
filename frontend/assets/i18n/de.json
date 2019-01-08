@@ -264,6 +264,7 @@
         "paginationLabel": "Springe zur Seite",
         "filterLabel": {
             "roles": "Filter nach Rolle:",
+            "fablabs": "Filter nach Fablab:",
             "search": "Suche nach:"
         },
         "buttons": {
