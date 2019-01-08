@@ -10,24 +10,16 @@ const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
 const jwtExpiryTime = '2h';
 const attachmentBucket = 'orderAttachments';
 const baseUrl = '/api/v1/';
-// const email = {
-//   host: 'smtp.gmail.com',
-//   port: 587,
-//   secure: false,
-//   auth: {
-//     user: 'iot.fablab@gmail.com',
-//     pass: 'scdkhsxiumwwgiob'
-//   }
-// };
 const email = {
-  host: 'spica.uberspace.de',
+  host: 'smtp.gmail.com',
   port: 587,
   secure: false,
   auth: {
-    user: 'fablab@gercex.de',
-    pass: 'ahx8ohH1jini'
+    user: 'iot.fablab@gmail.com',
+    pass: 'scdkhsxiumwwgiob'
   }
 };
+
 const publicRoutes = [
   {
     url: `${baseUrl}orders`,
