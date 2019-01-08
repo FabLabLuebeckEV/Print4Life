@@ -15,7 +15,7 @@ export const testUser = {
   lastname: 'Der Tester',
   username: 'Hansi',
   password: 'VeryInsecurePW',
-  email: 'hansi@alm.de',
+  email: 'hansi@example.com',
   address: {
     street: 'Middlehofer Straße 42',
     zipCode: '421337',
