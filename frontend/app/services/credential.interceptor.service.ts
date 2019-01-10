@@ -35,12 +35,19 @@ export class HttpInterceptorService implements HttpInterceptor {
                 case 401:
                 case 403:
                     // console.log('handled error ' + err.status);
+                    let stackMessage = '';
+                    if (err && err.error && err.error.error) {
+                        stackMessage = err.error.error;
+                    } else if (err && err.error && err.error.stack && err.error.stack.message) {
+                        stackMessage = err.error.stack.message;
+                    }
+
                     this.errorService.showError(
                         {
                             type: err.error.type,
                             status: err.status,
                             statusText: err.statusText,
-                            stack: err.error.error,
+                            stack: stackMessage,
                             data: err.error.data
                         });
                     return of(err.message);

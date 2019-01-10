@@ -9,6 +9,7 @@
 * email fix (smtp config updated)
 * added fablabs in user list and detail view
 * filter for fablabs added in user list
+* fix error messages to use old and new styled error messages
 
 ### Version 0.5.1
 
