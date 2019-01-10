@@ -4,6 +4,12 @@
 
 * multilanguage support for English, German and Danish (/LF0380/)
 
+### Version 0.5.2
+
+* email fix (smtp config updated)
+* added fablabs in user list and detail view
+* filter for fablabs added in user list
+
 ### Version 0.5.1
 
 * fix cors to enable non port urls

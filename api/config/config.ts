@@ -11,10 +11,15 @@ const jwtExpiryTime = '2h';
 const attachmentBucket = 'orderAttachments';
 const baseUrl = '/api/v1/';
 const email = {
-  service: 'gmail',
-  address: 'iot.fablab@gmail.com',
-  password: '80ef1M4MgoGX'
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: 'iot.fablab@gmail.com',
+    pass: 'scdkhsxiumwwgiob'
+  }
 };
+
 const publicRoutes = [
   {
     url: `${baseUrl}orders`,

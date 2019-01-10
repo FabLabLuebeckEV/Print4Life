@@ -5,20 +5,22 @@ import config from '../config/config';
 import logger from '../logger';
 
 const env = process.env.NODE_ENV;
-let email;
+let email: Email;
 
-const transporter = Nodemailer.createTransport({
-  service: config.email.service,
-  auth: {
-    user: config.email.address,
-    pass: config.email.password
+const transporter = Nodemailer.createTransport(config.email);
+
+transporter.verify((error, success) => {
+  if (error) {
+    logger.info(error);
+  } else if (success) {
+    logger.info('E-Mail Server is ready to take our messages');
   }
 });
 
 if (env !== 'dev' && env !== 'prod') {
   email = new Email({
     message: {
-      from: config.email.address
+      from: config.email.auth.user
     },
     send: true,
     transport: {
@@ -28,7 +30,7 @@ if (env !== 'dev' && env !== 'prod') {
 } else {
   email = new Email({
     message: {
-      from: config.email.address
+      from: config.email.auth.user
     },
     transport: transporter
   });
@@ -51,8 +53,8 @@ function sendMail (options: EmailOptions) {
       },
       locals: options.locals
     })
-    .then((info) => logger.info(info))
-    .catch((err) => logger.error(err.message));
+    .then((info: any) => logger.info(info))
+    .catch((err: Error) => logger.error(err.message));
 }
 
 export default { sendMail };

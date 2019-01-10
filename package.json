@@ -9,7 +9,7 @@
     }
   },
   "name": "fablab-order-management",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "An order-management for the fablab connected to an IBM Watson IoT Platform to connect their machinery to this order and planning process",
   "scripts": {
     "precommit": "npm run build && npm run test-local && npm run apidocs",
@@ -70,6 +70,7 @@
     "@ng-select/ng-select": "^2.11.2",
     "@ngx-translate/core": "^10.0.2",
     "@ngx-translate/http-loader": "^3.0.1",
+    "@types/email-templates": "^3.5.0",
     "@types/nodemailer": "^4.6.5",
     "angular-file": "^0.5.4",
     "bcrypt": "^3.0.2",
