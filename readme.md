@@ -15,7 +15,16 @@
 	```
 	* Server:
 	`ssh -L 27017:localhost:27017 remote-user@212.83.56.107`
-* Webserver (Nginx, Apache) for production
+* Webserver (Nginx, Apache) for production (Let's Encrypt for Certificate)
+* PM2
+
+### Setup
+
+* Install Node
+* Install Mongo
+* Install PM2 via npm
+* Install a Webserver with SSL Certificate
+* Check Configuration of this project (order-management/api/config/config.ts for backend and order-management/frontend/app/config/routes.ts for frontend)
 
 ## Use Node-Debugger with VSCode
 

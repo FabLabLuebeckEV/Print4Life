@@ -15,7 +15,9 @@ export enum ErrorType {
   DOWNLOAD_FILE_ERROR,
   DELETE_FILE_ERROR,
   INVALID_ID,
-  FORBIDDEN
+  FORBIDDEN,
+  SERVER_ERROR,
+  MALFORMED_REQUEST
 }
 
 /* eslint-disable no-restricted-globals */
@@ -79,10 +81,17 @@ function _isPublicRoute (url, method) {
   return isPublic;
 }
 
-function isDownloadRoute (url: string, method: string) {
-  return url.includes('orders') && url.includes('files') && method === 'GET';
+/**
+ * Checks if a route is allowed by cors to use with requests on backend side only (e.g. using postman)
+ * @param url is the original url
+ * @param method is the HTTP method
+ */
+function corsAllowedRoutes (url: string, method: string) {
+  return (url.includes('orders') && url.includes('files')
+    && method === 'GET') || url.includes('statistics')
+    || (url.includes('users/login') && method === 'POST');
 }
 
 export default {
-  jwtValid, isDownloadRoute
+  jwtValid, corsAllowedRoutes
 };
