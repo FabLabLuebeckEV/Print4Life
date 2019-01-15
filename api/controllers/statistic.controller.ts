@@ -5,26 +5,29 @@
 import { Request, Response } from 'express';
 import { IError, ErrorType } from '../services/router.service';
 import { StatisticService } from '../services/statistic.service';
+import logger from '../logger';
 /* eslint-enable no-unused-vars */
 
 const statisticService = new StatisticService();
 
 /**
-* @api {post} /api/v1/statistics/orderByDate Returns the orders of the specific dates
+* @api {post} /api/v1/statistics/ordersByDate Returns the orders of the specific dates.
 * @apiName GetOrderByDate
 * @apiVersion 1.0.0
 * @apiGroup Statistics
 * @apiHeader (Needed Request Headers) {String} Content-Type application/json
 *
-* @apiParam {String} startDate is the start date to filter by
-* @apiParam {String} endDate is the end date to filter by
+* @apiParam {String} startDate is the start date to filter by.
+* Start Date filters starting and including the start date. (one date is mandatory)
+* @apiParam {String} endDate is the end date to filter by.
+* End Date filters up to the end date but not including. (one date is mandatory)
 * @apiParamExample {json} Request-Example:
 *
 {
   "startDate": "2018-01-01",
   "endDate": "2018-12-31"
 }
-* @apiSuccess {Object} count the number of orders
+* @apiSuccess {Object} statistics is the statistics object
 * @apiSuccessExample Success-Response:
 *    HTTP/1.1 200 OK
 {
@@ -125,8 +128,7 @@ const statisticService = new StatisticService();
                               }
                           ],
                           "token": "920b82af-005b-437e-9039-ed536e80f417",
-                          "createdAt": "2018-12-18T09:08:38.622Z",
-                          "__v": 1,
+                          "createdAt": "2018-12-18T09:08:38.622Z"
                           "editor": "5c18b4b417ced51c3e6080e0"
                       }
                   ],
@@ -167,8 +169,7 @@ const statisticService = new StatisticService();
                               "country": "Deutschland"
                           },
                           "token": "520e16ce-127d-4098-b73d-0b31560cde09",
-                          "createdAt": "2018-12-18T09:09:17.772Z",
-                          "__v": 0
+                          "createdAt": "2018-12-18T09:09:17.772Z"
                       },
                       {
                           "machine": {
@@ -198,8 +199,7 @@ const statisticService = new StatisticService();
                               "country": "Germany"
                           },
                           "token": "7104583e-25f6-46cd-a122-d87942277c4f",
-                          "createdAt": "2018-12-18T09:32:20.137Z",
-                          "__v": 0
+                          "createdAt": "2018-12-18T09:32:20.137Z"
                       }
                   ]
               }
@@ -304,8 +304,7 @@ const statisticService = new StatisticService();
                                   }
                               ],
                               "token": "920b82af-005b-437e-9039-ed536e80f417",
-                              "createdAt": "2018-12-18T09:08:38.622Z",
-                              "__v": 1,
+                              "createdAt": "2018-12-18T09:08:38.622Z,
                               "editor": "5c18b4b417ced51c3e6080e0"
                           }
                       ],
@@ -338,8 +337,7 @@ const statisticService = new StatisticService();
                                   "country": "Germany"
                               },
                               "token": "7104583e-25f6-46cd-a122-d87942277c4f",
-                              "createdAt": "2018-12-18T09:32:20.137Z",
-                              "__v": 0
+                              "createdAt": "2018-12-18T09:32:20.137Z"
                           }
                       ]
                   }
@@ -348,11 +346,22 @@ const statisticService = new StatisticService();
       }
   }
 }
+* @apiSuccessExample Success-Response:
+*    HTTP/1.1 204 No-Content
 *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Request! The request needs to have at least a start or end date!",
+      "type": 14
+  }
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Server Error
   {
-      "error": "Error while trying to search for a specific order with query:",
+      "name": "SERVER_ERROR",
+      "message": "Something went wrong while getting the orders by date, machine and fablab!",
+      "type": 13,
       "stack": {
           ...
       }
@@ -361,11 +370,36 @@ const statisticService = new StatisticService();
 
 
 async function getOrdersByDate (req: Request, res: Response) {
-  if (req.body.startDate && req.body.endDate) {
-    const statistics = await statisticService.getOrdersByDate(new Date(req.body.startDate), new Date(req.body.endDate));
-    return res.status(200).send({ statistics });
+  if (req.body.startDate || req.body.endDate) {
+    try {
+      const startDate = req.body.startDate ? new Date(req.body.startDate) : undefined;
+      const endDate = req.body.endDate ? new Date(req.body.endDate) : undefined;
+      const statistics = await statisticService.getOrdersByDate(
+        startDate, endDate
+      );
+      if (statistics) {
+        logger.info(`Got statistics for date ${startDate} and ${endDate}`);
+        return res.status(200).send({ statistics });
+      }
+      logger.info(`Got no results for date ${startDate} and ${endDate}`);
+      return res.status(204).send();
+    } catch (err) {
+      const error: IError = {
+        name: 'SERVER_ERROR',
+        message: 'Something went wrong while getting the orders by date, machine and fablab!',
+        type: ErrorType.SERVER_ERROR,
+        stack: err.stack
+      };
+      logger.error(error);
+      return res.status(500).send(error);
+    }
   }
-  const error: IError = { name: '', message: '', type: ErrorType.USER_DEACTIVATED };
+  const error: IError = {
+    name: 'MALFORMED_REQUEST',
+    message: 'Malformed Request! The request needs to have at least a start or end date!',
+    type: ErrorType.MALFORMED_REQUEST
+  };
+  logger.error(error);
   return res.status(400).send(error);
 }
 
