@@ -15,7 +15,9 @@ export enum ErrorType {
   DOWNLOAD_FILE_ERROR,
   DELETE_FILE_ERROR,
   INVALID_ID,
-  FORBIDDEN
+  FORBIDDEN,
+  SERVER_ERROR,
+  MALFORMED_REQUEST
 }
 
 /* eslint-disable no-restricted-globals */
