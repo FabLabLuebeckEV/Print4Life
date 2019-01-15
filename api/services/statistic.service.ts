@@ -85,6 +85,9 @@ export class StatisticService {
         );
         mIndex = statistics.machines[mType].length - 1;
       }
+      if (!statistics.machines[mType][mIndex].orders) {
+        statistics.machines[mType][mIndex].orders = {};
+      }
       if (!statistics.machines[mType][mIndex].orders[order.status]
         || !Array.isArray(statistics.machines[mType][mIndex].orders[order.status])) {
         statistics.machines[mType][mIndex].orders[order.status] = [];

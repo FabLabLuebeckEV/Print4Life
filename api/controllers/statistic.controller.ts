@@ -347,7 +347,7 @@ const statisticService = new StatisticService();
   }
 }
 * @apiSuccessExample Success-Response:
-*    HTTP/1.1 204 No-Content
+*    HTTP/1.1 204 No Content
 *
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
