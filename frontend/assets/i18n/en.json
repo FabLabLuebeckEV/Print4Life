@@ -91,6 +91,11 @@
             "outstandingOrders": "List Outstanding Orders",
             "unfinishedOrders": "List Unfinished Orders"
         },
+        "iotDevices": {
+            "title": "IoT Devices",
+            "createIotDevice": "Add IoT Device",
+            "listIotDevices": "My IoT Devices"
+        },
         "users": {
             "title": "Users",
             "signUp": "Sign up",

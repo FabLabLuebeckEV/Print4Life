@@ -91,6 +91,11 @@
             "outstandingOrders": "Herausragende Projekte",
             "unfinishedOrders": "Offene Aufträge"
         },
+        "iotDevices": {
+            "title": "IoT Geräte",
+            "createIotDevice": "IoT Gerät hinzufügen",
+            "listIotDevices": "Meine IoT Geräte"
+        },
         "users": {
             "title": "Benutzer",
             "signUp": "Registrieren",
