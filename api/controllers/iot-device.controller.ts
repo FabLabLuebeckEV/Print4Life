@@ -14,7 +14,7 @@ const ibmWatsonService = new IBMWatsonService();
 
 async function get (req: Request, res: Response) {
   if (req.params.id && req.headers && req.headers.authorization
-        && typeof req.headers.authorization === 'string') {
+    && typeof req.headers.authorization === 'string') {
     const token = req.headers.authorization.split('JWT')[1].trim();
     const user = await userService.getUserByToken(token);
     if (user && user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token) {
@@ -51,8 +51,8 @@ async function get (req: Request, res: Response) {
 
 async function create (req: Request, res: Response) {
   if (req.headers && req.headers.authorization
-        && typeof req.headers.authorization === 'string'
-        && req.body.deviceType && req.body.deviceId && req.body.events && req.body.events.length) {
+    && typeof req.headers.authorization === 'string'
+    && req.body.deviceType && req.body.deviceId && req.body.events && req.body.events.length) {
     const token = req.headers.authorization.split('JWT')[1].trim();
     const user = await userService.getUserByToken(token);
     if (user) {
@@ -103,6 +103,7 @@ async function create (req: Request, res: Response) {
           }
         );
         if (result) {
+          // TODO: Check if iot device id is already taken
           const iotDevice = await iotDeviceService.create(
             {
               clientId: result.clientId,
