@@ -52,6 +52,11 @@ export const routes = {
                 files: 'files',
                 shared: 'shared'
             },
+            iotDevices: {
+                root: 'iot-devices',
+                create: '',
+                getAll: ''
+            },
             machines: {
                 root: 'machines',
                 byId: ':type/:id',
