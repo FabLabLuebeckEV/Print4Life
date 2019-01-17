@@ -366,38 +366,38 @@ const statisticService = new StatisticService();
 */
 
 
-async function getOrdersByDate(req: Request, res: Response) {
-    if (req.body.startDate || req.body.endDate) {
-        try {
-            const startDate = req.body.startDate ? new Date(req.body.startDate) : undefined;
-            const endDate = req.body.endDate ? new Date(req.body.endDate) : undefined;
-            const statistics = await statisticService.getOrdersByDate(
-                startDate, endDate
-            );
-            if (statistics) {
-                logger.info(`Got statistics for date ${startDate} and ${endDate}`);
-                return res.status(200).send({ statistics });
-            }
-            logger.info(`Got no results for date ${startDate} and ${endDate}`);
-            return res.status(204).send();
-        } catch (err) {
-            const error: IError = {
-                name: 'SERVER_ERROR',
-                message: 'Something went wrong while getting the orders by date, machine and fablab!',
-                type: ErrorType.SERVER_ERROR,
-                stack: err.stack
-            };
-            logger.error(error);
-            return res.status(500).send(error);
-        }
+async function getOrdersByDate (req: Request, res: Response) {
+  if (req.body.startDate || req.body.endDate) {
+    try {
+      const startDate = req.body.startDate ? new Date(req.body.startDate) : undefined;
+      const endDate = req.body.endDate ? new Date(req.body.endDate) : undefined;
+      const statistics = await statisticService.getOrdersByDate(
+        startDate, endDate
+      );
+      if (statistics) {
+        logger.info(`Got statistics for date ${startDate} and ${endDate}`);
+        return res.status(200).send({ statistics });
+      }
+      logger.info(`Got no results for date ${startDate} and ${endDate}`);
+      return res.status(204).send();
+    } catch (err) {
+      const error: IError = {
+        name: 'SERVER_ERROR',
+        message: 'Something went wrong while getting the orders by date, machine and fablab!',
+        type: ErrorType.SERVER_ERROR,
+        stack: err.stack
+      };
+      logger.error(error);
+      return res.status(500).send(error);
     }
-    const error: IError = {
-        name: 'MALFORMED_REQUEST',
-        message: 'Malformed Request! The request needs to have at least a start or end date!',
-        type: ErrorType.MALFORMED_REQUEST
-    };
-    logger.error(error);
-    return res.status(400).send(error);
+  }
+  const error: IError = {
+    name: 'MALFORMED_REQUEST',
+    message: 'Malformed Request! The request needs to have at least a start or end date!',
+    type: ErrorType.MALFORMED_REQUEST
+  };
+  logger.error(error);
+  return res.status(400).send(error);
 }
 
 export default { getOrdersByDate };

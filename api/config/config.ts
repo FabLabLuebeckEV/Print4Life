@@ -1,6 +1,12 @@
 const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
 const ngPort = process.env.NG_PORT || 4200;
+const ibmWatson = {
+  key: process.env.WATSON_API_KEY || 'a-tcccti-2lwmcsshej',
+  token: process.env.WATSON_API_PASSWORD || 'okbv(ZXzFa6QwZ2l)Y',
+  orgId: process.env.WATSON_ORG_ID || 'tcccti',
+  userRoles: ['PD_STANDARD_APP']
+};
 const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
 /**
  * set to 2 hours
@@ -132,6 +138,7 @@ const dev = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   ssl: {
     privateKeyPath: '',
     certificatePath: ''
@@ -163,6 +170,7 @@ const staging = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   ssl: {
     privateKeyPath: '/etc/letsencrypt/live/iot-fablab.ddns.net/privkey.pem',
     certificatePath: '/etc/letsencrypt/live/iot-fablab.ddns.net/cert.pem'
@@ -203,6 +211,7 @@ const prod = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   ssl: {
     privateKeyPath: '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/private.pem',
     certificatePath: '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/cert.pem'
@@ -243,6 +252,7 @@ const test = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   ssl: {
     privateKeyPath: '',
     certificatePath: ''
@@ -271,6 +281,7 @@ const testLocal = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   ssl: {
     privateKeyPath: '',
     certificatePath: ''

@@ -54,6 +54,18 @@ export const userSchema = new Schema({
     minlength: 24,
     maxlength: 24
   },
+  iot: {
+    devices: [String],
+    auth: {
+      key: {
+        type: String
+      },
+      token: {
+        type: String
+      },
+      roles: [String]
+    }
+  }
 });
 
 /* eslint-disable */
