@@ -41,6 +41,8 @@ import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { ngfModule } from 'angular-file';
 import { DatePickerTranslationService } from './services/datepicker-translation.service';
+import { IotDeviceListComponent } from './iot-devices/iot-device-list/iot-device-list.component';
+import { IotDeviceFormComponent } from './iot-devices/iot-device-form/iot-device-form.component';
 
 @NgModule({
     declarations: [
@@ -64,6 +66,8 @@ import { DatePickerTranslationService } from './services/datepicker-translation.
         ChangePasswdModalComponent,
         UserDetailComponent,
         UploadComponent,
+        IotDeviceListComponent,
+        IotDeviceFormComponent,
     ],
     imports: [
         BrowserModule,

@@ -14,6 +14,8 @@ import { Observable } from 'rxjs';
 import { ErrorService, ErrorType } from '../services/error.service';
 import { UserListComponent } from '../users/user-list/user-list.component';
 import { UserDetailComponent } from '../users/user-detail/user-detail.component';
+import { IotDeviceListComponent } from '../iot-devices/iot-device-list/iot-device-list.component';
+import { IotDeviceFormComponent } from '../iot-devices/iot-device-form/iot-device-form.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -49,6 +51,14 @@ export const appRoutes: Routes = [
         path: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}`,
         component: MachineListComponent,
         runGuardsAndResolvers: 'always',
+    },
+    {
+        path: routes.paths.frontend.iotDevices.root,
+        component: IotDeviceListComponent,
+        runGuardsAndResolvers: 'always',
+        children: [
+            { path: routes.paths.frontend.iotDevices.create, component: IotDeviceFormComponent, canActivate: [AuthGuard] }
+        ]
     },
     {
         path: routes.paths.frontend.orders.root,

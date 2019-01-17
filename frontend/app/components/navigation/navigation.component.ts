@@ -25,6 +25,7 @@ export class NavigationComponent implements OnInit {
   isNavbarCollapsed: Boolean = false;
   machineDropdown: Dropdown = { name: '', elements: [] };
   orderDropdown: Dropdown = { name: '', elements: [] };
+  iotDevicesDropdown: Dropdown = { name: '', elements: [] };
   languageDropdown: Dropdown = { name: '', elements: [] };
   userDropdown: Dropdown = { name: '', elements: [] };
   userIsLoggedIn: Boolean;
@@ -60,7 +61,7 @@ export class NavigationComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(
-      ['navigation', 'languages', 'dropdown.machines', 'dropdown.orders', 'dropdown.users']
+      ['navigation', 'languages', 'dropdown.machines', 'dropdown.orders', 'dropdown.users', 'dropdown.iotDevices']
     ).subscribe((translations => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.title = translations['navigation'].title;
@@ -90,6 +91,17 @@ export class NavigationComponent implements OnInit {
           {
             name: translations['dropdown.machines'].listSuccessfulOrders,
             routerHref: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}`
+          }
+        ]
+      };
+
+      this.iotDevicesDropdown = {
+        name: translations['dropdown.iotDevices'].title,
+        elements: [
+          { name: translations['dropdown.iotDevices'].listIotDevices, routerHref: routes.paths.frontend.iotDevices.root },
+          {
+            name: translations['dropdown.iotDevices'].createIotDevice,
+            routerHref: `${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.create}`
           }
         ]
       };
