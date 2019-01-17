@@ -281,6 +281,7 @@ const testLocal = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   ssl: {
     privateKeyPath: '',
     certificatePath: ''
