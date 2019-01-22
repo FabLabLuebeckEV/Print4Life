@@ -393,7 +393,50 @@ async function create (req: Request, res: Response) {
 }
 
 async function getAll (req: Request, res: Response) {
-  return res.status(200).send(req);
+  let error: IError;
+  if (req.headers && req.headers.authorization
+    && typeof req.headers.authorization === 'string') {
+    try {
+      const token = req.headers.authorization.split('JWT')[1].trim();
+      const user = await userService.getUserByToken(token);
+      if (user && user.role && user.role.role) {
+        let iotDevices = await iotDeviceService.getAll({});
+        if (iotDevices) {
+          if (user.role.role !== 'admin' && user.iot && user.iot.devices && user.iot.devices.length) {
+            iotDevices = iotDevices.filter((device) => user.iot.devices.contains(device.id));
+            if (iotDevices.length) {
+              return res.status(200).send({ 'iot-devices': iotDevices });
+            }
+            return res.status(204).send();
+          }
+        }
+        return res.status(200).send({ 'iot-devices': iotDevices });
+      }
+      error = {
+        name: 'FORBIDDEN',
+        message: 'User can not get iot devices!',
+        type: ErrorType.FORBIDDEN
+      };
+      logger.error(error);
+      return res.status(403).send(error);
+    } catch (err) {
+      error = {
+        name: 'SERVER_ERROR',
+        message: 'Error while trying to get all iot devices of user',
+        type: ErrorType.SERVER_ERROR,
+        stack: err.message
+      };
+      logger.error(error);
+      return res.status(400).send(error);
+    }
+  }
+  error = {
+    name: 'MALFORMED_REQUEST',
+    message: 'Malformed Request! Please provide a valid JWT Token on the Authorization Header',
+    type: ErrorType.MALFORMED_REQUEST
+  };
+  logger.error(error);
+  return res.status(400).send(error);
 }
 
 async function deleteById (req: Request, res: Response) {
