@@ -41,6 +41,7 @@ export const appRoutes: Routes = [
         path: routes.paths.frontend.machines.root,
         component: MachineListComponent,
         runGuardsAndResolvers: 'always',
+        canActivate: [AuthGuard],
         children: [
             { path: routes.paths.frontend.machines.create, component: MachineFormComponent, canActivate: [AuthGuard], },
             { path: `${routes.paths.frontend.machines.update}/:type/:id`, component: MachineFormComponent, canActivate: [AuthGuard], },
@@ -56,8 +57,9 @@ export const appRoutes: Routes = [
         path: routes.paths.frontend.iotDevices.root,
         component: IotDeviceListComponent,
         runGuardsAndResolvers: 'always',
+        canActivate: [AuthGuard],
         children: [
-            { path: routes.paths.frontend.iotDevices.create, component: IotDeviceFormComponent, canActivate: [AuthGuard] }
+            { path: routes.paths.frontend.iotDevices.create, component: IotDeviceFormComponent }
         ]
     },
     {

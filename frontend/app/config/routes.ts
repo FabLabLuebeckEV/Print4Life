@@ -105,7 +105,8 @@ export const routes = {
             iotDevices: {
                 root: 'iotDevices',
                 create: 'create',
-                getAllIotDevices: ''
+                getAllIotDevices: '',
+                detail: 'detail'
             },
             machines: {
                 root: 'machines',

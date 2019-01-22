@@ -97,13 +97,7 @@ export class NavigationComponent implements OnInit {
 
       this.iotDevicesDropdown = {
         name: translations['dropdown.iotDevices'].title,
-        elements: [
-          { name: translations['dropdown.iotDevices'].listIotDevices, routerHref: routes.paths.frontend.iotDevices.root },
-          {
-            name: translations['dropdown.iotDevices'].createIotDevice,
-            routerHref: `${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.create}`
-          }
-        ]
+        elements: []
       };
 
       this.orderDropdown = {
@@ -165,6 +159,12 @@ export class NavigationComponent implements OnInit {
       }
 
       if (this.userIsLoggedIn) {
+        this.iotDevicesDropdown.elements = this.iotDevicesDropdown.elements.concat([{
+          name: translations['dropdown.iotDevices'].listIotDevices, routerHref: routes.paths.frontend.iotDevices.root
+        }, {
+          name: translations['dropdown.iotDevices'].createIotDevice,
+          routerHref: `${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.create}`
+        }]);
         this.machineDropdown.elements = this.machineDropdown.elements.concat(machineDropdownAuthElements);
         if (this.user && this.user.role && this.user.role.role && this.user.role.role === 'editor' || this.userIsAdmin) {
           this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownAuthElements);

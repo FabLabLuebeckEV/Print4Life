@@ -130,6 +130,13 @@
         "editor": "Bearbeiter",
         "admin": "Administrator"
     },
+    "iotDeviceList": {
+        "spinnerLoadingText": "Lade IoT Geräte",
+        "buttons": {
+            "deleteLabel": "Gerät löschen",
+            "detailLabel": "Gerätedetails"
+        }
+    },
     "machineList": {
         "paginationLabel": "",
         "filterLabel": {

@@ -2,6 +2,7 @@ export class IotDevice {
     constructor(
         public _id: String,
         public clientId: String,
+        public deviceId: String,
         public deviceType: String,
         public username: String,
         public password: String,

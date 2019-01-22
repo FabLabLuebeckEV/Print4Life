@@ -1,3 +1,15 @@
-<p>
+<div #spinnerContainer>
+  <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size"
+    [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+</div>
+<router-outlet></router-outlet>
+<p *ngIf="listView">
   iot-device-list works!
 </p>
+<div *ngIf="listView">
+  <div class="row">
+    <div class="col-md-12">
+      <app-table (buttonEvent)="eventHandler($event)" [items]="visibleIotDevices"></app-table>
+    </div>
+  </div>
+</div>

@@ -130,6 +130,13 @@
         "editor": "editor",
         "admin": "admin"
     },
+    "iotDeviceList": {
+        "spinnerLoadingText": "Loading IoT Devices",
+        "buttons": {
+            "deleteLabel": "Delete Device",
+            "detailLabel": "Device Details"
+        }
+    },
     "machineList": {
         "paginationLabel": "Jump to Page",
         "filterLabel": {
