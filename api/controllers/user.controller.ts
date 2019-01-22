@@ -440,7 +440,7 @@ function search (req, res) {
     if (users.length === 0) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
-      res.status(204).send({ users });
+      res.status(204).send();
     } else if (req.body.limit && req.body.skip) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} `
