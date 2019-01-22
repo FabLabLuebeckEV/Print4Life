@@ -12,7 +12,69 @@ const iotDeviceService = new IoTDeviceService();
 const userService = new UserService();
 const ibmWatsonService = new IBMWatsonService();
 
+/**
+ * @api {get} /api/v1/iot-devices/:id gets an iot device by its id
+ * @apiName getIoTDeviceById
+ * @apiVersion 1.0.0
+ * @apiGroup Iot-Devices
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
+ *
+ * @apiSuccess { Object } iot-device the iot device object, if success
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "iot-device": {
+        "clientId": "d:tcccti:Sensor:Sensor-Test-2",
+        "deviceType": "Sensor",
+        "deviceId": "Sensor-Test-2",
+        "deviceInfo": {},
+        "events": [
+            {
+                "topic": "Event_1",
+                "dataformat": "json"
+            },
+            {
+                "topic": "Event_2",
+                "dataformat": "json"
+            }
+        ]
+    }
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "name": "INVALID_ID",
+      "message": "Invalid ID! IoT Device not found!",
+      "type": 11,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Request! JWT Token does not match a user or the user has no iot credentials",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Request! Please provide a valid JWT Token
+      in the Authorization header and an id of the iot device!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ */
 async function get (req: Request, res: Response) {
+  let error: IError;
   if (req.params.id && req.headers && req.headers.authorization
     && typeof req.headers.authorization === 'string') {
     const token = req.headers.authorization.split('JWT')[1].trim();
@@ -26,30 +88,148 @@ async function get (req: Request, res: Response) {
       if (iotDevice) {
         const result = await ibmWatsonService.getDevice(iotDevice.deviceId, iotDevice.deviceType, apiKey);
         if (result) {
-          const iotDevice = {
+          const retIoTDevice = {
             clientId: result.clientId,
             deviceType: result.typeId,
             deviceId: result.deviceId,
-            deviceInfo: result.deviceInfo
+            deviceInfo: result.deviceInfo,
+            events: iotDevice.events
           };
-          return res.status(200).send({ 'iot-device': iotDevice });
+          return res.status(200).send({ 'iot-device': retIoTDevice });
         }
         return res.status(204).send();
       }
-      return 'Hallo';
+      error = {
+        name: 'INVALID_ID',
+        message: 'Invalid ID! IoT Device not found!',
+        type: ErrorType.INVALID_ID
+      };
+      logger.error(error);
+      return res.status(404).send(error);
     }
-    const error: IError = {
+    error = {
       name: 'MALFORMED_REQUEST',
-      message: 'Malformed Request! The request needs to have at least a start or end date!',
+      message: 'Malformed Request! JWT Token does not match a user or the user has no iot credentials!',
       type: ErrorType.MALFORMED_REQUEST
     };
     logger.error(error);
     return res.status(400).send(error);
   }
-  return 'Hallo';
+  error = {
+    name: 'MALFORMED_REQUEST',
+    message: 'Malformed Request! Please provide a valid JWT Token'
+      + ' in the Authorization header and an id of the iot device!',
+    type: ErrorType.MALFORMED_REQUEST
+  };
+  logger.error(error);
+  return res.status(400).send(error);
 }
 
+/**
+ * @api {post} /api/v1/iot-devices/ Adds a new iot device
+ * @apiName createIoTDevice
+ * @apiVersion 1.0.0
+ * @apiGroup IoT-Devices
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
+ *
+ * @apiParam {String} deviceType is the type of the device (required)
+ * @apiParam {String} deviceId is the unique id for the device (required)
+ * @apiParam {Array} events is an array of event objects {"topic": "Event_1", "dataformat": "json"} (required)
+ *
+ * @apiParamExample {json} Request-Example:
+{
+  "deviceType": "Sensor",
+  "deviceId": "Sensor-Test-23",
+  "events": [
+    {"topic": "Event_1", "dataformat": "json"},
+    {"topic": "Event_2", "dataformat": "json"}
+  ]
+}
+ * @apiSuccess { Object } iot-device the new iot device object, if success
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 201 Created
+{
+    "iot-device": {
+        "username": "use-auth-token",
+        "_id": "5c46eb14e2dfc2314a7269a0",
+        "clientId": "d:tcccti:Sensor:Sensor-Test-24",
+        "deviceType": "Sensor",
+        "deviceId": "Sensor-Test-24",
+        "password": "C3T0G?Y(ljWUeQEkAa",
+        "events": [
+            {
+                "topic": "Event_1",
+                "dataformat": "json"
+            },
+            {
+                "topic": "Event_2",
+                "dataformat": "json"
+            }
+        ],
+        "__v": 0
+    }
+}
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ * {
+    "name": "SERVER_ERROR",
+    "message": "Error while trying to create a new IoT Device!",
+    "type": 13,
+    "level": "error",
+    "timestamp": "2019-01-22T09:22:05.900Z"
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ * {
+    "name": "SERVER_ERROR",
+    "message": "User has no credentials for iot devices!",
+    "type": 13,
+    "level": "error",
+    "timestamp": "2019-01-22T09:22:05.900Z"
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ * {
+    "name": "SERVER_ERROR",
+    "message": "Error while trying to save the user!",
+    "type": 13,
+    "level": "error",
+    "timestamp": "2019-01-22T09:22:05.900Z"
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "name": "IOT_DEVICE_EXISTS",
+    "message": "The IoT Device already exists. Please choose another DeviceId!",
+    "type": 15,
+    "level": "error",
+    "timestamp": "2019-01-22T09:22:05.900Z"
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+{
+    "name": "INVALID_ID",
+    "message": "User does not exist!",
+    "type": 11,
+    "level": "error",
+    "timestamp": "2019-01-22T09:22:05.900Z"
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+{
+    "name": "MALFORMED_REQUEST",
+    "message": "Malformed Request! Please provide a valid JWT Token on the Authorization Header,
+    and a body with deviceType, deviceId and events. See ApiDocs for more Information!",
+    "type": 14,
+    "level": "error",
+    "timestamp": "2019-01-22T09:22:05.900Z"
+}
+ */
 async function create (req: Request, res: Response) {
+  let error: IError;
   if (req.headers && req.headers.authorization
     && typeof req.headers.authorization === 'string'
     && req.body.deviceType && req.body.deviceId && req.body.events && req.body.events.length) {
@@ -88,7 +268,8 @@ async function create (req: Request, res: Response) {
             const error: IError = {
               name: 'SERVER_ERROR',
               message: 'Error while trying to save the user!',
-              type: ErrorType.SERVER_ERROR
+              type: ErrorType.SERVER_ERROR,
+              stack: err.message
             };
             logger.error(error);
             return res.status(500).send(error);
@@ -97,13 +278,22 @@ async function create (req: Request, res: Response) {
       }
 
       if (user.iot.auth.key && user.iot.auth.token) {
+        const device = await iotDeviceService.getAll({ deviceId: req.body.deviceId }, '1', '0');
+        if (device && device.length) {
+          error = {
+            name: 'IOT_DEVICE_EXISTS',
+            message: 'The IoT Device already exists. Please choose another DeviceId!',
+            type: ErrorType.IOT_DEVICE_EXISTS
+          };
+          logger.error(error);
+          return res.status(400).send(error);
+        }
         const result = await ibmWatsonService.createDevice(
           req.body.deviceType, req.body.deviceId, req.body.deviceInfo, {
             key: user.iot.auth.key, token: user.iot.auth.token
           }
         );
         if (result) {
-          // TODO: Check if iot device id is already taken
           const iotDevice = await iotDeviceService.create(
             {
               clientId: result.clientId,
@@ -122,10 +312,11 @@ async function create (req: Request, res: Response) {
           try {
             await userService.update(user);
           } catch (err) {
-            const error: IError = {
+            error = {
               name: 'SERVER_ERROR',
               message: 'Error while trying to save the user!',
-              type: ErrorType.SERVER_ERROR
+              type: ErrorType.SERVER_ERROR,
+              stack: err.message
             };
             logger.error(error);
             return res.status(500).send(error);
@@ -133,13 +324,38 @@ async function create (req: Request, res: Response) {
           delete iotDevice.__v;
           return res.status(200).send({ 'iot-device': iotDevice });
         }
-        return 'Hallo';
+        error = {
+          name: 'SERVER_ERROR',
+          message: 'Error while trying to create a new IoT Device!',
+          type: ErrorType.SERVER_ERROR
+        };
+        logger.error(error);
+        return res.status(500).send(error);
       }
-      return 'Hallo';
+      error = {
+        name: 'SERVER_ERROR',
+        message: 'User has no credentials for iot devices!',
+        type: ErrorType.SERVER_ERROR
+      };
+      logger.error(error);
+      return res.status(500).send(error);
     }
-    return 'Hallo';
+    error = {
+      name: 'INVALID_ID',
+      message: 'User does not exist!',
+      type: ErrorType.INVALID_ID
+    };
+    logger.error(error);
+    return res.status(404).send(error);
   }
-  return 'Hallo';
+  error = {
+    name: 'MALFORMED_REQUEST',
+    message: 'Malformed Request! Please provide a valid JWT Token on the Authorization Header,'
+      + 'and a body with deviceType, deviceId and events. See ApiDocs for more Information!',
+    type: ErrorType.MALFORMED_REQUEST
+  };
+  logger.error(error);
+  return res.status(400).send(error);
 }
 
 async function getAll (req: Request, res: Response) {

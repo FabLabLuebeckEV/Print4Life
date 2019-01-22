@@ -17,7 +17,8 @@ export enum ErrorType {
   INVALID_ID,
   FORBIDDEN,
   SERVER_ERROR,
-  MALFORMED_REQUEST
+  MALFORMED_REQUEST,
+  IOT_DEVICE_EXISTS
 }
 
 /* eslint-disable no-restricted-globals */
