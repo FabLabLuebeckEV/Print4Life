@@ -84,7 +84,7 @@ export class IotDeviceListComponent implements OnInit {
     this.iotDevices = new Array();
     this.visibleIotDevices = undefined;
     this.genericService.scrollIntoView(this.spinnerContainerRef);
-    this.iotDevices = await this.iotDeviceServices.getAllIotDevices();
+    this.iotDevices = (await this.iotDeviceServices.getAllIotDevices())['iot-devices'];
     const arr = [];
     for (const iotDevice of this.iotDevices) {
       const item = new TableItem();

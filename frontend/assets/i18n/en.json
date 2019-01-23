@@ -332,6 +332,18 @@
         "city": "City",
         "country": "Country"
     },
+    "iotDevicesForm": {
+        "createTitle": "Add IoT Device",
+        "labels": {
+            "deviceId": "Devicename",
+            "deviceType": "Choose Devicetype",
+            "submit": "Add"
+        },
+        "messages": {
+            "deviceId": "The given device name is not set.",
+            "deviceId2": "The given device name has already been taken."
+        }
+    },
     "orderForm": {
         "createTitle": "Create Order",
         "editTitle": "Edit Order",

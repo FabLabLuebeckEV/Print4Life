@@ -332,6 +332,18 @@
         "city": "Stadt",
         "country": "Land"
     },
+    "iotDevicesForm": {
+        "createTitle": "IoT Gerät hinzufügen",
+        "labels": {
+            "deviceId": "Gerätename",
+            "deviceType": "Gerätetyp wählen",
+            "submit": "Hinzufügen"
+        },
+        "messages": {
+            "deviceId": "Der Name ist nicht gesetzt.",
+            "deviceId2": "Der Name ist bereits vergeben."
+        }
+    },
     "orderForm": {
         "createTitle": "Auftrag anlegen",
         "editTitle": "Auftrag bearbeiten",

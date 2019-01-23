@@ -2,3 +2,36 @@
 <p>
   iot-device-form works!
 </p>
+<div class="row spacing">
+  <div class="col-md-12 text-center">
+    <h1>{{translationFields.title}}</h1>
+  </div>
+</div>
+<div class="row spacing">
+  <div class="container">
+    <form (ngSubmit)="onSubmit()" #createIotDeviceForm="ngForm">
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="deviceId">{{translationFields.labels.deviceId}}</label>
+          <input type="text" class="form-control" id="deviceId" required [(ngModel)]="iotDevice.deviceId" name="deviceId"
+            (ngModelChange)="checkUniqueness($event)" #deviceId="ngModel">
+          <div [hidden]="deviceId.valid || deviceId.pristine" class="alert alert-danger">
+            {{translationFields.messages.deviceId}}
+          </div>
+          <div [hidden]="deviceIdAlreadyTaken" class="alert alert-danger">
+            {{translationFields.messages.deviceId2}}
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-12">
+          <label for="deviceType">{{translationFields.labels.deviceType}}</label>
+          <ng-select [loading]="loadingDeviceTypes" [items]=deviceTypes bindLabel="name" [(ngModel)]="iotDevice.deviceType"
+            id="deviceType" name="deviceType" #deviceType="ngModel">
+          </ng-select>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createIotDeviceForm.form.valid">{{translationFields.labels.submit}}</button>
+    </form>
+  </div>
+</div>
