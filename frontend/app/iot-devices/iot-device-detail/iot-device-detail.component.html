@@ -1,3 +1,18 @@
-<p>
-  iot-device-detail works!
-</p>
+<div class="row spacing text-center">
+  <div class="col-md-12 text-center">
+    <h1>{{iotDevice.deviceId}}</h1>
+  </div>
+  <div class="col-md-3 col-xl-2">
+    <button *ngIf="userIsLoggedIn 
+    && loggedInUser 
+    && (loggedInUser 
+    && loggedInUser._id 
+    && owner && owner._id 
+    && loggedInUser._id === owner._id || loggedInUser.role 
+    && loggedInUser.role.role 
+    && loggedInUser.role.role === 'admin')"
+      (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
+      <fa-icon [icon]="deleteIcon"></fa-icon>
+    </button>
+  </div>
+</div>

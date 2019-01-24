@@ -27,7 +27,7 @@ export class IotDeviceService {
     return this.http.post(`${this.rootPath}/${routes.paths.backend.iotDevices.create}`, device).toPromise();
   }
 
-  public getDevice(id: String): Promise<any> {
+  public getDeviceById(id: String): Promise<any> {
     return this.http.get(`${this.rootPath}/${id}`).toPromise();
   }
 

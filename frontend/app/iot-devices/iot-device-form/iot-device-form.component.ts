@@ -68,7 +68,7 @@ export class IotDeviceFormComponent implements OnInit {
 
   private async _checkDeviceId(id: String) {
     let iotDevice;
-    iotDevice = await this.iotDeviceService.getDevice(id);
+    iotDevice = await this.iotDeviceService.getDeviceById(id);
     this.deviceIdAlreadyTaken = iotDevice ? true : false;
   }
 
