@@ -1,14 +1,19 @@
 /* eslint-disable no-unused-vars */
-import { ErrorType } from '../services/router.service';
+import { Request, Response } from 'express';
+import { ErrorType, IError } from '../services/router.service';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 import FablabService from '../services/fablab.service';
 import UserService from '../services/user.service';
 import { searchableTextFields } from '../models/user.model';
+import IoTDeviceService from '../services/iot-device.service';
+import IBMWatsonService from '../services/ibm.watson.service';
 
 /* eslint-enable no-unused-vars */
 
 const userService = new UserService();
+const iotDeviceService = new IoTDeviceService();
+const ibmWatsonService = new IBMWatsonService();
 
 /**
  * @api {post} /api/v1/users/ Adds a new user
@@ -105,8 +110,8 @@ async function create (req, res) {
 }
 
 /**
- * @api {put} /api/v1/users/ Adds a new user
- * @apiName createUser
+ * @api {put} /api/v1/users/ Updates a user
+ * @apiName updateUser
  * @apiVersion 1.0.0
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
@@ -114,7 +119,7 @@ async function create (req, res) {
  * @apiSuccess { Object } user the new user object, if success
  *
  * @apiSuccessExample Success-Response:
- *    HTTP/1.1 201 Created
+ *    HTTP/1.1 200 Ok
   {
     "user": {
         "_id": "5b7d29ed40ddae62a94e5940",
@@ -169,7 +174,7 @@ function update (req, res) {
  * @apiSuccess { Object } user the deactivated user object, if success
  *
  * @apiSuccessExample Success-Response:
- *    HTTP/1.1 201 Created
+ *    HTTP/1.1 200 Ok
   {
     "user": {
         "_id": "5b7d29ed40ddae62a94e5940",
@@ -191,28 +196,73 @@ function update (req, res) {
         "__v": 0
     }
   }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "name": "SERVER_ERROR",
+      "message": "Error while trying to delete the user!",
+      "type": 13,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
   {
-      "error": "Malformed Request!",
-      "stack": {
-          ...
-      }
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Request! Please provide a user id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
   }
  */
-function deleteById (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
-  if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    userService.deleteById(req.params.id).then((user) => {
-      logger.info(`DELETE User with result ${JSON.stringify(user)}`);
-      res.status(200).send({ user });
-    }).catch((err) => {
-      logger.error({ error: 'Malformed Request!', stack: err });
-      res.status(400).send({ error: 'Malformed Request!', stack: err });
-    });
+async function deleteById (req: Request, res: Response) {
+  let error: IError = {
+    name: 'SERVER_ERROR',
+    message: 'Error while trying to delete the user!',
+    type: ErrorType.SERVER_ERROR
+  };
+  if (req.params.id) {
+    const checkId = validatorService.checkId(req.params.id);
+    if (checkId) {
+      return res.status(checkId.status).send({ error: checkId.error });
+    }
+    try {
+      const user = await userService.deleteById(req.params.id);
+      if (user) {
+        if (user.iot) {
+          if (user.iot.auth && user.iot.auth.key) {
+            await ibmWatsonService.deleteAPIKey(user.iot.auth.key);
+          }
+        }
+        if (user.iot.devices) {
+          /* eslint-disable no-await-in-loop */
+          for (let i = 0; i < user.iot.devices.length; i = 1 + i) {
+            const deviceId = user.iot.devices[i];
+            await iotDeviceService.deleteById(deviceId);
+          }
+          /* eslint-enable no-await-in-loop */
+        }
+        delete user.iot;
+        await userService.update(user);
+        logger.info(`DELETE User with result ${JSON.stringify(user)}`);
+        return res.status(200).send({ user });
+      }
+      logger.error(error);
+      return res.status(500).send(error);
+    } catch (err) {
+      error.stack = err && err.message ? err : '';
+      logger.error(error);
+      return res.status(500).send(error);
+    }
   }
+  error = {
+    name: 'MALFORMED_REQUEST',
+    message: 'Malformed Request! Please provide a user id!',
+    type: ErrorType.MALFORMED_REQUEST
+  };
+  logger.error(error);
+  return res.status(400).send(error);
 }
 
 /**

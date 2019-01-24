@@ -109,11 +109,11 @@ export class IBMWatsonService {
     }));
   }
 
-  async deleteAPIKey (id: string, credentials: { key: string, token: string }): Promise<any> {
+  async deleteAPIKey (id: string): Promise<any> {
     return new Promise((resolve, reject) => request.delete(`${baseUrl}authorization/apikeys/${id}`, {
       auth: {
-        user: credentials.key,
-        pass: credentials.token,
+        user: config.ibmWatson.key,
+        pass: config.ibmWatson.token,
         sendImmediately: true
       },
       json: true
