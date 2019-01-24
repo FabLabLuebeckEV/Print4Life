@@ -774,6 +774,87 @@ async function search (req: Request, res: Response) {
     return res.status(500).send(error);
   }
 }
+
+/**
+ * @api {post} /api/v1/iot-devices/count Counts the iot devices by a given query
+ * @apiName countIoTDevice
+ * @apiVersion 1.0.0
+ * @apiGroup IoT-Devices
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
+ *
+ * @apiParam {Object} query is the query object for mongoose
+ *
+ * @apiParamExample {json} Request-Example:
+{
+  "query": {
+    "$and": [
+      {
+        "$text": {
+          "$search": "Sensor"
+        }
+      }
+    ]
+  }
+}
+ * @apiSuccess { Number } count is the number of counted documents
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 Ok
+{
+    "count": 2
+}
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ * {
+    "name": "SERVER_ERROR",
+    "message": "Error while trying to count the iot devices!",
+    "type": 13,
+    "stack": {...}, // optional
+    "level": "error",
+    "timestamp": "2019-01-22T09:22:05.900Z"
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Request!Please provide a valid JWT Token on the Authorization Header",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ */
+async function count (req: Request, res: Response) {
+  const error: IError = {
+    name: 'SERVER_ERROR',
+    message: 'Error while trying to count the iot devices!',
+    type: ErrorType.SERVER_ERROR
+  };
+  req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
+  const user = await getUser(req);
+  if (!user || user.error) {
+    return user && user.error ? res.status(400).send(user.error) : res.status(400).send();
+  }
+  try {
+    if (user.role && user.role.role) {
+      let count = 0;
+      if (user.role.role === 'admin') {
+        count = await iotDeviceService.count(req.body.query);
+      } else if (user.iot && user.iot.devices) {
+        count = user.iot.devices.length;
+      }
+      return res.status(200).send({ count });
+    }
+    logger.error(error);
+    return res.status(500).send(error);
+  } catch (err) {
+    error.stack = err && err.message ? err.message : '';
+    logger.error(error);
+    return res.status(500).send(error);
+  }
+}
+
 /**
  * @api {get} /api/v1/iot-devices/types gets all types of iot devices
  * @apiName getIoTDeviceTypes
@@ -918,5 +999,5 @@ async function getUser (req: Request) {
 }
 
 export default {
-  get, create, getAll, deleteById, getDeviceTypes, search
+  get, create, getAll, deleteById, getDeviceTypes, search, count
 };

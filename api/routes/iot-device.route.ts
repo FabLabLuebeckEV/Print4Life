@@ -18,4 +18,6 @@ router.route('/:id').delete(iotDeviceCtrl.deleteById);
 
 router.route('/search').post(iotDeviceCtrl.search);
 
+router.route('/count').post(iotDeviceCtrl.count);
+
 export default router;
