@@ -3,9 +3,12 @@
     [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
 </div>
 <router-outlet></router-outlet>
-<p *ngIf="listView">
-  iot-device-list works!
-</p>
+<div *ngIf="listView" class="col-md-1 spacing-top-xxl">
+  <button *ngIf="userIsLoggedIn && listView" type="button" class="btn btn-success  spacing-top-xxl spacing-left-xxl"
+    [routerLink]="addLink">
+    <fa-icon [icon]="plusIcon"></fa-icon>
+  </button>
+</div>
 <div *ngIf="listView">
   <div class="row">
     <div class="col-md-12">

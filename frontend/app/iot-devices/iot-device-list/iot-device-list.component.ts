@@ -29,7 +29,7 @@ export class IotDeviceListComponent implements OnInit {
   spinnerConfig: SpinnerConfig;
   private config: any;
   plusIcon: Icon;
-  createLink: String;
+  addLink: String;
   headers: Array<String> = [];
 
   translationFields = {
@@ -62,7 +62,7 @@ export class IotDeviceListComponent implements OnInit {
       'Loading IoT Devices', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type
     );
-    this.createLink = `./${routes.paths.frontend.iotDevices}`;
+    this.addLink = `./${routes.paths.frontend.iotDevices.create}`;
     this.plusIcon = this.config.icons.add;
   }
 
