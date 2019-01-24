@@ -280,10 +280,23 @@ export class UserService implements ModelService {
   }
 
   /**
-     * Not implemented yet
-     */
-  public getAll () {
-    throw Error('Not implemented!');
+   * This method gets all iot devices. The result can be limited as well as some items skipped
+   * @param limit is the limit of items to get
+   * @param skip is the amount of items to skip (counted from the beginning)
+   * @returns a promise with the results
+   */
+  getAll (query: any, limit?: string, skip?: string) {
+    let l: Number;
+    let s: Number;
+    let promise;
+    if ((limit && skip) || (isNumber(limit) && isNumber(skip))) {
+      l = Number.parseInt(limit, 10);
+      s = Number.parseInt(skip, 10);
+      query ? promise = User.find(query).limit(l).skip(s) : promise = User.find(query).limit(l).skip(s);
+    } else {
+      query ? promise = User.find(query) : promise = User.find();
+    }
+    return promise;
   }
   /* eslint-enable class-methods-use-this */
 }
