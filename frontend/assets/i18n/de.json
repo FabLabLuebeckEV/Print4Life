@@ -135,6 +135,16 @@
         "buttons": {
             "deleteLabel": "Gerät löschen",
             "detailLabel": "Gerätedetails"
+        },
+        "modals": {
+            "yes": "Ja",
+            "abort": "Nein",
+            "abortValue": "Abbrechen",
+            "deleteValue": "Löschen",
+            "deleteHeader": "Möchten Sie das Gerät wirklich löschen?",
+            "deleteQuestion": "Sind Sie sich sicher, dass Sie",
+            "deleteQuestion2": "dieses Gerät wirklich entfernen möchten?",
+            "deleteWarning": "Das Löschen eines Geräts entfernt auch dessen Zugang zu Watson/MQTT."
         }
     },
     "machineList": {

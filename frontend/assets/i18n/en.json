@@ -135,6 +135,16 @@
         "buttons": {
             "deleteLabel": "Delete Device",
             "detailLabel": "Device Details"
+        },
+        "modals": {
+            "yes": "Yes",
+            "abort": "No",
+            "abortValue": "Abort",
+            "deleteLabel": "Delete",
+            "deleteHeader": "Do you really want to remove this device?",
+            "deleteQuestion": "Are you really sure, that you want",
+            "deleteQuestion2": "to remove this device?",
+            "deleteWarning": "The removal of this device will also remove it's access to the Watson/MQTT platform."
         }
     },
     "machineList": {

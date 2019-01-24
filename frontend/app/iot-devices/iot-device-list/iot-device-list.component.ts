@@ -12,6 +12,9 @@ import { SpinnerConfig } from 'frontend/app/config/config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { UserService } from 'frontend/app/services/user.service';
+import { ModalButton, MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { async } from 'q';
 
 @Component({
   selector: 'app-iot-device-list',
@@ -36,18 +39,29 @@ export class IotDeviceListComponent implements OnInit {
     buttons: {
       detailLabel: '',
       deleteLabel: ''
+    },
+    modals: {
+      yes: '',
+      abort: '',
+      abortValue: '',
+      deleteValue: '',
+      deleteHeader: '',
+      deleteQuestion: '',
+      deleteQuestion2: '',
+      deleteWarning: ''
     }
   };
 
   constructor(
     private router: Router,
     private location: Location,
-    private iotDeviceServices: IotDeviceService,
+    private iotDeviceService: IotDeviceService,
     private translateService: TranslateService,
     private configService: ConfigService,
     private spinner: NgxSpinnerService,
     private genericService: GenericService,
     private userService: UserService,
+    private modalService: NgbModal
   ) {
     this.config = this.configService.getConfig();
     this.headers = ['id', 'Device ID', 'Type'];
@@ -86,7 +100,7 @@ export class IotDeviceListComponent implements OnInit {
     this.iotDevices = new Array();
     this.visibleIotDevices = undefined;
     this.genericService.scrollIntoView(this.spinnerContainerRef);
-    this.iotDevices = (await this.iotDeviceServices.getAllIotDevices())['iot-devices'];
+    this.iotDevices = (await this.iotDeviceService.getAllIotDevices())['iot-devices'];
     const arr = [];
 
     for (const iotDevice of this.iotDevices) {
@@ -130,10 +144,39 @@ export class IotDeviceListComponent implements OnInit {
           iotDeviceIndex = index;
         }
       });
-      // show modal
-      // delete if modal success
-      // init
+      const deleteButton = new ModalButton(
+        this.translationFields.modals.yes, 'btn btn-danger',
+        this.translationFields.modals.deleteValue);
+      const abortButton = new ModalButton(
+        this.translationFields.modals.abort, 'btn btn-secondary',
+        this.translationFields.modals.abortValue);
+      const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+        'modal-header header-danger', [`${this.translationFields.modals.deleteQuestion} ` +
+          `${iotDevice.obj[`Device ID`].label} ${this.translationFields.modals.deleteQuestion2}`,
+        `${this.translationFields.modals.deleteWarning}`], deleteButton, abortButton);
+      modalRef.result.then((result) => {
+        if (result === deleteButton.returnValue) {
+          this.iotDeviceService.deleteDevice(iotDevice.obj.id.label).then((result) => {
+            result = result['iot-device'];
+            this.visibleIotDevices = new Array().concat(
+              this.visibleIotDevices.slice(0, iotDeviceIndex),
+              this.visibleIotDevices.slice(iotDeviceIndex + 1));
+          });
+        }
+      });
     }
+  }
+
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
+    modalRef.componentInstance.title = title;
+    if (titleClass) {
+      modalRef.componentInstance.titleClass = titleClass;
+    }
+    modalRef.componentInstance.messages = messages;
+    modalRef.componentInstance.button1 = button1;
+    modalRef.componentInstance.button2 = button2;
+    return modalRef;
   }
 
   private _translate() {
@@ -146,6 +189,16 @@ export class IotDeviceListComponent implements OnInit {
         buttons: {
           detailLabel: translations['iotDeviceList'].buttons.detailLabel,
           deleteLabel: translations['iotDeviceList'].buttons.deleteLabel
+        },
+        modals: {
+          yes: translations['iotDeviceList'].modals.yes,
+          abort: translations['iotDeviceList'].modals.abort,
+          abortValue: translations['iotDeviceList'].modals.abortValue,
+          deleteValue: translations['iotDeviceList'].modals.deleteValue,
+          deleteHeader: translations['iotDeviceList'].modals.deleteHeader,
+          deleteQuestion: translations['iotDeviceList'].modals.deleteQuestion,
+          deleteQuestion2: translations['iotDeviceList'].modals.deleteQuestion2,
+          deleteWarning: translations['iotDeviceList'].modals.deleteWarning,
         }
       };
     }));

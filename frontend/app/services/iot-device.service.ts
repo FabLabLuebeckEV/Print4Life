@@ -30,4 +30,8 @@ export class IotDeviceService {
   public getDevice(id: String): Promise<any> {
     return this.http.get(`${this.rootPath}/${id}`).toPromise();
   }
+
+  public deleteDevice(id: String): Promise<any> {
+    return this.http.delete(`${this.rootPath}/${id}`).toPromise();
+  }
 }
