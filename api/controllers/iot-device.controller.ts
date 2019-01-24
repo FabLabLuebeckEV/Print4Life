@@ -2,9 +2,11 @@
 import { Request, Response } from 'express';
 import { IError, ErrorType } from '../services/router.service';
 import { IoTDeviceService } from '../services/iot-device.service';
+import { searchableTextFields } from '../models/iot-device.model';
 import logger from '../logger';
 import UserService from '../services/user.service';
 import IBMWatsonService from '../services/ibm.watson.service';
+import validatorService from '../services/validator.service';
 import config from '../config/config';
 /* eslint-enable no-unused-vars */
 
@@ -107,8 +109,10 @@ async function get (req: Request, res: Response) {
               deviceInfo: result.deviceInfo,
               events: iotDevice.events
             };
+            logger.info(`GET iot device with result ${JSON.stringify(retIoTDevice)}`);
             return res.status(200).send({ 'iot-device': retIoTDevice });
           }
+          logger.info('GET iot device with empty result');
           return res.status(204).send();
         }
         error = {
@@ -357,7 +361,7 @@ async function create (req: Request, res: Response) {
               logger.error(error);
               return res.status(500).send(error);
             }
-            delete iotDevice.__v;
+            logger.info(`POST iot device with result ${JSON.stringify(iotDevice)}`);
             return res.status(200).send({ 'iot-device': iotDevice });
           }
           error = {
@@ -482,11 +486,14 @@ async function getAll (req: Request, res: Response) {
         if (user.role.role !== 'admin' && user.iot && user.iot.devices && user.iot.devices.length) {
           iotDevices = iotDevices.filter((device) => user.iot.devices.contains(device.id));
           if (iotDevices.length) {
+            logger.info(`GET ALL iot devices with result ${JSON.stringify(iotDevices)}`);
             return res.status(200).send({ 'iot-devices': iotDevices });
           }
+          logger.info('GET ALL iot devices with empty result');
           return res.status(204).send();
         }
       }
+      logger.info(`GET ALL iot devices with result ${JSON.stringify(iotDevices)}`);
       return res.status(200).send({ 'iot-devices': iotDevices });
     }
     error = {
@@ -607,6 +614,7 @@ async function deleteById (req: Request, res: Response) {
                 userService.update(user);
               });
             }
+            logger.info(`DELETE iot device with result ${JSON.stringify(result)}`);
             return res.status(200).send({ 'iot-device': result });
           }
           logger.error(error);
@@ -637,6 +645,135 @@ async function deleteById (req: Request, res: Response) {
   }
 }
 
+/**
+ * @api {post} /api/v1/iot-devices/search Searches an iot device by a given query
+ * @apiName searchIoTDevice
+ * @apiVersion 1.0.0
+ * @apiGroup IoT-Devices
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
+ *
+ * @apiParam {Object} query is the query object for mongoose
+ * @apiParam {String} limit is the limit of results (optional)
+ * @apiParam {String} skip is the number of elements to skip (optional)
+ *
+ * @apiParamExample {json} Request-Example:
+{
+  "query": {
+    "$and": [
+      {
+        "$text": {
+          "$search": "Sensor"
+        }
+      }
+    ]
+  }
+}
+ * @apiSuccess { Array } iot-devices the array of iot device objects, if successful
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 Ok
+{
+    "iot-devices": [
+        {
+            "username": "use-auth-token",
+            "_id": "5c49af9825a8926218d3a808",
+            "clientId": "d:tcccti:Sensor:Sensor-Test-27",
+            "deviceType": "Sensor",
+            "deviceId": "Sensor-Test-27",
+            "password": "URr8E9qPui*EqJWQW(",
+            "events": [
+                {
+                    "topic": "Event_1",
+                    "dataformat": "json"
+                },
+                {
+                    "topic": "Event_2",
+                    "dataformat": "json"
+                }
+            ],
+            "__v": 0
+        }
+    ]
+}
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ * {
+    "name": "SERVER_ERROR",
+    "message": "Error while trying to get the iot devices!",
+    "type": 13,
+    "stack": {...}, // optional
+    "level": "error",
+    "timestamp": "2019-01-22T09:22:05.900Z"
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+ * {
+    "name": "SERVER_ERROR",
+    "message": "User has no credentials for iot devices!",
+    "type": 13,
+    "level": "error",
+    "timestamp": "2019-01-22T09:22:05.900Z"
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Request!Please provide a valid JWT Token on the Authorization Header",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ */
+async function search (req: Request, res: Response) {
+  req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
+  const user = await getUser(req);
+  if (!user || user.error) {
+    return user && user.error ? res.status(400).send(user.error) : res.status(400).send();
+  }
+  try {
+    let iotDevices: Array<any> = [];
+    if (user.role.role && user.role.role === 'admin') {
+      iotDevices = await iotDeviceService.getAll(req.body.query, req.body.limit, req.body.skip);
+    } else if (user.iot && user.iot.devices && user.role && user.role.role && user.role.role !== 'admin') {
+      const tmpList = await iotDeviceService.getAll(req.body.query, req.body.limit, req.body.skip);
+      iotDevices = [];
+      user.iot.devices.forEach((deviceId: any) => {
+        tmpList.forEach((device: any) => {
+          if (device.id === deviceId) {
+            iotDevices.push(device);
+          }
+        });
+      });
+    } else {
+      iotDevices = [];
+    }
+    if (iotDevices.length === 0) {
+      logger.info(`POST search for iot devices with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+      return res.status(204).send({ 'iot-devices': iotDevices });
+    } if (req.body.limit && req.body.skip) {
+      logger.info(`POST search for iot devices with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds partial results ${JSON.stringify(iotDevices)}`);
+      return res.status(206).send({ 'iot-devices': iotDevices });
+    }
+    logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
+      + `limit ${req.body.limit} skip ${req.body.skip} `
+      + `holds results ${JSON.stringify(iotDevices)}`);
+    return res.status(200).send({ 'iot-devices': iotDevices });
+  } catch (err) {
+    const error: IError = {
+      name: 'SERVER_ERROR',
+      message: 'Error while trying to get the iot devices!',
+      type: ErrorType.SERVER_ERROR,
+      stack: err && err.message ? err.message : ''
+    };
+    logger.error(error);
+    return res.status(500).send(error);
+  }
+}
 /**
  * @api {get} /api/v1/iot-devices/types gets all types of iot devices
  * @apiName getIoTDeviceTypes
@@ -713,11 +850,10 @@ async function getDeviceTypes (req: Request, res: Response) {
       });
       if (result && result.results) {
         if (!result.results.length) {
-          logger.info('No results of Device Types');
+          logger.info('GET DEVICE TYPES No results of Device Types');
           return res.status(204).send();
         }
         const deviceTypes = [];
-        let logString = '';
         result.results.forEach((deviceType: any) => {
           const newObj = {
             id: deviceType.id,
@@ -726,9 +862,8 @@ async function getDeviceTypes (req: Request, res: Response) {
             updatedDateTime: deviceType.updatedDateTime
           };
           deviceTypes.push(newObj);
-          logString += `${JSON.stringify(newObj)}, `;
         });
-        logger.info(`Result of Device Types: ${logString}`);
+        logger.info(`GET DEVICE TYPES Result of Device Types: ${JSON.stringify(deviceTypes)}`);
         return res.status(200).send({ deviceTypes });
       }
       error = {
@@ -783,5 +918,5 @@ async function getUser (req: Request) {
 }
 
 export default {
-  get, create, getAll, deleteById, getDeviceTypes
+  get, create, getAll, deleteById, getDeviceTypes, search
 };
