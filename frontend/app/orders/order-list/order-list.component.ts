@@ -43,6 +43,7 @@ export class OrderListComponent implements OnInit {
   loadingOrders: Boolean = false;
   loadingFablabs: Boolean = false;
   datePickerError: Boolean = false;
+  headers: Array<String> = [];
 
   loadingStatus: Boolean;
   filter: any = {
@@ -128,6 +129,8 @@ export class OrderListComponent implements OnInit {
     this.calendarIcon = this.config.icons.calendar;
     this.jumpArrow = this.config.icons.forward;
     this.trashIcon = this.config.icons.delete;
+    this.headers = ['id', 'Created at', 'Schedule Start Date',
+      'Schedule End Date', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type'];
 
     this.router.events.subscribe(() => {
       const route = this.location.path();

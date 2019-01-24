@@ -29,9 +29,9 @@ export class TableItem {
 })
 export class TableComponent implements OnInit, DoCheck {
   @Input() items: Array<TableItem>;
+  @Input() headers: Array<String>;
   @Output() buttonEvent: EventEmitter<TableButton> = new EventEmitter();
   visibleItems: Array<TableItem>;
-  headers: Array<String> = [];
   button1Active: Boolean = false;
   button2Active: Boolean = false;
   differ: any;
@@ -79,7 +79,7 @@ export class TableComponent implements OnInit, DoCheck {
   private _loadTable() {
     if (this.items) {
       this._translate();
-      this.headers = [];
+      // this.headers = [];
       this.visibleItems.forEach((item) => {
 
         if (item.button1) {
@@ -90,17 +90,17 @@ export class TableComponent implements OnInit, DoCheck {
           this.button2Active = true;
         }
 
-        Object.keys(item.obj).forEach((key) => {
-          let found = false;
-          this.headers.forEach((header) => {
-            if (header === key) {
-              found = true;
-            }
-          });
-          if (!found && key !== 'id') {
-            this.headers.push(key);
-          }
-        });
+        // Object.keys(item.obj).forEach((key) => {
+        //   let found = false;
+        //   this.headers.forEach((header) => {
+        //     if (header === key) {
+        //       found = true;
+        //     }
+        //   });
+        //   if (!found && key !== 'id') {
+        //     this.headers.push(key);
+        //   }
+        // });
       });
     } else {
       this.items = [];

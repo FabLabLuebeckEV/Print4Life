@@ -30,6 +30,7 @@ export class IotDeviceListComponent implements OnInit {
   private config: any;
   plusIcon: Icon;
   createLink: String;
+  headers: Array<String> = [];
 
   translationFields = {
     buttons: {
@@ -49,6 +50,7 @@ export class IotDeviceListComponent implements OnInit {
     private userService: UserService,
   ) {
     this.config = this.configService.getConfig();
+    this.headers = ['id', 'Device ID', 'Type'];
     this.router.events.subscribe(() => {
       const route = this.location.path();
       if (route === `/${routes.paths.frontend.iotDevices.root}` || route === `/${routes.paths.frontend.iotDevices.root}/`) {
@@ -86,6 +88,7 @@ export class IotDeviceListComponent implements OnInit {
     this.genericService.scrollIntoView(this.spinnerContainerRef);
     this.iotDevices = (await this.iotDeviceServices.getAllIotDevices())['iot-devices'];
     const arr = [];
+
     for (const iotDevice of this.iotDevices) {
       const item = new TableItem();
       item.obj['id'] = { label: iotDevice._id };
@@ -94,7 +97,7 @@ export class IotDeviceListComponent implements OnInit {
         href: (`/${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.detail}/`)
       };
       item.obj['Type'] = {
-        label: iotDevice.deviceType
+        label: iotDevice.deviceType && iotDevice.deviceType.id ? iotDevice.deviceType.id : ''
       };
       if (this.userIsLoggedIn &&
         (loggedInUser.role.role === 'user' || this.userIsAdmin || loggedInUser._id === iotDevice._id)) {
@@ -115,6 +118,22 @@ export class IotDeviceListComponent implements OnInit {
     this.visibleIotDevices = JSON.parse(JSON.stringify(arr));
     this.loadingIotDevices = false;
     this.spinner.hide();
+  }
+
+  eventHandler(event) {
+    if (event.label === this.translationFields.buttons.deleteLabel) {
+      let iotDevice: TableItem;
+      let iotDeviceIndex: number;
+      this.visibleIotDevices.forEach((item, index) => {
+        if (event.refId === item.button1.refId || event.refId === item.button2.refId) {
+          iotDevice = item;
+          iotDeviceIndex = index;
+        }
+      });
+      // show modal
+      // delete if modal success
+      // init
+    }
   }
 
   private _translate() {

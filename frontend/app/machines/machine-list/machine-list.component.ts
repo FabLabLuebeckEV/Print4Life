@@ -14,6 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'frontend/app/services/user.service';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { User } from 'frontend/app/models/user.model';
+import { headersToString } from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-machine-list',
@@ -106,6 +107,7 @@ export class MachineListComponent implements OnInit {
       deleteQuestion2: ''
     }
   };
+  headers: Array<String> = [];
 
 
   constructor(private machineService: MachineService,
@@ -125,10 +127,12 @@ export class MachineListComponent implements OnInit {
     this.searchIcon = this.config.icons.search;
     this.newLink = `./${routes.paths.frontend.machines.create}`;
     this.router.events.subscribe(() => {
+      this.headers = this._initHeaders();
       const route = this.location.path();
       if (route === `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}` && !this.successList) {
         this.successList = true;
         this.listView = false;
+        this.headers.push('Successful Orders');
         this.ngOnInit();
       } else if (!this.listView && route === `/${routes.paths.frontend.machines.root}`) {
         this.listView = true;
@@ -138,6 +142,10 @@ export class MachineListComponent implements OnInit {
         this.listView = false;
       }
     });
+  }
+
+  private _initHeaders(): Array<String> {
+    return ['id', 'Device Type', 'Device Name', 'Manufacturer', 'Fablab', 'Comment'];
   }
 
   async ngOnInit() {

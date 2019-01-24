@@ -9,7 +9,7 @@
 <div *ngIf="listView">
   <div class="row">
     <div class="col-md-12">
-      <app-table (buttonEvent)="eventHandler($event)" [items]="visibleIotDevices"></app-table>
+      <app-table (buttonEvent)="eventHandler($event)" [items]="visibleIotDevices" [headers]="headers"></app-table>
     </div>
   </div>
 </div>

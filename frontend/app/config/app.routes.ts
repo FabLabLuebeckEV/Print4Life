@@ -16,6 +16,7 @@ import { UserListComponent } from '../users/user-list/user-list.component';
 import { UserDetailComponent } from '../users/user-detail/user-detail.component';
 import { IotDeviceListComponent } from '../iot-devices/iot-device-list/iot-device-list.component';
 import { IotDeviceFormComponent } from '../iot-devices/iot-device-form/iot-device-form.component';
+import { IotDeviceDetailComponent } from '../iot-devices/iot-device-detail/iot-device-detail.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -59,7 +60,8 @@ export const appRoutes: Routes = [
         runGuardsAndResolvers: 'always',
         canActivate: [AuthGuard],
         children: [
-            { path: routes.paths.frontend.iotDevices.create, component: IotDeviceFormComponent }
+            { path: routes.paths.frontend.iotDevices.create, component: IotDeviceFormComponent },
+            { path: routes.paths.frontend.iotDevices.detail, component: IotDeviceDetailComponent }
         ]
     },
     {

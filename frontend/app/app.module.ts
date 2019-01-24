@@ -43,6 +43,7 @@ import { ngfModule } from 'angular-file';
 import { DatePickerTranslationService } from './services/datepicker-translation.service';
 import { IotDeviceListComponent } from './iot-devices/iot-device-list/iot-device-list.component';
 import { IotDeviceFormComponent } from './iot-devices/iot-device-form/iot-device-form.component';
+import { IotDeviceDetailComponent } from './iot-devices/iot-device-detail/iot-device-detail.component';
 
 @NgModule({
     declarations: [
@@ -68,6 +69,7 @@ import { IotDeviceFormComponent } from './iot-devices/iot-device-form/iot-device
         UploadComponent,
         IotDeviceListComponent,
         IotDeviceFormComponent,
+        IotDeviceDetailComponent,
     ],
     imports: [
         BrowserModule,

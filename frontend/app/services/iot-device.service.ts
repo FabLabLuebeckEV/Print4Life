@@ -28,6 +28,6 @@ export class IotDeviceService {
   }
 
   public getDevice(id: String): Promise<any> {
-    return this.http.get(`${this.rootPath}/:${id}`).toPromise();
+    return this.http.get(`${this.rootPath}/${id}`).toPromise();
   }
 }
