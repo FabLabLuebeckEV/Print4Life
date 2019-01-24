@@ -399,49 +399,94 @@ async function getAll (req: Request, res: Response) {
   if (user.error) {
     return res.status(400).send(user.error);
   }
-    try {
-      if (user && user.role && user.role.role) {
-        let iotDevices = await iotDeviceService.getAll({});
-        if (iotDevices) {
-          if (user.role.role !== 'admin' && user.iot && user.iot.devices && user.iot.devices.length) {
-            iotDevices = iotDevices.filter((device) => user.iot.devices.contains(device.id));
-            if (iotDevices.length) {
-              return res.status(200).send({ 'iot-devices': iotDevices });
-            }
-            return res.status(204).send();
+  try {
+    if (user && user.role && user.role.role) {
+      let iotDevices = await iotDeviceService.getAll({});
+      if (iotDevices) {
+        if (user.role.role !== 'admin' && user.iot && user.iot.devices && user.iot.devices.length) {
+          iotDevices = iotDevices.filter((device) => user.iot.devices.contains(device.id));
+          if (iotDevices.length) {
+            return res.status(200).send({ 'iot-devices': iotDevices });
           }
+          return res.status(204).send();
         }
-        return res.status(200).send({ 'iot-devices': iotDevices });
       }
-      error = {
-        name: 'FORBIDDEN',
-        message: 'User can not get iot devices!',
-        type: ErrorType.FORBIDDEN
-      };
-      logger.error(error);
-      return res.status(403).send(error);
-    } catch (err) {
-      error = {
-        name: 'SERVER_ERROR',
-        message: 'Error while trying to get all iot devices of user',
-        type: ErrorType.SERVER_ERROR,
-        stack: err.message
-      };
-      logger.error(error);
-      return res.status(400).send(error);
+      return res.status(200).send({ 'iot-devices': iotDevices });
     }
+    error = {
+      name: 'FORBIDDEN',
+      message: 'User can not get iot devices!',
+      type: ErrorType.FORBIDDEN
+    };
+    logger.error(error);
+    return res.status(403).send(error);
+  } catch (err) {
+    error = {
+      name: 'SERVER_ERROR',
+      message: 'Error while trying to get all iot devices of user',
+      type: ErrorType.SERVER_ERROR,
+      stack: err.message
+    };
+    logger.error(error);
+    return res.status(400).send(error);
   }
-  error = {
-    name: 'MALFORMED_REQUEST',
-    message: 'Malformed Request! Please provide a valid JWT Token on the Authorization Header',
-    type: ErrorType.MALFORMED_REQUEST
-  };
-  logger.error(error);
-  return res.status(400).send(error);
 }
 
 async function deleteById (req: Request, res: Response) {
-  return res.status(200).send(req);
+  let error: IError = {
+    name: 'SERVER_ERROR',
+    message: `Error while trying to delete the iot device with id ${req.params.id}`,
+    type: ErrorType.SERVER_ERROR
+  };
+  const user = await getUser(req);
+  if (!user || user.error) {
+    return user && user.error ? res.status(400).send(user.error) : res.status(400).send();
+  }
+  try {
+    if (req.params.id && user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token) {
+      let result = await iotDeviceService.get(req.params.id);
+      if (result) {
+        const watsonResult = await ibmWatsonService.deleteDevice(
+          result.deviceId, result.deviceType, { key: user.iot.auth.key, token: user.iot.auth.token }
+        );
+        if (watsonResult || watsonResult.success) {
+          result = await iotDeviceService.deleteById(req.params.id);
+          if (result) {
+            const users = await userService.getAll({ 'iot.devices': result.id });
+            if (users && users.length) {
+              users.forEach((user: any) => {
+                user.iot.devices = user.iot.devices.filter((device: any) => device !== result.id);
+                userService.update(user);
+              });
+            }
+            return res.status(200).send({ 'iot-device': result });
+          }
+          logger.error(error);
+          return res.status(500).send(error);
+        }
+        logger.error(error);
+        return res.status(500).send(error);
+      }
+      error = {
+        name: 'INVALID_ID',
+        message: `Could not delete iot device with id ${req.params.id}`,
+        type: ErrorType.INVALID_ID
+      };
+      logger.error(error);
+      return res.status(404).send(error);
+    }
+    error = {
+      name: 'MALFORMED_REQUEST',
+      message: 'Malformed Request! Please provide additionally to the valid JWT Token a valid iot device id',
+      type: ErrorType.MALFORMED_REQUEST
+    };
+    logger.error(error);
+    return res.status(400).send(error);
+  } catch (err) {
+    error.stack = err && err.message ? err.message : '';
+    logger.error(error);
+    return res.status(500).send(error);
+  }
 }
 
 /**
@@ -513,57 +558,57 @@ async function getDeviceTypes (req: Request, res: Response) {
   if (user.error) {
     return res.status(400).send(user.error);
   }
-    try {
-      if (user && user.iot && user.iot.auth && user.iot.auth.token && user.iot.auth.key) {
-        const result = await ibmWatsonService.getDeviceTypes({
-          key: config.ibmWatson.key, token: config.ibmWatson.token
-        });
-        if (result && result.results) {
-          if (!result.results.length) {
-            logger.info('No results of Device Types');
-            return res.status(204).send();
-          }
-          const deviceTypes = [];
-          let logString = '';
-          result.results.forEach((deviceType: any) => {
-            const newObj = {
-              id: deviceType.id,
-              classId: deviceType.classId,
-              createdDateTime: deviceType.createdDateTime,
-              updatedDateTime: deviceType.updatedDateTime
-            };
-            deviceTypes.push(newObj);
-            logString += `${JSON.stringify(newObj)}, `;
-          });
-          logger.info(`Result of Device Types: ${logString}`);
-          return res.status(200).send({ deviceTypes });
+  try {
+    if (user && user.iot && user.iot.auth && user.iot.auth.token && user.iot.auth.key) {
+      const result = await ibmWatsonService.getDeviceTypes({
+        key: config.ibmWatson.key, token: config.ibmWatson.token
+      });
+      if (result && result.results) {
+        if (!result.results.length) {
+          logger.info('No results of Device Types');
+          return res.status(204).send();
         }
-        error = {
-          name: 'SERVER_ERROR',
-          message: 'Error while trying to get the device types!',
-          type: ErrorType.SERVER_ERROR
-        };
-        logger.error(error);
-        return res.status(500).send(error);
+        const deviceTypes = [];
+        let logString = '';
+        result.results.forEach((deviceType: any) => {
+          const newObj = {
+            id: deviceType.id,
+            classId: deviceType.classId,
+            createdDateTime: deviceType.createdDateTime,
+            updatedDateTime: deviceType.updatedDateTime
+          };
+          deviceTypes.push(newObj);
+          logString += `${JSON.stringify(newObj)}, `;
+        });
+        logger.info(`Result of Device Types: ${logString}`);
+        return res.status(200).send({ deviceTypes });
       }
-      error = {
-        name: 'MALFORMED_REQUEST',
-        message: 'Malformed Request! JWT Token does not match a user or the user has no iot credentials!',
-        type: ErrorType.MALFORMED_REQUEST
-      };
-      logger.error(error);
-      return res.status(400).send(error);
-    } catch (err) {
       error = {
         name: 'SERVER_ERROR',
         message: 'Error while trying to get the device types!',
-        type: ErrorType.SERVER_ERROR,
-        stack: err.message
+        type: ErrorType.SERVER_ERROR
       };
       logger.error(error);
       return res.status(500).send(error);
     }
+    error = {
+      name: 'MALFORMED_REQUEST',
+      message: 'Malformed Request! JWT Token does not match a user or the user has no iot credentials!',
+      type: ErrorType.MALFORMED_REQUEST
+    };
+    logger.error(error);
+    return res.status(400).send(error);
+  } catch (err) {
+    error = {
+      name: 'SERVER_ERROR',
+      message: 'Error while trying to get the device types!',
+      type: ErrorType.SERVER_ERROR,
+      stack: err.message
+    };
+    logger.error(error);
+    return res.status(500).send(error);
   }
+}
 
 async function getUser (req: Request) {
   const error: IError = {
@@ -575,7 +620,11 @@ async function getUser (req: Request) {
     && typeof req.headers.authorization === 'string') {
     try {
       const token = req.headers.authorization.split('JWT')[1].trim();
-      return await userService.getUserByToken(token);
+      const user = await userService.getUserByToken(token);
+      if (user) {
+        return user;
+      }
+      return { error };
     } catch (err) {
       logger.error(error);
       return { error };
