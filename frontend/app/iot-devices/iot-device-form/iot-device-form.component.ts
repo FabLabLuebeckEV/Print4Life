@@ -16,7 +16,7 @@ import { UserService } from 'frontend/app/services/user.service';
 export class IotDeviceFormComponent implements OnInit {
   config: any;
   events: Array<Event> = [];
-  iotDevice: IotDevice = new IotDevice('', '', '', new DeviceType(''), '', '', this.events);
+  iotDevice: IotDevice = new IotDevice('', '', '', new DeviceType('', '', '', ''), '', '', this.events);
   deviceId: String = 'hello';
   deviceIdAlreadyTaken = true;
   loadingDeviceTypes: boolean;
@@ -76,7 +76,11 @@ export class IotDeviceFormComponent implements OnInit {
     this.loadingDeviceTypes = true;
     const result = await this.iotDeviceService.getDeviceTypes();
     if (result && result.deviceTypes) {
-      this.deviceTypes = result.deviceTypes;
+      this.deviceTypes = [];
+      result.deviceTypes.forEach((deviceType: { id: string, classId: string, createdDateTime: string, updatedDateTime: string }) => {
+        this.deviceTypes.push(new DeviceType(deviceType.id, deviceType.classId, deviceType.createdDateTime, deviceType.updatedDateTime));
+      }
+      );
     }
     this.loadingDeviceTypes = false;
   }

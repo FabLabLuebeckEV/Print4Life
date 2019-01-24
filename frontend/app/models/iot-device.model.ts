@@ -19,6 +19,9 @@ export class Event {
 
 export class DeviceType {
     constructor(
-        public name: String
+        public id: String,
+        public classId: String,
+        public createdDateTime: String,
+        public updatedDateTime: String
     ) { }
 }

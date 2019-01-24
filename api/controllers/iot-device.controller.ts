@@ -515,7 +515,7 @@ async function getDeviceTypes (req: Request, res: Response) {
       const user = await userService.getUserByToken(token);
       if (user && user.iot && user.iot.auth && user.iot.auth.token && user.iot.auth.key) {
         const result = await ibmWatsonService.getDeviceTypes({
-          key: user.iot.auth.key, token: user.iot.auth.token
+          key: config.ibmWatson.key, token: config.ibmWatson.token
         });
         if (result && result.results) {
           if (!result.results.length) {
