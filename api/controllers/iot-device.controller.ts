@@ -85,7 +85,7 @@ const ibmWatsonService = new IBMWatsonService();
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  */
-async function get(req: Request, res: Response) {
+async function get (req: Request, res: Response) {
   let error: IError;
   const user = await getUser(req);
   if (user.error) {
@@ -112,7 +112,7 @@ async function get(req: Request, res: Response) {
             logger.info(`GET iot device with result ${JSON.stringify(retIoTDevice)}`);
             return res.status(200).send({ 'iot-device': retIoTDevice });
           }
-          logger.info(`GET iot device with empty result`);
+          logger.info('GET iot device with empty result');
           return res.status(204).send();
         }
         error = {
@@ -256,7 +256,7 @@ async function get(req: Request, res: Response) {
     "timestamp": "2019-01-22T09:22:05.900Z"
 }
  */
-async function create(req: Request, res: Response) {
+async function create (req: Request, res: Response) {
   let error: IError;
   const user = await getUser(req);
   if (user.error) {
@@ -473,7 +473,7 @@ async function create(req: Request, res: Response) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  */
-async function getAll(req: Request, res: Response) {
+async function getAll (req: Request, res: Response) {
   let error: IError;
   const user = await getUser(req);
   if (user.error) {
@@ -489,7 +489,7 @@ async function getAll(req: Request, res: Response) {
             logger.info(`GET ALL iot devices with result ${JSON.stringify(iotDevices)}`);
             return res.status(200).send({ 'iot-devices': iotDevices });
           }
-          logger.info(`GET ALL iot devices with empty result`);
+          logger.info('GET ALL iot devices with empty result');
           return res.status(204).send();
         }
       }
@@ -587,7 +587,7 @@ async function getAll(req: Request, res: Response) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  */
-async function deleteById(req: Request, res: Response) {
+async function deleteById (req: Request, res: Response) {
   let error: IError = {
     name: 'SERVER_ERROR',
     message: `Error while trying to delete the iot device with id ${req.params.id}`,
@@ -726,7 +726,7 @@ async function deleteById(req: Request, res: Response) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  */
-async function search(req: Request, res: Response) {
+async function search (req: Request, res: Response) {
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   const user = await getUser(req);
   if (!user || user.error) {
@@ -837,7 +837,7 @@ async function search(req: Request, res: Response) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  */
-async function getDeviceTypes(req: Request, res: Response) {
+async function getDeviceTypes (req: Request, res: Response) {
   let error: IError;
   const user = await getUser(req);
   if (user.error) {
@@ -893,7 +893,7 @@ async function getDeviceTypes(req: Request, res: Response) {
   }
 }
 
-async function getUser(req: Request) {
+async function getUser (req: Request) {
   const error: IError = {
     name: 'MALFORMED_REQUEST',
     message: 'Malformed Request! Please provide a valid JWT Token on the Authorization Header',
