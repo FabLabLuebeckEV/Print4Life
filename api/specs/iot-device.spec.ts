@@ -1,6 +1,5 @@
 import 'jasmine';
 import * as request from 'request';
-import * as uuid from 'uuid/v4';
 import config from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
 
