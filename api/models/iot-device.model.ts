@@ -34,4 +34,6 @@ export const iotDeviceSchema = mongoose.Schema(attributes);
 
 export const IoTDevice = mongoose.model('IoTDevice', iotDeviceSchema);
 
+export const searchableTextFields = ['deviceId', 'deviceType'];
+
 export default IoTDevice;
