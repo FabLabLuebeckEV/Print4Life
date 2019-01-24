@@ -85,11 +85,12 @@ const ibmWatsonService = new IBMWatsonService();
  */
 async function get (req: Request, res: Response) {
   let error: IError;
-  if (req.params.id && req.headers && req.headers.authorization
-    && typeof req.headers.authorization === 'string') {
+  const user = await getUser(req);
+  if (user.error) {
+    return res.status(400).send(user.error);
+  }
+  if (req.params.id) {
     try {
-      const token = req.headers.authorization.split('JWT')[1].trim();
-      const user = await userService.getUserByToken(token);
       if (user && user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token) {
         const apiKey = {
           key: user.iot.auth.key,
@@ -253,12 +254,12 @@ async function get (req: Request, res: Response) {
  */
 async function create (req: Request, res: Response) {
   let error: IError;
-  if (req.headers && req.headers.authorization
-    && typeof req.headers.authorization === 'string'
-    && req.body.deviceType && req.body.deviceId && req.body.events && req.body.events.length) {
+  const user = await getUser(req);
+  if (user.error) {
+    return res.status(400).send(user.error);
+  }
+  if (req.body.deviceType && req.body.deviceId && req.body.events && req.body.events.length) {
     try {
-      const token = req.headers.authorization.split('JWT')[1].trim();
-      const user = await userService.getUserByToken(token);
       if (user) {
         if (!user.iot || !user.iot.auth || !user.iot.auth.key || !user.iot.auth.token) {
           const apiKey = await ibmWatsonService.createAPIKey(
@@ -384,8 +385,8 @@ async function create (req: Request, res: Response) {
   }
   error = {
     name: 'MALFORMED_REQUEST',
-    message: 'Malformed Request! Please provide a valid JWT Token on the Authorization Header,'
-      + 'and a body with deviceType, deviceId and events. See ApiDocs for more Information!',
+    message: 'Malformed Request! Please provide to the JWT Token '
+      + 'a body with deviceType, deviceId and events. See ApiDocs for more Information!',
     type: ErrorType.MALFORMED_REQUEST
   };
   logger.error(error);
@@ -394,11 +395,11 @@ async function create (req: Request, res: Response) {
 
 async function getAll (req: Request, res: Response) {
   let error: IError;
-  if (req.headers && req.headers.authorization
-    && typeof req.headers.authorization === 'string') {
+  const user = await getUser(req);
+  if (user.error) {
+    return res.status(400).send(user.error);
+  }
     try {
-      const token = req.headers.authorization.split('JWT')[1].trim();
-      const user = await userService.getUserByToken(token);
       if (user && user.role && user.role.role) {
         let iotDevices = await iotDeviceService.getAll({});
         if (iotDevices) {
@@ -508,11 +509,11 @@ async function deleteById (req: Request, res: Response) {
  */
 async function getDeviceTypes (req: Request, res: Response) {
   let error: IError;
-  if (req.headers && req.headers.authorization
-    && typeof req.headers.authorization === 'string') {
+  const user = await getUser(req);
+  if (user.error) {
+    return res.status(400).send(user.error);
+  }
     try {
-      const token = req.headers.authorization.split('JWT')[1].trim();
-      const user = await userService.getUserByToken(token);
       if (user && user.iot && user.iot.auth && user.iot.auth.token && user.iot.auth.key) {
         const result = await ibmWatsonService.getDeviceTypes({
           key: config.ibmWatson.key, token: config.ibmWatson.token
@@ -563,13 +564,25 @@ async function getDeviceTypes (req: Request, res: Response) {
       return res.status(500).send(error);
     }
   }
-  error = {
+
+async function getUser (req: Request) {
+  const error: IError = {
     name: 'MALFORMED_REQUEST',
     message: 'Malformed Request! Please provide a valid JWT Token on the Authorization Header',
     type: ErrorType.MALFORMED_REQUEST
   };
+  if (req.headers && req.headers.authorization
+    && typeof req.headers.authorization === 'string') {
+    try {
+      const token = req.headers.authorization.split('JWT')[1].trim();
+      return await userService.getUserByToken(token);
+    } catch (err) {
+      logger.error(error);
+      return { error };
+    }
+  }
   logger.error(error);
-  return res.status(400).send(error);
+  return { error };
 }
 
 export default {
