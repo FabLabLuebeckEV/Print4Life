@@ -17,7 +17,9 @@ import { User } from 'frontend/app/models/user.model';
 export class IotDeviceDetailComponent implements OnInit {
   config: any;
   deleteIcon: Icon;
-  iotDevice: IotDevice;
+  iotDevice: IotDevice = new IotDevice(
+    undefined, undefined, undefined, undefined, undefined, undefined, undefined
+  );
   private loggedInUser: User;
   userIsLoggedIn: boolean;
   translationFields = {

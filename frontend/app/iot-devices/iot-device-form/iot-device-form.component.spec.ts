@@ -1,14 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-
+import { BackButtonComponent } from '../../components/back-button/back-button.component';
 import { IotDeviceFormComponent } from './iot-device-form.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 describe('IotDeviceFormComponent', () => {
@@ -17,7 +17,10 @@ describe('IotDeviceFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [IotDeviceFormComponent],
+      declarations: [
+        IotDeviceFormComponent,
+        BackButtonComponent
+      ],
       providers: [TranslateService],
       imports: [
         RouterTestingModule,
