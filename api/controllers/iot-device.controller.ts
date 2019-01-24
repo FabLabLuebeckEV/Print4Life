@@ -131,7 +131,7 @@ async function get (req: Request, res: Response) {
         name: 'SERVER_ERROR',
         message: 'Error while trying to get the iot device!',
         type: ErrorType.SERVER_ERROR,
-        stack: err.message
+        stack: err && err.message ? err.message : ''
       };
       logger.error(error);
       return res.status(500).send(error);
@@ -294,7 +294,7 @@ async function create (req: Request, res: Response) {
                 name: 'SERVER_ERROR',
                 message: 'Error while trying to save the user!',
                 type: ErrorType.SERVER_ERROR,
-                stack: err.message
+                stack: err && err.message ? err.message : ''
               };
               logger.error(error);
               return res.status(500).send(error);
@@ -313,11 +313,22 @@ async function create (req: Request, res: Response) {
             logger.error(error);
             return res.status(400).send(error);
           }
-          const result = await ibmWatsonService.createDevice(
-            req.body.deviceType, req.body.deviceId, req.body.deviceInfo, {
-              key: user.iot.auth.key, token: user.iot.auth.token
-            }
-          );
+          let result;
+          try {
+            result = await ibmWatsonService.createDevice(
+              req.body.deviceType, req.body.deviceId, req.body.deviceInfo, {
+                key: user.iot.auth.key, token: user.iot.auth.token
+              }
+            );
+          } catch (err) {
+            error = {
+              name: 'IOT_DEVICE_EXISTS',
+              message: 'The IoT Device already exists. Please choose another DeviceId!',
+              type: ErrorType.IOT_DEVICE_EXISTS
+            };
+            logger.error(error);
+            return res.status(400).send(error);
+          }
           if (result) {
             const iotDevice = await iotDeviceService.create(
               {
@@ -341,7 +352,7 @@ async function create (req: Request, res: Response) {
                 name: 'SERVER_ERROR',
                 message: 'Error while trying to save the user!',
                 type: ErrorType.SERVER_ERROR,
-                stack: err.message
+                stack: err && err.message ? err.message : ''
               };
               logger.error(error);
               return res.status(500).send(error);
@@ -377,7 +388,7 @@ async function create (req: Request, res: Response) {
         name: 'SERVER_ERROR',
         message: 'Error while trying to create a new IoT Device!',
         type: ErrorType.SERVER_ERROR,
-        stack: err.message
+        stack: err && err.message ? err.message : ''
       };
       logger.error(error);
       return res.status(500).send(error);
@@ -393,6 +404,71 @@ async function create (req: Request, res: Response) {
   return res.status(400).send(error);
 }
 
+/**
+ * @api {get} /api/v1/iot-devices/ gets all iot devices of a user (admin gets all devices)
+ * @apiName getIoTDevices
+ * @apiVersion 1.0.0
+ * @apiGroup Iot-Devices
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
+ *
+ * @apiSuccess { Array } iot-devices the array of iot device objects, if successful
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "iot-devices": [
+        {
+            "username": "use-auth-token",
+            "_id": "5c499dc4c16fe74e7191c5bc",
+            "clientId": "d:tcccti:Sensor:Sensor-Test-26",
+            "deviceType": "Sensor",
+            "deviceId": "Sensor-Test-26",
+            "password": "5bq3vj6wb)Sq?JRNqk",
+            "events": [
+                {
+                    "topic": "Event_1",
+                    "dataformat": "json"
+                },
+                {
+                    "topic": "Event_2",
+                    "dataformat": "json"
+                }
+            ],
+            "__v": 0
+        }
+    ]
+}
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "name": "SERVER_ERROR",
+      "message": "Error while trying to get all iot devices of user",
+      "type": 13,
+      "stack": {...}, // optional
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 403 Forbidden
+  {
+      "name": "FORBIDDEN",
+      "message": "User can not get iot devices!",
+      "type": 12,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Request!Please provide a valid JWT Token on the Authorization Header",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ */
 async function getAll (req: Request, res: Response) {
   let error: IError;
   const user = await getUser(req);
@@ -425,13 +501,85 @@ async function getAll (req: Request, res: Response) {
       name: 'SERVER_ERROR',
       message: 'Error while trying to get all iot devices of user',
       type: ErrorType.SERVER_ERROR,
-      stack: err.message
+      stack: err && err.message ? err.message : ''
     };
     logger.error(error);
     return res.status(400).send(error);
   }
 }
 
+/**
+ * @api {delete} /api/v1/iot-devices/:id deletes an iot device
+ * @apiName deleteIotDevice
+ * @apiVersion 1.0.0
+ * @apiGroup Iot-Devices
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
+ *
+ * @apiSuccess { Object } iot-device is the iot device object, if successful
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "iot-device": {
+        "username": "use-auth-token",
+        "_id": "5c499dc4c16fe74e7191c5bc",
+        "clientId": "d:tcccti:Sensor:Sensor-Test-26",
+        "deviceType": "Sensor",
+        "deviceId": "Sensor-Test-26",
+        "password": "5bq3vj6wb)Sq?JRNqk",
+        "events": [
+            {
+                "topic": "Event_1",
+                "dataformat": "json"
+            },
+            {
+                "topic": "Event_2",
+                "dataformat": "json"
+            }
+        ],
+        "__v": 0
+    }
+}
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "name": "SERVER_ERROR",
+      "message": "Error while trying to delete the iot device with id 9999",
+      "type": 13,
+      "stack": {...}, // optional
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "name": "INVALID_ID",
+      "message": "Could not delete iot device with id 9999",
+      "type": 11,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Request!Please provide a valid JWT Token on the Authorization Header",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+     * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "  Malformed Request! Please provide additionally to the valid JWT Token a valid iot device id",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ */
 async function deleteById (req: Request, res: Response) {
   let error: IError = {
     name: 'SERVER_ERROR',
@@ -603,7 +751,7 @@ async function getDeviceTypes (req: Request, res: Response) {
       name: 'SERVER_ERROR',
       message: 'Error while trying to get the device types!',
       type: ErrorType.SERVER_ERROR,
-      stack: err.message
+      stack: err && err.message ? err.message : ''
     };
     logger.error(error);
     return res.status(500).send(error);

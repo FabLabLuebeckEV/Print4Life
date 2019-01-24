@@ -18,7 +18,7 @@ export class IBMWatsonService {
       },
       json: true
     }, (error, resp, body) => {
-      if (error) {
+      if (error || resp.statusCode >= 300) {
         return reject(error);
       }
       return resolve(body);
@@ -34,7 +34,7 @@ export class IBMWatsonService {
       },
       json: true
     }, (error, resp, body) => {
-      if (error) {
+      if (error || resp.statusCode >= 300) {
         return reject(error);
       }
       return resolve(body);
@@ -50,10 +50,10 @@ export class IBMWatsonService {
       },
       json: true
     }, (error, resp, body) => {
-      if (error) {
+      if (error || resp.statusCode >= 300) {
         return reject(error);
       }
-      return resolve(body);
+      return body ? resolve(body) : resolve([]);
     }));
   }
 
@@ -66,10 +66,10 @@ export class IBMWatsonService {
       },
       json: true
     }, (error, resp, body) => {
-      if (error) {
+      if (error || resp.statusCode >= 300) {
         return reject(error);
       }
-      return resolve(body);
+      return body ? resolve(body) : resolve({ success: true });
     }));
   }
 
@@ -82,10 +82,10 @@ export class IBMWatsonService {
       },
       json: true
     }, (error, resp, body) => {
-      if (error) {
+      if (error || resp.statusCode >= 300) {
         return reject(error);
       }
-      return resolve(body);
+      return body ? resolve(body) : resolve([]);
     }));
   }
 
@@ -102,7 +102,7 @@ export class IBMWatsonService {
       },
       json: true
     }, (error, resp, body) => {
-      if (error) {
+      if (error || resp.statusCode >= 300) {
         return reject(error);
       }
       return resolve(body);
@@ -118,10 +118,10 @@ export class IBMWatsonService {
       },
       json: true
     }, (error, resp, body) => {
-      if (error) {
+      if (error || resp.statusCode >= 300) {
         return reject(error);
       }
-      return resolve(body);
+      return body ? resolve(body) : resolve({ success: true });
     }));
   }
   /* eslint-enable class-methods-use-this */
