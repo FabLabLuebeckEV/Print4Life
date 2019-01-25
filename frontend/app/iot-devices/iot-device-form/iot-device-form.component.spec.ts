@@ -7,7 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -24,6 +24,7 @@ describe('IotDeviceFormComponent', () => {
       providers: [TranslateService],
       imports: [
         RouterTestingModule,
+        ReactiveFormsModule,
         HttpClientTestingModule,
         FormsModule,
         NgSelectModule,
