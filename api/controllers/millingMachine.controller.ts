@@ -406,12 +406,25 @@ function create (req, res) {
     "__v": 0
 }
  *
- * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
-{
-    "error": "Id needs to be a 24 character long hex string!"
-}
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
 
  * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
@@ -443,60 +456,63 @@ function create (req, res) {
  *
  *
  */
-function deleteById (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function deleteById (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    let millingMachine;
-    millingMachineService
-      .get(req.params.id).then((m) => {
-        if (m) {
-          millingMachine = m;
-          millingMachineService
-            .deleteById(req.params.id).then((result) => {
-              if (result) {
-                millingMachineService
-                  .get(req.params.id).then((result) => {
-                    if (result) {
-                      logger.info(`DELETE Milling Machine with result ${JSON.stringify(millingMachine)}`);
-                      res.status(200).send({
-                        millingMachine: result
-                      });
-                    }
-                  }).catch((err) => {
-                    const msg = {
-                      err: `Error while trying to get the Milling Machine by id ${req.params.id}`,
-                      stack: err
-                    };
-                    logger.error(msg);
-                    res.status(500).send(msg);
-                  });
-              } else {
-                const msg = {
-                  error: `Error while trying to delete the Milling Machine with id ${req.params.id}`
-                };
-                logger.error(msg);
-                res.status(500).send(msg);
-              }
-            }).catch((err) => {
-              const msg = { error: 'Malformed request!', stack: err };
-              logger.error(msg);
-              res.status(400).send(msg);
-            });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  let millingMachine;
+  try {
+    const m = await millingMachineService
+      .get(req.params.id);
+    if (m) {
+      millingMachine = m;
+      try {
+        let result = await millingMachineService
+          .deleteById(req.params.id);
+        if (result) {
+          try {
+            result = await millingMachineService
+              .get(req.params.id);
+            if (result) {
+              logger.info(`DELETE Milling Machine with result ${JSON.stringify(millingMachine)}`);
+              return res.status(200).send({
+                millingMachine: result
+              });
+            }
+            throw Error;
+          } catch (err) {
+            const msg = {
+              err: `Error while trying to get the Milling Machine by id ${req.params.id}`,
+              stack: err
+            };
+            logger.error(msg);
+            return res.status(500).send(msg);
+          }
         } else {
-          const msg = { error: `Milling Machine by id ${req.params.id} not found!` };
+          const msg = {
+            error: `Error while trying to delete the Milling Machine with id ${req.params.id}`
+          };
           logger.error(msg);
-          res.status(404).send(msg);
+          return res.status(500).send(msg);
         }
-      }).catch((err) => {
-        const msg = {
-          error: `Error while trying to get the Milling Machine by id ${req.params.id}`, stack: err
-        };
+      } catch (err) {
+        const msg = { error: 'Malformed request!', stack: err };
         logger.error(msg);
-        res.status(500).send(msg);
-      });
+        return res.status(400).send(msg);
+      }
+    } else {
+      const msg = { error: `Milling Machine by id ${req.params.id} not found!` };
+      logger.error(msg);
+      return res.status(404).send(msg);
+    }
+  } catch (err) {
+    const msg = {
+      error: `Error while trying to get the Milling Machine by id ${req.params.id}`, stack: err
+    };
+    logger.error(msg);
+    return res.status(500).send(msg);
   }
 }
 
@@ -529,12 +545,25 @@ function deleteById (req, res) {
         "__v": 0
     }
 }
- * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
-{
-    "error": "Id needs to be a 24 character long hex string!"
-}
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  * @apiError 404 The object was not found
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
@@ -544,30 +573,29 @@ function deleteById (req, res) {
  *
  *
  */
-function get (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function get (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    millingMachineService
-      .get(req.params.id).then((millingMachine) => {
-        if (!millingMachine
-        ) {
-          const msg = { error: `Milling Machine by id '${req.params.id}' not found` };
-          logger.error(msg);
-          res.status(404).send(msg);
-        } else {
-          logger.info(`GET Milling Machine by id with result ${JSON.stringify(millingMachine)}`);
-          res.status(200).send({
-            millingMachine
-          });
-        }
-      }).catch((err) => {
-        const msg = { error: 'Malformed request!', stack: err };
-        logger.error(msg);
-        res.status(400).send(msg);
-      });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const millingMachine = await millingMachineService
+      .get(req.params.id);
+    if (!millingMachine
+    ) {
+      const msg = { error: `Milling Machine by id '${req.params.id}' not found` };
+      logger.error(msg);
+      return res.status(404).send(msg);
+    }
+    logger.info(`GET Milling Machine by id with result ${JSON.stringify(millingMachine)}`);
+    return res.status(200).send({
+      millingMachine
+    });
+  } catch (err) {
+    const msg = { error: 'Malformed request!', stack: err };
+    logger.error(msg);
+    return res.status(400).send(msg);
   }
 }
 
@@ -625,12 +653,25 @@ function get (req, res) {
         "__v": 0
     }
 }
- * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
-{
-    "error": "Id needs to be a 24 character long hex string!"
-}
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
@@ -646,37 +687,35 @@ function get (req, res) {
  *
  *
  */
-function update (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function update (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else if (Object.keys(req.body).length === 0) {
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  } if (Object.keys(req.body).length === 0) {
     const msg = { error: 'No params to update given!' };
     logger.error(msg);
-    res.status(400).send(msg);
-  } else {
-    millingMachineService
-      .get(req.params.id).then((millingMachine) => {
-        if (!millingMachine
-        ) {
-          const msg = { error: `Milling Machine by id '${req.params.id}' not found` };
-          logger.error(msg);
-          res.status(404).send(msg);
-        } else {
-          millingMachineService
-            .update(req.params.id, req.body).then((millingMachine) => {
-              logger.info(`PUT Milling Machine with result ${JSON.stringify(millingMachine)}`);
-              res.status(200).send({
-                millingMachine
-              });
-            });
-        }
-      }).catch((err) => {
-        const msg = { error: 'Malformed request!', stack: err };
-        logger.error(msg);
-        res.status(400).send(msg);
-      });
+    return res.status(400).send(msg);
+  }
+  try {
+    let millingMachine = await millingMachineService
+      .get(req.params.id);
+    if (!millingMachine
+    ) {
+      const msg = { error: `Milling Machine by id '${req.params.id}' not found` };
+      logger.error(msg);
+      return res.status(404).send(msg);
+    }
+    millingMachine = await millingMachineService
+      .update(req.params.id, req.body);
+    logger.info(`PUT Milling Machine with result ${JSON.stringify(millingMachine)}`);
+    return res.status(200).send({
+      millingMachine
+    });
+  } catch (err) {
+    const msg = { error: 'Malformed request!', stack: err };
+    logger.error(msg);
+    return res.status(400).send(msg);
   }
 }
 
@@ -698,12 +737,25 @@ function update (req, res) {
     "machineId": "5b55f7bf3fe0c8b01713b3ee",
     "successfulOrders": 2
 }
- * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
-{
-    "error": "Id needs to be a 24 character long hex string!"
-}
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  * @apiError 500 Server Error
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Not Found
@@ -714,24 +766,23 @@ function update (req, res) {
  *
  */
 async function countSuccessfulOrders (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    try {
-      const successfulOrders = await machineService.countSuccessfulOrders(req.params.id);
-      const orders = [];
-      successfulOrders.forEach((order: { id: string, projectname: string }) => {
-        orders.push({ id: order.id, projectname: order.projectname });
-      });
-      logger.info(`Successful Orders of machine with id ${req.param.id}: ${successfulOrders}`);
-      res.status(200).send({ machineId: req.params.id, orders, successfulOrders: successfulOrders.length });
-    } catch (err) {
-      const msg = { error: `Could not get successful orders for machine Id ${req.param.id}!`, stack: err };
-      logger.error(msg);
-      res.status(500).send(msg);
-    }
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const successfulOrders = await machineService.countSuccessfulOrders(req.params.id);
+    const orders = [];
+    successfulOrders.forEach((order: { id: string, projectname: string }) => {
+      orders.push({ id: order.id, projectname: order.projectname });
+    });
+    logger.info(`Successful Orders of machine with id ${req.param.id}: ${successfulOrders}`);
+    return res.status(200).send({ machineId: req.params.id, orders, successfulOrders: successfulOrders.length });
+  } catch (err) {
+    const msg = { error: `Could not get successful orders for machine Id ${req.param.id}!`, stack: err };
+    logger.error(msg);
+    return res.status(500).send(msg);
   }
 }
 
@@ -789,27 +840,44 @@ async function countSuccessfulOrders (req, res) {
  *       "error": "Error while trying to get schedules of Milling Machine!"
  *     }
  *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  *
  */
 async function getSchedules (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    try {
-      const schedules = await machineService.getSchedules(req.params.id, req.query);
-      logger.info(`GET schedules for Milling Machine with result ${JSON.stringify(schedules)}`);
-      if (schedules.length) {
-        res.status(200).send({ schedules });
-      } else {
-        res.status(204).send();
-      }
-    } catch (err) {
-      const msg = { error: 'Error while trying to get schedules of Milling Machine!' };
-      logger.error({ msg, stack: err.stack });
-      res.status(500).send(msg);
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const schedules = await machineService.getSchedules(req.params.id, req.query);
+    logger.info(`GET schedules for Milling Machine with result ${JSON.stringify(schedules)}`);
+    if (schedules.length) {
+      return res.status(200).send({ schedules });
     }
+    return res.status(204).send();
+  } catch (err) {
+    const msg = { error: 'Error while trying to get schedules of Milling Machine!' };
+    logger.error({ msg, stack: err.stack });
+    return res.status(500).send(msg);
   }
 }
 

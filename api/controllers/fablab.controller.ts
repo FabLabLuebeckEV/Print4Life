@@ -99,25 +99,43 @@ function getAll (req, res) {
  *       "error": "Fablab by id '9999' not found"
  *     }
  *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
-function get (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function get (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    fablabService.get(req.params.id).then((fablab) => {
-      if (!fablab) {
-        logger.error({ error: `Fablab by id '${req.params.id}' not found` });
-        res.status(404).send({ error: `Fablab by id '${req.params.id}' not found` });
-      } else {
-        logger.info(`GET FablabById with result ${JSON.stringify(fablab)}`);
-        res.json({ fablab });
-      }
-    }).catch((err) => {
-      logger.error(err);
-      res.status(500).send(err);
-    });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const fablab = await fablabService.get(req.params.id);
+    if (!fablab) {
+      logger.error({ error: `Fablab by id '${req.params.id}' not found` });
+      return res.status(404).send({ error: `Fablab by id '${req.params.id}' not found` });
+    }
+    logger.info(`GET FablabById with result ${JSON.stringify(fablab)}`);
+    return res.json({ fablab });
+  } catch (err) {
+    logger.error(err);
+    return res.status(500).send(err);
   }
 }
 
@@ -240,34 +258,52 @@ function create (req, res) {
  *       "error": "Fablab by id '9999' not found"
  *     }
  *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  *
  */
-function update (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function update (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else if (Object.keys(req.body).length === 0) {
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  if (Object.keys(req.body).length === 0) {
     const msg = { error: 'No params to update given!' };
     logger.error(msg);
-    res.status(400).send(msg);
-  } else {
-    fablabService.get(req.params.id).then((fablab) => {
-      if (!fablab) {
-        const msg = { error: `Fablab by id '${req.params.id}' not found` };
-        logger.error(msg);
-        res.status(404).send(msg);
-      } else {
-        fablabService.update(req.params.id, req.body).then((fablab) => {
-          logger.info(`PUT Fablab with result ${JSON.stringify(fablab)}`);
-          res.status(200).send({ fablab });
-        });
-      }
-    }).catch((err) => {
-      const msg = { err: 'Malformed request!', stack: err };
+    return res.status(400).send(msg);
+  }
+  try {
+    let fablab = await fablabService.get(req.params.id);
+    if (!fablab) {
+      const msg = { error: `Fablab by id '${req.params.id}' not found` };
       logger.error(msg);
-      res.status(400).send(msg);
-    });
+      return res.status(404).send(msg);
+    }
+    fablab = await fablabService.update(req.params.id, req.body);
+    logger.info(`PUT Fablab with result ${JSON.stringify(fablab)}`);
+    return res.status(200).send({ fablab });
+  } catch (err) {
+    const msg = { err: 'Malformed request!', stack: err };
+    logger.error(msg);
+    return res.status(400).send(msg);
   }
 }
 
@@ -304,19 +340,40 @@ function update (req, res) {
           ...
       }
   }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
-function deleteById (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function deleteById (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    fablabService.deleteById(req.params.id).then((fablab) => {
-      logger.info(`DELETE Fablab with result ${JSON.stringify(fablab)}`);
-      res.status(200).send({ fablab });
-    }).catch((err) => {
-      logger.error({ error: 'Malformed Request!', stack: err });
-      res.status(400).send({ error: 'Malformed Request!', stack: err });
-    });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const fablab = await fablabService.deleteById(req.params.id);
+    logger.info(`DELETE Fablab with result ${JSON.stringify(fablab)}`);
+    return res.status(200).send({ fablab });
+  } catch (err) {
+    logger.error({ error: 'Malformed Request!', stack: err });
+    return res.status(400).send({ error: 'Malformed Request!', stack: err });
   }
 }
 

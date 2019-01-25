@@ -73,17 +73,25 @@ const ibmWatsonService = new IBMWatsonService();
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
-
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
   {
       "name": "MALFORMED_REQUEST",
-      "message": "Malformed Request! Please provide a valid JWT Token
-      in the Authorization header and an id of the iot device!",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
       "type": 14,
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
 async function get (req: Request, res: Response) {
   let error: IError;
@@ -91,64 +99,59 @@ async function get (req: Request, res: Response) {
   if (user.error) {
     return res.status(400).send(user.error);
   }
-  if (req.params.id) {
-    try {
-      if (user && user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token) {
-        const apiKey = {
-          key: user.iot.auth.key,
-          token: user.iot.auth.token
-        };
-        const iotDevice: any = await iotDeviceService.get(req.params.id);
-        if (iotDevice) {
-          const result = await ibmWatsonService.getDevice(iotDevice.deviceId, iotDevice.deviceType, apiKey);
-          if (result) {
-            const retIoTDevice = {
-              clientId: result.clientId,
-              deviceType: result.typeId,
-              deviceId: result.deviceId,
-              deviceInfo: result.deviceInfo,
-              events: iotDevice.events
-            };
-            logger.info(`GET iot device with result ${JSON.stringify(retIoTDevice)}`);
-            return res.status(200).send({ 'iot-device': retIoTDevice });
-          }
-          logger.info('GET iot device with empty result');
-          return res.status(204).send();
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
+  if (checkId) {
+    logger.error(error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    if (user && user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token) {
+      const apiKey = {
+        key: user.iot.auth.key,
+        token: user.iot.auth.token
+      };
+      const iotDevice: any = await iotDeviceService.get(req.params.id);
+      if (iotDevice) {
+        const result = await ibmWatsonService.getDevice(iotDevice.deviceId, iotDevice.deviceType, apiKey);
+        if (result) {
+          const retIoTDevice = {
+            clientId: result.clientId,
+            deviceType: result.typeId,
+            deviceId: result.deviceId,
+            deviceInfo: result.deviceInfo,
+            events: iotDevice.events
+          };
+          logger.info(`GET iot device with result ${JSON.stringify(retIoTDevice)}`);
+          return res.status(200).send({ 'iot-device': retIoTDevice });
         }
-        error = {
-          name: 'INVALID_ID',
-          message: 'Invalid ID! IoT Device not found!',
-          type: ErrorType.INVALID_ID
-        };
-        logger.error(error);
-        return res.status(404).send(error);
+        logger.info('GET iot device with empty result');
+        return res.status(204).send();
       }
       error = {
-        name: 'MALFORMED_REQUEST',
-        message: 'Malformed Request! JWT Token does not match a user or the user has no iot credentials!',
-        type: ErrorType.MALFORMED_REQUEST
+        name: 'INVALID_ID',
+        message: 'Invalid ID! IoT Device not found!',
+        type: ErrorType.INVALID_ID
       };
       logger.error(error);
-      return res.status(400).send(error);
-    } catch (err) {
-      error = {
-        name: 'SERVER_ERROR',
-        message: 'Error while trying to get the iot device!',
-        type: ErrorType.SERVER_ERROR,
-        stack: err && err.message ? err.message : ''
-      };
-      logger.error(error);
-      return res.status(500).send(error);
+      return res.status(404).send(error);
     }
+    error = {
+      name: 'MALFORMED_REQUEST',
+      message: 'Malformed Request! JWT Token does not match a user or the user has no iot credentials!',
+      type: ErrorType.MALFORMED_REQUEST
+    };
+    logger.error(error);
+    return res.status(400).send(error);
+  } catch (err) {
+    error = {
+      name: 'SERVER_ERROR',
+      message: 'Error while trying to get the iot device!',
+      type: ErrorType.SERVER_ERROR,
+      stack: err && err.message ? err.message : ''
+    };
+    logger.error(error);
+    return res.status(500).send(error);
   }
-  error = {
-    name: 'MALFORMED_REQUEST',
-    message: 'Malformed Request! Please provide a valid JWT Token'
-      + ' in the Authorization header and an id of the iot device!',
-    type: ErrorType.MALFORMED_REQUEST
-  };
-  logger.error(error);
-  return res.status(400).send(error);
 }
 
 /**
@@ -577,15 +580,35 @@ async function getAll (req: Request, res: Response) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
-     * @apiErrorExample {json} Error-Response:
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "FORBIDDEN",
+      "message": "  No valid iot credentials given!",
+      "type": 12,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+
+ * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
   {
       "name": "MALFORMED_REQUEST",
-      "message": "  Malformed Request! Please provide additionally to the valid JWT Token a valid iot device id",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
       "type": 14,
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
 async function deleteById (req: Request, res: Response) {
   let error: IError = {
@@ -593,12 +616,17 @@ async function deleteById (req: Request, res: Response) {
     message: `Error while trying to delete the iot device with id ${req.params.id}`,
     type: ErrorType.SERVER_ERROR
   };
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
+  if (checkId) {
+    logger.error(error);
+    return res.status(checkId.status).send(checkId.error);
+  }
   const user = await getUser(req);
   if (!user || user.error) {
     return user && user.error ? res.status(400).send(user.error) : res.status(400).send();
   }
   try {
-    if (req.params.id && user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token) {
+    if (user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token) {
       let result = await iotDeviceService.get(req.params.id);
       if (result) {
         const watsonResult = await ibmWatsonService.deleteDevice(
@@ -632,12 +660,12 @@ async function deleteById (req: Request, res: Response) {
       return res.status(404).send(error);
     }
     error = {
-      name: 'MALFORMED_REQUEST',
-      message: 'Malformed Request! Please provide additionally to the valid JWT Token a valid iot device id',
-      type: ErrorType.MALFORMED_REQUEST
+      name: 'FORBIDDEN',
+      message: 'No valid iot credentials given!',
+      type: ErrorType.FORBIDDEN
     };
     logger.error(error);
-    return res.status(400).send(error);
+    return res.status(403).send(error);
   } catch (err) {
     error.stack = err && err.message ? err.message : '';
     logger.error(error);

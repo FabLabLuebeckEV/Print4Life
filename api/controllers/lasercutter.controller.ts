@@ -329,12 +329,25 @@ function count (req, res) {
     "machineId": "5b55f7bf3fe0c8b01713b3ee",
     "successfulOrders": 2
 }
- * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
-{
-    "error": "Id needs to be a 24 character long hex string!"
-}
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  * @apiError 500 Server Error
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Not Found
@@ -345,24 +358,23 @@ function count (req, res) {
  *
  */
 async function countSuccessfulOrders (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    try {
-      const successfulOrders = await machineService.countSuccessfulOrders(req.params.id);
-      const orders = [];
-      successfulOrders.forEach((order: { id: string, projectname: string }) => {
-        orders.push({ id: order.id, projectname: order.projectname });
-      });
-      logger.info(`Successful Orders of machine with id ${req.param.id}: ${successfulOrders}`);
-      res.status(200).send({ machineId: req.params.id, orders, successfulOrders: successfulOrders.length });
-    } catch (err) {
-      const msg = { error: `Could not get successful orders for machine Id ${req.param.id}!`, stack: err };
-      logger.error(msg);
-      res.status(500).send(msg);
-    }
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const successfulOrders = await machineService.countSuccessfulOrders(req.params.id);
+    const orders = [];
+    successfulOrders.forEach((order: { id: string, projectname: string }) => {
+      orders.push({ id: order.id, projectname: order.projectname });
+    });
+    logger.info(`Successful Orders of machine with id ${req.param.id}: ${successfulOrders}`);
+    return res.status(200).send({ machineId: req.params.id, orders, successfulOrders: successfulOrders.length });
+  } catch (err) {
+    const msg = { error: `Could not get successful orders for machine Id ${req.param.id}!`, stack: err };
+    logger.error(msg);
+    return res.status(500).send(msg);
   }
 }
 
@@ -539,12 +551,25 @@ function create (req, res) {
     "__v": 0
 }
  *
- * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
-{
-    "error": "Id needs to be a 24 character long hex string!"
-}
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
 
  * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
@@ -576,49 +601,52 @@ function create (req, res) {
  *
  *
  */
-function deleteById (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function deleteById (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    lasercutterService.get(req.params.id).then((l) => {
-      if (l) {
-        lasercutterService.deleteById(req.params.id).then((result) => {
-          if (result) {
-            lasercutterService.get(req.params.id).then((result) => {
-              if (result) {
-                logger.info(`DELETE Lasercutter with result ${JSON.stringify(result)}`);
-                res.status(200).send({ lasercutter: result });
-              }
-            }).catch((err) => {
-              const msg = {
-                err: `Error while trying to get the Lasercutter by id ${req.params.id}`,
-                stack: err
-              };
-              logger.error(msg);
-              res.status(500).send(msg);
-            });
-          } else {
-            const msg = { error: `Error while trying to delete the Lasercutter with id ${req.params.id}` };
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const l = await lasercutterService.get(req.params.id);
+    if (l) {
+      try {
+        let result = await lasercutterService.deleteById(req.params.id);
+        if (result) {
+          try {
+            result = await lasercutterService.get(req.params.id);
+            if (result) {
+              logger.info(`DELETE Lasercutter with result ${JSON.stringify(result)}`);
+              return res.status(200).send({ lasercutter: result });
+            }
+            throw Error;
+          } catch (err) {
+            const msg = {
+              err: `Error while trying to get the Lasercutter by id ${req.params.id}`,
+              stack: err
+            };
             logger.error(msg);
-            res.status(500).send(msg);
+            return res.status(500).send(msg);
           }
-        }).catch((err) => {
-          const msg = { error: 'Malformed request!', stack: err };
+        } else {
+          const msg = { error: `Error while trying to delete the Lasercutter with id ${req.params.id}` };
           logger.error(msg);
-          res.status(400).send(msg);
-        });
-      } else {
-        const msg = { error: `Lasercutter by id ${req.params.id} not found!` };
+          return res.status(500).send(msg);
+        }
+      } catch (err) {
+        const msg = { error: 'Malformed request!', stack: err };
         logger.error(msg);
-        res.status(404).send(msg);
+        return res.status(400).send(msg);
       }
-    }).catch((err) => {
-      const msg = { error: `Error while trying to get the Lasercutter by id ${req.params.id}`, stack: err };
+    } else {
+      const msg = { error: `Lasercutter by id ${req.params.id} not found!` };
       logger.error(msg);
-      res.status(500).send(msg);
-    });
+      return res.status(404).send(msg);
+    }
+  } catch (err) {
+    const msg = { error: `Error while trying to get the Lasercutter by id ${req.params.id}`, stack: err };
+    logger.error(msg);
+    return res.status(500).send(msg);
   }
 }
 
@@ -656,12 +684,25 @@ function deleteById (req, res) {
         "__v": 0
     }
 }
- * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
-{
-    "error": "Id needs to be a 24 character long hex string!"
-}
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  * @apiError 404 The object was not found
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
@@ -671,26 +712,25 @@ function deleteById (req, res) {
  *
  *
  */
-function get (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function get (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    lasercutterService.get(req.params.id).then((lasercutter) => {
-      if (!lasercutter) {
-        const msg = { error: `Lasercutter by id '${req.params.id}' not found` };
-        logger.error(msg);
-        res.status(404).send(msg);
-      } else {
-        logger.info(`GET LasercutterById with result ${JSON.stringify(lasercutter)}`);
-        res.status(200).send({ lasercutter });
-      }
-    }).catch((err) => {
-      const msg = { error: 'Malformed request!', stack: err };
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const lasercutter = await lasercutterService.get(req.params.id);
+    if (!lasercutter) {
+      const msg = { error: `Lasercutter by id '${req.params.id}' not found` };
       logger.error(msg);
-      res.status(400).send(msg);
-    });
+      return res.status(404).send(msg);
+    }
+    logger.info(`GET LasercutterById with result ${JSON.stringify(lasercutter)}`);
+    return res.status(200).send({ lasercutter });
+  } catch (err) {
+    const msg = { error: 'Malformed request!', stack: err };
+    logger.error(msg);
+    return res.status(400).send(msg);
   }
 }
 
@@ -760,12 +800,25 @@ function get (req, res) {
         "__v": 0
     }
 }
- * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
-{
-    "error": "Id needs to be a 24 character long hex string!"
-}
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
@@ -781,32 +834,31 @@ function get (req, res) {
  *
  *
  */
-function update (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function update (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else if (Object.keys(req.body).length === 0) {
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  if (Object.keys(req.body).length === 0) {
     const msg = { error: 'No params to update given!' };
     logger.error(msg);
-    res.status(400).send(msg);
-  } else {
-    lasercutterService.get(req.params.id).then((lasercutter) => {
-      if (!lasercutter) {
-        const msg = { error: `Lasercutter by id '${req.params.id}' not found` };
-        logger.error(msg);
-        res.status(404).send(msg);
-      } else {
-        lasercutterService.update(req.params.id, req.body).then((lasercutter) => {
-          logger.info(`PUT Lasercutter with result ${JSON.stringify(lasercutter)}`);
-          res.status(200).send({ lasercutter });
-        });
-      }
-    }).catch((err) => {
-      const msg = { error: 'Malformed request!', stack: err };
+    return res.status(400).send(msg);
+  }
+  try {
+    let lasercutter = await lasercutterService.get(req.params.id);
+    if (!lasercutter) {
+      const msg = { error: `Lasercutter by id '${req.params.id}' not found` };
       logger.error(msg);
-      res.status(400).send(msg);
-    });
+      return res.status(404).send(msg);
+    }
+    lasercutter = await lasercutterService.update(req.params.id, req.body);
+    logger.info(`PUT Lasercutter with result ${JSON.stringify(lasercutter)}`);
+    return res.status(200).send({ lasercutter });
+  } catch (err) {
+    const msg = { error: 'Malformed request!', stack: err };
+    logger.error(msg);
+    return res.status(400).send(msg);
   }
 }
 
@@ -862,27 +914,44 @@ function update (req, res) {
  *       "error": "Error while trying to get schedules of Lasercutter!"
  *     }
  *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  *
  */
 async function getSchedules (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    try {
-      const schedules = await machineService.getSchedules(req.params.id, req.query);
-      logger.info(`GET schedules for Lasercutter with result ${JSON.stringify(schedules)}`);
-      if (schedules.length) {
-        res.status(200).send({ schedules });
-      } else {
-        res.status(204).send();
-      }
-    } catch (err) {
-      const msg = { error: 'Error while trying to get schedules of Lasercutter!' };
-      logger.error({ msg, stack: err.stack });
-      res.status(500).send(msg);
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const schedules = await machineService.getSchedules(req.params.id, req.query);
+    logger.info(`GET schedules for Lasercutter with result ${JSON.stringify(schedules)}`);
+    if (schedules.length) {
+      return res.status(200).send({ schedules });
     }
+    return res.status(204).send();
+  } catch (err) {
+    const msg = { error: 'Error while trying to get schedules of Lasercutter!' };
+    logger.error({ msg, stack: err.stack });
+    return res.status(500).send(msg);
   }
 }
 

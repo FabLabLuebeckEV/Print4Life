@@ -426,19 +426,39 @@ function create (req, res) {
           ...
       }
   }
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
-function update (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function update (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    orderService.update(req.body).then((order) => {
-      logger.info(`PUT Order with result ${JSON.stringify(order)}`);
-      res.status(200).send({ order });
-    }).catch((err) => {
-      logger.error({ error: 'Malformed update.', stack: err });
-      res.status(400).send({ error: 'Malformed update.', stack: err });
-    });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const order = await orderService.update(req.body);
+    logger.info(`PUT Order with result ${JSON.stringify(order)}`);
+    return res.status(200).send({ order });
+  } catch (err) {
+    logger.error({ error: 'Malformed update.', stack: err });
+    return res.status(400).send({ error: 'Malformed update.', stack: err });
   }
 }
 
@@ -488,19 +508,40 @@ function update (req, res) {
           ...
       }
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
-function deleteById (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function deleteById (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    orderService.deleteById(req.params.id).then((order) => {
-      logger.info(`DELETE Order with result ${JSON.stringify(order)}`);
-      res.status(200).send({ order });
-    }).catch((err) => {
-      logger.error({ error: 'Malformed Request!', stack: err });
-      res.status(400).send({ error: 'Malformed Request!', stack: err });
-    });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const order = await orderService.deleteById(req.params.id);
+    logger.info(`DELETE Order with result ${JSON.stringify(order)}`);
+    return res.status(200).send({ order });
+  } catch (err) {
+    logger.error({ error: 'Malformed Request!', stack: err });
+    return res.status(400).send({ error: 'Malformed Request!', stack: err });
   }
 }
 
@@ -652,24 +693,44 @@ function getOutstandingStatus (req, res) {
           ...
       }
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
-function createComment (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function createComment (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    orderService.createComment(req.params.id, { timestamp: new Date(), ...req.body }).then((comment) => {
-      if (!comment) {
-        logger.error({ error: `Could not find any Order with id ${req.params.id}` });
-        res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
-      } else {
-        logger.info(`POST comment with result ${JSON.stringify(comment)}`);
-        res.status(201).send({ comment });
-      }
-    }).catch((err) => {
-      logger.error({ error: 'Malformed Request! Could not add comment to order.', stack: err });
-      res.status(400).send({ error: 'Malformed Request! Could not add comment to order.', stack: err });
-    });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const comment = await orderService.createComment(req.params.id, { timestamp: new Date(), ...req.body });
+    if (!comment) {
+      logger.error({ error: `Could not find any Order with id ${req.params.id}` });
+      return res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
+    }
+    logger.info(`POST comment with result ${JSON.stringify(comment)}`);
+    return res.status(201).send({ comment });
+  } catch (err) {
+    logger.error({ error: 'Malformed Request! Could not add comment to order.', stack: err });
+    return res.status(400).send({ error: 'Malformed Request! Could not add comment to order.', stack: err });
   }
 }
 
@@ -729,24 +790,44 @@ function createComment (req, res) {
           ...
       }
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
-function get (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function get (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    orderService.get(req.params.id).then((order) => {
-      if (!order) {
-        logger.error({ error: `Could not find any Order with id ${req.params.id}` });
-        res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
-      } else {
-        logger.info(`GET Order with result ${JSON.stringify(order)}`);
-        res.status(200).send({ order });
-      }
-    }).catch((err) => {
-      logger.error({ error: `Error while trying to get Order with id ${req.params.id}`, stack: err });
-      res.status(500).send({ error: `Error while trying to get Order with id ${req.params.id}`, stack: err });
-    });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const order = await orderService.get(req.params.id);
+    if (!order) {
+      logger.error({ error: `Could not find any Order with id ${req.params.id}` });
+      return res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
+    }
+    logger.info(`GET Order with result ${JSON.stringify(order)}`);
+    return res.status(200).send({ order });
+  } catch (err) {
+    logger.error({ error: `Error while trying to get Order with id ${req.params.id}`, stack: err });
+    return res.status(500).send({ error: `Error while trying to get Order with id ${req.params.id}`, stack: err });
   }
 }
 
@@ -788,28 +869,45 @@ function get (req, res) {
  *     }
  *
  *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
 async function getSchedule (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    try {
-      const schedules = await scheduleService.getAll({ orderId: req.params.id }, '1', '0');
-      logger.info(`GET schedules for Order with result ${JSON.stringify(schedules)}`);
-      if (schedules.length) {
-        res.status(200).send({ schedule: schedules[0] });
-      } else {
-        const msg = 'No Schedule for Order found';
-        logger.info(msg);
-        res.status(204).send();
-      }
-    } catch (err) {
-      const msg = 'Error while trying to get schedules of Order!';
-      logger.error({ msg, stack: err.stack });
-      res.status(500).send({ error: msg });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const schedules = await scheduleService.getAll({ orderId: req.params.id }, '1', '0');
+    logger.info(`GET schedules for Order with result ${JSON.stringify(schedules)}`);
+    if (schedules.length) {
+      return res.status(200).send({ schedule: schedules[0] });
     }
+    const msg = 'No Schedule for Order found';
+    logger.info(msg);
+    return res.status(204).send();
+  } catch (err) {
+    const msg = 'Error while trying to get schedules of Order!';
+    logger.error({ msg, stack: err.stack });
+    return res.status(500).send({ error: msg });
   }
 }
 
@@ -862,14 +960,35 @@ async function getSchedule (req, res) {
           "type": "DOWNLOAD_FILE_ERROR"
         };
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
 async function downloadFile (req, res) {
   let err: IError;
   let file: any;
   let downloadStream: any;
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    return res.status(checkId.status).send({ error: checkId.error });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
   }
 
   try {
@@ -973,14 +1092,35 @@ async function downloadFile (req, res) {
           "type": "DELETE_FILE_ERROR"
         };
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
 async function deleteFile (req, res) {
   let err: IError;
   let order: any;
   let result: { order: any };
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    return res.status(checkId.status).send({ error: checkId.error });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
   }
 
   try {
@@ -1098,16 +1238,37 @@ async function deleteFile (req, res) {
           ...
       }
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
 function uploadFile (req, res) {
   const promises = [];
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (!req.files) {
     return res.status(400).send({ message: 'No files present' });
   }
 
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
   }
 
   req.files.forEach(async (file) => {

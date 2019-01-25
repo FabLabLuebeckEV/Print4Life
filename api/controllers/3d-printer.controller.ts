@@ -131,23 +131,25 @@ const machineService = new MachineService();
       ]
     }
  */
-function getAll (req, res) {
-  printer3DService.getAll(undefined, req.query.limit, req.query.skip).then((printers3d) => {
+async function getAll (req, res) {
+  try {
+    const printers3d = await printer3DService.getAll(undefined, req.query.limit, req.query.skip);
     if ((printers3d && printers3d.length === 0) || !printers3d) {
       logger.info('GET 3D Printers with no result');
-      res.status(204).send();
-    } else if (printers3d && req.query.limit && req.query.skip) {
+      return res.status(204).send();
+    } if (printers3d && req.query.limit && req.query.skip) {
       logger.info(`GET 3D Printers with partial result ${JSON.stringify(printers3d)}`);
-      res.status(206).send({ '3d-printers': printers3d });
-    } else if (printers3d) {
+      return res.status(206).send({ '3d-printers': printers3d });
+    } if (printers3d) {
       logger.info(`GET 3D Printers with result ${JSON.stringify(printers3d)}`);
-      res.status(200).send({ '3d-printers': printers3d });
+      return res.status(200).send({ '3d-printers': printers3d });
     }
-  }).catch((err) => {
+    throw Error;
+  } catch (err) {
     const msg = { error: 'Error while trying to get all printers', stack: err };
     logger.error(msg);
-    res.status(500).send(msg);
-  });
+    return res.status(500).send(msg);
+  }
 }
 
 /**
@@ -369,27 +371,45 @@ function count (req, res) {
  *       "error": "Could not get successful orders for machine Id 9999""
  *     }
  *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  *
  */
 async function countSuccessfulOrders (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    try {
-      const successfulOrders = await machineService.countSuccessfulOrders(req.params.id);
-      const orders = [];
-      successfulOrders.forEach((order: { id: string, projectname: string }) => {
-        orders.push({ id: order.id, projectname: order.projectname });
-      });
-      logger.info(`Successful Orders of machine with id ${req.param.id}: ${successfulOrders}`);
-      res.status(200).send({ machineId: req.params.id, orders, successfulOrders: successfulOrders.length });
-    } catch (err) {
-      const msg = { error: `Could not get successful orders for machine Id ${req.param.id}!`, stack: err };
-      logger.error(msg);
-      res.status(500).send(msg);
-    }
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const successfulOrders = await machineService.countSuccessfulOrders(req.params.id);
+    const orders = [];
+    successfulOrders.forEach((order: { id: string, projectname: string }) => {
+      orders.push({ id: order.id, projectname: order.projectname });
+    });
+    logger.info(`Successful Orders of machine with id ${req.param.id}: ${successfulOrders}`);
+    return res.status(200).send({ machineId: req.params.id, orders, successfulOrders: successfulOrders.length });
+  } catch (err) {
+    const msg = { error: `Could not get successful orders for machine Id ${req.param.id}!`, stack: err };
+    logger.error(msg);
+    return res.status(500).send(msg);
   }
 }
 
@@ -578,50 +598,73 @@ function create (req, res) {
 {
    "error": "Error while trying to delete the Printer with id 9999"
 }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  *
  *
  */
-function deleteById (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function deleteById (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    let printer3d;
-    printer3DService.get(req.params.id).then((p) => {
-      if (p) {
-        printer3d = p;
-        printer3DService.deleteById(req.params.id).then((result) => {
-          if (result) {
-            printer3DService.get(req.params.id).then((result) => {
-              if (result) {
-                logger.info(`DELETE 3D Printer with result ${JSON.stringify(printer3d)}`);
-                res.status(200).send({ '3d-printer': result });
-              }
-            }).catch((err) => {
-              const msg = { err: `Error while trying to get the 3D Printer by id ${req.params.id}`, stack: err };
-              logger.error(msg);
-              res.status(500).send(msg);
-            });
-          } else {
-            const msg = { err: `Error while trying to delete the 3D Printer with id ${req.params.id}` };
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  let printer3d;
+  try {
+    const p = await printer3DService.get(req.params.id);
+    if (p) {
+      printer3d = p;
+      try {
+        let result = await printer3DService.deleteById(req.params.id);
+        if (result) {
+          try {
+            result = await printer3DService.get(req.params.id);
+            if (result) {
+              logger.info(`DELETE 3D Printer with result ${JSON.stringify(printer3d)}`);
+              return res.status(200).send({ '3d-printer': result });
+            }
+            throw Error;
+          } catch (err) {
+            const msg = { err: `Error while trying to get the 3D Printer by id ${req.params.id}`, stack: err };
             logger.error(msg);
-            res.status(500).send(msg);
+            return res.status(500).send(msg);
           }
-        }).catch((err) => {
-          const msg = { err: 'Malformed request!', stack: err };
+        } else {
+          const msg = { err: `Error while trying to delete the 3D Printer with id ${req.params.id}` };
           logger.error(msg);
-          res.status(400).send(msg);
-        });
-      } else {
-        const msg = { err: `3D Printer by id ${req.params.id} not found!` };
+          return res.status(500).send(msg);
+        }
+      } catch (err) {
+        const msg = { err: 'Malformed request!', stack: err };
         logger.error(msg);
-        res.status(404).send(msg);
+        return res.status(400).send(msg);
       }
-    }).catch((err) => {
-      const msg = { err: `Error while trying to get the 3D Printer by id ${req.params.id}`, stack: err };
+    } else {
+      const msg = { err: `3D Printer by id ${req.params.id} not found!` };
       logger.error(msg);
-      res.status(500).send(msg);
-    });
+      return res.status(404).send(msg);
+    }
+  } catch (err) {
+    const msg = { err: `Error while trying to get the 3D Printer by id ${req.params.id}`, stack: err };
+    logger.error(msg);
+    return res.status(500).send(msg);
   }
 }
 
@@ -677,28 +720,46 @@ function deleteById (req, res) {
  *       "error": "Printer by id '9999' not found"
  *     }
  *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  *
  */
-function get (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function get (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    printer3DService.get(req.params.id).then((printer3d) => {
-      if (!printer3d) {
-        const msg = { error: `3D Printer by id '${req.params.id}' not found` };
-        logger.error(msg);
-        res.status(404).send(msg);
-      } else {
-        logger.info(`GET 3D Printer by Id with result ${JSON.stringify(printer3d)}`);
-        res.status(200).send({ '3d-printer': printer3d });
-      }
-    }).catch((err) => {
-      const msg = { err: 'Malformed request!', stack: err };
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const printer3d = await printer3DService.get(req.params.id);
+    if (!printer3d) {
+      const msg = { error: `3D Printer by id '${req.params.id}' not found` };
       logger.error(msg);
-      res.status(400).send(msg);
-    });
+      return res.status(404).send(msg);
+    }
+    logger.info(`GET 3D Printer by Id with result ${JSON.stringify(printer3d)}`);
+    return res.status(200).send({ '3d-printer': printer3d });
+  } catch (err) {
+    const msg = { err: 'Malformed request!', stack: err };
+    logger.error(msg);
+    return res.status(400).send(msg);
   }
 }
 
@@ -801,34 +862,52 @@ function get (req, res) {
  *       "error": "Printer by id '9999' not found"
  *     }
  *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  *
  */
-function update (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function update (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else if (Object.keys(req.body).length === 0) {
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  if (Object.keys(req.body).length === 0) {
     const msg = { error: 'No params to update given!' };
     logger.error(msg);
-    res.status(400).send(msg);
-  } else {
-    printer3DService.get(req.params.id).then((printer3d) => {
-      if (!printer3d) {
-        const msg = { error: `3D Printer by id '${req.params.id}' not found` };
-        logger.error(msg);
-        res.status(404).send(msg);
-      } else {
-        printer3DService.update(req.params.id, req.body).then((printer3d) => {
-          logger.info(`PUT 3D Printer with result ${JSON.stringify(printer3d)}`);
-          res.status(200).send({ '3d-printer': printer3d });
-        });
-      }
-    }).catch((err) => {
-      const msg = { err: 'Malformed request!', stack: err };
+    return res.status(400).send(msg);
+  }
+  try {
+    let printer3d = await printer3DService.get(req.params.id);
+    if (!printer3d) {
+      const msg = { error: `3D Printer by id '${req.params.id}' not found` };
       logger.error(msg);
-      res.status(400).send(msg);
-    });
+      return res.status(404).send(msg);
+    }
+    printer3d = await printer3DService.update(req.params.id, req.body);
+    logger.info(`PUT 3D Printer with result ${JSON.stringify(printer3d)}`);
+    return res.status(200).send({ '3d-printer': printer3d });
+  } catch (err) {
+    const msg = { err: 'Malformed request!', stack: err };
+    logger.error(msg);
+    return res.status(400).send(msg);
   }
 }
 
@@ -884,27 +963,44 @@ function update (req, res) {
  *       "error": "Error while trying to get schedules of 3D-Printer!"
  *     }
  *
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  *
  */
 async function getSchedules (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error({ error: checkId.error });
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    try {
-      const schedules = await machineService.getSchedules(req.params.id, req.query);
-      logger.info(`GET schedules for 3D-Printer with result ${JSON.stringify(schedules)}`);
-      if (schedules.length) {
-        res.status(200).send({ schedules });
-      } else {
-        res.status(204).send();
-      }
-    } catch (err) {
-      const msg = { error: 'Error while trying to get schedules of 3D-Printer!' };
-      logger.error({ msg, stack: err.stack });
-      res.status(500).send(msg);
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const schedules = await machineService.getSchedules(req.params.id, req.query);
+    logger.info(`GET schedules for 3D-Printer with result ${JSON.stringify(schedules)}`);
+    if (schedules.length) {
+      return res.status(200).send({ schedules });
     }
+    return res.status(204).send();
+  } catch (err) {
+    const msg = { error: 'Error while trying to get schedules of 3D-Printer!' };
+    logger.error({ msg, stack: err.stack });
+    return res.status(500).send(msg);
   }
 }
 

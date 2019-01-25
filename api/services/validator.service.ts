@@ -1,7 +1,9 @@
 import * as mongoose from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 import config from '../config/config';
-import routerService from './router.service';
+/* eslint-disable no-unused-vars */
+import routerService, { ErrorType, IError } from './router.service';
+/* eslint-enable no-unused-vars */
 
 export interface TokenCheck {
   tokenOk: boolean;
@@ -53,14 +55,33 @@ function checkQuery (query: any, fields?: Array<String>) {
   return query;
 }
 
-function checkId (id: string) {
+function checkId (id: string): { status: number, error: IError } {
   let retObj;
-  const valid = mongoose.Types.ObjectId.isValid(id);
-  if (!valid) {
-    retObj = { status: 400, error: 'Malformed Id! Check if id is a 24 character long hex string!' };
+  if (id) {
+    const valid = mongoose.Types.ObjectId.isValid(id);
+    if (!valid) {
+      retObj = {
+        status: 400,
+        error: {
+          name: 'MALFORMED_REQUEST',
+          message: 'Malformed Id! Check if id is a 24 character long hex string!',
+          type: ErrorType.MALFORMED_REQUEST
+        }
+      };
+    } else {
+      retObj = undefined;
+    }
   } else {
-    retObj = undefined;
+    retObj = {
+      status: 400,
+      error: {
+        name: 'MALFORMED_REQUEST',
+        message: 'Malformed Id! Please provide a valid id!',
+        type: ErrorType.MALFORMED_REQUEST
+      }
+    };
   }
+
   return retObj;
 }
 
