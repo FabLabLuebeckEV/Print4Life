@@ -4,7 +4,7 @@ import { NgbModule, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { HttpInterceptorService } from './services/credential.interceptor.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
@@ -72,6 +72,7 @@ import { IotDeviceDetailComponent } from './iot-devices/iot-device-detail/iot-de
         IotDeviceDetailComponent,
     ],
     imports: [
+        ReactiveFormsModule,
         BrowserModule,
         NgxSpinnerModule,
         NgSelectModule,

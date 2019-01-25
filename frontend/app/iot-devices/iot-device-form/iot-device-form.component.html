@@ -14,7 +14,7 @@
         <div class="col-md-12">
           <label for="deviceId">{{translationFields.labels.deviceId}}</label>
           <input type="text" class="form-control" id="deviceId" required [(ngModel)]="iotDevice.deviceId" name="deviceId"
-            (ngModelChange)="checkUniqueness($event)" #deviceId="ngModel">
+            #deviceId="ngModel">
           <div [hidden]="deviceId.valid || deviceId.pristine" class="alert alert-danger">
             {{translationFields.messages.deviceId}}
           </div>
@@ -31,7 +31,32 @@
           </ng-select>
         </div>
       </div>
+      <form class="form-group row" [formGroup]="eventFormGroup">
+        <div formArrayName="events">
+          <div *ngFor="let item of events.controls; let eventIndex=index;" [formGroupName]="eventIndex" class="form-group row">
+            <div class="col-md-2">
+              Event {{eventIndex+1}}
+            </div>
+            <div class="col-md-4">
+              <input class="form-control" type="text" formControlName="topic" />
+            </div>
+            <div class="col-md-4">
+              <input class="form-control" type="text" formControlName="dataformat" />
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-danger" (click)="deleteEvent(eventIndex)">
+                <fa-icon [icon]="deleteIcon"></fa-icon>
+              </button>
+            </div>
+          </div>
+          <button class="btn btn-success" (click)="addEvent()">
+            <fa-icon [icon]="plusIcon"></fa-icon>
+          </button>
+        </div>
+      </form>
       <button type="submit" class="btn btn-success spacing-top" [disabled]="!createIotDeviceForm.form.valid">{{translationFields.labels.submit}}</button>
     </form>
   </div>
 </div>
+
+{{ this.eventFormGroup.value.events | json }}

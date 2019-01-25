@@ -12,7 +12,7 @@ export class IotDevice {
 
 export class Event {
     constructor(
-        public format: String,
+        public dataformat: String,
         public topic: String
     ) { }
 }
