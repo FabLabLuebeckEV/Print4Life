@@ -2,6 +2,7 @@ import 'jasmine';
 import * as request from 'request';
 import config from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
+import { ErrorType } from '../services/router.service';
 
 const endpoint = config.baseUrlBackend;
 
@@ -24,6 +25,7 @@ describe('IoT Device Controller', () => {
   afterEach(() => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   });
+
   it('gets iot devices', (done) => {
     request.get(`${endpoint}iot-devices/`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
@@ -57,18 +59,63 @@ describe('IoT Device Controller', () => {
   });
 
   it('search iot devices', (done) => {
-    request.post(`${endpoint}iot-devices/search`, {
+    const testBody = JSON.parse(JSON.stringify(testIoTDevice));
+    let id = '';
+    testBody.deviceId += (Math.random() * 1000 + 1).toString().replace('.', '-');
+    request({
+      uri: `${endpoint}iot-devices/`,
+      method: 'POST',
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
-      body: { query: { $and: [{ $text: { $search: 'Sensor' } }] } }
+      body: testBody
     }, (error, response) => {
-      const { iotDevices } = { iotDevices: response.body['iot-devices'] };
-      expect(response.statusCode).toEqual(200);
-      expect(iotDevices).toBeDefined();
-      expect(iotDevices.length).toBeGreaterThan(-1);
-      if (iotDevices.length > 0) {
-        expect(iotDevices[0].deviceId).toContain('Sensor');
-      }
+      const { iotDevice } = { iotDevice: response.body['iot-device'] };
+      expect(iotDevice).toBeDefined();
+      expect(iotDevice._id).toBeDefined();
+      id = iotDevice._id;
+      request.post(`${endpoint}iot-devices/search`, {
+        headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+        json: true,
+        body: { query: { $and: [{ $text: { $search: 'Sensor' } }] } }
+      }, (error, response) => {
+        const { iotDevices } = { iotDevices: response.body['iot-devices'] };
+        expect(response.statusCode).toEqual(200);
+        expect(iotDevices).toBeDefined();
+        expect(iotDevices.length).toBeGreaterThan(-1);
+        if (iotDevices.length > 0) {
+          expect(iotDevices[0].deviceId).toContain('Sensor');
+        }
+        deleteDevice(testBody, id, authorizationHeader, done);
+      });
+    });
+  });
+
+  it('create iot device (deviceId missing)', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testIoTDevice));
+    delete testBody.deviceId;
+    request.post(`${endpoint}/iot-devices/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testBody,
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      expect(response.body.type).toBeDefined();
+      expect(response.body.type).toEqual(ErrorType.MALFORMED_REQUEST);
+      done();
+    });
+  });
+
+  it('create iot device (deviceType missing)', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testIoTDevice));
+    delete testBody.deviceType;
+    request.post(`${endpoint}/iot-devices/`, {
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      body: testBody,
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      expect(response.body.type).toBeDefined();
+      expect(response.body.type).toEqual(ErrorType.MALFORMED_REQUEST);
       done();
     });
   });
@@ -95,6 +142,34 @@ describe('IoT Device Controller', () => {
         expect(event.dataformat).toEqual(testIoTDevice.events[idx].dataformat);
       });
       deleteDevice(testBody, iotDeviceResult._id, authorizationHeader, done);
+    });
+  });
+
+  it('get iot device by id (invalid id)', (done) => {
+    request({
+      uri: `${endpoint}iot-devices/123456789123456789asdfgh`,
+      method: 'GET',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      expect(response.body.type).toBeDefined();
+      expect(response.body.type).toEqual(ErrorType.MALFORMED_REQUEST);
+      done();
+    });
+  });
+
+  it('get iot device by id (wrong id)', (done) => {
+    request({
+      uri: `${endpoint}iot-devices/5c4b5318b9b20c5fb04ae084`,
+      method: 'GET',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(404);
+      expect(response.body.type).toBeDefined();
+      expect(response.body.type).toEqual(ErrorType.INVALID_ID);
+      done();
     });
   });
 
@@ -130,9 +205,36 @@ describe('IoT Device Controller', () => {
       });
     });
   });
+  it('delete iot device by id (invalid id)', (done) => {
+    request({
+      uri: `${endpoint}iot-devices/123456789123456789asdfgh`,
+      method: 'DELETE',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(400);
+      expect(response.body.type).toBeDefined();
+      expect(response.body.type).toEqual(ErrorType.MALFORMED_REQUEST);
+      done();
+    });
+  });
+
+  it('delete iot device by id (wrong id)', (done) => {
+    request({
+      uri: `${endpoint}iot-devices/5c4b5318b9b20c5fb04ae084`,
+      method: 'DELETE',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true
+    }, (error, response) => {
+      expect(response.statusCode).toEqual(404);
+      expect(response.body.type).toBeDefined();
+      expect(response.body.type).toEqual(ErrorType.INVALID_ID);
+      done();
+    });
+  });
 });
 
-function deleteDevice (testBody, id, authorizationHeader, done) {
+function deleteDevice (testBody: { deviceId: string }, id: string, authorizationHeader: any, done: Function) {
   request({
     uri: `${endpoint}iot-devices/${id}`,
     method: 'DELETE',
