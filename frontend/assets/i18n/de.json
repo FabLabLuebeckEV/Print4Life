@@ -352,6 +352,15 @@
         "messages": {
             "deviceId": "Der Name ist nicht gesetzt.",
             "deviceId2": "Der Name ist bereits vergeben."
+        },
+        "modals": {
+            "ok": "Okay",
+            "errorHeader": "Fehler",
+            "successHeader": "MQTT Zugangsdaten",
+            "username": "Benutzername",
+            "password": "Passwort",
+            "dataformat": "Datenformat",
+            "saveHint": "Verwende die folgenden Daten für dein Gerät:"
         }
     },
     "orderForm": {

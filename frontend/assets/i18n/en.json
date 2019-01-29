@@ -352,6 +352,15 @@
         "messages": {
             "deviceId": "The given device name is not set.",
             "deviceId2": "The given device name has already been taken."
+        },
+        "modals": {
+            "ok": "Okay",
+            "errorHeader": "Error",
+            "successHeader": "MQTT Auth. Data",
+            "username": "Username",
+            "password": "Password",
+            "dataformat": "Dataformat",
+            "saveHint": "Use the following logindata with your device:"
         }
     },
     "orderForm": {
