@@ -1,14 +1,14 @@
 <table class="table table-striped table-spacing">
   <thead>
     <tr>
-      <th *ngFor="let header of headers" scope="col">{{header}}</th>
+      <th *ngFor="let header of visibleHeaders" scope="col">{{header}}</th>
       <th *ngIf="button1Active" scope="col"></th>
       <th *ngIf="button2Active" scope="col"></th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let item of visibleItems">
-      <td *ngFor="let header of headers" class="align-middle">
+      <td *ngFor="let header of visibleHeaders" class="align-middle">
         <a *ngIf="item.obj[header].href && !item.obj[header].badge" [routerLink]="item.obj[header].href">{{item.obj[header].label}}</a>
         <span *ngIf="!item.obj[header].href && !item.obj[header].badge">{{item.obj[header].label}}</span>
         <span *ngIf="item.obj[header].badge && !item.obj[header].href" [class]="item.obj[header].class">{{item.obj[header].label}}</span>

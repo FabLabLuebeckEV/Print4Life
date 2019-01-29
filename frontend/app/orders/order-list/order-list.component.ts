@@ -184,12 +184,12 @@ export class OrderListComponent implements OnInit {
 
   async init() {
     const promises = [];
+    this.spinner.show();
     const loggedInUser = await this.userService.getUser();
     this.loadingOrders = true;
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
     this.orders = new Array();
     this.visibleOrders = undefined;
-    this.spinner.show();
     this.genericService.scrollIntoView(this.spinnerContainerRef);
     let countObj;
     let totalItems = 0;
@@ -419,10 +419,10 @@ export class OrderListComponent implements OnInit {
         this.orders = [].concat(arr);
         this.visibleOrders = undefined;
         this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+        this.spinner.hide();
       }));
     }
     this.loadingOrders = false;
-    this.spinner.hide();
   }
 
   // Event Handler
