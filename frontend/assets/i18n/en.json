@@ -541,6 +541,9 @@
         }
     },
     "tableComponent": {
+        "id": "ID",
+        "Device ID": "Device ID",
+        "Type": "Type",
         "Device Type": "Device Type",
         "Device Name": "Device Name",
         "Manufacturer": "Manufacturer",

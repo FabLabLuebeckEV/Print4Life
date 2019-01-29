@@ -28,6 +28,7 @@ export class UserListComponent implements OnInit {
   private loadingFablabs: Boolean;
   private users: Array<TableItem> = [];
   private visibleUsers: Array<TableItem> = [];
+  headers: Array<String>;
   spinnerConfig: SpinnerConfig;
   jumpArrow: Icon;
   searchIcon: Icon;
@@ -93,6 +94,7 @@ export class UserListComponent implements OnInit {
     this.config = this.configService.getConfig();
     this.jumpArrow = this.config.icons.forward;
     this.searchIcon = this.config.icons.search;
+    this.headers = ['id', 'Username', 'Firstname', 'Lastname', 'Fablab', 'Role', 'Active'];
     this.router.events.subscribe(() => {
       const route = this.location.path();
       if (route === `/${routes.paths.frontend.users.root}` && !this.listView) {

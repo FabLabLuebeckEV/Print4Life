@@ -14,7 +14,6 @@ import { GenericService } from 'frontend/app/services/generic.service';
 import { UserService } from 'frontend/app/services/user.service';
 import { ModalButton, MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { async } from 'q';
 
 @Component({
   selector: 'app-iot-device-list',
@@ -90,6 +89,7 @@ export class IotDeviceListComponent implements OnInit {
       });
       this.userIsLoggedIn = await this.userService.isLoggedIn();
       this.userIsAdmin = await this.userService.isAdmin();
+      this.init();
     }
   }
 

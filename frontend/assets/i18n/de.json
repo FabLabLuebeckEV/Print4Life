@@ -541,6 +541,9 @@
         }
     },
     "tableComponent": {
+        "id": "ID",
+        "Device ID": "Gerät ID",
+        "Type": "Typ",
         "Device Type": "Maschinen Typ",
         "Device Name": "Maschinen Name",
         "Manufacturer": "Hersteller",
