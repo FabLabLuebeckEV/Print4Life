@@ -25,7 +25,8 @@ export class User {
         public role: Role,
         public preferredLanguage: Language,
         public activated: boolean,
-        public fablabId: String
+        public fablabId: String,
+        public iot: Array<String>
     ) { }
 }
 

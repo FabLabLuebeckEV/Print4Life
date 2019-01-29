@@ -487,7 +487,7 @@ async function getAll (req: Request, res: Response) {
       let iotDevices = await iotDeviceService.getAll({});
       if (iotDevices) {
         if (user.role.role !== 'admin' && user.iot && user.iot.devices && user.iot.devices.length) {
-          iotDevices = iotDevices.filter((device) => user.iot.devices.contains(device.id));
+          iotDevices = iotDevices.filter((device) => user.iot.devices.includes(device.id));
           if (iotDevices.length) {
             logger.info(`GET ALL iot devices with result ${JSON.stringify(iotDevices)}`);
             return res.status(200).send({ 'iot-devices': iotDevices });

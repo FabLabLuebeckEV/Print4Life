@@ -342,6 +342,15 @@
         "city": "Stadt",
         "country": "Land"
     },
+    "iotDeviceDetail": {
+        "labels": {
+            "deviceId": "Gerätename",
+            "mqttHeader": "MQTT Zugangsdaten",
+            "username": "Benutzername",
+            "password": "Passwort",
+            "dataformat": "Datenformat"
+        }
+    },
     "iotDevicesForm": {
         "createTitle": "IoT Gerät hinzufügen",
         "labels": {

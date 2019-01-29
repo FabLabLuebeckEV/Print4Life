@@ -4,16 +4,51 @@
   </div>
   <div class="col-md-3 col-xl-2">
     <app-back-button class="spacing-right-xs"></app-back-button>
-    <button *ngIf="userIsLoggedIn 
-    && loggedInUser 
-    && (loggedInUser 
-    && loggedInUser._id 
-    && owner && owner._id 
-    && loggedInUser._id === owner._id || loggedInUser.role 
-    && loggedInUser.role.role 
-    && loggedInUser.role.role === 'admin')"
-      (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
+    <button *ngIf="true" (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
       <fa-icon [icon]="deleteIcon"></fa-icon>
     </button>
+  </div>
+  <div class="row spacing text-center">
+    <div class="col-md-6">
+      {{translationFields.labels.deviceId}}
+    </div>
+    <div class="col-md-6">
+      {{iotDevice.deviceId}}
+    </div>
+  </div>
+  <div class="row spacing text-center">
+    <div class="col-md-6">
+      {{translationFields.labels.mqttHeader}}
+    </div>
+    <div class="col-md-6">
+
+    </div>
+  </div>
+  <div class="row spacing text-center">
+    <div class="col-md-6">
+      {{translationFields.labels.username}}
+    </div>
+    <div class="col-md-6">
+      {{iotDevice.username}}
+    </div>
+  </div>
+  <div class="row spacing text-center">
+    <div class="col-md-6">
+      {{translationFields.labels.password}}
+    </div>
+    <div class="col-md-6">
+      {{iotDevice.password}}
+    </div>
+  </div>
+  <div *ngFor="let event of iotDevice.events; let i = index" class="row spacing text-center">
+    <div class="col-md-4">
+      {{i}}. Event
+    </div>
+    <div class="col-md-4">
+      {{iotDevice.events[i].topic}}
+    </div>
+    <div class="col-md-4">
+      {{iotDevice.events[i].dataformat}}
+    </div>
   </div>
 </div>

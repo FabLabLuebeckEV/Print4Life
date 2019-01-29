@@ -130,6 +130,15 @@
         "editor": "editor",
         "admin": "admin"
     },
+    "iotDeviceDetail": {
+        "labels": {
+            "deviceId": "Devicename",
+            "mqttHeader": "MQTT Auth. Data",
+            "username": "Username",
+            "password": "Password",
+            "dataformat": "Dataformat"
+        }
+    },
     "iotDeviceList": {
         "spinnerLoadingText": "Loading IoT Devices",
         "buttons": {

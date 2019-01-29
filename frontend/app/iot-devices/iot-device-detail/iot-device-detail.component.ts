@@ -23,7 +23,13 @@ export class IotDeviceDetailComponent implements OnInit {
   private loggedInUser: User;
   userIsLoggedIn: boolean;
   translationFields = {
-
+    labels: {
+      deviceId: '',
+      mqttHeader: '',
+      username: '',
+      password: '',
+      dataformat: '',
+    }
   };
 
   constructor(
@@ -54,11 +60,25 @@ export class IotDeviceDetailComponent implements OnInit {
       });
   }
 
+  userHasDeviceId(id): boolean {
+    this.loggedInUser.iot.forEach(device => {
+      if (device === id) {
+        return true;
+      }
+    });
+    return false;
+  }
 
   private _translate() {
     this.translateService.get(['iotDeviceDetail']).subscribe((translations => {
       this.translationFields = {
-
+        labels: {
+          deviceId: translations['iotDeviceDetail'].labels.deviceId,
+          mqttHeader: translations['iotDeviceDetail'].labels.deviceId,
+          username: translations['iotDeviceDetail'].labels.username,
+          password: translations['iotDeviceDetail'].labels.password,
+          dataformat: translations['iotDeviceDetail'].labels.dataformat
+        }
       };
     }));
   }

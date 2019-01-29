@@ -27,7 +27,7 @@ export class IotDeviceFormComponent implements OnInit {
   loadingDeviceTypes: boolean;
   deviceTypes: Array<DeviceType> = [];
   loggedInUser: User = new User(
-    undefined, '', '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+    undefined, '', '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   eventFormGroup: FormGroup;
   plusIcon: Icon;
   deleteIcon: Icon;

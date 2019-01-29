@@ -100,37 +100,41 @@ export class IotDeviceListComponent implements OnInit {
     this.iotDevices = new Array();
     this.visibleIotDevices = undefined;
     this.genericService.scrollIntoView(this.spinnerContainerRef);
-    this.iotDevices = (await this.iotDeviceService.getAllIotDevices())['iot-devices'];
-    const arr = [];
+    this.iotDevices = await this.iotDeviceService.getAllIotDevices();
 
-    for (const iotDevice of this.iotDevices) {
-      const item = new TableItem();
-      item.obj['id'] = { label: iotDevice._id };
-      item.obj['Device ID'] = {
-        label: iotDevice.deviceId,
-        href: (`/${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.detail}/${iotDevice._id}`)
-      };
-      item.obj['Type'] = {
-        label: iotDevice.deviceType ? iotDevice.deviceType : ''
-      };
-      if (this.userIsLoggedIn &&
-        (loggedInUser.role.role === 'user' || this.userIsAdmin || loggedInUser._id === iotDevice._id)) {
-        item.button1.label = this.translationFields.buttons.detailLabel;
-        item.button1.href = `/${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.detail}/${iotDevice._id}`;
-        item.button1.class = 'btn btn-warning spacing';
-        item.button1.icon = this.config.icons.edit;
-        item.button2.label = this.translationFields.buttons.deleteLabel;
-        item.button2.eventEmitter = true;
-        item.button2.class = 'btn btn-danger spacing';
-        item.button2.icon = this.config.icons.delete;
-        item.button2.refId = iotDevice._id;
+    if (this.iotDevices && this.iotDevices['iot-devices']) {
+      this.iotDevices = this.iotDevices['iot-devices'];
+      const arr = [];
+
+      for (const iotDevice of this.iotDevices) {
+        const item = new TableItem();
+        item.obj['id'] = { label: iotDevice._id };
+        item.obj['Device ID'] = {
+          label: iotDevice.deviceId,
+          href: (`/${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.detail}/${iotDevice._id}`)
+        };
+        item.obj['Type'] = {
+          label: iotDevice.deviceType ? iotDevice.deviceType : ''
+        };
+        if (this.userIsLoggedIn &&
+          (loggedInUser.role.role === 'user' || this.userIsAdmin || loggedInUser._id === iotDevice._id)) {
+          item.button1.label = this.translationFields.buttons.detailLabel;
+          item.button1.href = `/${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.detail}/${iotDevice._id}`;
+          item.button1.class = 'btn btn-warning spacing';
+          item.button1.icon = this.config.icons.edit;
+          item.button2.label = this.translationFields.buttons.deleteLabel;
+          item.button2.eventEmitter = true;
+          item.button2.class = 'btn btn-danger spacing';
+          item.button2.icon = this.config.icons.delete;
+          item.button2.refId = iotDevice._id;
+        }
+        arr.push(item);
       }
-      arr.push(item);
-    }
 
-    this.visibleIotDevices = undefined;
-    this.visibleIotDevices = JSON.parse(JSON.stringify(arr));
-    this.loadingIotDevices = false;
+      this.visibleIotDevices = undefined;
+      this.visibleIotDevices = JSON.parse(JSON.stringify(arr));
+      this.loadingIotDevices = false;
+    }
     this.spinner.hide();
   }
 

@@ -61,7 +61,7 @@ export const appRoutes: Routes = [
         canActivate: [AuthGuard],
         children: [
             { path: routes.paths.frontend.iotDevices.create, component: IotDeviceFormComponent },
-            { path: routes.paths.frontend.iotDevices.detail, component: IotDeviceDetailComponent }
+            { path: routes.paths.frontend.iotDevices.detail + '/:id', component: IotDeviceDetailComponent }
         ]
     },
     {
