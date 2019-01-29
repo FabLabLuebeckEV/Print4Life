@@ -1,6 +1,3 @@
-// import logger from '../logger';
-// import validatorService from '../services/validator.service';
-// import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import { Request, Response } from 'express';
 import { IError, ErrorType } from '../services/router.service';

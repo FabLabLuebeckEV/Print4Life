@@ -5,6 +5,7 @@ import usersRoute from './user.route';
 import fablabRoute from './fablab.route';
 import scheduleRoute from './schedule.route';
 import statisticRoute from './statistic.route';
+import octoprintRoute from './octoprint.route';
 
 const router = express.Router();
 
@@ -33,5 +34,6 @@ router.use('/users/', usersRoute);
 router.use('/fablabs/', fablabRoute);
 router.use('/schedules/', scheduleRoute);
 router.use('/statistics/', statisticRoute);
+router.use('/octoprint/', octoprintRoute);
 
 export default router;
