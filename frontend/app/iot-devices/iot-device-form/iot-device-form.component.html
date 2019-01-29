@@ -41,7 +41,9 @@
               <input class="form-control" type="text" formControlName="topic" />
             </div>
             <div class="col-md-4">
-              <input class="form-control" type="text" formControlName="dataformat" />
+              <!-- <input class="form-control" type="text" formControlName="dataformat" /> -->
+              <ng-select [items]=dataFormats formControlName="dataformat">
+              </ng-select>
             </div>
             <div class="col-md-2">
               <button class="btn btn-danger" (click)="deleteEvent(eventIndex)">

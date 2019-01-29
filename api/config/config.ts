@@ -2,9 +2,9 @@ const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
 const ngPort = process.env.NG_PORT || 4200;
 const ibmWatson = {
-  key: process.env.WATSON_API_KEY || 'a-tcccti-2lwmcsshej',
-  token: process.env.WATSON_API_PASSWORD || 'okbv(ZXzFa6QwZ2l)Y',
-  orgId: process.env.WATSON_ORG_ID || 'tcccti',
+  key: process.env.WATSON_API_KEY || 'a-mvgc70-kzvlngabpn',
+  token: process.env.WATSON_API_PASSWORD || 'UAwuv+jRcFO*jMKUvB',
+  orgId: process.env.WATSON_ORG_ID || 'mvgc70',
   userRoles: ['PD_STANDARD_APP']
 };
 const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';

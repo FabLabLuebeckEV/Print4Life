@@ -28,6 +28,7 @@ export class IotDeviceFormComponent implements OnInit {
   eventFormGroup: FormGroup;
   plusIcon: Icon;
   deleteIcon: Icon;
+  dataFormats: Array<any> = ['json', 'txt', 'bin'];
 
   translationFields = {
     title: '',

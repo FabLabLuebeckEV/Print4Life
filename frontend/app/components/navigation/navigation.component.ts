@@ -103,10 +103,12 @@ export class NavigationComponent implements OnInit {
       this.orderDropdown = {
         name: translations['dropdown.orders'].title,
         elements: [
-          { name: translations['dropdown.orders'].listOrders, routerHref: routes.paths.frontend.orders.root },
           {
-            name:
-              translations['dropdown.orders'].outstandingOrders,
+            name: translations['dropdown.orders'].listOrders,
+            routerHref: routes.paths.frontend.orders.root
+          },
+          {
+            name: translations['dropdown.orders'].outstandingOrders,
             routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}`
           },
         ]

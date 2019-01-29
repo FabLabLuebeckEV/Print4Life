@@ -108,10 +108,10 @@ export class IotDeviceListComponent implements OnInit {
       item.obj['id'] = { label: iotDevice._id };
       item.obj['Device ID'] = {
         label: iotDevice.deviceId,
-        href: (`/${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.detail}/`)
+        href: (`/${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.detail}/${iotDevice._id}`)
       };
       item.obj['Type'] = {
-        label: iotDevice.deviceType && iotDevice.deviceType.id ? iotDevice.deviceType.id : ''
+        label: iotDevice.deviceType ? iotDevice.deviceType : ''
       };
       if (this.userIsLoggedIn &&
         (loggedInUser.role.role === 'user' || this.userIsAdmin || loggedInUser._id === iotDevice._id)) {
