@@ -8,4 +8,6 @@ router.use((req, res, next) => routerService.jwtValid(req, res, next));
 
 router.route('/uploadFile/:id').post(octoprintCtrl.uploadFile);
 
+router.route('/print/:id').post(octoprintCtrl.startPrint);
+
 export default router;
