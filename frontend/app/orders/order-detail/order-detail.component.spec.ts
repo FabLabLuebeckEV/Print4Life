@@ -10,6 +10,7 @@ import { BackButtonComponent } from '../../components/back-button/back-button.co
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 describe('OrderDetailComponent', () => {
   let component: OrderDetailComponent;
@@ -26,6 +27,7 @@ describe('OrderDetailComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         FontAwesomeModule,
+        NgxSpinnerModule,
         TranslateModule.forRoot()
       ]
     })
