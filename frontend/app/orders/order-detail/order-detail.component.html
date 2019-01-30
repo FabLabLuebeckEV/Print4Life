@@ -1,4 +1,8 @@
-<div *ngIf="true">
+<div #spinnerContainer>
+  <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size"
+    [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+</div>
+<div>
   <div class="row spacing text-center">
     <div class="col-md-12 text-center">
       <h1>{{order.projectname}}</h1>
@@ -7,13 +11,18 @@
       <app-back-button class="spacing-right-xs"></app-back-button>
       <a [routerLink]="editLink">
         <button *ngIf="order.shared || (userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')))"
-          type="button" class="btn btn-warning spacing-right-xs">
+          type="button" [title]="translationFields.tooltips.edit" class="btn btn-warning spacing-right-xs">
           <fa-icon [icon]="editIcon"></fa-icon>
         </button>
       </a>
       <button *ngIf="userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin'))"
-        (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
+        (click)="delete()" [title]="translationFields.tooltips.delete" type="button" class="btn btn-danger spacing-right-xs">
         <fa-icon [icon]="deleteIcon"></fa-icon>
+      </button>
+      <button *ngIf="userIsLoggedIn && loggedInUser && loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')"
+        (click)="startPrintJob()" [disabled]="!printFilesAvailable" [title]="translationFields.tooltips.print" type="button"
+        class="btn btn-primary spacing-right-xs">
+        <fa-icon [icon]="processIcon"></fa-icon>
       </button>
     </div>
   </div>

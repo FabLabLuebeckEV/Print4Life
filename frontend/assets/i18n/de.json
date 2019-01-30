@@ -1,4 +1,9 @@
 {
+    "buttons": {
+        "back": {
+            "tooltip": "Zurück"
+        }
+    },
     "date": {
         "dateFormat": "DD.MM.YYYY",
         "dateTimeFormat": "DD.MM.YYYY HH:mm"
@@ -424,6 +429,13 @@
         }
     },
     "orderDetail": {
+        "buttons": {
+            "tooltips": {
+                "delete": "Auftrag löschen",
+                "edit": "Auftrag bearbeiten",
+                "print": "Auftrag über Octoprint drucken"
+            }
+        },
         "labels": {
             "owner": "Ersteller",
             "editor": "Bearbeiter",
@@ -443,12 +455,18 @@
         "modals": {
             "ok": "Ja",
             "abort": "Nein",
+            "cancel": "Abbrechen",
             "deleteReturnValue": "Löschen",
             "abortReturnValue": "Abbrechen",
+            "cancelReturnValue": "Abbrechen",
             "deleteHeader": "Wollen Sie wirklich diesen Auftrag löschen?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
             "deleteQuestion2": "löschen wollen?",
-            "deleteWarning": "Das Löschen des Auftrags entfernt auch alle alten Dateien und behält nur die letzten aktuellen Dateien!"
+            "deleteWarning": "Das Löschen des Auftrags entfernt auch alle alten Dateien und behält nur die letzten aktuellen Dateien!",
+            "printHeader": "Druckauftrag starten",
+            "addressLabel": "Octoprint URL",
+            "apiKeyLabel": "Octoprint API Key",
+            "fileSelectLabel": "Druckdatei"
         }
     },
     "userForm": {

@@ -3,15 +3,20 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalButton } from '../message-modal/message-modal.component';
 
 @Component({
-  selector: 'app-input-modal',
-  templateUrl: './input-modal.component.html',
-  styleUrls: ['./input-modal.component.css']
+  selector: 'app-octoprint-modal',
+  templateUrl: './octoprint-modal.component.html',
+  styleUrls: ['./octoprint-modal.component.css']
 })
-export class InputModalComponent implements OnInit {
-  @Input() inputLabel: String;
+export class OctoprintModalComponent implements OnInit {
+  @Input() addressLabel: String;
+  @Input() apiKeyLabel: String;
+  @Input() fileSelectLabel: String;
+  @Input() selectItems: Array<any>;
   @Input() title: String;
   @Input() button1: ModalButton;
-  inputString: String;
+  addressString: String;
+  apiKeyString: String;
+  selectedItem: any;
   titleClass: String;
 
   constructor(private activeModal: NgbActiveModal) { }
@@ -24,6 +29,10 @@ export class InputModalComponent implements OnInit {
 
   close(input) {
     this.activeModal.close(input);
+  }
+
+  public printFile(fileId: String, apiKey: String, address: String) {
+    console.log(fileId);
   }
 
 }
