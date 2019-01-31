@@ -10,6 +10,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 describe('IotDeviceFormComponent', () => {
   let component: IotDeviceFormComponent;
@@ -27,6 +28,7 @@ describe('IotDeviceFormComponent', () => {
         ReactiveFormsModule,
         HttpClientTestingModule,
         FormsModule,
+        NgbModule.forRoot(),
         NgSelectModule,
         FontAwesomeModule,
         TranslateModule.forRoot(),

@@ -8,7 +8,7 @@ const endpoint = config.baseUrlBackend;
 
 export const testIoTDevice = {
   deviceType: 'Sensor',
-  deviceId: 'Sensor-Test-',
+  deviceId: 'IoTDevice-Test-',
   events: [
     { topic: 'Event_1', dataformat: 'json' },
     { topic: 'Event_2', dataformat: 'json' }
@@ -48,7 +48,7 @@ describe('IoT Device Controller', () => {
     request.post(`${endpoint}iot-devices/count`, {
       headers: { 'content-type': 'application/json', authorization: authorizationHeader },
       json: true,
-      body: { query: { $and: [{ $text: { $search: 'Sensor' } }] } }
+      body: { query: { $and: [{ $text: { $search: 'IoTDevice' } }] } }
     }, (error, response) => {
       const { count } = { count: response.body.count };
       expect(response.statusCode).toEqual(200);
@@ -76,14 +76,14 @@ describe('IoT Device Controller', () => {
       request.post(`${endpoint}iot-devices/search`, {
         headers: { 'content-type': 'application/json', authorization: authorizationHeader },
         json: true,
-        body: { query: { $and: [{ $text: { $search: 'Sensor' } }] } }
+        body: { query: { $and: [{ $text: { $search: 'IoTDevice' } }] } }
       }, (error, response) => {
         const { iotDevices } = { iotDevices: response.body['iot-devices'] };
         expect(response.statusCode).toEqual(200);
         expect(iotDevices).toBeDefined();
         expect(iotDevices.length).toBeGreaterThan(-1);
         if (iotDevices.length > 0) {
-          expect(iotDevices[0].deviceId).toContain('Sensor');
+          expect(iotDevices[0].deviceId).toContain('IoTDevice');
         }
         deleteDevice(testBody, id, authorizationHeader, done);
       });
