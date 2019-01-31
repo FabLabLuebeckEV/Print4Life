@@ -15,8 +15,30 @@ export class IotDeviceService {
     this.rootPath = routes.backendUrl + '/' + routes.paths.backend.iotDevices.root;
   }
 
-  public getAllIotDevices(): Promise<any> {
-    return this.http.get(`${this.rootPath}/`).toPromise();
+  public getAllIotDevices(query?, limit?, skip?): Promise<any> {
+    let params = new HttpParams();
+    if (query) {
+      return this.search(query, limit, skip);
+    }
+    if (limit >= 0 && skip >= 0) {
+      params = params.append('limit', limit);
+      params = params.append('skip', skip);
+    }
+    return this.http.get(`${this.rootPath}`, { params: params }).toPromise();
+  }
+
+  public search(query, limit?, skip?) {
+    const body = {
+      query: query,
+      limit: undefined,
+      skip: undefined
+    };
+
+    if (limit >= 0 && skip >= 0) {
+      body.limit = limit;
+      body.skip = skip;
+    }
+    return this.http.post(`${this.rootPath}/${routes.paths.backend.iotDevices.search}`, body).toPromise();
   }
 
   public getDeviceTypes(): Promise<any> {
