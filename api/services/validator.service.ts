@@ -107,8 +107,13 @@ async function checkToken (req): Promise<TokenCheck> {
   return ret;
 }
 
+function isAdmin (user: any): boolean {
+  return user && user.role && user.role.role === 'admin';
+}
+
 export default {
   checkId,
   checkToken,
-  checkQuery
+  checkQuery,
+  isAdmin
 };

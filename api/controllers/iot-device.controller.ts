@@ -105,10 +105,13 @@ async function get (req: Request, res: Response) {
     return res.status(checkId.status).send(checkId.error);
   }
   try {
-    if (user && user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token) {
+    if ((user && user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token)
+      || validatorService.isAdmin(user)) {
       const apiKey = {
-        key: user.iot.auth.key,
-        token: user.iot.auth.token
+        key: validatorService.isAdmin(user) && !user.iot.auth.key ? config.ibmWatson.key
+          : user.iot.auth.key,
+        token: validatorService.isAdmin(user) && !user.iot.auth.token ? config.ibmWatson.token
+          : user.iot.auth.token
       };
       const iotDevice: any = await iotDeviceService.get(req.params.id);
       if (iotDevice) {
@@ -488,7 +491,7 @@ async function getAll (req: Request, res: Response) {
     if (user && user.role && user.role.role) {
       let iotDevices = await iotDeviceService.getAll({});
       if (iotDevices) {
-        if (user.role.role !== 'admin' && user.iot && user.iot.devices && user.iot.devices.length) {
+        if (!validatorService.isAdmin(user) && user.iot && user.iot.devices && user.iot.devices.length) {
           iotDevices = iotDevices.filter((device) => user.iot.devices.includes(device.id));
           if (iotDevices.length) {
             logger.info(`GET ALL iot devices with result ${JSON.stringify(iotDevices)}`);
@@ -628,11 +631,18 @@ async function deleteById (req: Request, res: Response) {
     return user && user.error ? res.status(400).send(user.error) : res.status(400).send();
   }
   try {
-    if (user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token) {
+    if ((user && user.iot && user.iot.auth && user.iot.auth.key && user.iot.auth.token)
+      || validatorService.isAdmin(user)) {
+      const apiKey = {
+        key: validatorService.isAdmin(user) && !user.iot.auth.key ? config.ibmWatson.key
+          : user.iot.auth.key,
+        token: validatorService.isAdmin(user) && !user.iot.auth.token ? config.ibmWatson.token
+          : user.iot.auth.token
+      };
       let result = await iotDeviceService.get(req.params.id);
       if (result) {
         const watsonResult = await ibmWatsonService.deleteDevice(
-          result.deviceId, result.deviceType, { key: user.iot.auth.key, token: user.iot.auth.token }
+          result.deviceId, result.deviceType, apiKey
         );
         if (watsonResult || watsonResult.success) {
           result = await iotDeviceService.deleteById(req.params.id);
@@ -764,9 +774,9 @@ async function search (req: Request, res: Response) {
   }
   try {
     let iotDevices: Array<any> = [];
-    if (user.role.role && user.role.role === 'admin') {
+    if (validatorService.isAdmin(user)) {
       iotDevices = await iotDeviceService.getAll(req.body.query, req.body.limit, req.body.skip);
-    } else if (user.iot && user.iot.devices && user.role && user.role.role && user.role.role !== 'admin') {
+    } else if (user.iot && user.iot.devices && !validatorService.isAdmin(user)) {
       const tmpList = await iotDeviceService.getAll(req.body.query, req.body.limit, req.body.skip);
       iotDevices = [];
       user.iot.devices.forEach((deviceId: any) => {
@@ -869,7 +879,7 @@ async function count (req: Request, res: Response) {
   try {
     if (user.role && user.role.role) {
       let count = 0;
-      if (user.role.role === 'admin') {
+      if (validatorService.isAdmin(user)) {
         count = await iotDeviceService.count(req.body.query);
       } else if (user.iot && user.iot.devices) {
         count = user.iot.devices.length;
