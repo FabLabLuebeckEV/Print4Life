@@ -29,31 +29,26 @@ export class HttpInterceptorService implements HttpInterceptor {
     }
 
     private handleError(err: HttpErrorResponse): Observable<any> {
+        let stackMessage = '';
         if (err.status && err.message) {
-            switch (err.status) {
-                case 400:
-                case 401:
-                case 403:
-                    // console.log('handled error ' + err.status);
-                    let stackMessage = '';
-                    if (err && err.error && err.error.error) {
-                        stackMessage = err.error.error;
-                    } else if (err && err.error && err.error.stack && err.error.stack.message) {
-                        stackMessage = err.error.stack.message;
-                    }
-
-                    this.errorService.showError(
-                        {
-                            type: err.error.type,
-                            status: err.status,
-                            statusText: err.statusText,
-                            stack: stackMessage,
-                            data: err.error.data
-                        });
-                    return of(err.message);
-                default:
-                    throw Error;
+            stackMessage = '';
+            if (err && err.error && err.error.error) {
+                stackMessage = err.error.error;
+            } else if (err && err.error && err.error.stack && err.error.stack.message) {
+                stackMessage = err.error.stack.message;
+            } else if (err && err.error && err.error.message) {
+                stackMessage = err.error.message;
             }
+
+            this.errorService.showError(
+                {
+                    type: err.error.type,
+                    status: err.status,
+                    statusText: err.statusText,
+                    stack: stackMessage,
+                    data: err.error.data
+                });
+            return of(err.message);
         }
         throw Error;
     }
