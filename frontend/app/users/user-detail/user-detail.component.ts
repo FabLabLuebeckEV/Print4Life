@@ -23,7 +23,7 @@ export class UserDetailComponent implements OnInit {
   disableIcon: any;
   editLink: String;
   user: User = new User(
-    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
   translationFields = {
     labels: {

@@ -17,6 +17,8 @@ import { User } from 'frontend/app/models/user.model';
 export class IotDeviceDetailComponent implements OnInit {
   config: any;
   deleteIcon: Icon;
+  mqttUri: String = '';
+  mqttPorts: String = '1883, 8883, 443';
   iotDevice: IotDevice = new IotDevice(
     undefined, undefined, undefined, undefined, undefined, undefined, undefined
   );
@@ -29,6 +31,8 @@ export class IotDeviceDetailComponent implements OnInit {
       username: '',
       password: '',
       dataformat: '',
+      clientId: '',
+      deviceType: ''
     }
   };
 
@@ -53,6 +57,7 @@ export class IotDeviceDetailComponent implements OnInit {
         this.iotDeviceService.getDeviceById(params.get('id')).then(async (result) => {
           if (result && result['iot-device']) {
             this.iotDevice = result['iot-device'];
+            this.mqttUri = `http(s)://${this.iotDevice.clientId.split(':')[1]}.messaging.internetofthings.ibmcloud.com:port`;
             this.userIsLoggedIn = this.userService.isLoggedIn();
             this.loggedInUser = await this.userService.getUser();
           }
@@ -77,7 +82,9 @@ export class IotDeviceDetailComponent implements OnInit {
           mqttHeader: translations['iotDeviceDetail'].labels.deviceId,
           username: translations['iotDeviceDetail'].labels.username,
           password: translations['iotDeviceDetail'].labels.password,
-          dataformat: translations['iotDeviceDetail'].labels.dataformat
+          dataformat: translations['iotDeviceDetail'].labels.dataformat,
+          clientId: translations['iotDeviceDetail'].labels.clientId,
+          deviceType: translations['iotDeviceDetail'].labels.deviceType,
         }
       };
     }));

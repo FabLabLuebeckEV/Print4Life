@@ -43,7 +43,7 @@ export class UserFormComponent implements OnInit {
   user: User = new User(
     undefined, undefined, undefined, undefined,
     undefined, undefined, undefined, this.address,
-    this.role, this.preferredLanguage, false, undefined);
+    this.role, this.preferredLanguage, false, undefined, undefined);
   translationFields = {
     title: '',
     shownRoles: [],
@@ -242,7 +242,7 @@ export class UserFormComponent implements OnInit {
         this.user = new User(
           undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, this.address,
-          this.role, this.preferredLanguage, false, undefined);
+          this.role, this.preferredLanguage, false, undefined, undefined);
       }
     }
   }

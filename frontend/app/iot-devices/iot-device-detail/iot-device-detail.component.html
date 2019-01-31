@@ -8,47 +8,69 @@
       <fa-icon [icon]="deleteIcon"></fa-icon>
     </button>
   </div>
-  <div class="row spacing text-center">
-    <div class="col-md-6">
-      {{translationFields.labels.deviceId}}
-    </div>
-    <div class="col-md-6">
-      {{iotDevice.deviceId}}
-    </div>
+</div>
+<div class="row">
+  <div class="col-md-11 table-spacing">
+    <table class="table table-striped">
+      <tbody>
+        <tr>
+          <td class="align-middle text-center">{{translationFields.labels.deviceId}}</td>
+          <td class="align-middle text-center">{{iotDevice.deviceId}}</td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">{{translationFields.labels.deviceType}}</td>
+          <td class="align-middle text-center">{{iotDevice.deviceType}}</td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">{{translationFields.labels.clientId}}</td>
+          <td class="align-middle text-center">{{iotDevice.clientId}}</td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">{{translationFields.labels.username}}</td>
+          <td class="align-middle text-center">{{iotDevice.username}}</td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">{{translationFields.labels.password}}</td>
+          <td class="align-middle text-center">{{iotDevice.password}}</td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">MQTT URI</td>
+          <td class="align-middle text-center">
+            <pre>{{ mqttUri }}</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">MQTT Ports</td>
+          <td class="align-middle text-center">
+            <pre>{{ mqttPorts }}</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <div class="row spacing text-center">
-    <div class="col-md-6">
-      {{translationFields.labels.mqttHeader}}
-    </div>
-    <div class="col-md-6">
-
-    </div>
+</div>
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h3>Events</h3>
   </div>
-  <div class="row spacing text-center">
-    <div class="col-md-6">
-      {{translationFields.labels.username}}
-    </div>
-    <div class="col-md-6">
-      {{iotDevice.username}}
-    </div>
-  </div>
-  <div class="row spacing text-center">
-    <div class="col-md-6">
-      {{translationFields.labels.password}}
-    </div>
-    <div class="col-md-6">
-      {{iotDevice.password}}
-    </div>
-  </div>
-  <div *ngFor="let event of iotDevice.events; let i = index" class="row spacing text-center">
-    <div class="col-md-4">
-      {{i}}. Event
-    </div>
-    <div class="col-md-4">
-      {{iotDevice.events[i].topic}}
-    </div>
-    <div class="col-md-4">
-      {{iotDevice.events[i].dataformat}}
-    </div>
+</div>
+<div class="row">
+  <div class="col-md-11 table-spacing">
+    <table class="table table-striped">
+      <thead>
+        <td class="align-middle text-center">Topic</td>
+        <td class="align-middle text-center">{{translationFields.labels.dataformat}}</td>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of iotDevice.events">
+          <td class="align-middle text-center">
+            <pre>{{event.topic}}</pre>
+          </td>
+          <td class="align-middle text-center">
+            <pre>{{event.dataformat}}</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

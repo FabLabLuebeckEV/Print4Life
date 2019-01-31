@@ -104,7 +104,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   editors: Array<User>;
   loadingEditors: Boolean;
   loggedInUser: User = new User(
-    undefined, '', '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+    undefined, '', '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   userCanDownload: boolean;
   translationFields = {
     title: '',
@@ -308,7 +308,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             this.order.shippingAddress.city, this.order.shippingAddress.country
           ),
           new Role('guest'),
-          new Language(localStorage.getItem('orderManagementLang')), false, undefined));
+          new Language(localStorage.getItem('orderManagementLang')), false, undefined, undefined));
       this.loggedInUser = resUser.user;
       this.order.owner = resUser.user._id;
       this.order.shippingAddress = resUser.user.address;

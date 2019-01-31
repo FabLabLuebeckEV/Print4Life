@@ -136,7 +136,9 @@
             "mqttHeader": "MQTT Auth. Data",
             "username": "Username",
             "password": "Password",
-            "dataformat": "Dataformat"
+            "dataformat": "Dataformat",
+            "clientId": "Client ID",
+            "deviceType": "Device Type"
         }
     },
     "iotDeviceList": {

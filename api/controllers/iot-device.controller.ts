@@ -119,7 +119,9 @@ async function get (req: Request, res: Response) {
             deviceType: result.typeId,
             deviceId: result.deviceId,
             deviceInfo: result.deviceInfo,
-            events: iotDevice.events
+            events: iotDevice.events,
+            username: iotDevice.username,
+            password: user.iot.devices.includes(iotDevice.id) ? iotDevice.password : undefined
           };
           logger.info(`GET iot device with result ${JSON.stringify(retIoTDevice)}`);
           return res.status(200).send({ 'iot-device': retIoTDevice });
