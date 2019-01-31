@@ -271,6 +271,7 @@ async function create (req: Request, res: Response) {
     return res.status(400).send(user.error);
   }
   if (req.body.deviceType && req.body.deviceId && req.body.events && req.body.events.length) {
+    const deviceId = req.body.deviceId.split(' ').join('-'); // replace all whitespaces
     try {
       if (user) {
         if (!user.iot || !user.iot.auth || !user.iot.auth.key || !user.iot.auth.token) {
@@ -315,7 +316,7 @@ async function create (req: Request, res: Response) {
         }
 
         if (user.iot.auth.key && user.iot.auth.token) {
-          const device = await iotDeviceService.getAll({ deviceId: req.body.deviceId }, '1', '0');
+          const device = await iotDeviceService.getAll({ deviceId }, '1', '0');
           if (device && device.length) {
             error = {
               name: 'IOT_DEVICE_EXISTS',
@@ -328,7 +329,7 @@ async function create (req: Request, res: Response) {
           let result;
           try {
             result = await ibmWatsonService.createDevice(
-              req.body.deviceType, req.body.deviceId, req.body.deviceInfo, {
+              req.body.deviceType, deviceId, req.body.deviceInfo, {
                 key: user.iot.auth.key, token: user.iot.auth.token
               }
             );
@@ -491,8 +492,10 @@ async function getAll (req: Request, res: Response) {
     if (user && user.role && user.role.role) {
       let iotDevices = await iotDeviceService.getAll({});
       if (iotDevices) {
-        if (!validatorService.isAdmin(user) && user.iot && user.iot.devices && user.iot.devices.length) {
-          iotDevices = iotDevices.filter((device) => user.iot.devices.includes(device.id));
+        if (!validatorService.isAdmin(user)) {
+          iotDevices = iotDevices.filter(
+            (device) => user.iot && user.iot.devices && user.iot.devices.includes(device.id)
+          );
           if (iotDevices.length) {
             logger.info(`GET ALL iot devices with result ${JSON.stringify(iotDevices)}`);
             return res.status(200).send({ 'iot-devices': iotDevices });
