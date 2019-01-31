@@ -100,7 +100,8 @@ export const routes = {
                     detail: 'detail'
                 },
                 outstandingOrders: 'outstanding',
-                unfinishedOrders: 'unfinished'
+                unfinishedOrders: 'unfinished',
+                myOrders: 'myOrders'
             },
             machines: {
                 root: 'machines',

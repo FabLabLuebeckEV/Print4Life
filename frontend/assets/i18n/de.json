@@ -94,7 +94,8 @@
             "createOrder": "Auftrag anlegen",
             "createShared": "Geteilten Auftrag anlegen",
             "outstandingOrders": "Herausragende Projekte",
-            "unfinishedOrders": "Offene Aufträge"
+            "unfinishedOrders": "Offene Aufträge",
+            "myOrders": "Meine Aufträge"
         },
         "users": {
             "title": "Benutzer",

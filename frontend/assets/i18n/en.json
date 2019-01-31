@@ -94,7 +94,8 @@
             "createOrder": "Create Order",
             "createShared": "Create Shared Order",
             "outstandingOrders": "List Outstanding Orders",
-            "unfinishedOrders": "List Unfinished Orders"
+            "unfinishedOrders": "List Unfinished Orders",
+            "myOrders": "List My Orders"
         },
         "users": {
             "title": "Users",
