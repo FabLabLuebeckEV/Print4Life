@@ -5,6 +5,10 @@ import { RUN_ENV } from 'frontend/app/config/config.service';
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  mqttUri: 'mqtt(s)://mvgc70.messaging.internetofthings.ibmcloud.com:PORT',
+  mqttPubTopic: 'iot-2/evt/TOPICNAME/fmt/DATAFORMAT',
+  mqttSubTopic: 'iot-2/type/Sensor/id/DEVICENAME/evt/TOPICNAME/fmt/DATAFORMAT',
+  mqttPorts: [1883, 8883],
   production: false,
   env: RUN_ENV.DEV
 };
