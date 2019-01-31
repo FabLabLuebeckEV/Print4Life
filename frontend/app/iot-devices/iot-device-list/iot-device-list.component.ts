@@ -65,8 +65,9 @@ export class IotDeviceListComponent implements OnInit {
     this.config = this.configService.getConfig();
     this.headers = ['id', 'Device ID', 'Type'];
     this.router.events.subscribe(() => {
+      this.listView = false;
       const route = this.location.path();
-      if (route === `/${routes.paths.frontend.iotDevices.root}` || route === `/${routes.paths.frontend.iotDevices.root}/`) {
+      if (route === `/${routes.paths.frontend.iotDevices.root}`) {
         this.listView = true;
         this.ngOnInit();
       }
@@ -116,17 +117,14 @@ export class IotDeviceListComponent implements OnInit {
         item.obj['Type'] = {
           label: iotDevice.deviceType ? iotDevice.deviceType : ''
         };
-        if (this.userIsLoggedIn &&
-          (loggedInUser.role.role === 'user' || this.userIsAdmin || loggedInUser._id === iotDevice._id)) {
-          item.button1.label = this.translationFields.buttons.detailLabel;
-          item.button1.href = `/${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.detail}/${iotDevice._id}`;
-          item.button1.class = 'btn btn-warning spacing';
-          item.button1.icon = this.config.icons.edit;
-          item.button2.label = this.translationFields.buttons.deleteLabel;
-          item.button2.eventEmitter = true;
-          item.button2.class = 'btn btn-danger spacing';
-          item.button2.icon = this.config.icons.delete;
-          item.button2.refId = iotDevice._id;
+        if (this.userIsLoggedIn && this.userIsAdmin ||
+          (this.userIsLoggedIn && loggedInUser.role.role === 'user'
+            && loggedInUser.iot && loggedInUser.iot.devices && loggedInUser.iot.devices.includes(iotDevice._id))) {
+          item.button1.label = this.translationFields.buttons.deleteLabel;
+          item.button1.eventEmitter = true;
+          item.button1.class = 'btn btn-danger spacing';
+          item.button1.icon = this.config.icons.delete;
+          item.button1.refId = iotDevice._id;
         }
         arr.push(item);
       }

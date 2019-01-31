@@ -362,7 +362,8 @@
         },
         "messages": {
             "deviceId": "Der Name ist nicht gesetzt.",
-            "deviceId2": "Der Name ist bereits vergeben."
+            "deviceId2": "Der Name ist bereits vergeben.",
+            "eventsNotValid": "Füge mindestens ein Event hinzu bzw. mindestens eins scheint fehlerhaft zu sein."
         },
         "modals": {
             "ok": "Okay",

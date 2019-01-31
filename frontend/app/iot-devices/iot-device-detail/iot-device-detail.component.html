@@ -25,11 +25,11 @@
           <td class="align-middle text-center">{{translationFields.labels.clientId}}</td>
           <td class="align-middle text-center">{{iotDevice.clientId}}</td>
         </tr>
-        <tr>
+        <tr *ngIf="iotDevice.password">
           <td class="align-middle text-center">{{translationFields.labels.username}}</td>
           <td class="align-middle text-center">{{iotDevice.username}}</td>
         </tr>
-        <tr>
+        <tr *ngIf="iotDevice.password">
           <td class="align-middle text-center">{{translationFields.labels.password}}</td>
           <td class="align-middle text-center">{{iotDevice.password}}</td>
         </tr>
@@ -68,6 +68,40 @@
           </td>
           <td class="align-middle text-center">
             <pre>{{event.dataformat}}</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h3>Publisher/Subscriber URLs</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-11 table-spacing">
+    <table class="table table-striped">
+      <thead>
+        <td class="align-middle text-center">Pub/Sub</td>
+        <td class="align-middle text-center">Topic</td>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="align-middle text-center">
+            Subscriber:
+          </td>
+          <td class="align-middle text-center">
+            <pre>{{environment.mqttSubTopic.replace('DEVICENAME', iotDevice.deviceId)}}</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">
+            Publisher:
+          </td>
+          <td class="align-middle text-center">
+            <pre>{{environment.mqttPubTopic}}</pre>
           </td>
         </tr>
       </tbody>

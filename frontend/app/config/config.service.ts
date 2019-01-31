@@ -12,7 +12,7 @@ import {
   faCloudUploadAlt,
   faExclamationCircle,
   faCalendarAlt,
-  faSearch
+  faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 
 export class SpinnerConfig {

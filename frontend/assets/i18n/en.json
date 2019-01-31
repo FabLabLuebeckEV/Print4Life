@@ -362,7 +362,8 @@
         },
         "messages": {
             "deviceId": "The given device name is not set.",
-            "deviceId2": "The given device name has already been taken."
+            "deviceId2": "The given device name has already been taken.",
+            "eventsNotValid": "Add at least one event or an event seem to be malformed."
         },
         "modals": {
             "ok": "Okay",

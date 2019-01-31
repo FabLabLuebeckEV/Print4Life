@@ -56,6 +56,7 @@ export const routes = {
                 root: 'iot-devices',
                 create: '',
                 getAll: '',
+                search: 'search',
                 deviceTypes: 'types'
             },
             machines: {

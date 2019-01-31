@@ -22,8 +22,9 @@ export class IotDeviceFormComponent implements OnInit {
   config: any;
   eventsAsArray: Array<Event> = [];
   iotDevice: IotDevice = new IotDevice('', '', '', new DeviceType('', '', '', ''), '', '', this.eventsAsArray);
-  deviceId: String = 'hello';
+  deviceId: String = '';
   deviceIdAlreadyTaken = true;
+  eventsValid = false;
   loadingDeviceTypes: boolean;
   deviceTypes: Array<DeviceType> = [];
   loggedInUser: User = new User(
@@ -42,7 +43,8 @@ export class IotDeviceFormComponent implements OnInit {
     },
     messages: {
       deviceId: '',
-      deviceId2: ''
+      deviceId2: '',
+      eventsNotValid: ''
     },
     modals: {
       errorHeader: '',
@@ -107,42 +109,54 @@ export class IotDeviceFormComponent implements OnInit {
     iotDeviceCopy = JSON.parse(JSON.stringify(this.iotDevice));
     iotDeviceCopy.deviceType = this.iotDevice.deviceType.id;
     iotDeviceCopy.events = this.eventFormGroup.value.events;
-    this.iotDeviceService.addDevice(iotDeviceCopy)
-      .then((result) => {
-        if (result && result['iot-device']) {
-          const device = result['iot-device'];
-          const message = [
-            `${this.translationFields.modals.saveHint}`,
-            `Client ID ${device.clientId}`,
-            `${this.translationFields.modals.username}: ${device.username}`,
-            `${this.translationFields.modals.password}: ${device.password}`
-          ];
-          device.events.forEach(event => {
-            message.push(`Event: Topic: ${event.topic}, ${this.translationFields.modals.dataformat}: ${event.dataformat}`);
-          });
-          this._openMsgModal(
-            this.translationFields.modals.successHeader,
-            'modal-header header-success', message, okButton, undefined).result.then((result) => {
-              this.genericService.back();
+    if (!this.deviceIdAlreadyTaken && this.eventsValid) {
+      this.iotDeviceService.addDevice(iotDeviceCopy)
+        .then((result) => {
+          if (result && result['iot-device']) {
+            const device = result['iot-device'];
+            const message = [
+              `${this.translationFields.modals.saveHint}`,
+              `Client ID ${device.clientId}`,
+              `${this.translationFields.modals.username}: ${device.username}`,
+              `${this.translationFields.modals.password}: ${device.password}`
+            ];
+            device.events.forEach(event => {
+              message.push(`Event: Topic: ${event.topic}, ${this.translationFields.modals.dataformat}: ${event.dataformat}`);
             });
-        }
-      })
-      .catch(err => {
-        this._openMsgModal(
-          this.translationFields.modals.errorHeader,
-          'modal-header header-danger',
-          [this.translationFields.modals.errorHeader],
-          okButton,
-          undefined
-        );
-      });
+            this._openMsgModal(
+              this.translationFields.modals.successHeader,
+              'modal-header header-success', message, okButton, undefined).result.then((result) => {
+                this.genericService.back();
+              });
+          }
+        })
+        .catch(err => {
+          this._openMsgModal(
+            this.translationFields.modals.errorHeader,
+            'modal-header header-danger',
+            [this.translationFields.modals.errorHeader],
+            okButton,
+            undefined
+          );
+        });
+    }
   }
 
-  private async _checkDeviceId(id: String) {
-    let iotDevice;
-    iotDevice = await this.iotDeviceService.getDeviceById(id);
-    this.deviceIdAlreadyTaken = iotDevice ? true : false;
-    return iotDevice ? true : false;
+  async checkDeviceId(deviceId: String) {
+    const noWhiteSpaceDeviceId = deviceId.split(' ').join('-');
+    const result = await this.iotDeviceService.getAllIotDevices({ deviceId: noWhiteSpaceDeviceId });
+    this.deviceIdAlreadyTaken = result && result['iot-devices'] && result['iot-devices'].length;
+  }
+
+  private validateEvents() {
+    let valid = true;
+    this.eventFormGroup.value.events.forEach(event => {
+      valid = (event.dataformat && event.topic) && valid;
+    });
+    if (this.eventFormGroup.value.events.length === 0) {
+      valid = false;
+    }
+    this.eventsValid = valid;
   }
 
   private _openMsgModal(title: String, titleClass: String, messages: Array<String>,
@@ -183,7 +197,8 @@ export class IotDeviceFormComponent implements OnInit {
         },
         messages: {
           deviceId: translations['iotDevicesForm'].messages.deviceId,
-          deviceId2: translations['iotDevicesForm'].messages.deviceId2
+          deviceId2: translations['iotDevicesForm'].messages.deviceId2,
+          eventsNotValid: translations['iotDevicesForm'].messages.eventsNotValid
         },
         modals: {
           errorHeader: translations['iotDevicesForm'].modals.errorHeader,

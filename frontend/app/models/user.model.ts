@@ -26,7 +26,14 @@ export class User {
         public preferredLanguage: Language,
         public activated: boolean,
         public fablabId: String,
-        public iot: Array<String>
+        public iot: {
+            auth: {
+                roles: Array<String>,
+                token: String,
+                key: String
+            },
+            devices: Array<String>
+        }
     ) { }
 }
 
