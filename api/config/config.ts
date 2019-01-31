@@ -16,6 +16,7 @@ const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
 const jwtExpiryTime = '2h';
 const attachmentBucket = 'orderAttachments';
 const baseUrl = '/api/v1/';
+const tmpDir = process.env.TMP_DIR || './tmp';
 const email = {
   host: 'smtp.gmail.com',
   port: 587,
@@ -139,6 +140,7 @@ const dev = {
   jwtExpiryTime,
   attachmentBucket,
   ibmWatson,
+  tmpDir,
   ssl: {
     privateKeyPath: '',
     certificatePath: ''
@@ -171,6 +173,7 @@ const staging = {
   jwtExpiryTime,
   attachmentBucket,
   ibmWatson,
+  tmpDir,
   ssl: {
     privateKeyPath: '/etc/letsencrypt/live/iot-fablab.ddns.net/privkey.pem',
     certificatePath: '/etc/letsencrypt/live/iot-fablab.ddns.net/cert.pem'
@@ -212,6 +215,7 @@ const prod = {
   jwtExpiryTime,
   attachmentBucket,
   ibmWatson,
+  tmpDir,
   ssl: {
     privateKeyPath: '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/private.pem',
     certificatePath: '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/cert.pem'
@@ -253,6 +257,7 @@ const test = {
   jwtExpiryTime,
   attachmentBucket,
   ibmWatson,
+  tmpDir,
   ssl: {
     privateKeyPath: '',
     certificatePath: ''
@@ -282,6 +287,7 @@ const testLocal = {
   jwtExpiryTime,
   attachmentBucket,
   ibmWatson,
+  tmpDir,
   ssl: {
     privateKeyPath: '',
     certificatePath: ''

@@ -1,4 +1,9 @@
 {
+    "buttons": {
+        "back": {
+            "tooltip": "Back"
+        }
+    },
     "date": {
         "dateFormat": "DD/MM/YYYY",
         "dateTimeFormat": "DD/MM/YYYY hh:mm a"
@@ -89,7 +94,8 @@
             "createOrder": "Create Order",
             "createShared": "Create Shared Order",
             "outstandingOrders": "List Outstanding Orders",
-            "unfinishedOrders": "List Unfinished Orders"
+            "unfinishedOrders": "List Unfinished Orders",
+            "myOrders": "List My Orders"
         },
         "iotDevices": {
             "title": "IoT Devices",
@@ -479,6 +485,13 @@
         }
     },
     "orderDetail": {
+        "buttons": {
+            "tooltips": {
+                "delete": "Delete Order",
+                "edit": "Edit Order",
+                "print": "Print Order via Octoprint"
+            }
+        },
         "labels": {
             "owner": "Owner",
             "editor": "Editor",
@@ -498,12 +511,18 @@
         "modals": {
             "ok": "Yes",
             "abort": "No",
+            "cancel": "Cancel",
             "deleteReturnValue": "Delete",
             "abortReturnValue": "Abort",
+            "cancelReturnValue": "Abort",
             "deleteHeader": "Do you really want to delete this order?",
             "deleteQuestion": "Are you sure you want to delete",
             "deleteQuestion2": "?",
-            "deleteWarning": "The deletion of this order will delete all old and deprecated files. Only the latest files will remain!"
+            "deleteWarning": "The deletion of this order will delete all old and deprecated files. Only the latest files will remain!",
+            "printHeader": "Start Printjob",
+            "addressLabel": "Octoprint URL",
+            "apiKeyLabel": "Octoprint API Key",
+            "fileSelectLabel": "Print File"
         }
     },
     "userForm": {

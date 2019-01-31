@@ -1,0 +1,41 @@
+<div [class]="titleClass">
+  <h4 class="modal-title">{{title}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="close('dismiss')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-4">
+        <label for="addressInputField">{{addressLabel}}</label>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" id="addressInputField" [(ngModel)]="addressString" name="addressInputField"
+          #addressInputField="ngModel">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label for="apiKeyInputField">{{apiKeyLabel}}</label>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" id="apiKeyInputField" [(ngModel)]="apiKeyString" name="apiKeyInputField" #apiKeyInputField="ngModel">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <label for="fileSelect">{{fileSelectLabel}}</label>
+      </div>
+      <div class="col-sm-8">
+        <ng-select [multiple]="false" [hideSelected]="true" bindValue="id" bindLabel="filename" [closeOnSelect]="false"
+          [items]="selectItems" [(ngModel)]="selectedItem" id="fileSelect" name="fileSelect" #fileSelect="ngModel">
+        </ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button *ngIf="button1" type="submit" [class]="button1.class" (click)="printFile(selectedItem, apiKeyString, addressString)">{{button1.label}}</button>
+    <button *ngIf="button2" type="button" [class]="button2.class" (click)="close('button2')">{{button2.label}}</button>
+  </div>
+</form>

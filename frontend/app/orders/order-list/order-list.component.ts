@@ -38,6 +38,7 @@ export class OrderListComponent implements OnInit {
   visibleOrders: Array<TableItem> = [];
   id: String;
   listView: Boolean = false;
+  myOrdersView: Boolean = false;
   outstandingOrders: Boolean = false;
   unfinishedOrders: Boolean = false;
   loadingOrders: Boolean = false;
@@ -133,23 +134,23 @@ export class OrderListComponent implements OnInit {
       'Schedule End Date', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type'];
 
     this.router.events.subscribe(() => {
+      this.outstandingOrders = false;
+      this.listView = false;
+      this.myOrdersView = false;
+      this.unfinishedOrders = false;
       const route = this.location.path();
-      if (route === `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}` && !this.outstandingOrders) {
+      if (route === `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}`) {
         this.outstandingOrders = true;
-        this.listView = false;
-        this.ngOnInit();
-      } else if (route === `/${routes.paths.frontend.orders.root}` && !this.listView) {
+      } else if (route === `/${routes.paths.frontend.orders.root}`) {
         this.listView = true;
-        this.outstandingOrders = false;
-        this.ngOnInit();
       } else if (route === `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`
         && !this.unfinishedOrders) {
         this.unfinishedOrders = true;
-        this.listView = false;
-        this.outstandingOrders = false;
-      } else if (route !== `/${routes.paths.frontend.orders.root}`) {
-        this.listView = false;
+      } else if (route === `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`) {
+        this.listView = true;
+        this.myOrdersView = true;
       }
+      this.ngOnInit();
     });
   }
 
@@ -282,6 +283,10 @@ export class OrderListComponent implements OnInit {
         && (loggedInUser.role.role !== 'admin' && loggedInUser.role.role !== 'editor')) {
         query.$and.push({ shared: false });
       }
+
+      if (loggedInUser && loggedInUser._id && this.myOrdersView) {
+        query.$and.push({ owner: loggedInUser._id });
+      }
     }
 
     countObj = await this.orderService.count(query);
@@ -369,7 +374,8 @@ export class OrderListComponent implements OnInit {
           item.obj['Created at'] = {
             label: `${this.genericService.translateDate(order.createdAt, currentLang, translations['date'].dateTimeFormat)}`
           };
-          if (this.userIsLoggedIn && (loggedInUser.role.role === 'editor' || this.userIsAdmin) || this.unfinishedOrders) {
+          if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor' || this.userIsAdmin)
+            || this.unfinishedOrders) {
             item.obj['Schedule Start Date'] = {
               label: order.schedule && order.schedule.startDate ?
                 `${this.genericService.translateDate(order.schedule.startDate, currentLang, translations['date'].dateTimeFormat)}`
@@ -401,8 +407,8 @@ export class OrderListComponent implements OnInit {
           };
           item.obj['Status'] = { label: order.status };
           item.obj['Device Type'] = { label: order.machine.type };
-          if (this.userIsLoggedIn &&
-            (loggedInUser.role.role === 'editor' || this.userIsAdmin || loggedInUser._id === owner._id)) {
+          if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor'
+            || this.userIsAdmin || loggedInUser._id === owner._id)) {
             item.button1.label = this.translationFields.buttons.updateLabel;
             item.button1.href = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${order._id}`;
             item.button1.class = 'btn btn-warning spacing';

@@ -44,6 +44,7 @@ import { DatePickerTranslationService } from './services/datepicker-translation.
 import { IotDeviceListComponent } from './iot-devices/iot-device-list/iot-device-list.component';
 import { IotDeviceFormComponent } from './iot-devices/iot-device-form/iot-device-form.component';
 import { IotDeviceDetailComponent } from './iot-devices/iot-device-detail/iot-device-detail.component';
+import { OctoprintModalComponent } from './components/octoprint-modal/octoprint-modal.component';
 
 @NgModule({
     declarations: [
@@ -70,6 +71,7 @@ import { IotDeviceDetailComponent } from './iot-devices/iot-device-detail/iot-de
         IotDeviceListComponent,
         IotDeviceFormComponent,
         IotDeviceDetailComponent,
+        OctoprintModalComponent,
     ],
     imports: [
         ReactiveFormsModule,
@@ -104,7 +106,8 @@ import { IotDeviceDetailComponent } from './iot-devices/iot-device-detail/iot-de
         MessageModalComponent,
         LoginModalComponent,
         InputModalComponent,
-        ChangePasswdModalComponent
+        ChangePasswdModalComponent,
+        OctoprintModalComponent
     ]
 })
 export class AppModule { }

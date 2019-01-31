@@ -20,7 +20,8 @@ export enum ErrorType {
   FORBIDDEN,
   SERVER_ERROR,
   MALFORMED_REQUEST,
-  IOT_DEVICE_EXISTS
+  IOT_DEVICE_EXISTS,
+  OCTOPRINT_ERROR
 }
 
 export interface Error {

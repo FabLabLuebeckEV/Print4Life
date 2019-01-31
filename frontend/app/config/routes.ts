@@ -73,6 +73,11 @@ export const routes = {
             fablabs: {
                 root: 'fablabs',
                 getById: ':id'
+            },
+            octoprint: {
+                root: 'octoprint',
+                uploadFile: 'uploadFile',
+                print: 'print'
             }
         },
         frontend: {
@@ -102,7 +107,8 @@ export const routes = {
                     detail: 'detail'
                 },
                 outstandingOrders: 'outstanding',
-                unfinishedOrders: 'unfinished'
+                unfinishedOrders: 'unfinished',
+                myOrders: 'myOrders'
             },
             iotDevices: {
                 root: 'iotDevices',

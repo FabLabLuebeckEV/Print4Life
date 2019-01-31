@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfigService } from '../../config/config.service';
+import { ConfigService, SpinnerConfig } from '../../config/config.service';
 import { routes } from '../../config/routes';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order.model';
 import { MachineService } from '../../services/machine.service';
+import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { FablabService } from '../../services/fablab.service';
 import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
+import { OctoprintModalComponent } from '../../components/octoprint-modal/octoprint-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,6 +16,7 @@ import { UserService } from '../../services/user.service';
 import { User } from 'frontend/app/models/user.model';
 import { Schedule } from 'frontend/app/models/schedule.model';
 import { ScheduleService } from 'frontend/app/services/schedule.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-order-detail',
@@ -22,13 +25,17 @@ import { ScheduleService } from 'frontend/app/services/schedule.service';
 })
 export class OrderDetailComponent implements OnInit {
   private config: any;
-  private userIsLoggedIn: boolean;
-  private loggedInUser: User;
+  userIsLoggedIn: boolean;
+  loggedInUser: User;
+  loadingOrder: boolean;
   userCanDownload: boolean;
-  editIcon: any;
-  deleteIcon: any;
-  toggleOnIcon: any;
-  toggleOffIcon: any;
+  printFilesAvailable: boolean;
+  editIcon: Icon;
+  deleteIcon: Icon;
+  processIcon: Icon;
+  toggleOnIcon: Icon;
+  toggleOffIcon: Icon;
+  spinnerConfig: SpinnerConfig;
   editLink: String;
   editor: User = new User(
     undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
@@ -57,6 +64,11 @@ export class OrderDetailComponent implements OnInit {
   fablab: any;
 
   translationFields = {
+    tooltips: {
+      delete: '',
+      edit: '',
+      print: '',
+    },
     labels: {
       owner: '',
       editor: '',
@@ -76,12 +88,18 @@ export class OrderDetailComponent implements OnInit {
     modals: {
       ok: '',
       abort: '',
+      cancel: '',
       deleteReturnValue: '',
       abortReturnValue: '',
+      cancelReturnValue: '',
       deleteHeader: '',
       deleteQuestion: '',
       deleteQuestion2: '',
-      deleteWarning: ''
+      deleteWarning: '',
+      printHeader: '',
+      addressLabel: '',
+      apiKeyLabel: '',
+      fileSelectLabel: ''
     }
   };
 
@@ -95,13 +113,18 @@ export class OrderDetailComponent implements OnInit {
     private genericService: GenericService,
     private translateService: TranslateService,
     private userService: UserService,
-    private scheduleService: ScheduleService
+    private scheduleService: ScheduleService,
+    private spinner: NgxSpinnerService
   ) {
     this.config = this.configService.getConfig();
     this.editIcon = this.config.icons.edit;
     this.deleteIcon = this.config.icons.delete;
     this.toggleOnIcon = this.config.icons.toggleOn;
     this.toggleOffIcon = this.config.icons.toggleOff;
+    this.processIcon = this.config.icons.processIcon;
+    this.spinnerConfig = new SpinnerConfig(
+      'Loading Order', this.config.spinnerConfig.bdColor,
+      this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
   }
 
   async ngOnInit() {
@@ -112,6 +135,7 @@ export class OrderDetailComponent implements OnInit {
     this.route.paramMap
       .subscribe(async (params) => {
         if (params && params.get('id')) {
+          this.spinner.show();
           this.orderService.getOrderById(params.get('id')).then(async (result) => {
             if (result && result.order) {
               this.order = result.order;
@@ -170,12 +194,26 @@ export class OrderDetailComponent implements OnInit {
                 } else {
                   this.machine = { type: this.order.machine.type.toLowerCase() };
                 }
+                this.printFilesAvailable = this.order.files.filter((file) => file.contentType === 'text/x.gcode'
+                  || file.filename.split('.')[1] === 'gcode').length > 0;
                 this._translate();
+                this.spinner.hide();
               });
             }
           });
         }
       });
+  }
+
+  public startPrintJob() {
+    const startButton = new ModalButton(this.translationFields.modals.printHeader, 'btn btn-success', '');
+    const cancelButton = new ModalButton(this.translationFields.modals.cancel, 'btn btn-secondary',
+      this.translationFields.modals.cancelReturnValue);
+    this._openOctoprintModal(this.translationFields.modals.printHeader,
+      'modal-header header-primary', this.translationFields.modals.addressLabel, this.translationFields.modals.apiKeyLabel,
+      this.translationFields.modals.fileSelectLabel, this.order.files.filter((file) => file.contentType === 'text/x.gcode'
+        || file.filename.split('.')[1] === 'gcode'),
+      startButton, cancelButton);
   }
 
   public delete() {
@@ -211,6 +249,21 @@ export class OrderDetailComponent implements OnInit {
     return modalRef;
   }
 
+  private _openOctoprintModal(title: String, titleClass: String, addressLabel: String,
+    apiKeyLabel: String, fileSelectLabel: String, selectItems: Array<any>, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(OctoprintModalComponent, { backdrop: 'static' });
+    modalRef.componentInstance.title = title;
+    if (titleClass) {
+      modalRef.componentInstance.titleClass = titleClass;
+    }
+    modalRef.componentInstance.addressLabel = addressLabel;
+    modalRef.componentInstance.apiKeyLabel = apiKeyLabel;
+    modalRef.componentInstance.fileSelectLabel = fileSelectLabel;
+    modalRef.componentInstance.selectItems = selectItems;
+    modalRef.componentInstance.button1 = button1;
+    modalRef.componentInstance.button2 = button2;
+  }
+
   private _translateStatus(): Promise<String> {
     return new Promise((resolve) => {
       this.translateService.get(['status']).subscribe((translations) => {
@@ -229,7 +282,7 @@ export class OrderDetailComponent implements OnInit {
 
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
-    this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
+    this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date', 'buttonTooltips']).subscribe((translations => {
       if (this.order) {
         if (this.schedule) {
           this.schedule['shownStartDate'] = this.genericService.translateDate(
@@ -267,6 +320,11 @@ export class OrderDetailComponent implements OnInit {
       }
 
       this.translationFields = {
+        tooltips: {
+          delete: translations['orderDetail'].buttons.tooltips.delete,
+          edit: translations['orderDetail'].buttons.tooltips.edit,
+          print: translations['orderDetail'].buttons.tooltips.print,
+        },
         labels: {
           owner: translations['orderDetail'].labels.owner,
           editor: translations['orderDetail'].labels.editor,
@@ -286,12 +344,18 @@ export class OrderDetailComponent implements OnInit {
         modals: {
           ok: translations['orderDetail'].modals.ok,
           abort: translations['orderDetail'].modals.abort,
+          cancel: translations['orderDetail'].modals.cancel,
           deleteReturnValue: translations['orderDetail'].modals.deleteReturnValue,
           abortReturnValue: translations['orderDetail'].modals.abortReturnValue,
+          cancelReturnValue: translations['orderDetail'].modals.cancelReturnValue,
           deleteHeader: translations['orderDetail'].modals.deleteHeader,
           deleteQuestion: translations['orderDetail'].modals.deleteQuestion,
           deleteQuestion2: translations['orderDetail'].modals.deleteQuestion2,
-          deleteWarning: translations['orderDetail'].modals.deleteWarning
+          deleteWarning: translations['orderDetail'].modals.deleteWarning,
+          printHeader: translations['orderDetail'].modals.printHeader,
+          addressLabel: translations['orderDetail'].modals.addressLabel,
+          apiKeyLabel: translations['orderDetail'].modals.apiKeyLabel,
+          fileSelectLabel: translations['orderDetail'].modals.fileSelectLabel,
         }
       };
     }));
