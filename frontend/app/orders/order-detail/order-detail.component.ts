@@ -25,8 +25,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class OrderDetailComponent implements OnInit {
   private config: any;
-  private userIsLoggedIn: boolean;
-  private loggedInUser: User;
+  userIsLoggedIn: boolean;
+  loggedInUser: User;
   loadingOrder: boolean;
   userCanDownload: boolean;
   printFilesAvailable: boolean;

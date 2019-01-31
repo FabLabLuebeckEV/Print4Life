@@ -53,12 +53,12 @@
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.status}}</td>
             <td class="align-middle text-center">
-              <span class="badge badge-secondary">{{order.shownStatus}}</span>
+              <span class="badge badge-secondary">{{order['shownStatus']}}</span>
             </td>
           </tr>
           <tr>
             <td class="align-middle text-center">{{translationFields.labels.createdAt}}</td>
-            <td class="align-middle text-center">{{order.shownCreatedAt}}</td>
+            <td class="align-middle text-center">{{order['shownCreatedAt']}}</td>
           </tr>
           <tr *ngIf="schedule && schedule.startDate && schedule.endDate">
             <td class="align-middle text-center">{{translationFields.labels.scheduledFor}}</td>
