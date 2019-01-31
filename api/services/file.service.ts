@@ -87,7 +87,7 @@ export class FileService {
     });
   }
 
-  public downloadFile (fileId, bucketName): Promise<Object> {
+  public downloadFile (fileId, bucketName): Promise<any> {
     let error: IError;
     return new Promise((resolve, reject) => {
       let fileID;

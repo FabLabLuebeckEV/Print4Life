@@ -19,7 +19,8 @@ export enum ErrorType {
   INVALID_ID,
   FORBIDDEN,
   SERVER_ERROR,
-  MALFORMED_REQUEST
+  MALFORMED_REQUEST,
+  OCTOPRINT_ERROR
 }
 
 export interface Error {

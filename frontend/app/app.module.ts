@@ -41,6 +41,7 @@ import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { ngfModule } from 'angular-file';
 import { DatePickerTranslationService } from './services/datepicker-translation.service';
+import { OctoprintModalComponent } from './components/octoprint-modal/octoprint-modal.component';
 
 @NgModule({
     declarations: [
@@ -64,6 +65,7 @@ import { DatePickerTranslationService } from './services/datepicker-translation.
         ChangePasswdModalComponent,
         UserDetailComponent,
         UploadComponent,
+        OctoprintModalComponent,
     ],
     imports: [
         BrowserModule,
@@ -97,7 +99,8 @@ import { DatePickerTranslationService } from './services/datepicker-translation.
         MessageModalComponent,
         LoginModalComponent,
         InputModalComponent,
-        ChangePasswdModalComponent
+        ChangePasswdModalComponent,
+        OctoprintModalComponent
     ]
 })
 export class AppModule { }

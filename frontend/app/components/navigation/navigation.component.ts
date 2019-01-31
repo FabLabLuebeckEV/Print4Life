@@ -70,12 +70,19 @@ export class NavigationComponent implements OnInit {
       const orderDropdownAuthElements = [
         {
           name:
-            translations['dropdown.orders'].unfinishedOrders,
-          routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`
+            translations['dropdown.orders'].myOrders,
+          routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`
         },
         {
           name: translations['dropdown.orders'].createOrder,
           routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.create}`
+        }
+      ];
+      const orderDropdownEditorElements = [
+        {
+          name:
+            translations['dropdown.orders'].unfinishedOrders,
+          routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`
         }
       ];
       const machineDropdownAuthElements = [
@@ -155,8 +162,9 @@ export class NavigationComponent implements OnInit {
       if (this.userIsLoggedIn) {
         this.machineDropdown.elements = this.machineDropdown.elements.concat(machineDropdownAuthElements);
         if (this.user && this.user.role && this.user.role.role && this.user.role.role === 'editor' || this.userIsAdmin) {
-          this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownAuthElements);
+          this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownEditorElements);
         }
+        this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownAuthElements);
         this.userDropdown.elements = this.userDropdown.elements.concat(userDropdownAuthElements);
         if (this.userIsAdmin) {
           this.machineDropdown.elements = this.machineDropdown.elements.concat({
