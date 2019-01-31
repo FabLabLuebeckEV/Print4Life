@@ -101,7 +101,7 @@ async function get (req: Request, res: Response) {
   }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    logger.error(error);
+    logger.error(checkId.error);
     return res.status(checkId.status).send(checkId.error);
   }
   try {
