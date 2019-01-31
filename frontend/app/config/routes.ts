@@ -66,6 +66,11 @@ export const routes = {
             fablabs: {
                 root: 'fablabs',
                 getById: ':id'
+            },
+            octoprint: {
+                root: 'octoprint',
+                uploadFile: 'uploadFile',
+                print: 'print'
             }
         },
         frontend: {

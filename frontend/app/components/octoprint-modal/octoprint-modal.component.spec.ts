@@ -4,6 +4,7 @@ import { OctoprintModalComponent } from './octoprint-modal.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('OctoprintModalComponent', () => {
   let component: OctoprintModalComponent;
@@ -12,7 +13,7 @@ describe('OctoprintModalComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [OctoprintModalComponent],
-      imports: [NgSelectModule, FormsModule, NgbModule.forRoot()],
+      imports: [NgSelectModule, FormsModule, NgbModule.forRoot(), HttpClientTestingModule],
       providers: [NgbActiveModal]
     })
       .compileComponents();

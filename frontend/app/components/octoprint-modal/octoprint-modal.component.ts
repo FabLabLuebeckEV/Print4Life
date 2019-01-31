@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalButton } from '../message-modal/message-modal.component';
+import { OctoprintService } from 'frontend/app/services/octoprint.service';
 
 @Component({
   selector: 'app-octoprint-modal',
@@ -19,7 +20,7 @@ export class OctoprintModalComponent implements OnInit {
   selectedItem: any;
   titleClass: String;
 
-  constructor(private activeModal: NgbActiveModal) { }
+  constructor(private activeModal: NgbActiveModal, private octoprintService: OctoprintService) { }
 
   ngOnInit() {
     if (!this.titleClass) {
@@ -27,12 +28,16 @@ export class OctoprintModalComponent implements OnInit {
     }
   }
 
-  close(input) {
+  close(input: String) {
     this.activeModal.close(input);
   }
 
-  public printFile(fileId: String, apiKey: String, address: String) {
-    console.log(fileId);
+  async printFile(fileId: String, apiKey: String, address: String) {
+    try {
+      await this.octoprintService.uploadFile(fileId, address, apiKey);
+      await this.octoprintService.printFile(fileId, address, apiKey);
+      this.close('dismiss');
+    } catch (err) { }
   }
 
 }
