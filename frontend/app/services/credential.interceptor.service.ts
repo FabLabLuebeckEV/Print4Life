@@ -48,8 +48,8 @@ export class HttpInterceptorService implements HttpInterceptor {
                     stack: stackMessage,
                     data: err.error.data
                 });
-            return of(err.message);
+            throw err;
         }
-        throw Error;
+        throw err;
     }
 }

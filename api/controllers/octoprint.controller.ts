@@ -142,18 +142,21 @@ async function uploadFile (req: Request, res: Response) {
         formData
       }, (err, httpResponse, body) => {
         fs.unlinkSync(`${config.tmpDir}/${file.filename}`);
-        const { statusCode, statusMessage } = {
-          statusCode: httpResponse.statusCode,
-          statusMessage: httpResponse.statusMessage
+        let { statusCode, statusMessage } = {
+          statusCode: httpResponse ? httpResponse.statusCode : undefined,
+          statusMessage: httpResponse ? httpResponse.statusMessage : undefined
         };
         if (err || statusCode >= 300) {
+          statusCode = statusCode || 502;
+          body = !body && statusCode === 502 ? `Connection refused to ${req.body.octoprintAddress}` : body;
+          statusMessage = statusMessage || (err ? err.message : undefined);
           logger.error(`Upload to octoprint on ${req.body.octoprintAddress} `
             + `failed: ${statusCode} - ${statusMessage} ${err ? '-' : ''} ${err || ''}`);
           body = {
             name: 'OCTOPRINT_ERROR',
             type: ErrorType.OCTOPRINT_ERROR,
-            message: body,
-            stack: err || undefined
+            message: body || err.message,
+            stack: err ? err.stack : undefined
           };
         } else {
           logger.info(`Upload to octoprint on ${req.body.octoprintAddress} successful!`
@@ -269,18 +272,20 @@ async function startPrint (req: Request, res: Response) {
         body: { command: 'select', print: true },
         json: true
       }, (err, httpResponse, body) => {
-        const { statusCode, statusMessage } = {
-          statusCode: httpResponse.statusCode,
-          statusMessage: httpResponse.statusMessage
+        let { statusCode, statusMessage } = {
+          statusCode: httpResponse ? httpResponse.statusCode : undefined,
+          statusMessage: httpResponse ? httpResponse.statusMessage : undefined
         };
         if (err || statusCode >= 300) {
-          logger.error(`Print job could not be started on ${req.body.octoprintAddress} `
+          statusCode = statusCode || 502;
+          statusMessage = statusMessage || (err ? err.message : undefined);
+          logger.error(`Upload to octoprint on ${req.body.octoprintAddress} `
             + `failed: ${statusCode} - ${statusMessage} ${err ? '-' : ''} ${err || ''}`);
           body = {
             name: 'OCTOPRINT_ERROR',
             type: ErrorType.OCTOPRINT_ERROR,
-            message: body,
-            stack: err || undefined
+            message: body || err.message,
+            stack: err ? err.stack : undefined
           };
         } else {
           logger.info(`Print job started on ${req.body.octoprintAddress} successful!`
