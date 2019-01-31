@@ -15,6 +15,7 @@ export class OctoprintModalComponent implements OnInit {
   @Input() selectItems: Array<any>;
   @Input() title: String;
   @Input() button1: ModalButton;
+  @Input() button2: ModalButton;
   addressString: String;
   apiKeyString: String;
   selectedItem: any;
