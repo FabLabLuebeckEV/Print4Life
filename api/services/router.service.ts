@@ -32,7 +32,7 @@ export interface IError extends Error {
 }
 /* eslint-enable no-restricted-globals */
 
-async function jwtValid(req, res, next) {
+async function jwtValid (req, res, next) {
   let ret;
   let error: IError;
   const tc = await validatorService.checkToken(req);
@@ -56,7 +56,7 @@ async function jwtValid(req, res, next) {
   return ret;
 }
 
-function _isPublicRoute(url, method) {
+function _isPublicRoute (url, method) {
   let isPublic = false;
   config.publicRoutes.forEach((route) => {
     let methodOk = false;
@@ -88,7 +88,7 @@ function _isPublicRoute(url, method) {
  * @param url is the original url
  * @param method is the HTTP method
  */
-function corsAllowedRoutes(url: string, method: string) {
+function corsAllowedRoutes (url: string, method: string) {
   return (url.includes('orders') && url.includes('files')
     && method === 'GET') || url.includes('statistics')
     || (url.includes('users/login') && method === 'POST');

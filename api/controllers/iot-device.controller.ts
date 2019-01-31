@@ -271,7 +271,7 @@ async function create (req: Request, res: Response) {
     return res.status(400).send(user.error);
   }
   if (req.body.deviceType && req.body.deviceId && req.body.events && req.body.events.length) {
-    const deviceId = req.body.deviceId.split(' ').join('-'); // replace all whitespaces
+    const deviceId = req.body.deviceId.trim().split(/\s/g).join('-'); // replace all whitespaces
     try {
       if (user) {
         if (!user.iot || !user.iot.auth || !user.iot.auth.key || !user.iot.auth.token) {

@@ -14,13 +14,10 @@
         <div class="form-group row">
           <div class="col-md-12">
             <label for="deviceId">{{translationFields.labels.deviceId}}</label>
-            <input type="text" (focusout)="checkDeviceId(iotDevice.deviceId)" class=" form-control" id="deviceId"
-              required [(ngModel)]="iotDevice.deviceId" name="deviceId" #deviceId="ngModel">
-            <div [hidden]="deviceId.valid || deviceId.pristine" class="alert alert-danger">
-              {{translationFields.messages.deviceId}}
-            </div>
-            <div [hidden]="(deviceId.pristine) || !deviceIdAlreadyTaken" class="alert alert-danger">
-              {{translationFields.messages.deviceId2}}
+            <input type="text" class=" form-control" id="deviceId" required [(ngModel)]="iotDevice.deviceId" name="deviceId"
+              #deviceId="ngModel">
+            <div [hidden]="(deviceId.valid || deviceId.pristine) && !deviceIdAlreadyTaken" class="alert alert-danger">
+              {{deviceIdErrorMessage}}
             </div>
           </div>
         </div>

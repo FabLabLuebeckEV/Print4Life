@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { IotDevice, Event, DeviceType } from 'frontend/app/models/iot-device.model';
 import { Location } from '@angular/common';
@@ -12,27 +12,35 @@ import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { ModalButton, MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GenericService } from 'frontend/app/services/generic.service';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-iot-device-form',
   templateUrl: './iot-device-form.component.html',
   styleUrls: ['./iot-device-form.component.css']
 })
-export class IotDeviceFormComponent implements OnInit {
+export class IotDeviceFormComponent implements OnInit, OnDestroy {
+  @ViewChild('deviceId') deviceIdRef: FormControl;
   config: any;
   eventsAsArray: Array<Event> = [];
   iotDevice: IotDevice = new IotDevice('', '', '', new DeviceType('', '', '', ''), '', '', this.eventsAsArray);
   deviceId: String = '';
-  deviceIdAlreadyTaken = true;
-  eventsValid = false;
+  deviceIdAlreadyTaken: boolean;
+  deviceIdErrorMessage: String;
+  eventsValid: boolean;
   loadingDeviceTypes: boolean;
   deviceTypes: Array<DeviceType> = [];
   loggedInUser: User = new User(
     undefined, '', '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   eventFormGroup: FormGroup;
+  eventFormGroupSubscription: Subscription;
   plusIcon: Icon;
   deleteIcon: Icon;
   dataFormats: Array<any> = ['json', 'txt', 'bin'];
+  formSubscription: Subscription;
+
+  regEx: RegExp = new RegExp('[a-zA-Z0-9\s]{1,36}');
 
   translationFields = {
     title: '',
@@ -72,6 +80,11 @@ export class IotDeviceFormComponent implements OnInit {
     this.deleteIcon = this.config.icons.delete;
     this._translate();
   }
+  ngOnDestroy() {
+    if (this.formSubscription) {
+      this.formSubscription.unsubscribe();
+    }
+  }
 
   ngOnInit() {
     this.translateService.onLangChange.subscribe(() => {
@@ -81,6 +94,27 @@ export class IotDeviceFormComponent implements OnInit {
     this.eventFormGroup = this.fb.group({
       events: this.fb.array([this.fb.group({ topic: '', dataformat: '' })])
     });
+
+    this.formSubscription = this.deviceIdRef.valueChanges.pipe(debounceTime(1000))
+      .subscribe(async (newValue) => {
+        this.deviceIdErrorMessage = this.translationFields.messages.deviceId;
+        await this.checkDeviceId(newValue);
+        if (this.deviceIdAlreadyTaken) {
+          this.deviceIdErrorMessage = this.translationFields.messages.deviceId2;
+        }
+        this.iotDevice.deviceId = newValue;
+      });
+
+    this.eventFormGroupSubscription = this.eventFormGroup.valueChanges.pipe(debounceTime(200))
+      .subscribe(async (changed) => {
+        let eventsValid = false;
+        console.log(changed);
+        changed.events.forEach(event => {
+          eventsValid = eventsValid || !this.regEx.test(event.topic);
+          eventsValid = eventsValid || event.dataformat;
+        });
+        this.eventsValid = eventsValid;
+      });
 
     this.init();
   }
@@ -131,19 +165,13 @@ export class IotDeviceFormComponent implements OnInit {
           }
         })
         .catch(err => {
-          this._openMsgModal(
-            this.translationFields.modals.errorHeader,
-            'modal-header header-danger',
-            [this.translationFields.modals.errorHeader],
-            okButton,
-            undefined
-          );
+
         });
     }
   }
 
   async checkDeviceId(deviceId: String) {
-    const noWhiteSpaceDeviceId = deviceId.split(' ').join('-');
+    const noWhiteSpaceDeviceId = deviceId.split(/\s/g).join('-');
     const result = await this.iotDeviceService.getAllIotDevices({ deviceId: noWhiteSpaceDeviceId });
     this.deviceIdAlreadyTaken = result && result['iot-devices'] && result['iot-devices'].length;
   }
@@ -157,6 +185,11 @@ export class IotDeviceFormComponent implements OnInit {
       valid = false;
     }
     this.eventsValid = valid;
+  }
+
+  private _validateWatson(str: String): boolean {
+
+    return false;
   }
 
   private _openMsgModal(title: String, titleClass: String, messages: Array<String>,
