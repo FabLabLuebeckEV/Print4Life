@@ -421,6 +421,8 @@ export class OrderListComponent implements OnInit {
         this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
         this.spinner.hide();
       }));
+    } else {
+      this.spinner.hide();
     }
     this.loadingOrders = false;
   }
