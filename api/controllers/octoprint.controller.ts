@@ -83,6 +83,16 @@ const orderService = new OrderService();
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
+
+     * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 4xx Malformed Request
+  {
+      "name": "OCTOPRINT_ERROR",
+      "message": "{...}",
+      "type": 15,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
  *
  */
 
@@ -138,10 +148,16 @@ async function uploadFile (req: Request, res: Response) {
         };
         if (err || statusCode >= 300) {
           logger.error(`Upload to octoprint on ${req.body.octoprintAddress} `
-          + `failed: ${statusCode} - ${statusMessage} ${err ? '-' : ''} ${err || ''}`);
+            + `failed: ${statusCode} - ${statusMessage} ${err ? '-' : ''} ${err || ''}`);
+          body = {
+            name: 'OCTOPRINT_ERROR',
+            type: ErrorType.OCTOPRINT_ERROR,
+            message: body,
+            stack: err || undefined
+          };
         } else {
           logger.info(`Upload to octoprint on ${req.body.octoprintAddress} successful!`
-          + `Server responded with ${statusCode} - ${statusMessage} ${body ? '-' : ''} ${body || ''}`);
+            + `Server responded with ${statusCode} - ${statusMessage} ${body ? '-' : ''} ${body || ''}`);
         }
         return res.status(statusCode).send(body);
       });
@@ -216,6 +232,16 @@ async function uploadFile (req: Request, res: Response) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 4xx Malformed Request
+  {
+      "name": "OCTOPRINT_ERROR",
+      "message": "Printer is not operational, cannot directly start printing",
+      "type": 15,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
  *
  */
 async function startPrint (req: Request, res: Response) {
@@ -249,10 +275,16 @@ async function startPrint (req: Request, res: Response) {
         };
         if (err || statusCode >= 300) {
           logger.error(`Print job could not be started on ${req.body.octoprintAddress} `
-          + `failed: ${statusCode} - ${statusMessage} ${err ? '-' : ''} ${err || ''}`);
+            + `failed: ${statusCode} - ${statusMessage} ${err ? '-' : ''} ${err || ''}`);
+          body = {
+            name: 'OCTOPRINT_ERROR',
+            type: ErrorType.OCTOPRINT_ERROR,
+            message: body,
+            stack: err || undefined
+          };
         } else {
           logger.info(`Print job started on ${req.body.octoprintAddress} successful!`
-          + `Server responded with ${statusCode} - ${statusMessage} ${body ? '-' : ''} ${body || ''}`);
+            + `Server responded with ${statusCode} - ${statusMessage} ${body ? '-' : ''} ${body || ''}`);
         }
         return res.status(statusCode).send(body);
       });
