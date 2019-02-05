@@ -12,6 +12,8 @@ import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
+import { FormsModule } from '@angular/forms';
 
 describe('IotDeviceListComponent', () => {
   let component: IotDeviceListComponent;
@@ -21,7 +23,8 @@ describe('IotDeviceListComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         IotDeviceListComponent,
-        TableComponent
+        TableComponent,
+        MessageModalComponent
       ],
       imports: [
         NgxSpinnerModule,
@@ -29,6 +32,7 @@ describe('IotDeviceListComponent', () => {
         NgbModule.forRoot(),
         HttpClientTestingModule,
         FontAwesomeModule,
+        FormsModule,
         TranslateModule.forRoot()
       ],
       providers: [
