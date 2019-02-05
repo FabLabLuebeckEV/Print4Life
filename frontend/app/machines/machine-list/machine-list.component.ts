@@ -95,6 +95,7 @@ export class MachineListComponent implements OnInit {
     spinnerLoadingText: '',
     buttons: {
       deleteLabel: '',
+      toggleLabel: '',
       updateLabel: ''
     },
     modals: {
@@ -277,17 +278,22 @@ export class MachineListComponent implements OnInit {
         const successfulOrders: { machineId: string, successfulOrders: number }
           = await this.machineService.countSuccessfulOrders(elem.type, elem._id);
         item.obj['Successful Orders'] = { label: successfulOrders.successfulOrders };
+        if (this.headers.findIndex(e => e === 'Successful Orders') < 0) {
+          this.headers.push('Successful Orders');
+        }
       }
       if (this.userIsAdmin) {
         item.button1.label = this.translationFields.buttons.updateLabel;
         item.button1.href = `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
         item.button1.class = 'btn btn-warning spacing';
         item.button1.icon = this.config.icons.edit;
+        item.button1.tooltip = this.translationFields.buttons.updateLabel;
         item.button2.label = this.translationFields.buttons.deleteLabel;
         item.button2.eventEmitter = true;
         item.button2.class = elem.activated ? 'btn btn-success spacing' : 'btn btn-danger spacing';
         item.button2.icon = elem.activated ? this.config.icons.toggleOn : this.config.icons.toggleOff;
         item.button2.refId = elem._id;
+        item.button2.tooltip = this.translationFields.buttons.toggleLabel;
       }
       return item;
     }
@@ -521,6 +527,7 @@ export class MachineListComponent implements OnInit {
         spinnerLoadingText: translations['machineList'].spinnerLoadingText,
         buttons: {
           deleteLabel: translations['machineList'].buttons.deleteLabel,
+          toggleLabel: translations['machineList'].buttons.toggleLabel,
           updateLabel: translations['machineList'].buttons.updateLabel
         },
         modals: {

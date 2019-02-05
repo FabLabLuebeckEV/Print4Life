@@ -185,6 +185,7 @@
         "spinnerLoadingText": "Loading Machines",
         "buttons": {
             "deleteLabel": "Delete",
+            "toggleLabel": "Change Status",
             "updateLabel": "Edit"
         },
         "modals": {

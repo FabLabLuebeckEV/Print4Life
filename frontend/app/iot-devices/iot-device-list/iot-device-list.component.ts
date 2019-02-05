@@ -163,6 +163,7 @@ export class IotDeviceListComponent implements OnInit {
           item.button1.class = 'btn btn-danger spacing';
           item.button1.icon = this.config.icons.delete;
           item.button1.refId = iotDevice._id;
+          item.button1.tooltip = this.translationFields.buttons.deleteLabel;
         }
         arr.push(item);
       }
