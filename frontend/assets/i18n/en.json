@@ -154,6 +154,7 @@
         }
     },
     "iotDeviceList": {
+        "paginationLabel": "",
         "spinnerLoadingText": "Loading IoT Devices",
         "buttons": {
             "deleteLabel": "Delete Device",
@@ -168,6 +169,9 @@
             "deleteQuestion": "Are you really sure, that you want",
             "deleteQuestion2": "to remove this device?",
             "deleteWarning": "The removal of this device will also remove it's access to the Watson/MQTT platform."
+        },
+        "filterLabel": {
+            "search": "Search"
         }
     },
     "machineList": {
@@ -375,6 +379,7 @@
         "messages": {
             "deviceId": "The given device name is not set.",
             "deviceId2": "The given device name has already been taken.",
+            "deviceId3": "The name is not valid, allowed: 1 to 36 characters, a-z, A-Z, 0-9, '.', '-' and '_'",
             "eventsNotValid": "Add at least one event or an event seem to be malformed."
         },
         "modals": {

@@ -41,6 +41,10 @@ export class IotDeviceService {
     return this.http.post(`${this.rootPath}/${routes.paths.backend.iotDevices.search}`, body).toPromise();
   }
 
+  public count(query) {
+    return this.http.post(`${this.rootPath}/${routes.paths.backend.iotDevices.count}`, { query: query }).toPromise();
+  }
+
   public getDeviceTypes(): Promise<any> {
     return this.http.get(`${this.rootPath}/${routes.paths.backend.iotDevices.deviceTypes}`).toPromise();
   }

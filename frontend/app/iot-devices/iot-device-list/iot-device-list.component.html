@@ -4,17 +4,51 @@
     [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
 </div>
 <div *ngIf="listView">
-  <div class="col-md-1 spacing-top-xxl">
-    <button *ngIf="userIsLoggedIn && listView" type="button" class="btn btn-success  spacing-top-xxl spacing-left-xxl"
-      [routerLink]="addLink">
-      <fa-icon [icon]="plusIcon"></fa-icon>
-    </button>
-  </div>
-  <div>
-    <div class="row">
-      <div class="col-md-12">
-        <app-table (buttonEvent)="eventHandler($event)" [items]="visibleIotDevices" [headers]="headers"></app-table>
-      </div>
+  <div class="row">
+    <div class="col-md-1 spacing-top-xs">
+      <button *ngIf="userIsLoggedIn && listView" type="button" class="btn btn-success  spacing-top-xxl spacing-left-xxl"
+        [routerLink]="addLink">
+        <fa-icon [icon]="plusIcon"></fa-icon>
+      </button>
     </div>
+    <div class="col-md-10">
+      <form>
+        <label for="search">{{translationFields.filterLabel.search}}</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search" #search="ngModel">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary" (click)="searchInit()" type="submit">
+              <fa-icon [icon]="searchIcon"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-md-12">
+      <app-table (buttonEvent)="eventHandler($event)" [items]="visibleIotDevices" [headers]="headers"></app-table>
+    </div>
+
   </div>
+  <footer class="footer">
+    <div class="container">
+      <form>
+        <div class="row">
+          <div class="col-md-2 offset-5 text-center">
+            <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
+            <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage" name="jumpToPage"
+              #jumpToPage="ngModel">
+          </div>
+          <div class="col-md-1 align-self-end">
+            <button [disabled]="!paginationObj.jumpToPage" type="submit" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
+              <fa-icon [icon]="jumpArrow"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+      <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems"
+        [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="pageChanged($event)" [maxSize]="paginationObj.maxSize"
+        [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks" aria-label="Default pagination"></ngb-pagination>
+    </div>
+  </footer>
 </div>

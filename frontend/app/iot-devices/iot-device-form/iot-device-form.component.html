@@ -16,7 +16,7 @@
             <label for="deviceId">{{translationFields.labels.deviceId}}</label>
             <input type="text" class=" form-control" id="deviceId" required [(ngModel)]="iotDevice.deviceId" name="deviceId"
               #deviceId="ngModel">
-            <div [hidden]="(deviceId.valid || deviceId.pristine) && !deviceIdAlreadyTaken" class="alert alert-danger">
+            <div [hidden]="(deviceId.valid || deviceId.pristine) && (!deviceIdAlreadyTaken || !deviceIdValid)" class="alert alert-danger">
               {{deviceIdErrorMessage}}
             </div>
           </div>

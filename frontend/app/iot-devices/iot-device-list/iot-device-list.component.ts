@@ -31,8 +31,23 @@ export class IotDeviceListComponent implements OnInit {
   spinnerConfig: SpinnerConfig;
   private config: any;
   plusIcon: Icon;
+  jumpArrow: Icon;
+  searchIcon: Icon;
   addLink: String;
   headers: Array<String> = [];
+  filter: any = {
+    searchTerm: ''
+  };
+  paginationObj: any = {
+    page: 1,
+    totalItems: 0,
+    perPage: 20,
+    maxSize: 10,
+    boundaryLinks: true,
+    rotate: true,
+    maxPages: 0,
+    jumpToPage: undefined
+  };
 
   translationFields = {
     buttons: {
@@ -48,6 +63,9 @@ export class IotDeviceListComponent implements OnInit {
       deleteQuestion: '',
       deleteQuestion2: '',
       deleteWarning: ''
+    },
+    filterLabel: {
+      search: ''
     }
   };
 
@@ -78,6 +96,8 @@ export class IotDeviceListComponent implements OnInit {
     );
     this.addLink = `./${routes.paths.frontend.iotDevices.create}`;
     this.plusIcon = this.config.icons.add;
+    this.jumpArrow = this.config.icons.forward;
+    this.searchIcon = this.config.icons.search;
   }
 
   async ngOnInit() {
@@ -101,7 +121,25 @@ export class IotDeviceListComponent implements OnInit {
     this.iotDevices = new Array();
     this.visibleIotDevices = undefined;
     this.genericService.scrollIntoView(this.spinnerContainerRef);
-    this.iotDevices = await this.iotDeviceService.getAllIotDevices();
+
+    let countObj;
+    let totalItems = 0;
+    const query = { $and: [] };
+    if (this.filter.searchTerm) {
+      query.$and.push({ $text: { $search: this.filter.searchTerm } });
+    }
+    countObj = await this.iotDeviceService.count(query);
+    totalItems = countObj.count;
+
+    if (totalItems !== this.paginationObj.totalItems) {
+      this.paginationObj.totalItems = totalItems;
+    }
+
+    this.iotDevices = await this.iotDeviceService.getAllIotDevices(
+      query,
+      this.paginationObj.perPage,
+      (this.paginationObj.page - 1) * this.paginationObj.perPage
+    );
 
     if (this.iotDevices && this.iotDevices['iot-devices']) {
       this.iotDevices = this.iotDevices['iot-devices'];
@@ -134,6 +172,12 @@ export class IotDeviceListComponent implements OnInit {
       this.loadingIotDevices = false;
     }
     this.spinner.hide();
+  }
+
+  searchInit() {
+    this.paginationObj.page = 1;
+    this.paginationObj.totalItems = 0;
+    this.init();
   }
 
   eventHandler(event) {
@@ -201,6 +245,9 @@ export class IotDeviceListComponent implements OnInit {
           deleteQuestion: translations['iotDeviceList'].modals.deleteQuestion,
           deleteQuestion2: translations['iotDeviceList'].modals.deleteQuestion2,
           deleteWarning: translations['iotDeviceList'].modals.deleteWarning,
+        },
+        filterLabel: {
+          search: translations['iotDeviceList'].filterLabel.search
         }
       };
     }));
