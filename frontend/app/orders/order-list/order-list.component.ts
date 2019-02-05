@@ -425,11 +425,13 @@ export class OrderListComponent implements OnInit {
               item.button1.href = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${order._id}`;
               item.button1.class = 'btn btn-warning spacing';
               item.button1.icon = this.config.icons.edit;
+              item.button1.tooltip = this.translationFields.buttons.updateLabel;
               item.button2.label = this.translationFields.buttons.deleteLabel;
               item.button2.eventEmitter = true;
               item.button2.class = 'btn btn-danger spacing';
               item.button2.icon = this.config.icons.delete;
               item.button2.refId = order._id;
+              item.button2.tooltip = this.translationFields.buttons.deleteLabel;
             }
             resolve(item);
           }));

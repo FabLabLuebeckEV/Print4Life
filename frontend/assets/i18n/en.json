@@ -2,6 +2,12 @@
     "buttons": {
         "back": {
             "tooltip": "Back"
+        },
+        "add": {
+            "tooltip": "New"
+        },
+        "edit": {
+            "tooltip": "Edit"
         }
     },
     "date": {
@@ -175,7 +181,7 @@
         "spinnerLoadingText": "Loading Machines",
         "buttons": {
             "deleteLabel": "Delete",
-            "updateLabel": "Update"
+            "updateLabel": "Edit"
         },
         "modals": {
             "yes": "Yes",

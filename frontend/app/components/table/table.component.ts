@@ -10,6 +10,7 @@ export class TableButton {
   routerLink: Boolean = true;
   class: String = '';
   refId: String = '';
+  tooltip: String = '';
 }
 
 export class TableItem {

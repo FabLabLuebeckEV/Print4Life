@@ -2,6 +2,12 @@
     "buttons": {
         "back": {
             "tooltip": "Zurück"
+        },
+        "add": {
+            "tooltip": "Neu anlegen"
+        },
+        "edit": {
+            "tooltip": "Ändern"
         }
     },
     "date": {

@@ -45,6 +45,9 @@ import { IotDeviceListComponent } from './iot-devices/iot-device-list/iot-device
 import { IotDeviceFormComponent } from './iot-devices/iot-device-form/iot-device-form.component';
 import { IotDeviceDetailComponent } from './iot-devices/iot-device-detail/iot-device-detail.component';
 import { OctoprintModalComponent } from './components/octoprint-modal/octoprint-modal.component';
+import { AddButtonComponent } from './components/add-button/add-button.component';
+import { EditButtonComponent } from './components/edit-button/edit-button.component';
+import { DeleteButtonComponent } from './components/delete-button/delete-button.component';
 
 @NgModule({
     declarations: [
@@ -72,6 +75,9 @@ import { OctoprintModalComponent } from './components/octoprint-modal/octoprint-
         IotDeviceFormComponent,
         IotDeviceDetailComponent,
         OctoprintModalComponent,
+        AddButtonComponent,
+        EditButtonComponent,
+        DeleteButtonComponent,
     ],
     imports: [
         ReactiveFormsModule,
