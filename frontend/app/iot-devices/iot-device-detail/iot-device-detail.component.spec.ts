@@ -28,8 +28,7 @@ describe('IotDeviceDetailComponent', () => {
         NgbModule.forRoot(),
         FontAwesomeModule,
         TranslateModule.forRoot(),
-        RouterTestingModule,
-        NgbModal
+        RouterTestingModule
       ]
     })
       .compileComponents();
