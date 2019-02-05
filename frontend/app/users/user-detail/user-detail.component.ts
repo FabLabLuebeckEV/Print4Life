@@ -17,8 +17,8 @@ import { FablabService } from 'frontend/app/services/fablab.service';
 })
 export class UserDetailComponent implements OnInit {
   private config: any;
-  private userIsLoggedIn: boolean;
-  private userIsAdmin: Boolean;
+  userIsLoggedIn: boolean;
+  userIsAdmin: Boolean;
   editIcon: any;
   disableIcon: any;
   editLink: String;
