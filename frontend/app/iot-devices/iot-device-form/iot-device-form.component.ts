@@ -25,7 +25,7 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
   iotDevice: IotDevice = new IotDevice('', '', '', new DeviceType('', '', '', ''), '', '', this.eventsAsArray);
   deviceId: String = '';
   deviceIdAlreadyTaken: boolean;
-  deviceIdValid: boolean;
+  deviceIdValid = true;
   deviceIdErrorMessage: String;
   eventsValid: boolean;
   loadingDeviceTypes: boolean;
@@ -50,7 +50,7 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
     jumpToPage: undefined
   };
 
-  regEx: RegExp = new RegExp('[a-zA-Z0-9\s\.\-\_]{1,36}');
+  regEx: RegExp = new RegExp('^[a-zA-Z0-9\s\.\-\_]+$');
 
   translationFields = {
     title: '',
@@ -110,15 +110,20 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
     this.formSubscription = this.deviceIdRef.valueChanges
       .pipe(debounceTime(1000))
       .subscribe(async (newValue) => {
+        let deviceIdValid = true;
+        if (!newValue.length) {
         this.deviceIdErrorMessage = this.translationFields.messages.deviceId;
+        }
         await this.checkDeviceId(newValue);
         if (this.deviceIdAlreadyTaken) {
           this.deviceIdErrorMessage = this.translationFields.messages.deviceId2;
         }
-        this.deviceIdValid = this.regEx.test(newValue);
-        if (!this.deviceIdValid) {
+        deviceIdValid = this.regEx.test(newValue);
+        if (!deviceIdValid || !(newValue.length > 0 && newValue.length < 37)) {
           this.deviceIdErrorMessage = this.translationFields.messages.deviceId3;
         }
+        this.deviceIdValid = this.deviceIdRef.pristine ? true : !this.deviceIdAlreadyTaken &&
+          deviceIdValid && newValue.length > 0 && newValue.length < 37;
         this.iotDevice.deviceId = newValue;
       });
 

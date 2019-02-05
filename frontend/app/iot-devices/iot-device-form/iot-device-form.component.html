@@ -16,7 +16,7 @@
             <label for="deviceId">{{translationFields.labels.deviceId}}</label>
             <input type="text" class=" form-control" id="deviceId" required [(ngModel)]="iotDevice.deviceId" name="deviceId"
               #deviceId="ngModel">
-            <div [hidden]="(deviceId.valid || deviceId.pristine) && (!deviceIdAlreadyTaken || !deviceIdValid)" class="alert alert-danger">
+            <div [hidden]="deviceId.pristine || deviceIdValid" class="alert alert-danger">
               {{deviceIdErrorMessage}}
             </div>
           </div>
@@ -51,7 +51,7 @@
             <app-add-button [disable]="!eventsValid" (click)="addEvent();"></app-add-button>
           </div>
         </form>
-        <button type="submit" class="btn btn-success spacing-top" [disabled]="!createIotDeviceForm.form.valid || !eventsValid || deviceIdAlreadyTaken">{{translationFields.labels.submit}}</button>
+        <button type="submit" class="btn btn-success spacing-top" [disabled]="!createIotDeviceForm.form.valid || !eventsValid || deviceIdAlreadyTaken || !deviceIdValid">{{translationFields.labels.submit}}</button>
       </form>
     </div>
   </div>
