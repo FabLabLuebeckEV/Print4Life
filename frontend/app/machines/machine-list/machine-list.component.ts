@@ -133,11 +133,9 @@ export class MachineListComponent implements OnInit {
         this.successList = true;
         this.listView = false;
         this.headers.push('Successful Orders');
-        this.ngOnInit();
       } else if (!this.listView && route === `/${routes.paths.frontend.machines.root}`) {
         this.listView = true;
         this.successList = false;
-        this.ngOnInit();
       } else if (route !== `/${routes.paths.frontend.machines.root}`) {
         this.listView = false;
       }
