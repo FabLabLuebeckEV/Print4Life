@@ -137,6 +137,7 @@
         "admin": "Administrator"
     },
     "iotDeviceList": {
+        "paginationLabel": "",
         "spinnerLoadingText": "Lade IoT Geräte",
         "buttons": {
             "deleteLabel": "Gerät löschen",
@@ -151,6 +152,9 @@
             "deleteQuestion": "Sind Sie sich sicher, dass Sie",
             "deleteQuestion2": "dieses Gerät wirklich entfernen möchten?",
             "deleteWarning": "Das Löschen eines Geräts entfernt auch dessen Zugang zu Watson/MQTT."
+        },
+        "filterLabel": {
+            "search": "Suche"
         }
     },
     "machineList": {
@@ -369,6 +373,7 @@
         "messages": {
             "deviceId": "Der Name ist nicht gesetzt.",
             "deviceId2": "Der Name ist bereits vergeben.",
+            "deviceId3": "Der Name ist ungültig, erlaubt sind: 1 bis 36 Zeichen, a-z, A-Z, 0-9, '.', '-' und '_'",
             "eventsNotValid": "Füge mindestens ein Event hinzu bzw. mindestens eins scheint fehlerhaft zu sein."
         },
         "modals": {

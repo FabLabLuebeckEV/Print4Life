@@ -57,7 +57,8 @@ export const routes = {
                 create: '',
                 getAll: '',
                 search: 'search',
-                deviceTypes: 'types'
+                deviceTypes: 'types',
+                count: 'count'
             },
             machines: {
                 root: 'machines',
