@@ -155,6 +155,15 @@
             "dataformat": "Dataformat",
             "clientId": "Client ID",
             "deviceType": "Device Type"
+        },
+        "modals": {
+            "ok": "Yes",
+            "abort": "No",
+            "abortReturnValue": "Abort",
+            "deleteReturnValue": "Delete",
+            "deleteHeader": "Delete Device",
+            "deleteQuestion": "Are you really sure, that you want to remove this device?",
+            "deleteWarning": "The removal of this device will also remove it's access to the Watson/MQTT platform."
         }
     },
     "iotDeviceList": {

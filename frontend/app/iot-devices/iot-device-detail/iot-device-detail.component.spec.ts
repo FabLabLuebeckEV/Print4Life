@@ -6,9 +6,10 @@ import { IotDeviceDetailComponent } from './iot-device-detail.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BackButtonComponent } from 'frontend/app/components/back-button/back-button.component';
 import { DeleteButtonComponent } from 'frontend/app/components/delete-button/delete-button.component';
+import { MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
 
 describe('IotDeviceDetailComponent', () => {
   let component: IotDeviceDetailComponent;
@@ -19,6 +20,7 @@ describe('IotDeviceDetailComponent', () => {
       declarations: [
         IotDeviceDetailComponent,
         BackButtonComponent,
+        MessageModalComponent,
         DeleteButtonComponent
       ],
       imports: [
@@ -26,7 +28,8 @@ describe('IotDeviceDetailComponent', () => {
         NgbModule.forRoot(),
         FontAwesomeModule,
         TranslateModule.forRoot(),
-        RouterTestingModule
+        RouterTestingModule,
+        NgbModal
       ]
     })
       .compileComponents();

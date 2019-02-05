@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'frontend/app/services/user.service';
 import { IotDeviceListComponent } from '../iot-device-list/iot-device-list.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigService, SpinnerConfig } from 'frontend/app/config/config.service';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
@@ -10,6 +11,8 @@ import { IotDevice } from 'frontend/app/models/iot-device.model';
 import { User } from 'frontend/app/models/user.model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { environment } from '../../../environments/environment';
+import { ModalButton, MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
+import { GenericService } from 'frontend/app/services/generic.service';
 
 @Component({
   selector: 'app-iot-device-detail',
@@ -38,6 +41,15 @@ export class IotDeviceDetailComponent implements OnInit {
       dataformat: '',
       clientId: '',
       deviceType: ''
+    },
+    modals: {
+      ok: '',
+      deleteReturnValue: '',
+      abort: '',
+      abortReturnValue: '',
+      deleteHeader: '',
+      deleteQuestion: '',
+      deleteWarning: ''
     }
   };
 
@@ -48,6 +60,8 @@ export class IotDeviceDetailComponent implements OnInit {
     private configService: ConfigService,
     private translateService: TranslateService,
     private spinner: NgxSpinnerService,
+    private modalService: NgbModal,
+    private genericService: GenericService
   ) {
     this.config = this.configService.getConfig();
     this.deleteIcon = this.config.icons.delete;
@@ -87,6 +101,44 @@ export class IotDeviceDetailComponent implements OnInit {
     return false;
   }
 
+  public delete() {
+    const deleteButton = new ModalButton(
+      this.translationFields.modals.ok,
+      'btn btn-danger',
+      this.translationFields.modals.deleteReturnValue);
+
+    const abortButton = new ModalButton(
+      this.translationFields.modals.abort,
+      'btn btn-secondary',
+      this.translationFields.modals.abortReturnValue);
+
+    const modalRef = this._openMsgModal(
+      this.translationFields.modals.deleteHeader,
+      'modal-header header-danger',
+      [`${this.translationFields.modals.deleteQuestion}`,
+      `${this.translationFields.modals.deleteWarning}`],
+      deleteButton, abortButton);
+    modalRef.result.then((result) => {
+      if (result === deleteButton.returnValue) {
+        this.iotDeviceService.deleteDevice(this.iotDevice._id).then(() => {
+          this.genericService.back();
+        });
+      }
+    });
+  }
+
+  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
+    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
+    modalRef.componentInstance.title = title;
+    if (titleClass) {
+      modalRef.componentInstance.titleClass = titleClass;
+    }
+    modalRef.componentInstance.messages = messages;
+    modalRef.componentInstance.button1 = button1;
+    modalRef.componentInstance.button2 = button2;
+    return modalRef;
+  }
+
   private _translate() {
     this.translateService.get(['iotDeviceDetail']).subscribe((translations => {
       this.translationFields = {
@@ -98,6 +150,15 @@ export class IotDeviceDetailComponent implements OnInit {
           dataformat: translations['iotDeviceDetail'].labels.dataformat,
           clientId: translations['iotDeviceDetail'].labels.clientId,
           deviceType: translations['iotDeviceDetail'].labels.deviceType,
+        },
+        modals: {
+          ok: translations['iotDeviceDetail'].ok,
+          deleteReturnValue: translations['iotDeviceDetail'].deleteReturnValue,
+          abort: translations['iotDeviceDetail'].abort,
+          abortReturnValue: translations['iotDeviceDetail'].abortReturnValue,
+          deleteHeader: translations['iotDeviceDetail'].deleteHeader,
+          deleteQuestion: translations['iotDeviceDetail'].deleteQuestion,
+          deleteWarning: translations['iotDeviceDetail'].deleteWarning
         }
       };
     }));
