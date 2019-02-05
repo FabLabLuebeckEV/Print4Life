@@ -18,6 +18,7 @@ import {
 import { OrderListComponent } from './order-list.component';
 import { ConfigService } from '../../config/config.service';
 import { ValidationService } from 'frontend/app/services/validation.service';
+import { AddButtonComponent } from 'frontend/app/components/add-button/add-button.component';
 
 describe('OrderListComponent', () => {
   let component: OrderListComponent;
@@ -28,7 +29,8 @@ describe('OrderListComponent', () => {
       declarations: [
         OrderListComponent,
         TableComponent,
-        MessageModalComponent
+        MessageModalComponent,
+        AddButtonComponent
       ],
       imports: [
         NgbModule.forRoot(),

@@ -10,6 +10,7 @@ import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
 import { OrderService } from 'frontend/app/services/order.service';
+import { DeleteButtonType } from 'frontend/app/components/delete-button/delete-button.component';
 
 @Component({
   selector: 'app-machine-detail',
@@ -19,6 +20,8 @@ import { OrderService } from 'frontend/app/services/order.service';
 export class MachineDetailComponent implements OnInit {
   private config: any;
   private userIsLoggedIn: boolean;
+  toggleOnState: DeleteButtonType = DeleteButtonType.ToggleOn;
+  toggleOffState: DeleteButtonType = DeleteButtonType.ToggleOff;
   userIsAdmin: boolean;
   editLink: String;
   deleteLink: String;
@@ -45,6 +48,9 @@ export class MachineDetailComponent implements OnInit {
       deleteHeader: '',
       deleteMessage: '',
       deleteMessage2: ''
+    },
+    buttons: {
+      toggleTooltip: ''
     }
   };
   params: any = {
@@ -365,6 +371,9 @@ export class MachineDetailComponent implements OnInit {
           no: translations['machineDetail'].modals.no,
           deleteReturnValue: translations['machineDetail'].modals.deleteReturnValue,
           abortReturnValue: translations['machineDetail'].modals.abortReturnValue,
+        },
+        buttons: {
+          toggleTooltip: translations['machineDetail'].buttons.toggleTooltip
         }
       };
 

@@ -21,6 +21,7 @@ export class IotDeviceDetailComponent implements OnInit {
   deleteIcon: Icon;
   spinnerConfig: SpinnerConfig;
   mqttUri: String = environment.mqtt.uri;
+  mqttSubTopic: String;
   mqttPorts: String = environment.mqtt.ports.join(', ');
   environment = environment;
   iotDevice: IotDevice = new IotDevice(
@@ -70,6 +71,7 @@ export class IotDeviceDetailComponent implements OnInit {
             this.iotDevice = result['iot-device'];
             this.userIsLoggedIn = this.userService.isLoggedIn();
             this.loggedInUser = await this.userService.getUser();
+            this.mqttSubTopic = environment.mqtt.subTopic.replace('DEVICENAME', this.iotDevice.deviceId as string);
           }
           this.spinner.hide();
         });

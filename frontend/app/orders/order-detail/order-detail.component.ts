@@ -66,7 +66,6 @@ export class OrderDetailComponent implements OnInit {
   translationFields = {
     tooltips: {
       delete: '',
-      edit: '',
       print: '',
     },
     labels: {
@@ -322,7 +321,6 @@ export class OrderDetailComponent implements OnInit {
       this.translationFields = {
         tooltips: {
           delete: translations['orderDetail'].buttons.tooltips.delete,
-          edit: translations['orderDetail'].buttons.tooltips.edit,
           print: translations['orderDetail'].buttons.tooltips.print,
         },
         labels: {

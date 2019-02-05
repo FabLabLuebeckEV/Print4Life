@@ -44,15 +44,11 @@
                 </ng-select>
               </div>
               <div class="col-md-2">
-                <button [disabled]="!eventIndex" class="btn btn-danger" (click)="deleteEvent(eventIndex)">
-                  <fa-icon [icon]="deleteIcon"></fa-icon>
-                </button>
+                <app-delete-button [disable]="!eventIndex" (click)="deleteEvent(eventIndex)"></app-delete-button>
               </div>
             </div>
 
-            <button class="btn btn-success" [disabled]="!eventsValid" (click)="addEvent()">
-              <fa-icon [icon]="plusIcon"></fa-icon>
-            </button>
+            <app-add-button [disable]="!eventsValid" (click)="addEvent();"></app-add-button>
           </div>
         </form>
         <button type="submit" class="btn btn-success spacing-top" [disabled]="!createIotDeviceForm.form.valid || !eventsValid || deviceIdAlreadyTaken">{{translationFields.labels.submit}}</button>

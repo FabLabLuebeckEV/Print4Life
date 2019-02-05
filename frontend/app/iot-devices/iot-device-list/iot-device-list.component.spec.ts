@@ -14,6 +14,7 @@ import {
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
 import { FormsModule } from '@angular/forms';
+import { AddButtonComponent } from 'frontend/app/components/add-button/add-button.component';
 
 describe('IotDeviceListComponent', () => {
   let component: IotDeviceListComponent;
@@ -24,7 +25,8 @@ describe('IotDeviceListComponent', () => {
       declarations: [
         IotDeviceListComponent,
         TableComponent,
-        MessageModalComponent
+        MessageModalComponent,
+        AddButtonComponent
       ],
       imports: [
         NgxSpinnerModule,

@@ -24,7 +24,7 @@ export class IotDeviceListComponent implements OnInit {
   @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
-  private listView: Boolean = false;
+  listView: Boolean = false;
   loadingIotDevices: Boolean = false;
   iotDevices: Array<IotDevice> = [];
   visibleIotDevices: Array<TableItem> = [];

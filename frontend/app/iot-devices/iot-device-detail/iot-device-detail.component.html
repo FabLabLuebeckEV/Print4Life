@@ -4,9 +4,7 @@
   </div>
   <div class="col-md-3 col-xl-2">
     <app-back-button class="spacing-right-xs"></app-back-button>
-    <button *ngIf="true" (click)="delete()" type="button" class="btn btn-danger spacing-right-xs">
-      <fa-icon [icon]="deleteIcon"></fa-icon>
-    </button>
+    <app-delete-button (click)="delete()"></app-delete-button>
   </div>
 </div>
 <div class="row">
@@ -93,7 +91,7 @@
             Subscriber:
           </td>
           <td class="align-middle text-center">
-            <pre>{{environment.mqtt.subTopic.replace('DEVICENAME', iotDevice.deviceId)}}</pre>
+            <pre>{{mqttSubTopic}}</pre>
           </td>
         </tr>
         <tr>

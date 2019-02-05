@@ -20,6 +20,9 @@ import { FablabService } from '../../services/fablab.service';
 import { MachineFormComponent } from '../machine-form/machine-form.component';
 import { MachineDetailComponent } from '../machine-detail/machine-detail.component';
 import { BackButtonComponent } from '../../components/back-button/back-button.component';
+import { AddButtonComponent } from 'frontend/app/components/add-button/add-button.component';
+import { EditButtonComponent } from 'frontend/app/components/edit-button/edit-button.component';
+import { DeleteButtonComponent } from 'frontend/app/components/delete-button/delete-button.component';
 
 describe('MachineListComponent', () => {
   let component: MachineListComponent;
@@ -27,7 +30,15 @@ describe('MachineListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MachineListComponent, MachineFormComponent, MachineDetailComponent, TableComponent, BackButtonComponent],
+      declarations: [
+        MachineListComponent,
+        MachineFormComponent,
+        MachineDetailComponent,
+        TableComponent,
+        BackButtonComponent,
+        AddButtonComponent,
+        EditButtonComponent,
+        DeleteButtonComponent],
       imports: [
         NgSelectModule,
         FormsModule,

@@ -47,6 +47,14 @@
     margin-top: 60px;
 }
 
+.spacing-top-xs {
+    margin-top: 10px;
+}
+
+.spacing-left-xxl {
+    margin-left: 30px;
+}
+
 .header-success {
     background-color: green;
     color: white;

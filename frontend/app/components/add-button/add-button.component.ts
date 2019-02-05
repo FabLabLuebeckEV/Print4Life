@@ -10,6 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AddButtonComponent implements OnInit {
   @Input() createLink: String;
+  @Input() disable: boolean;
   config: any;
   plusIcon: Icon;
   tooltip: String;

@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { BackButtonComponent } from 'frontend/app/components/back-button/back-button.component';
+import { EditButtonComponent } from 'frontend/app/components/edit-button/edit-button.component';
 
 describe('UserDetailComponent', () => {
   let component: UserDetailComponent;
@@ -18,7 +19,7 @@ describe('UserDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        UserDetailComponent, BackButtonComponent
+        UserDetailComponent, BackButtonComponent, EditButtonComponent
       ],
       imports: [
         NgbModule.forRoot(),

@@ -11,6 +11,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteButtonComponent } from 'frontend/app/components/delete-button/delete-button.component';
+import { AddButtonComponent } from 'frontend/app/components/add-button/add-button.component';
 
 describe('IotDeviceFormComponent', () => {
   let component: IotDeviceFormComponent;
@@ -20,7 +22,9 @@ describe('IotDeviceFormComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         IotDeviceFormComponent,
-        BackButtonComponent
+        BackButtonComponent,
+        AddButtonComponent,
+        DeleteButtonComponent
       ],
       providers: [TranslateService],
       imports: [

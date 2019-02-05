@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { IotDevice, Event, DeviceType } from 'frontend/app/models/iot-device.model';
-import { Location } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfigService } from 'frontend/app/config/config.service';
 import { IotDeviceService } from 'frontend/app/services/iot-device.service';
@@ -67,6 +65,9 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
       deviceId3: '',
       eventsNotValid: ''
     },
+    buttons: {
+      deleteTooltip: ''
+    },
     modals: {
       errorHeader: '',
       successHeader: '',
@@ -78,8 +79,6 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
     }
   };
   constructor(
-    private router: Router,
-    private location: Location,
     private translateService: TranslateService,
     private configService: ConfigService,
     private iotDeviceService: IotDeviceService,
@@ -125,14 +124,11 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
 
     this.eventFormGroupSubscription = this.eventFormGroup.valueChanges.pipe(debounceTime(200))
       .subscribe(async (changed) => {
-        let eventsValid = false;
-        changed.events.forEach(event => {
-          eventsValid = eventsValid || this.regEx.test(event.topic);
-          eventsValid = eventsValid || event.dataformat;
+        const invalidEvents = changed.events.filter(event => {
+          return !this.regEx.test(event.topic) || !event.dataformat;
         });
-        this.eventsValid = eventsValid;
+        this.eventsValid = !invalidEvents.length;
       });
-
     this.init();
   }
 
@@ -141,7 +137,11 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
   }
 
   addEvent() {
-    this.events.push(this.fb.group({ topic: '', dataformat: '' }));
+    if (this.eventsValid) {
+      this.events.push(this.fb.group({ topic: '', dataformat: '' }));
+      this.eventsValid = undefined;
+      this.eventsValid = false;
+    }
   }
 
   deleteEvent(index) {
@@ -193,7 +193,7 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
     this.deviceIdAlreadyTaken = result && result['iot-devices'] && result['iot-devices'].length;
   }
 
-  private validateEvents() {
+  public validateEvents() {
     let valid = true;
     this.eventFormGroup.value.events.forEach(event => {
       valid = (event.dataformat && event.topic) && valid;
@@ -202,11 +202,6 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
       valid = false;
     }
     this.eventsValid = valid;
-  }
-
-  private _validateWatson(str: String): boolean {
-
-    return false;
   }
 
   private _openMsgModal(title: String, titleClass: String, messages: Array<String>,
@@ -240,6 +235,9 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
     this.translateService.get(['iotDevicesForm']).subscribe((translations => {
       this.translationFields = {
         title: translations['iotDevicesForm'].createTitle,
+        buttons: {
+          deleteTooltip: translations['iotDevicesForm'].buttons.deleteTooltip,
+        },
         labels: {
           deviceId: translations['iotDevicesForm'].labels.deviceId,
           deviceType: translations['iotDevicesForm'].labels.deviceType,

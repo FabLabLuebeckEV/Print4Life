@@ -11,6 +11,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { EditButtonComponent } from 'frontend/app/components/edit-button/edit-button.component';
+import { DeleteButtonComponent } from 'frontend/app/components/delete-button/delete-button.component';
 
 describe('OrderDetailComponent', () => {
   let component: OrderDetailComponent;
@@ -19,7 +21,7 @@ describe('OrderDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        OrderDetailComponent, BackButtonComponent
+        OrderDetailComponent, BackButtonComponent, EditButtonComponent, DeleteButtonComponent
       ],
       providers: [TranslateService],
       imports: [

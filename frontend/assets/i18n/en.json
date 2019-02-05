@@ -8,6 +8,10 @@
         },
         "edit": {
             "tooltip": "Edit"
+        },
+        "delete": {
+            "deleteTooltip": "Delete",
+            "toggleTooltip": "Change Active Status"
         }
     },
     "date": {
@@ -157,7 +161,7 @@
         "paginationLabel": "",
         "spinnerLoadingText": "Loading IoT Devices",
         "buttons": {
-            "deleteLabel": "Delete Device",
+            "deleteLabel": "Delete",
             "detailLabel": "Device Details"
         },
         "modals": {
@@ -185,7 +189,7 @@
         "spinnerLoadingText": "Loading Machines",
         "buttons": {
             "deleteLabel": "Delete",
-            "toggleLabel": "Change Status",
+            "toggleLabel": "Change Active Status",
             "updateLabel": "Edit"
         },
         "modals": {
@@ -270,6 +274,9 @@
             "deleteHeader": "Do you really want toggle machine's status?",
             "deleteMessage": "Are you sure you want to toggle",
             "deleteMessage2": "?"
+        },
+        "buttons": {
+            "toggleTooltip": "Change Active Status"
         },
         "props": {
             "activated": "Active-Status",
@@ -372,6 +379,9 @@
     },
     "iotDevicesForm": {
         "createTitle": "Add IoT Device",
+        "buttons": {
+            "deleteTooltip": "Delete"
+        },
         "labels": {
             "deviceId": "Devicename",
             "deviceType": "Choose Devicetype",
@@ -499,8 +509,7 @@
     "orderDetail": {
         "buttons": {
             "tooltips": {
-                "delete": "Delete Order",
-                "edit": "Edit Order",
+                "delete": "Delete",
                 "print": "Print Order via Octoprint"
             }
         },

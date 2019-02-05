@@ -8,6 +8,10 @@
         },
         "edit": {
             "tooltip": "Ändern"
+        },
+        "delete": {
+            "deleteTooltip": "Löschen",
+            "toggleTooltip": "Aktiv Status wechseln"
         }
     },
     "date": {
@@ -146,7 +150,7 @@
         "paginationLabel": "",
         "spinnerLoadingText": "Lade IoT Geräte",
         "buttons": {
-            "deleteLabel": "Gerät löschen",
+            "deleteLabel": "Löschen",
             "detailLabel": "Gerätedetails"
         },
         "modals": {
@@ -174,7 +178,7 @@
         "spinnerLoadingText": "Lade Maschinen",
         "buttons": {
             "deleteLabel": "Löschen",
-            "toggleLabel": "Status wechseln",
+            "toggleLabel": "Aktiv Status wechseln",
             "updateLabel": "Ändern"
         },
         "modals": {
@@ -184,7 +188,7 @@
             "abortValue": "Abbrechen",
             "deleteHeader": "Möchten den Status der Maschine ändern?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "den Status wechseln wollen?"
+            "deleteQuestion2": "den Aktiv Status wechseln wollen?"
         },
         "activations": {
             "active": "Aktive",
@@ -258,7 +262,10 @@
             "abortReturnValue": "Abbrechen",
             "deleteHeader": "Möchten den Status der Maschine ändern?",
             "deleteMessage": "Sind Sie sicher, dass Sie",
-            "deleteMessage2": "den Status wechseln wollen?"
+            "deleteMessage2": "den Aktiv Status wechseln wollen?"
+        },
+        "buttons": {
+            "toggleTooltip": "Aktiv Status wechseln"
         },
         "props": {
             "activated": "Aktiv-Status",
@@ -372,6 +379,9 @@
     },
     "iotDevicesForm": {
         "createTitle": "IoT Gerät hinzufügen",
+        "buttons": {
+            "deleteTooltip": "Löschen"
+        },
         "labels": {
             "deviceId": "Gerätename",
             "deviceType": "Gerätetyp wählen",
@@ -499,8 +509,7 @@
     "orderDetail": {
         "buttons": {
             "tooltips": {
-                "delete": "Auftrag löschen",
-                "edit": "Auftrag bearbeiten",
+                "delete": "Löschen",
                 "print": "Auftrag über Octoprint drucken"
             }
         },

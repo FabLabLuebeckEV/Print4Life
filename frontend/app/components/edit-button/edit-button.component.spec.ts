@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditButtonComponent } from './edit-button.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 describe('EditButtonComponent', () => {
   let component: EditButtonComponent;
@@ -8,9 +11,11 @@ describe('EditButtonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditButtonComponent ]
+      declarations: [EditButtonComponent],
+      imports: [FontAwesomeModule, RouterTestingModule, TranslateModule.forRoot()],
+      providers: [TranslateService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BackButtonComponent } from 'frontend/app/components/back-button/back-button.component';
+import { DeleteButtonComponent } from 'frontend/app/components/delete-button/delete-button.component';
 
 describe('IotDeviceDetailComponent', () => {
   let component: IotDeviceDetailComponent;
@@ -17,7 +18,8 @@ describe('IotDeviceDetailComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         IotDeviceDetailComponent,
-        BackButtonComponent
+        BackButtonComponent,
+        DeleteButtonComponent
       ],
       imports: [
         HttpClientTestingModule,
