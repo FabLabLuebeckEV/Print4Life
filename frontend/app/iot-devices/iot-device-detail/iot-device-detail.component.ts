@@ -20,8 +20,8 @@ export class IotDeviceDetailComponent implements OnInit {
   config: any;
   deleteIcon: Icon;
   spinnerConfig: SpinnerConfig;
-  mqttUri: String = environment.mqttUri;
-  mqttPorts: String = environment.mqttPorts.join(', ');
+  mqttUri: String = environment.mqtt.uri;
+  mqttPorts: String = environment.mqtt.ports.join(', ');
   environment = environment;
   iotDevice: IotDevice = new IotDevice(
     undefined, undefined, undefined, undefined, undefined, undefined, undefined
