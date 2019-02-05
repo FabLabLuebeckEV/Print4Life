@@ -5,8 +5,6 @@ import { TableItem } from '../../components/table/table.component';
 import { OrderService } from '../../services/order.service';
 import { MachineService } from '../../services/machine.service';
 import { ConfigService } from '../../config/config.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { routes } from '../../config/routes';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
@@ -17,6 +15,8 @@ import { SpinnerConfig } from '../../config/config.service';
 import { FablabService } from 'frontend/app/services/fablab.service';
 import { ValidationService } from 'frontend/app/services/validation.service';
 import { isArray } from 'util';
+import { ModalService } from '../../services/modal.service';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-order-list',
@@ -111,7 +111,7 @@ export class OrderListComponent implements OnInit {
     private machineService: MachineService,
     private router: Router,
     private location: Location,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private configService: ConfigService,
     private spinner: NgxSpinnerService,
     private translateService: TranslateService,
@@ -529,7 +529,7 @@ export class OrderListComponent implements OnInit {
       const deleteButton = new ModalButton(this.translationFields.modals.yes, 'btn btn-danger', this.translationFields.modals.deleteValue);
       const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
         this.translationFields.modals.abortValue);
-      const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+      const modalRef = this.modalService.openMsgModal(this.translationFields.modals.deleteHeader,
         'modal-header header-danger', [`${this.translationFields.modals.deleteQuestion} ` +
           `${order.obj[`Projectname`].label} ${this.translationFields.modals.deleteQuestion2}`,
         `${this.translationFields.modals.deleteWarning}`], deleteButton, abortButton);
@@ -591,18 +591,6 @@ export class OrderListComponent implements OnInit {
     if (index >= 0) {
       this.headers.splice(index, 1);
     }
-  }
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    if (titleClass) {
-      modalRef.componentInstance.titleClass = titleClass;
-    }
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
   }
 
   private async _loadStatus() {

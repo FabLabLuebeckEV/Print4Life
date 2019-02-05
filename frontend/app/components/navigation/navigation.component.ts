@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { routes } from '../../config/routes';
 import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginModalComponent } from '../../users/login-modal/login-modal.component';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
+import { ModalService } from '../../services/modal.service';
 
 interface Dropdown {
   name: String;
@@ -35,7 +35,7 @@ export class NavigationComponent implements OnInit {
   constructor(
     private translateService: TranslateService,
     private userService: UserService,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private router: Router
   ) {
     this.router.events.subscribe(async () => {

@@ -3,14 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { ConfigService } from '../../config/config.service';
-import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { routes } from '../../config/routes';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
 import { OrderService } from 'frontend/app/services/order.service';
 import { DeleteButtonType } from 'frontend/app/components/delete-button/delete-button.component';
+import { ModalService } from '../../services/modal.service';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-machine-detail',
@@ -62,7 +62,7 @@ export class MachineDetailComponent implements OnInit {
     private fablabService: FablabService,
     private configService: ConfigService,
     private genericService: GenericService,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private translateService: TranslateService,
     private userService: UserService,
     private orderService: OrderService) {
@@ -98,7 +98,7 @@ export class MachineDetailComponent implements OnInit {
       this.translationFields.modals.deleteReturnValue);
     const abortButton = new ModalButton(this.translationFields.modals.no, 'btn btn-secondary',
       this.translationFields.modals.abortReturnValue);
-    const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+    const modalRef = this.modalService.openMsgModal(this.translationFields.modals.deleteHeader,
       'modal-header header-warning',
       [`${this.translationFields.modals.deleteMessage} ${this.machine.deviceName} ${this.translationFields.modals.deleteMessage2}`],
       deleteButton, abortButton);
@@ -158,18 +158,6 @@ export class MachineDetailComponent implements OnInit {
         });
       });
     }
-  }
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    if (titleClass) {
-      modalRef.componentInstance.titleClass = titleClass;
-    }
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
   }
 
   private async _splitMachineProps() {

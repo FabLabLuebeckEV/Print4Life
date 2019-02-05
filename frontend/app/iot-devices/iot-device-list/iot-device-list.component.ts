@@ -12,8 +12,8 @@ import { SpinnerConfig } from 'frontend/app/config/config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { UserService } from 'frontend/app/services/user.service';
-import { ModalButton, MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalService } from '../../services/modal.service';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-iot-device-list',
@@ -78,7 +78,7 @@ export class IotDeviceListComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private genericService: GenericService,
     private userService: UserService,
-    private modalService: NgbModal
+    private modalService: ModalService
   ) {
     this.config = this.configService.getConfig();
     this.headers = ['id', 'Device ID', 'Type'];
@@ -197,7 +197,7 @@ export class IotDeviceListComponent implements OnInit {
       const abortButton = new ModalButton(
         this.translationFields.modals.abort, 'btn btn-secondary',
         this.translationFields.modals.abortValue);
-      const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+      const modalRef = this.modalService.openMsgModal(this.translationFields.modals.deleteHeader,
         'modal-header header-danger', [`${this.translationFields.modals.deleteQuestion} ` +
           `${iotDevice.obj[`Device ID`].label} ${this.translationFields.modals.deleteQuestion2}`,
         `${this.translationFields.modals.deleteWarning}`], deleteButton, abortButton);
@@ -212,18 +212,6 @@ export class IotDeviceListComponent implements OnInit {
         }
       });
     }
-  }
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    if (titleClass) {
-      modalRef.componentInstance.titleClass = titleClass;
-    }
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
   }
 
   private _translate() {

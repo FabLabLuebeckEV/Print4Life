@@ -4,8 +4,6 @@ import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { TableItem } from '../../components/table/table.component';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { ConfigService, SpinnerConfig } from '../../config/config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { routes } from '../../config/routes';
@@ -14,7 +12,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'frontend/app/services/user.service';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { User } from 'frontend/app/models/user.model';
-import { headersToString } from 'selenium-webdriver/http';
+import { ModalService } from '../../services/modal.service';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-machine-list',
@@ -113,7 +112,7 @@ export class MachineListComponent implements OnInit {
 
   constructor(private machineService: MachineService,
     private fablabService: FablabService, private router: Router,
-    private location: Location, private modalService: NgbModal,
+    private location: Location, private modalService: ModalService,
     private spinner: NgxSpinnerService, private configService: ConfigService,
     private translateService: TranslateService, private userService: UserService,
     private genericService: GenericService) {
@@ -219,7 +218,7 @@ export class MachineListComponent implements OnInit {
       const deleteButton = new ModalButton(this.translationFields.modals.yes, 'btn btn-danger', this.translationFields.modals.deleteValue);
       const abortButton = new ModalButton(this.translationFields.modals.abort,
         'btn btn-secondary', this.translationFields.modals.abortValue);
-      const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+      const modalRef = this.modalService.openMsgModal(this.translationFields.modals.deleteHeader,
         'modal-header header-warning',
         [`${this.translationFields.modals.deleteQuestion} ` +
           `${machine.obj[`Device Name`].label} ${this.translationFields.modals.deleteQuestion2}`]
@@ -353,19 +352,6 @@ export class MachineListComponent implements OnInit {
     }
     this.loadingFablabs = false;
   }
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    if (titleClass) {
-      modalRef.componentInstance.titleClass = titleClass;
-    }
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
-  }
-
 
   public async init() {
     const arr = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);

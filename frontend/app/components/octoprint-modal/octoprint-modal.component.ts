@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalButton } from '../message-modal/message-modal.component';
 import { OctoprintService } from 'frontend/app/services/octoprint.service';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-octoprint-modal',

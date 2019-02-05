@@ -7,11 +7,11 @@ import { User } from 'frontend/app/models/user.model';
 import { UserService } from 'frontend/app/services/user.service';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
-import { ModalButton, MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { ModalService } from '../../services/modal.service';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-iot-device-form',
@@ -84,7 +84,7 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
     private iotDeviceService: IotDeviceService,
     private userService: UserService,
     private fb: FormBuilder,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private genericService: GenericService
   ) {
     this.config = this.configService.getConfig();
@@ -112,7 +112,7 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
       .subscribe(async (newValue) => {
         let deviceIdValid = true;
         if (!newValue.length) {
-        this.deviceIdErrorMessage = this.translationFields.messages.deviceId;
+          this.deviceIdErrorMessage = this.translationFields.messages.deviceId;
         }
         await this.checkDeviceId(newValue);
         if (this.deviceIdAlreadyTaken) {
@@ -179,7 +179,7 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
             device.events.forEach(event => {
               message.push(`Event: Topic: ${event.topic}, ${this.translationFields.modals.dataformat}: ${event.dataformat}`);
             });
-            this._openMsgModal(
+            this.modalService.openMsgModal(
               this.translationFields.modals.successHeader,
               'modal-header header-success', message, okButton, undefined).result.then((result) => {
                 this.genericService.back();
@@ -195,7 +195,7 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
   async checkDeviceId(deviceId: String) {
     const noWhiteSpaceDeviceId = deviceId.split(/\s/g).join('-');
     const result = await this.iotDeviceService.getAllIotDevices({ deviceId: noWhiteSpaceDeviceId });
-    this.deviceIdAlreadyTaken = result && result['iot-devices'] && result['iot-devices'].length;
+    this.deviceIdAlreadyTaken = result && result['iot-devices'] && result['iot-devices'].length ? true : false;
   }
 
   public validateEvents() {
@@ -207,20 +207,6 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
       valid = false;
     }
     this.eventsValid = valid;
-  }
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>,
-    button1: ModalButton, button2: ModalButton, link?: String) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    modalRef.componentInstance.titleClass = titleClass;
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    if (link) {
-      modalRef.componentInstance.link = link;
-    }
-    return modalRef;
   }
 
   private async _loadDeviceTypes() {

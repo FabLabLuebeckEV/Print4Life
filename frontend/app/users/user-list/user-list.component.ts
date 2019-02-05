@@ -3,8 +3,6 @@ import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { ConfigService } from '../../config/config.service';
 import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { TableItem } from '../../components/table/table.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { routes } from '../../config/routes';
@@ -13,6 +11,8 @@ import { Location } from '@angular/common';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { SpinnerConfig } from '../../config/config.service';
 import { FablabService } from 'frontend/app/services/fablab.service';
+import { ModalService } from '../../services/modal.service';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-user-list',
@@ -87,7 +87,7 @@ export class UserListComponent implements OnInit {
     private configService: ConfigService,
     private router: Router,
     private location: Location,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private genericService: GenericService,
     private fablabService: FablabService
   ) {
@@ -152,11 +152,6 @@ export class UserListComponent implements OnInit {
     };
     if (this.filter.selectedRoles.length > 0) {
       const $or = [];
-      // query = {
-      //   $and: [
-      //     { $or: [] }
-      //   ]
-      // };
       this.filter.selectedRoles.forEach((role) => {
         $or.push({ 'role.role': role });
       });
@@ -293,7 +288,7 @@ export class UserListComponent implements OnInit {
       const deleteButton = new ModalButton(this.translationFields.modals.yes, 'btn btn-danger', this.translationFields.modals.deleteValue);
       const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
         this.translationFields.modals.abortValue);
-      const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+      const modalRef = this.modalService.openMsgModal(this.translationFields.modals.deleteHeader,
         'modal-header header-danger', [`${this.translationFields.modals.deleteQuestion} ` +
           `${user.obj[`Username`].label} ${this.translationFields.modals.deleteQuestion2}`], deleteButton, abortButton);
       modalRef.result.then((result) => {
@@ -413,15 +408,4 @@ export class UserListComponent implements OnInit {
     }));
   }
 
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    if (titleClass) {
-      modalRef.componentInstance.titleClass = titleClass;
-    }
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
-  }
 }
