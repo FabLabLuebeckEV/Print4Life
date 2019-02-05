@@ -130,8 +130,6 @@ export class OrderListComponent implements OnInit {
     this.calendarIcon = this.config.icons.calendar;
     this.jumpArrow = this.config.icons.forward;
     this.trashIcon = this.config.icons.delete;
-    this.headers = ['id', 'Created at', 'Schedule Start Date',
-      'Schedule End Date', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type'];
 
     this.router.events.subscribe(() => {
       this.outstandingOrders = false;
@@ -150,7 +148,6 @@ export class OrderListComponent implements OnInit {
         this.listView = true;
         this.myOrdersView = true;
       }
-      this.ngOnInit();
     });
   }
 
@@ -184,7 +181,7 @@ export class OrderListComponent implements OnInit {
   }
 
   async init() {
-    const promises = [];
+    let promises = [];
     this.spinner.show();
     const loggedInUser = await this.userService.getUser();
     this.loadingOrders = true;
@@ -353,76 +350,98 @@ export class OrderListComponent implements OnInit {
           }));
         });
       }
-      const results = await Promise.all(promises);
+      let results = await Promise.all(promises);
       this.translateService.get(['date']).subscribe((async translations => {
         orders = this.unfinishedOrders && results && Array.isArray(results) ? results.filter((order) => order) : orders.orders;
-        const arr = [];
+        this.headers = this._initHeaders();
+        promises = [];
         for (const order of orders) {
-          let fablab;
-          if (order.fablabId) {
-            try {
-              const result = await this.fablabService.getFablab(order.fablabId);
-              if (result && result.fablab) {
-                fablab = result.fablab;
+          promises.push(new Promise(async (resolve, reject) => {
+            let owner;
+            let editor;
+            let fablab;
+            if (order.fablabId) {
+              try {
+                const result = await this.fablabService.getFablab(order.fablabId);
+                if (result && result.fablab) {
+                  fablab = result.fablab;
+                }
+              } catch (err) {
+                reject(err);
               }
-            } catch (err) { }
-          }
-          const item = new TableItem();
-          const owner = await this.userService.getNamesOfUser(order.owner);
-          const editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
-          item.obj['id'] = { label: order._id };
-          item.obj['Created at'] = {
-            label: `${this.genericService.translateDate(order.createdAt, currentLang, translations['date'].dateTimeFormat)}`
-          };
-          if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor' || this.userIsAdmin)
-            || this.unfinishedOrders) {
-            item.obj['Schedule Start Date'] = {
-              label: order.schedule && order.schedule.startDate ?
-                `${this.genericService.translateDate(order.schedule.startDate, currentLang, translations['date'].dateTimeFormat)}`
-                : '-'
+            }
+            const item = new TableItem();
+
+            try {
+              owner = await this.userService.getNamesOfUser(order.owner);
+              editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
+            } catch (err) {
+              reject(err);
+            }
+
+            item.obj['id'] = { label: order._id };
+            item.obj['Created at'] = {
+              label: `${this.genericService.translateDate(order.createdAt, currentLang, translations['date'].dateTimeFormat)}`
             };
-            item.obj['Schedule End Date'] = {
-              label: order.schedule && order.schedule.endDate ?
-                `${this.genericService.translateDate(order.schedule.endDate, currentLang, translations['date'].dateTimeFormat)}`
-                : '-'
-            };
+            if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor' || this.userIsAdmin)
+              || this.unfinishedOrders) {
+              item.obj['Schedule Start Date'] = {
+                label: order.schedule && order.schedule.startDate ?
+                  `${this.genericService.translateDate(order.schedule.startDate, currentLang, translations['date'].dateTimeFormat)}`
+                  : '-'
+              };
+              item.obj['Schedule End Date'] = {
+                label: order.schedule && order.schedule.endDate ?
+                  `${this.genericService.translateDate(order.schedule.endDate, currentLang, translations['date'].dateTimeFormat)}`
+                  : '-'
+              };
+            } else {
+              this._removeHeader('Schedule Start Date');
+              this._removeHeader('Schedule End Date');
+            }
             item.obj['Fablab'] = {
               label: fablab ? fablab.name : '-'
             };
-          }
-          item.obj['Projectname'] = {
-            label: order.projectname,
-            href: (order.shared ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
-              : `/${routes.paths.frontend.orders.root}/`) +
-              `${routes.paths.frontend.orders.detail}/${order._id}`,
-            icon: order.shared ? this.publicIcon : undefined
-          };
-          item.obj['Owner'] = {
-            label: owner.firstname + ' ' + owner.lastname,
-            href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''
-          };
-          item.obj['Editor'] = {
-            label: editor ? editor.firstname + ' ' + editor.lastname : '',
-            href: editor && this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
-          };
-          item.obj['Status'] = { label: order.status };
-          item.obj['Device Type'] = { label: order.machine.type };
-          if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor'
-            || this.userIsAdmin || loggedInUser._id === owner._id)) {
-            item.button1.label = this.translationFields.buttons.updateLabel;
-            item.button1.href = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${order._id}`;
-            item.button1.class = 'btn btn-warning spacing';
-            item.button1.icon = this.config.icons.edit;
-            item.button2.label = this.translationFields.buttons.deleteLabel;
-            item.button2.eventEmitter = true;
-            item.button2.class = 'btn btn-danger spacing';
-            item.button2.icon = this.config.icons.delete;
-            item.button2.refId = order._id;
-          }
-          arr.push(item);
+            item.obj['Projectname'] = {
+              label: order.projectname,
+              href: (order.shared ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
+                : `/${routes.paths.frontend.orders.root}/`) +
+                `${routes.paths.frontend.orders.detail}/${order._id}`,
+              icon: order.shared ? this.publicIcon : undefined
+            };
+            item.obj['Owner'] = {
+              label: owner.firstname + ' ' + owner.lastname,
+              href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''
+            };
+            item.obj['Editor'] = {
+              label: editor ? editor.firstname + ' ' + editor.lastname : '',
+              href: editor && this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
+            };
+            item.obj['Status'] = { label: order.status };
+            item.obj['Device Type'] = { label: order.machine.type };
+            if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor'
+              || this.userIsAdmin || loggedInUser._id === owner._id)) {
+              item.button1.label = this.translationFields.buttons.updateLabel;
+              item.button1.href = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${order._id}`;
+              item.button1.class = 'btn btn-warning spacing';
+              item.button1.icon = this.config.icons.edit;
+              item.button2.label = this.translationFields.buttons.deleteLabel;
+              item.button2.eventEmitter = true;
+              item.button2.class = 'btn btn-danger spacing';
+              item.button2.icon = this.config.icons.delete;
+              item.button2.refId = order._id;
+            }
+            resolve(item);
+          }));
         }
 
-        this.orders = [].concat(arr);
+        this.orders = [];
+
+        results = await Promise.all(promises);
+        results.forEach((item) => {
+          this.orders.push(item);
+        });
+
         this.visibleOrders = undefined;
         this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
         this.spinner.hide();
@@ -559,6 +578,18 @@ export class OrderListComponent implements OnInit {
   }
 
   // Private Functions
+
+  private _initHeaders(): Array<String> {
+    return ['id', 'Created at', 'Schedule Start Date',
+      'Schedule End Date', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type'];
+  }
+
+  private _removeHeader(headerName: string) {
+    const index = this.headers.findIndex(e => e === headerName);
+    if (index >= 0) {
+      this.headers.splice(index, 1);
+    }
+  }
 
   private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
     const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
