@@ -153,12 +153,6 @@ export class OrderListComponent implements OnInit {
 
   async ngOnInit() {
     if ((this.listView || this.outstandingOrders || this.unfinishedOrders) && !this.loadingOrders) {
-      this.translateService.onLangChange.subscribe(() => {
-        this._translate();
-        this.paginationObj.page = 1;
-        this.init();
-      });
-      this.loadingOrders = true;
       this.visibleOrders = [];
       this.orders = [];
       if (this.unfinishedOrders) {
@@ -169,295 +163,284 @@ export class OrderListComponent implements OnInit {
       this.userIsLoggedIn = await this.userService.isLoggedIn();
       this.userIsAdmin = await this.userService.isAdmin();
       this._translate();
-      this.init();
+      await this.init();
+      this.translateService.onLangChange.subscribe(async () => {
+        this._translate();
+        this.paginationObj.page = 1;
+        await this.init();
+      });
     }
   }
 
 
-  searchInit() {
+  async searchInit() {
     this.paginationObj.page = 1;
     this.paginationObj.totalItems = 0;
-    this.init();
+    await this.init();
   }
 
   async init() {
-    let promises = [];
-    this.spinner.show();
-    const loggedInUser = await this.userService.getUser();
-    this.loadingOrders = true;
-    const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
-    this.orders = new Array();
-    this.visibleOrders = undefined;
-    this.genericService.scrollIntoView(this.spinnerContainerRef);
-    let countObj;
-    let totalItems = 0;
-    let query = { $and: [] };
+    if (!this.loadingOrders) {
+      this.loadingOrders = true;
 
-    if (this.filter.selectedStatus.length > 0 && this.filter.selectedMachineTypes.length > 0) {
-      query = {
-        $and: [
-          { $or: [] },
-          { $or: [] },
-        ]
-      };
-      this.filter.selectedStatus.forEach((status) => {
-        query.$and[0].$or.push({ status: status });
-      });
-      this.filter.selectedMachineTypes.forEach((type) => {
-        query.$and[1].$or.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
-      });
-    } else if (this.filter.selectedStatus.length > 0 || this.filter.selectedMachineTypes.length > 0) {
-      query = {
-        $and: [
-          { $or: [] },
-          { $nor: [] }
-        ]
-      };
-      if (this.filter.selectedStatus.length > 0) {
+      let promises = [];
+      this.spinner.show();
+      const loggedInUser = await this.userService.getUser();
+      this.loadingOrders = true;
+      const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
+      this.orders = new Array();
+      this.visibleOrders = undefined;
+      this.genericService.scrollIntoView(this.spinnerContainerRef);
+      let countObj;
+      let totalItems = 0;
+      let query = { $and: [] };
+
+      if (this.filter.selectedStatus.length > 0 && this.filter.selectedMachineTypes.length > 0) {
+        query = {
+          $and: [
+            { $or: [] },
+            { $or: [] },
+          ]
+        };
         this.filter.selectedStatus.forEach((status) => {
           query.$and[0].$or.push({ status: status });
         });
-        this.filter.originalMachineTypes.forEach((type) => {
-          query.$and[1].$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
-        });
-      } else if (this.filter.selectedMachineTypes.length > 0) {
         this.filter.selectedMachineTypes.forEach((type) => {
-          query.$and[0].$or.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
+          query.$and[1].$or.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
         });
-        this.filter.originalValidStatus.forEach((status) => {
-          query.$and[1].$nor.push({ status });
-        });
-      }
-    } else if (this.filter.originalValidStatus.length && this.filter.originalMachineTypes.length) {
-      query = {
-        $and: [
-          { $nor: [] }
-        ]
-      };
-      this.filter.originalValidStatus.forEach((status) => {
-        query.$and[0].$nor.push({ status });
-      });
-      this.filter.originalMachineTypes.forEach((type) => {
-        query.$and[0].$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
-      });
-    }
-
-    // filter only valid status and not one of the others
-    if (this.outstandingOrders) {
-      try {
-        const result = await this.orderService.getStatus(false);
-        if (result && result.status && this.filter.originalValidStatus.length) {
-          query.$and.push({ $nor: [] });
-          let statusArr = [];
-          if (isArray(result.status)) {
-            statusArr = result.status.filter((status) => {
-              return !this.filter.originalValidStatus.includes(status);
-            });
-          } else {
-            statusArr = this.filter.originalValidStatus.filter((status) => {
-              return status !== result.status;
-            });
-          }
-          statusArr.forEach((status) => {
-            query.$and[query.$and.length - 1].$nor.push({ status });
+      } else if (this.filter.selectedStatus.length > 0 || this.filter.selectedMachineTypes.length > 0) {
+        query = {
+          $and: [
+            { $or: [] },
+            { $nor: [] }
+          ]
+        };
+        if (this.filter.selectedStatus.length > 0) {
+          this.filter.selectedStatus.forEach((status) => {
+            query.$and[0].$or.push({ status: status });
+          });
+          this.filter.originalMachineTypes.forEach((type) => {
+            query.$and[1].$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
+          });
+        } else if (this.filter.selectedMachineTypes.length > 0) {
+          this.filter.selectedMachineTypes.forEach((type) => {
+            query.$and[0].$or.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
+          });
+          this.filter.originalValidStatus.forEach((status) => {
+            query.$and[1].$nor.push({ status });
           });
         }
-      } catch (err) { }
-    }
-
-
-    if (!query.$and) {
-      query.$and = [];
-    } else if (query.$and && isArray(query.$and)) {
-      // if search term is defined add to mongo query
-      if (this.filter.searchTerm) {
-        query.$and.push({ $text: { $search: this.filter.searchTerm } });
-      }
-
-      // if user is not editor, admin or logged in: do not show shared orders
-      if (!loggedInUser
-        || loggedInUser && loggedInUser.role
-        && (loggedInUser.role.role !== 'admin' && loggedInUser.role.role !== 'editor')) {
-        query.$and.push({ shared: false });
-      }
-
-      if (loggedInUser && loggedInUser._id && this.myOrdersView) {
-        query.$and.push({ owner: loggedInUser._id });
-      }
-    }
-
-    countObj = await this.orderService.count(query);
-    totalItems = countObj.count;
-
-    if (totalItems !== this.paginationObj.totalItems) {
-      this.paginationObj.totalItems = totalItems;
-    }
-
-    let orders = await this.orderService.getAllOrders(
-      query, this.paginationObj.perPage,
-      (this.paginationObj.page - 1) * this.paginationObj.perPage);
-    if (orders && orders.orders) {
-      if (this.userIsLoggedIn && (this.userIsAdmin || loggedInUser.role.role === 'editor')) {
-        orders.orders.forEach(async (order) => {
-          const result = await this.orderService.getSchedule(order._id);
-          if (result && result.schedule) {
-            order.schedule = result.schedule;
-          }
+      } else if (this.filter.originalValidStatus.length && this.filter.originalMachineTypes.length) {
+        query = {
+          $and: [
+            { $nor: [] }
+          ]
+        };
+        this.filter.originalValidStatus.forEach((status) => {
+          query.$and[0].$nor.push({ status });
+        });
+        this.filter.originalMachineTypes.forEach((type) => {
+          query.$and[0].$nor.push({ 'machine.type': this.machineService.camelCaseTypes(type) });
         });
       }
 
-      if (this.unfinishedOrders && this.filter.selectedFablabs && this.filter.selectedFablabs.length) {
-        orders.orders.forEach(async (order) => {
-          promises.push(new Promise(async resolve => {
-            const found = { fablab: false, schedule: false };
-            let result;
-            let resultSchedules;
-            if (order.machine.type.toLowerCase() !== 'unknown') {
-              result = await this.machineService.get(order.machine.type, order.machine._id);
-              resultSchedules = await this.machineService.getSchedules(order.machine.type, order.machine._id,
-                { startDay: this.filter.schedule.startDay, endDay: this.filter.schedule.endDay });
+      // filter only valid status and not one of the others
+      if (this.outstandingOrders) {
+        try {
+          const result = await this.orderService.getStatus(false);
+          if (result && result.status && this.filter.originalValidStatus.length) {
+            query.$and.push({ $nor: [] });
+            let statusArr = [];
+            if (isArray(result.status)) {
+              statusArr = result.status.filter((status) => {
+                return !this.filter.originalValidStatus.includes(status);
+              });
+            } else {
+              statusArr = this.filter.originalValidStatus.filter((status) => {
+                return status !== result.status;
+              });
             }
-            this.filter.selectedFablabs.forEach((fablab) => {
-              if (fablab._id === order.fablabId) {
-                found.fablab = true;
-              }
+            statusArr.forEach((status) => {
+              query.$and[query.$and.length - 1].$nor.push({ status });
             });
-
-            if ((!this.filter.schedule.startDay || !this.filter.schedule.startDay.year ||
-              !this.filter.schedule.startDay.month || !this.filter.schedule.startDay.day) &&
-              (!this.filter.schedule.endDay || !this.filter.schedule.endDay.year || !this.filter.schedule.endDay.month
-                || !this.filter.schedule.endDay.day)) {
-              found.schedule = true;
-            }
-            if (result && result[`${order.machine.type}`]) {
-              if (resultSchedules && resultSchedules['schedules']) {
-                resultSchedules['schedules'].forEach((schedule) => {
-                  if (schedule.orderId === order._id) {
-                    found.schedule = true;
-                  }
-                });
-              }
-
-              if (found.fablab && found.schedule) {
-                resolve(order);
-              } else {
-                resolve();
-              }
-            } else if (order.machine.type.toLowerCase() === 'unknown') {
-              resolve(order);
-            }
-            resolve();
-          }));
-        });
+          }
+        } catch (err) { }
       }
-      let results = await Promise.all(promises);
-      this.translateService.get(['date']).subscribe((async translations => {
-        orders = this.unfinishedOrders && results && Array.isArray(results) ? results.filter((order) => order) : orders.orders;
-        this.headers = this._initHeaders();
-        promises = [];
-        for (const order of orders) {
-          promises.push(new Promise(async (resolve, reject) => {
-            let owner;
-            let editor;
-            let fablab;
-            if (order.fablabId) {
-              try {
-                const result = await this.fablabService.getFablab(order.fablabId);
-                if (result && result.fablab) {
-                  fablab = result.fablab;
+
+
+      if (!query.$and) {
+        query.$and = [];
+      } else if (query.$and && isArray(query.$and)) {
+        // if search term is defined add to mongo query
+        if (this.filter.searchTerm) {
+          query.$and.push({ $text: { $search: this.filter.searchTerm } });
+        }
+
+        // if user is not editor, admin or logged in: do not show shared orders
+        if (!loggedInUser
+          || loggedInUser && loggedInUser.role
+          && (loggedInUser.role.role !== 'admin' && loggedInUser.role.role !== 'editor')) {
+          query.$and.push({ shared: false });
+        }
+
+        if (loggedInUser && loggedInUser._id && this.myOrdersView) {
+          query.$and.push({ owner: loggedInUser._id });
+        }
+
+        if (this.filter.selectedFablabs && this.filter.selectedFablabs.length > 0) {
+          query.$and.push({ $or: [] });
+          this.filter.selectedFablabs.forEach((fablab) => {
+            query.$and[query.$and.length - 1].$or.push({ fablabId: fablab._id });
+          });
+        }
+      }
+
+      if (this.filter.schedule.startDay && this.filter.schedule.startDay.year &&
+        this.filter.schedule.startDay.month && this.filter.schedule.startDay.day) {
+        const day = `${this.filter.schedule.startDay.year}-${this.filter.schedule.startDay.month}-${this.filter.schedule.startDay.day}`;
+        query.$and.push(
+          {
+            'machine.schedule.startDate':
+              { $gte: new Date((new Date(day)).setHours(0, 0, 0)) }
+          }
+        );
+      }
+
+      if (this.filter.schedule.endDay && this.filter.schedule.endDay.year &&
+        this.filter.schedule.endDay.month && this.filter.schedule.endDay.day) {
+        const day = `${this.filter.schedule.endDay.year}-${this.filter.schedule.endDay.month}-${this.filter.schedule.endDay.day}`;
+        query.$and.push({ 'machine.schedule.endDate': { $lte: new Date((new Date(day)).setHours(23, 59, 59)) } });
+      }
+
+      countObj = await this.orderService.count(query);
+      totalItems = countObj.count;
+
+      if (totalItems !== this.paginationObj.totalItems) {
+        this.paginationObj.totalItems = totalItems;
+      }
+
+      let orders = await this.orderService.getAllOrders(
+        query, this.paginationObj.perPage,
+        (this.paginationObj.page - 1) * this.paginationObj.perPage);
+      if (orders && orders.orders) {
+        if (this.userIsLoggedIn && (this.userIsAdmin || loggedInUser.role.role === 'editor')) {
+          orders.orders.forEach(async (order) => {
+            const result = await this.orderService.getSchedule(order._id);
+            if (result && result.schedule) {
+              order.schedule = result.schedule;
+            }
+          });
+        }
+
+        let results;
+        this.translateService.get(['date']).subscribe((async translations => {
+          orders = orders && orders.orders ? orders.orders : [];
+          this.headers = this._initHeaders();
+          promises = [];
+          for (const order of orders) {
+            promises.push(new Promise(async (resolve, reject) => {
+              let owner;
+              let editor;
+              let fablab;
+              if (order.fablabId) {
+                try {
+                  const result = await this.fablabService.getFablab(order.fablabId);
+                  if (result && result.fablab) {
+                    fablab = result.fablab;
+                  }
+                } catch (err) {
+                  reject(err);
                 }
+              }
+              const item = new TableItem();
+
+              try {
+                owner = await this.userService.getNamesOfUser(order.owner);
+                editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
               } catch (err) {
                 reject(err);
               }
-            }
-            const item = new TableItem();
 
-            try {
-              owner = await this.userService.getNamesOfUser(order.owner);
-              editor = order.editor ? await this.userService.getNamesOfUser(order.editor) : undefined;
-            } catch (err) {
-              reject(err);
-            }
-
-            item.obj['id'] = { label: order._id };
-            item.obj['Created at'] = {
-              label: `${this.genericService.translateDate(order.createdAt, currentLang, translations['date'].dateTimeFormat)}`
-            };
-            if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor' || this.userIsAdmin)
-              || this.unfinishedOrders) {
-              item.obj['Schedule Start Date'] = {
-                label: order.schedule && order.schedule.startDate ?
-                  `${this.genericService.translateDate(order.schedule.startDate, currentLang, translations['date'].dateTimeFormat)}`
-                  : '-'
+              item.obj['id'] = { label: order._id };
+              item.obj['Created at'] = {
+                label: `${this.genericService.translateDate(order.createdAt, currentLang, translations['date'].dateTimeFormat)}`
               };
-              item.obj['Schedule End Date'] = {
-                label: order.schedule && order.schedule.endDate ?
-                  `${this.genericService.translateDate(order.schedule.endDate, currentLang, translations['date'].dateTimeFormat)}`
-                  : '-'
+              if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor' || this.userIsAdmin)
+                || this.unfinishedOrders) {
+                item.obj['Schedule Start Date'] = {
+                  label: order.schedule && order.schedule.startDate ?
+                    `${this.genericService.translateDate(order.schedule.startDate, currentLang, translations['date'].dateTimeFormat)}`
+                    : '-'
+                };
+                item.obj['Schedule End Date'] = {
+                  label: order.schedule && order.schedule.endDate ?
+                    `${this.genericService.translateDate(order.schedule.endDate, currentLang, translations['date'].dateTimeFormat)}`
+                    : '-'
+                };
+              } else {
+                this._removeHeader('Schedule Start Date');
+                this._removeHeader('Schedule End Date');
+              }
+              item.obj['Fablab'] = {
+                label: fablab ? fablab.name : '-'
               };
-            } else {
-              this._removeHeader('Schedule Start Date');
-              this._removeHeader('Schedule End Date');
-            }
-            item.obj['Fablab'] = {
-              label: fablab ? fablab.name : '-'
-            };
-            item.obj['Projectname'] = {
-              label: order.projectname,
-              href: (order.shared ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
-                : `/${routes.paths.frontend.orders.root}/`) +
-                `${routes.paths.frontend.orders.detail}/${order._id}`,
-              icon: order.shared ? this.publicIcon : undefined
-            };
-            item.obj['Owner'] = {
-              label: owner.firstname + ' ' + owner.lastname,
-              href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''
-            };
-            item.obj['Editor'] = {
-              label: editor ? editor.firstname + ' ' + editor.lastname : '',
-              href: editor && this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
-            };
-            item.obj['Status'] = { label: order.status };
-            item.obj['Device Type'] = { label: order.machine.type };
-            if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor'
-              || this.userIsAdmin || loggedInUser._id === owner._id)) {
-              item.button1.label = this.translationFields.buttons.updateLabel;
-              item.button1.href = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${order._id}`;
-              item.button1.class = 'btn btn-warning spacing';
-              item.button1.icon = this.config.icons.edit;
-              item.button1.tooltip = this.translationFields.buttons.updateLabel;
-              item.button2.label = this.translationFields.buttons.deleteLabel;
-              item.button2.eventEmitter = true;
-              item.button2.class = 'btn btn-danger spacing';
-              item.button2.icon = this.config.icons.delete;
-              item.button2.refId = order._id;
-              item.button2.tooltip = this.translationFields.buttons.deleteLabel;
-            }
-            resolve(item);
-          }));
-        }
+              item.obj['Projectname'] = {
+                label: order.projectname,
+                href: (order.shared ? `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.shared.root}/`
+                  : `/${routes.paths.frontend.orders.root}/`) +
+                  `${routes.paths.frontend.orders.detail}/${order._id}`,
+                icon: order.shared ? this.publicIcon : undefined
+              };
+              item.obj['Owner'] = {
+                label: owner.firstname + ' ' + owner.lastname,
+                href: this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${owner._id}` : ''
+              };
+              item.obj['Editor'] = {
+                label: editor ? editor.firstname + ' ' + editor.lastname : '',
+                href: editor && this.userIsLoggedIn ? `/${routes.paths.frontend.users.root}/${editor._id}` : ''
+              };
+              item.obj['Status'] = { label: order.status };
+              item.obj['Device Type'] = { label: order.machine.type };
+              if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor'
+                || this.userIsAdmin || loggedInUser._id === owner._id)) {
+                item.button1.label = this.translationFields.buttons.updateLabel;
+                item.button1.href = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${order._id}`;
+                item.button1.class = 'btn btn-warning spacing';
+                item.button1.icon = this.config.icons.edit;
+                item.button1.tooltip = this.translationFields.buttons.updateLabel;
+                item.button2.label = this.translationFields.buttons.deleteLabel;
+                item.button2.eventEmitter = true;
+                item.button2.class = 'btn btn-danger spacing';
+                item.button2.icon = this.config.icons.delete;
+                item.button2.refId = order._id;
+                item.button2.tooltip = this.translationFields.buttons.deleteLabel;
+              }
+              resolve(item);
+            }));
+          }
 
-        this.orders = [];
+          this.orders = [];
 
-        results = await Promise.all(promises);
-        results.forEach((item) => {
-          this.orders.push(item);
-        });
+          results = await Promise.all(promises);
+          results.forEach((item) => {
+            this.orders.push(item);
+          });
 
-        this.visibleOrders = undefined;
-        this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+          this.visibleOrders = undefined;
+          this.visibleOrders = JSON.parse(JSON.stringify(this.orders));
+          this.spinner.hide();
+        }));
+      } else {
         this.spinner.hide();
-      }));
-    } else {
-      this.spinner.hide();
+      }
+      this.loadingOrders = false;
     }
-    this.loadingOrders = false;
   }
 
   // Event Handler
 
-  public pageChanged() {
-    this.init();
+  public async pageChanged() {
+    await this.init();
   }
 
   // remove add change clear
@@ -500,19 +483,19 @@ export class OrderListComponent implements OnInit {
     this.filter.selectedFablabs = event;
   }
 
-  changeHandlerStartDay(event: { year: number, month: number, day: number }) {
+  async changeHandlerStartDay(event: { year: number, month: number, day: number }) {
     this.datePickerError = this.validationService.validateDate(event, this.filter.schedule.endDay);
     if (!this.datePickerError) {
       this.filter.schedule.startDay = event;
-      this.init();
+      await this.init();
     }
   }
 
-  changeHandlerEndDay(event: { year: number, month: number, day: number }) {
+  async changeHandlerEndDay(event: { year: number, month: number, day: number }) {
     this.datePickerError = this.validationService.validateDate(this.filter.schedule.startDay, event);
     if (!this.datePickerError) {
       this.filter.schedule.endDay = event;
-      this.init();
+      await this.init();
     }
   }
 
@@ -571,7 +554,7 @@ export class OrderListComponent implements OnInit {
             this.visibleOrders[orderIdx].obj['Device Type'] = { label: result.machine.type };
             if ((this.filter.selectedStatus && this.filter.selectedStatus.length > 0) ||
               this.filter.selectedMachineTypes && this.filter.selectedMachineTypes.length > 0) {
-              this.init();
+              await this.init();
             }
           });
         }

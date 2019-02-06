@@ -2,9 +2,11 @@ import validatorService from '../services/validator.service';
 import logger from '../logger';
 import ScheduleService from '../services/schedule.service';
 import MachineService from '../services/machine.service';
+import OrderService from '../services/order.service';
 
 const scheduleService = new ScheduleService();
 const machineService = new MachineService();
+const orderService = new OrderService();
 
 /**
  * @api {get} /api/v1/schedules/:id Request a schedule by its id
@@ -343,6 +345,9 @@ async function create (req, res) {
 
   try {
     const schedule = await scheduleService.create(req.body);
+    const order = await orderService.get(req.body.orderId);
+    order.machine.schedule = { id: schedule.id, startDate: schedule.startDate, endDate: schedule.endDate };
+    await orderService.update(order);
     const machine = await machineService.get(schedule.machine.type, schedule.machine.id);
     if (!machine.schedules.includes(schedule.id)) {
       machine.schedules.push(schedule.id);
@@ -447,10 +452,12 @@ async function update (req, res) {
   }
 
   try {
-    let schedule;
+    let schedule = await scheduleService.get(req.params.id);
+    const oldOrder = await orderService.get(schedule.orderId);
+    delete oldOrder.machine.schedule;
+    await orderService.update(oldOrder);
     // old machine is changed in schedule
     if (req.body.machine.type && req.body.machine.id) {
-      schedule = await scheduleService.get(req.params.id);
       const oldMachine = await machineService.get(schedule.machine.type, schedule.machine.id);
       if (schedule.machine.type !== req.body.machine.type || schedule.machine.id !== req.body.machine.id) {
         oldMachine.schedules = oldMachine.schedules.filter((e) => e !== schedule.id);
@@ -463,6 +470,9 @@ async function update (req, res) {
       machine.schedules.push(schedule.id);
       machineService.update(schedule.machine.type, schedule.machine.id, machine);
     }
+    const order = await orderService.get(schedule.orderId);
+    order.machine.schedule = { id: schedule.id, startDate: schedule.startDate, endDate: schedule.endDate };
+    await orderService.update(order);
     logger.info(`PUT Schedule with result ${JSON.stringify(schedule)}`);
     return res.status(200).send({ schedule });
   } catch (err) {
@@ -532,6 +542,9 @@ async function deleteById (req, res) {
   try {
     const oldSchedule = await scheduleService.get(req.params.id);
     const schedule = await scheduleService.deleteById(req.params.id);
+    const order = await orderService.get(oldSchedule.orderId);
+    delete order.machine.schedule;
+    await orderService.update(order);
     const machine = await machineService.get(schedule.machine.type, schedule.machine.id);
     machine.schedules = machine.schedules.filter((e) => e !== oldSchedule.id);
     machineService.update(oldSchedule.machine.type, oldSchedule.machine.id, machine);
