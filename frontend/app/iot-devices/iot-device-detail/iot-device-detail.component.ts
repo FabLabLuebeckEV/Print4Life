@@ -141,13 +141,13 @@ export class IotDeviceDetailComponent implements OnInit {
           deviceType: translations['iotDeviceDetail'].labels.deviceType,
         },
         modals: {
-          ok: translations['iotDeviceDetail'].ok,
-          deleteReturnValue: translations['iotDeviceDetail'].deleteReturnValue,
-          abort: translations['iotDeviceDetail'].abort,
-          abortReturnValue: translations['iotDeviceDetail'].abortReturnValue,
-          deleteHeader: translations['iotDeviceDetail'].deleteHeader,
-          deleteQuestion: translations['iotDeviceDetail'].deleteQuestion,
-          deleteWarning: translations['iotDeviceDetail'].deleteWarning
+          ok: translations['iotDeviceDetail'].modals.ok,
+          deleteReturnValue: translations['iotDeviceDetail'].modals.deleteReturnValue,
+          abort: translations['iotDeviceDetail'].modals.abort,
+          abortReturnValue: translations['iotDeviceDetail'].modals.abortReturnValue,
+          deleteHeader: translations['iotDeviceDetail'].modals.deleteHeader,
+          deleteQuestion: translations['iotDeviceDetail'].modals.deleteQuestion,
+          deleteWarning: translations['iotDeviceDetail'].modals.deleteWarning
         }
       };
     }));
