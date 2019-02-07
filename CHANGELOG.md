@@ -4,6 +4,18 @@
 
 * multilanguage support for English, German and Danish (/LF0380/)
 
+### Version 0.6
+
+* added ModalService
+* added Buttons as Components
+* added IoT Device Support (/LF0010/, /LF0020/, /LF0030/, /LF0040/)
+* added Octoprint bridge
+* fixed DatePicker ChangeEvent on entering input without DatePicker
+* unfinished orders filters fixed on schedules and fablabs
+* fixed spinner on order list
+* tooltips on buttons
+
+
 ### Version 0.5.2
 
 * email fix (smtp config updated)
