@@ -28,10 +28,13 @@ const ibmWatsonService = new IBMWatsonService();
  *    HTTP/1.1 200 OK
 {
     "iot-device": {
+        "_id": "5c599568cc5e7f17276d8447",
         "clientId": "d:tcccti:Sensor:Sensor-Test-2",
         "deviceType": "Sensor",
         "deviceId": "Sensor-Test-2",
         "deviceInfo": {},
+        "username": "use-auth-token",
+        "password": "@Rb1p1!&JpbJKDR1mr",
         "events": [
             {
                 "topic": "Event_1",
