@@ -16,6 +16,7 @@ import { UploadComponent } from 'frontend/app/components/upload/upload.component
 import { ngfModule } from 'angular-file';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { ValidationService } from 'frontend/app/services/validation.service';
+import { DeleteButtonComponent } from 'frontend/app/components/delete-button/delete-button.component';
 
 describe('CreateOrderComponent', () => {
   let component: CreateOrderComponent;
@@ -23,7 +24,7 @@ describe('CreateOrderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CreateOrderComponent, BackButtonComponent, UploadComponent],
+      declarations: [CreateOrderComponent, BackButtonComponent, UploadComponent, DeleteButtonComponent],
       providers: [ConfigService, TranslateService, NgxSpinnerService, ValidationService],
       imports: [
         ngfModule,
