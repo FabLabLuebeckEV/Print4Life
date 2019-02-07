@@ -483,8 +483,16 @@ export class OrderListComponent implements OnInit {
     this.filter.selectedFablabs = event;
   }
 
+  transformStringToDateObj(event: string, isStartDay: boolean) {
+    const split = event.split('-');
+    if (split.length === 3) {
+      const date = { year: Number.parseInt(split[0], 10), month: Number.parseInt(split[1], 10), day: Number.parseInt(split[2]) };
+      isStartDay ? this.changeHandlerStartDay(date) : this.changeHandlerEndDay(date);
+    }
+  }
+
   async changeHandlerStartDay(event: { year: number, month: number, day: number }) {
-    this.datePickerError = this.validationService.validateDate(event, this.filter.schedule.endDay);
+    this.datePickerError = this.validationService.validateDate(event, this.filter.schedule.startDay);
     if (!this.datePickerError) {
       this.filter.schedule.startDay = event;
       await this.init();
