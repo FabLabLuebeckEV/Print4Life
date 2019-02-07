@@ -35,7 +35,8 @@
       <label for="datePickerStart">{{translationFields.filterLabel.startDay}}</label>
       <div class="input-group">
         <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerStart" id="datePickerStart" [(ngModel)]="filter.schedule.startDay"
-          ngbDatepicker #datePickerStart="ngbDatepicker" (dateSelect)="changeHandlerStartDay($event)" [required]="false">
+          ngbDatepicker #datePickerStart="ngbDatepicker" (change)="transformStringToDateObj($event.currentTarget.value, true)"
+          (dateSelect)="changeHandlerStartDay($event)" [required]="false">
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button">
             <fa-icon [icon]="calendarIcon"></fa-icon>
@@ -53,7 +54,8 @@
         <label for="datePickerEnd">{{translationFields.filterLabel.endDay}}</label>
         <div class="input-group">
           <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd" [(ngModel)]="filter.schedule.endDay"
-            ngbDatepicker #datePickerEnd="ngbDatepicker" (dateSelect)="changeHandlerEndDay($event)" [required]="false">
+            ngbDatepicker #datePickerEnd="ngbDatepicker" (change)="transformStringToDateObj($event.currentTarget.value, false)"
+            (dateSelect)="changeHandlerEndDay($event)" [required]="false">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button">
               <fa-icon [icon]="calendarIcon"></fa-icon>

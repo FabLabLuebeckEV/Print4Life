@@ -48,9 +48,7 @@
                 {{ item.size/1024/1024 | number:'.2' }} MB
               </td>
               <td nowrap>
-                <button type="button" class="btn btn-danger btn-xs" (click)="files.splice(i,1); emitFileChange(files);">
-                  <fa-icon [icon]="deleteIcon"></fa-icon>
-                </button>
+                <app-delete-button (click)="files.splice(i,1); emitFileChange(files);"></app-delete-button>
               </td>
             </tr>
           </tbody>
