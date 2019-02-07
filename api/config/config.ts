@@ -7,7 +7,7 @@ const ibmWatson = {
   orgId: process.env.WATSON_ORG_ID || 'mvgc70',
   userRoles: ['PD_STANDARD_APP']
 };
-const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
+const jwtSecret = env === 'dev' ? 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah' : process.env.JWT_SECRET;
 /**
  * set to 2 hours
  * (values without unit are by default ms,
@@ -142,8 +142,8 @@ const dev = {
   ibmWatson,
   tmpDir,
   ssl: {
-    privateKeyPath: process.env.PRIV_KEY || '',
-    certificatePath: process.env.CERT || ''
+    privateKeyPath: process.env.SSL_PRIV_KEY || '',
+    certificatePath: process.env.SSL_CERT || ''
   },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
@@ -163,7 +163,7 @@ const dev = {
   baseUrlBackend: `${process.env.BASE_URL_BACKEND || 'http://localhost'}:${port}${baseUrl}`,
   baseUrlFrontend: `${process.env.BASE_URL_FRONTEND || 'http://localhost'}:${ngPort}`,
   cors: {
-    whitelist: [`http://localhost:${ngPort}`]
+    whitelist: [`${process.env.BASE_URL_FRONTEND || 'http://localhost'}:${ngPort}`]
   }
   // cors: undefined // if testing backend routes in dev mode without using the frontend
 };
@@ -175,8 +175,8 @@ const staging = {
   ibmWatson,
   tmpDir,
   ssl: {
-    privateKeyPath: process.env.PRIV_KEY || '/etc/letsencrypt/live/iot-fablab.ddns.net/privkey.pem',
-    certificatePath: process.env.CERT || '/etc/letsencrypt/live/iot-fablab.ddns.net/cert.pem'
+    privateKeyPath: process.env.SSL_PRIV_KEY,
+    certificatePath: process.env.SSL_CERT
   },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
@@ -187,24 +187,18 @@ const staging = {
   email,
   connections: {
     mongo: {
-      host: process.env.MONGO_HOST || 'mongodb://127.0.0.1:27017/',
-      database: process.env.MONGO_DBNAME || 'iot-fablab-staging'
+      host: process.env.MONGO_HOST,
+      database: process.env.MONGO_DBNAME
     }
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `${process.env.BASE_URL_BACKEND || 'http://localhost'}:${port}${baseUrl}`,
-  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND || 'https://iot-fablab.ddns.net'}`,
+  baseUrlBackend: `${process.env.BASE_URL_BACKEND}:${port}${baseUrl}`,
+  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
   cors: {
     whitelist: [
-      `https://localhost:${ngPort}`,
-      `https://212.83.56.107:${ngPort}`,
-      `https://iot-fablab.ddns.net:${ngPort}`,
-      'https://iot-fablab.ddns.net',
-      `http://localhost:${ngPort}`,
-      `http://212.83.56.107:${ngPort}`,
-      `http://iot-fablab.ddns.net:${ngPort}`,
-      'http://iot-fablab.ddns.net'
+      `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
+      `${process.env.BASE_URL_FRONTEND}`
     ]
   }
   // cors: undefined
@@ -217,8 +211,8 @@ const prod = {
   ibmWatson,
   tmpDir,
   ssl: {
-    privateKeyPath: process.env.PRIV_KEY || '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/private.pem',
-    certificatePath: process.env.CERT || '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/cert.pem'
+    privateKeyPath: process.env.SSL_PRIV_KEY,
+    certificatePath: process.env.SSL_CERT
   },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
@@ -229,24 +223,18 @@ const prod = {
   email,
   connections: {
     mongo: {
-      host: process.env.MONGO_HOST || 'mongodb://127.0.0.1:27017/',
-      database: process.env.MONGO_DBNAME || 'iot-fablab'
+      host: process.env.MONGO_HOST,
+      database: process.env.MONGO_DBNAME
     }
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `${process.env.BASE_URL_BACKEND || 'http://localhost'}:${port}${baseUrl}`,
-  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND || 'https://fablab.itm.uni-luebeck.de'}`,
+  baseUrlBackend: `${process.env.BASE_URL_BACKEND}:${port}${baseUrl}`,
+  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
   cors: {
     whitelist: [
-      `https://localhost:${ngPort}`,
-      `https://141.83.68.36:${ngPort}`,
-      `https://fablab.itm.uni-luebeck.de:${ngPort}`,
-      'https://fablab.itm.uni-luebeck.de',
-      `http://localhost:${ngPort}`,
-      `http://141.83.68.36:${ngPort}`,
-      `http://fablab.itm.uni-luebeck.de:${ngPort}`,
-      'http://fablab.itm.uni-luebeck.de'
+      `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
+      `${process.env.BASE_URL_FRONTEND}`
     ]
   }
   // cors: undefined
