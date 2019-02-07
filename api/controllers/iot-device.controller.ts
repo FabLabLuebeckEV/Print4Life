@@ -118,6 +118,7 @@ async function get (req: Request, res: Response) {
         const result = await ibmWatsonService.getDevice(iotDevice.deviceId, iotDevice.deviceType, apiKey);
         if (result) {
           const retIoTDevice = {
+            _id: iotDevice._id,
             clientId: result.clientId,
             deviceType: result.typeId,
             deviceId: result.deviceId,
