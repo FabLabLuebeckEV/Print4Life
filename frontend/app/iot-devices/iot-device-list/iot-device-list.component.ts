@@ -116,7 +116,7 @@ export class IotDeviceListComponent implements OnInit {
 
   async init() {
     this.spinner.show();
-    const loggedInUser = await this.userService.getUser();
+    const loggedInUser = await this.userService.findOwn();
     this.loadingIotDevices = true;
     this.iotDevices = new Array();
     this.visibleIotDevices = undefined;
@@ -155,9 +155,8 @@ export class IotDeviceListComponent implements OnInit {
         item.obj['Type'] = {
           label: iotDevice.deviceType ? iotDevice.deviceType : ''
         };
-        if (this.userIsLoggedIn && this.userIsAdmin ||
-          (this.userIsLoggedIn && loggedInUser.role.role === 'user'
-            && loggedInUser.iot && loggedInUser.iot.devices && loggedInUser.iot.devices.includes(iotDevice._id))) {
+        if (this.userIsLoggedIn && (this.userIsAdmin ||
+          loggedInUser.iot && loggedInUser.iot.devices && loggedInUser.iot.devices.includes(iotDevice._id))) {
           item.button1.label = this.translationFields.buttons.deleteLabel;
           item.button1.eventEmitter = true;
           item.button1.class = 'btn btn-danger spacing';
