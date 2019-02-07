@@ -7,7 +7,9 @@ const ibmWatson = {
   orgId: process.env.WATSON_ORG_ID || 'mvgc70',
   userRoles: ['PD_STANDARD_APP']
 };
-const jwtSecret = env === 'dev' ? 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah' : process.env.JWT_SECRET;
+const jwtSecret = env === 'dev' || env === 'test' || env === 'testLocal'
+  ? 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah'
+  : process.env.JWT_SECRET;
 /**
  * set to 2 hours
  * (values without unit are by default ms,
