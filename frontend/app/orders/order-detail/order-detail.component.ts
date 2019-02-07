@@ -7,9 +7,6 @@ import { Order } from '../../models/order.model';
 import { MachineService } from '../../services/machine.service';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { FablabService } from '../../services/fablab.service';
-import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
-import { OctoprintModalComponent } from '../../components/octoprint-modal/octoprint-modal.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from '../../services/user.service';
@@ -17,6 +14,8 @@ import { User } from 'frontend/app/models/user.model';
 import { Schedule } from 'frontend/app/models/schedule.model';
 import { ScheduleService } from 'frontend/app/services/schedule.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ModalService } from '../../services/modal.service';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-order-detail',
@@ -38,10 +37,10 @@ export class OrderDetailComponent implements OnInit {
   spinnerConfig: SpinnerConfig;
   editLink: String;
   editor: User = new User(
-    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   editorLink: String;
   owner: User = new User(
-    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   ownerLink: String;
   order: Order = new Order(
     undefined,
@@ -66,7 +65,6 @@ export class OrderDetailComponent implements OnInit {
   translationFields = {
     tooltips: {
       delete: '',
-      edit: '',
       print: '',
     },
     labels: {
@@ -109,7 +107,7 @@ export class OrderDetailComponent implements OnInit {
     private machineService: MachineService,
     private fablabService: FablabService,
     private configService: ConfigService,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private genericService: GenericService,
     private translateService: TranslateService,
     private userService: UserService,
@@ -209,7 +207,7 @@ export class OrderDetailComponent implements OnInit {
     const startButton = new ModalButton(this.translationFields.modals.printHeader, 'btn btn-success', '');
     const cancelButton = new ModalButton(this.translationFields.modals.cancel, 'btn btn-secondary',
       this.translationFields.modals.cancelReturnValue);
-    this._openOctoprintModal(this.translationFields.modals.printHeader,
+    this.modalService.openOctoprintModal(this.translationFields.modals.printHeader,
       'modal-header header-primary', this.translationFields.modals.addressLabel, this.translationFields.modals.apiKeyLabel,
       this.translationFields.modals.fileSelectLabel, this.order.files.filter((file) => file.contentType === 'text/x.gcode'
         || file.filename.split('.')[1] === 'gcode'),
@@ -221,7 +219,7 @@ export class OrderDetailComponent implements OnInit {
       this.translationFields.modals.deleteReturnValue);
     const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
       this.translationFields.modals.abortReturnValue);
-    const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+    const modalRef = this.modalService.openMsgModal(this.translationFields.modals.deleteHeader,
       'modal-header header-danger',
       [`${this.translationFields.modals.deleteQuestion} ${this.order.projectname} ${this.translationFields.modals.deleteQuestion2}`,
       `${this.translationFields.modals.deleteWarning}`],
@@ -236,33 +234,6 @@ export class OrderDetailComponent implements OnInit {
   }
 
   // Private Functions
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    if (titleClass) {
-      modalRef.componentInstance.titleClass = titleClass;
-    }
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
-  }
-
-  private _openOctoprintModal(title: String, titleClass: String, addressLabel: String,
-    apiKeyLabel: String, fileSelectLabel: String, selectItems: Array<any>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(OctoprintModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    if (titleClass) {
-      modalRef.componentInstance.titleClass = titleClass;
-    }
-    modalRef.componentInstance.addressLabel = addressLabel;
-    modalRef.componentInstance.apiKeyLabel = apiKeyLabel;
-    modalRef.componentInstance.fileSelectLabel = fileSelectLabel;
-    modalRef.componentInstance.selectItems = selectItems;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-  }
 
   private _translateStatus(): Promise<String> {
     return new Promise((resolve) => {
@@ -322,7 +293,6 @@ export class OrderDetailComponent implements OnInit {
       this.translationFields = {
         tooltips: {
           delete: translations['orderDetail'].buttons.tooltips.delete,
-          edit: translations['orderDetail'].buttons.tooltips.edit,
           print: translations['orderDetail'].buttons.tooltips.print,
         },
         labels: {

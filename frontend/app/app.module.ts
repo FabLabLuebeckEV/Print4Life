@@ -4,7 +4,7 @@ import { NgbModule, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { HttpInterceptorService } from './services/credential.interceptor.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
@@ -41,7 +41,13 @@ import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { ngfModule } from 'angular-file';
 import { DatePickerTranslationService } from './services/datepicker-translation.service';
+import { IotDeviceListComponent } from './iot-devices/iot-device-list/iot-device-list.component';
+import { IotDeviceFormComponent } from './iot-devices/iot-device-form/iot-device-form.component';
+import { IotDeviceDetailComponent } from './iot-devices/iot-device-detail/iot-device-detail.component';
 import { OctoprintModalComponent } from './components/octoprint-modal/octoprint-modal.component';
+import { AddButtonComponent } from './components/add-button/add-button.component';
+import { EditButtonComponent } from './components/edit-button/edit-button.component';
+import { DeleteButtonComponent } from './components/delete-button/delete-button.component';
 
 @NgModule({
     declarations: [
@@ -65,9 +71,16 @@ import { OctoprintModalComponent } from './components/octoprint-modal/octoprint-
         ChangePasswdModalComponent,
         UserDetailComponent,
         UploadComponent,
+        IotDeviceListComponent,
+        IotDeviceFormComponent,
+        IotDeviceDetailComponent,
         OctoprintModalComponent,
+        AddButtonComponent,
+        EditButtonComponent,
+        DeleteButtonComponent,
     ],
     imports: [
+        ReactiveFormsModule,
         BrowserModule,
         NgxSpinnerModule,
         NgSelectModule,

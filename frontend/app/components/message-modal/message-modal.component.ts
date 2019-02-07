@@ -1,19 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
-export class ModalButton {
-  label: String;
-  class: String;
-  link: String;
-  returnValue: String;
-
-  constructor(l: String, c: String, r: String) {
-    this.label = l;
-    this.class = c;
-    this.returnValue = r;
-  }
-}
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-message-modal',

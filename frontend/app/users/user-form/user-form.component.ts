@@ -4,13 +4,13 @@ import { Address } from '../../models/address.model';
 import { UserService } from '../../services/user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { routes } from '../../config/routes';
 import { TranslateService } from '@ngx-translate/core';
 import { GenericService } from '../../services/generic.service';
 import { FablabService } from 'frontend/app/services/fablab.service';
 import { ChangePasswdModalComponent } from '../change-passwd-modal/change-passwd-modal.component';
+import { ModalService } from '../../services/modal.service';
+import { ModalButton } from '../../helper/modal.button';
 
 interface Dropdown {
   name: String;
@@ -43,7 +43,7 @@ export class UserFormComponent implements OnInit {
   user: User = new User(
     undefined, undefined, undefined, undefined,
     undefined, undefined, undefined, this.address,
-    this.role, this.preferredLanguage, false, undefined);
+    this.role, this.preferredLanguage, false, undefined, undefined);
   translationFields = {
     title: '',
     shownRoles: [],
@@ -105,7 +105,7 @@ export class UserFormComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private location: Location,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private translateService: TranslateService,
     private genericService: GenericService,
     private route: ActivatedRoute,
@@ -174,34 +174,48 @@ export class UserFormComponent implements OnInit {
               if (this.loggedInUser._id === userCopy._id) {
                 this.translateService.use(res.user.preferredLanguage.language).toPromise().then(() => {
                   this.userService.resetLocalUser();
-                  this._openSuccessMsg();
+                  this.modalService.openSuccessMsg(
+                    this.translationFields.modals.ok,
+                    this.translationFields.modals.okReturnValue,
+                    this.translationFields.modals.successHeader,
+                    this.translationFields.modals.successMessage);
                 }).catch((err) => {
                   const errorMsg = this.translationFields.modals.errorMessage;
                   const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
-                  this._openMsgModal(this.translationFields.modals.errorHeader,
+                  this.modalService.openMsgModal(this.translationFields.modals.errorHeader,
                     'modal-header header-danger', [errorMsg], okButton, undefined);
                 });
               } else {
-                this._openSuccessMsg();
+                this.modalService.openSuccessMsg(
+                  this.translationFields.modals.ok,
+                  this.translationFields.modals.okReturnValue,
+                  this.translationFields.modals.successHeader,
+                  this.translationFields.modals.successMessage);
               }
             }
           })
           .catch(err => {
             const errorMsg = this.translationFields.modals.errorMessage;
             const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
-            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
+            this.modalService.openMsgModal(
+              this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
           });
       } else {
         this.userService.createUser(userCopy)
           .then(res => {
             if (res) {
-              this._openSuccessMsg();
+              this.modalService.openSuccessMsg(
+                this.translationFields.modals.ok,
+                this.translationFields.modals.okReturnValue,
+                this.translationFields.modals.successHeader,
+                this.translationFields.modals.successMessage);
             }
           })
           .catch(err => {
             const errorMsg = this.translationFields.modals.errorMessage;
             const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
-            this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
+            this.modalService.openMsgModal(
+              this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
           });
       }
     }));
@@ -242,7 +256,7 @@ export class UserFormComponent implements OnInit {
         this.user = new User(
           undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, this.address,
-          this.role, this.preferredLanguage, false, undefined);
+          this.role, this.preferredLanguage, false, undefined, undefined);
       }
     }
   }
@@ -261,24 +275,6 @@ export class UserFormComponent implements OnInit {
       return lang !== 'dk';
     });
     this.loadingLanguages = false;
-  }
-
-  private _openSuccessMsg() {
-    const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
-    this._openMsgModal(this.translationFields.modals.successHeader, 'modal-header header-success',
-      [this.translationFields.modals.successMessage], okButton, undefined).result.then((result) => {
-        this.genericService.back();
-      });
-  }
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    modalRef.componentInstance.titleClass = titleClass;
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
   }
 
   private _translateRole(role): Promise<String> {
@@ -330,11 +326,15 @@ export class UserFormComponent implements OnInit {
     modalRef.componentInstance.userId = this.user._id;
     modalRef.result.then((result) => {
       if (result.msg) {
-        this._openSuccessMsg();
+        this.modalService.openSuccessMsg(
+          this.translationFields.modals.ok,
+          this.translationFields.modals.okReturnValue,
+          this.translationFields.modals.successHeader,
+          this.translationFields.modals.successMessage);
       }
     }).catch((err) => {
       const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.okReturnValue);
-      this._openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', err, okButton, undefined);
+      this.modalService.openMsgModal(this.translationFields.modals.errorHeader, 'modal-header header-danger', err, okButton, undefined);
     });
   }
 

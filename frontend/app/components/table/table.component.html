@@ -1,14 +1,14 @@
 <table class="table table-striped table-spacing">
   <thead>
     <tr>
-      <th *ngFor="let header of headers" scope="col">{{header}}</th>
+      <th *ngFor="let header of visibleHeaders" scope="col">{{header}}</th>
       <th *ngIf="button1Active" scope="col"></th>
       <th *ngIf="button2Active" scope="col"></th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let item of visibleItems">
-      <td *ngFor="let header of headers" class="align-middle">
+      <td *ngFor="let header of visibleHeaders" class="align-middle">
         <a *ngIf="item.obj[header].href && !item.obj[header].badge" [routerLink]="item.obj[header].href">{{item.obj[header].label}}</a>
         <span *ngIf="!item.obj[header].href && !item.obj[header].badge">{{item.obj[header].label}}</span>
         <span *ngIf="item.obj[header].badge && !item.obj[header].href" [class]="item.obj[header].class">{{item.obj[header].label}}</span>
@@ -19,25 +19,25 @@
         <!-- Button 1 -->
 
         <!-- EventEmitter and no icon -->
-        <button *ngIf="item.button1.class && item.button1.eventEmitter && !item.button1.icon" (click)="emit(item.button1)"
-          type="button" [class]="item.button1.class">{{item.button1.label}}</button>
+        <button *ngIf="item.button1.class && item.button1.eventEmitter && !item.button1.icon" [title]="item.button1.tooltip"
+          (click)="emit(item.button1)" type="button" [class]="item.button1.class">{{item.button1.label}}</button>
 
         <!-- EventEmitter and icon -->
-        <button *ngIf="item.button1.class && item.button1.eventEmitter" (click)="emit(item.button1)" type="button"
-          [class]="item.button1.class">
+        <button *ngIf="item.button1.class && item.button1.eventEmitter" [title]="item.button1.tooltip" (click)="emit(item.button1)"
+          type="button" [class]="item.button1.class">
           <fa-icon *ngIf="item.button1.icon" [icon]="item.button1.icon"></fa-icon>
         </button>
 
         <!-- external link and no icon -->
         <a *ngIf="item.button1.label && !item.button1.eventEmitter && item.button1.href && !item.button1.routerLink && !item.button1.icon"
           [href]="item.button1.href">
-          <button *ngIf="item.button1.class" type="button" [class]="item.button1.class">{{item.button1.label}}</button>
+          <button *ngIf="item.button1.class" type="button" [title]="item.button1.tooltip" [class]="item.button1.class">{{item.button1.label}}</button>
         </a>
 
         <!-- external link and icon -->
         <a *ngIf="item.button1.icon && !item.button1.eventEmitter && item.button1.href && !item.button1.routerLink"
           [href]="item.button1.href">
-          <button *ngIf="item.button1.class" type="button" [class]="item.button1.class">
+          <button *ngIf="item.button1.class" [title]="item.button1.tooltip" type="button" [class]="item.button1.class">
             <fa-icon *ngIf="item.button1.icon" [icon]="item.button1.icon"></fa-icon>
           </button>
         </a>
@@ -45,13 +45,13 @@
         <!-- internal link and no icon -->
         <a *ngIf="item.button1.label && item.button1.routerLink && !item.button1.icon" [routerLink]="item.button1.href"
           routerLinkActive="true">
-          <button *ngIf="item.button1.href && item.button1.class" type="button" [class]="item.button1.class">{{item.button1.label}}</button>
+          <button *ngIf="item.button1.href && item.button1.class" [title]="item.button1.tooltip" type="button" [class]="item.button1.class">{{item.button1.label}}</button>
         </a>
 
         <!-- internal link and icon -->
         <a *ngIf="item.button1.label && !item.button1.eventEmitter && item.button1.routerLink && item.button1.icon"
           [routerLink]="item.button1.href" routerLinkActive="true">
-          <button *ngIf="item.button1.href && item.button1.class" type="button" [class]="item.button1.class">
+          <button *ngIf="item.button1.href && item.button1.class" [title]="item.button1.tooltip" type="button" [class]="item.button1.class">
             <fa-icon *ngIf="item.button1.icon" [icon]="item.button1.icon"></fa-icon>
           </button>
         </a>
@@ -60,25 +60,25 @@
         <!-- Button 2 -->
 
         <!-- EventEmitter and no icon -->
-        <button *ngIf="item.button2.class && item.button2.eventEmitter && !item.button2.icon" (click)="emit(item.button2)"
-          type="button" [class]="item.button2.class">{{item.button2.label}}</button>
+        <button *ngIf="item.button2.class && item.button2.eventEmitter && !item.button2.icon" [title]="item.button2.tooltip"
+          (click)="emit(item.button2)" type="button" [class]="item.button2.class">{{item.button2.label}}</button>
 
         <!-- EventEmitter and icon -->
-        <button *ngIf="item.button2.class && item.button2.eventEmitter" (click)="emit(item.button2)" type="button"
-          [class]="item.button2.class">
+        <button *ngIf="item.button2.class && item.button2.eventEmitter" [title]="item.button2.tooltip" (click)="emit(item.button2)"
+          type="button" [class]="item.button2.class">
           <fa-icon *ngIf="item.button2.icon" [icon]="item.button2.icon"></fa-icon>
         </button>
 
         <!-- external link and no icon -->
         <a *ngIf="item.button2.label && !item.button2.eventEmitter && item.button2.href && !item.button2.routerLink && !item.button2.icon"
-          [href]="item.button2.href">
+          [title]="item.button2.tooltip" [href]="item.button2.href">
           <button *ngIf="item.button2.class" type="button" [class]="item.button2.class">{{item.button2.label}}</button>
         </a>
 
         <!-- external link and icon -->
         <a *ngIf="item.button2.icon && !item.button2.eventEmitter && item.button2.href && !item.button2.routerLink"
           [href]="item.button2.href">
-          <button *ngIf="item.button2.class" type="button" [class]="item.button2.class">
+          <button *ngIf="item.button2.class" [title]="item.button2.tooltip" type="button" [class]="item.button2.class">
             <fa-icon *ngIf="item.button2.icon" [icon]="item.button2.icon"></fa-icon>
           </button>
         </a>
@@ -86,13 +86,13 @@
         <!-- internal link and no icon -->
         <a *ngIf="item.button2.label && item.button2.routerLink && !item.button2.eventEmitter && !item.button2.icon"
           [routerLink]="item.button2.href" routerLinkActive="true">
-          <button *ngIf="item.button2.href && item.button2.class" type="button" [class]="item.button2.class">{{item.button2.label}}</button>
+          <button *ngIf="item.button2.href && item.button2.class" [title]="item.button2.tooltip" type="button" [class]="item.button2.class">{{item.button2.label}}</button>
         </a>
 
         <!-- internal link and icon -->
         <a *ngIf="item.button2.label && item.button2.routerLink && !item.button2.eventEmitter && item.button2.icon"
           [routerLink]="item.button2.href" routerLinkActive="true">
-          <button *ngIf="item.button2.href && item.button2.class" type="button" [class]="item.button2.class">
+          <button *ngIf="item.button2.href && item.button2.class" [title]="item.button2.tooltip" type="button" [class]="item.button2.class">
             <fa-icon *ngIf="item.button2.icon" [icon]="item.button2.icon"></fa-icon>
           </button>
         </a>

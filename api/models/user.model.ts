@@ -54,6 +54,18 @@ export const userSchema = new Schema({
     minlength: 24,
     maxlength: 24
   },
+  iot: {
+    devices: [String],
+    auth: {
+      key: {
+        type: String
+      },
+      token: {
+        type: String
+      },
+      roles: [String]
+    }
+  }
 });
 
 /* eslint-disable */
@@ -87,6 +99,16 @@ userSchema.methods.comparePassword = function (passw, cb) {
     cb(null, isMatch);
   });
 };
+
+userSchema.set('toJSON', {
+  transform: (doc, ret, options) => {
+    if (ret.iot && ret.iot.auth) {
+      delete ret.iot.auth;
+    }
+    delete ret.__v;
+    return ret;
+  }
+});
 /* eslint-enable */
 
 export const User = mongoose.model('User', userSchema);

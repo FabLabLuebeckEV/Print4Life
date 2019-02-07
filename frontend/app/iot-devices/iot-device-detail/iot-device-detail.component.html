@@ -1,0 +1,108 @@
+<div class="row spacing text-center">
+  <div class="col-md-12 text-center">
+    <h1>{{iotDevice.deviceId}}</h1>
+  </div>
+  <div class="col-md-3 col-xl-2">
+    <app-back-button class="spacing-right-xs"></app-back-button>
+    <app-delete-button [disable]="!userIsLoggedIn" (click)="delete()"></app-delete-button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-11 table-spacing">
+    <table class="table table-striped">
+      <tbody>
+        <tr>
+          <td class="align-middle text-center">{{translationFields.labels.deviceId}}</td>
+          <td class="align-middle text-center">{{iotDevice.deviceId}}</td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">{{translationFields.labels.deviceType}}</td>
+          <td class="align-middle text-center">{{iotDevice.deviceType}}</td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">{{translationFields.labels.clientId}}</td>
+          <td class="align-middle text-center">{{iotDevice.clientId}}</td>
+        </tr>
+        <tr *ngIf="iotDevice.password">
+          <td class="align-middle text-center">{{translationFields.labels.username}}</td>
+          <td class="align-middle text-center">{{iotDevice.username}}</td>
+        </tr>
+        <tr *ngIf="iotDevice.password">
+          <td class="align-middle text-center">{{translationFields.labels.password}}</td>
+          <td class="align-middle text-center">{{iotDevice.password}}</td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">MQTT URI</td>
+          <td class="align-middle text-center">
+            <pre>{{ mqttUri }}</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">MQTT Ports</td>
+          <td class="align-middle text-center">
+            <pre>{{ mqttPorts }}</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h3>Events</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-11 table-spacing">
+    <table class="table table-striped">
+      <thead>
+        <td class="align-middle text-center">Topic</td>
+        <td class="align-middle text-center">{{translationFields.labels.dataformat}}</td>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of iotDevice.events">
+          <td class="align-middle text-center">
+            <pre>{{event.topic}}</pre>
+          </td>
+          <td class="align-middle text-center">
+            <pre>{{event.dataformat}}</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h3>Publisher/Subscriber URLs</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-11 table-spacing">
+    <table class="table table-striped">
+      <thead>
+        <td class="align-middle text-center">Pub/Sub</td>
+        <td class="align-middle text-center">Topic</td>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="align-middle text-center">
+            Subscriber:
+          </td>
+          <td class="align-middle text-center">
+            <pre>{{mqttSubTopic}}</pre>
+          </td>
+        </tr>
+        <tr>
+          <td class="align-middle text-center">
+            Publisher:
+          </td>
+          <td class="align-middle text-center">
+            <pre>{{environment.mqtt.pubTopic}}</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,14 +1,19 @@
 /* eslint-disable no-unused-vars */
-import { ErrorType } from '../services/router.service';
+import { Request, Response } from 'express';
+import { ErrorType, IError } from '../services/router.service';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 import FablabService from '../services/fablab.service';
 import UserService from '../services/user.service';
 import { searchableTextFields } from '../models/user.model';
+import IoTDeviceService from '../services/iot-device.service';
+import IBMWatsonService from '../services/ibm.watson.service';
 
 /* eslint-enable no-unused-vars */
 
 const userService = new UserService();
+const iotDeviceService = new IoTDeviceService();
+const ibmWatsonService = new IBMWatsonService();
 
 /**
  * @api {post} /api/v1/users/ Adds a new user
@@ -105,8 +110,8 @@ async function create (req, res) {
 }
 
 /**
- * @api {put} /api/v1/users/ Adds a new user
- * @apiName createUser
+ * @api {put} /api/v1/users/ Updates a user
+ * @apiName updateUser
  * @apiVersion 1.0.0
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
@@ -114,7 +119,7 @@ async function create (req, res) {
  * @apiSuccess { Object } user the new user object, if success
  *
  * @apiSuccessExample Success-Response:
- *    HTTP/1.1 201 Created
+ *    HTTP/1.1 200 Ok
   {
     "user": {
         "_id": "5b7d29ed40ddae62a94e5940",
@@ -143,19 +148,40 @@ async function create (req, res) {
           ...
       }
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
-function update (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function update (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    userService.update(req.body).then((user) => {
-      logger.info(`PUT User with result ${JSON.stringify(user)}`);
-      res.status(200).send({ user });
-    }).catch((err) => {
-      logger.error({ error: 'Malformed update.', stack: err });
-      res.status(400).send({ error: 'Malformed update.', stack: err });
-    });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const user = await userService.update(req.body);
+    logger.info(`PUT User with result ${JSON.stringify(user)}`);
+    return res.status(200).send({ user });
+  } catch (err) {
+    logger.error({ error: 'Malformed update.', stack: err });
+    return res.status(400).send({ error: 'Malformed update.', stack: err });
   }
 }
 
@@ -169,7 +195,7 @@ function update (req, res) {
  * @apiSuccess { Object } user the deactivated user object, if success
  *
  * @apiSuccessExample Success-Response:
- *    HTTP/1.1 201 Created
+ *    HTTP/1.1 200 Ok
   {
     "user": {
         "_id": "5b7d29ed40ddae62a94e5940",
@@ -191,27 +217,84 @@ function update (req, res) {
         "__v": 0
     }
   }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "name": "SERVER_ERROR",
+      "message": "Error while trying to delete the user!",
+      "type": 13,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
   {
-      "error": "Malformed Request!",
-      "stack": {
-          ...
-      }
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Request! Please provide a user id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
-function deleteById (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function deleteById (req: Request, res: Response) {
+  const error: IError = {
+    name: 'SERVER_ERROR',
+    message: 'Error while trying to delete the user!',
+    type: ErrorType.SERVER_ERROR
+  };
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    userService.deleteById(req.params.id).then((user) => {
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const user = await userService.deleteById(req.params.id);
+    if (user) {
+      if (user.iot) {
+        if (user.iot.auth && user.iot.auth.key) {
+          await ibmWatsonService.deleteAPIKey(user.iot.auth.key);
+        }
+      }
+      if (user.iot.devices) {
+        /* eslint-disable no-await-in-loop */
+        for (let i = 0; i < user.iot.devices.length; i = 1 + i) {
+          const deviceId = user.iot.devices[i];
+          await iotDeviceService.deleteById(deviceId);
+        }
+        /* eslint-enable no-await-in-loop */
+      }
+      delete user.iot;
+      await userService.update(user);
       logger.info(`DELETE User with result ${JSON.stringify(user)}`);
-      res.status(200).send({ user });
-    }).catch((err) => {
-      logger.error({ error: 'Malformed Request!', stack: err });
-      res.status(400).send({ error: 'Malformed Request!', stack: err });
-    });
+      return res.status(200).send({ user });
+    }
+    logger.error(error);
+    return res.status(500).send(error);
+  } catch (err) {
+    error.stack = err && err.message ? err : '';
+    logger.error(error);
+    return res.status(500).send(error);
   }
 }
 
@@ -440,7 +523,7 @@ function search (req, res) {
     if (users.length === 0) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
-      res.status(204).send({ users });
+      res.status(204).send();
     } else if (req.body.limit && req.body.skip) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} `
@@ -772,12 +855,25 @@ function findown (req, res) {
       "error": "'GET User by id with no result.'",
   }
 
- * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
   {
-    "error": "Id needs to be a 24 character long hex string!"
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
   }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
 
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Server Error
@@ -788,25 +884,25 @@ function findown (req, res) {
       }
   }
  */
-function get (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function get (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    userService.get(req.params.id).then((user) => {
-      if (user) {
-        logger.info(`GET User by id with result ${user}`);
-        res.status(200).send({ user });
-      } else {
-        const msg = { error: 'GET User by id with no result.' };
-        logger.error(msg);
-        res.status(404).send(msg);
-      }
-    }).catch((err) => {
-      const msg = { error: 'Error while retrieving the user.', stack: err };
-      logger.error(msg);
-      res.status(500).send(msg);
-    });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const user = await userService.get(req.params.id);
+    if (user) {
+      logger.info(`GET User by id with result ${user}`);
+      return res.status(200).send({ user });
+    }
+    const msg = { error: 'GET User by id with no result.' };
+    logger.error(msg);
+    return res.status(404).send(msg);
+  } catch (err) {
+    const msg = { error: 'Error while retrieving the user.', stack: err };
+    logger.error(msg);
+    return res.status(500).send(msg);
   }
 }
 
@@ -834,12 +930,25 @@ function get (req, res) {
       "error": "'GET User by id with no result.'",
   }
 
- * @apiError 400 The request is malformed
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Malformed Request
   {
-    "error": "Id needs to be a 24 character long hex string!"
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
   }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
 
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Server Error
@@ -850,39 +959,39 @@ function get (req, res) {
       }
   }
  */
-function getNames (req, res) {
+async function getNames (req, res) {
   const fablabService = new FablabService();
-  const checkId = validatorService.checkId(req.params.id);
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    userService.get(req.params.id).then(async (user) => {
-      if (user) {
-        user.fablabName = '';
-        if (user.fablabId) {
-          const fablab = await fablabService.get(user.fablabId);
-          user.fablabName = fablab.name;
-        }
-        logger.info(`GET User by id with result ${user}`);
-        res.status(200).send({
-          user: {
-            _id: user.id,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            fullname: `${user.firstname} ${user.lastname}`,
-            fablabName: user.fablabName
-          }
-        });
-      } else {
-        const msg = { error: 'GET User by id with no result.' };
-        logger.error(msg);
-        res.status(404).send(msg);
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const user = await userService.get(req.params.id);
+    if (user) {
+      user.fablabName = '';
+      if (user.fablabId) {
+        const fablab = await fablabService.get(user.fablabId);
+        user.fablabName = fablab.name;
       }
-    }).catch((err) => {
-      const msg = { error: 'Error while retrieving the user.', stack: err };
-      logger.error(msg);
-      res.status(500).send(msg);
-    });
+      logger.info(`GET User by id with result ${user}`);
+      return res.status(200).send({
+        user: {
+          _id: user.id,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          fullname: `${user.firstname} ${user.lastname}`,
+          fablabName: user.fablabName
+        }
+      });
+    }
+    const msg = { error: 'GET User by id with no result.' };
+    logger.error(msg);
+    return res.status(404).send(msg);
+  } catch (err) {
+    const msg = { error: 'Error while retrieving the user.', stack: err };
+    logger.error(msg);
+    return res.status(500).send(msg);
   }
 }
 
@@ -914,26 +1023,46 @@ function getNames (req, res) {
           ...
       }
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
-function sendActivationRequest (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function sendActivationRequest (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    userService.get(req.params.id).then((user) => {
-      if (user) {
-        userService.informAdmins(user, false);
-        res.status(200).send({ msg: 'Admins informed' });
-      } else {
-        const msg = { error: 'GET User by id with no result.' };
-        logger.error(msg);
-        res.status(404).send(msg);
-      }
-    }).catch((err) => {
-      const msg = { error: 'Error while retrieving the user.', stack: err };
-      logger.error(msg);
-      res.status(500).send(msg);
-    });
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const user = await userService.get(req.params.id);
+    if (user) {
+      userService.informAdmins(user, false);
+      return res.status(200).send({ msg: 'Admins informed' });
+    }
+    const msg = { error: 'GET User by id with no result.' };
+    logger.error(msg);
+    return res.status(404).send(msg);
+  } catch (err) {
+    const msg = { error: 'Error while retrieving the user.', stack: err };
+    logger.error(msg);
+    return res.status(500).send(msg);
   }
 }
 
@@ -1037,40 +1166,60 @@ function resetPassword (req, res) {
           ...
       }
   }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ *
  */
-function changePassword (req, res) {
-  const checkId = validatorService.checkId(req.params.id);
+async function changePassword (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
-    res.status(checkId.status).send({ error: checkId.error });
-  } else {
-    userService.get(req.params.id).then((user) => {
-      if (user) {
-        user.comparePassword(req.body.oldPassword, (err, isMatch) => {
-          if (err) {
-            const msg = { error: 'The current user password is not correct.' };
-            logger.error(msg);
-            res.status(401).send(msg);
-          } else if (isMatch) {
-            const msg = { msg: `User ${user._id} successfully changed his password.` };
-            logger.error(msg);
-            userService.changePassword(user, req.body.newPassword);
-            res.status(200).send(msg);
-          } else {
-            const msg = { error: 'Something bad happened' };
-            logger.error(msg);
-            res.status(500).send(msg);
-          }
-        });
-      } else {
-        const msg = { error: 'GET User by id with no result.' };
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const user = await userService.get(req.params.id);
+    if (user) {
+      return user.comparePassword(req.body.oldPassword, (err, isMatch) => {
+        if (err) {
+          const msg = { error: 'The current user password is not correct.' };
+          logger.error(msg);
+          return res.status(401).send(msg);
+        }
+        if (isMatch) {
+          const msg = { msg: `User ${user._id} successfully changed his password.` };
+          logger.error(msg);
+          userService.changePassword(user, req.body.newPassword);
+          return res.status(200).send(msg);
+        }
+        const msg = { error: 'Something bad happened' };
         logger.error(msg);
-        res.status(404).send(msg);
-      }
-    }).catch((err) => {
-      const msg = { error: 'Error while retrieving the user.', stack: err };
-      logger.error(msg);
-      res.status(500).send(msg);
-    });
+        return res.status(500).send(msg);
+      });
+    }
+    const msg = { error: 'GET User by id with no result.' };
+    logger.error(msg);
+    return res.status(404).send(msg);
+  } catch (err) {
+    const msg = { error: 'Error while retrieving the user.', stack: err };
+    logger.error(msg);
+    return res.status(500).send(msg);
   }
 }
 

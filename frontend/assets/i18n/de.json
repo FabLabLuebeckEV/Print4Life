@@ -2,6 +2,16 @@
     "buttons": {
         "back": {
             "tooltip": "Zurück"
+        },
+        "add": {
+            "tooltip": "Neu anlegen"
+        },
+        "edit": {
+            "tooltip": "Ändern"
+        },
+        "delete": {
+            "deleteTooltip": "Löschen",
+            "toggleTooltip": "Aktiv Status wechseln"
         }
     },
     "date": {
@@ -97,6 +107,11 @@
             "unfinishedOrders": "Offene Aufträge",
             "myOrders": "Meine Aufträge"
         },
+        "iotDevices": {
+            "title": "IoT Geräte",
+            "createIotDevice": "IoT Gerät hinzufügen",
+            "listIotDevices": "Meine IoT Geräte"
+        },
         "users": {
             "title": "Benutzer",
             "signUp": "Registrieren",
@@ -131,6 +146,27 @@
         "editor": "Bearbeiter",
         "admin": "Administrator"
     },
+    "iotDeviceList": {
+        "paginationLabel": "",
+        "spinnerLoadingText": "Lade IoT Geräte",
+        "buttons": {
+            "deleteLabel": "Löschen",
+            "detailLabel": "Gerätedetails"
+        },
+        "modals": {
+            "yes": "Ja",
+            "abort": "Nein",
+            "abortValue": "Abbrechen",
+            "deleteValue": "Löschen",
+            "deleteHeader": "Möchten Sie das Gerät wirklich löschen?",
+            "deleteQuestion": "Sind Sie sich sicher, dass Sie",
+            "deleteQuestion2": "dieses Gerät wirklich entfernen möchten?",
+            "deleteWarning": "Das Löschen eines Geräts entfernt auch dessen Zugang zu Watson/MQTT."
+        },
+        "filterLabel": {
+            "search": "Suche"
+        }
+    },
     "machineList": {
         "paginationLabel": "",
         "filterLabel": {
@@ -142,6 +178,7 @@
         "spinnerLoadingText": "Lade Maschinen",
         "buttons": {
             "deleteLabel": "Löschen",
+            "toggleLabel": "Aktiv Status wechseln",
             "updateLabel": "Ändern"
         },
         "modals": {
@@ -151,7 +188,7 @@
             "abortValue": "Abbrechen",
             "deleteHeader": "Möchten den Status der Maschine ändern?",
             "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "den Status wechseln wollen?"
+            "deleteQuestion2": "den Aktiv Status wechseln wollen?"
         },
         "activations": {
             "active": "Aktive",
@@ -225,7 +262,10 @@
             "abortReturnValue": "Abbrechen",
             "deleteHeader": "Möchten den Status der Maschine ändern?",
             "deleteMessage": "Sind Sie sicher, dass Sie",
-            "deleteMessage2": "den Status wechseln wollen?"
+            "deleteMessage2": "den Aktiv Status wechseln wollen?"
+        },
+        "buttons": {
+            "toggleTooltip": "Aktiv Status wechseln"
         },
         "props": {
             "activated": "Aktiv-Status",
@@ -325,6 +365,52 @@
         "zipCode": "PLZ",
         "city": "Stadt",
         "country": "Land"
+    },
+    "iotDeviceDetail": {
+        "labels": {
+            "deviceId": "Gerätename",
+            "mqttHeader": "MQTT Zugangsdaten",
+            "username": "Benutzername",
+            "password": "Passwort",
+            "dataformat": "Datenformat",
+            "clientId": "Client ID",
+            "deviceType": "Geräte Typ"
+        },
+        "modals": {
+            "ok": "Ja",
+            "abort": "Nein",
+            "abortReturnValue": "Abbrechen",
+            "deleteReturnValue": "Löschen",
+            "deleteHeader": "Gerät löschen",
+            "deleteQuestion": "Sind Sie sich sicher, dass Sie dieses Gerät wirklich entfernen möchten?",
+            "deleteWarning": "Das Löschen eines Geräts entfernt auch dessen Zugang zu Watson/MQTT."
+        }
+    },
+    "iotDevicesForm": {
+        "createTitle": "IoT Gerät hinzufügen",
+        "buttons": {
+            "deleteTooltip": "Löschen"
+        },
+        "labels": {
+            "deviceId": "Gerätename",
+            "deviceType": "Gerätetyp wählen",
+            "submit": "Hinzufügen"
+        },
+        "messages": {
+            "deviceId": "Der Name ist nicht gesetzt.",
+            "deviceId2": "Der Name ist bereits vergeben.",
+            "deviceId3": "Der Name ist ungültig, erlaubt sind: 1 bis 36 Zeichen, a-z, A-Z, 0-9, '.', '-' und '_'",
+            "eventsNotValid": "Füge mindestens ein Event hinzu bzw. mindestens eins scheint fehlerhaft zu sein."
+        },
+        "modals": {
+            "ok": "Okay",
+            "errorHeader": "Fehler",
+            "successHeader": "MQTT Zugangsdaten",
+            "username": "Benutzername",
+            "password": "Passwort",
+            "dataformat": "Datenformat",
+            "saveHint": "Verwende die folgenden Daten für dein Gerät:"
+        }
     },
     "orderForm": {
         "createTitle": "Auftrag anlegen",
@@ -432,8 +518,7 @@
     "orderDetail": {
         "buttons": {
             "tooltips": {
-                "delete": "Auftrag löschen",
-                "edit": "Auftrag bearbeiten",
+                "delete": "Löschen",
                 "print": "Auftrag über Octoprint drucken"
             }
         },
@@ -526,6 +611,9 @@
         }
     },
     "tableComponent": {
+        "id": "ID",
+        "Device ID": "Gerät ID",
+        "Type": "Typ",
         "Device Type": "Maschinen Typ",
         "Device Name": "Maschinen Name",
         "Manufacturer": "Hersteller",

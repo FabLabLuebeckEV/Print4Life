@@ -10,6 +10,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
+import { EditButtonComponent } from 'frontend/app/components/edit-button/edit-button.component';
+import { DeleteButtonComponent } from 'frontend/app/components/delete-button/delete-button.component';
 
 describe('MachineDetailComponent', () => {
   let component: MachineDetailComponent;
@@ -17,7 +19,7 @@ describe('MachineDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MachineDetailComponent, BackButtonComponent],
+      declarations: [MachineDetailComponent, BackButtonComponent, EditButtonComponent, DeleteButtonComponent],
       imports: [NgbModule.forRoot(),
         HttpClientTestingModule,
         RouterTestingModule,

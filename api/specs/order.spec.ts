@@ -13,6 +13,12 @@ export const testOrder = {
   fablabId: '5b453ddb5cf4a9574849e98a',
   files: [],
   status: 'new',
+  shippingAddress: {
+    street: 'Example Street',
+    zipCode: 'D15623',
+    city: 'Example City',
+    country: 'Dreamland'
+  },
   machine: {
     type: 'otherMachine',
     _id: '5b55f7bf3fe0c8b01713b3ef',

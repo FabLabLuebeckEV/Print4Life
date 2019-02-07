@@ -10,6 +10,7 @@ export class TableButton {
   routerLink: Boolean = true;
   class: String = '';
   refId: String = '';
+  tooltip: String = '';
 }
 
 export class TableItem {
@@ -29,15 +30,17 @@ export class TableItem {
 })
 export class TableComponent implements OnInit, DoCheck {
   @Input() items: Array<TableItem>;
+  @Input() headers: Array<String>;
   @Output() buttonEvent: EventEmitter<TableButton> = new EventEmitter();
   visibleItems: Array<TableItem>;
-  headers: Array<String> = [];
+  visibleHeaders: Array<String>;
   button1Active: Boolean = false;
   button2Active: Boolean = false;
   differ: any;
   objDiffer: any;
 
-  constructor(private differs: KeyValueDiffers, private translateService: TranslateService) {
+  constructor(private differs: KeyValueDiffers,
+    private translateService: TranslateService) {
     this.differ = differs.find([]).create();
   }
 
@@ -78,8 +81,13 @@ export class TableComponent implements OnInit, DoCheck {
 
   private _loadTable() {
     if (this.items) {
+      if (this.headers) {
+        const itemIdx = this.headers.indexOf('id');
+        if (itemIdx >= 0) {
+          this.headers.splice(itemIdx, 1);
+        }
+      }
       this._translate();
-      this.headers = [];
       this.visibleItems.forEach((item) => {
 
         if (item.button1) {
@@ -89,18 +97,6 @@ export class TableComponent implements OnInit, DoCheck {
         if (item.button2) {
           this.button2Active = true;
         }
-
-        Object.keys(item.obj).forEach((key) => {
-          let found = false;
-          this.headers.forEach((header) => {
-            if (header === key) {
-              found = true;
-            }
-          });
-          if (!found && key !== 'id') {
-            this.headers.push(key);
-          }
-        });
       });
     } else {
       this.items = [];
@@ -110,7 +106,12 @@ export class TableComponent implements OnInit, DoCheck {
 
   private _translate() {
     this.visibleItems = [];
+    this.visibleHeaders = [];
     this.translateService.get(['tableComponent', 'deviceTypes', 'status', 'roles']).subscribe((translations => {
+      this.headers.forEach((header) => {
+        const translatedHeader = translations['tableComponent'][`${header}`];
+        this.visibleHeaders.push(translatedHeader);
+      });
       this.items.forEach((item) => {
         const itemCopy = JSON.parse(JSON.stringify(item));
         const visibleItem = new TableItem();

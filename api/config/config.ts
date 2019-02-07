@@ -1,7 +1,15 @@
 const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
 const ngPort = process.env.NG_PORT || 4200;
-const jwtSecret = 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah';
+const ibmWatson = {
+  key: process.env.WATSON_API_KEY || 'a-mvgc70-kzvlngabpn',
+  token: process.env.WATSON_API_PASSWORD || 'UAwuv+jRcFO*jMKUvB',
+  orgId: process.env.WATSON_ORG_ID || 'mvgc70',
+  userRoles: ['PD_STANDARD_APP']
+};
+const jwtSecret = env === 'dev' || env === 'test' || env === 'testLocal'
+  ? 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah'
+  : process.env.JWT_SECRET;
 /**
  * set to 2 hours
  * (values without unit are by default ms,
@@ -12,12 +20,12 @@ const attachmentBucket = 'orderAttachments';
 const baseUrl = '/api/v1/';
 const tmpDir = process.env.TMP_DIR || './tmp';
 const email = {
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
+  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+  port: process.env.EMAIL_PORT || 587,
+  secure: process.env.EMAIL_SECURE === 'true',
   auth: {
-    user: 'iot.fablab@gmail.com',
-    pass: 'scdkhsxiumwwgiob'
+    user: process.env.EMAIL_USER || 'iot.fablab@gmail.com',
+    pass: process.env.EMAIL_PASS || 'scdkhsxiumwwgiob'
   }
 };
 
@@ -133,10 +141,11 @@ const dev = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   tmpDir,
   ssl: {
-    privateKeyPath: '',
-    certificatePath: ''
+    privateKeyPath: process.env.SSL_PRIV_KEY || '',
+    certificatePath: process.env.SSL_CERT || ''
   },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
@@ -147,16 +156,16 @@ const dev = {
   email,
   connections: {
     mongo: {
-      host: 'mongodb://127.0.0.1:27017/',
-      database: 'iot-fablab-dev'
+      host: process.env.MONGO_HOST || 'mongodb://127.0.0.1:27017/',
+      database: process.env.MONGO_DBNAME || 'iot-fablab-dev'
     }
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `http://localhost:${port}${baseUrl}`,
-  baseUrlFrontend: `http://localhost:${ngPort}`,
+  baseUrlBackend: `${process.env.BASE_URL_BACKEND || 'http://localhost'}:${port}${baseUrl}`,
+  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND || 'http://localhost'}:${ngPort}`,
   cors: {
-    whitelist: [`http://localhost:${ngPort}`]
+    whitelist: [`${process.env.BASE_URL_FRONTEND || 'http://localhost'}:${ngPort}`]
   }
   // cors: undefined // if testing backend routes in dev mode without using the frontend
 };
@@ -165,10 +174,11 @@ const staging = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   tmpDir,
   ssl: {
-    privateKeyPath: '/etc/letsencrypt/live/iot-fablab.ddns.net/privkey.pem',
-    certificatePath: '/etc/letsencrypt/live/iot-fablab.ddns.net/cert.pem'
+    privateKeyPath: process.env.SSL_PRIV_KEY,
+    certificatePath: process.env.SSL_CERT
   },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
@@ -179,24 +189,18 @@ const staging = {
   email,
   connections: {
     mongo: {
-      host: 'mongodb://127.0.0.1:27017/',
-      database: 'iot-fablab-staging'
+      host: process.env.MONGO_HOST,
+      database: process.env.MONGO_DBNAME
     }
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `https://localhost:${port}${baseUrl}`,
-  baseUrlFrontend: 'https://iot-fablab.ddns.net',
+  baseUrlBackend: `${process.env.BASE_URL_BACKEND}:${port}${baseUrl}`,
+  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
   cors: {
     whitelist: [
-      `https://localhost:${ngPort}`,
-      `https://212.83.56.107:${ngPort}`,
-      `https://iot-fablab.ddns.net:${ngPort}`,
-      'https://iot-fablab.ddns.net',
-      `http://localhost:${ngPort}`,
-      `http://212.83.56.107:${ngPort}`,
-      `http://iot-fablab.ddns.net:${ngPort}`,
-      'http://iot-fablab.ddns.net'
+      `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
+      `${process.env.BASE_URL_FRONTEND}`
     ]
   }
   // cors: undefined
@@ -206,10 +210,11 @@ const prod = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   tmpDir,
   ssl: {
-    privateKeyPath: '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/private.pem',
-    certificatePath: '/usr/share/ca-certificates/fablab.itm.uni-luebeck.de/cert.pem'
+    privateKeyPath: process.env.SSL_PRIV_KEY,
+    certificatePath: process.env.SSL_CERT
   },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
@@ -220,24 +225,18 @@ const prod = {
   email,
   connections: {
     mongo: {
-      host: 'mongodb://127.0.0.1:27017/',
-      database: 'iot-fablab'
+      host: process.env.MONGO_HOST,
+      database: process.env.MONGO_DBNAME
     }
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `https://localhost:${port}${baseUrl}`,
-  baseUrlFrontend: 'https://fablab.itm.uni-luebeck.de',
+  baseUrlBackend: `${process.env.BASE_URL_BACKEND}:${port}${baseUrl}`,
+  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
   cors: {
     whitelist: [
-      `https://localhost:${ngPort}`,
-      `https://141.83.68.36:${ngPort}`,
-      `https://fablab.itm.uni-luebeck.de:${ngPort}`,
-      'https://fablab.itm.uni-luebeck.de',
-      `http://localhost:${ngPort}`,
-      `http://141.83.68.36:${ngPort}`,
-      `http://fablab.itm.uni-luebeck.de:${ngPort}`,
-      'http://fablab.itm.uni-luebeck.de'
+      `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
+      `${process.env.BASE_URL_FRONTEND}`
     ]
   }
   // cors: undefined
@@ -247,10 +246,11 @@ const test = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   tmpDir,
   ssl: {
-    privateKeyPath: '',
-    certificatePath: ''
+    privateKeyPath: process.env.PRIV_KEY || '',
+    certificatePath: process.env.CERT || ''
   },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
@@ -261,14 +261,14 @@ const test = {
   email,
   connections: {
     mongo: {
-      host: 'mongodb://mongo:27017/',
-      database: 'iot-fablab'
+      host: process.env.MONGO_HOST || 'mongodb://mongo:27017/',
+      database: process.env.MONGO_DBNAME || 'iot-fablab'
     }
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `http://localhost:${port}${baseUrl}`,
-  baseUrlFrontend: `http://localhost:${ngPort}`,
+  baseUrlBackend: `${process.env.BASE_URL_BACKEND || 'http://localhost'}:${port}${baseUrl}`,
+  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND || 'http://localhost'}:${ngPort}`,
   cors: undefined
 };
 
@@ -276,10 +276,11 @@ const testLocal = {
   jwtSecret,
   jwtExpiryTime,
   attachmentBucket,
+  ibmWatson,
   tmpDir,
   ssl: {
-    privateKeyPath: '',
-    certificatePath: ''
+    privateKeyPath: process.env.PRIV_KEY || '',
+    certificatePath: process.env.CERT || ''
   },
   loggerRotateOptions: {
     datePattern: 'DD-MM-YYYY',
@@ -290,14 +291,14 @@ const testLocal = {
   email,
   connections: {
     mongo: {
-      host: 'mongodb://127.0.0.1:27017/',
-      database: 'iot-fablab-dev'
+      host: process.env.MONGO_HOST || 'mongodb://127.0.0.1:27017/',
+      database: process.env.MONGO_DBNAME || 'iot-fablab-dev'
     }
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `http://localhost:${port}${baseUrl}`,
-  baseUrlFrontend: `http://localhost:${ngPort}`,
+  baseUrlBackend: `${process.env.BASE_URL_BACKEND || 'http://localhost'}:${port}${baseUrl}`,
+  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND || 'http://localhost'}:${ngPort}`,
   cors: undefined
 };
 

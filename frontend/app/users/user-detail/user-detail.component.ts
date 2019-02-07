@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'frontend/app/services/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { ConfigService } from 'frontend/app/config/config.service';
 import { User } from 'frontend/app/models/user.model';
-import { ModalButton, MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
 import { routes } from 'frontend/app/config/routes';
 import { FablabService } from 'frontend/app/services/fablab.service';
+import { ModalService } from '../../services/modal.service';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-user-detail',
@@ -17,13 +17,13 @@ import { FablabService } from 'frontend/app/services/fablab.service';
 })
 export class UserDetailComponent implements OnInit {
   private config: any;
-  private userIsLoggedIn: boolean;
-  private userIsAdmin: Boolean;
+  userIsLoggedIn: boolean;
+  userIsAdmin: Boolean;
   editIcon: any;
   disableIcon: any;
   editLink: String;
   user: User = new User(
-    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+    undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
   translationFields = {
     labels: {
@@ -60,7 +60,7 @@ export class UserDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private genericService: GenericService,
     private translateService: TranslateService,
     private configService: ConfigService,
@@ -105,7 +105,7 @@ export class UserDetailComponent implements OnInit {
       this.translationFields.modals.deactivateReturnValue);
     const abortButton = new ModalButton(this.translationFields.modals.abort, 'btn btn-secondary',
       this.translationFields.modals.abortReturnValue);
-    const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+    const modalRef = this.modalService.openMsgModal(this.translationFields.modals.deleteHeader,
       'modal-header header-danger',
       [`${this.translationFields.modals.deleteQuestion} ${this.user.username} ${this.translationFields.modals.deleteQuestion2}`],
       deleteButton, abortButton);
@@ -116,18 +116,6 @@ export class UserDetailComponent implements OnInit {
         });
       }
     });
-  }
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    if (titleClass) {
-      modalRef.componentInstance.titleClass = titleClass;
-    }
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
   }
 
   private _translateRole(): Promise<String> {

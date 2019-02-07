@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { MessageModalComponent, ModalButton } from '../components/message-modal/message-modal.component';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
+import { ModalService } from './modal.service';
+import { ModalButton } from '../helper/modal.button';
 
 export enum ErrorType {
   TOKEN_EXPIRED,
@@ -20,6 +20,7 @@ export enum ErrorType {
   FORBIDDEN,
   SERVER_ERROR,
   MALFORMED_REQUEST,
+  IOT_DEVICE_EXISTS,
   OCTOPRINT_ERROR
 }
 
@@ -35,7 +36,7 @@ export interface Error {
 })
 export class ErrorService {
   isOpen = false;
-  constructor(private modalService: NgbModal, private userService: UserService, private router: Router) {
+  constructor(private modalService: ModalService, private userService: UserService, private router: Router) {
   }
 
   public showError(err: Error) {
@@ -47,7 +48,7 @@ export class ErrorService {
         err.type as ErrorType === ErrorType.UNAUTHORIZED as ErrorType)) {
         this.userService.logout();
         this.router.navigate(['/']);
-        modalRef = this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', [err.stack],
+        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', [err.stack],
           okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then(() => {
@@ -59,13 +60,13 @@ export class ErrorService {
           secondButton = new ModalButton(activateRequestResult, 'btn btn-success', activateRequestResult);
           err.stack = err.stack ? err.stack : 'The User is deactivated. Please request an Activation!';
         }
-        modalRef = this._openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger',
+        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger',
           [err.stack], okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then((result) => {
           if (result === activateRequestResult) {
             this.userService.claimActivation(err.data.userId).then(() => {
-              this._openMsgModal(`Activation Request sent!`, 'modal-header header-success',
+              this.modalService.openMsgModal(`Activation Request sent!`, 'modal-header header-success',
                 ['An Admin was informed that you wish an activation of your user account!'], okButton, undefined);
             });
           }
@@ -73,15 +74,5 @@ export class ErrorService {
         });
       }
     }
-  }
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    modalRef.componentInstance.titleClass = titleClass;
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
   }
 }

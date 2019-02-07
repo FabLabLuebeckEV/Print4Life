@@ -1,0 +1,58 @@
+<router-outlet></router-outlet>
+<div class="row spacing">
+  <div class="col-md-12 text-center">
+    <h1>{{translationFields.title}}</h1>
+  </div>
+  <div class="container text-left">
+    <app-back-button></app-back-button>
+  </div>
+</div>
+<div class="row spacing">
+  <div class="col-md-12">
+    <div class="container">
+      <form (ngSubmit)="onSubmit()" #createIotDeviceForm="ngForm">
+        <div class="form-group row">
+          <div class="col-md-12">
+            <label for="deviceId">{{translationFields.labels.deviceId}}</label>
+            <input type="text" class=" form-control" id="deviceId" required [(ngModel)]="iotDevice.deviceId" name="deviceId"
+              #deviceId="ngModel">
+            <div [hidden]="deviceId.pristine || deviceIdValid" class="alert alert-danger">
+              {{deviceIdErrorMessage}}
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-12">
+            <label for="deviceType">{{translationFields.labels.deviceType}}</label>
+            <ng-select [loading]="loadingDeviceTypes" [items]=deviceTypes bindLabel="id" [(ngModel)]="iotDevice.deviceType"
+              id="deviceType" name="deviceType" #deviceType="ngModel">
+            </ng-select>
+          </div>
+        </div>
+        <form class="form-group row container text-left" [formGroup]="eventFormGroup">
+          <div formArrayName="events">
+
+            <div *ngFor="let item of events.controls; let eventIndex=index;" [formGroupName]="eventIndex" class="form-group row">
+              <div class="col-md-2">
+                Event {{eventIndex+1}}
+              </div>
+              <div class="col-md-4">
+                <input class="form-control" (focusout)="validateEvents()" type="text" formControlName="topic" />
+              </div>
+              <div class="col-md-4">
+                <ng-select [items]=dataFormats (focusout)="validateEvents()" formControlName="dataformat">
+                </ng-select>
+              </div>
+              <div class="col-md-2">
+                <app-delete-button [disable]="!eventIndex" (click)="deleteEvent(eventIndex)"></app-delete-button>
+              </div>
+            </div>
+
+            <app-add-button [disable]="!eventsValid" (click)="addEvent();"></app-add-button>
+          </div>
+        </form>
+        <button type="submit" class="btn btn-success spacing-top" [disabled]="!createIotDeviceForm.form.valid || !eventsValid || deviceIdAlreadyTaken || !deviceIdValid">{{translationFields.labels.submit}}</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { routes } from '../../config/routes';
 import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LoginModalComponent } from '../../users/login-modal/login-modal.component';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
+import { ModalService } from '../../services/modal.service';
 
 interface Dropdown {
   name: String;
@@ -25,6 +25,7 @@ export class NavigationComponent implements OnInit {
   isNavbarCollapsed: Boolean = false;
   machineDropdown: Dropdown = { name: '', elements: [] };
   orderDropdown: Dropdown = { name: '', elements: [] };
+  iotDevicesDropdown: Dropdown = { name: '', elements: [] };
   languageDropdown: Dropdown = { name: '', elements: [] };
   userDropdown: Dropdown = { name: '', elements: [] };
   userIsLoggedIn: Boolean;
@@ -34,7 +35,7 @@ export class NavigationComponent implements OnInit {
   constructor(
     private translateService: TranslateService,
     private userService: UserService,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private router: Router
   ) {
     this.router.events.subscribe(async () => {
@@ -60,7 +61,7 @@ export class NavigationComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(
-      ['navigation', 'languages', 'dropdown.machines', 'dropdown.orders', 'dropdown.users']
+      ['navigation', 'languages', 'dropdown.machines', 'dropdown.orders', 'dropdown.users', 'dropdown.iotDevices']
     ).subscribe((translations => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.title = translations['navigation'].title;
@@ -101,13 +102,20 @@ export class NavigationComponent implements OnInit {
         ]
       };
 
+      this.iotDevicesDropdown = {
+        name: translations['dropdown.iotDevices'].title,
+        elements: []
+      };
+
       this.orderDropdown = {
         name: translations['dropdown.orders'].title,
         elements: [
-          { name: translations['dropdown.orders'].listOrders, routerHref: routes.paths.frontend.orders.root },
           {
-            name:
-              translations['dropdown.orders'].outstandingOrders,
+            name: translations['dropdown.orders'].listOrders,
+            routerHref: routes.paths.frontend.orders.root
+          },
+          {
+            name: translations['dropdown.orders'].outstandingOrders,
             routerHref: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}`
           },
         ]
@@ -160,6 +168,12 @@ export class NavigationComponent implements OnInit {
       }
 
       if (this.userIsLoggedIn) {
+        this.iotDevicesDropdown.elements = this.iotDevicesDropdown.elements.concat([{
+          name: translations['dropdown.iotDevices'].listIotDevices, routerHref: routes.paths.frontend.iotDevices.root
+        }, {
+          name: translations['dropdown.iotDevices'].createIotDevice,
+          routerHref: `${routes.paths.frontend.iotDevices.root}/${routes.paths.frontend.iotDevices.create}`
+        }]);
         this.machineDropdown.elements = this.machineDropdown.elements.concat(machineDropdownAuthElements);
         if (this.user && this.user.role && this.user.role.role && this.user.role.role === 'editor' || this.userIsAdmin) {
           this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownEditorElements);

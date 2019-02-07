@@ -26,6 +26,7 @@ const serverInstance = process.env && (process.env.NODE_ENV === 'prod' || proces
 function run (callback) {
   const port = process.env.PORT || 3000;
   const ngPort = process.env.NG_PORT || 4200;
+  mongoose.set('useCreateIndex', true);
   mongoose
     .connect(config.connections.mongo.host + config.connections.mongo.database,
       { autoReconnect: true, useNewUrlParser: true }).then(() => {

@@ -4,11 +4,9 @@ import { Location } from '@angular/common';
 import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { Machine, Printer3D, MillingMachine, OtherMachine, Lasercutter, Material, Lasertype } from '../../models/machines.model';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { ConfigService } from '../../config/config.service';
-import { GenericService } from '../../services/generic.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-machine-form',
@@ -80,9 +78,8 @@ export class MachineFormComponent implements OnInit {
     private router: Router,
     private location: Location,
     private route: ActivatedRoute,
-    private modalService: NgbModal,
+    private modalService: ModalService,
     private configService: ConfigService,
-    private genericService: GenericService,
     private translateService: TranslateService) {
     this.config = this.configService.getConfig();
     this.route.params.subscribe(params => {
@@ -125,58 +122,45 @@ export class MachineFormComponent implements OnInit {
     if (!this.editView) {
       this.machineService.create(this.machineService.camelCaseTypes(this.selectedType), this.model).then((result) => {
         if (result) {
-          this._openSuccessMsg();
+          this.modalService.openSuccessMsg(
+            this.translationFields.modals.ok,
+            this.translationFields.modals.ok,
+            this.translationFields.modals.successHeader,
+            this.translationFields.modals.successMessage);
         } else {
-          this._openErrMsg(undefined);
+          const errMessage = this.editView ? '' : this.translationFields.modals.errorMessage;
+          this.modalService.openErrMsg(
+            this.translationFields.modals.error, errMessage, this.translationFields.modals.ok, this.translationFields.modals.ok);
         }
         this.submitted = true;
       }).catch((err) => {
-        this._openErrMsg(err);
+        const errMessage = this.editView ? '' : this.translationFields.modals.errorMessage;
+        this.modalService.openErrMsg(
+          this.translationFields.modals.error, errMessage, this.translationFields.modals.ok, this.translationFields.modals.ok);
       });
     } else {
       this.machineService.update(this.machineService.camelCaseTypes(this.selectedType), this.model._id, this.model).then((result) => {
         if (result) {
-          this._openSuccessMsg();
+          this.modalService.openSuccessMsg(
+            this.translationFields.modals.ok,
+            this.translationFields.modals.ok,
+            this.translationFields.modals.successHeader,
+            this.translationFields.modals.successMessage);
         } else {
-          this._openErrMsg(undefined);
+          const errMessage = this.editView ? '' : this.translationFields.modals.errorMessage;
+          this.modalService.openErrMsg(
+            this.translationFields.modals.error, errMessage, this.translationFields.modals.ok, this.translationFields.modals.ok);
         }
         this.submitted = true;
       }).catch((err) => {
-        this._openErrMsg(err);
+        const errMessage = this.editView ? '' : this.translationFields.modals.errorMessage;
+        this.modalService.openErrMsg(
+          this.translationFields.modals.error, errMessage, this.translationFields.modals.ok, this.translationFields.modals.ok);
       });
     }
   }
 
   // Private Functions
-
-  private _openSuccessMsg() {
-    const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
-    const msgHeader = this.translationFields.modals.successHeader;
-    const msg = this.translationFields.modals.successMessage;
-    this._openMsgModal(msgHeader, 'modal-header header-success',
-      [msg], okButton, undefined).result.then(() => {
-        this.genericService.back();
-      });
-  }
-
-  private _openErrMsg(err) {
-    let errorMsg;
-    this.editView ? errorMsg = ''
-      : errorMsg = this.translationFields.modals.errorMessage;
-    const okButton = new ModalButton(this.translationFields.modals.ok, 'btn btn-primary', this.translationFields.modals.ok);
-    this._openMsgModal(this.translationFields.modals.error, 'modal-header header-danger', errorMsg,
-      okButton, undefined);
-  }
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    modalRef.componentInstance.titleClass = titleClass;
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
-  }
 
   private async _loadLaserTypes() {
     this.loadingLaserTypes = true;

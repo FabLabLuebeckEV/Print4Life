@@ -54,6 +54,17 @@ const attributes = {
     _id: {
       type: String,
       required: true
+    },
+    schedule: {
+      id: {
+        type: String
+      },
+      startDate: {
+        type: Date
+      },
+      endDate: {
+        type: Date
+      }
     }
   },
   fileCopyright: {

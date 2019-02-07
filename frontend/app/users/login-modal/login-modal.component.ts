@@ -3,7 +3,8 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { InputModalComponent } from 'frontend/app/components/input-modal/input-modal.component';
-import { ModalButton, MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
+import { MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-login-modal',

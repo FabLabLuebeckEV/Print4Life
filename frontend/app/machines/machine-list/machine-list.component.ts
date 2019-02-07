@@ -4,8 +4,6 @@ import { MachineService } from '../../services/machine.service';
 import { FablabService } from '../../services/fablab.service';
 import { TableItem } from '../../components/table/table.component';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { MessageModalComponent, ModalButton } from '../../components/message-modal/message-modal.component';
 import { ConfigService, SpinnerConfig } from '../../config/config.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { routes } from '../../config/routes';
@@ -14,6 +12,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'frontend/app/services/user.service';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { User } from 'frontend/app/models/user.model';
+import { ModalService } from '../../services/modal.service';
+import { ModalButton } from '../../helper/modal.button';
 
 @Component({
   selector: 'app-machine-list',
@@ -94,6 +94,7 @@ export class MachineListComponent implements OnInit {
     spinnerLoadingText: '',
     buttons: {
       deleteLabel: '',
+      toggleLabel: '',
       updateLabel: ''
     },
     modals: {
@@ -106,11 +107,12 @@ export class MachineListComponent implements OnInit {
       deleteQuestion2: ''
     }
   };
+  headers: Array<String> = [];
 
 
   constructor(private machineService: MachineService,
     private fablabService: FablabService, private router: Router,
-    private location: Location, private modalService: NgbModal,
+    private location: Location, private modalService: ModalService,
     private spinner: NgxSpinnerService, private configService: ConfigService,
     private translateService: TranslateService, private userService: UserService,
     private genericService: GenericService) {
@@ -125,19 +127,23 @@ export class MachineListComponent implements OnInit {
     this.searchIcon = this.config.icons.search;
     this.newLink = `./${routes.paths.frontend.machines.create}`;
     this.router.events.subscribe(() => {
+      this.headers = this._initHeaders();
       const route = this.location.path();
       if (route === `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}` && !this.successList) {
         this.successList = true;
         this.listView = false;
-        this.ngOnInit();
+        this.headers.push('Successful Orders');
       } else if (!this.listView && route === `/${routes.paths.frontend.machines.root}`) {
         this.listView = true;
         this.successList = false;
-        this.ngOnInit();
       } else if (route !== `/${routes.paths.frontend.machines.root}`) {
         this.listView = false;
       }
     });
+  }
+
+  private _initHeaders(): Array<String> {
+    return ['id', 'Device Type', 'Device Name', 'Manufacturer', 'Fablab', 'Comment'];
   }
 
   async ngOnInit() {
@@ -212,7 +218,7 @@ export class MachineListComponent implements OnInit {
       const deleteButton = new ModalButton(this.translationFields.modals.yes, 'btn btn-danger', this.translationFields.modals.deleteValue);
       const abortButton = new ModalButton(this.translationFields.modals.abort,
         'btn btn-secondary', this.translationFields.modals.abortValue);
-      const modalRef = this._openMsgModal(this.translationFields.modals.deleteHeader,
+      const modalRef = this.modalService.openMsgModal(this.translationFields.modals.deleteHeader,
         'modal-header header-warning',
         [`${this.translationFields.modals.deleteQuestion} ` +
           `${machine.obj[`Device Name`].label} ${this.translationFields.modals.deleteQuestion2}`]
@@ -271,17 +277,22 @@ export class MachineListComponent implements OnInit {
         const successfulOrders: { machineId: string, successfulOrders: number }
           = await this.machineService.countSuccessfulOrders(elem.type, elem._id);
         item.obj['Successful Orders'] = { label: successfulOrders.successfulOrders };
+        if (this.headers.findIndex(e => e === 'Successful Orders') < 0) {
+          this.headers.push('Successful Orders');
+        }
       }
       if (this.userIsAdmin) {
         item.button1.label = this.translationFields.buttons.updateLabel;
         item.button1.href = `/${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.update}/${elem.type}s/${elem._id}`;
         item.button1.class = 'btn btn-warning spacing';
         item.button1.icon = this.config.icons.edit;
+        item.button1.tooltip = this.translationFields.buttons.updateLabel;
         item.button2.label = this.translationFields.buttons.deleteLabel;
         item.button2.eventEmitter = true;
         item.button2.class = elem.activated ? 'btn btn-success spacing' : 'btn btn-danger spacing';
         item.button2.icon = elem.activated ? this.config.icons.toggleOn : this.config.icons.toggleOff;
         item.button2.refId = elem._id;
+        item.button2.tooltip = this.translationFields.buttons.toggleLabel;
       }
       return item;
     }
@@ -341,19 +352,6 @@ export class MachineListComponent implements OnInit {
     }
     this.loadingFablabs = false;
   }
-
-  private _openMsgModal(title: String, titleClass: String, messages: Array<String>, button1: ModalButton, button2: ModalButton) {
-    const modalRef = this.modalService.open(MessageModalComponent, { backdrop: 'static' });
-    modalRef.componentInstance.title = title;
-    if (titleClass) {
-      modalRef.componentInstance.titleClass = titleClass;
-    }
-    modalRef.componentInstance.messages = messages;
-    modalRef.componentInstance.button1 = button1;
-    modalRef.componentInstance.button2 = button2;
-    return modalRef;
-  }
-
 
   public async init() {
     const arr = await this._loadMachinesByTypes(this.filter.selectedMachineTypes);
@@ -515,6 +513,7 @@ export class MachineListComponent implements OnInit {
         spinnerLoadingText: translations['machineList'].spinnerLoadingText,
         buttons: {
           deleteLabel: translations['machineList'].buttons.deleteLabel,
+          toggleLabel: translations['machineList'].buttons.toggleLabel,
           updateLabel: translations['machineList'].buttons.updateLabel
         },
         modals: {

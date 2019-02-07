@@ -2,6 +2,16 @@
     "buttons": {
         "back": {
             "tooltip": "Back"
+        },
+        "add": {
+            "tooltip": "New"
+        },
+        "edit": {
+            "tooltip": "Edit"
+        },
+        "delete": {
+            "deleteTooltip": "Delete",
+            "toggleTooltip": "Change Active Status"
         }
     },
     "date": {
@@ -97,6 +107,11 @@
             "unfinishedOrders": "List Unfinished Orders",
             "myOrders": "List My Orders"
         },
+        "iotDevices": {
+            "title": "IoT Devices",
+            "createIotDevice": "Add IoT Device",
+            "listIotDevices": "My IoT Devices"
+        },
         "users": {
             "title": "Users",
             "signUp": "Sign up",
@@ -131,6 +146,47 @@
         "editor": "editor",
         "admin": "admin"
     },
+    "iotDeviceDetail": {
+        "labels": {
+            "deviceId": "Devicename",
+            "mqttHeader": "MQTT Auth. Data",
+            "username": "Username",
+            "password": "Password",
+            "dataformat": "Dataformat",
+            "clientId": "Client ID",
+            "deviceType": "Device Type"
+        },
+        "modals": {
+            "ok": "Yes",
+            "abort": "No",
+            "abortReturnValue": "Abort",
+            "deleteReturnValue": "Delete",
+            "deleteHeader": "Delete Device",
+            "deleteQuestion": "Are you really sure, that you want to remove this device?",
+            "deleteWarning": "The removal of this device will also remove it's access to the Watson/MQTT platform."
+        }
+    },
+    "iotDeviceList": {
+        "paginationLabel": "",
+        "spinnerLoadingText": "Loading IoT Devices",
+        "buttons": {
+            "deleteLabel": "Delete",
+            "detailLabel": "Device Details"
+        },
+        "modals": {
+            "yes": "Yes",
+            "abort": "No",
+            "abortValue": "Abort",
+            "deleteLabel": "Delete",
+            "deleteHeader": "Do you really want to remove this device?",
+            "deleteQuestion": "Are you really sure, that you want",
+            "deleteQuestion2": "to remove this device?",
+            "deleteWarning": "The removal of this device will also remove it's access to the Watson/MQTT platform."
+        },
+        "filterLabel": {
+            "search": "Search"
+        }
+    },
     "machineList": {
         "paginationLabel": "Jump to Page",
         "filterLabel": {
@@ -142,7 +198,8 @@
         "spinnerLoadingText": "Loading Machines",
         "buttons": {
             "deleteLabel": "Delete",
-            "updateLabel": "Update"
+            "toggleLabel": "Change Active Status",
+            "updateLabel": "Edit"
         },
         "modals": {
             "yes": "Yes",
@@ -226,6 +283,9 @@
             "deleteHeader": "Do you really want toggle machine's status?",
             "deleteMessage": "Are you sure you want to toggle",
             "deleteMessage2": "?"
+        },
+        "buttons": {
+            "toggleTooltip": "Change Active Status"
         },
         "props": {
             "activated": "Active-Status",
@@ -325,6 +385,32 @@
         "zipCode": "Zip Code",
         "city": "City",
         "country": "Country"
+    },
+    "iotDevicesForm": {
+        "createTitle": "Add IoT Device",
+        "buttons": {
+            "deleteTooltip": "Delete"
+        },
+        "labels": {
+            "deviceId": "Devicename",
+            "deviceType": "Choose Devicetype",
+            "submit": "Add"
+        },
+        "messages": {
+            "deviceId": "The given device name is not set.",
+            "deviceId2": "The given device name has already been taken.",
+            "deviceId3": "The name is not valid, allowed: 1 to 36 characters, a-z, A-Z, 0-9, '.', '-' and '_'",
+            "eventsNotValid": "Add at least one event or an event seem to be malformed."
+        },
+        "modals": {
+            "ok": "Okay",
+            "errorHeader": "Error",
+            "successHeader": "MQTT Auth. Data",
+            "username": "Username",
+            "password": "Password",
+            "dataformat": "Dataformat",
+            "saveHint": "Use the following logindata with your device:"
+        }
     },
     "orderForm": {
         "createTitle": "Create Order",
@@ -432,8 +518,7 @@
     "orderDetail": {
         "buttons": {
             "tooltips": {
-                "delete": "Delete Order",
-                "edit": "Edit Order",
+                "delete": "Delete",
                 "print": "Print Order via Octoprint"
             }
         },
@@ -526,6 +611,9 @@
         }
     },
     "tableComponent": {
+        "id": "ID",
+        "Device ID": "Device ID",
+        "Type": "Type",
         "Device Type": "Device Type",
         "Device Name": "Device Name",
         "Manufacturer": "Manufacturer",
