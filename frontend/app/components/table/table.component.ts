@@ -80,14 +80,14 @@ export class TableComponent implements OnInit, DoCheck {
   }
 
   private _loadTable() {
-    if (this.items) {
-      if (this.headers) {
-        const itemIdx = this.headers.indexOf('id');
-        if (itemIdx >= 0) {
-          this.headers.splice(itemIdx, 1);
-        }
+    if (this.headers) {
+      const itemIdx = this.headers.indexOf('id');
+      if (itemIdx >= 0) {
+        this.headers.splice(itemIdx, 1);
       }
-      this._translate();
+    }
+    this._translate();
+    if (this.items) {
       this.visibleItems.forEach((item) => {
 
         if (item.button1) {

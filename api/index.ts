@@ -7,7 +7,6 @@ import * as https from 'https';
 import app from './App';
 import logger from './logger';
 import config from './config/config';
-// import { setUpOrderAttachmentStorage } from './routes/order.route';
 
 let privateKey = '';
 let certificate = '';
@@ -30,7 +29,6 @@ function run (callback) {
   mongoose
     .connect(config.connections.mongo.host + config.connections.mongo.database,
       { autoReconnect: true, useNewUrlParser: true }).then(() => {
-      // setUpOrderAttachmentStorage(mongoose.connection.db, mongoose.mongo);
     })
     .catch((error) => logger.error(error));
   const db = mongoose.connection;

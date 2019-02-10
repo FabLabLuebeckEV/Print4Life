@@ -480,7 +480,11 @@
             "content": "Der Inhalt des Kommentars wird benötigt",
             "datePicker": "Das Startdatum ist größer als das Enddatum",
             "timePicker": "Die Start- und Endzeit ist falsch. Bitte das Datum und die Zeiten prüfen",
-            "copyright": "Wenn Sie Dateien hochladen wollen oder hochgeladen haben, müssen Sie bestätigen, dass sie der Urheber der Daten sind."
+            "copyright": "Wenn Sie Dateien hochladen wollen oder hochgeladen haben, müssen Sie bestätigen, dass sie der Urheber der Daten sind.",
+            "street": "Die Straße wird benötigt",
+            "zipCode": "Die Postleitzahl wird benötigt",
+            "city": "Die Stadt wird benötigt",
+            "country": "Das Land wird benötigt"
         }
     },
     "userDetail": {
