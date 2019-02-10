@@ -10,6 +10,12 @@ const ibmWatson = {
 const jwtSecret = env === 'dev' || env === 'test' || env === 'testLocal'
   ? 'phahng9tie6uthashe4Deng8Iek0eefahv9aawu1ah'
   : process.env.JWT_SECRET;
+
+const baseUrl = '/api/v1/';
+const baseUrlBackend = `${process.env.BASE_URL_BACKEND || 'http://localhost'}:${port}${baseUrl}`;
+const baseUrlFrontend = ngPort === 80
+  ? `${process.env.BASE_URL_FRONTEND || 'http://localhost'}`
+  : `${process.env.BASE_URL_FRONTEND || 'http://localhost'}:${ngPort}`;
 /**
  * set to 2 hours
  * (values without unit are by default ms,
@@ -17,7 +23,7 @@ const jwtSecret = env === 'dev' || env === 'test' || env === 'testLocal'
  */
 const jwtExpiryTime = '2h';
 const attachmentBucket = 'orderAttachments';
-const baseUrl = '/api/v1/';
+
 const tmpDir = process.env.TMP_DIR || './tmp';
 const email = {
   host: process.env.EMAIL_HOST || 'smtp.gmail.com',
@@ -162,10 +168,10 @@ const dev = {
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `${process.env.BASE_URL_BACKEND || 'http://localhost'}:${port}${baseUrl}`,
-  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND || 'http://localhost'}:${ngPort}`,
+  baseUrlBackend,
+  baseUrlFrontend,
   cors: {
-    whitelist: [`${process.env.BASE_URL_FRONTEND || 'http://localhost'}:${ngPort}`]
+    whitelist: [baseUrlFrontend]
   }
   // cors: undefined // if testing backend routes in dev mode without using the frontend
 };
@@ -195,12 +201,11 @@ const staging = {
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `${process.env.BASE_URL_BACKEND}:${port}${baseUrl}`,
-  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
+  baseUrlBackend,
+  baseUrlFrontend,
   cors: {
     whitelist: [
-      `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
-      `${process.env.BASE_URL_FRONTEND}`
+      baseUrlFrontend
     ]
   }
   // cors: undefined
@@ -231,12 +236,11 @@ const prod = {
   },
   rawBaseUrl: baseUrl,
   publicRoutes,
-  baseUrlBackend: `${process.env.BASE_URL_BACKEND}:${port}${baseUrl}`,
-  baseUrlFrontend: `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
+  baseUrlBackend,
+  baseUrlFrontend,
   cors: {
     whitelist: [
-      `${process.env.BASE_URL_FRONTEND}:${ngPort}`,
-      `${process.env.BASE_URL_FRONTEND}`
+      baseUrlFrontend
     ]
   }
   // cors: undefined

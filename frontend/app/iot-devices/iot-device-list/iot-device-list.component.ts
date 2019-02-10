@@ -207,6 +207,9 @@ export class IotDeviceListComponent implements OnInit {
             this.visibleIotDevices = new Array().concat(
               this.visibleIotDevices.slice(0, iotDeviceIndex),
               this.visibleIotDevices.slice(iotDeviceIndex + 1));
+            // XXX: Ugly Hack to trigger update of table component
+            const copy = JSON.parse(JSON.stringify(this.visibleIotDevices));
+            this.visibleIotDevices = copy;
           });
         }
       });

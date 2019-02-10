@@ -4,6 +4,19 @@
 
 * multilanguage support for English, German and Danish (/LF0380/)
 
+### Version 0.6.1
+
+* fix table headers of order list (now shows on empty table)
+* use baseUrlFrontend as whitelist for cors
+* set email secure to false for production and add another api password for gmail
+* show table headers even for empty tables
+* update table of iot device list view if a device is deleted
+* disable machine info button on create shared order
+* set validation error messages for shipping address fields of create order form
+* correct behaviour of scheduling validation of create order form (now allows only complete start- and end dates)
+* schedules are deleted if they are emptied on create order form (former: didn't delete model relation with order <--> schedule)
+* make loggedInUser a component variable on order list
+
 ### Version 0.6
 
 * added ModalService

@@ -70,7 +70,7 @@
             {{translationFields.messages.selectedMachine}}
           </div>
         </div>
-        <div *ngIf="order.machine && order.machine.deviceName" class="col-md-4">
+        <div *ngIf="order.machine && order.machine.deviceName && !sharedView" class="col-md-4">
           <label for="selectedMachineDetailView">{{translationFields.labels.selectedMachineInfo}}:</label>
           <div>
             <a [routerLink]="order.machine.detailView" name="selectedMachineDetailView">
@@ -99,7 +99,7 @@
         <div class="col-md-6">
           <label for="owner">{{translationFields.labels.owner}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <input *ngIf="!sharedView!" type="text" class="form-control" id="owner" required name="owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
+          <input *ngIf="!sharedView" type="text" class="form-control" id="owner" required name="owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
             disabled>
           <input *ngIf=sharedView type="text" class="form-control" id="owner" required name="owner" [(ngModel)]="order.owner"
             [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" [disabled]="editView">
@@ -138,7 +138,7 @@
             <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="street"
               required [(ngModel)]="order.shippingAddress.street" name="street" #street="ngModel">
             <div [hidden]="street.valid || street.pristine" class="alert alert-danger">
-              {{order.shippingAddress.street}}
+              {{translationFields.messages.street}}
             </div>
           </div>
           <div class="col-md-6">
@@ -146,7 +146,7 @@
             <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="city" required
               [(ngModel)]="order.shippingAddress.city" name="city" #city="ngModel">
             <div [hidden]="city.valid || city.pristine" class="alert alert-danger">
-              {{order.shippingAddress.city}}
+              {{translationFields.messages.city}}
             </div>
           </div>
         </div>
@@ -156,7 +156,7 @@
             <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="zipCode"
               required [(ngModel)]="order.shippingAddress.zipCode" name="zipCode" #zipCode="ngModel">
             <div [hidden]="zipCode.valid || zipCode.pristine" class="alert alert-danger">
-              {{order.shippingAddress.zipCode}}
+              {{translationFields.messages.zipCode}}
             </div>
           </div>
           <div class="col-md-6">
@@ -164,7 +164,7 @@
             <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="country"
               required [(ngModel)]="order.shippingAddress.country" name="country" #country="ngModel">
             <div [hidden]="country.valid || country.pristine" class="alert alert-danger">
-              {{order.shippingAddress.country}}
+              {{translationFields.messages.country}}
             </div>
           </div>
         </div>
@@ -183,7 +183,7 @@
                   <fa-icon [icon]="calendarIcon"></fa-icon>
                 </button>
               </div>
-              <div [hidden]="!datePickerError" class="alert alert-danger">
+              <div [hidden]="datePickerStart.pristine || datePickerEnd.pristine || !datePickerError" class="alert alert-danger">
                 {{translationFields.messages.datePicker}}
               </div>
             </div>
@@ -193,7 +193,7 @@
             <label for="timePickerStart">{{translationFields.labels.timePickerStart}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerStart" id="timePickerStart" [spinners]="false"
               [(ngModel)]="schedule.startTime" #timePickerStart="ngModel" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
-            <div [hidden]="!timePickerError" class="alert alert-danger">
+            <div [hidden]="timePickerStart.pristine || timePickerEnd.pristine || !timePickerError" class="alert alert-danger">
               {{translationFields.messages.timePicker}}
             </div>
           </div>
@@ -208,7 +208,7 @@
                   <fa-icon [icon]="calendarIcon"></fa-icon>
                 </button>
               </div>
-              <div [hidden]="!datePickerError" class="alert alert-danger">
+              <div [hidden]="datePickerStart.pristine || datePickerEnd.pristine || !datePickerError" class="alert alert-danger">
                 {{translationFields.messages.datePicker}}
               </div>
             </div>
@@ -218,7 +218,7 @@
             <label for="timePickerEnd">{{translationFields.labels.timePickerEnd}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerEnd" id="timePickerEnd" [spinners]="false" [(ngModel)]="schedule.endTime"
               #timePickerEnd="ngModel" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
-            <div [hidden]="!timePickerError" class="alert alert-danger">
+            <div [hidden]="timePickerStart.pristine || timePickerEnd.pristine || !timePickerError" class="alert alert-danger">
               {{translationFields.messages.timePicker}}
             </div>
           </div>
@@ -348,7 +348,7 @@
           {{translationFields.messages.copyright}}
         </div>
       </div>
-      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid || datePickerError || timePickerError">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid || datePickerError || timePickerError || !scheduleValid">{{translationFields.labels.submit}}</button>
     </form>
 
     <!-- Print comments to this order as a table -->

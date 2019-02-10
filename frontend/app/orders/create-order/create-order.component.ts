@@ -53,6 +53,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   formSubscription: Subscription;
   datePickerError = false;
   timePickerError = false;
+  scheduleValid = true;
   inUploadQueue = false;
   doneStatus = {
     original: ['representive', 'completed', 'archived', 'deleted'],
@@ -172,7 +173,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       content: '',
       datePicker: '',
       timePicker: '',
-      copyright: ''
+      copyright: '',
+      street: '',
+      zipCode: '',
+      city: '',
+      country: '',
     }
   };
 
@@ -250,11 +255,18 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       } else if (this.createOrderForm && this.editView) {
+        const datePickerStartForm = this.createOrderForm.form.controls.datePickerStart;
+        const datePickerEndForm = this.createOrderForm.form.controls.datePickerEnd;
         this.orderIsDone = this.doneStatus.translated.includes(changes.status as string);
         const startDate = this.validationService.createCheckDate(changes.datePickerStart);
         const endDate = this.validationService.createCheckDate(changes.datePickerEnd);
-        this.datePickerError = this.validationService.validateDate(changes.datePickerStart, changes.datePickerEnd);
-        this.timePickerError = this.validationService.validateTime(startDate, endDate, changes.timePickerStart, changes.timePickerEnd);
+        this.datePickerError = !datePickerStartForm.pristine && !datePickerEndForm.pristine && (!changes.datePickerStart &&
+          changes.datePickerEnd || changes.datePickerStart && !changes.datePickerEnd)
+          || this.validationService.validateDate(changes.datePickerStart, changes.datePickerEnd);
+        this.timePickerError = this.validationService.validateTime(startDate, endDate, changes.timePickerStart, changes.timePickerEnd)
+          || !changes.timePickerStart && changes.timePickerEnd || changes.timePickerStart && !changes.timePickerEnd;
+        this.scheduleValid = changes.datePickerStart && changes.datePickerEnd && changes.timePickerStart && changes.timePickerEnd ||
+          !changes.datePickerStart && !changes.datePickerEnd && !changes.timePickerStart && !changes.timePickerEnd;
       }
     });
   }
@@ -377,6 +389,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
               } else {
                 promises.push(this.scheduleService.create(this.schedule));
               }
+            } else if (this.schedule._id) {
+              promises.push(this.scheduleService.deleteSchedule(this.schedule._id));
             }
           }
 
@@ -946,7 +960,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             content: translations['orderForm'].messages.content,
             datePicker: translations['orderForm'].messages.datePicker,
             timePicker: translations['orderForm'].messages.timePicker,
-            copyright: translations['orderForm'].messages.copyright
+            copyright: translations['orderForm'].messages.copyright,
+            street: translations['orderForm'].messages.street,
+            zipCode: translations['orderForm'].messages.zipCode,
+            city: translations['orderForm'].messages.city,
+            country: translations['orderForm'].messages.country,
           }
         };
       }

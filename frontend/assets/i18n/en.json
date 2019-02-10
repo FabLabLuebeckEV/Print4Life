@@ -480,7 +480,11 @@
             "content": "Text is required",
             "datePicker": "Start Date is greater than End Date",
             "timePicker": "The Start and End Time is wrong. Please check the Start and End Date and Times",
-            "copyright": "If you want to upload or have uploaded files, you need to confirm that they are your data and you have the copyright for them."
+            "copyright": "If you want to upload or have uploaded files, you need to confirm that they are your data and you have the copyright for them.",
+            "street": "Street is required",
+            "zipCode": "Zip code is required",
+            "city": "City is required",
+            "country": "Country is required"
         }
     },
     "userDetail": {

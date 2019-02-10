@@ -28,6 +28,7 @@ export class OrderListComponent implements OnInit {
   private config: any;
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
+  loggedInUser: any;
   publicIcon: Icon;
   calendarIcon: Icon;
   trashIcon: Icon;
@@ -130,7 +131,7 @@ export class OrderListComponent implements OnInit {
     this.calendarIcon = this.config.icons.calendar;
     this.jumpArrow = this.config.icons.forward;
     this.trashIcon = this.config.icons.delete;
-
+    this.headers = this._initHeaders();
     this.router.events.subscribe(() => {
       this.outstandingOrders = false;
       this.listView = false;
@@ -162,6 +163,7 @@ export class OrderListComponent implements OnInit {
       await this._loadMachineTypes();
       this.userIsLoggedIn = await this.userService.isLoggedIn();
       this.userIsAdmin = await this.userService.isAdmin();
+      this.loggedInUser = await this.userService.getUser();
       this._translate();
       await this.init();
       this.translateService.onLangChange.subscribe(async () => {
@@ -181,11 +183,10 @@ export class OrderListComponent implements OnInit {
 
   async init() {
     if (!this.loadingOrders) {
+      this.headers = this._initHeaders();
       this.loadingOrders = true;
-
       let promises = [];
       this.spinner.show();
-      const loggedInUser = await this.userService.getUser();
       this.loadingOrders = true;
       const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
       this.orders = new Array();
@@ -277,14 +278,14 @@ export class OrderListComponent implements OnInit {
         }
 
         // if user is not editor, admin or logged in: do not show shared orders
-        if (!loggedInUser
-          || loggedInUser && loggedInUser.role
-          && (loggedInUser.role.role !== 'admin' && loggedInUser.role.role !== 'editor')) {
+        if (!this.loggedInUser
+          || this.loggedInUser && this.loggedInUser.role
+          && (this.loggedInUser.role.role !== 'admin' && this.loggedInUser.role.role !== 'editor')) {
           query.$and.push({ shared: false });
         }
 
-        if (loggedInUser && loggedInUser._id && this.myOrdersView) {
-          query.$and.push({ owner: loggedInUser._id });
+        if (this.loggedInUser && this.loggedInUser._id && this.myOrdersView) {
+          query.$and.push({ owner: this.loggedInUser._id });
         }
 
         if (this.filter.selectedFablabs && this.filter.selectedFablabs.length > 0) {
@@ -323,7 +324,7 @@ export class OrderListComponent implements OnInit {
         query, this.paginationObj.perPage,
         (this.paginationObj.page - 1) * this.paginationObj.perPage);
       if (orders && orders.orders) {
-        if (this.userIsLoggedIn && (this.userIsAdmin || loggedInUser.role.role === 'editor')) {
+        if (this.userIsLoggedIn && (this.userIsAdmin || this.loggedInUser.role.role === 'editor')) {
           orders.orders.forEach(async (order) => {
             const result = await this.orderService.getSchedule(order._id);
             if (result && result.schedule) {
@@ -335,7 +336,6 @@ export class OrderListComponent implements OnInit {
         let results;
         this.translateService.get(['date']).subscribe((async translations => {
           orders = orders && orders.orders ? orders.orders : [];
-          this.headers = this._initHeaders();
           promises = [];
           for (const order of orders) {
             promises.push(new Promise(async (resolve, reject) => {
@@ -365,7 +365,8 @@ export class OrderListComponent implements OnInit {
               item.obj['Created at'] = {
                 label: `${this.genericService.translateDate(order.createdAt, currentLang, translations['date'].dateTimeFormat)}`
               };
-              if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor' || this.userIsAdmin)
+              if (this.userIsLoggedIn && (this.loggedInUser && this.loggedInUser.role &&
+                this.loggedInUser.role.role === 'editor' || this.userIsAdmin)
                 || this.unfinishedOrders) {
                 item.obj['Schedule Start Date'] = {
                   label: order.schedule && order.schedule.startDate ?
@@ -377,9 +378,6 @@ export class OrderListComponent implements OnInit {
                     `${this.genericService.translateDate(order.schedule.endDate, currentLang, translations['date'].dateTimeFormat)}`
                     : '-'
                 };
-              } else {
-                this._removeHeader('Schedule Start Date');
-                this._removeHeader('Schedule End Date');
               }
               item.obj['Fablab'] = {
                 label: fablab ? fablab.name : '-'
@@ -401,8 +399,8 @@ export class OrderListComponent implements OnInit {
               };
               item.obj['Status'] = { label: order.status };
               item.obj['Device Type'] = { label: order.machine.type };
-              if (this.userIsLoggedIn && (loggedInUser && loggedInUser.role && loggedInUser.role.role === 'editor'
-                || this.userIsAdmin || loggedInUser._id === owner._id)) {
+              if (this.userIsLoggedIn && (this.loggedInUser && this.loggedInUser.role && this.loggedInUser.role.role === 'editor'
+                || this.userIsAdmin || this.loggedInUser._id === owner._id)) {
                 item.button1.label = this.translationFields.buttons.updateLabel;
                 item.button1.href = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${order._id}`;
                 item.button1.class = 'btn btn-warning spacing';
@@ -573,8 +571,20 @@ export class OrderListComponent implements OnInit {
   // Private Functions
 
   private _initHeaders(): Array<String> {
-    return ['id', 'Created at', 'Schedule Start Date',
-      'Schedule End Date', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type'];
+    const headers = {
+      user: [
+        'id', 'Created at', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type'
+      ],
+      editor: ['id', 'Created at', 'Schedule Start Date',
+        'Schedule End Date', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type']
+    };
+    if (this.userIsLoggedIn && (this.loggedInUser && this.loggedInUser.role && this.loggedInUser.role.role === 'editor' || this.userIsAdmin)
+      || this.unfinishedOrders) {
+      return headers.editor;
+    } else {
+      return headers.user;
+    }
+
   }
 
   private _removeHeader(headerName: string) {
