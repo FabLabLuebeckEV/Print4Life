@@ -43,7 +43,7 @@ export interface EmailOptions {
   locals: any;
 }
 
-function sendMail(options: EmailOptions) {
+function sendMail (options: EmailOptions) {
   const dir = path.join(__dirname, '../', 'config', 'email-templates', options.preferredLanguage, options.template);
   email
     .send({
