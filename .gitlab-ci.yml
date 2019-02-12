@@ -24,6 +24,7 @@ build_dev:
     - echo "done"
   except: 
     - master
+    - develop
     - fix/ci
   
 build_prod:
@@ -35,10 +36,25 @@ build_prod:
     # - ./
     # expire_in: 1 day
   script:
-    - npm run deploy-staging
     - npm run deploy-prod
   only: 
     - master
+    - develop
+    - fix/ci
+
+build_staging:
+  stage: build
+  before_script:
+    - npm install
+   #artifacts:
+    # paths:
+    # - ./
+    # expire_in: 1 day
+  script:
+    - npm run deploy-staging
+  only: 
+    - master
+    - develop
     - fix/ci
 
 test_build_api_docs:
@@ -81,6 +97,7 @@ deploy_staging:
   when: manual
   only:
    - master
+   - develop
    - fix/ci
   before_script:
    - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
@@ -117,6 +134,7 @@ deploy_production:
   when: manual
   only:
    - master
+   - develop
    - fix/ci
   before_script:
    - 'which base64 || ( apt-get update -y && apt-get install base64 -y )'
