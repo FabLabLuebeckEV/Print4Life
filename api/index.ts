@@ -10,21 +10,23 @@ import config from './config/config';
 
 let privateKey = '';
 let certificate = '';
-console.log(process.env.NODE_ENV);
+let serverInstance: any;
 
 if (process.env.NODE_ENV && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')) {
   privateKey = fs.readFileSync(config.ssl.privateKeyPath, 'utf8');
-  console.log(config.ssl.privateKeyPath);
-  console.log(config.ssl.certificatePath);
   certificate = fs.readFileSync(config.ssl.certificatePath, 'utf8');
 }
 
 const credentials = { key: privateKey, cert: certificate };
-console.log(JSON.stringify(credentials));
 
-const serverInstance = process.env && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')
-  ? https.createServer(credentials, app)
-  : http.createServer(app);
+if (credentials && credentials.key && credentials.cert && process.env
+  && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')) {
+  serverInstance = https.createServer(credentials, app);
+  logger.info('Starting HTTPs Server!');
+} else {
+  serverInstance = http.createServer(app);
+  logger.info('Starting HTTP Server!');
+}
 
 function run (callback) {
   const port = process.env.PORT || 3000;

@@ -1,6 +1,6 @@
 const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
-const ngPort = process.env.NG_PORT || 4200;
+const ngPort = process.env.NG_PORT ? Number.parseInt(process.env.NG_PORT, 10) : 4200;
 const ibmWatson = {
   key: process.env.WATSON_API_KEY || 'a-mvgc70-kzvlngabpn',
   token: process.env.WATSON_API_PASSWORD || 'UAwuv+jRcFO*jMKUvB',
@@ -171,10 +171,10 @@ const dev = {
   publicRoutes,
   baseUrlBackend,
   baseUrlFrontend,
-  cors: {
-    whitelist: [baseUrlFrontend]
-  }
-  // cors: undefined // if testing backend routes in dev mode without using the frontend
+  // cors: {
+  //   whitelist: [baseUrlFrontend]
+  // }
+  cors: undefined // if testing backend routes in dev mode without using the frontend
 };
 
 const staging = {
@@ -239,12 +239,12 @@ const prod = {
   publicRoutes,
   baseUrlBackend,
   baseUrlFrontend,
-  /* cors: {
+  cors: {
     whitelist: [
       baseUrlFrontend
     ]
-    } */
-  cors: undefined
+  }
+  // cors: undefined
 };
 
 const test = {
