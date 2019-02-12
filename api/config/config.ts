@@ -171,10 +171,10 @@ const dev = {
   publicRoutes,
   baseUrlBackend,
   baseUrlFrontend,
-  // cors: {
-  //   whitelist: [baseUrlFrontend]
-  // }
-  cors: undefined // if testing backend routes in dev mode without using the frontend
+  cors: {
+    whitelist: [baseUrlFrontend]
+  }
+  // cors: undefined // if testing backend routes in dev mode without using the frontend
 };
 
 const staging = {
