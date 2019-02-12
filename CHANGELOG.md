@@ -4,6 +4,13 @@
 
 * multilanguage support for English, German and Danish (/LF0380/)
 
+### Version 0.6.2
+
+* correctly parse env variable NG_PORT as number and therefore correctly check for it being port 80 to set baseURLFrontend with or without port addition
+* implement new env variable for EMAIL_ADDRESS as it may differ from EMAIL_USER
+* add ecosystem for tzl deploy
+* add log message for http or https server start to see if the server accepted SSL keys
+
 ### Version 0.6.1
 
 * fix table headers of order list (now shows on empty table)
@@ -27,7 +34,6 @@
 * unfinished orders filters fixed on schedules and fablabs
 * fixed spinner on order list
 * tooltips on buttons
-
 
 ### Version 0.5.2
 
