@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* Node > 8.9.4
+* Node > 10.6
 * MongoDB (or at least a server with it)
 	* Locally:
 	```bash
