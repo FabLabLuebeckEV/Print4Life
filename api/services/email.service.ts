@@ -20,7 +20,7 @@ transporter.verify((error, success) => {
 if (env !== 'dev' && env !== 'prod') {
   email = new Email({
     message: {
-      from: config.email.auth.user
+      from: config.email.from
     },
     send: true,
     transport: {
@@ -30,7 +30,7 @@ if (env !== 'dev' && env !== 'prod') {
 } else {
   email = new Email({
     message: {
-      from: config.email.auth.user
+      from: config.email.auth.from
     },
     transport: transporter
   });
@@ -43,7 +43,7 @@ export interface EmailOptions {
   locals: any;
 }
 
-function sendMail (options: EmailOptions) {
+function sendMail(options: EmailOptions) {
   const dir = path.join(__dirname, '../', 'config', 'email-templates', options.preferredLanguage, options.template);
   email
     .send({
