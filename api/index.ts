@@ -10,13 +10,17 @@ import config from './config/config';
 
 let privateKey = '';
 let certificate = '';
+console.log(process.env.NODE_ENV);
 
 if (process.env.NODE_ENV && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')) {
   privateKey = fs.readFileSync(config.ssl.privateKeyPath, 'utf8');
+  console.log(config.ssl.privateKeyPath);
+  console.log(config.ssl.certificatePath);
   certificate = fs.readFileSync(config.ssl.certificatePath, 'utf8');
 }
 
 const credentials = { key: privateKey, cert: certificate };
+console.log(JSON.stringify(credentials));
 
 const serverInstance = process.env && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')
   ? https.createServer(credentials, app)

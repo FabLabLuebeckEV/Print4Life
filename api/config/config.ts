@@ -239,12 +239,12 @@ const prod = {
   publicRoutes,
   baseUrlBackend,
   baseUrlFrontend,
-  cors: {
+  /* cors: {
     whitelist: [
       baseUrlFrontend
     ]
-  }
-  // cors: undefined
+    } */
+  cors: undefined
 };
 
 const test = {
