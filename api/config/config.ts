@@ -1,6 +1,6 @@
 const env = process.env.NODE_ENV || 'dev';
 const port = process.env.PORT || 3000;
-const ngPort = process.env.NG_PORT || 4200;
+const ngPort = process.env.NG_PORT ? Number.parseInt(process.env.NG_PORT, 10) : 4200;
 const ibmWatson = {
   key: process.env.WATSON_API_KEY || 'a-mvgc70-kzvlngabpn',
   token: process.env.WATSON_API_PASSWORD || 'UAwuv+jRcFO*jMKUvB',
@@ -29,6 +29,7 @@ const email = {
   host: process.env.EMAIL_HOST || 'smtp.gmail.com',
   port: process.env.EMAIL_PORT || 587,
   secure: process.env.EMAIL_SECURE === 'true',
+  from: process.env.EMAIL_ADDRESS,
   auth: {
     user: process.env.EMAIL_USER || 'iot.fablab@gmail.com',
     pass: process.env.EMAIL_PASS || 'scdkhsxiumwwgiob'

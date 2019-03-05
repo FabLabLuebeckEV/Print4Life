@@ -10,26 +10,38 @@ import config from './config/config';
 
 let privateKey = '';
 let certificate = '';
+let serverInstance: any;
 
 if (process.env.NODE_ENV && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')) {
   privateKey = fs.readFileSync(config.ssl.privateKeyPath, 'utf8');
+  if (privateKey.length) {
+    logger.info(`SSL private key found and loaded.`);
+  }
   certificate = fs.readFileSync(config.ssl.certificatePath, 'utf8');
+  if (privateKey.length) {
+    logger.info(`SSL certificate found and loaded.`);
+  }
 }
 
 const credentials = { key: privateKey, cert: certificate };
 
-const serverInstance = process.env && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')
-  ? https.createServer(credentials, app)
-  : http.createServer(app);
+if (credentials && credentials.key && credentials.cert && process.env
+  && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')) {
+  serverInstance = https.createServer(credentials, app);
+  logger.info('Starting HTTPs Server!');
+} else {
+  serverInstance = http.createServer(app);
+  logger.info('Starting HTTP Server!');
+}
 
-function run (callback) {
+function run(callback) {
   const port = process.env.PORT || 3000;
   const ngPort = process.env.NG_PORT || 4200;
   mongoose.set('useCreateIndex', true);
   mongoose
     .connect(config.connections.mongo.host + config.connections.mongo.database,
       { autoReconnect: true, useNewUrlParser: true }).then(() => {
-    })
+      })
     .catch((error) => logger.error(error));
   const db = mongoose.connection;
 
