@@ -1,8 +1,84 @@
-<div class="row spacing">
-  <div class="col" style="text-align:center">
-    <h1>
-      {{ title }}
-    </h1>
-    <img width="300" alt="Fablab Logo" src="assets/img/fablab-logo.png" class="spacing">
+<div class="container">
+  <!-- <div class="row">
+    <div class="col-12">
+      <img alt="Background" width="100%" src="assets/img/background.jpg" class="img-responsive">
+    </div>
+  </div> -->
+  <div class="row background-filler">
+    <div class="container">
+      <div class="row">
+        <div class="col-4">
+          <img alt="Interreg Logo" style="margin: 5%" height="40%"
+            src="assets/img/logos/logo_interreg_neu_juni16.eps (3).svg" class="img-responsive">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <!--  -->
+        </div>
+        <div class="col-4" style="background-color:rgba(248, 249, 250, 0.7);padding-top:2%;padding-bottom:2%">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm">
+                <h3 class="right">
+                  {{ translationFields.order }}<br>
+                  {{ translationFields.management }}<br>
+                  {{ translationFields.system }}
+                </h3>
+              </div>
+              <div class="col-sm">
+                <img alt="Maker Startup Logo" height="75%" src="assets/img/logos/MakerStartupLogo.svg"
+                  class="text-center" style="padding-top: 25%">
+              </div>
+            </div>
+            <div class="row" style="padding-top: 10%">
+              <div class="col-sm" style="text-align: center">
+                <button class="btn btn-primary" [disabled]="userIsLoggedIn"
+                  (click)="_login()">{{ translationFields.buttons.login }}</button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm" style="text-align: center">
+                {{translationFields.accountQuestion}} <a href="/users/signup">{{translationFields.accountCreation}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <!--  -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col" style="padding-top:10%">
+          <!--  -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-top:2%">
+    <div class="col-sm">
+      <img alt="EAJS Logo" height="5%" src="assets/img/logos/EASJ_logo_dk_black_300dpi.png" class="img-responsive">
+    </div>
+    <div class="col-3">
+      <img alt="Open Campus Logo" height="5%" src="assets/img/logos/open-campus_black.svg" class="img-responsive">
+    </div>
+    <div class="col-sm">
+      <img alt="TzL Lübeck Logo" height="5%"
+        src="assets/img/logos/ALL_TZL_Logo_Schriftzug mit_Standort ohne_Original_Bachorski.svg" class="img-responsive">
+    </div>
+    <div class="col-sm">
+      <img alt="FabLab Lübeck Logo" height="5%" src="assets/img/logos/FabLab_Luebeck.svg" class="img-responsive">
+    </div>
+    <div class="col-1">
+      <img alt="EAL Danmark Logo" height="5%" src="assets/img/logos/EAL-logoDK-green-background.svg"
+        class="img-responsive">
+    </div>
+    <div class="col-sm">
+      <img alt="FabLab Danmark Logo" height="5%" src="assets/img/logos/FabLab_DANMARK_logo.svg" class="img-responsive">
+    </div>
+    <div class="col-sm">
+      <img alt="Open Campus" height="5%" src="assets/img/logos/Logo_FH_Kiel_2Zeiler_deu_HKS41.svg"
+        class="img-responsive">
+    </div>
   </div>
 </div>

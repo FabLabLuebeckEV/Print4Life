@@ -60,7 +60,15 @@
         }
     },
     "dashboard": {
-        "title": "Welcome to Fablab - Order Management! "
+        "title": "Welcome to Fablab - Order Management! ",
+        "order": "Order",
+        "management": "Management",
+        "system": "System",
+        "accountQuestion": "No account yet?",
+        "accountCreation": "Register",
+        "buttons": {
+            "login": "Login"
+        }
     },
     "upload": {
         "labels": {
