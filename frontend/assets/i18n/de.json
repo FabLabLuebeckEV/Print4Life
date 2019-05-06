@@ -60,7 +60,15 @@
         }
     },
     "dashboard": {
-        "title": "Willkommen zur Fablab - Auftragsverwaltung!"
+        "title": "Willkommen zur Fablab - Auftragsverwaltung!",
+        "order": "Auftrags-",
+        "management": "Verwaltungs-",
+        "system": "System",
+        "accountQuestion": "Noch keinen Account?",
+        "accountCreation": "Registrieren",
+        "buttons": {
+            "login": "Einloggen"
+        }
     },
     "upload": {
         "labels": {

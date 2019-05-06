@@ -11,6 +11,16 @@
     /* red */
 }
 
+.right {
+    text-align: right;
+}
+
+.background-filler {
+    background-image: url('/assets/img/background.jpg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
 .dropdown-backdrop {
     position: absolute;
 }
@@ -29,6 +39,10 @@
 
 .spacing {
     margin: 10px;
+}
+
+.spacing-xxl {
+    margin: 40px;
 }
 
 .spacing-top {
