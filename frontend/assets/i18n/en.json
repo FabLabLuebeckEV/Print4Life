@@ -110,7 +110,7 @@
             "title": "Orders",
             "listOrders": "List Orders",
             "createOrder": "Create Order",
-            "createShared": "Create Shared Order",
+            "createShared": "Create Guest Order",
             "outstandingOrders": "List Outstanding Orders",
             "unfinishedOrders": "List Unfinished Orders",
             "myOrders": "List My Orders"
@@ -473,7 +473,7 @@
             "errorHeader": "Error",
             "updateError": "Error while trying to update!",
             "createError": "Error while trying to create!",
-            "orderSharedLinkSuccessHeader": "Save shared link",
+            "orderSharedLinkSuccessHeader": "Save guest order link",
             "orderSharedLinkSuccess": "Please save the following link, to access this order: "
         },
         "messages": {
