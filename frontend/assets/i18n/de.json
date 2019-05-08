@@ -110,7 +110,7 @@
             "title": "Aufträge",
             "listOrders": "Auftragsliste",
             "createOrder": "Auftrag anlegen",
-            "createShared": "Geteilten Auftrag anlegen",
+            "createShared": "Gast Auftrag anlegen",
             "outstandingOrders": "Herausragende Projekte",
             "unfinishedOrders": "Offene Aufträge",
             "myOrders": "Meine Aufträge"
@@ -452,7 +452,7 @@
             "latestVersion": "Aktuelle Version",
             "datePickerStart": "Starttag der Bearbeitung",
             "datePickerEnd": "Endtag der Bearbeitung",
-            "timePickerStart": "Starzeit am Starttag",
+            "timePickerStart": "Startzeit am Starttag",
             "timePickerEnd": "Endzeit am Endtag",
             "machineSchedule": "Maschinenplanung",
             "startDate": "Startdatum",
@@ -473,7 +473,7 @@
             "errorHeader": "Fehler",
             "updateError": "Ein Fehler ist beim Aktualisieren aufgetreten!",
             "createError": "Ein Fehler ist beim Anlegen aufgetreten!",
-            "orderSharedLinkSuccessHeader": "Öffentlichen Link sichern",
+            "orderSharedLinkSuccessHeader": "Gastauftrags Link sichern",
             "orderSharedLinkSuccess": "Sichern Sie die folgenden Link, um auf den Auftrag zuzugreifen: "
         },
         "messages": {
