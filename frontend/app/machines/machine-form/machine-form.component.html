@@ -10,9 +10,11 @@
   <div class="col-md-12">
     <div class="container">
       <div *ngIf="!editView" class="col-md-6 offset-3">
-        <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Machine selection">
-          <button *ngFor="let type of translationFields.shownMachineTypes" (click)="_selectType(type); machineForm.reset()"
-            type="button" [class.active]="type === translationFields.shownType" class="btn btn-outline-primary">{{type}}</button>
+        <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group"
+          aria-label="Machine selection">
+          <button *ngFor="let type of translationFields.shownMachineTypes"
+            (click)="_selectType(type); machineForm.reset()" type="button"
+            [class.active]="type === translationFields.shownType" class="btn btn-outline-primary">{{type}}</button>
         </div>
       </div>
       <form (ngSubmit)="onSubmit()" #machineForm="ngForm">
@@ -20,16 +22,16 @@
         <div *ngIf="selectedType" class="form-group row">
           <div class="col-md-6">
             <label for="deviceName">{{translationFields.labels.deviceName}}</label>
-            <input type="text" class="form-control" id="deviceName" required [(ngModel)]="model.deviceName" name="deviceName"
-              #deviceName="ngModel">
+            <input type="text" class="form-control" id="deviceName" required [(ngModel)]="model.deviceName"
+              name="deviceName" #deviceName="ngModel">
             <div [hidden]="deviceName.valid || deviceName.pristine" class="alert alert-danger">
               {{translationFields.messages.deviceName}}
             </div>
           </div>
           <div class="col-md-6">
             <label for="fablabId">{{translationFields.labels.fablab}}</label>
-            <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name" [(ngModel)]="model.fablabId"
-              id="fablabId" name="fablabId" #fablabId="ngModel" required>
+            <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name"
+              [(ngModel)]="model.fablabId" id="fablabId" name="fablabId" #fablabId="ngModel" required>
             </ng-select>
             <div [hidden]="fablabId.valid || fablabId.pristine" class="alert alert-danger">
               {{translationFields.messages.fablab}}
@@ -40,8 +42,8 @@
         <div *ngIf="selectedType" class="form-group row">
           <div class="col-md-6">
             <label for="manufacturer">{{translationFields.labels.manufacturer}}</label>
-            <input type="text" class="form-control" id="manufacturer" required [(ngModel)]="model.manufacturer" name="manufacturer"
-              #manufacturer="ngModel">
+            <input type="text" class="form-control" id="manufacturer" required [(ngModel)]="model.manufacturer"
+              name="manufacturer" #manufacturer="ngModel">
             <div [hidden]="manufacturer.valid || manufacturer.pristine" class="alert alert-danger">
               {{translationFields.messages.manufacturer}}
             </div>
@@ -67,13 +69,13 @@
           <div class="form-group row">
             <div class="col-md-4">
               <label for="camSoftware">{{translationFields.labels.camSoftware}}</label>
-              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware"
-                #camSoftware="ngModel">
+              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware"
+                name="camSoftware" #camSoftware="ngModel">
             </div>
             <div class="col-md-4">
               <label for="nozzleDiameter">{{translationFields.labels.nozzleDiameter}}</label>
-              <input type="text" class="form-control" id="nozzleDiameter" [(ngModel)]="model.nozzleDiameter" name="nozzleDiameter"
-                #nozzleDiameter="ngModel">
+              <input type="text" class="form-control" id="nozzleDiameter" [(ngModel)]="model.nozzleDiameter"
+                name="nozzleDiameter" #nozzleDiameter="ngModel">
             </div>
             <div class="col-md-4">
               <label for="materials">{{translationFields.labels.materials}}</label>
@@ -86,37 +88,37 @@
 
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="printVolumeX">{{translationFields.labels.printVolume}} X</label>
-              <input type="number" class="form-control" id="printVolumeX" [(ngModel)]="model.printVolumeX" name="printVolumeX"
-                #printVolumeX="ngModel">
+              <label for="printVolumeX">{{translationFields.labels.printVolume}} X (mm)</label>
+              <input type="number" class="form-control" id="printVolumeX" [(ngModel)]="model.printVolumeX"
+                name="printVolumeX" #printVolumeX="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printVolumeY">{{translationFields.labels.printVolume}} Y</label>
-              <input type="number" class="form-control" id="printVolumeY" [(ngModel)]="model.printVolumeY" name="printVolumeY"
-                #printVolumeY="ngModel">
+              <label for="printVolumeY">{{translationFields.labels.printVolume}} Y (mm)</label>
+              <input type="number" class="form-control" id="printVolumeY" [(ngModel)]="model.printVolumeY"
+                name="printVolumeY" #printVolumeY="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printVolumeZ">{{translationFields.labels.printVolume}} Z</label>
-              <input type="number" class="form-control" id="printVolumeZ" [(ngModel)]="model.printVolumeZ" name="printVolumeZ"
-                #printVolumeZ="ngModel">
+              <label for="printVolumeZ">{{translationFields.labels.printVolume}} Z (mm)</label>
+              <input type="number" class="form-control" id="printVolumeZ" [(ngModel)]="model.printVolumeZ"
+                name="printVolumeZ" #printVolumeZ="ngModel">
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="printResolutionX">{{translationFields.labels.printResolution}} X</label>
-              <input type="number" class="form-control" id="printResolutionX" [(ngModel)]="model.printResolutionX" name="printResolutionX"
-                #printResolutionX="ngModel">
+              <label for="printResolutionX">{{translationFields.labels.printResolution}} X (micron)</label>
+              <input type="number" class="form-control" id="printResolutionX" [(ngModel)]="model.printResolutionX"
+                name="printResolutionX" #printResolutionX="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printResolutionY">{{translationFields.labels.printResolution}} Y</label>
-              <input type="number" class="form-control" id="printResolutionY" [(ngModel)]="model.printResolutionY" name="printResolutionY"
-                #printResolutionY="ngModel">
+              <label for="printResolutionY">{{translationFields.labels.printResolution}} Y (micron)</label>
+              <input type="number" class="form-control" id="printResolutionY" [(ngModel)]="model.printResolutionY"
+                name="printResolutionY" #printResolutionY="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printResolutionZ">{{translationFields.labels.printResolution}} Z</label>
-              <input type="number" class="form-control" id="printResolutionZ" [(ngModel)]="model.printResolutionZ" name="printResolutionZ"
-                #printResolutionZ="ngModel">
+              <label for="printResolutionZ">{{translationFields.labels.printResolution}} Z (micron)</label>
+              <input type="number" class="form-control" id="printResolutionZ" [(ngModel)]="model.printResolutionZ"
+                name="printResolutionZ" #printResolutionZ="ngModel">
             </div>
           </div>
 
@@ -128,7 +130,8 @@
             </div>
             <div class="col-md-6">
               <label for="comment">{{translationFields.labels.comment}}</label>
-              <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment" #comment="ngModel">
+              <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment"
+                #comment="ngModel">
             </div>
           </div>
         </div>
@@ -137,13 +140,13 @@
           <div class="form-group row">
             <div class="col-md-4">
               <label for="camSoftware">{{translationFields.labels.camSoftware}}</label>
-              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware"
-                #camSoftware="ngModel">
+              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware"
+                name="camSoftware" #camSoftware="ngModel">
             </div>
             <div class="col-md-4">
               <label for="movementSpeed">{{translationFields.labels.movementSpeed}}</label>
-              <input type="number" class="form-control" id="movementSpeed" [(ngModel)]="model.movementSpeed" name="movementSpeed"
-                #movementSpeed="ngModel">
+              <input type="number" class="form-control" id="movementSpeed" [(ngModel)]="model.movementSpeed"
+                name="movementSpeed" #movementSpeed="ngModel">
             </div>
             <div class="col-md-4">
               <label for="stepSize">{{translationFields.labels.stepSize}}</label>
@@ -154,17 +157,17 @@
 
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="workspaceX">{{translationFields.labels.workspace}} X</label>
+              <label for="workspaceX">{{translationFields.labels.workspace}} X (mm)</label>
               <input type="number" class="form-control" id="workspaceX" [(ngModel)]="model.workspaceX" name="workspaceX"
                 #workspaceX="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="workspaceY">{{translationFields.labels.workspace}} Y</label>
+              <label for="workspaceY">{{translationFields.labels.workspace}} Y (mm)</label>
               <input type="number" class="form-control" id="workspaceY" [(ngModel)]="model.workspaceY" name="workspaceY"
                 #workspaceY="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="workspaceZ">{{translationFields.labels.workspace}} Z</label>
+              <label for="workspaceZ">{{translationFields.labels.workspace}} Z (mm)</label>
               <input type="number" class="form-control" id="workspaceZ" [(ngModel)]="model.workspaceZ" name="workspaceZ"
                 #workspaceZ="ngModel">
             </div>
@@ -173,7 +176,8 @@
           <div class="form-group row">
             <div class="col-md-12">
               <label for="comment">{{translationFields.labels.comment}}</label>
-              <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment" #comment="ngModel">
+              <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment"
+                #comment="ngModel">
             </div>
           </div>
         </div>
@@ -190,7 +194,8 @@
             </div>
             <div class="col-md-6">
               <label for="comment">{{translationFields.labels.comment}}</label>
-              <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment" #comment="ngModel">
+              <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment"
+                #comment="ngModel">
             </div>
           </div>
         </div>
@@ -200,8 +205,8 @@
             <div class="col-md-4">
               <label for="laserTypes">{{translationFields.labels.laserTypes}}</label>
               <ng-select [multiple]="true" [loading]="loadingLaserTypes" [hideSelected]="true" [closeOnSelect]="false"
-                [items]=laserTypesArr bindLabel="laserType" [(ngModel)]="model.laserTypes" id="laserTypes" name="laserTypes"
-                #laserTypes="ngModel" required>
+                [items]=laserTypesArr bindLabel="laserType" [(ngModel)]="model.laserTypes" id="laserTypes"
+                name="laserTypes" #laserTypes="ngModel" required>
               </ng-select>
             </div>
             <div class="col-md-4">
@@ -211,24 +216,24 @@
             </div>
             <div class="col-md-4">
               <label for="maxResolution">{{translationFields.labels.maxResolution}}</label>
-              <input type="number" class="form-control" id="maxResolution" [(ngModel)]="model.maxResolution" name="maxResolution"
-                #maxResolution="ngModel">
+              <input type="number" class="form-control" id="maxResolution" [(ngModel)]="model.maxResolution"
+                name="maxResolution" #maxResolution="ngModel">
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="workspaceX">{{translationFields.labels.workspace}} X</label>
+              <label for="workspaceX">{{translationFields.labels.workspace}} X (mm)</label>
               <input type="number" class="form-control" id="workspaceX" [(ngModel)]="model.workspaceX" name="workspaceX"
                 #workspaceX="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="workspaceY">{{translationFields.labels.workspace}} Y</label>
+              <label for="workspaceY">{{translationFields.labels.workspace}} Y (mm)</label>
               <input type="number" class="form-control" id="workspaceY" [(ngModel)]="model.workspaceY" name="workspaceY"
                 #workspaceY="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="workspaceZ">{{translationFields.labels.workspace}} Z</label>
+              <label for="workspaceZ">{{translationFields.labels.workspace}} Z (mm)</label>
               <input type="number" class="form-control" id="workspaceZ" [(ngModel)]="model.workspaceZ" name="workspaceZ"
                 #workspaceZ="ngModel">
             </div>
@@ -237,17 +242,19 @@
           <div class="form-group row">
             <div class="col-md-6">
               <label for="camSoftware">{{translationFields.labels.camSoftware}}</label>
-              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware" name="camSoftware"
-                #camSoftware="ngModel">
+              <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware"
+                name="camSoftware" #camSoftware="ngModel">
             </div>
             <div class="col-md-6">
               <label for="comment">{{translationFields.labels.comment}}</label>
-              <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment" #comment="ngModel">
+              <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment"
+                #comment="ngModel">
             </div>
           </div>
         </div>
 
-        <button *ngIf="selectedType" type="submit" class="btn btn-success" [disabled]="!machineForm.form.valid">{{translationFields.labels.submit}}</button>
+        <button *ngIf="selectedType" type="submit" class="btn btn-success"
+          [disabled]="!machineForm.form.valid">{{translationFields.labels.submit}}</button>
       </form>
     </div>
   </div>
