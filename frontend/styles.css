@@ -93,3 +93,8 @@
     color: black;
     background-color: #ffc107;
 }
+
+.logo-row .col-sm {
+    height: 60px;
+    text-align: center;
+}
