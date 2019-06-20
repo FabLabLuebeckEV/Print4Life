@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
     }));
   }
 
-  private _login() {
+  login() {
     this.modalService.open(LoginModalComponent, { backdrop: 'static' }).result.then(async (login) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.user = await this.userService.getUser();

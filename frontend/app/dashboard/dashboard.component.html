@@ -19,22 +19,22 @@
       <div class="col-4" style="background-color:rgba(248, 249, 250, 0.7);padding-top:2%;padding-bottom:2%">
         <div class="container">
           <div class="row">
-            <div class="col-sm">
+            <div class="col-sm mx-auto">
               <h3 class="right">
                 {{ translationFields.order }}<br>
                 {{ translationFields.management }}<br>
                 {{ translationFields.system }}
               </h3>
             </div>
-            <div class="col-sm">
-              <img alt="Maker Startup Logo" height="75%" src="assets/img/logos/MakerStartupLogo.svg" class="text-center"
+            <div class="col-sm mx-auto">
+              <img alt="Maker Startup Logo" width="90%" src="assets/img/logos/MakerStartupLogo.svg" class="text-center"
                 style="padding-top: 25%">
             </div>
           </div>
           <div class="row" style="padding-top: 10%">
             <div class="col-sm" style="text-align: center">
               <button class="btn btn-primary" [disabled]="userIsLoggedIn"
-                (click)="_login()">{{ translationFields.buttons.login }}</button>
+                (click)="login()">{{ translationFields.buttons.login }}</button>
             </div>
           </div>
           <div class="row">
@@ -49,16 +49,14 @@
       </div>
     </div>
     <div class="row">
-      <div class="col" style="padding-top:10%">
+      <div class="col" style="padding-top:15%">
         <!--  -->
       </div>
     </div>
   </div>
 </div>
-<div>
 
-</div>
-<div class="row logo-row mb-5 mt-5">
+<div class="row logo-row mb-4 mt-4">
   <div class="col-sm my-auto mx-auto">
     <img alt="EAJS Logo" height="100%" style="padding-left: 3%" src="assets/img/logos/EASJ_logo_dk_black_300dpi.png" />
   </div>
@@ -73,7 +71,7 @@
     <img alt="FabLab Lübeck Logo" height="100%" src="assets/img/logos/FabLab_Luebeck.svg" class="img-responsive">
   </div>
   <div class="col-sm my-auto mx-auto">
-    <img alt="EAL Danmark Logo" height="100%" src="assets/img/logos/EAL-logoDK-green-background-2.svg"
+    <img alt="EAL Danmark Logo" height="100%" src="assets/img/logos/EAL-logoDK-green-background.svg"
       class="img-responsive">
   </div>
   <div class="col-sm my-auto mx-auto">
