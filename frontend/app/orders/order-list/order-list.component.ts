@@ -17,6 +17,7 @@ import { ValidationService } from 'frontend/app/services/validation.service';
 import { isArray } from 'util';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
+import { NavigationComponent } from 'frontend/app/components/navigation/navigation.component';
 
 @Component({
   selector: 'app-order-list',
