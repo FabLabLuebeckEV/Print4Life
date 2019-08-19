@@ -12,6 +12,8 @@ import { ConfigService } from './config/config.service';
 export class AppComponent {
     version: String;
     softwareName: String;
+    privacyPolicy: String;
+    imprint: String;
     config;
     constructor(private translateService: TranslateService, private http: HttpClient, private configService: ConfigService) {
         this.config = this.configService.getConfig();
@@ -34,6 +36,8 @@ export class AppComponent {
     private _translate() {
         this.translateService.get(['navigation']).subscribe((translations) => {
             this.softwareName = translations['navigation'].title;
+            this.privacyPolicy = translations['navigation'].privacyPolicy;
+            this.imprint = translations['navigation'].imprint;
         });
     }
 }

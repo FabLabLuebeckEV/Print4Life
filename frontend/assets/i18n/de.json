@@ -88,7 +88,9 @@
         "title": "Auftragsverwaltung",
         "login": "Einloggen",
         "logout": "Ausloggen",
-        "register": "Registrieren"
+        "register": "Registrieren",
+        "privacyPolicy": "Datenschutz",
+        "imprint": "Impressum"
     },
     "languages": {
         "title": "Sprachauswahl",

@@ -88,7 +88,9 @@
         "title": "Order Management",
         "login": "Login",
         "logout": "Logout",
-        "register": "Register"
+        "register": "Register",
+        "privacyPolicy": "Privacy policy",
+        "imprint": "Imprint"
     },
     "languages": {
         "title": "Languages",
