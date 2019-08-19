@@ -73,6 +73,7 @@ export class OrderDetailComponent implements OnInit {
       status: '',
       createdAt: '',
       machine: '',
+      machineNotSet: '',
       fablab: '',
       comments: '',
       author: '',
@@ -184,13 +185,15 @@ export class OrderDetailComponent implements OnInit {
                 : `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.update}/${this.order._id}/`;
               this.fablabService.getFablab(this.order.fablabId).then(async result => {
                 this.fablab = result.fablab;
-                if (this.order.machine.type.toLowerCase() !== 'unknown') {
+                if (this.order.machine.type.toLowerCase() !== 'unknown' && this.order.machine._id !== 'unknown') {
                   const result = await this.machineService.get(this.order.machine.type, this.order.machine._id);
                   const type = this.machineService.camelCaseTypes(this.order.machine.type);
                   this.machine = result[`${type}`];
                   this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
+                } else if (this.order.machine.type.toLowerCase() !== 'unknown' && this.order.machine._id === 'unknown') {
+                  this.machine = { type: this.order.machine.type, deviceName: this.translationFields.labels.machineNotSet };
                 } else {
-                  this.machine = { type: this.order.machine.type.toLowerCase() };
+                  this.machine = { type: this.order.machine.type };
                 }
                 this.printFilesAvailable = this.order.files.filter((file) => file.contentType === 'text/x.gcode'
                   || file.filename.split('.')[1] === 'gcode').length > 0;
@@ -301,6 +304,7 @@ export class OrderDetailComponent implements OnInit {
           status: translations['orderDetail'].labels.status,
           createdAt: translations['orderDetail'].labels.createdAt,
           machine: translations['orderDetail'].labels.machine,
+          machineNotSet: translations['orderDetail'].labels.machineNotSet,
           fablab: translations['orderDetail'].labels.fablab,
           comments: translations['orderDetail'].labels.comments,
           author: translations['orderDetail'].labels.author,

@@ -20,8 +20,8 @@
         <div class="col-md-12">
           <label for="projectname">{{translationFields.labels.projectName}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <input type="text" class="form-control" id="projectname" required [(ngModel)]="order.projectname" name="projectname"
-            #projectname="ngModel">
+          <input type="text" class="form-control" id="projectname" required [(ngModel)]="order.projectname"
+            name="projectname" #projectname="ngModel">
           <div [hidden]="projectname.valid || projectname.pristine" class="alert alert-danger">
             {{translationFields.messages.projectName}}
           </div>
@@ -31,8 +31,9 @@
         <div class="col-md-6">
           <label for="fablab">{{translationFields.labels.fablab}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name" [(ngModel)]="order.fablabId"
-            id="fablab" name="fablab" #fablab="ngModel" (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)">
+          <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name"
+            [(ngModel)]="order.fablabId" id="fablab" name="fablab" #fablab="ngModel"
+            (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)">
             <ng-template ng-optgroup-tmp let-item="item">
               {{item.fablabName || translationFields.messages.unnamedFablab}}
             </ng-template>
@@ -42,8 +43,9 @@
         <div class="col-md-6">
           <label for="selectedMachineType">{{translationFields.labels.machineType}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingMachineTypes" [items]=translationFields.shownMachineTypes [(ngModel)]="order.machine['shownType']"
-            id="selectedMachineType" name="selectedMachineType" #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)"
+          <ng-select [loading]="loadingMachineTypes" [items]=translationFields.shownMachineTypes
+            [(ngModel)]="order.machine['shownType']" id="selectedMachineType" name="selectedMachineType"
+            #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)"
             required [disabled]="!order.fablabId">
           </ng-select>
           <div [hidden]="selectedMachineType.valid || selectedMachineType.pristine" class="alert alert-danger">
@@ -58,7 +60,7 @@
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingMachinesForType" [items]=machines bindValue="_id" bindLabel="deviceName"
             [(ngModel)]="order.machine._id" id="selectedMachine" name="selectedMachine" #selectedMachine="ngModel"
-            groupBy="fablabName" (change)="machineSelected(selectedMachine)" [virtualScroll]=true required>
+            groupBy="fablabName" (change)="machineSelected(selectedMachine)" [virtualScroll]=true>
             <ng-template ng-optgroup-tmp let-item="item">
               {{item.fablabName || translationFields.messages.unnamedFablab}}
             </ng-template>
@@ -85,7 +87,8 @@
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingStatus" [items]=translationFields.shownStatus bindValue="_id" bindLabel="name"
             [(ngModel)]="order.shownStatus" (change)="statusChanged(order.shownStatus)" id="status" name="status"
-            #status="ngModel" required [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+            #status="ngModel" required
+            [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
           </ng-select>
           <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
             {{translationFields.messages.status}}
@@ -99,17 +102,19 @@
         <div class="col-md-6">
           <label for="owner">{{translationFields.labels.owner}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <input *ngIf="!sharedView" type="text" class="form-control" id="owner" required name="owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
-            disabled>
-          <input *ngIf=sharedView type="text" class="form-control" id="owner" required name="owner" [(ngModel)]="order.owner"
-            [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" [disabled]="editView">
+          <input *ngIf="!sharedView" type="text" class="form-control" id="owner" required name="owner"
+            [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" disabled>
+          <input *ngIf=sharedView type="text" class="form-control" id="owner" required name="owner"
+            [(ngModel)]="order.owner" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
+            [disabled]="editView">
         </div>
 
         <div class="col-md-6">
           <label for="editor">{{translationFields.labels.editor}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingEditors" [items]=editors bindValue="_id" bindLabel="shownName" [(ngModel)]="order.editor"
-            id="editor" name="editor" #editor="ngModel" groupBy="fablabName" [disabled]="!order.fablabId && !editView || !loggedInUser || !loggedInUser.role || !loggedInUser.role.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+          <ng-select [loading]="loadingEditors" [items]=editors bindValue="_id" bindLabel="shownName"
+            [(ngModel)]="order.editor" id="editor" name="editor" #editor="ngModel" groupBy="fablabName"
+            [disabled]="!order.fablabId && !editView || !loggedInUser || !loggedInUser.role || !loggedInUser.role.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
             <ng-template ng-optgroup-tmp let-item="item">
               {{item.fablabName || translationFields.messages.unnamedFablab}}
             </ng-template>
@@ -124,9 +129,11 @@
       </div>
       <div class="row">
         <div class="col-md-8 offset-4">
-          <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Shipping address selection">
+          <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group"
+            aria-label="Shipping address selection">
             <button *ngFor="let key of shippingAddressKeys; let index=index" (click)="_selectAddress(key)" type="button"
-              [class.active]="key === selectedAddressKey" [disabled]="shippingAddresses[key] === undefined" class="btn btn-outline-primary">{{
+              [class.active]="key === selectedAddressKey" [disabled]="shippingAddresses[key] === undefined"
+              class="btn btn-outline-primary">{{
               translationFields.shownShippingAddresses[index] }}</button>
           </div>
         </div>
@@ -179,11 +186,13 @@
                 [(ngModel)]="schedule.startDay" ngbDatepicker #datePickerStart="ngbDatepicker" [required]="false"
                 [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
               <div class="input-group-append">
-                <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button"
+                  [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
                   <fa-icon [icon]="calendarIcon"></fa-icon>
                 </button>
               </div>
-              <div [hidden]="datePickerStart.pristine || datePickerEnd.pristine || !datePickerError" class="alert alert-danger">
+              <div [hidden]="datePickerStart.pristine || datePickerEnd.pristine || !datePickerError"
+                class="alert alert-danger">
                 {{translationFields.messages.datePicker}}
               </div>
             </div>
@@ -192,8 +201,11 @@
           <div class="col-md-3">
             <label for="timePickerStart">{{translationFields.labels.timePickerStart}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerStart" id="timePickerStart" [spinners]="false"
-              [(ngModel)]="schedule.startTime" #timePickerStart="ngModel" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
-            <div [hidden]="timePickerStart.pristine || timePickerEnd.pristine || !timePickerError" class="alert alert-danger">
+              [(ngModel)]="schedule.startTime" #timePickerStart="ngModel"
+              [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+            </ngb-timepicker>
+            <div [hidden]="timePickerStart.pristine || timePickerEnd.pristine || !timePickerError"
+              class="alert alert-danger">
               {{translationFields.messages.timePicker}}
             </div>
           </div>
@@ -201,14 +213,17 @@
           <div class="col-md-3">
             <label for="datePickerEnd">{{translationFields.labels.datePickerEnd}}</label>
             <div class="input-group">
-              <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd" [(ngModel)]="schedule.endDay"
-                ngbDatepicker #datePickerEnd="ngbDatepicker" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+              <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd"
+                [(ngModel)]="schedule.endDay" ngbDatepicker #datePickerEnd="ngbDatepicker"
+                [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
               <div class="input-group-append">
-                <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button" [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+                <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button"
+                  [disabled]=" !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
                   <fa-icon [icon]="calendarIcon"></fa-icon>
                 </button>
               </div>
-              <div [hidden]="datePickerStart.pristine || datePickerEnd.pristine || !datePickerError" class="alert alert-danger">
+              <div [hidden]="datePickerStart.pristine || datePickerEnd.pristine || !datePickerError"
+                class="alert alert-danger">
                 {{translationFields.messages.datePicker}}
               </div>
             </div>
@@ -216,9 +231,12 @@
 
           <div class="col-md-3">
             <label for="timePickerEnd">{{translationFields.labels.timePickerEnd}}</label>
-            <ngb-timepicker class="spacing-top" name="timePickerEnd" id="timePickerEnd" [spinners]="false" [(ngModel)]="schedule.endTime"
-              #timePickerEnd="ngModel" [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'"></ngb-timepicker>
-            <div [hidden]="timePickerStart.pristine || timePickerEnd.pristine || !timePickerError" class="alert alert-danger">
+            <ngb-timepicker class="spacing-top" name="timePickerEnd" id="timePickerEnd" [spinners]="false"
+              [(ngModel)]="schedule.endTime" #timePickerEnd="ngModel"
+              [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
+            </ngb-timepicker>
+            <div [hidden]="timePickerStart.pristine || timePickerEnd.pristine || !timePickerError"
+              class="alert alert-danger">
               {{translationFields.messages.timePicker}}
             </div>
           </div>
@@ -234,7 +252,8 @@
                 <h4>{{translationFields.labels.machineSchedule}}</h4>
               </button>
             </div>
-            <div id="collapseExample" class="col-md-12 table-spacing-top table-spacing-bottom" [ngbCollapse]="isCollapsed">
+            <div id="collapseExample" class="col-md-12 table-spacing-top table-spacing-bottom"
+              [ngbCollapse]="isCollapsed">
               <div>
                 <table class="table table-striped">
                   <thead>
@@ -270,7 +289,8 @@
         </div>
 
         <div *ngIf="!orderIsDone" class="col-md-12">
-          <app-upload #fileUpload (uploadingEvent)="uploadingEventHandler($event)" (fileChangeEvent)="fileChangeEventHandler($event)"></app-upload>
+          <app-upload #fileUpload (uploadingEvent)="uploadingEventHandler($event)"
+            (fileChangeEvent)="fileChangeEventHandler($event)"></app-upload>
         </div>
 
         <!-- Print files of this order as a list -->
@@ -295,7 +315,8 @@
                       <fa-icon class="text-success" *ngIf="!file.deprecated" [icon]="toggleOnIcon"></fa-icon>
                       <fa-icon class="text-danger" *ngIf="file.deprecated" [icon]="toggleOffIcon"></fa-icon>
                     </td>
-                    <td *ngIf="userCanDownload" class="align-middle text-center"> <a [href]="file.link">{{file.filename}}</a>
+                    <td *ngIf="userCanDownload" class="align-middle text-center"> <a
+                        [href]="file.link">{{file.filename}}</a>
                     </td>
                     <td *ngIf="!userCanDownload" class="align-middle text-center">{{file.filename}}</td>
                     <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
@@ -322,16 +343,16 @@
           <div class="form-group row">
             <div class="col-md-12">
               <label for="author">{{translationFields.labels.author}}</label>
-              <input type="text" class="form-control" id="author" required name="author" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
-                disabled>
+              <input type="text" class="form-control" id="author" required name="author"
+                [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" disabled>
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-12">
               <label for="content">{{translationFields.labels.content}}</label>
-              <textarea type="text" class="form-control" id="content" required [(ngModel)]="comment.content" name="content"
-                #content="ngModel"></textarea>
+              <textarea type="text" class="form-control" id="content" required [(ngModel)]="comment.content"
+                name="content" #content="ngModel"></textarea>
               <div [hidden]="content.valid || content.pristine" class="alert alert-danger">
                 {{translationFields.messages.content}}
               </div>
@@ -341,14 +362,15 @@
       </div>
 
       <div class="form-check spacing-top">
-        <input type="checkbox" class="form-check-input" id="copyright" required [(ngModel)]="order.fileCopyright" name="copyright"
-          #copyright="ngModel" [disabled]="!inUploadQueue && order.files && !order.files.length " />
+        <input type="checkbox" class="form-check-input" id="copyright" required [(ngModel)]="order.fileCopyright"
+          name="copyright" #copyright="ngModel" [disabled]="!inUploadQueue && order.files && !order.files.length " />
         <label class="form-check-label spacing-right-xs" for="copyright">{{translationFields.labels.copyright}}</label>
         <div [hidden]="copyright.valid || copyright.pristine" class="alert alert-danger">
           {{translationFields.messages.copyright}}
         </div>
       </div>
-      <button type="submit" class="btn btn-success spacing-top" [disabled]="!createOrderForm.form.valid || datePickerError || timePickerError || !scheduleValid">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success spacing-top"
+        [disabled]="!createOrderForm.form.valid || datePickerError || timePickerError || !scheduleValid">{{translationFields.labels.submit}}</button>
     </form>
 
     <!-- Print comments to this order as a table -->
@@ -392,8 +414,8 @@
       <div class="form-group row">
         <div class="col-md-12">
           <label for="author">{{translationFields.labels.author}}</label>
-          <input type="text" class="form-control" id="author" required name="author" [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname"
-            disabled>
+          <input type="text" class="form-control" id="author" required name="author"
+            [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" disabled>
         </div>
       </div>
       <div class="form-group row">
@@ -406,7 +428,8 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!createCommentForm.form.valid || submitting">{{translationFields.labels.sendComment}}</button>
+      <button type="submit" class="btn btn-success"
+        [disabled]="!createCommentForm.form.valid || submitting">{{translationFields.labels.sendComment}}</button>
     </form>
   </div>
 </div>

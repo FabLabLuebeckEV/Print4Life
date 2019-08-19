@@ -349,6 +349,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     orderCopy.machine.type = this.machineService.camelCaseTypes(orderCopy.machine.type);
     if (orderCopy.machine && orderCopy.machine.type.toLowerCase() === 'unknown') {
       orderCopy.machine._id = 'unknown'; // save unknown machine into order
+    } else if (orderCopy.machine.type) {
+      orderCopy.machine._id = 'unknown';
+      // orderCopy.machine.type = 'unknown';
     }
     if (this.editView) {
       const promises = [];
@@ -481,7 +484,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   async machineSelected() {
     if (this.order.machine.type && this.order.machine.type.toLowerCase() !== 'unknown'
-      && this.order.machine._id) {
+      && this.order.machine._id !== '' && this.order.machine._id !== 'unknown') {
       this.machines.forEach(element => {
         if (element._id === this.order.machine._id) {
           this.order.machine['deviceName'] = element.deviceName;
@@ -635,7 +638,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
         this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
         this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
-        if (this.order.machine.type.toLowerCase() !== 'unknown') {
+        if (this.order.machine.type.toLowerCase() !== 'unknown' && this.order.machine._id !== '' && this.order.machine._id !== 'unkown') {
           try {
             const result: any =
               await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);

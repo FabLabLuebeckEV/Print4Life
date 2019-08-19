@@ -542,6 +542,7 @@
             "status": "Status",
             "createdAt": "Created at",
             "machine": "Machine",
+            "machineNotSet": "not set",
             "fablab": "Fablab",
             "comments": "Comments",
             "author": "Author",
