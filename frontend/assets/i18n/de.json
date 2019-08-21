@@ -133,7 +133,7 @@
     "deviceTypes": {
         "lasercutter": "Lasercutter",
         "otherMachine": "Andere Machine",
-        "millingMachine": "Fräßmaschine",
+        "millingMachine": "Fräsmaschine",
         "3d-printer": "3D Drucker",
         "unknown": "Unbekannt"
     },
@@ -220,7 +220,7 @@
             "nozzleDiameter": "Durchmesser Düse(n) (mm)",
             "materials": "Materialien",
             "printVolume": "Druckvolumen",
-            "printResolution": "Druckauflösung (micron)",
+            "printResolution": "Druckauflösung",
             "numberOfExtruders": "Anzahl von Extrudern",
             "comment": "Kommentar",
             "movementSpeed": "Bewegungsgeschwindigkeit (m/s)",
