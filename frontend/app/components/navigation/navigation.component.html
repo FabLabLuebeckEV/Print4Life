@@ -4,8 +4,8 @@
     {{title}}
   </a>
   <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
-    data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-    aria-label="Toggle navigation">
+    data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+    aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -41,7 +41,7 @@
       <li *ngIf="userIsLoggedIn" class="nav-item">
         <button class="btn btn-primary" (click)="_logout()">{{logout}}</button>
       </li>
-      <li *ngIf="!userIsLoggedIn" class="nav-item">
+      <li *ngIf="!userIsLoggedIn" style="margin-left: 15px" class="nav-item">
         <button class="btn btn-primary" (click)="_register()">{{register}}</button>
       </li>
     </ul>
