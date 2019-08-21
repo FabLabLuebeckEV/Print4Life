@@ -31,7 +31,7 @@
         <div class="col-md-6">
           <label for="fablab">{{translationFields.labels.fablab}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name"
+          <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name" required
             [(ngModel)]="order.fablabId" id="fablab" name="fablab" #fablab="ngModel"
             (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)">
             <ng-template ng-optgroup-tmp let-item="item">
