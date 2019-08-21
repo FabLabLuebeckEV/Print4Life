@@ -315,15 +315,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           (this.order.owner.trim().split(' ')[1] ? (this.order.owner.trim().split(' ')[1] + ' ') : '') + '(Gast)',
           guestPassword, guestPassword,
           `${this.order.owner.trim().replace(' ', '')}-${Math.random().toString(36).substr(2, 9)}@gast.nutzer`,
-          new Address(
-            this.order.shippingAddress.street, this.order.shippingAddress.zipCode,
-            this.order.shippingAddress.city, this.order.shippingAddress.country
-          ),
+          undefined,
           new Role('guest'),
           new Language(localStorage.getItem('orderManagementLang')), false, undefined, undefined));
       this.loggedInUser = resUser.user;
       this.order.owner = resUser.user._id;
-      this.order.shippingAddress = resUser.user.address;
+      // this.order.shippingAddress = resUser.user.address;
       this.comment.author = resUser.user._id;
     }
 
@@ -447,6 +444,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   async machineTypeChanged(type, fablab) {
     let machineObj;
+    if (this.sharedView && fablab) {
+      const fablabObj = (await this.fablabService.getFablab(fablab)).fablab;
+      this.order.shippingAddress = fablabObj.address;
+      this.selectedAddressKey = 'fablabAdress';
+    }
     if (type) {
       this.loadingMachinesForType = true;
       this.order.machine._id = '';
@@ -558,7 +560,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         this.shippingAddresses.fablabAddress = undefined;
       }
     } else {
-      this.shippingAddresses.fablabAddress = undefined;
+      if (this.sharedView && !this.editView) {
+        this.selectedAddressKey = 'fablabAddress';
+        this.shippingAddresses.fablabAddress = new Address(
+          '', '', '', '');
+      }
+      // this.shippingAddresses.fablabAddress = undefined;
     }
     this.loadingAddresses = false;
   }
@@ -917,7 +924,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             zipCode: translations['address'].zipCode,
             city: translations['address'].city,
             country: translations['address'].country,
-            addressTitle: translations['orderForm'].addressTitle,
+            addressTitle: translations['orderForm'].labels.addressTitle,
             fileUpload: translations['orderForm'].labels.fileUpload,
             files: translations['orderForm'].labels.files,
             file: translations['orderForm'].labels.file,

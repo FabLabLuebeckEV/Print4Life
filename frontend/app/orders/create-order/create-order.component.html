@@ -132,7 +132,7 @@
           <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group"
             aria-label="Shipping address selection">
             <button *ngFor="let key of shippingAddressKeys; let index=index" (click)="_selectAddress(key)" type="button"
-              [class.active]="key === selectedAddressKey" [disabled]="shippingAddresses[key] === undefined"
+              [class.active]="key === selectedAddressKey" [disabled]="sharedView && !editView"
               class="btn btn-outline-primary">{{
               translationFields.shownShippingAddresses[index] }}</button>
           </div>

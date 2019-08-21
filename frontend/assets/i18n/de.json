@@ -442,7 +442,7 @@
             "author": "Author",
             "content": "Inhalt",
             "createdAt": "Erstellt am",
-            "addressTitle": "Lieferadresse",
+            "addressTitle": "Liefer-/Abholadresse",
             "shippingAddresses": {
                 "userAddress": "Deine Adresse",
                 "fablabAddress": "Dein FabLab",
