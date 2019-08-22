@@ -19,6 +19,10 @@
     margin-right: 0px !important;
 }
 
+.table {
+    margin-left: 7px !important;
+}
+
 .background-filler {
     background-image: url('/assets/img/background.jpg');
     background-size: 100%;
