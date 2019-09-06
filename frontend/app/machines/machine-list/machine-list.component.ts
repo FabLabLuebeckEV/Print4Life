@@ -319,7 +319,7 @@ export class MachineListComponent implements OnInit {
           this.filter.shownMachineTypes[idx] = translated;
         });
       }));
-      this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
+      this.filter.selectedMachineTypes = [];
     }
     this.loadingMachineTypes = false;
   }
