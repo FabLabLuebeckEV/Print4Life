@@ -159,7 +159,7 @@ export class MachineListComponent implements OnInit {
       });
       await this._loadMachineTypes();
       await this._loadFablabs();
-      this.filter.selectedActivated = JSON.parse(JSON.stringify(["active"]));
+      this.filter.selectedActivated = JSON.parse(JSON.stringify(['active']));
       this.filter.translatedActivated = JSON.parse(JSON.stringify(this.filter.originActivated));
       this._translate();
       this.init();
@@ -461,7 +461,7 @@ export class MachineListComponent implements OnInit {
     // checks for an empty machine type filter.
     // an empty filter should show all machines instead of nothing, see #173
     let hasSelection = false;
-    for (var machine of Object.values(this.paginationObj.machines)) {
+    for (const machine of Object.values(this.paginationObj.machines)) {
       if (machine['selected']) {
         hasSelection = true;
       }
