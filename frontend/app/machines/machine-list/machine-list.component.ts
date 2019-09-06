@@ -400,7 +400,7 @@ export class MachineListComponent implements OnInit {
       // show all machines if no type is selected in filter
       // see #173
       if (machineTypes.length === 0) {
-        machineTypes = this.filter.originMachineTypes;
+        machineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
       }
 
       machineTypes.forEach(async (type) => {
