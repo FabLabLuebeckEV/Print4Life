@@ -150,6 +150,11 @@ export class UserListComponent implements OnInit {
     const query = {
       $and: []
     };
+
+    if (this.filter.selectedRoles.length === 0) {
+      this.filter.selectedRoles = JSON.parse(JSON.stringify(this.filter.originalRoles));
+    }
+
     if (this.filter.selectedRoles.length > 0) {
       const $or = [];
       this.filter.selectedRoles.forEach((role) => {
@@ -258,7 +263,7 @@ export class UserListComponent implements OnInit {
       }
     }));
     if (!this.filter.selectedRoles.length) {
-      this.filter.selectedRoles = JSON.parse(JSON.stringify(this.filter.originalRoles));
+      this.filter.selectedRoles = JSON.parse(JSON.stringify([]));
     }
     this.loadingRoles = false;
   }
