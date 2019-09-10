@@ -130,26 +130,28 @@ export class IotDeviceDetailComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(['iotDeviceDetail']).subscribe((translations => {
-      this.translationFields = {
-        labels: {
-          deviceId: translations['iotDeviceDetail'].labels.deviceId,
-          mqttHeader: translations['iotDeviceDetail'].labels.deviceId,
-          username: translations['iotDeviceDetail'].labels.username,
-          password: translations['iotDeviceDetail'].labels.password,
-          dataformat: translations['iotDeviceDetail'].labels.dataformat,
-          clientId: translations['iotDeviceDetail'].labels.clientId,
-          deviceType: translations['iotDeviceDetail'].labels.deviceType,
-        },
-        modals: {
-          ok: translations['iotDeviceDetail'].modals.ok,
-          deleteReturnValue: translations['iotDeviceDetail'].modals.deleteReturnValue,
-          abort: translations['iotDeviceDetail'].modals.abort,
-          abortReturnValue: translations['iotDeviceDetail'].modals.abortReturnValue,
-          deleteHeader: translations['iotDeviceDetail'].modals.deleteHeader,
-          deleteQuestion: translations['iotDeviceDetail'].modals.deleteQuestion,
-          deleteWarning: translations['iotDeviceDetail'].modals.deleteWarning
-        }
-      };
+      if (translations.hasOwnProperty('iotDeviceDetail') && translations.upload.hasOwnProperty('labels')) {
+        this.translationFields = {
+          labels: {
+            deviceId: translations['iotDeviceDetail'].labels.deviceId,
+            mqttHeader: translations['iotDeviceDetail'].labels.deviceId,
+            username: translations['iotDeviceDetail'].labels.username,
+            password: translations['iotDeviceDetail'].labels.password,
+            dataformat: translations['iotDeviceDetail'].labels.dataformat,
+            clientId: translations['iotDeviceDetail'].labels.clientId,
+            deviceType: translations['iotDeviceDetail'].labels.deviceType,
+          },
+          modals: {
+            ok: translations['iotDeviceDetail'].modals.ok,
+            deleteReturnValue: translations['iotDeviceDetail'].modals.deleteReturnValue,
+            abort: translations['iotDeviceDetail'].modals.abort,
+            abortReturnValue: translations['iotDeviceDetail'].modals.abortReturnValue,
+            deleteHeader: translations['iotDeviceDetail'].modals.deleteHeader,
+            deleteQuestion: translations['iotDeviceDetail'].modals.deleteQuestion,
+            deleteWarning: translations['iotDeviceDetail'].modals.deleteWarning
+          }
+        };
+      }
     }));
   }
 }
