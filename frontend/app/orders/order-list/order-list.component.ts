@@ -197,6 +197,18 @@ export class OrderListComponent implements OnInit {
       let totalItems = 0;
       let query = { $and: [] };
 
+      // show all orders if no type is selected in filter
+      // see #173
+      if (this.filter.selectedMachineTypes.length === 0) {
+        this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originalMachineTypes));
+      }
+
+      // show all orders if no status is selected in filter
+      // see #173
+      if (this.filter.selectedStatus.length === 0) {
+        this.filter.selectedStatus = JSON.parse(JSON.stringify(this.filter.originalValidStatus));
+      }
+
       if (this.filter.selectedStatus.length > 0 && this.filter.selectedMachineTypes.length > 0) {
         query = {
           $and: [
@@ -625,7 +637,7 @@ export class OrderListComponent implements OnInit {
         this.filter.shownStatus[idx] = translated;
       });
     }));
-    this.filter.selectedStatus = JSON.parse(JSON.stringify(this.filter.originalValidStatus));
+    this.filter.selectedStatus = JSON.parse(JSON.stringify([]));
     this.loadingStatus = false;
   }
 
@@ -665,7 +677,7 @@ export class OrderListComponent implements OnInit {
         this.filter.shownMachineTypes[idx] = translated;
       });
     }));
-    this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originalMachineTypes));
+    this.filter.selectedMachineTypes = JSON.parse(JSON.stringify([]));
     this.loadingMachineTypes = false;
   }
 

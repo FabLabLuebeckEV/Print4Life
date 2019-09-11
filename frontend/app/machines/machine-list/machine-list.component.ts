@@ -159,7 +159,7 @@ export class MachineListComponent implements OnInit {
       });
       await this._loadMachineTypes();
       await this._loadFablabs();
-      this.filter.selectedActivated = JSON.parse(JSON.stringify(this.filter.originActivated));
+      this.filter.selectedActivated = JSON.parse(JSON.stringify(['active']));
       this.filter.translatedActivated = JSON.parse(JSON.stringify(this.filter.originActivated));
       this._translate();
       this.init();
@@ -319,7 +319,7 @@ export class MachineListComponent implements OnInit {
           this.filter.shownMachineTypes[idx] = translated;
         });
       }));
-      this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
+      this.filter.selectedMachineTypes = [];
     }
     this.loadingMachineTypes = false;
   }
@@ -397,6 +397,12 @@ export class MachineListComponent implements OnInit {
         machineTypes[i] = this.machineService.camelCaseTypes(machineTypes[i]);
       }
 
+      // show all machines if no type is selected in filter
+      // see #173
+      if (machineTypes.length === 0) {
+        machineTypes = JSON.parse(JSON.stringify(this.filter.originMachineTypes));
+      }
+
       machineTypes.forEach(async (type) => {
         promises.push(new Promise(async resolve => {
           countObj = await this.machineService.count(type as string, query);
@@ -452,7 +458,15 @@ export class MachineListComponent implements OnInit {
   }
 
   private async _resolveMachines(type: String, maxPerPage: number, query?: any) {
-    if (this.paginationObj.machines[`${type}`].selected &&
+    // checks for an empty machine type filter.
+    // an empty filter should show all machines instead of nothing, see #173
+    let hasSelection = false;
+    for (const machine of Object.values(this.paginationObj.machines)) {
+      if (machine['selected']) {
+        hasSelection = true;
+      }
+    }
+    if ((this.paginationObj.machines[`${type}`].selected || !hasSelection) &&
       this.paginationObj.machines[`${type}`].lastItem < this.paginationObj.machines[`${type}`].total && maxPerPage > 0) {
       const resMach = await this.machineService.getAll(type as string,
         query, maxPerPage, this.paginationObj.machines[`${type}`].lastItem);
