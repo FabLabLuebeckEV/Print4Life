@@ -8,9 +8,8 @@
 	```bash
 	docker run --rm -d \
 	--name order-mongo \
-	-e MONGO_INITDB_ROOT_USERNAME=mongoadmin \
-	-e MONGO_INITDB_ROOT_PASSWORD=veryInsecurePW \
 	-v /path/to/git/order-management/dev-mongo:/data/db \
+	-p 27017:27017 \
 	mongo
 	```
 	* Server:
