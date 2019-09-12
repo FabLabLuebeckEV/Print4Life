@@ -34,6 +34,8 @@
 * Create an application to get an API Key and it's password
 * Update: ecosystem-*, config.ts, environment* with OrgID (top right corner on every page), API Key and API password
 
+If iot-tests fail, try deleting existing testcase-users as there might be an incorrect entry
+
 ## Use Node-Debugger with VSCode
 
 If you use this boilerplate with VSCode you can run the debugger for node with ```npm run api-dev``` and use the feature in the bottom line 'auto attach' when running 'Attach to NPM'. This auto attaches the debugger to the running npm process.
