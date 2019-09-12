@@ -79,7 +79,7 @@ describe('IoT Device Controller', () => {
         json: true,
         body: { query: { $and: [{ $text: { $search: 'IoTDevice' } }] } }
       }, (error, response) => {
-        logger.info(`search device response: ${JSON.stringify(error)}, ${JSON.stringify(response)}`)
+        logger.info(`search device response: ${JSON.stringify(error)}, ${JSON.stringify(response)}`);
         const { iotDevices } = { iotDevices: response.body['iot-devices'] };
         expect(response.statusCode).toEqual(200);
         expect(iotDevices).toBeDefined();
