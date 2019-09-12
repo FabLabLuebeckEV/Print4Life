@@ -130,7 +130,7 @@ export class IotDeviceDetailComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(['iotDeviceDetail']).subscribe((translations => {
-      if (translations.iotDeviceDetail && translations.upload.labels) {
+      if (translations.iotDeviceDetail && translations.iotDeviceDetail.labels) {
         this.translationFields = {
           labels: {
             deviceId: translations['iotDeviceDetail'].labels.deviceId,
