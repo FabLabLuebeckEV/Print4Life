@@ -14,6 +14,7 @@ const orderService = new OrderService();
  * @apiVersion 1.0.0
  * @apiGroup Schedules
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} id is the id of the schedule (required)
  * @apiSuccess { Object } schedule a single schedule
@@ -64,7 +65,7 @@ const orderService = new OrderService();
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function get (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -93,6 +94,7 @@ async function get (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Schedules
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam (Query String) limit is the limit of objects to get
  * @apiParam (Query String) skip is the number of objects to skip
@@ -263,6 +265,7 @@ async function get (req, res) {
         {...}
     ]
 }
+* @apiPermission loggedIn
 */
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
@@ -290,6 +293,7 @@ function getAll (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Schedules
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {Date} startDate is the start date of the schedule for the order and machine (required)
  * @apiParam {Date} endDate is the end date of the schedule for the order and machine (required)
@@ -332,6 +336,7 @@ function getAll (req, res) {
   {
       "error": "Malformed schedule, one or more parameters wrong or missing"
   }
+ * @apiPermission editor
  */
 async function create (req, res) {
   try {
@@ -368,6 +373,7 @@ async function create (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Schedules
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} id is the id of the schedule (required)
  * @apiParam {Date} startDate is the start date of the schedule for the order and machine
@@ -434,7 +440,7 @@ async function create (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission editor
  */
 async function update (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -488,6 +494,7 @@ async function update (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Schedules
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiSuccess { Object } schedule the deleted schedule
  *
@@ -531,7 +538,7 @@ async function update (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission editor
  */
 async function deleteById (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);

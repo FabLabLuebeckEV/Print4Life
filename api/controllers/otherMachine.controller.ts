@@ -74,6 +74,7 @@ const machineService = new MachineService();
         }
     ]
 }
+ * @apiPermission none
  */
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
@@ -168,6 +169,7 @@ function getAll (req, res) {
  *   error: Error while trying to search for a specific other machine with query: {...},
  *   stack: {...}
  * }
+ * @apiPermission none
 */
 function search (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query);
@@ -213,7 +215,7 @@ function search (req, res) {
 {
     "count": 98
 }
- *
+ * @apiPermission none
  */
 function count (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query);
@@ -271,7 +273,7 @@ function count (req, res) {
  *       "error": "Could not get successful orders for machine Id 9999""
  *     }
  *
- *
+ * @apiPermission none
  */
 async function countSuccessfulOrders (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -300,6 +302,7 @@ async function countSuccessfulOrders (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup OtherMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} fablabId id of the corresponding fablab (required)
  * @apiParam {String} deviceName name of the device (required)
@@ -364,7 +367,7 @@ async function countSuccessfulOrders (req, res) {
     }
 }
  *
- *
+ * @apiPermission admin
  */
 function create (req, res) {
   otherMachineService.create(req.body).then((otherMachine) => {
@@ -383,6 +386,7 @@ function create (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup OtherMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {id} is the id of the other machine
  *
@@ -448,7 +452,7 @@ function create (req, res) {
    "error": "Error while trying to delete the Other Machine with id 9999"
 }
  *
- *
+ * @apiPermission admin
  */
 async function deleteById (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -552,7 +556,7 @@ async function deleteById (req, res) {
  *       "error": "Other Machine by id '9999' not found"
  *     }
  *
- *
+ * @apiPermission none
  */
 async function get (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -582,6 +586,7 @@ async function get (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup OtherMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} id is the id of the other machine
  * @apiParam {String} fablabId id of the corresponding fablab (required)
@@ -649,7 +654,7 @@ async function get (req, res) {
  *       "error": "Other Machine by id '9999' not found"
  *     }
  *
- *
+ * @apiPermission admin
  */
 async function update (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -748,7 +753,7 @@ async function update (req, res) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  *
- *
+ * @apiPermission none
  */
 async function getSchedules (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);

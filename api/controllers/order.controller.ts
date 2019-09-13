@@ -120,6 +120,7 @@ const scheduleService = new ScheduleService();
         }
       ]
     }
+* @apiPermission none
 */
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query, searchableTextFields);
@@ -192,6 +193,7 @@ function getAll (req, res) {
           ...
       }
   }
+* @apiPermission none
 */
 function search (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
@@ -259,6 +261,7 @@ function search (req, res) {
           ...
       }
   }
+* @apiPermission none
 */
 function count (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
@@ -342,6 +345,7 @@ function count (req, res) {
           ...
       }
   }
+ * @apiPermission none
  */
 function create (req, res) {
   orderService.create(req.body).then((order) => {
@@ -359,6 +363,7 @@ function create (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {Object} machine simple object containing id and type of machine (required)
  * @apiParam {String} projectName name of the project (required)
@@ -444,7 +449,7 @@ function create (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function update (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -468,6 +473,7 @@ async function update (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiSuccess { Object } order the deleted order
  *
@@ -527,7 +533,7 @@ async function update (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function deleteById (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -579,6 +585,7 @@ async function deleteById (req, res) {
           ...
       }
   }
+ * @apiPermission none
  */
 function getStatus (req, res) {
   orderService.getStatus().then((status) => {
@@ -623,6 +630,7 @@ function getStatus (req, res) {
           ...
       }
   }
+ * @apiPermission none
  */
 function getOutstandingStatus (req, res) {
   let found = false;
@@ -712,7 +720,7 @@ function getOutstandingStatus (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function createComment (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -809,7 +817,7 @@ async function createComment (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission none
  */
 async function get (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -887,7 +895,7 @@ async function get (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function getSchedule (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -979,7 +987,7 @@ async function getSchedule (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function downloadFile (req, res) {
   let err: IError;
@@ -1111,7 +1119,7 @@ async function downloadFile (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function deleteFile (req, res) {
   let err: IError;
@@ -1178,6 +1186,7 @@ async function deleteFile (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Orders
  * @apiHeader (Needed Request Headers) {String} Content-Type form-data/multipart
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} file file object uploaded through form data.
  * Can contain multiple files under the name 'file' (required)
@@ -1257,7 +1266,7 @@ async function deleteFile (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 function uploadFile (req, res) {
   const promises = [];
