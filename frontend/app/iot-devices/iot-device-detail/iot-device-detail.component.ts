@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
+import { isObject, isArray } from 'util';
 
 @Component({
   selector: 'app-iot-device-detail',
@@ -130,9 +131,8 @@ export class IotDeviceDetailComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(['iotDeviceDetail']).subscribe((translations => {
-      if (translations.hasOwnProperty('iotDeviceDetail')
-                && translations.iotDeviceDetail.hasOwnProperty('labels')
-                && translations.iotDeviceDetail.labels) {
+      if (translations.hasOwnProperty('iotDeviceDetail') && isObject(translations.iotDeviceDetail)
+        && translations.iotDeviceDetail.hasOwnProperty('labels') && isObject(translations.iotDeviceDetail.labels)) {
         this.translationFields = {
           labels: {
             deviceId: translations['iotDeviceDetail'].labels.deviceId,
