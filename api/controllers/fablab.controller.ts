@@ -146,6 +146,7 @@ async function get (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Fablabs
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} is the name of the fablab (required)
  * @apiParam {Object} address is the address object of the fablab (required)
