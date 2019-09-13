@@ -545,7 +545,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       }
     } catch (err) {
       this.shippingAddresses.userAddress = undefined;
-      let index = this.shippingAddressKeys.indexOf("userAddress");
+      const index = this.shippingAddressKeys.indexOf('userAddress');
       if (index > -1) {
         this.shippingAddressKeys.splice(index, 1);
       }
