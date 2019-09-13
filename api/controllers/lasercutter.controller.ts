@@ -2,6 +2,7 @@ import validatorService from '../services/validator.service';
 import logger from '../logger';
 import LasercutterService from '../services/lasercutter.service';
 import MachineService from '../services/machine.service';
+import machineController from './machine.controller';
 
 const lasercutterService = new LasercutterService();
 
@@ -510,7 +511,13 @@ function getLaserTypes (req, res) {
  *
  * @apiPermission admin
  */
-function create (req, res) {
+async function create (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    res.status(403).send(error);
+    return;
+  }
   lasercutterService.create(req.body).then((lasercutter) => {
     logger.info(`POST Lasercutter with result ${JSON.stringify(lasercutter)}`);
     res.status(201).send({ lasercutter });
@@ -606,6 +613,12 @@ function create (req, res) {
  * @apiPermission admin
  */
 async function deleteById (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    return res.status(403).send(error);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -840,6 +853,12 @@ async function get (req, res) {
  * @apiPermission admin
  */
 async function update (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    return res.status(403).send(error);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
