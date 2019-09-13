@@ -1,8 +1,10 @@
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 import FablabService from '../services/fablab.service';
+import UserService from '../services/user.service';
 
 const fablabService = new FablabService();
+const userService = new UserService();
 
 /**
  * @api {get} /api/v1/fablabs/ Get all fablabs
@@ -191,7 +193,19 @@ async function get (req, res) {
  *
  * @apiPermission admin
  */
-function create (req, res) {
+async function create (req, res) {
+  // check admin permissions, see #178
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not create FabLabs!'
+    };
+    res.status(403).send(msg);
+    return;
+  }
   fablabService.create(req.body).then((fablab) => {
     logger.info(`POST Fablab with result ${JSON.stringify(fablab)}`);
     res.status(201).send({ fablab });
@@ -282,6 +296,18 @@ function create (req, res) {
  * @apiPermission admin
  */
 async function update (req, res) {
+  // check admin permissions, see #178
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not update FabLabs!'
+    };
+
+    return res.status(403).send(msg);
+  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -364,6 +390,17 @@ async function update (req, res) {
  * @apiPermission admin
  */
 async function deleteById (req, res) {
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not update FabLabs!'
+    };
+
+    return res.status(403).send(msg);
+  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
