@@ -130,6 +130,7 @@ const machineService = new MachineService();
         }
       ]
     }
+    @apiPermission none
  */
 async function getAll (req, res) {
   try {
@@ -281,6 +282,7 @@ async function getAll (req, res) {
  *   error: Error while trying to search for a specific 3d printer with query: {...},
  *   stack: {...}
  * }
+ * @apiPermission none
 */
 function search (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
@@ -326,7 +328,7 @@ function search (req, res) {
 {
     "count": 98
 }
- *
+ * @apiPermission none
  */
 function count (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
@@ -390,7 +392,7 @@ function count (req, res) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  *
- *
+ * @apiPermission none
  */
 async function countSuccessfulOrders (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -512,6 +514,7 @@ async function countSuccessfulOrders (req, res) {
         "name": "ValidationError"
     }
 }
+ * @apiPermission admin
  *
  *
  */
@@ -618,7 +621,7 @@ function create (req, res) {
   }
  *
  *
- *
+ * @apiPermission admin
  */
 async function deleteById (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -739,7 +742,7 @@ async function deleteById (req, res) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  *
- *
+ * @apiPermission none
  */
 async function get (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -881,7 +884,7 @@ async function get (req, res) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  *
- *
+ * @apiPermission admin
  */
 async function update (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -982,7 +985,7 @@ async function update (req, res) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  *
- *
+ * @apiPermission none
  */
 async function getSchedules (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);

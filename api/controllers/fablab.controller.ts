@@ -43,6 +43,7 @@ const fablabService = new FablabService();
         }
     ]
 }
+ * @apiPermission none
  */
 function getAll (req, res) {
   fablabService.getAll().then((fablabs) => {
@@ -117,7 +118,7 @@ function getAll (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission none
  */
 async function get (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -187,7 +188,7 @@ async function get (req, res) {
     }
 }
  *
- *
+ * @apiPermission admin
  */
 function create (req, res) {
   fablabService.create(req.body).then((fablab) => {
@@ -277,7 +278,7 @@ function create (req, res) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  *
- *
+ * @apiPermission admin
  */
 async function update (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -359,7 +360,7 @@ async function update (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission admin
  */
 async function deleteById (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);

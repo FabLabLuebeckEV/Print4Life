@@ -93,7 +93,7 @@ const orderService = new OrderService();
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 
 async function uploadFile (req: Request, res: Response) {
@@ -245,7 +245,7 @@ async function uploadFile (req: Request, res: Response) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function startPrint (req: Request, res: Response) {
   let error: IError;

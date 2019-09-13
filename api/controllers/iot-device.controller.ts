@@ -94,7 +94,7 @@ const ibmWatsonService = new IBMWatsonService();
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function get (req: Request, res: Response) {
   let error: IError;
@@ -267,6 +267,7 @@ async function get (req: Request, res: Response) {
     "level": "error",
     "timestamp": "2019-01-22T09:22:05.900Z"
 }
+ * @apiPermission loggedIn
  */
 async function create (req: Request, res: Response) {
   let error: IError;
@@ -485,6 +486,7 @@ async function create (req: Request, res: Response) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
+ * @apiPermission loggedIn
  */
 async function getAll (req: Request, res: Response) {
   let error: IError;
@@ -620,7 +622,7 @@ async function getAll (req: Request, res: Response) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function deleteById (req: Request, res: Response) {
   let error: IError = {
@@ -772,6 +774,7 @@ async function deleteById (req: Request, res: Response) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
+  @apiPermission loggedIn
  */
 async function search (req: Request, res: Response) {
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
@@ -871,6 +874,7 @@ async function search (req: Request, res: Response) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
+  @apiPermission loggedIn
  */
 async function count (req: Request, res: Response) {
   const error: IError = {
@@ -964,6 +968,7 @@ async function count (req: Request, res: Response) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
+ * @apiPermission loggedIn
  */
 async function getDeviceTypes (req: Request, res: Response) {
   let error: IError;

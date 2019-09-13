@@ -91,6 +91,7 @@ const machineService = new MachineService();
         ]
     }
 }
+ * @apiPermission none
  */
 
 function getAllMachines (req, res) {
