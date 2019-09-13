@@ -132,7 +132,8 @@ export class IotDeviceDetailComponent implements OnInit {
   private _translate() {
     this.translateService.get(['iotDeviceDetail']).subscribe((translations => {
       if (translations.hasOwnProperty('iotDeviceDetail') && isObject(translations.iotDeviceDetail)
-        && translations.iotDeviceDetail.hasOwnProperty('labels') && isObject(translations.iotDeviceDetail.labels)) {
+        && translations.iotDeviceDetail.hasOwnProperty('labels') && isObject(translations.iotDeviceDetail.labels)
+        && translations.iotDeviceDetail.hasOwnProperty('modals') && isObject(translations.iotDeviceDetail.modals)) {
         this.translationFields = {
           labels: {
             deviceId: translations['iotDeviceDetail'].labels.deviceId,
