@@ -2,6 +2,7 @@ import validatorService from '../services/validator.service';
 import logger from '../logger';
 import OtherMachineService from '../services/otherMachine.service';
 import MachineService from '../services/machine.service';
+import machineController from './machine.controller';
 
 const otherMachineService = new OtherMachineService();
 
@@ -369,7 +370,14 @@ async function countSuccessfulOrders (req, res) {
  *
  * @apiPermission admin
  */
-function create (req, res) {
+async function create (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    res.status(403).send(error);
+    return;
+  }
+
   otherMachineService.create(req.body).then((otherMachine) => {
     logger.info(`POST Other Machine with result ${JSON.stringify(otherMachine)}`);
     res.status(201).send({ otherMachine });
@@ -455,6 +463,12 @@ function create (req, res) {
  * @apiPermission admin
  */
 async function deleteById (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    return res.status(403).send(error);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -657,6 +671,12 @@ async function get (req, res) {
  * @apiPermission admin
  */
 async function update (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    return res.status(403).send(error);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);

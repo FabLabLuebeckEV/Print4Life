@@ -2,6 +2,7 @@ import { MachineService } from '../services/machine.service';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 import MillingMachineService from '../services/milling-machine.service';
+import machineController from './machine.controller';
 
 const machineService = new MachineService();
 
@@ -369,7 +370,14 @@ function count (req, res) {
  *
  * @apiPermission admin
  */
-function create (req, res) {
+async function create (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    res.status(403).send(error);
+    return;
+  }
+
   millingMachineService
     .create(req.body).then((millingMachine) => {
       logger.info(`POST Milling Machine with result ${JSON.stringify(millingMachine)}`);
@@ -461,6 +469,12 @@ function create (req, res) {
  * @apiPermission admin
  */
 async function deleteById (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    return res.status(403).send(error);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -693,6 +707,12 @@ async function get (req, res) {
  * @apiPermission admin
  */
 async function update (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    return res.status(403).send(error);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);

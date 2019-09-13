@@ -3,6 +3,7 @@ import logger from '../logger';
 import { Printer3DService } from '../services/3d-printer.service';
 import MachineService from '../services/machine.service';
 import { searchableTextFields } from '../models/machines/machine.basic.model';
+import machineController from './machine.controller';
 
 const printer3DService = new Printer3DService();
 
@@ -421,6 +422,7 @@ async function countSuccessfulOrders (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup 3D-Printers
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} fablabId id of the corresponding fablab (required)
  * @apiParam {String} deviceName name of the device (required)
@@ -518,7 +520,14 @@ async function countSuccessfulOrders (req, res) {
  *
  *
  */
-function create (req, res) {
+async function create (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    res.status(403).send(error);
+    return;
+  }
+
   printer3DService.create(req.body).then((printer3d) => {
     logger.info(`POST 3D Printers with result ${JSON.stringify(printer3d)}`);
     res.status(201).send({ '3d-printer': printer3d });
@@ -624,7 +633,13 @@ function create (req, res) {
  * @apiPermission admin
  */
 async function deleteById (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    return res.status(403).send(error);
+  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
+
   if (checkId) {
     logger.error(checkId.error);
     return res.status(checkId.status).send(checkId.error);
@@ -887,6 +902,12 @@ async function get (req, res) {
  * @apiPermission admin
  */
 async function update (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    return res.status(403).send(error);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);

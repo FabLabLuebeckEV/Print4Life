@@ -1,8 +1,9 @@
 import { MachineService } from '../services/machine.service';
+import { UserService } from '../services/user.service';
 import logger from '../logger';
 
 const machineService = new MachineService();
-
+const userService = new UserService();
 /**
  * @api {get} /api/v1/machines/ Get all machines
  * @apiName GetMachines
@@ -190,4 +191,31 @@ function getMaterialsByType (req, res) {
   });
 }
 
-export default { getAllMachines, getMachineTypes, getMaterialsByType };
+/**
+ * Checks the user`s update permission for the given machine
+ * Currently only checks for admin permissions, may be updated for local admins,
+ * see #160
+ *
+ * @param tokenstring **validated** jwt token of logged in user (directly from header, unshortened)
+ * @param type machine type to be updated (currently unused)
+ * @param id id of machine that is to be updated
+ *
+ * Throws Error if no permission is granted
+ */
+async function checkUpdatePermissions (tokenstring:string, type:string, id:string):Promise<void> {
+  const token = tokenstring.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+  logger.info(`requesting permission to update ${type} with id ${id}`);
+  if (user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not update machines!'
+    };
+
+    throw new Error(JSON.stringify(msg));
+  }
+}
+
+export default {
+  getAllMachines, getMachineTypes, getMaterialsByType, checkUpdatePermissions
+};
