@@ -545,6 +545,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       }
     } catch (err) {
       this.shippingAddresses.userAddress = undefined;
+      const index = this.shippingAddressKeys.indexOf('userAddress');
+      if (index > -1) {
+        this.shippingAddressKeys.splice(index, 1);
+      }
     }
 
     if (this.loggedInUser && this.loggedInUser.fablabId) {
@@ -820,6 +824,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         translations.hasOwnProperty('deviceTypes') && isObject(translations.deviceTypes) &&
         translations.hasOwnProperty('status') && isObject(translations.status) &&
         translations.hasOwnProperty('date') && isObject(translations.date)) {
+
         const shownMachineTypes = [];
         const shownStatus = [];
         const shownShippingAddresses = [];
