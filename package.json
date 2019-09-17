@@ -33,7 +33,7 @@
     "api-test-dev": "tsc && cross-env NODE_ENV='testLocal' node --inspect-brk=9229 dist/specs/global.spec.js",
     "ng-serve": "ng serve --port 80",
     "ng-dev": "ng lint && ng serve --poll=2000",
-    "ng-test": "ng test --watch=false"
+    "ng-test": "ng test --watch=false --source-map=false"
   },
   "husky": {
     "hooks": {
