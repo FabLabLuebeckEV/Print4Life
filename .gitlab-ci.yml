@@ -82,7 +82,7 @@ test:
    - bash scripts/import.sh $DATABASE_HOST $DATABASE_PORT $DATABASE $DATABASE_DUMP
    - cd ..
    - NODE_ENV=$NODE_ENV
-   - npm run test -sm=false
+   - npm run test --source-map=false
     
 deploy_staging:
   stage: deploy
