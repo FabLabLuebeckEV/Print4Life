@@ -3,10 +3,12 @@ import logger from '../logger';
 import ScheduleService from '../services/schedule.service';
 import MachineService from '../services/machine.service';
 import OrderService from '../services/order.service';
+import UserService from '../services/user.service';
 
 const scheduleService = new ScheduleService();
 const machineService = new MachineService();
 const orderService = new OrderService();
+const userService = new UserService();
 
 /**
  * @api {get} /api/v1/schedules/:id Request a schedule by its id
@@ -339,6 +341,17 @@ function getAll (req, res) {
  * @apiPermission editor
  */
 async function create (req, res) {
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'editor' && user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not create schedules!'
+    };
+
+    return res.status(403).send(msg);
+  }
   try {
     if (req.body.startDate && req.body.endDate && req.body.machine) {
       await scheduleService.checkDateTime({ id: req.params.id, ...req.body });

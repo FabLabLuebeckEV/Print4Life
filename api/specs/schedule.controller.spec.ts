@@ -1,7 +1,7 @@
 import 'jasmine';
 import * as request from 'request';
 import config from '../config/config';
-import { getTestUserToken, newTimeout } from './global.spec';
+import { getTestUserToken, getTestEditorToken, getTestUserNormalToken, newTimeout } from './global.spec';
 import { testOrder } from './order.spec';
 import { testOtherMachine } from './otherMachine.controller.spec';
 import logger from '../logger';
@@ -26,6 +26,8 @@ function randomDate (start, end) {
 describe('Schedule Controller', () => {
   let originalTimeout;
   const authorizationHeader = getTestUserToken();
+  const authorizationHeaderEditor = getTestEditorToken();
+  const authorizationHeaderNormal = getTestUserNormalToken();
 
   const testOrderBody = JSON.parse(JSON.stringify(testOrder));
   request.post(`${endpoint}/machines/otherMachines`,
@@ -94,7 +96,7 @@ describe('Schedule Controller', () => {
     request({
       uri: `${endpoint}schedules/`,
       method: 'POST',
-      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeaderEditor },
       json: true,
       body: testBody
     }, (error, response) => {
@@ -109,6 +111,28 @@ describe('Schedule Controller', () => {
       expect(scheduleResult.machine).toBeDefined();
       expect(scheduleResult.machine.type).toEqual(testBody.machine.type);
       expect(scheduleResult.machine.id).toEqual(testBody.machine.id);
+      done();
+    });
+  });
+
+
+  it('should fail to create a schedule if the user does not have the permission', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testSchedule));
+    const today = new Date();
+    const startDate = randomDate(new Date(today.getFullYear(), 0, 1), new Date(today.getFullYear(), 0, 20));
+    testBody.startDate = startDate;
+    testBody.endDate = startDate;
+    testBody.endDate.setMinutes(startDate.getMinutes() + 1);
+    request({
+      uri: `${endpoint}schedules/`,
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeaderNormal },
+      json: true,
+      body: testBody
+    }, (error, response) => {
+      const scheduleResult = response.body.schedule;
+
+      expect(response.statusCode).toEqual(403);
       done();
     });
   });
