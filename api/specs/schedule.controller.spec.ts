@@ -132,8 +132,6 @@ describe('Schedule Controller', () => {
       json: true,
       body: testBody
     }, (error, response) => {
-      const scheduleResult = response.body.schedule;
-
       expect(response.statusCode).toEqual(403);
       done();
     });
@@ -214,6 +212,55 @@ describe('Schedule Controller', () => {
     });
   });
 
+  it('should not update the schedule if the user is no editor', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testSchedule));
+    const today = new Date();
+    const startDate = randomDate(new Date(today.getFullYear(), 2, 1), new Date(today.getFullYear(), 2, 20));
+    testBody.startDate = startDate;
+    testBody.endDate = startDate;
+    testBody.endDate.setMinutes(startDate.getMinutes() + 1);
+    request({
+      uri: `${endpoint}schedules/`,
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true,
+      body: testBody
+    }, (error, response) => {
+      testBody.startDate = new Date();
+      testBody.endDate = new Date();
+      response.body.schedule.startDate = testBody.startDate;
+      response.body.schedule.endDate = testBody.endDate;
+      request({
+        uri: `${endpoint}schedules/${response.body.schedule._id}`,
+        method: 'PUT',
+        headers: { 'content-type': 'application/json', authorization: authorizationHeaderNormal },
+        json: true,
+        body: response.body.schedule
+      }, (error, response2) => {
+        expect(response2.statusCode).toEqual(403);
+
+        request({
+          uri: `${endpoint}schedules/${response.body.schedule._id}`,
+          method: 'GET',
+          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+          json: true
+        }, (error, response) => {
+          const scheduleResult = response.body.schedule;
+          expect(response.body.schedule).toBeDefined();
+          expect(response.statusCode).toEqual(200);
+          expect(new Date(scheduleResult.startDate)).toEqual(startDate);
+          expect(new Date(scheduleResult.endDate)).toEqual(startDate);
+          expect(scheduleResult.orderId).toEqual(testBody.orderId);
+          expect(scheduleResult.fablabId).toEqual(testBody.fablabId);
+          expect(scheduleResult.machine).toBeDefined();
+          expect(scheduleResult.machine.type).toEqual(testBody.machine.type);
+          expect(scheduleResult.machine.id).toEqual(testBody.machine.id);
+          done();
+        });
+      });
+    });
+  });
+
   it('delete schedule', (done) => {
     const testBody = JSON.parse(JSON.stringify(testSchedule));
     const today = new Date();
@@ -245,6 +292,50 @@ describe('Schedule Controller', () => {
         expect(scheduleResult.machine.type).toEqual(testBody.machine.type);
         expect(scheduleResult.machine.id).toEqual(testBody.machine.id);
         done();
+      });
+    });
+  });
+
+  it('should not delete schedule if user is no editor', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testSchedule));
+    const today = new Date();
+    const startDate = randomDate(new Date(today.getFullYear(), 3, 1), new Date(today.getFullYear(), 3, 20));
+    testBody.startDate = startDate;
+    testBody.endDate = startDate;
+    testBody.endDate.setMinutes(startDate.getMinutes() + 1);
+    request({
+      uri: `${endpoint}schedules/`,
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true,
+      body: testBody
+    }, (error, response) => {
+      request({
+        uri: `${endpoint}schedules/${response.body.schedule._id}`,
+        method: 'DELETE',
+        headers: { 'content-type': 'application/json', authorization: authorizationHeaderNormal },
+        json: true
+      }, (error, response2) => {
+        expect(response2.statusCode).toEqual(403);
+
+        request({
+          uri: `${endpoint}schedules/${response.body.schedule._id}`,
+          method: 'GET',
+          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+          json: true
+        }, (error, response) => {
+          const scheduleResult = response.body.schedule;
+          expect(response.body.schedule).toBeDefined();
+          expect(response.statusCode).toEqual(200);
+          expect(new Date(scheduleResult.startDate)).toEqual(startDate);
+          expect(new Date(scheduleResult.endDate)).toEqual(startDate);
+          expect(scheduleResult.orderId).toEqual(testBody.orderId);
+          expect(scheduleResult.fablabId).toEqual(testBody.fablabId);
+          expect(scheduleResult.machine).toBeDefined();
+          expect(scheduleResult.machine.type).toEqual(testBody.machine.type);
+          expect(scheduleResult.machine.id).toEqual(testBody.machine.id);
+          done();
+        });
       });
     });
   });
