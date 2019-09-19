@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
       this.translationFields.system = translations['dashboard'].system;
       this.translationFields.accountQuestion = translations['dashboard'].accountQuestion;
       this.translationFields.accountCreation = translations['dashboard'].accountCreation;
-      this.translationFields.buttons.login = translations['dashboard']['buttons'].login;
+      this.translationFields.buttons.login = translations['dashboard']['buttons'] ? translations['dashboard']['buttons'].login : 'f';
     }));
   }
 

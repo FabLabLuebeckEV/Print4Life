@@ -3,6 +3,7 @@ import * as request from 'request';
 import config from '../config/config';
 import { getTestUserToken, newTimeout } from './global.spec';
 import { ErrorType } from '../services/router.service';
+import logger from '../logger';
 
 const endpoint = config.baseUrlBackend;
 
@@ -78,6 +79,7 @@ describe('IoT Device Controller', () => {
         json: true,
         body: { query: { $and: [{ $text: { $search: 'IoTDevice' } }] } }
       }, (error, response) => {
+        logger.info(`search device response: ${JSON.stringify(error)}, ${JSON.stringify(response)}`);
         const { iotDevices } = { iotDevices: response.body['iot-devices'] };
         expect(response.statusCode).toEqual(200);
         expect(iotDevices).toBeDefined();
@@ -183,6 +185,7 @@ describe('IoT Device Controller', () => {
       json: true,
       body: testBody
     }, (error, response) => {
+      logger.info(`request response: ${JSON.stringify(error)}, ${JSON.stringify(response)}`);
       testBody.id = response.body['iot-device']._id;
       request({
         uri: `${endpoint}iot-devices/${response.body['iot-device']._id}`,

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LoginModalComponent } from './login-modal.component';
+import { RouterTestingModule } from '@angular/router/testing';
 import {
   HttpClientTestingModule
 } from '@angular/common/http/testing';
@@ -18,7 +19,8 @@ describe('LoginModalComponent', () => {
         NgbModule.forRoot(),
         FormsModule,
         HttpClientTestingModule,
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        RouterTestingModule
       ],
       providers: [
         NgbActiveModal,

@@ -24,8 +24,8 @@ describe('IotDeviceDetailComponent', () => {
         DeleteButtonComponent
       ],
       imports: [
-        HttpClientTestingModule,
         NgbModule.forRoot(),
+        HttpClientTestingModule,
         FontAwesomeModule,
         TranslateModule.forRoot(),
         RouterTestingModule
