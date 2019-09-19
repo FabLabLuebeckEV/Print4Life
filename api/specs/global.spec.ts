@@ -53,7 +53,7 @@ export const testUserEditor = {
   },
   activated: true,
   createdAt: undefined
-}
+};
 export const testUserNormal = {
   id: '',
   firstname: 'Hans',
@@ -75,7 +75,7 @@ export const testUserNormal = {
   },
   activated: true,
   createdAt: undefined
-}
+};
 export const newTimeout = 60 * 1000;
 
 let token;
@@ -83,7 +83,7 @@ let tokenEditor;
 let tokenNormal;
 
 server.run();
-/* setup testUser */ 
+/* setup testUser */
 User.findOne({ username: testUser.username }).then(async (user) => {
   if (!user) {
     testUser.createdAt = new Date();
@@ -129,8 +129,8 @@ User.findOne({ username: testUser.username }).then(async (user) => {
   }
 });
 
-function createEditorUser() {
-  /* setup testUser */ 
+function createEditorUser () {
+  /* setup testUser */
   User.findOne({ username: testUserEditor.username }).then(async (user) => {
     if (!user) {
       testUserEditor.createdAt = new Date();
@@ -177,8 +177,8 @@ function createEditorUser() {
   });
 }
 
-function createNormalUser() {
-  /* setup testUser */ 
+function createNormalUser () {
+  /* setup testUser */
   User.findOne({ username: testUserNormal.username }).then(async (user) => {
     if (!user) {
       testUserNormal.createdAt = new Date();

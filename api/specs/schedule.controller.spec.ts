@@ -1,7 +1,9 @@
 import 'jasmine';
 import * as request from 'request';
 import config from '../config/config';
-import { getTestUserToken, getTestEditorToken, getTestUserNormalToken, newTimeout } from './global.spec';
+import {
+  getTestUserToken, getTestEditorToken, getTestUserNormalToken, newTimeout
+} from './global.spec';
 import { testOrder } from './order.spec';
 import { testOtherMachine } from './otherMachine.controller.spec';
 import logger from '../logger';
