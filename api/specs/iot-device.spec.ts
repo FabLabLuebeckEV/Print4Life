@@ -16,7 +16,7 @@ export const testIoTDevice = {
   ]
 };
 
-xdescribe('IoT Device Controller', () => {
+describe('IoT Device Controller', () => {
   let originalTimeout;
   const authorizationHeader = getTestUserToken();
   beforeEach(() => {
