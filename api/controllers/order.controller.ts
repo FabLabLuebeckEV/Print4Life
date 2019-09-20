@@ -6,12 +6,14 @@ import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import { IError, ErrorType } from '../services/router.service';
 import ScheduleService from '../services/schedule.service';
+import UserService from '../services/user.service';
 import { searchableTextFields } from '../models/order.model';
 /* eslint-enable no-unused-vars */
 
 const orderService = new OrderService();
 const fileService = new FileService();
 const scheduleService = new ScheduleService();
+const userService = new UserService();
 
 /**
  * @api {get} /api/v1/orders/ Request the list of orders
@@ -452,6 +454,17 @@ function create (req, res) {
  * @apiPermission loggedIn
  */
 async function update (req, res) {
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'editor' && user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not update orders!'
+    };
+
+    return res.status(403).send(msg);
+  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -536,6 +549,18 @@ async function update (req, res) {
  * @apiPermission loggedIn
  */
 async function deleteById (req, res) {
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'editor' && user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not delete orders!'
+    };
+
+    return res.status(403).send(msg);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -1119,7 +1144,7 @@ async function downloadFile (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- * @apiPermission loggedIn
+ * @apiPermission owner
  */
 async function deleteFile (req, res) {
   let err: IError;
