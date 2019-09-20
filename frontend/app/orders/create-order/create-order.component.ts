@@ -346,7 +346,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     orderCopy.machine.type = this.machineService.camelCaseTypes(orderCopy.machine.type);
     if (orderCopy.machine && orderCopy.machine.type.toLowerCase() === 'unknown') {
       orderCopy.machine._id = 'unknown'; // save unknown machine into order
-    } else if (orderCopy.machine.type) {
+    } else if (!orderCopy.machine.type) {
       orderCopy.machine._id = 'unknown';
       // orderCopy.machine.type = 'unknown';
     }
