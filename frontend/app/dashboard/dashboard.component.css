@@ -60,6 +60,10 @@
     height: 100%;
 }
 
+.logo-row div {
+    margin-bottom: 20px !important;
+}
+
 @media only screen and (max-width: 1100px) {
     #login-container-inner .row:nth-child(1) {
         display:inherit;
@@ -127,7 +131,5 @@
     .logo-row {
         margin-left: 0px !important;
     }
-    .logo-row div {
-        margin-bottom: 10px !important;
-    }
+
 }
