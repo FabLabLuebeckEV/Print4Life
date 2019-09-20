@@ -8,11 +8,13 @@
     margin-left: 20% !important;
 }
 
-#frontpage-container #logo-container {
+#frontpage-container .logo-container {
     position:relative;
+    width: 100%;
+    height: 100%;
 }
 
-#frontpage-container #logo-container img {
+#frontpage-container .logo-container img {
     top: 50%;
     position: absolute;
     transform: translateY(-50%);
@@ -39,7 +41,7 @@
 }
 
 #login-container {
-    background-color:rgba(248, 249, 250, 0.7);
+    background-color:rgba(248, 249, 250, 0.6);
     padding-top:2%;
     padding-bottom:2%;
     border-radius: 6px;
@@ -47,4 +49,85 @@
 
 #bottom-filler-row {
     height: 150px;
+}
+
+.hide-large-center {
+    display: none !important;
+}
+
+.hide-small-center {
+    width: 100%;
+    height: 100%;
+}
+
+@media only screen and (max-width: 1100px) {
+    #login-container-inner .row:nth-child(1) {
+        display:inherit;
+    }
+    #login-container-inner .row:nth-child(1) .logo-container {
+        width: 100%;
+    }
+    #login-container-inner .row:nth-child(1) .logo-container img {
+        position:relative;
+        width: 100%;
+        max-width: 100%;
+        transform: none;
+        -webkit-transform: none;
+    }
+
+    .logo-container {
+        margin-bottom: 20px;
+    }
+
+    #login-container-inner h3 {
+        text-align: center;
+    }
+    
+    .hide-large-center {
+        display: inline-block !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    .hide-small-center {
+        display:none !important;
+    }
+
+    #login-container-inner  .row:nth-child(1) {
+        border-bottom: none;
+    }
+
+    #frontpage-container .row .col-4 {
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+
+    #frontpage-container #login-container {
+        flex: 0 0 60%;
+        max-width: 60%;
+    }
+}
+
+
+@media only screen and (max-width: 440px) {
+    #frontpage-container .row .col-4 {
+        flex: 0 0 0%;
+        max-width: 0%;
+    }
+
+    #frontpage-container #login-container {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    #frontpage-container {
+        padding-right: 0px;
+    }
+
+    .logo-row {
+        margin-left: 0px !important;
+    }
+    .logo-row div {
+        margin-bottom: 10px !important;
+    }
 }
