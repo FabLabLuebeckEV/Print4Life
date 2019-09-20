@@ -61,8 +61,8 @@
     },
     "dashboard": {
         "title": "Willkommen zur Fablab - Auftragsverwaltung!",
-        "order": "Auftrags-",
-        "management": "Verwaltungs-",
+        "order": "Order",
+        "management": "Management",
         "system": "System",
         "accountQuestion": "Noch keinen Account?",
         "accountCreation": "Registrieren",
