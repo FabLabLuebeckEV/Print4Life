@@ -24,9 +24,10 @@
 }
 
 .background-filler {
-    background-image: linear-gradient(-180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.5)), url('/assets/img/background.jpg');
-    background-size: 100%;
-    background-repeat: no-repeat;
+    background: linear-gradient(-180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.5)),url('/assets/img/background.jpg') no-repeat center center fixed;
+    /*background-image:  url('/assets/img/background.jpg');
+    */
+    background-size: 1cover;
     margin-left: 0px !important;
 }
 
