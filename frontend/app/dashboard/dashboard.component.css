@@ -1,0 +1,50 @@
+#frontpage-container {
+    width: 100%;
+    max-width: unset !important;
+}
+
+#frontpage-container .img-responsive {
+    height: 35%;
+    margin-left: 20% !important;
+}
+
+#frontpage-container #logo-container {
+    position:relative;
+}
+
+#frontpage-container #logo-container img {
+    top: 50%;
+    position: absolute;
+    transform: translateY(-50%);
+    padding-top: 0px !important;
+    height: 70%;
+    max-width: 90%;
+    
+}
+
+.subtitle-font, .subtitle-font button {
+    font-size: 0.8rem;
+}
+
+.subtitle-font {
+    padding-top:3% !important;
+}
+
+#login-container-inner {
+    padding-left: 30px !important;
+}
+
+#login-container-inner  .row:nth-child(1) {
+    border-bottom: #003a54 3px solid;
+}
+
+#login-container {
+    background-color:rgba(248, 249, 250, 0.7);
+    padding-top:2%;
+    padding-bottom:2%;
+    border-radius: 6px;
+}
+
+#bottom-filler-row {
+    height: 150px;
+}

@@ -24,9 +24,10 @@
 }
 
 .background-filler {
-    background-image: url('/assets/img/background.jpg');
+    background-image: linear-gradient(-180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.5)), url('/assets/img/background.jpg');
     background-size: 100%;
     background-repeat: no-repeat;
+    margin-left: 0px !important;
 }
 
 .dropdown-backdrop {
@@ -102,7 +103,13 @@
     background-color: #ffc107;
 }
 
+.logo-row {
+    width: 100%;
+    margin-left:0px;
+    margin-right: 0px;
+}
+
 .logo-row .col-sm {
-    height: 55px;
+    height: 40px;
     text-align: center;
 }
