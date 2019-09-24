@@ -1,0 +1,26 @@
+
+/* .navbar {
+    padding-right: 0px;
+} */
+
+@media only screen and (max-width: 1200px) and (min-width: 900px) {
+    .navbar-nav {
+        flex-direction: unset !important;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .navbar-nav .nav-item {
+        margin-bottom: 10px;
+        margin-left: 0px !important;
+    }
+
+    .nav-item button {
+        width: 100%;
+        margin-left: 0px !important;
+    }
+
+    .right-stretch {
+        margin-right: -15px;
+    }
+}

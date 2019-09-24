@@ -22,7 +22,7 @@ export class NavigationComponent implements OnInit {
   login: String = 'Login';
   logout: String = 'Logout';
   register: String = 'Register';
-  isNavbarCollapsed: Boolean = false;
+  isNavbarCollapsed: Boolean = true;
   machineDropdown: Dropdown = { name: '', elements: [] };
   orderDropdown: Dropdown = { name: '', elements: [] };
   iotDevicesDropdown: Dropdown = { name: '', elements: [] };
