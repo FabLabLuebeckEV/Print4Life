@@ -157,7 +157,7 @@
         "admin": "Administrator"
     },
     "iotDeviceList": {
-        "paginationLabel": "",
+        "paginationLabel": "Springe zur Seite",
         "spinnerLoadingText": "Lade IoT Geräte",
         "buttons": {
             "deleteLabel": "Löschen",
@@ -178,7 +178,7 @@
         }
     },
     "machineList": {
-        "paginationLabel": "",
+        "paginationLabel": "Springe zur Seite",
         "filterLabel": {
             "type": "Filter nach Maschinentyp:",
             "search": "Suche nach:",

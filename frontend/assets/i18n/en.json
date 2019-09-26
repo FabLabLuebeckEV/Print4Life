@@ -177,7 +177,7 @@
         }
     },
     "iotDeviceList": {
-        "paginationLabel": "",
+        "paginationLabel": "Jump to Page",
         "spinnerLoadingText": "Loading IoT Devices",
         "buttons": {
             "deleteLabel": "Delete",

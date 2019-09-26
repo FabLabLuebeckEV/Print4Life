@@ -42,7 +42,7 @@ export class IotDeviceListComponent implements OnInit {
     page: 1,
     totalItems: 0,
     perPage: 20,
-    maxSize: 10,
+    maxSize: 3,
     boundaryLinks: true,
     rotate: true,
     maxPages: 0,
@@ -50,6 +50,7 @@ export class IotDeviceListComponent implements OnInit {
   };
 
   translationFields = {
+    paginationLabel: '',
     buttons: {
       detailLabel: '',
       deleteLabel: ''
@@ -223,6 +224,7 @@ export class IotDeviceListComponent implements OnInit {
         this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
 
       this.translationFields = {
+        paginationLabel: translations['iotDeviceList'].paginationLabel,
         buttons: {
           detailLabel: translations['iotDeviceList'].buttons.detailLabel,
           deleteLabel: translations['iotDeviceList'].buttons.deleteLabel
