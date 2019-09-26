@@ -7,11 +7,13 @@ import config from '../config/config';
 import { IError, ErrorType } from '../services/router.service';
 import ScheduleService from '../services/schedule.service';
 import { searchableTextFields } from '../models/order.model';
+import UserService from '../services/user.service';
 /* eslint-enable no-unused-vars */
 
 const orderService = new OrderService();
 const fileService = new FileService();
 const scheduleService = new ScheduleService();
+const userService = new UserService();
 
 /**
  * @api {get} /api/v1/orders/ Request the list of orders
@@ -454,6 +456,7 @@ async function update (req, res) {
   }
   try {
     const order = await orderService.update(req.body);
+
     logger.info(`PUT Order with result ${JSON.stringify(order)}`);
     return res.status(200).send({ order });
   } catch (err) {
@@ -823,6 +826,20 @@ async function get (req, res) {
       logger.error({ error: `Could not find any Order with id ${req.params.id}` });
       return res.status(404).send({ error: `Could not find any Order with id ${req.params.id}` });
     }
+
+    let authorized = false;
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.split('JWT')[1].trim();
+      const user = await userService.getUserByToken(token);
+
+      authorized = user && (user.role.role === 'admin' || user.role.role === 'editor');
+    }
+
+    if (!authorized) {
+      delete order.shippingAddress;
+      order.shippingAddress = undefined;
+    }
+
     logger.info(`GET Order with result ${JSON.stringify(order)}`);
     return res.status(200).send({ order });
   } catch (err) {

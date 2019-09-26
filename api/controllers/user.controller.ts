@@ -894,6 +894,22 @@ async function get (req, res) {
     const user = await userService.get(req.params.id);
     if (user) {
       logger.info(`GET User by id with result ${user}`);
+
+
+      // remove user address, see #161
+      let authorized = false;
+      if (req.headers.authorization) {
+        const token = req.headers.authorization.split('JWT')[1].trim();
+        const ownUser = await userService.getUserByToken(token);
+
+        authorized = ownUser && (ownUser.role.role === 'admin' || ownUser.role.role === 'editor');
+      }
+
+      if (!authorized) {
+        delete user.address;
+        user.address = undefined;
+      }
+
       return res.status(200).send({ user });
     }
     const msg = { error: 'GET User by id with no result.' };

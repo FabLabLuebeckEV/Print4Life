@@ -122,6 +122,36 @@ describe('Order Controller', () => {
         expect(response.body.order.owner).toEqual(testBody.owner);
         expect(response.body.order.token).toBeDefined();
         expect(response.body.order.status).toEqual(testBody.status);
+        expect(response.body.order.shippingAddress).toEqual(testBody.shippingAddress);
+        done();
+      });
+    });
+  });
+
+  it('should not get the order shipping address when not logged in', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testOrder));
+    request({
+      uri: `${endpoint}orders/`,
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true,
+      body: testBody
+    }, (error, response) => {
+      request({
+        uri: `${endpoint}orders/${response.body.order._id}`,
+        method: 'GET',
+        headers: { 'content-type': 'application/json' },
+        json: true
+      }, (error, response) => {
+        expect(response.statusCode).toEqual(200);
+        // see #161
+        expect(response.body.order.shippingAddress).toBeUndefined();
+
+        expect(response.body.order).toBeDefined();
+        expect(response.body.order.editor).toEqual(testBody.editor);
+        expect(response.body.order.owner).toEqual(testBody.owner);
+        expect(response.body.order.token).toBeDefined();
+        expect(response.body.order.status).toEqual(testBody.status);
         done();
       });
     });
