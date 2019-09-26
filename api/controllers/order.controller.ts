@@ -6,7 +6,6 @@ import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import { IError, ErrorType } from '../services/router.service';
 import ScheduleService from '../services/schedule.service';
-import UserService from '../services/user.service';
 import { searchableTextFields } from '../models/order.model';
 import UserService from '../services/user.service';
 /* eslint-enable no-unused-vars */
