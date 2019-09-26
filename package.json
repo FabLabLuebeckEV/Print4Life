@@ -22,6 +22,7 @@
     "test-local": "npm run ng-test && npm run api-test-local",
     "serve": "concurrently --kill-others \"npm run api-serve\" \"npm run ng-serve\"",
     "dev": "concurrently --kill-others \"npm run api-dev\" \"npm run ng-dev\"",
+    "dev-network": "concurrently --kill-others \"npm run api-dev\" \"npm run ng-dev-network\"",
     "lint": "ng lint && eslint api --fix --ext ts",
     "e2e": "ng e2e",
     "api-serve-dev": "cross-env NODE_ENV='dev' node --inspect-brk=9229 dist",
@@ -33,6 +34,7 @@
     "api-test-dev": "tsc && cross-env NODE_ENV='testLocal' node --inspect-brk=9229 dist/specs/global.spec.js",
     "ng-serve": "ng serve --port 80",
     "ng-dev": "ng lint && ng serve --poll=2000",
+    "ng-dev-network": "ng lint && ng serve --poll=2000 --host 0.0.0.0",
     "ng-test": "ng test --watch=false --source-map=false"
   },
   "husky": {
