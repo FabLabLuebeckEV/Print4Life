@@ -655,7 +655,7 @@
             "username": "Benutzername",
             "password": "Passwort",
             "login": "Einloggen",
-            "resetPassword": "Passwort zurücksetzen"
+            "resetPassword": "Passwort vergessen?"
         },
         "modals": {
             "title": "Passwort zurücksetzen",

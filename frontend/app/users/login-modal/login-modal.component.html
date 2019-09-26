@@ -13,11 +13,11 @@
     <input type="password" id="password" #password="ngModel" class="form-control" placeholder={{translationFields.labels.password}}
       [(ngModel)]="loginData.password" name="password" />
     <div class="row">
-      <div class="col-sm-6">
-        <button class="btn btn-primary spacing-top spacing-right" type="submit" [disabled]="!loginForm.form.valid">{{translationFields.labels.login}}</button>
-      </div>
-      <div class="col-sm-6 text-right">
+      <div class="col-8">
         <button class="btn btn-primary spacing-top" type="button" (click)="resetPassword(); closeModal('');">{{translationFields.labels.resetPassword}}</button>
+      </div>
+      <div class="col-4  text-right">
+        <button class="btn btn-primary spacing-top spacing-right" type="submit" [disabled]="!loginForm.form.valid">{{translationFields.labels.login}}</button>
       </div>
     </div>
   </form>
