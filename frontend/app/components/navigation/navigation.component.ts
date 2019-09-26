@@ -142,7 +142,7 @@ export class NavigationComponent implements OnInit {
             name: translations['languages'].danish,
             isFlag: true,
             class: 'flag-icon flag-icon-dk',
-            countryCode: 'dk',
+            countryCode: 'da',
             disabled: true
           },
           {
