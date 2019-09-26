@@ -5,3 +5,7 @@
 .spacing-left-xxl {
     margin-left: 30px;
 }
+
+.machine-list-container {
+    overflow-x: scroll;
+}
