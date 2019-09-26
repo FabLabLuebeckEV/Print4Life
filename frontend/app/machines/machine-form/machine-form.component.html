@@ -6,17 +6,17 @@
     <app-back-button></app-back-button>
   </div>
 </div>
+<div *ngIf="!editView" class="col-md-6 center-buttons">
+  <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group"
+    aria-label="Machine selection">
+    <button *ngFor="let type of translationFields.shownMachineTypes"
+      (click)="_selectType(type); machineForm.reset()" type="button"
+      [class.active]="type === translationFields.shownType" class="btn btn-outline-primary">{{type}}</button>
+  </div>
+</div>
 <div class="row spacing">
   <div class="col-md-12">
     <div class="container">
-      <div *ngIf="!editView" class="col-md-6 offset-3">
-        <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group"
-          aria-label="Machine selection">
-          <button *ngFor="let type of translationFields.shownMachineTypes"
-            (click)="_selectType(type); machineForm.reset()" type="button"
-            [class.active]="type === translationFields.shownType" class="btn btn-outline-primary">{{type}}</button>
-        </div>
-      </div>
       <form (ngSubmit)="onSubmit()" #machineForm="ngForm">
         <h2 *ngIf="selectedType" class="col-md-12 header-left-bound">{{translationFields.generalData}}</h2>
         <div *ngIf="selectedType" class="form-group row">

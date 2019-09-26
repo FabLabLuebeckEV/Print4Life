@@ -23,4 +23,10 @@
     .right-stretch {
         margin-right: -15px;
     }
+
+    .navbar-toggler {
+        position: absolute;
+        right: 20px;
+        top: 10px;
+    }
 }

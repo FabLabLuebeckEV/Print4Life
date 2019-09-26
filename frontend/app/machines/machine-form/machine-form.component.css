@@ -2,3 +2,15 @@
 .header-left-bound {
     margin-left: -20px;
 }
+
+
+.center-buttons {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    max-width: unset !important;
+}
+
+.center-buttons .btn-group {
+    display: unset !important;
+}
