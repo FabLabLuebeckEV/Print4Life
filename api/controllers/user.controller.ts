@@ -752,6 +752,7 @@ async function login (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiSuccess { Object } user the user object, if success
  *
@@ -792,6 +793,7 @@ async function login (req, res) {
           ...
       }
   }
+ * @apiPermission loggedIn
  */
 function findown (req, res) {
   if (req.headers && req.headers.authorization && typeof req.headers.authorization === 'string') {
@@ -823,6 +825,7 @@ function findown (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiSuccess { Object } user the user object, if success
  *
@@ -883,6 +886,7 @@ function findown (req, res) {
           ...
       }
   }
+ * @apiPermission loggedIn
  */
 async function get (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -974,6 +978,7 @@ async function get (req, res) {
           ...
       }
   }
+ * @apiPermission none
  */
 async function getNames (req, res) {
   const fablabService = new FablabService();
@@ -1012,7 +1017,7 @@ async function getNames (req, res) {
 }
 
 /**
- * @api {put} /api/v1/users/:id/activationRequest activate a user
+ * @api {put} /api/v1/users/:id/activationRequest ask admin to activate a user
  * @apiName activationRequestByUser
  * @apiVersion 1.0.0
  * @apiGroup Users
@@ -1058,7 +1063,7 @@ async function getNames (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission none
  */
 async function sendActivationRequest (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -1110,6 +1115,7 @@ async function sendActivationRequest (req, res) {
           ...
       }
   }
+ * @apiPermission none
  */
 function resetPassword (req, res) {
   if (!req.body.email) {
@@ -1139,6 +1145,7 @@ function resetPassword (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Users
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiSuccess { String } msg a response message
  *
@@ -1201,7 +1208,7 @@ function resetPassword (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function changePassword (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);

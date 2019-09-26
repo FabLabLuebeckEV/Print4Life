@@ -2,6 +2,7 @@ import { MachineService } from '../services/machine.service';
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 import MillingMachineService from '../services/milling-machine.service';
+import machineController from './machine.controller';
 
 const machineService = new MachineService();
 
@@ -99,6 +100,7 @@ const millingMachineService = new MillingMachineService();
         }
     ]
 }
+ * @apiPermission none
  */
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
@@ -219,6 +221,7 @@ function getAll (req, res) {
  *   error: Error while trying to search for a specific milling machine with query: {...},
  *   stack: {...}
  * }
+ * @apiPermission none
 */
 function search (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query);
@@ -266,7 +269,7 @@ function search (req, res) {
 {
     "count": 98
 }
- *
+ * @apiPermission none
  */
 function count (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query);
@@ -287,6 +290,7 @@ function count (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} fablabId id of the corresponding fablab (required)
  * @apiParam {String} deviceName name of the device (required)
@@ -364,9 +368,16 @@ function count (req, res) {
     }
 }
  *
- *
+ * @apiPermission admin
  */
-function create (req, res) {
+async function create (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    res.status(403).send(error);
+    return;
+  }
+
   millingMachineService
     .create(req.body).then((millingMachine) => {
       logger.info(`POST Milling Machine with result ${JSON.stringify(millingMachine)}`);
@@ -386,6 +397,7 @@ function create (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {id} is the id of the milling machine
  *
@@ -454,9 +466,15 @@ function create (req, res) {
    "error": "Error while trying to delete the Milling Machine with id 9999"
 }
  *
- *
+ * @apiPermission admin
  */
 async function deleteById (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    return res.status(403).send(error);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -571,7 +589,7 @@ async function deleteById (req, res) {
  *       "error": "Milling Machine by id '9999' not found"
  *     }
  *
- *
+ * @apiPermission none
  */
 async function get (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -605,6 +623,7 @@ async function get (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup MillingMachines
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {id} is the id of the milling machine
  * @apiParam {String} fablabId id of the corresponding fablab (required)
@@ -685,9 +704,15 @@ async function get (req, res) {
  *       "error": "Milling Machine by id '9999' not found"
  *     }
  *
- *
+ * @apiPermission admin
  */
 async function update (req, res) {
+  try {
+    await machineController.checkUpdatePermissions(req.headers.authorization, '3d-printer', '');
+  } catch (error) {
+    return res.status(403).send(error);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -763,7 +788,7 @@ async function update (req, res) {
  *       "error": "Could not get successful orders for machine Id 9999""
  *     }
  *
- *
+ * @apiPermission none
  */
 async function countSuccessfulOrders (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -859,7 +884,7 @@ async function countSuccessfulOrders (req, res) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  *
- *
+ * @apiPermission none
  */
 async function getSchedules (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);

@@ -141,7 +141,7 @@ const publicRoutes = [
   {
     url: `${baseUrl}fablabs`,
     canChilds: true,
-    methods: ['*']
+    methods: ['GET']
   }
 ];
 const dev = {
