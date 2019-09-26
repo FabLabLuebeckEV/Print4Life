@@ -5,3 +5,7 @@
 .spacing-left-xxl {
     margin-left: 30px;
 }
+
+.order-list-container {
+    overflow-x: scroll;
+}

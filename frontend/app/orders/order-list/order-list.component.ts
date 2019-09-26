@@ -72,7 +72,7 @@ export class OrderListComponent implements OnInit {
     page: 1,
     totalItems: 0,
     perPage: 20,
-    maxSize: 10,
+    maxSize: 3,
     boundaryLinks: true,
     rotate: true,
     maxPages: 0,
