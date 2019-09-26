@@ -5,7 +5,7 @@
 
 #frontpage-container .img-responsive {
     height: 35%;
-    margin-left: 20% !important;
+    /* margin-left: 20% !important; */
 }
 
 #frontpage-container .logo-container {
@@ -48,7 +48,7 @@
 }
 
 #bottom-filler-row {
-    height: 150px;
+    height: 75px;
 }
 
 .hide-large-center {
@@ -62,6 +62,19 @@
 
 .logo-row div {
     margin-bottom: 20px !important;
+}
+
+#main-logo {
+    height: 60px !important;
+    margin-bottom: 100px;
+}
+
+.app-logo {
+    max-height: 50px !important;
+}
+
+#frontpage-container > .row:nth-child(1) {
+    margin-bottom: 50px;
 }
 
 @media only screen and (max-width: 1200px) {
@@ -137,6 +150,10 @@
 
     .logo-container img {
         min-width: 100px;
+    }
+
+    h3 {
+        font-size: 1.6rem !important;
     }
 
 }
