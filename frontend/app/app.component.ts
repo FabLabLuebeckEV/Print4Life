@@ -3,6 +3,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { routes } from './config/routes';
 import { ConfigService } from './config/config.service';
+import { UserService } from './services/user.service';
 
 @Component({
     selector: 'app-root',
@@ -15,16 +16,36 @@ export class AppComponent {
     privacyPolicy: String;
     imprint: String;
     config;
-    constructor(private translateService: TranslateService, private http: HttpClient, private configService: ConfigService) {
+    constructor(private translateService: TranslateService, private http: HttpClient, 
+            private configService: ConfigService, private userService:UserService) {
         this.config = this.configService.getConfig();
         const promise = this.http.get(`${routes.backendUrl}/version`).toPromise();
         promise.then((result: any) => {
             this.version = result.version;
         });
+        this.setupLanguage();
         if (!localStorage.getItem(this.config.defaultLangStorageName)) {
-            localStorage.setItem(this.config.defaultLangStorageName, this.config.defaultLang);
+            this.userService.getLanguages().then(data=> {
+                if (data.languages.includes(navigator.language)) {
+                    this.translateService.use(navigator.language.trim());
+                    //localStorage.setItem(this.config.defaultLangStorageName, navigator.language.trim());
+                } else {
+                    this.translateService.use(this.config.defaultLang);
+                    localStorage.setItem(this.config.defaultLangStorageName, this.config.defaultLang);
+                }
+            });
         }
-        this.translateService.setDefaultLang(localStorage.getItem(this.config.defaultLangStorageName));
+        
+    }
+
+    private setupLanguage() {
+        let lang = localStorage.getItem(this.config.defaultLangStorageName);
+        if (!lang || lang === '') {
+            lang = this.config.defaultLang;
+        }
+        this.translateService.setDefaultLang(lang);
+
+        //console.log("setup language, value is ", localStorage.getItem(this.config.defaultLangStorageName))
         this._translate();
         this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
             this.translateService.use(event.lang);

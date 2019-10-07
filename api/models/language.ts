@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 const attributes = {
   language: {
-    enum: ['de', 'dk', 'en'],
+    enum: ['de', 'da', 'en'],
     type: String,
     default: 'en'
   },
