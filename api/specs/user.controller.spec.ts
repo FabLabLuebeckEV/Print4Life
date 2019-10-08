@@ -160,7 +160,7 @@ describe('User Controller', () => {
 
       expect(response.body.languages.includes('de')).toEqual(true);
       expect(response.body.languages.includes('en')).toEqual(true);
-      expect(response.body.languages.includes('dk')).toEqual(true);
+      expect(response.body.languages.includes('da')).toEqual(true);
       done();
     });
   });

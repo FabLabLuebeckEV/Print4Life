@@ -272,7 +272,7 @@ export class UserFormComponent implements OnInit {
     this.validLanguages = (await this.userService.getLanguages()).languages;
     // FIXME: Remove filter if dk is implemented
     this.validLanguages = this.validLanguages.filter((lang) => {
-      return lang !== 'dk';
+      return lang !== 'da';
     });
     this.loadingLanguages = false;
   }
