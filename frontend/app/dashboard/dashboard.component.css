@@ -77,6 +77,11 @@
     margin-bottom: 50px;
 }
 
+.logo-row {
+    margin-left: 50px !important;
+    margin-right: 50px !important;
+}
+
 @media only screen and (max-width: 1200px) {
     #login-container-inner .row:nth-child(1) {
         display:inherit;

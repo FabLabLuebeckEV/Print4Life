@@ -16,8 +16,8 @@ export class AppComponent {
     privacyPolicy: String;
     imprint: String;
     config;
-    constructor(private translateService: TranslateService, private http: HttpClient, 
-            private configService: ConfigService, private userService:UserService) {
+    constructor(private translateService: TranslateService, private http: HttpClient,
+            private configService: ConfigService, private userService: UserService) {
         this.config = this.configService.getConfig();
         const promise = this.http.get(`${routes.backendUrl}/version`).toPromise();
         promise.then((result: any) => {
@@ -25,17 +25,16 @@ export class AppComponent {
         });
         this.setupLanguage();
         if (!localStorage.getItem(this.config.defaultLangStorageName)) {
-            this.userService.getLanguages().then(data=> {
+            this.userService.getLanguages().then(data => {
                 if (data.languages.includes(navigator.language)) {
                     this.translateService.use(navigator.language.trim());
-                    //localStorage.setItem(this.config.defaultLangStorageName, navigator.language.trim());
+                    // localStorage.setItem(this.config.defaultLangStorageName, navigator.language.trim());
                 } else {
                     this.translateService.use(this.config.defaultLang);
                     localStorage.setItem(this.config.defaultLangStorageName, this.config.defaultLang);
                 }
             });
         }
-        
     }
 
     private setupLanguage() {
@@ -45,7 +44,7 @@ export class AppComponent {
         }
         this.translateService.setDefaultLang(lang);
 
-        //console.log("setup language, value is ", localStorage.getItem(this.config.defaultLangStorageName))
+        // console.log("setup language, value is ", localStorage.getItem(this.config.defaultLangStorageName))
         this._translate();
         this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
             this.translateService.use(event.lang);
