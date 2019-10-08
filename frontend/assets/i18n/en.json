@@ -251,7 +251,7 @@
             "maxResolution": "Max Resolution (micron)",
             "typeOfMachine": "Type of Machine",
             "isActivated": "Status",
-            "informationLink": "More Informations (Link)"
+            "informationLink": "More Information (Link)"
         },
         "buttons": {
             "activatedTrue": "active",
