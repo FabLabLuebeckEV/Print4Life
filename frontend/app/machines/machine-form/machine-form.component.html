@@ -129,10 +129,15 @@
                 name="numberOfExtruders" #numberOfExtruders="ngModel">
             </div>
             <div class="col-md-6">
-              <label for="comment">{{translationFields.labels.comment}}</label>
-              <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment"
-                #comment="ngModel">
+              <label for="informationLink">{{translationFields.labels.informationLink}}</label>
+              <input type="url" class="form-control" id="informationLink" [(ngModel)]="model.informationLink"
+                name="informationLink" #informationLink="ngModel">
             </div>
+          </div>
+          <div class="form-group row">
+            <label for="comment">{{translationFields.labels.comment}}</label>
+            <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment"
+              #comment="ngModel">
           </div>
         </div>
 

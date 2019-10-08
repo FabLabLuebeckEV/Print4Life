@@ -230,7 +230,8 @@
             "laserPower": "Leistung des Lasers (Watt)",
             "maxResolution": "Maximale Auflösung (micron)",
             "typeOfMachine": "Typ der Maschine",
-            "isActivated": "Status"
+            "isActivated": "Status",
+            "informationLink": "Mehr Informationen (Link)"
         },
         "buttons": {
             "activatedTrue": "Aktiv",
@@ -311,7 +312,8 @@
             "country": "Land",
             "projectname": "Projektname",
             "shownStartDate": "Startdatum",
-            "shownEndDate": "Enddatum"
+            "shownEndDate": "Enddatum",
+            "informationLink": "Mehr Informationen"
         }
     },
     "userList": {

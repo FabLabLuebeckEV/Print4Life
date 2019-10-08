@@ -7,7 +7,8 @@ export class Machine {
         public deviceName: String,
         public type: String,
         public manufacturer: String,
-        public activated: Boolean
+        public activated: Boolean,
+        public informationLink: String
     ) { }
 }
 
@@ -43,8 +44,9 @@ export class Printer3D extends Machine {
         public printResolutionZ: Number,
         public nozzleDiameter: String,
         public numberOfExtruders: Number,
-        public comment: String
-    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated); }
+        public comment: String,
+        public informationLink: String
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated, informationLink); }
 }
 
 export class MillingMachine extends Machine {
@@ -61,8 +63,9 @@ export class MillingMachine extends Machine {
         public workspaceZ: Number,
         public movementSpeed: Number,
         public stepSize: Number,
-        public comment: String
-    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated); }
+        public comment: String,
+        public informationLink: String
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated, informationLink); }
 }
 
 export class OtherMachine extends Machine {
@@ -74,8 +77,9 @@ export class OtherMachine extends Machine {
         public manufacturer: String,
         public activated: Boolean,
         public typeOfMachine: String,
-        public comment: String
-    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated); }
+        public comment: String,
+        public informationLink: String
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated, informationLink); }
 }
 
 export class Lasercutter extends Machine {
@@ -93,6 +97,7 @@ export class Lasercutter extends Machine {
         public workspaceZ: Number,
         public maxResoultion: Number,
         public laserPower: String,
-        public comment: String
-    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated); }
+        public comment: String,
+        public informationLink: String
+    ) { super(_id, fablabId, undefined, deviceName, type, manufacturer, activated, informationLink); }
 }
