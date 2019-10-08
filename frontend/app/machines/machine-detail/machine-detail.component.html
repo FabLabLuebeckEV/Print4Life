@@ -20,7 +20,6 @@
     <div class="col-md-12">
       <div class="container text-center">
         <ngb-accordion #acc="ngbAccordion" activeIds="machine-data">
-
           <ngb-panel *ngIf="machineProps['title'] && machineProps['props']" id="machine-data" [title]="machineProps['title']">
             <ng-template ngbPanelContent>
               <ul class="list-group col-md-12">
@@ -30,8 +29,11 @@
                       <div class="col-md-6">
                         {{prop.label}}:
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-6" *ngIf="prop.key!='informationLink'">
                         {{machine[prop.key]}}
+                      </div>
+                      <div class="col-md-6" *ngIf="prop.key=='informationLink'">
+                        <a [attr.href]="machine[prop.key]">{{machine[prop.key]}}</a>
                       </div>
                     </div>
                   </li>

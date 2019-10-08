@@ -250,7 +250,8 @@
             "laserPower": "Laserpower (watt)",
             "maxResolution": "Max Resolution (micron)",
             "typeOfMachine": "Type of Machine",
-            "isActivated": "Status"
+            "isActivated": "Status",
+            "informationLink": "More Information (Link)"
         },
         "buttons": {
             "activatedTrue": "active",

@@ -23,6 +23,9 @@ const machineFields = {
     required: true,
     default: true
   },
+  informationLink: {
+    type: String
+  }
 };
 
 function getFields () {

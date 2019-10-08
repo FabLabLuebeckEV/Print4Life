@@ -51,7 +51,8 @@ export class MachineFormComponent implements OnInit {
       laserPower: '',
       maxResolution: '',
       typeOfMachine: '',
-      isActivated: ''
+      isActivated: '',
+      informationLink: ''
     },
     buttons: {
       activatedTrue: '',
@@ -208,20 +209,21 @@ export class MachineFormComponent implements OnInit {
         return new Printer3D(undefined, undefined, undefined,
           this.machineService.camelCaseTypes(type), undefined, undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined);
+          undefined, undefined, undefined);
       case 'Milling Machine':
         return new MillingMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined, undefined);
+          undefined, undefined, undefined, undefined);
       case 'Other Machine':
         return new OtherMachine(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
-          undefined, undefined, undefined, undefined);
+          undefined, undefined, undefined, undefined, undefined);
       case 'Lasercutter':
         return new Lasercutter(undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
           undefined, undefined, undefined, undefined, undefined, undefined,
-          undefined, undefined, undefined, undefined);
+          undefined, undefined, undefined, undefined, undefined);
       default:
-        return new Machine(undefined, undefined, undefined, undefined, this.machineService.camelCaseTypes(type), undefined, undefined);
+        return new Machine(undefined, undefined, undefined, undefined, this.machineService.camelCaseTypes(type),
+          undefined, undefined, undefined);
     }
   }
 
@@ -275,7 +277,8 @@ export class MachineFormComponent implements OnInit {
           laserPower: translations['machineForm'].labels.laserPower,
           maxResolution: translations['machineForm'].labels.maxResolution,
           typeOfMachine: translations['machineForm'].labels.typeOfMachine,
-          isActivated: translations['machineForm'].labels.isActivated
+          isActivated: translations['machineForm'].labels.isActivated,
+          informationLink: translations['machineForm'].labels.informationLink
         },
         messages: {
           deviceName: translations['machineForm'].messages.deviceName,
