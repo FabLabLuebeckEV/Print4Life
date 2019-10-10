@@ -789,6 +789,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.modalService.openMsgModal(this.translationFields.modals.orderSuccessHeader, 'modal-header header-success',
       [this.translationFields.modals.orderSuccess], okButton, undefined).result.then((result) => {
         if (resultOrder.order.shared) {
+          if (this.loggedInUser && this.loggedInUser.role && this.loggedInUser.role.role === 'editor') {
+            this.genericService.back();
+            return;
+          }
           this._openLinkMsg(resultOrder.order);
         } else {
           this.genericService.back();
