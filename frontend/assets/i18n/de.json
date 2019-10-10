@@ -461,7 +461,7 @@
             "machineSchedule": "Maschinenplanung",
             "startDate": "Startdatum",
             "endDate": "Enddatum",
-            "copyright": "Urheberrecht vorhanden?",
+            "copyright": "Sind Sie der Eigentümer der Dateien und haben sie deren Copyright?",
             "fablab": "Fablab"
         },
         "modals": {
