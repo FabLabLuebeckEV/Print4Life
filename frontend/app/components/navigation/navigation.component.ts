@@ -60,7 +60,7 @@ export class NavigationComponent implements OnInit {
   }
 
   private _translate() {
-    this.translateService.get(
+    this.translateService.stream(
       ['navigation', 'languages', 'dropdown.machines', 'dropdown.orders', 'dropdown.users', 'dropdown.iotDevices']
     ).subscribe((translations => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
