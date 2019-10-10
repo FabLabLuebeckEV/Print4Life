@@ -3,10 +3,12 @@ import logger from '../logger';
 import ScheduleService from '../services/schedule.service';
 import MachineService from '../services/machine.service';
 import OrderService from '../services/order.service';
+import UserService from '../services/user.service';
 
 const scheduleService = new ScheduleService();
 const machineService = new MachineService();
 const orderService = new OrderService();
+const userService = new UserService();
 
 /**
  * @api {get} /api/v1/schedules/:id Request a schedule by its id
@@ -14,6 +16,7 @@ const orderService = new OrderService();
  * @apiVersion 1.0.0
  * @apiGroup Schedules
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} id is the id of the schedule (required)
  * @apiSuccess { Object } schedule a single schedule
@@ -64,7 +67,7 @@ const orderService = new OrderService();
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission loggedIn
  */
 async function get (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -93,6 +96,7 @@ async function get (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Schedules
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam (Query String) limit is the limit of objects to get
  * @apiParam (Query String) skip is the number of objects to skip
@@ -263,6 +267,7 @@ async function get (req, res) {
         {...}
     ]
 }
+* @apiPermission loggedIn
 */
 function getAll (req, res) {
   req.query = validatorService.checkQuery(req.query);
@@ -290,6 +295,7 @@ function getAll (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Schedules
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {Date} startDate is the start date of the schedule for the order and machine (required)
  * @apiParam {Date} endDate is the end date of the schedule for the order and machine (required)
@@ -332,8 +338,20 @@ function getAll (req, res) {
   {
       "error": "Malformed schedule, one or more parameters wrong or missing"
   }
+ * @apiPermission editor
  */
 async function create (req, res) {
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'editor' && user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not create schedules!'
+    };
+
+    return res.status(403).send(msg);
+  }
   try {
     if (req.body.startDate && req.body.endDate && req.body.machine) {
       await scheduleService.checkDateTime({ id: req.params.id, ...req.body });
@@ -368,6 +386,7 @@ async function create (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Schedules
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} id is the id of the schedule (required)
  * @apiParam {Date} startDate is the start date of the schedule for the order and machine
@@ -434,9 +453,20 @@ async function create (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission editor
  */
 async function update (req, res) {
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'editor' && user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not update schedules!'
+    };
+
+    return res.status(403).send(msg);
+  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -488,6 +518,7 @@ async function update (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Schedules
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiSuccess { Object } schedule the deleted schedule
  *
@@ -531,9 +562,21 @@ async function update (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission editor
  */
 async function deleteById (req, res) {
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'editor' && user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not delete schedules!'
+    };
+
+    return res.status(403).send(msg);
+  }
+
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);

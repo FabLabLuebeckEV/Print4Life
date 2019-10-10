@@ -17,6 +17,7 @@ import { ValidationService } from 'frontend/app/services/validation.service';
 import { isArray } from 'util';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
+import { NavigationComponent } from 'frontend/app/components/navigation/navigation.component';
 
 @Component({
   selector: 'app-order-list',
@@ -71,7 +72,7 @@ export class OrderListComponent implements OnInit {
     page: 1,
     totalItems: 0,
     perPage: 20,
-    maxSize: 10,
+    maxSize: 3,
     boundaryLinks: true,
     rotate: true,
     maxPages: 0,
@@ -195,6 +196,18 @@ export class OrderListComponent implements OnInit {
       let countObj;
       let totalItems = 0;
       let query = { $and: [] };
+
+      // show all orders if no type is selected in filter
+      // see #173
+      if (this.filter.selectedMachineTypes.length === 0) {
+        this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originalMachineTypes));
+      }
+
+      // show all orders if no status is selected in filter
+      // see #173
+      if (this.filter.selectedStatus.length === 0) {
+        this.filter.selectedStatus = JSON.parse(JSON.stringify(this.filter.originalValidStatus));
+      }
 
       if (this.filter.selectedStatus.length > 0 && this.filter.selectedMachineTypes.length > 0) {
         query = {
@@ -624,7 +637,7 @@ export class OrderListComponent implements OnInit {
         this.filter.shownStatus[idx] = translated;
       });
     }));
-    this.filter.selectedStatus = JSON.parse(JSON.stringify(this.filter.originalValidStatus));
+    this.filter.selectedStatus = JSON.parse(JSON.stringify([]));
     this.loadingStatus = false;
   }
 
@@ -664,7 +677,7 @@ export class OrderListComponent implements OnInit {
         this.filter.shownMachineTypes[idx] = translated;
       });
     }));
-    this.filter.selectedMachineTypes = JSON.parse(JSON.stringify(this.filter.originalMachineTypes));
+    this.filter.selectedMachineTypes = JSON.parse(JSON.stringify([]));
     this.loadingMachineTypes = false;
   }
 

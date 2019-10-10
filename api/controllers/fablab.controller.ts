@@ -1,8 +1,10 @@
 import logger from '../logger';
 import validatorService from '../services/validator.service';
 import FablabService from '../services/fablab.service';
+import UserService from '../services/user.service';
 
 const fablabService = new FablabService();
+const userService = new UserService();
 
 /**
  * @api {get} /api/v1/fablabs/ Get all fablabs
@@ -43,6 +45,7 @@ const fablabService = new FablabService();
         }
     ]
 }
+ * @apiPermission none
  */
 function getAll (req, res) {
   fablabService.getAll().then((fablabs) => {
@@ -117,7 +120,7 @@ function getAll (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission none
  */
 async function get (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -145,6 +148,7 @@ async function get (req, res) {
  * @apiVersion 1.0.0
  * @apiGroup Fablabs
  * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
  *
  * @apiParam {String} is the name of the fablab (required)
  * @apiParam {Object} address is the address object of the fablab (required)
@@ -187,9 +191,21 @@ async function get (req, res) {
     }
 }
  *
- *
+ * @apiPermission admin
  */
-function create (req, res) {
+async function create (req, res) {
+  // check admin permissions, see #178
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not create FabLabs!'
+    };
+    res.status(403).send(msg);
+    return;
+  }
   fablabService.create(req.body).then((fablab) => {
     logger.info(`POST Fablab with result ${JSON.stringify(fablab)}`);
     res.status(201).send({ fablab });
@@ -277,9 +293,21 @@ function create (req, res) {
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
  *
- *
+ * @apiPermission admin
  */
 async function update (req, res) {
+  // check admin permissions, see #178
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not update FabLabs!'
+    };
+
+    return res.status(403).send(msg);
+  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -359,9 +387,20 @@ async function update (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- *
+ * @apiPermission admin
  */
 async function deleteById (req, res) {
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
+  if (user.role.role !== 'admin') {
+    const msg = {
+      err: 'FORBIDDEN',
+      message: 'User can not update FabLabs!'
+    };
+
+    return res.status(403).send(msg);
+  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);

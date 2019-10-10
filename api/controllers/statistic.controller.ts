@@ -13,6 +13,7 @@ const statisticService = new StatisticService();
 * @apiVersion 1.0.0
 * @apiGroup Statistics
 * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+* @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
 *
 * @apiParam {String} startDate is the start date to filter by.
 * Start Date filters starting and including the start date. (one date is mandatory)
@@ -363,9 +364,8 @@ const statisticService = new StatisticService();
           ...
       }
   }
+* @apiPermission loggedIn
 */
-
-
 async function getOrdersByDate (req: Request, res: Response) {
   if (req.body.startDate || req.body.endDate) {
     try {

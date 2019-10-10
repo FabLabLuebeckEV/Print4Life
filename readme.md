@@ -8,9 +8,8 @@
 	```bash
 	docker run --rm -d \
 	--name order-mongo \
-	-e MONGO_INITDB_ROOT_USERNAME=mongoadmin \
-	-e MONGO_INITDB_ROOT_PASSWORD=veryInsecurePW \
 	-v /path/to/git/order-management/dev-mongo:/data/db \
+	-p 27017:27017 \
 	mongo
 	```
 	* Server:
@@ -25,6 +24,16 @@
 * Install PM2 via npm
 * Install a Webserver with SSL Certificate
 * Check Configuration of this project (order-management/api/config/config.ts for backend and order-management/frontend/app/config/routes.ts for frontend)
+
+#### IBM  Watson Setup
+
+* Create an IBM Watson IoT Platform organization
+* Create a role and remember it's name, the role has to be able to create api keys
+* Create a device type named "Sensor"
+* Create an application to get an API Key and it's password
+* Update: ecosystem-*, config.ts, environment* with OrgID (top right corner on every page), API Key and API password
+
+If iot-tests fail, try deleting existing testcase-users as there might be an incorrect entry
 
 ## Use Node-Debugger with VSCode
 

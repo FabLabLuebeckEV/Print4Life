@@ -315,15 +315,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           (this.order.owner.trim().split(' ')[1] ? (this.order.owner.trim().split(' ')[1] + ' ') : '') + '(Gast)',
           guestPassword, guestPassword,
           `${this.order.owner.trim().replace(' ', '')}-${Math.random().toString(36).substr(2, 9)}@gast.nutzer`,
-          new Address(
-            this.order.shippingAddress.street, this.order.shippingAddress.zipCode,
-            this.order.shippingAddress.city, this.order.shippingAddress.country
-          ),
+          undefined,
           new Role('guest'),
           new Language(localStorage.getItem('orderManagementLang')), false, undefined, undefined));
       this.loggedInUser = resUser.user;
       this.order.owner = resUser.user._id;
-      this.order.shippingAddress = resUser.user.address;
+      // this.order.shippingAddress = resUser.user.address;
       this.comment.author = resUser.user._id;
     }
 
@@ -349,6 +346,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     orderCopy.machine.type = this.machineService.camelCaseTypes(orderCopy.machine.type);
     if (orderCopy.machine && orderCopy.machine.type.toLowerCase() === 'unknown') {
       orderCopy.machine._id = 'unknown'; // save unknown machine into order
+    } else if (!orderCopy.machine.type) {
+      orderCopy.machine._id = 'unknown';
+      // orderCopy.machine.type = 'unknown';
     }
     if (this.editView) {
       const promises = [];
@@ -444,6 +444,11 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   async machineTypeChanged(type, fablab) {
     let machineObj;
+    if (this.sharedView && fablab) {
+      const fablabObj = (await this.fablabService.getFablab(fablab)).fablab;
+      this.order.shippingAddress = fablabObj.address;
+      this.selectedAddressKey = 'fablabAdress';
+    }
     if (type) {
       this.loadingMachinesForType = true;
       this.order.machine._id = '';
@@ -481,7 +486,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
   async machineSelected() {
     if (this.order.machine.type && this.order.machine.type.toLowerCase() !== 'unknown'
-      && this.order.machine._id) {
+      && this.order.machine._id !== '' && this.order.machine._id !== 'unknown') {
       this.machines.forEach(element => {
         if (element._id === this.order.machine._id) {
           this.order.machine['deviceName'] = element.deviceName;
@@ -540,6 +545,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       }
     } catch (err) {
       this.shippingAddresses.userAddress = undefined;
+      const index = this.shippingAddressKeys.indexOf('userAddress');
+      if (index > -1) {
+        this.shippingAddressKeys.splice(index, 1);
+      }
     }
 
     if (this.loggedInUser && this.loggedInUser.fablabId) {
@@ -555,7 +564,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         this.shippingAddresses.fablabAddress = undefined;
       }
     } else {
-      this.shippingAddresses.fablabAddress = undefined;
+      if (this.sharedView && !this.editView) {
+        this.selectedAddressKey = 'fablabAddress';
+        this.shippingAddresses.fablabAddress = new Address(
+          '', '', '', '');
+      }
+      // this.shippingAddresses.fablabAddress = undefined;
     }
     this.loadingAddresses = false;
   }
@@ -635,7 +649,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
         this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
         this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
-        if (this.order.machine.type.toLowerCase() !== 'unknown') {
+        if (this.order.machine.type.toLowerCase() !== 'unknown' && this.order.machine._id !== '' && this.order.machine._id !== 'unkown') {
           try {
             const result: any =
               await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
@@ -810,6 +824,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         translations.hasOwnProperty('deviceTypes') && isObject(translations.deviceTypes) &&
         translations.hasOwnProperty('status') && isObject(translations.status) &&
         translations.hasOwnProperty('date') && isObject(translations.date)) {
+
         const shownMachineTypes = [];
         const shownStatus = [];
         const shownShippingAddresses = [];
@@ -914,7 +929,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             zipCode: translations['address'].zipCode,
             city: translations['address'].city,
             country: translations['address'].country,
-            addressTitle: translations['orderForm'].addressTitle,
+            addressTitle: translations['orderForm'].labels.addressTitle,
             fileUpload: translations['orderForm'].labels.fileUpload,
             files: translations['orderForm'].labels.files,
             file: translations['orderForm'].labels.file,

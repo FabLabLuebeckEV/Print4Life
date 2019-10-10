@@ -1,8 +1,9 @@
 import 'jasmine';
 import * as request from 'request';
 import config from '../config/config';
-import { getTestUserToken, newTimeout } from './global.spec';
-
+import {
+  getTestUserToken, getTestUserNormalToken, newTimeout// , testUserNormal, testUserEditor
+} from './global.spec';
 
 const endpoint = config.baseUrlBackend;
 export const testOrder = {
@@ -28,6 +29,7 @@ export const testOrder = {
 describe('Order Controller', () => {
   let originalTimeout;
   const authorizationHeader = getTestUserToken();
+  const authorizationHeaderNormal = getTestUserNormalToken();
   beforeEach(() => {
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
     jasmine.DEFAULT_TIMEOUT_INTERVAL = newTimeout;
@@ -122,6 +124,36 @@ describe('Order Controller', () => {
         expect(response.body.order.owner).toEqual(testBody.owner);
         expect(response.body.order.token).toBeDefined();
         expect(response.body.order.status).toEqual(testBody.status);
+        expect(response.body.order.shippingAddress).toEqual(testBody.shippingAddress);
+        done();
+      });
+    });
+  });
+
+  it('should not get the order shipping address when not logged in', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testOrder));
+    request({
+      uri: `${endpoint}orders/`,
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true,
+      body: testBody
+    }, (error, response) => {
+      request({
+        uri: `${endpoint}orders/${response.body.order._id}`,
+        method: 'GET',
+        headers: { 'content-type': 'application/json' },
+        json: true
+      }, (error, response) => {
+        expect(response.statusCode).toEqual(200);
+        // see #161
+        expect(response.body.order.shippingAddress).toBeUndefined();
+
+        expect(response.body.order).toBeDefined();
+        expect(response.body.order.editor).toEqual(testBody.editor);
+        expect(response.body.order.owner).toEqual(testBody.owner);
+        expect(response.body.order.token).toBeDefined();
+        expect(response.body.order.status).toEqual(testBody.status);
         done();
       });
     });
@@ -157,6 +189,42 @@ describe('Order Controller', () => {
     });
   });
 
+
+  it('should not update the order if the user is not admin or editor', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testOrder));
+
+    request({
+      uri: `${endpoint}orders/`,
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true,
+      body: testBody
+    }, (error, response) => {
+      response.body.order.projectname = 'updated';
+      request({
+        uri: `${endpoint}orders/${response.body.order._id}`,
+        method: 'PUT',
+        headers: { 'content-type': 'application/json', authorization: authorizationHeaderNormal },
+        json: true,
+        body: response.body.order
+      }, (error, response2) => {
+        expect(response2.statusCode).toEqual(403);
+        request({
+          uri: `${endpoint}orders/${response.body.order._id}`,
+          method: 'GET',
+          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+          json: true
+        }, (error, response) => {
+          expect(response.statusCode).toEqual(200);
+          expect(response.body.order).toBeDefined();
+          expect(response.body.order.projectname).toEqual(testBody.projectname);
+
+          done();
+        });
+      });
+    });
+  });
+
   it('delete order', (done) => {
     const testBody = JSON.parse(JSON.stringify(testOrder));
     request({
@@ -180,6 +248,41 @@ describe('Order Controller', () => {
         expect(response.body.order.token).toBeDefined();
         expect(response.body.order.editor).toEqual(testBody.editor);
         done();
+      });
+    });
+  });
+
+  it('should not delete order if the user is no editor or admin', (done) => {
+    const testBody = JSON.parse(JSON.stringify(testOrder));
+    request({
+      uri: `${endpoint}orders/`,
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      json: true,
+      body: testBody
+    }, (error, response) => {
+      request({
+        uri: `${endpoint}orders/${response.body.order._id}`,
+        method: 'DELETE',
+        headers: { 'content-type': 'application/json', authorization: authorizationHeaderNormal },
+        json: true
+      }, (error, response2) => {
+        expect(response2.statusCode).toEqual(403);
+
+        request({
+          uri: `${endpoint}orders/${response.body.order._id}`,
+          method: 'GET',
+          headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+          json: true
+        }, (error, response) => {
+          expect(response.statusCode).toEqual(200);
+          expect(response.body.order).toBeDefined();
+          expect(response.body.order.editor).toEqual(testBody.editor);
+          expect(response.body.order.owner).toEqual(testBody.owner);
+          expect(response.body.order.token).toBeDefined();
+          expect(response.body.order.status).toEqual(testBody.status);
+          done();
+        });
       });
     });
   });

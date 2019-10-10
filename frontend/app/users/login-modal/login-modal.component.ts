@@ -5,6 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { InputModalComponent } from 'frontend/app/components/input-modal/input-modal.component';
 import { MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
 import { ModalButton } from '../../helper/modal.button';
+import { Router } from '@angular/router';
+import { routes } from '../../config/routes';
 
 @Component({
   selector: 'app-login-modal',
@@ -37,7 +39,8 @@ export class LoginModalComponent implements OnInit {
     private userService: UserService,
     private activeModal: NgbActiveModal,
     private translateService: TranslateService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -51,6 +54,7 @@ export class LoginModalComponent implements OnInit {
     try {
       this.response = await this.userService.login(this.loginData);
       this.activeModal.close(this.response);
+      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`]);
     } catch (err) {
       this.activeModal.close(err);
     }

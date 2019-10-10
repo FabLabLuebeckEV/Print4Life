@@ -48,7 +48,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 machine-list-container">
             <app-table (buttonEvent)="eventHandler($event)" [items]="displayedMachines" [headers]="headers"></app-table>
         </div>
     </div>
@@ -56,12 +56,14 @@
         <div class="container">
             <form>
                 <div class="row">
-                    <div class="col-md-2 offset-5 text-center">
+                    <div class="col-1 col-md-5">
+                    </div>
+                    <div class="col-7 col-md-2 text-center">
                         <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
                         <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage"
                             name="jumpToPage" #jumpToPage="ngModel">
                     </div>
-                    <div class="col-md-1 align-self-end">
+                    <div class="col-1 align-self-end">
                         <button [disabled]="!paginationObj.jumpToPage" type="submit" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
                             <fa-icon [icon]="jumpArrow"></fa-icon>
                         </button>

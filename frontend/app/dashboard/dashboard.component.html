@@ -1,84 +1,106 @@
-<div class="container">
-  <!-- <div class="row">
+<!-- <div class="container"> -->
+<!-- <div class="row">
     <div class="col-12">
       <img alt="Background" width="100%" src="assets/img/background.jpg" class="img-responsive">
     </div>
   </div> -->
-  <div class="row background-filler">
-    <div class="container">
-      <div class="row">
-        <div class="col-4">
-          <img alt="Interreg Logo" style="margin: 5%" height="40%"
-            src="assets/img/logos/logo_interreg_neu_juni16.eps (3).svg" class="img-responsive">
-        </div>
+<div class="row background-filler">
+  <div class="container" id="frontpage-container">
+    <div class="row">
+      <div class="col-4">
+        <img alt="Interreg Logo" id="main-logo" style="margin: 5%"
+          src="assets/img/logos/logo_interreg_neu_juni16.eps (3).svg" class="img-responsive">
       </div>
-      <div class="row">
-        <div class="col-4">
-          <!--  -->
-        </div>
-        <div class="col-4" style="background-color:rgba(248, 249, 250, 0.7);padding-top:2%;padding-bottom:2%">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm">
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <!--  -->
+      </div>
+      <div class="col-4" id="login-container" style="">
+        <div class="container" id="login-container-inner">
+          <div class="row">
+            <div class="col-sm mx-auto">
+              <div class="hide-small-center">
                 <h3 class="right">
                   {{ translationFields.order }}<br>
                   {{ translationFields.management }}<br>
                   {{ translationFields.system }}
                 </h3>
               </div>
-              <div class="col-sm">
-                <img alt="Maker Startup Logo" height="75%" src="assets/img/logos/MakerStartupLogo.svg"
-                  class="text-center" style="padding-top: 25%">
+              <div class="hide-large-center">
+                <div class="logo-container">
+                  <img alt="Maker Startup Logo" width="90%" src="assets/img/logos/MakerStartupLogo.svg" class="app-logo text-center"
+                  style="padding-top: 25%">
+                </div>
               </div>
             </div>
-            <div class="row" style="padding-top: 10%">
-              <div class="col-sm" style="text-align: center">
-                <button class="btn btn-primary" [disabled]="userIsLoggedIn"
-                  (click)="_login()">{{ translationFields.buttons.login }}</button>
+            <div class="col-sm mx-auto">
+              <div class="hide-small-center">
+                <div class="logo-container">
+                  <img alt="Maker Startup Logo" width="90%" src="assets/img/logos/MakerStartupLogo.svg" class="app-logo text-center"
+                  style="padding-top: 25%">
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-sm" style="text-align: center">
-                {{translationFields.accountQuestion}} <a href="/users/signup">{{translationFields.accountCreation}}</a>
+              <div class="hide-large-center">
+                  <h3 class="right">
+                    {{ translationFields.order }}<br>
+                    {{ translationFields.management }}<br>
+                    {{ translationFields.system }}
+                  </h3>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-4">
-          <!--  -->
+          <div class="row subtitle-font" style="padding-top: 10%; padding-bottom: 2%">
+            <div class="col-sm" style="text-align: center">
+              <button class="btn btn-primary" [disabled]="userIsLoggedIn"
+                (click)="login()">{{ translationFields.buttons.login }}</button>
+            </div>
+          </div>
+          <div class="row subtitle-font">
+            <div class="col-sm" style="text-align: center">
+              {{translationFields.accountQuestion}} <a href="/users/signup">{{translationFields.accountCreation}}</a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col" style="padding-top:10%">
-          <!--  -->
-        </div>
+      <div class="col-4">
+        <!--  -->
+      </div>
+    </div>
+    <div class="row" id="bottom-filler-row">
+      <div class="col" style="padding-top:15%">
+        <!--  -->
       </div>
     </div>
   </div>
-  <div class="row" style="padding-top:2%">
-    <div class="col-sm">
-      <img alt="EAJS Logo" height="5%" src="assets/img/logos/EASJ_logo_dk_black_300dpi.png" class="img-responsive">
+
+  <div class="row logo-row mb-4 mt-4">
+    <div class="col-sm my-auto mx-auto">
+      <img alt="EAJS Logo" height="100%" style="padding-left: 3%" src="assets/img/logos/EASJ_logo_dk_black_300dpi.png" />
     </div>
-    <div class="col-3">
-      <img alt="Open Campus Logo" height="5%" src="assets/img/logos/open-campus_black.svg" class="img-responsive">
+    <div class="col-sm my-auto mx-auto">
+      <img alt="Open Campus Logo" height="100%" src="assets/img/logos/open-campus_black.svg" />
     </div>
-    <div class="col-sm">
-      <img alt="TzL Lübeck Logo" height="5%"
+    <div class="col-sm my-auto mx-auto">
+      <img alt="TzL Lübeck Logo" height="100%"
         src="assets/img/logos/ALL_TZL_Logo_Schriftzug mit_Standort ohne_Original_Bachorski.svg" class="img-responsive">
     </div>
-    <div class="col-sm">
-      <img alt="FabLab Lübeck Logo" height="5%" src="assets/img/logos/FabLab_Luebeck.svg" class="img-responsive">
+    <div class="col-sm my-auto mx-auto">
+      <img alt="FabLab Lübeck Logo" height="100%" src="assets/img/logos/FabLab_Luebeck.svg" class="img-responsive">
     </div>
-    <div class="col-1">
-      <img alt="EAL Danmark Logo" height="5%" src="assets/img/logos/EAL-logoDK-green-background.svg"
+    <div class="col-sm my-auto mx-auto">
+      <img alt="EAL Danmark Logo" height="100%" src="assets/img/logos/EAL-logoDK-green-background.svg"
         class="img-responsive">
     </div>
-    <div class="col-sm">
-      <img alt="FabLab Danmark Logo" height="5%" src="assets/img/logos/FabLab_DANMARK_logo.svg" class="img-responsive">
+    <div class="col-sm my-auto mx-auto">
+      <img alt="FabLab Danmark Logo" height="100%" src="assets/img/logos/FabLab_DANMARK_logo.svg" class="img-responsive">
     </div>
-    <div class="col-sm">
-      <img alt="Open Campus" height="5%" src="assets/img/logos/Logo_FH_Kiel_2Zeiler_deu_HKS41.svg"
-        class="img-responsive">
+    <div class="col-sm my-auto mx-auto">
+      <img alt="Open Campus" height="100%" style="padding-right: 3%"
+        src="assets/img/logos/Logo_FH_Kiel_2Zeiler_deu_HKS41.svg" class="img-responsive">
     </div>
   </div>
 </div>
+
+
+<!-- </div> -->

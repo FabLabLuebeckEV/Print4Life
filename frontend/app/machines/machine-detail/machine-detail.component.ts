@@ -282,8 +282,6 @@ export class MachineDetailComponent implements OnInit {
         if (this.machineSchedules && this.machineSchedules.length) {
           const props = JSON.parse(JSON.stringify(this.machineSchedules));
           props.forEach((prop) => {
-            delete prop.startDate;
-            delete prop.endDate;
             prop.shownStartDate = this.genericService.translateDate(
               prop.startDate, currentLang, translations['date'].dateTimeFormat);
             prop.shownEndDate = this.genericService.translateDate(

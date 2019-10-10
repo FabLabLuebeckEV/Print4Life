@@ -1,7 +1,9 @@
 <app-navigation></app-navigation>
 <router-outlet></router-outlet>
-<footer *ngIf="softwareName && version" class="footer">
+<footer class="footer">
     <div class="container text-center">
-        <span class="text-muted">{{softwareName}} - Version {{version}}</span>
+        <span *ngIf="softwareName && version" class="text-muted">{{softwareName}} - Version {{version}}</span>
+        <span class="text-muted"> - <a href="https://www.fablab-luebeck.de/de/datenschutz">{{privacyPolicy}}</a></span>
+        <span class="text-muted"> - <a href="https://www.fablab-luebeck.de/de/impressum">{{imprint}}</a></span>
     </div>
 </footer>

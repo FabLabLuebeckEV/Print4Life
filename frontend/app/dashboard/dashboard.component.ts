@@ -4,6 +4,7 @@ import { ModalService } from '../services/modal.service';
 import { LoginModalComponent } from '../users/login-modal/login-modal.component';
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,6 +30,7 @@ export class DashboardComponent implements OnInit {
     private modalService: ModalService,
     private translateService: TranslateService,
     private userService: UserService,
+    private router: Router,
   ) {
     this._translate();
     this.translateService.onLangChange.subscribe(() => {
@@ -37,6 +39,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.userIsLoggedIn = this.userService.isLoggedIn();
   }
 
   // Private Functions
@@ -49,19 +52,19 @@ export class DashboardComponent implements OnInit {
       this.translationFields.system = translations['dashboard'].system;
       this.translationFields.accountQuestion = translations['dashboard'].accountQuestion;
       this.translationFields.accountCreation = translations['dashboard'].accountCreation;
-      this.translationFields.buttons.login = translations['dashboard']['buttons'].login;
+      this.translationFields.buttons.login = translations['dashboard']['buttons'] ? translations['dashboard']['buttons'].login : 'f';
     }));
   }
 
-  private _login() {
+  login() {
     this.modalService.open(LoginModalComponent, { backdrop: 'static' }).result.then(async (login) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.user = await this.userService.getUser();
+      this.router.navigate([this.router.url]);
       this._translate();
     }).catch((err) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.user = undefined;
     });
   }
-
 }

@@ -61,8 +61,8 @@
     },
     "dashboard": {
         "title": "Willkommen zur Fablab - Auftragsverwaltung!",
-        "order": "Auftrags-",
-        "management": "Verwaltungs-",
+        "order": "Order",
+        "management": "Management",
         "system": "System",
         "accountQuestion": "Noch keinen Account?",
         "accountCreation": "Registrieren",
@@ -88,7 +88,9 @@
         "title": "Auftragsverwaltung",
         "login": "Einloggen",
         "logout": "Ausloggen",
-        "register": "Registrieren"
+        "register": "Registrieren",
+        "privacyPolicy": "Datenschutz",
+        "imprint": "Impressum"
     },
     "languages": {
         "title": "Sprachauswahl",
@@ -110,7 +112,7 @@
             "title": "Aufträge",
             "listOrders": "Auftragsliste",
             "createOrder": "Auftrag anlegen",
-            "createShared": "Geteilten Auftrag anlegen",
+            "createShared": "Gast Auftrag anlegen",
             "outstandingOrders": "Herausragende Projekte",
             "unfinishedOrders": "Offene Aufträge",
             "myOrders": "Meine Aufträge"
@@ -131,7 +133,7 @@
     "deviceTypes": {
         "lasercutter": "Lasercutter",
         "otherMachine": "Andere Machine",
-        "millingMachine": "Fräßmaschine",
+        "millingMachine": "Fräsmaschine",
         "3d-printer": "3D Drucker",
         "unknown": "Unbekannt"
     },
@@ -155,7 +157,7 @@
         "admin": "Administrator"
     },
     "iotDeviceList": {
-        "paginationLabel": "",
+        "paginationLabel": "Springe zur Seite",
         "spinnerLoadingText": "Lade IoT Geräte",
         "buttons": {
             "deleteLabel": "Löschen",
@@ -176,7 +178,7 @@
         }
     },
     "machineList": {
-        "paginationLabel": "",
+        "paginationLabel": "Springe zur Seite",
         "filterLabel": {
             "type": "Filter nach Maschinentyp:",
             "search": "Suche nach:",
@@ -214,21 +216,22 @@
             "fablab": "Fablab",
             "manufacturer": "Hersteller",
             "data": "Daten",
-            "camSoftware": "Kamera Software",
-            "nozzleDiameter": "Durchmesser Düse(n)",
+            "camSoftware": "Cam Software",
+            "nozzleDiameter": "Durchmesser Düse(n) (mm)",
             "materials": "Materialien",
             "printVolume": "Druckvolumen",
             "printResolution": "Druckauflösung",
             "numberOfExtruders": "Anzahl von Extrudern",
             "comment": "Kommentar",
-            "movementSpeed": "Bewegungsgeschwindigkeit",
-            "stepSize": "Schrittgröße",
+            "movementSpeed": "Bewegungsgeschwindigkeit (m/s)",
+            "stepSize": "Schrittgröße (micron)",
             "workspace": "Arbeitsfläche",
             "laserTypes": "Lasertypen",
-            "laserPower": "Leistung des Lasers",
-            "maxResolution": "Maximale Auflösung",
+            "laserPower": "Leistung des Lasers (Watt)",
+            "maxResolution": "Maximale Auflösung (micron)",
             "typeOfMachine": "Typ der Maschine",
-            "isActivated": "Status"
+            "isActivated": "Status",
+            "informationLink": "Mehr Informationen (Link)"
         },
         "buttons": {
             "activatedTrue": "Aktiv",
@@ -280,11 +283,11 @@
             "deviceName": "Name der Maschine",
             "type": "Typ",
             "manufacturer": "Hersteller",
-            "workspaceX": "Arbeitsfläche X",
-            "workspaceY": "Arbeitsfläche Y",
-            "workspaceZ": "Arbeitsfläche Z",
-            "maxResolution": "Maximale Auflösung",
-            "laserPower": "Leistung des Lasers",
+            "workspaceX": "Arbeitsfläche X (mm)",
+            "workspaceY": "Arbeitsfläche Y (mm)",
+            "workspaceZ": "Arbeitsfläche Z (mm)",
+            "maxResolution": "Maximale Auflösung (micron)",
+            "laserPower": "Leistung des Lasers (Watt)",
             "comment": "Kommentar",
             "name": "Name",
             "phone": "Telefon",
@@ -292,16 +295,16 @@
             "laserType": "Lasertyp",
             "material": "Material",
             "camSoftware": "Kamera Software",
-            "movementSpeed": "Bewegungsgeschwindigkeit",
+            "movementSpeed": "Bewegungsgeschwindigkeit (m/s)",
             "stepSize": "Schrittgröße",
             "typeOfMachine": "Typ der Machine",
-            "printVolumeX": "Druckvolumen X",
-            "printVolumeY": "Druckvolumen Y",
-            "printVolumeZ": "Druckvolumen Z",
+            "printVolumeX": "Druckvolumen X (mm)",
+            "printVolumeY": "Druckvolumen Y (mm)",
+            "printVolumeZ": "Druckvolumen Z (mm)",
             "printResolutionX": "Druckauflösung X",
             "printResolutionY": "Druckauflösung Y",
             "printResolutionZ": "Druckauflösung Z",
-            "nozzleDiameter": "Durchmesser Düse(n)",
+            "nozzleDiameter": "Durchmesser Düse(n) (mm)",
             "numberOfExtruders": "Anzahl von Extrudern",
             "street": "Straße",
             "zipCode": "Postleitzahl",
@@ -309,7 +312,8 @@
             "country": "Land",
             "projectname": "Projektname",
             "shownStartDate": "Startdatum",
-            "shownEndDate": "Enddatum"
+            "shownEndDate": "Enddatum",
+            "informationLink": "Mehr Informationen"
         }
     },
     "userList": {
@@ -440,7 +444,7 @@
             "author": "Author",
             "content": "Inhalt",
             "createdAt": "Erstellt am",
-            "addressTitle": "Lieferadresse",
+            "addressTitle": "Liefer-/Abholadresse",
             "shippingAddresses": {
                 "userAddress": "Deine Adresse",
                 "fablabAddress": "Dein FabLab",
@@ -452,7 +456,7 @@
             "latestVersion": "Aktuelle Version",
             "datePickerStart": "Starttag der Bearbeitung",
             "datePickerEnd": "Endtag der Bearbeitung",
-            "timePickerStart": "Starzeit am Starttag",
+            "timePickerStart": "Startzeit am Starttag",
             "timePickerEnd": "Endzeit am Endtag",
             "machineSchedule": "Maschinenplanung",
             "startDate": "Startdatum",
@@ -473,7 +477,7 @@
             "errorHeader": "Fehler",
             "updateError": "Ein Fehler ist beim Aktualisieren aufgetreten!",
             "createError": "Ein Fehler ist beim Anlegen aufgetreten!",
-            "orderSharedLinkSuccessHeader": "Öffentlichen Link sichern",
+            "orderSharedLinkSuccessHeader": "Gastauftrags Link sichern",
             "orderSharedLinkSuccess": "Sichern Sie die folgenden Link, um auf den Auftrag zuzugreifen: "
         },
         "messages": {
@@ -540,6 +544,7 @@
             "status": "Status",
             "createdAt": "Erstellt am",
             "machine": "Maschine",
+            "machineNotSet": "Nicht gesetzt",
             "fablab": "Fablab",
             "comments": "Kommentare",
             "author": "Author",
@@ -652,7 +657,7 @@
             "username": "Benutzername",
             "password": "Passwort",
             "login": "Einloggen",
-            "resetPassword": "Passwort zurücksetzen"
+            "resetPassword": "Passwort vergessen?"
         },
         "modals": {
             "title": "Passwort zurücksetzen",

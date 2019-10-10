@@ -73,7 +73,7 @@ export class UserListComponent implements OnInit {
     page: 1,
     totalItems: 0,
     perPage: 20,
-    maxSize: 10,
+    maxSize: 3,
     boundaryLinks: true,
     rotate: true,
     maxPages: 0,
@@ -150,6 +150,11 @@ export class UserListComponent implements OnInit {
     const query = {
       $and: []
     };
+
+    if (this.filter.selectedRoles.length === 0) {
+      this.filter.selectedRoles = JSON.parse(JSON.stringify(this.filter.originalRoles));
+    }
+
     if (this.filter.selectedRoles.length > 0) {
       const $or = [];
       this.filter.selectedRoles.forEach((role) => {
@@ -258,7 +263,7 @@ export class UserListComponent implements OnInit {
       }
     }));
     if (!this.filter.selectedRoles.length) {
-      this.filter.selectedRoles = JSON.parse(JSON.stringify(this.filter.originalRoles));
+      this.filter.selectedRoles = JSON.parse(JSON.stringify([]));
     }
     this.loadingRoles = false;
   }

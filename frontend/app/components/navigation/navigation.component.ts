@@ -22,7 +22,7 @@ export class NavigationComponent implements OnInit {
   login: String = 'Login';
   logout: String = 'Logout';
   register: String = 'Register';
-  isNavbarCollapsed: Boolean = false;
+  isNavbarCollapsed: Boolean = true;
   machineDropdown: Dropdown = { name: '', elements: [] };
   orderDropdown: Dropdown = { name: '', elements: [] };
   iotDevicesDropdown: Dropdown = { name: '', elements: [] };
@@ -142,7 +142,7 @@ export class NavigationComponent implements OnInit {
             name: translations['languages'].danish,
             isFlag: true,
             class: 'flag-icon flag-icon-dk',
-            countryCode: 'dk',
+            countryCode: 'da',
             disabled: true
           },
           {
@@ -179,8 +179,8 @@ export class NavigationComponent implements OnInit {
           this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownEditorElements);
         }
         this.orderDropdown.elements = this.orderDropdown.elements.concat(orderDropdownAuthElements);
-        this.userDropdown.elements = this.userDropdown.elements.concat(userDropdownAuthElements);
         if (this.userIsAdmin) {
+          this.userDropdown.elements = this.userDropdown.elements.concat(userDropdownAuthElements);
           this.machineDropdown.elements = this.machineDropdown.elements.concat({
             name: translations['dropdown.machines'].createMachine,
             routerHref: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.create}`
