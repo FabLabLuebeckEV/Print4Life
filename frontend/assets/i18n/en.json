@@ -427,6 +427,7 @@
         "createTitle": "Create Order",
         "editTitle": "Edit Order",
         "publicHint": "This will be visible for you and the world.",
+        "privateHint": "This will be only visible for you, the editors and the administrators.",
         "labels": {
             "editSubmit": "Edit",
             "createSubmit": "Create",

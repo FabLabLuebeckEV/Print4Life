@@ -428,6 +428,7 @@
         "createTitle": "Auftrag anlegen",
         "editTitle": "Auftrag bearbeiten",
         "publicHint": "Dieses Feld wird für dich und die Welt öffentlich sein.",
+        "privateHint": "Dies wird nur für dich, die Bearbeiter und Administratoren sichtbar sein.",
         "labels": {
             "editSubmit": "Aktualisieren",
             "createSubmit": "Anlegen",
