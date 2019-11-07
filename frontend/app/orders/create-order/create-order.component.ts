@@ -40,6 +40,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   config: any;
   spinnerConfig: SpinnerConfig;
   publicIcon: Icon;
+  privateIcon: Icon;
   calendarIcon: Icon;
   toggleOnIcon: Icon;
   toggleOffIcon: Icon;
@@ -114,6 +115,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     shownShippingAddresses: [],
     shownAddress: '',
     publicHint: '',
+    privateHint: '',
     labels: {
       submit: '',
       sendComment: '',
@@ -201,6 +203,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       '', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
     this.publicIcon = this.config.icons.public;
+    this.privateIcon = this.config.icons.private;
     this.calendarIcon = this.config.icons.calendar;
     this.deleteIcon = this.config.icons.delete;
     this.shippingAddressKeys = ['userAddress', 'fablabAddress', 'newAddress'];
@@ -786,6 +789,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     this.modalService.openMsgModal(this.translationFields.modals.orderSuccessHeader, 'modal-header header-success',
       [this.translationFields.modals.orderSuccess], okButton, undefined).result.then((result) => {
         if (resultOrder.order.shared) {
+          if (this.loggedInUser && this.loggedInUser.role && this.loggedInUser.role.role === 'editor') {
+            this.genericService.back();
+            return;
+          }
           this._openLinkMsg(resultOrder.order);
         } else {
           this.genericService.back();
@@ -800,9 +807,9 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       [`${this.translationFields.modals.orderSharedLinkSuccess}`],
       okButton, undefined, `${routes.frontendUrl}/${routes.paths.frontend.orders.root}/` +
       `${routes.paths.frontend.orders.shared.root}/${routes.paths.frontend.orders.shared.detail}/` +
-      `${order._id}`).result.then(() => {
-        this.genericService.back();
-      });
+    `${order._id}`).result.then(() => {
+      this.genericService.back();
+    });
   }
 
   private _selectAddress(address) {
@@ -910,6 +917,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           shownShippingAddresses: shownShippingAddresses,
           shownAddress: 'TBA',
           publicHint: translations['orderForm'].publicHint,
+          privateHint: translations['orderForm'].privateHint,
           labels: {
             submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.createSubmit,
             sendComment: translations['orderForm'].labels.sendComment,
