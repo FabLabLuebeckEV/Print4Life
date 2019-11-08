@@ -55,7 +55,7 @@ const ibmWatsonService = new IBMWatsonService();
       }
   }
  */
-async function create (req, res) {
+async function create(req, res) {
   let user;
   let reject = false;
   try {
@@ -169,7 +169,7 @@ async function create (req, res) {
   }
  *
  */
-async function update (req, res) {
+async function update(req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -257,7 +257,7 @@ async function update (req, res) {
   }
  *
  */
-async function deleteById (req: Request, res: Response) {
+async function deleteById(req: Request, res: Response) {
   const error: IError = {
     name: 'SERVER_ERROR',
     message: 'Error while trying to delete the user!',
@@ -517,7 +517,7 @@ async function deleteById (req: Request, res: Response) {
       ]
     }
 */
-function search (req, res) {
+function search(req, res) {
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   userService.search(req.body.query, req.body.limit, req.body.skip).then((users) => {
     if (users.length === 0) {
@@ -583,7 +583,7 @@ function search (req, res) {
       }
   }
  */
-function count (req, res) {
+function count(req, res) {
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   userService.count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
@@ -626,7 +626,7 @@ function count (req, res) {
       }
   }
  */
-function getRoles (req, res) {
+function getRoles(req, res) {
   userService.getRoles().then((roles) => {
     if (!roles) {
       res.status(204).send();
@@ -671,7 +671,7 @@ function getRoles (req, res) {
       }
   }
  */
-function getLanguages (req, res) {
+function getLanguages(req, res) {
   userService.getLanguages().then((languages) => {
     if (!languages) {
       res.status(204).send();
@@ -712,7 +712,7 @@ function getLanguages (req, res) {
     }
 }
  */
-async function login (req, res) {
+async function login(req, res) {
   let user;
   try {
     user = await userService.getUserByUsername(req.body.username);
@@ -795,7 +795,7 @@ async function login (req, res) {
   }
  * @apiPermission loggedIn
  */
-function findown (req, res) {
+function findown(req, res) {
   if (req.headers && req.headers.authorization && typeof req.headers.authorization === 'string') {
     const token = req.headers.authorization.split('JWT')[1].trim();
     userService.getUserByToken(token).then((user) => {
@@ -888,7 +888,7 @@ function findown (req, res) {
   }
  * @apiPermission loggedIn
  */
-async function get (req, res) {
+async function get(req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -980,7 +980,7 @@ async function get (req, res) {
   }
  * @apiPermission none
  */
-async function getNames (req, res) {
+async function getNames(req, res) {
   const fablabService = new FablabService();
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
@@ -1065,7 +1065,7 @@ async function getNames (req, res) {
   }
  * @apiPermission none
  */
-async function sendActivationRequest (req, res) {
+async function sendActivationRequest(req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -1074,8 +1074,8 @@ async function sendActivationRequest (req, res) {
   try {
     const user = await userService.get(req.params.id);
     if (user) {
-      userService.informAdmins(user, false);
-      return res.status(200).send({ msg: 'Admins informed' });
+      userService.selfActivateUser(user, false);
+      return res.status(200).send({ msg: 'Confirmation email sent' });
     }
     const msg = { error: 'GET User by id with no result.' };
     logger.error(msg);
@@ -1117,7 +1117,7 @@ async function sendActivationRequest (req, res) {
   }
  * @apiPermission none
  */
-function resetPassword (req, res) {
+function resetPassword(req, res) {
   if (!req.body.email) {
     res.status(400).send({ error: 'Malformed Request! No Email given.' });
   } else {
@@ -1210,7 +1210,7 @@ function resetPassword (req, res) {
   }
  * @apiPermission loggedIn
  */
-async function changePassword (req, res) {
+async function changePassword(req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
