@@ -99,7 +99,7 @@ async function create (req, res) {
 
   if (!reject) {
     userService.create(req.body).then((user) => {
-      userService.informAdmins(user, true);
+      userService.selfActivateUser(user, true);
       res.status(200).send({ user });
     }).catch((err) => {
       const msg = { error: 'Malformed user, one or more parameters wrong or missing', stack: err };

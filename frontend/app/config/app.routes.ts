@@ -110,11 +110,11 @@ export const appRoutes: Routes = [
         component: UserListComponent,
         runGuardsAndResolvers: 'always',
         children: [
+            { path: routes.paths.frontend.users.activate + '/:id', component: UserActivationComponent },
             { path: routes.paths.frontend.users.signup, component: UserFormComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent, },
             { path: routes.paths.frontend.users.profile, component: UserFormComponent },
-            { path: ':id', component: UserDetailComponent },
-            { path: routes.paths.frontend.users.activate + '/:id', component: UserActivationComponent }
+            { path: ':id', component: UserDetailComponent }
         ]
     },
     {
