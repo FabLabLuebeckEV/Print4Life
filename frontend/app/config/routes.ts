@@ -18,7 +18,8 @@ export const routes = {
                 activationRequest: 'activationRequest',
                 resetPassword: 'resetPassword',
                 changePassword: 'changePassword',
-                getNames: 'getNames'
+                getNames: 'getNames',
+                activate: 'activate'
             },
             schedules: {
                 root: 'schedules',
@@ -70,7 +71,8 @@ export const routes = {
                 login: 'login',
                 update: 'edit',
                 list: 'list',
-                profile: 'profile'
+                profile: 'profile',
+                activate: 'activate'
             },
             orders: {
                 root: 'orders',

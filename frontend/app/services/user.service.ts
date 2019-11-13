@@ -171,6 +171,10 @@ export class UserService {
     return this.http.put(`${this.p}/${userId}/${routes.paths.backend.users.activationRequest}`, undefined).toPromise();
   }
 
+  public activateUser(userId) {
+    return this.http.put(`${this.p}/${userId}/${routes.paths.backend.users.activate}`, undefined).toPromise();
+  }
+
   public async resetPassword(email) {
     return this.http.post(`${this.p}/${routes.paths.backend.users.resetPassword}/`, email).toPromise();
   }
