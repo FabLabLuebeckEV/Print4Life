@@ -11,7 +11,7 @@ import { UserService } from 'frontend/app/services/user.service';
 export class UserActivationComponent implements OnInit {
   userId: String;
   activationStatus: boolean;
-  msg: any;
+  status: String = '';
 
   constructor(
     private router: Router,
@@ -34,7 +34,7 @@ export class UserActivationComponent implements OnInit {
   }
 
   async init() {
-    this.msg = await this.userService.activateUser(this.userId);
-    console.log(this.msg);
+    const result = await this.userService.activateUser(this.userId);
+    status = result['msg'];
   }
 }
