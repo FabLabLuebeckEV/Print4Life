@@ -7,11 +7,10 @@
   </div>
 </div>
 <div *ngIf="!editView" class="col-md-6 center-buttons">
-  <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group"
-    aria-label="Machine selection">
-    <button *ngFor="let type of translationFields.shownMachineTypes"
-      (click)="_selectType(type); machineForm.reset()" type="button"
-      [class.active]="type === translationFields.shownType" class="btn btn-outline-primary">{{type}}</button>
+  <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Machine selection">
+    <button *ngFor="let type of translationFields.shownMachineTypes" (click)="_selectType(type); machineForm.reset()"
+      type="button" [class.active]="type === translationFields.shownType"
+      class="btn btn-outline-primary">{{type}}</button>
   </div>
 </div>
 <div class="row spacing">
@@ -74,7 +73,7 @@
             </div>
             <div class="col-md-4">
               <label for="nozzleDiameter">{{translationFields.labels.nozzleDiameter}}</label>
-              <input type="text" class="form-control" id="nozzleDiameter" [(ngModel)]="model.nozzleDiameter"
+              <input type="number" class="form-control" id="nozzleDiameter" [(ngModel)]="model.nozzleDiameter"
                 name="nozzleDiameter" #nozzleDiameter="ngModel">
             </div>
             <div class="col-md-4">
