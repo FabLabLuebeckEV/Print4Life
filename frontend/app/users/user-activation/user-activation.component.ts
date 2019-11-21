@@ -35,6 +35,6 @@ export class UserActivationComponent implements OnInit {
 
   async init() {
     const result = await this.userService.activateUser(this.userId);
-    status = result['msg'];
+    this.status = result['msg'];
   }
 }
