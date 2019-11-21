@@ -150,9 +150,9 @@ deploy_production:
    - echo "$PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS with path /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME"
    - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "rm -rf /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && mkdir /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME"
    - rsync -rav -e ssh --exclude='.git/' --exclude='.gitlab-ci.yml' --exclude='node_modules' --delete-excluded ./ $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS:/home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME
-   - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && cp -r /var/www/html/essen /var/www/essen_bak && cp -r /var/www/html/projects /var/www/projects_bak && rm -rf /var/www/html/* && cp -r dist/. /var/www/html && cp -r /var/www/essen_bak /var/www/html/essen && cp -r /var/www/projects_bak /var/www/html/projects"
+   - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && npm install && rm -rf /var/www/html/* && cp -r dist/. /var/www/html"
    # Delete this line if the database shall not be dropped
-   - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "mongo iot-fablab --eval \"db.dropDatabase()\" && cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME/db-seeds && bash scripts/import.sh $DATABASE_HOST $DATABASE_PORT $DATABASE $DATABASE_DUMP"
+   # WARNING! - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "mongo iot-fablab --eval \"db.dropDatabase()\" && cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME/db-seeds && bash scripts/import.sh $DATABASE_HOST $DATABASE_PORT $DATABASE $DATABASE_DUMP"
    # Comment end
    # Delete old process if running, otherwise true and start process
    - ssh -p22 $PRODUCTION_RUNNER_USERNAME@$PRODUCTION_SERVER_ADDRESS "cd /home/$PRODUCTION_RUNNER_USERNAME/apps/$PROJECT_NAME && pm2 delete $PROJECT_NAME || true"
