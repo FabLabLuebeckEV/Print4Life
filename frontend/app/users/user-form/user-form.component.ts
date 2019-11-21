@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User, Role, Language } from '../../models/user.model';
 import { Address } from '../../models/address.model';
 import { UserService } from '../../services/user.service';
+import { LanguageService } from '../../services/language.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { routes } from '../../config/routes';
@@ -109,7 +110,8 @@ export class UserFormComponent implements OnInit {
     private translateService: TranslateService,
     private genericService: GenericService,
     private route: ActivatedRoute,
-    private fablabService: FablabService
+    private fablabService: FablabService,
+    private languageService: LanguageService
   ) {
     this.router.events.subscribe(async () => {
       const route = this.location.path();
@@ -269,7 +271,7 @@ export class UserFormComponent implements OnInit {
 
   private async _loadLanguages() {
     this.loadingLanguages = true;
-    this.validLanguages = (await this.userService.getLanguages()).languages;
+    this.validLanguages = (await this.languageService.getLanguages()).languages;
     // FIXME: Remove filter if dk is implemented
     this.validLanguages = this.validLanguages.filter((lang) => {
       return lang !== 'da';

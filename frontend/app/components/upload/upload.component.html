@@ -7,17 +7,18 @@
       <h3>{{translationFields.labels.title}}</h3>
 
       <div class="inline-block">
-        <div ngfDrop [(validDrag)]="baseDropValid" (fileOver)="hasBaseDropZoneOver=$event" [(files)]="files" [accept]="accept"
-          [maxSize]="maxSize" [(dragFiles)]="dragFiles" [(lastInvalids)]="lastInvalids" class="my-drop-zone"
-          [class.invalid-drag]="baseDropValid===false" [class.valid-drag]="baseDropValid" (filesChange)="lastFileAt=getDate(); emitFileChange(files);">
+        <div ngfDrop [(validDrag)]="baseDropValid" (fileOver)="hasBaseDropZoneOver=$event" [(files)]="files"
+          [accept]="accept" [maxSize]="maxSize" [(dragFiles)]="dragFiles" [(lastInvalids)]="lastInvalids"
+          class="my-drop-zone" [class.invalid-drag]="baseDropValid===false" [class.valid-drag]="baseDropValid"
+          (filesChange)="lastFileAt=getDate(); emitFileChange(files);">
           <div class="dropzone-label text-center">{{translationFields.labels.dropzone}}</div>
         </div>
       </div>
 
       <div class="inline-block spacing-top">
         {{translationFields.labels.multiple}}
-        <input ngfSelect multiple type="file" [(files)]="files" [accept]="accept" [maxSize]="maxSize" [(lastInvalids)]="lastInvalids"
-          (filesChange)="lastFileAt=getDate(); emitFileChange(files);" />
+        <input ngfSelect multiple type="file" [(files)]="files" [accept]="accept" [maxSize]="maxSize"
+          [(lastInvalids)]="lastInvalids" (filesChange)="lastFileAt=getDate(); emitFileChange(files);" />
       </div>
     </div>
 
@@ -31,6 +32,7 @@
               <th>{{translationFields.labels.type}}</th>
               <th>{{translationFields.labels.size}}</th>
               <th>{{translationFields.labels.actions}}</th>
+              <th>Gallerie</th>
             </tr>
           </thead>
           <tbody>
@@ -49,6 +51,9 @@
               </td>
               <td nowrap>
                 <app-delete-button (click)="files.splice(i,1); emitFileChange(files);"></app-delete-button>
+              </td>
+              <td>
+                <input type="radio" [disabled]="!(item.type==='image/png' || item.type==='image/jpeg' )" />
               </td>
             </tr>
           </tbody>
@@ -71,8 +76,8 @@
           <button type="button" class="btn btn-warning btn-s spacing-top spacing-right" (click)="cancel()" [disabled]="!httpEmitter">
             <fa-icon [icon]="warningIcon"></fa-icon> Cancel all
           </button> -->
-          <button type="button" class="btn btn-danger btn-s spacing-top spacing-right" (click)="files.length=0; emitFileChange(files);"
-            [disabled]="!files.length">
+          <button type="button" class="btn btn-danger btn-s spacing-top spacing-right"
+            (click)="files.length=0; emitFileChange(files);" [disabled]="!files.length">
             <fa-icon [icon]="deleteIcon"></fa-icon> {{translationFields.labels.removeAllButton}}
           </button>
         </div>

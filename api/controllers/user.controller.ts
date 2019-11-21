@@ -99,7 +99,7 @@ async function create (req, res) {
 
   if (!reject) {
     userService.create(req.body).then((user) => {
-      userService.informAdmins(user, true);
+      userService.selfActivateUser(user, true);
       res.status(200).send({ user });
     }).catch((err) => {
       const msg = { error: 'Malformed user, one or more parameters wrong or missing', stack: err };
@@ -1074,14 +1074,86 @@ async function sendActivationRequest (req, res) {
   try {
     const user = await userService.get(req.params.id);
     if (user) {
-      userService.informAdmins(user, false);
-      return res.status(200).send({ msg: 'Admins informed' });
+      userService.selfActivateUser(user, false);
+      return res.status(200).send({ msg: 'Confirmation email sent' });
     }
     const msg = { error: 'GET User by id with no result.' };
     logger.error(msg);
     return res.status(404).send(msg);
   } catch (err) {
     const msg = { error: 'Error while retrieving the user.', stack: err };
+    logger.error(msg);
+    return res.status(500).send(msg);
+  }
+}
+
+/**
+ * @api {put} /api/v1/users/:id/activate activates a user
+ * @apiName activateUser
+ * @apiVersion 1.0.0
+ * @apiGroup Users
+ * @apiHeader (Needed Request Headers) {String} Content-Type application/json
+ *
+ * @apiSuccess { String } msg an response object
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+{
+    "msg": "Account activated"
+}
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+  {
+      "error": "'GET User by id with no result.'",
+  }
+
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Server Error
+  {
+      "error": "Error while retrieving the user.",
+      "stack": {
+          ...
+      }
+  }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiPermission none
+ */
+async function activateUser (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
+  if (checkId) {
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  try {
+    const user = await userService.get(req.params.id);
+    if (user) {
+      user.activated = true;
+      user.save();
+      return res.status(200).send({ msg: 'Account activated' });
+    }
+    const msg = { error: 'GET User by id with no result.' };
+    logger.error(msg);
+    return res.status(404).send(msg);
+  } catch (err) {
+    const msg = { error: 'Error while activating the user.', stack: err };
     logger.error(msg);
     return res.status(500).send(msg);
   }
@@ -1260,5 +1332,6 @@ export default {
   update,
   deleteById,
   resetPassword,
-  changePassword
+  changePassword,
+  activateUser
 };

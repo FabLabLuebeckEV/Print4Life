@@ -175,6 +175,34 @@ export class UserService implements ModelService {
   }
 
   /**
+     * This method sends an email to the emailaddress of the newly generated user
+     * @param user is the new user
+     * @param newUser boolean to indicate if it is a new user or a reactivation
+     */
+  public selfActivateUser (user, newUser: boolean) {
+    if (user.role.role !== 'guest') {
+      let options: EmailOptions;
+      if (!user.activated) {
+        options = {
+          preferredLanguage: user.preferredLanguage.language || 'en',
+          template: 'selfActivateNewUser',
+          to: user.email,
+          locals:
+          {
+            adminName: '',
+            userName: `${user.firstname} ${user.lastname}`,
+            userEmail: user.email,
+            id: user._id,
+            url: `${config.baseUrlFrontend}/users/activate/${user._id}`,
+            newUser
+          }
+        };
+        emailService.sendMail(options);
+      }
+    }
+  }
+
+  /**
      * This method searches for users given a query
      * @param query is the query to search a user by
      * @param limit is the limit of results to get

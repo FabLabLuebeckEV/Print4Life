@@ -428,6 +428,7 @@
         "createTitle": "Auftrag anlegen",
         "editTitle": "Auftrag bearbeiten",
         "publicHint": "Dieses Feld wird für dich und die Welt öffentlich sein.",
+        "privateHint": "Dies wird nur für dich, die Bearbeiter und Administratoren sichtbar sein.",
         "labels": {
             "editSubmit": "Aktualisieren",
             "createSubmit": "Anlegen",
@@ -461,7 +462,7 @@
             "machineSchedule": "Maschinenplanung",
             "startDate": "Startdatum",
             "endDate": "Enddatum",
-            "copyright": "Urheberrecht vorhanden?",
+            "copyright": "Sind Sie der Eigentümer der Dateien und haben sie deren Copyright?",
             "fablab": "Fablab"
         },
         "modals": {

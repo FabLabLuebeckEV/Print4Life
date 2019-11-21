@@ -102,6 +102,10 @@ const publicRoutes = [
     methods: ['GET']
   },
   {
+    url: `${baseUrl}users/:id/activate`,
+    methods: ['PUT']
+  },
+  {
     url: `${baseUrl}machines`,
     canChilds: true,
     methods: ['GET']
