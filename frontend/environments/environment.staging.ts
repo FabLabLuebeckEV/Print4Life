@@ -10,8 +10,8 @@ export const environment = {
     upload: {
         maxSize: 1024 * 1024 * 20 // 20 MiB
     },
-    backendUrl: 'https://iot-fablab.ddns.net:3000/api/v1',
-    frontendUrl: 'https://iot-fablab.ddns.net',
+    backendUrl: 'https://fablab.itm.uni-luebeck.de:3000/api/v1',
+    frontendUrl: 'https://fablab.itm.uni-luebeck.de',
     production: true,
     env: RUN_ENV.STAGING
 };
