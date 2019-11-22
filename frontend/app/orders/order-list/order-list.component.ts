@@ -127,7 +127,7 @@ export class OrderListComponent implements OnInit {
     this.spinnerConfig = new SpinnerConfig(
       'Loading Orders', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
-    this.createLink = `./${routes.paths.frontend.orders.create}`;
+    this.createLink = `/orders/${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
     this.calendarIcon = this.config.icons.calendar;
     this.jumpArrow = this.config.icons.forward;
