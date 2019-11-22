@@ -2,10 +2,27 @@ import * as mongodb from 'mongodb';
 import * as mongoose from 'mongoose';
 import { Readable } from 'stream';
 /* eslint-disable no-unused-vars */
+import * as NodeClam from 'clamscan';
 import { IError, ErrorType } from './router.service';
+import logger from '../logger';
 /* eslint-disable no-unused-vars */
 
 /* eslint-disable class-methods-use-this */
+const ClamScan = new NodeClam().init({
+  debug_mode: true,
+  scan_recursively: false,
+  clamdscan: {
+    // socket: '/var/lib/clamav/clamd.sock',
+    active: true,
+    socket: false,
+    timeout: 10000,
+    host: '127.0.0.1',
+    port: 3310,
+    debug_mode: true,
+    bypass_test: true
+  }
+});
+
 
 export class FileService {
   public deleteFile (fileId: string, bucketName: string, order: any): Promise<{ order: any }> {
@@ -128,44 +145,56 @@ export class FileService {
       const readableTrackStream = new Readable();
       readableTrackStream.push(file.buffer);
       readableTrackStream.push(null);
-      const bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
-        bucketName
+      ClamScan.then(async (clamscan) => {
+        clamscan.scan_stream(readableTrackStream, (err, isInfected) => {
+          if (err) {
+            logger.error('malware scan failed ', err);
+            reject(err);
+          } else if (isInfected.is_infected) {
+            logger.error('virus found in file ', file.originalname);
+            reject(new Error('File unsave'));
+          } else {
+            const bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
+              bucketName
+            });
+            const uploadStream = bucket.openUploadStream(file.originalname);
+            // optional metadata
+            uploadStream.options.metadata = {
+              orderID: foreignId,
+              contentType: file.mimetype,
+              deprecated: false
+            };
+
+            readableTrackStream.pipe(uploadStream);
+
+            uploadStream.on('error',
+              (error) => {
+                const err: IError = {
+                  name: 'UPLOAD_FILE_ERROR',
+                  type: ErrorType.UPLOAD_FILE_ERROR,
+                  message: 'Error uploading file',
+                  stack: error.stack
+                };
+                reject(err);
+              });
+
+            uploadStream.on('finish',
+              () => {
+                const fileId = mongoose.Types.ObjectId(uploadStream.id).toString();
+                const createdAt = new Date(mongoose.Types.ObjectId(uploadStream.id).getTimestamp());
+                resolve(
+                  {
+                    success: true,
+                    fileId,
+                    contentType: uploadStream.options.metadata.contentType,
+                    filename: uploadStream.filename,
+                    createdAt
+                  }
+                );
+              });
+          }
+        });
       });
-      const uploadStream = bucket.openUploadStream(file.originalname);
-      // optional metadata
-      uploadStream.options.metadata = {
-        orderID: foreignId,
-        contentType: file.mimetype,
-        deprecated: false
-      };
-
-      readableTrackStream.pipe(uploadStream);
-
-      uploadStream.on('error',
-        (error) => {
-          const err: IError = {
-            name: 'UPLOAD_FILE_ERROR',
-            type: ErrorType.UPLOAD_FILE_ERROR,
-            message: 'Error uploading file',
-            stack: error.stack
-          };
-          reject(err);
-        });
-
-      uploadStream.on('finish',
-        () => {
-          const fileId = mongoose.Types.ObjectId(uploadStream.id).toString();
-          const createdAt = new Date(mongoose.Types.ObjectId(uploadStream.id).getTimestamp());
-          resolve(
-            {
-              success: true,
-              fileId,
-              contentType: uploadStream.options.metadata.contentType,
-              filename: uploadStream.filename,
-              createdAt
-            }
-          );
-        });
     });
   }
 }

@@ -1363,7 +1363,13 @@ function uploadFile (req, res) {
     } catch (error) {
       return res.status(500).send({ message: 'Error while uploading!', stack: error.stack });
     }
-  }).catch((error) => res.status(500).send({ message: 'Error while uploading!', stack: error.stack }));
+  }).catch((error) => {
+    if (error.message === 'File unsave') {
+      res.status(406).send({ message: 'File not save for uploading' });
+      return;
+    }
+    res.status(500).send({ message: 'Error while uploading!', stack: error.stack });
+  });
 }
 
 export default {
