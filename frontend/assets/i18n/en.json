@@ -477,7 +477,8 @@
             "updateError": "Error while trying to update!",
             "createError": "Error while trying to create!",
             "orderSharedLinkSuccessHeader": "Save guest order link",
-            "orderSharedLinkSuccess": "Please save the following link, to access this order: "
+            "orderSharedLinkSuccess": "Please save the following link, to access this order: ",
+            "fileUploadVirusError": "A file you uploaded was recognized by our antivirus software. Your order has been placed without the requested file"
         },
         "messages": {
             "projectName": "Project name is required",

@@ -159,7 +159,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       errorHeader: '',
       error: '',
       orderSharedLinkSuccessHeader: '',
-      orderSharedLinkSuccess: ''
+      orderSharedLinkSuccess: '',
+      fileUploadVirusError: ''
     },
     messages: {
       projectName: '',
@@ -422,7 +423,21 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             localStorage.removeItem(localStorageOrderKey);
             localStorage.removeItem(localStorageCommentKey);
             this._openSuccessMsg(result);
-          }, this.sharedView);
+          }, this.sharedView, uploadError => {
+            this.spinner.hide();
+            if (uploadError.status === 406) {
+              this.modalService.openMsgModal(
+                this.translationFields.modals.errorHeader, 'modal-header header-danger', 
+                    [this.translationFields.modals.fileUploadVirusError], okButton, undefined).result.then(result => {
+                  this.genericService.back();
+                });    
+                
+            } else {
+              this.modalService.openMsgModal(
+                this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
+            }
+            console.log("upload error: ", uploadError);
+          });
         } else {
           this.modalService.openMsgModal(
             this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
@@ -961,7 +976,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
               ? translations['orderForm'].modals.updateError
               : translations['orderForm'].modals.createError,
             orderSharedLinkSuccessHeader: translations['orderForm'].modals.orderSharedLinkSuccessHeader,
-            orderSharedLinkSuccess: translations['orderForm'].modals.orderSharedLinkSuccess
+            orderSharedLinkSuccess: translations['orderForm'].modals.orderSharedLinkSuccess,
+            fileUploadVirusError: translations['orderForm'].modals.fileUploadVirusError
           },
           messages: {
             projectName: translations['orderForm'].messages.projectName,

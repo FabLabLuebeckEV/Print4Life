@@ -478,7 +478,8 @@
             "updateError": "Ein Fehler ist beim Aktualisieren aufgetreten!",
             "createError": "Ein Fehler ist beim Anlegen aufgetreten!",
             "orderSharedLinkSuccessHeader": "Gastauftrags Link sichern",
-            "orderSharedLinkSuccess": "Sichern Sie die folgenden Link, um auf den Auftrag zuzugreifen: "
+            "orderSharedLinkSuccess": "Sichern Sie die folgenden Link, um auf den Auftrag zuzugreifen: ",
+            "fileUploadVirusError": "Eine hochgeladene Datei wurde von unserem Antiviren-Programm abgelehnt. Der Auftrag wurde ohne die Datei angelegt"
         },
         "messages": {
             "projectName": "Der Projektname wird benötigt",

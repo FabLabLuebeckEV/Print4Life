@@ -63,7 +63,7 @@ export class UploadComponent implements OnInit {
     }
   }
 
-  uploadFilesToOrder(id: string, cb?: Function, shared?: boolean): Subscription {
+  uploadFilesToOrder(id: string, cb?: Function, shared?: boolean, errorCB?:Function): Subscription {
     let url;
     if (shared) {
       url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/`
@@ -89,7 +89,12 @@ export class UploadComponent implements OnInit {
             delete this.httpEmitter;
           }
         },
-        error => console.log('Error Uploading', error),
+        error => {
+          console.log('Error Uploading', error);
+          if (errorCB) {
+            errorCB(error);
+          }
+        },
         () => {
           this.emit(false);
           if (cb) {
