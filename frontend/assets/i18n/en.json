@@ -79,6 +79,7 @@
             "type": "Type",
             "size": "Size",
             "actions": "Actions",
+            "virusCheck": "Uploaded files will be validated with a virus scanner. Please be patient, this may take some time",
             "queueTitle": "Total Qued Files: ",
             "removeAllButton": "Remove all from Queue",
             "spinnerLoadingText": "Uploading files..."

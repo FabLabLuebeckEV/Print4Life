@@ -39,6 +39,7 @@ export class UploadComponent implements OnInit {
       type: '',
       size: '',
       actions: '',
+      virusCheck: '',
       queueTitle: '',
       removeAllButton: ''
     }
@@ -140,6 +141,7 @@ export class UploadComponent implements OnInit {
             type: translations['upload'].labels.type,
             size: translations['upload'].labels.size,
             actions: translations['upload'].labels.actions,
+            virusCheck: translations['upload'].labels.virusCheck,
             queueTitle: translations['upload'].labels.queueTitle,
             removeAllButton: translations['upload'].labels.removeAllButton
           }

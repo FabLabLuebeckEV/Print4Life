@@ -22,7 +22,6 @@
     </div>
 
     <div class="offset-md-1 col-md-8" style="margin-bottom: 40px">
-
       <div style="margin-bottom: 40px">
         <table class="table">
           <thead>
@@ -54,7 +53,7 @@
           </tbody>
         </table>
 
-        <div>
+        <div  class="text-center">
           <h5 *ngIf="files.length">{{translationFields.labels.queueTitle}} {{ files.length }}</h5>
 
           <!-- <ng-container *ngIf="lastFileAt">
@@ -71,6 +70,8 @@
           <button type="button" class="btn btn-warning btn-s spacing-top spacing-right" (click)="cancel()" [disabled]="!httpEmitter">
             <fa-icon [icon]="warningIcon"></fa-icon> Cancel all
           </button> -->
+
+        {{translationFields.labels.virusCheck}}
           <button type="button" class="btn btn-danger btn-s spacing-top spacing-right" (click)="files.length=0; emitFileChange(files);"
             [disabled]="!files.length">
             <fa-icon [icon]="deleteIcon"></fa-icon> {{translationFields.labels.removeAllButton}}

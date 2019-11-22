@@ -79,6 +79,7 @@
             "type": "Typ",
             "size": "Größe",
             "actions": "Aktionen",
+            "virusCheck": "Hochgeladene Dateien werden zuerst durch einen Virenscanner überprüft. Dies kann einige Zeit in Anspruch nehmen",
             "queueTitle": "Gesamtanzahl an Dateien zum Upload: ",
             "removeAllButton": "Alle aus Warteschlange entfernen",
             "spinnerLoadingText": "Dateien werden hochgeladen..."
