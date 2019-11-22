@@ -63,7 +63,7 @@ export class UploadComponent implements OnInit {
     }
   }
 
-  uploadFilesToOrder(id: string, cb?: Function, shared?: boolean, errorCB?:Function): Subscription {
+  uploadFilesToOrder(id: string, cb?: Function, shared?: boolean, errorCB?: Function): Subscription {
     let url;
     if (shared) {
       url = `${routes.backendUrl}/${routes.paths.backend.orders.root}/`

@@ -427,16 +427,14 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             this.spinner.hide();
             if (uploadError.status === 406) {
               this.modalService.openMsgModal(
-                this.translationFields.modals.errorHeader, 'modal-header header-danger', 
+                this.translationFields.modals.errorHeader, 'modal-header header-danger',
                     [this.translationFields.modals.fileUploadVirusError], okButton, undefined).result.then(result => {
                   this.genericService.back();
-                });    
-                
+                });
             } else {
               this.modalService.openMsgModal(
                 this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
             }
-            console.log("upload error: ", uploadError);
           });
         } else {
           this.modalService.openMsgModal(

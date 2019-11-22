@@ -31,7 +31,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     private handleError(err: HttpErrorResponse): Observable<any> {
         let stackMessage = '';
         if (err.status === 406) {
-            //Dont show error messages, as this message is handled separately
+            // Dont show error messages, as this message is handled separately
             throw err;
         }
         if (err.status && err.message) {
