@@ -15,7 +15,7 @@ const ClamScan = new NodeClam().init({
     // socket: '/var/lib/clamav/clamd.sock',
     active: true,
     socket: false,
-    timeout: 10000,
+    timeout: 60000,
     host: '127.0.0.1',
     port: 3310,
     debug_mode: true,
