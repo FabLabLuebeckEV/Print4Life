@@ -5,6 +5,7 @@
 
 <router-outlet></router-outlet>
 <ng-template #tipContent>{{translationFields.publicHint}}</ng-template>
+<ng-template #privateTipContent>{{translationFields.privateHint}}</ng-template>
 <div class="row spacing">
   <div class="col-md-12 text-center">
     <h1>{{translationFields.title}}</h1>
@@ -297,7 +298,10 @@
         <div *ngIf="editView && order.files && order.files.length > 0">
           <div class="row table-spacing">
             <div class="col-md-12 text-center">
-              <h4>{{translationFields.labels.files}}</h4>
+              <h4>
+                {{translationFields.labels.files}}
+                <fa-icon class="spacing" [icon]="privateIcon" [ngbTooltip]="privateTipContent"></fa-icon>
+              </h4>
             </div>
             <div class="col-md-12 table-spacing-top table-spacing-bottom">
               {{translationFields.labels.virusCheck}}

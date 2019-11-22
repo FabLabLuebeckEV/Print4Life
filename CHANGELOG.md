@@ -4,6 +4,17 @@
 
 * multilanguage support for English, German and Danish (/LF0380/)
 
+### Version 0.7
+* users can activate themselfs by a link via email
+* landing page redsigned and added support for mobile devices
+* public orders heavily redisgned
+* initial location will be retrieved from the browsers
+* maschine detail show correct schedules
+* no more orders without empty user addresses
+* user address is only visible for the user itself and the admins
+* fixed a lot of typos and measurment units
+* fixed input types for various input fields
+
 ### Version 0.6.2
 
 * correctly parse env variable NG_PORT as number and therefore correctly check for it being port 80 to set baseURLFrontend with or without port addition

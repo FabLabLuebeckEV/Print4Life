@@ -48,6 +48,7 @@ import { OctoprintModalComponent } from './components/octoprint-modal/octoprint-
 import { AddButtonComponent } from './components/add-button/add-button.component';
 import { EditButtonComponent } from './components/edit-button/edit-button.component';
 import { DeleteButtonComponent } from './components/delete-button/delete-button.component';
+import { UserActivationComponent } from './users/user-activation/user-activation.component';
 
 @NgModule({
     declarations: [
@@ -78,6 +79,7 @@ import { DeleteButtonComponent } from './components/delete-button/delete-button.
         AddButtonComponent,
         EditButtonComponent,
         DeleteButtonComponent,
+        UserActivationComponent,
     ],
     imports: [
         ReactiveFormsModule,

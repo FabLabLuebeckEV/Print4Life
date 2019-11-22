@@ -34,4 +34,6 @@ router.route('/resetPassword/').post(userCtrl.resetPassword);
 
 router.route('/:id/changePassword').put(userCtrl.changePassword);
 
+router.route('/:id/activate').put(userCtrl.activateUser);
+
 export default router;

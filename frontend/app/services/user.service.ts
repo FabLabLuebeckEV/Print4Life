@@ -27,9 +27,7 @@ export class UserService {
     return this.http.get(`${this.p}/${routes.paths.backend.users.getRoles}`).toPromise();
   }
 
-  public getLanguages(): Promise<any> {
-    return this.http.get(`${this.p}/${routes.paths.backend.users.getLanguages}`).toPromise();
-  }
+
 
   public createUser(user): Promise<any> {
     return this.http.post(`${this.p}/`, user).toPromise();
@@ -169,6 +167,10 @@ export class UserService {
 
   public claimActivation(userId) {
     return this.http.put(`${this.p}/${userId}/${routes.paths.backend.users.activationRequest}`, undefined).toPromise();
+  }
+
+  public activateUser(userId) {
+    return this.http.put(`${this.p}/${userId}/${routes.paths.backend.users.activate}`, undefined).toPromise();
   }
 
   public async resetPassword(email) {

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { ConfigService } from 'frontend/app/config/config.service';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from 'frontend/environments/environment.staging';
 
 @Component({
   selector: 'app-upload',
@@ -55,6 +56,7 @@ export class UploadComponent implements OnInit {
     this.warningIcon = this.config.icons.warning;
     this.deleteIcon = this.config.icons.delete;
     this.uploadIcon = this.config.icons.upload;
+    this.maxSize = environment.upload.maxSize;
   }
 
   cancel() {
