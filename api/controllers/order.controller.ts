@@ -843,7 +843,7 @@ async function createComment (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- * @apiPermission none
+ * @apiPermission none (owner for address)
  */
 async function get (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -863,7 +863,7 @@ async function get (req, res) {
       const token = req.headers.authorization.split('JWT')[1].trim();
       const user = await userService.getUserByToken(token);
 
-      authorized = user && (user.role.role === 'admin' || user.role.role === 'editor');
+      authorized = user && (user.role.role === 'admin' || user.role.role === 'editor' || user.id === order.owner);
     }
 
     if (!authorized) {
