@@ -451,13 +451,20 @@ function create (req, res) {
       "level": "error",
       "timestamp": "2019-01-22T09:16:56.793Z"
   }
- * @apiPermission loggedIn
+ * @apiPermission owner
  */
 async function update (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
+  if (checkId) {
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+  const order = await orderService.get(req.params.id);
+
   const token = req.headers.authorization.split('JWT')[1].trim();
   const user = await userService.getUserByToken(token);
 
-  if (user.role.role !== 'editor' && user.role.role !== 'admin') {
+  if (user.role.role !== 'editor' && user.role.role !== 'admin' && user.id !== order.owner) {
     const msg = {
       err: 'FORBIDDEN',
       message: 'User can not update orders!'
@@ -465,11 +472,7 @@ async function update (req, res) {
 
     return res.status(403).send(msg);
   }
-  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
-  if (checkId) {
-    logger.error(checkId.error);
-    return res.status(checkId.status).send(checkId.error);
-  }
+
   try {
     const order = await orderService.update(req.body);
 
