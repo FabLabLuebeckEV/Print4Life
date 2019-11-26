@@ -8,6 +8,7 @@ import { ngfModule } from 'angular-file';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { DeleteButtonComponent } from '../delete-button/delete-button.component';
+import { FormsModule } from '@angular/forms';
 
 describe('UploadComponent', () => {
   let component: UploadComponent;
@@ -16,7 +17,7 @@ describe('UploadComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [UploadComponent, DeleteButtonComponent],
-      imports: [ngfModule, RouterTestingModule,
+      imports: [FormsModule, ngfModule, RouterTestingModule,
         HttpClientTestingModule, FontAwesomeModule, TranslateModule.forRoot()],
       providers: [TranslateService]
     })
