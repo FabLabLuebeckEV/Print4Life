@@ -19,6 +19,13 @@
       </button>
     </div>
   </div>
+  <div class="row" *ngIf="order.galleryFiles && order.galleryFiles.length > 0">
+    <div *ngFor="let file of order.galleryFiles">
+      <div *ngIf="file.contentType==='image/png' || file.contentType==='image/jpeg'">
+        <img [src]="file.link" />
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col-md-11 table-spacing">
       <table class="table table-striped">

@@ -147,12 +147,17 @@ export class OrderDetailComponent implements OnInit {
                 const author = await this.userService.getNamesOfUser(comment.author);
                 comment['link'] = `/${routes.paths.frontend.users.root}/${author._id}`;
               });
+              result.order.galleryFiles = [];
               result.order.files.forEach(async file => {
                 file['link'] = `${routes.backendUrl}/` +
                   `${routes.paths.backend.orders.root}/` +
                   (this.order.shared ? `${routes.paths.backend.orders.shared}/` : ``) +
                   `${this.order._id}/` +
                   `${routes.paths.backend.orders.files}/${file.id}?token=${this.userService.getToken()}`;
+                console.log(file);
+                if (file['gallery'] === true && !file['deprecated']) {
+                  result.order.galleryFiles.push(file);
+                }
               });
               // sort files to show deprecated last
               this.orderService.sortFilesByDeprecated(result.order.files);

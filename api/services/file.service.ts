@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose';
 import { Readable } from 'stream';
 /* eslint-disable no-unused-vars */
 import * as NodeClam from 'clamscan';
+import * as cloneBuffer from 'clone-buffer';
 import { IError, ErrorType } from './router.service';
 import logger from '../logger';
 /* eslint-disable no-unused-vars */
@@ -142,11 +143,11 @@ export class FileService {
 
   public uploadFile (file, bucketName, foreignId) {
     return new Promise((resolve, reject) => {
-      const readableTrackStream = new Readable();
-      readableTrackStream.push(file.buffer);
-      readableTrackStream.push(null);
+      const virusTrackStream = new Readable();
+      virusTrackStream.push(file.buffer);
+      virusTrackStream.push(null);
       ClamScan.then(async (clamscan) => {
-        clamscan.scan_stream(readableTrackStream, (err, isInfected) => {
+        clamscan.scan_stream(virusTrackStream, (err, isInfected) => {
           if (err) {
             logger.error('malware scan failed ', err);
             reject(err);
@@ -157,7 +158,12 @@ export class FileService {
             const bucket = new mongodb.GridFSBucket(mongoose.connection.db, {
               bucketName
             });
+
             const uploadStream = bucket.openUploadStream(file.originalname);
+
+            const readableTrackStream = new Readable();
+            readableTrackStream.push(file.buffer);
+            readableTrackStream.push(null);
             // optional metadata
             uploadStream.options.metadata = {
               orderID: foreignId,
