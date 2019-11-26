@@ -6,7 +6,7 @@ import config from '../config/config';
 /* eslint-disable no-unused-vars */
 import { IError, ErrorType } from '../services/router.service';
 import ScheduleService from '../services/schedule.service';
-import { searchableTextFields } from '../models/order.model';
+import Order, { searchableTextFields } from '../models/order.model';
 import UserService from '../services/user.service';
 /* eslint-enable no-unused-vars */
 
@@ -1220,6 +1220,83 @@ async function deleteFile (req, res) {
   return res.status(500).send(err);
 }
 
+
+/**
+ * @api {post} /api/v1/orders/:id/files/:fileid/gallery Select gallery pictures
+ * @apiName addFileToOrderGallery
+ * @apiVersion 1.0.0
+ * @apiGroup Orders
+ * @apiHeader (Needed Request Headers) {String} Content-Type form-data/multipart
+ * @apiHeader (Needed Request Headers) {String} Authorization valid JWT Token
+ *
+ * @apiParam {Boolean} gallery is the file supposed to be in the gallery
+ *
+ * @apiParamExample {json} Request-Example:
+ {
+    "gallery": true
+ }
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 204 No-Content
+ *
+*
+* @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+  {
+      "error": "Could not find any Order with id 9999",
+      "stack": {
+          ...
+      }
+  }
+* @apiErrorExample {json} Error-Response:
+*     HTTP/1.1 400 Not Found
+  {
+      "error": "Could not find any File with id 9999",
+      "stack": {
+          ...
+      }
+  }
+
+   * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Check if id is a 24 character long hex string!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Malformed Request
+  {
+      "name": "MALFORMED_REQUEST",
+      "message": "Malformed Id! Please provide a valid id!",
+      "type": 14,
+      "level": "error",
+      "timestamp": "2019-01-22T09:16:56.793Z"
+  }
+ * @apiPermission loggedIn
+ */
+async function addGallery (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
+
+  if (checkId) {
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+
+  const order = await orderService.get(req.params.id);
+  const file = order.files.find((f) => f.id === req.params.fileId);
+  if (!file) {
+    return res.status(404).send({ message: 'Requested File could not be found' });
+  }
+  if (file.contentType === 'image/png' || file.contentType === 'image/jpeg') {
+    file.gallery = req.body.gallery;
+    await Order.update(order);
+    return res.status(204).send();
+  }
+  return res.status(400).send({ message: 'File type not suitable for gallery' });
+}
+
 /**
  * @api {post} /api/v1/orders/:id/files Uploads file(s) to an order
  * @apiName uploadFileToOrder
@@ -1386,5 +1463,6 @@ export default {
   uploadFile,
   downloadFile,
   deleteFile,
-  getSchedule
+  getSchedule,
+  addGallery
 };

@@ -31,7 +31,7 @@
               <th>{{translationFields.labels.type}}</th>
               <th>{{translationFields.labels.size}}</th>
               <th>{{translationFields.labels.actions}}</th>
-              <th>Gallerie</th>
+              <th>{{translationFields.labels.gallery}}</th>
             </tr>
           </thead>
           <tbody>
@@ -52,7 +52,7 @@
                 <app-delete-button (click)="files.splice(i,1); emitFileChange(files);"></app-delete-button>
               </td>
               <td>
-                <input type="radio" [disabled]="!(item.type==='image/png' || item.type==='image/jpeg' )" />
+                <input type="checkbox" [(ngModel)]="item.gallery" [disabled]="!(item.type==='image/png' || item.type==='image/jpeg' )" />
               </td>
             </tr>
           </tbody>

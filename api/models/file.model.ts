@@ -21,6 +21,11 @@ const attributes = {
   createdAt: {
     type: Date,
     required: true
+  },
+  gallery: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 };
 

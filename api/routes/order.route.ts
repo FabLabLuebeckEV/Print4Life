@@ -34,9 +34,12 @@ router.route('/:id').get(orderCtrl.get);
 
 router.route('/:id/files').post(upload.array('file'), orderCtrl.uploadFile);
 
+
 router.route('/:id/schedule').get(orderCtrl.getSchedule);
 
 router.route('/:id/files/:fileId').get(orderCtrl.downloadFile);
+
+router.route('/:id/files/:fileId/gallery').post(orderCtrl.addGallery);
 
 router.route('/:id/files/:fileId').delete(orderCtrl.deleteFile);
 

@@ -40,6 +40,7 @@ export class UploadComponent implements OnInit {
       type: '',
       size: '',
       actions: '',
+      gallery: '',
       virusCheck: '',
       queueTitle: '',
       removeAllButton: ''
@@ -76,6 +77,7 @@ export class UploadComponent implements OnInit {
     }
     const formData: FormData = new FormData();
     this.files.forEach(file => {
+      console.log('start uploading file ', file);
       formData.append('file', file, file.name);
     });
     const req = new HttpRequest<FormData>('POST', url, formData, {
@@ -143,6 +145,7 @@ export class UploadComponent implements OnInit {
             type: translations['upload'].labels.type,
             size: translations['upload'].labels.size,
             actions: translations['upload'].labels.actions,
+            gallery: translations['upload'].labels.gallery,
             virusCheck: translations['upload'].labels.virusCheck,
             queueTitle: translations['upload'].labels.queueTitle,
             removeAllButton: translations['upload'].labels.removeAllButton
