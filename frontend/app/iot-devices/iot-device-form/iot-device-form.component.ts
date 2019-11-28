@@ -19,7 +19,7 @@ import { ModalButton } from '../../helper/modal.button';
   styleUrls: ['./iot-device-form.component.css']
 })
 export class IotDeviceFormComponent implements OnInit, OnDestroy {
-  @ViewChild('deviceId') deviceIdRef: FormControl;
+  @ViewChild('deviceId', { static: false }) deviceIdRef: FormControl;
   config: any;
   eventsAsArray: Array<Event> = [];
   iotDevice: IotDevice = new IotDevice('', '', '', new DeviceType('', '', '', ''), '', '', this.eventsAsArray);

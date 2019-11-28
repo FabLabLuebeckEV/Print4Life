@@ -25,7 +25,7 @@ import { NavigationComponent } from 'frontend/app/components/navigation/navigati
   styleUrls: ['./order-list.component.css']
 })
 export class OrderListComponent implements OnInit {
-  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
+  @ViewChild('spinnerContainer', { static: false }) spinnerContainerRef: ElementRef;
   private config: any;
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
@@ -265,7 +265,7 @@ export class OrderListComponent implements OnInit {
           if (result && result.status && this.filter.originalValidStatus.length) {
             query.$and.push({ $nor: [] });
             let statusArr = [];
-            if (isArray(result.status)) {
+            if (Array.isArray(result.status)) {
               statusArr = result.status.filter((status) => {
                 return !this.filter.originalValidStatus.includes(status);
               });
@@ -284,7 +284,7 @@ export class OrderListComponent implements OnInit {
 
       if (!query.$and) {
         query.$and = [];
-      } else if (query.$and && isArray(query.$and)) {
+      } else if (query.$and && Array.isArray(query.$and)) {
         // if search term is defined add to mongo query
         if (this.filter.searchTerm) {
           query.$and.push({ $text: { $search: this.filter.searchTerm } });
@@ -497,7 +497,7 @@ export class OrderListComponent implements OnInit {
   transformStringToDateObj(event: string, isStartDay: boolean) {
     const split = event.split('-');
     if (split.length === 3) {
-      const date = { year: Number.parseInt(split[0], 10), month: Number.parseInt(split[1], 10), day: Number.parseInt(split[2]) };
+      const date = { year: Number.parseInt(split[0], 10), month: Number.parseInt(split[1], 10), day: Number.parseInt(split[2], 10) };
       isStartDay ? this.changeHandlerStartDay(date) : this.changeHandlerEndDay(date);
     }
   }
