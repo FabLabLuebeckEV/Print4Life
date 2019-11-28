@@ -12,7 +12,6 @@ import { environment } from '../../../environments/environment';
 import { GenericService } from 'frontend/app/services/generic.service';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
-import { isObject } from 'util';
 
 @Component({
   selector: 'app-iot-device-detail',
