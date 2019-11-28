@@ -1,7 +1,7 @@
 <router-outlet></router-outlet>
 <div #spinnerContainer>
-  <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size"
-    [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+  <ngx-spinner [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size" [color]="spinnerConfig.color"
+    [type]="spinnerConfig.type">{{spinnerConfig.loadingText}}</ngx-spinner>
 </div>
 <div *ngIf="listView">
   <div class="row">
@@ -12,7 +12,8 @@
       <form>
         <label for="search">{{translationFields.filterLabel.search}}</label>
         <div class="input-group">
-          <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search" #search="ngModel">
+          <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search"
+            #search="ngModel">
           <div class="input-group-append">
             <button class="btn btn-outline-primary" (click)="searchInit()" type="submit">
               <fa-icon [icon]="searchIcon"></fa-icon>
@@ -35,19 +36,21 @@
           </div>
           <div class="col-8 col-md-2 text-center">
             <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
-            <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage" name="jumpToPage"
-              #jumpToPage="ngModel">
+            <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage"
+              name="jumpToPage" #jumpToPage="ngModel">
           </div>
           <div class="col-1 align-self-end">
-            <button [disabled]="!paginationObj.jumpToPage" type="submit" class="btn btn-primary" (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
+            <button [disabled]="!paginationObj.jumpToPage" type="submit" class="btn btn-primary"
+              (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
               <fa-icon [icon]="jumpArrow"></fa-icon>
             </button>
           </div>
         </div>
       </form>
       <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems"
-        [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="pageChanged($event)" [maxSize]="paginationObj.maxSize"
-        [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks" aria-label="Default pagination"></ngb-pagination>
+        [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="pageChanged($event)"
+        [maxSize]="paginationObj.maxSize" [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks"
+        aria-label="Default pagination"></ngb-pagination>
     </div>
   </footer>
 </div>
