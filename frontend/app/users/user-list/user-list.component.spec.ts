@@ -23,7 +23,7 @@ describe('UserListComponent', () => {
         TableComponent
       ],
       imports: [
-        NgbModule.forRoot(),
+        NgbModule,
         HttpClientTestingModule,
         RouterTestingModule,
         FontAwesomeModule,

@@ -14,7 +14,7 @@ describe('ChangePasswdModalComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ChangePasswdModalComponent],
       imports: [
-        NgbModule.forRoot(),
+        NgbModule,
         FormsModule,
         HttpClientTestingModule,
         TranslateModule.forRoot()

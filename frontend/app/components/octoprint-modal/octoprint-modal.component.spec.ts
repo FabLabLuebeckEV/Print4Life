@@ -13,7 +13,7 @@ describe('OctoprintModalComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [OctoprintModalComponent],
-      imports: [NgSelectModule, FormsModule, NgbModule.forRoot(), HttpClientTestingModule],
+      imports: [NgSelectModule, FormsModule, NgbModule, HttpClientTestingModule],
       providers: [NgbActiveModal]
     })
       .compileComponents();

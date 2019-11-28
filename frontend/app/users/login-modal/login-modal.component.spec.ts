@@ -16,7 +16,7 @@ describe('LoginModalComponent', () => {
     TestBed.configureTestingModule({
       declarations: [LoginModalComponent],
       imports: [
-        NgbModule.forRoot(),
+        NgbModule,
         FormsModule,
         HttpClientTestingModule,
         TranslateModule.forRoot(),

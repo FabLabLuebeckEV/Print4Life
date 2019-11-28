@@ -32,7 +32,7 @@ describe('IotDeviceFormComponent', () => {
         ReactiveFormsModule,
         HttpClientTestingModule,
         FormsModule,
-        NgbModule.forRoot(),
+        NgbModule,
         NgSelectModule,
         FontAwesomeModule,
         TranslateModule.forRoot(),

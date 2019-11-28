@@ -20,11 +20,11 @@ describe('MachineDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [MachineDetailComponent, BackButtonComponent, EditButtonComponent, DeleteButtonComponent],
-      imports: [NgbModule.forRoot(),
+      imports: [NgbModule,
         HttpClientTestingModule,
         RouterTestingModule,
         FontAwesomeModule,
-      TranslateModule.forRoot()],
+        TranslateModule.forRoot()],
       providers: [ConfigService, TranslateService]
     })
       .compileComponents();
