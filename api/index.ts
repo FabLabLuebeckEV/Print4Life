@@ -1,5 +1,4 @@
 
-
 import * as mongoose from 'mongoose';
 import * as fs from 'fs';
 import * as http from 'http';
@@ -40,7 +39,7 @@ function run (callback) {
   mongoose.set('useCreateIndex', true);
   mongoose
     .connect(config.connections.mongo.host + config.connections.mongo.database,
-      { autoReconnect: true, useNewUrlParser: true }).then(() => {
+      { autoReconnect: true, useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
     })
     .catch((error) => logger.error(error));
   const db = mongoose.connection;
