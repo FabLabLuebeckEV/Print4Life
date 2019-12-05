@@ -27,12 +27,15 @@
     cursor: pointer;
 }
 
+.picsum-img-wrapper div {
+    height: 100%;
+}
 
 .picsum-img-wrapper img {
     max-height: 400px;
     max-width: 100%;
     width: 100%;
-    height:400px;
+    height: 400px;
     object-fit: contain;
     height: auto;
     vertical-align: middle;

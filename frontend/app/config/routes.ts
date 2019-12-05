@@ -33,6 +33,7 @@ export const routes = {
                 count: 'count',
                 search: 'search',
                 files: 'files',
+                gallery: 'gallery',
                 shared: 'shared'
             },
             iotDevices: {

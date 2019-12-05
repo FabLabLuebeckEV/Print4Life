@@ -92,6 +92,26 @@ export class UploadComponent implements OnInit {
           this.httpEvent = event;
           if (event instanceof HttpResponse) {
             delete this.httpEmitter;
+
+            console.log('success uploading, event is ', event);
+            this.files.forEach(file => {
+              if (file['gallery']) {
+                console.log('adding file ', file, ' to gallery');
+                event.body['uploaded'].files.forEach(searchFile => {
+                  console.log('search file: ', searchFile);
+                  if (searchFile['filename'] === file.name) {
+                    console.log('searchFile found');
+                    const fileid = searchFile['id'];
+                    this.HttpClient.post(`${routes.backendUrl}/${routes.paths.backend.orders.root}/${id}/` +
+                        `${routes.paths.backend.orders.files}/${fileid}/${routes.paths.backend.orders.gallery}`,
+                        {'gallery' : 'true'}).subscribe();
+                  }
+                });
+
+                // this.HttpClient.post(`${routes.backendUrl}/${routes.paths.backend.orders.root}/${id}/`+
+                //    `${routes.paths.backend.orders.files}/${routes.paths.backend.orders.gallery}/${fileid}`, []);
+              }
+            });
           }
         },
         error => {
@@ -102,6 +122,7 @@ export class UploadComponent implements OnInit {
         },
         () => {
           this.emit(false);
+
           if (cb) {
             cb();
           }
