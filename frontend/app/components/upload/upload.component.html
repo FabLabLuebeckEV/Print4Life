@@ -52,7 +52,7 @@
                 <app-delete-button (click)="files.splice(i,1); emitFileChange(files);"></app-delete-button>
               </td>
               <td>
-                <input type="checkbox" [(ngModel)]="item.gallery" [disabled]="!(item.type==='image/png' || item.type==='image/jpeg' )" />
+                <input type="checkbox" [(ngModel)]="item.gallery" [disabled]="!(item.type==='image/png' || item.type==='image/jpeg' || item.type==='application/sla' )" />
               </td>
             </tr>
           </tbody>

@@ -20,12 +20,44 @@
     </div>
   </div>
   <div class="row" *ngIf="order.galleryFiles && order.galleryFiles.length > 0">
-    <div *ngFor="let file of order.galleryFiles">
-      <div *ngIf="file.contentType==='image/png' || file.contentType==='image/jpeg'">
-        <img [src]="file.link" />
-      </div>
+    <div class="carousel-container col-md-11 table-spacing">
+      <ngb-carousel #carousel 
+          [pauseOnHover]="true"
+          interval="10000">
+        <ng-template ngbSlide *ngFor="let file of order.galleryFiles; index as i">
+          <div class="picsum-img-wrapper">
+            <div *ngIf="file.contentType=='image/png' || file.contentType=='image/jpeg'">
+              <div class="vertical-helper">
+              </div>
+              <img [src]="file.link" alt="Gallery Picture {{i + 1}}">
+              <div class="image-blur">
+              </div>
+            </div>
+            <!--
+            stl-model-viewer requires typescript version 3.7 and up
+            this has to wait for the angular upgrade
+            <div *ngIf="file.contentType=='application/sla'">
+              <stl-model-viewer stlModel="file.link"></stl-model-viewer>
+            </div>-->
+          </div>
+        </ng-template>
+      </ngb-carousel>
     </div>
   </div>
+    <!--
+    <mdb-carousel class="carousel slide carousel-fade" [animation]="'fade'">
+      <mdb-carousel-item >
+        <div class="view w-100">
+          <img class="d-block w-100" [src]="file.link" alt="file.link">
+          <div class="mask rgba-black-light waves-light" mdbWavesEffect></div>
+        </div>
+        <div class="carousel-caption">
+          <h3 class="h3-responsive">Light mask</h3>
+          <p>file.filename</p>
+        </div>
+      </mdb-carousel-item>
+    </mdb-carousel>
+    -->
   <div class="row">
     <div class="col-md-11 table-spacing">
       <table class="table table-striped">

@@ -1,3 +1,50 @@
 .spacing-right-xs {
     margin: 5px;
 }
+
+.carousel {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #EEE;
+    padding: 10px;
+}
+
+.image-blur {
+    width:100%;
+    height:100%;
+    margin:0px;
+    padding:0px;
+    position: absolute;
+    top:0px;
+    left:0px;
+    background-color:gray;
+    z-index:100;
+    opacity:0.25;
+}
+
+.carousel-control-next, .carousel-control-prev {
+    cursor: pointer;
+}
+
+
+.picsum-img-wrapper img {
+    max-height: 400px;
+    max-width: 100%;
+    width: 100%;
+    height:400px;
+    object-fit: contain;
+    height: auto;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.vertical-helper {
+    vertical-align: middle;
+    height: 100%;
+    display: inline-block;
+}
+ 
+.picsum-img-wrapper {
+    height: 400px;
+}

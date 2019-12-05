@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ConfigService, SpinnerConfig } from '../../config/config.service';
 import { routes } from '../../config/routes';
 import { ActivatedRoute } from '@angular/router';
@@ -42,6 +42,10 @@ export class OrderDetailComponent implements OnInit {
   owner: User = new User(
     undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   ownerLink: String;
+
+  @ViewChild('GalleryCarousel')
+  galleryCarousel: ElementRef;
+
   order: Order = new Order(
     undefined,
     undefined,
