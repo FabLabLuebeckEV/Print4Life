@@ -429,12 +429,11 @@ export class OrderListComponent implements OnInit {
               item.obj['Gallery Image'] = {image : false};
               if (order.files) {
                 order.files.forEach(file => {
-                  console.log("file: ", file);
                   if (file.gallery) {
                     item.obj['Gallery Image'].image = `${routes.backendUrl}/` +
                       `${routes.paths.backend.orders.root}/${order._id}/` +
                       `${routes.paths.backend.orders.files}/${file.id}?token=${this.userService.getToken()}`;
-                  } 
+                  }
                 });
               }
 
