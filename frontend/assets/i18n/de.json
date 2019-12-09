@@ -557,7 +557,8 @@
             "file": "Datei",
             "addressTitle": "Lieferadresse",
             "latestVersion": "Aktuelle Version",
-            "scheduledFor": "Geplant für"
+            "scheduledFor": "Geplant für",
+            "gallery": "Vorschaubild"
         },
         "modals": {
             "ok": "Ja",

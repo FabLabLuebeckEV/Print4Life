@@ -34,6 +34,8 @@ export class OrderDetailComponent implements OnInit {
   processIcon: Icon;
   toggleOnIcon: Icon;
   toggleOffIcon: Icon;
+  crossIcon: Icon;
+  checkIcon: Icon;
   spinnerConfig: SpinnerConfig;
   editLink: String;
   editor: User = new User(
@@ -86,7 +88,8 @@ export class OrderDetailComponent implements OnInit {
       file: '',
       addressTitle: '',
       latestVersion: '',
-      scheduledFor: ''
+      scheduledFor: '',
+      gallery: ''
     },
     modals: {
       ok: '',
@@ -125,6 +128,8 @@ export class OrderDetailComponent implements OnInit {
     this.toggleOnIcon = this.config.icons.toggleOn;
     this.toggleOffIcon = this.config.icons.toggleOff;
     this.processIcon = this.config.icons.processIcon;
+    this.checkIcon = this.config.icons.checkIcon;
+    this.crossIcon = this.config.icons.crossIcon;
     this.spinnerConfig = new SpinnerConfig(
       'Loading Order', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
@@ -322,7 +327,8 @@ export class OrderDetailComponent implements OnInit {
           file: translations['orderDetail'].labels.file,
           addressTitle: translations['orderDetail'].labels.addressTitle,
           latestVersion: translations['orderDetail'].labels.latestVersion,
-          scheduledFor: translations['orderDetail'].labels.scheduledFor
+          scheduledFor: translations['orderDetail'].labels.scheduledFor,
+          gallery: translations['orderDetail'].labels.gallery
         },
         modals: {
           ok: translations['orderDetail'].modals.ok,

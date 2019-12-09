@@ -556,7 +556,8 @@
             "file": "File",
             "addressTitle": "Shippingaddress",
             "latestVersion": "Latest Version",
-            "scheduledFor": "Scheduled for"
+            "scheduledFor": "Scheduled for",
+            "gallery": "Preview Picture"
         },
         "modals": {
             "ok": "Yes",

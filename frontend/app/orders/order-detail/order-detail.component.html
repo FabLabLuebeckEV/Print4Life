@@ -19,28 +19,28 @@
       </button>
     </div>
   </div>
-  <div class="row" *ngIf="order.galleryFiles && order.galleryFiles.length > 0">
+  <div class="row" *ngIf="order.files && order.files.length > 0">
     <div class="carousel-container col-md-11 table-spacing">
       <ngb-carousel #carousel 
           [pauseOnHover]="true"
           interval="10000">
-        <ng-template ngbSlide *ngFor="let file of order.galleryFiles; index as i">
-          <div class="picsum-img-wrapper">
-            <div *ngIf="file.contentType=='image/png' || file.contentType=='image/jpeg'">
+        <div *ngFor="let file of order.files; index as i">
+          <ng-template ngbSlide *ngIf="(file.contentType=='image/png' || file.contentType=='image/jpeg') && !file.deprecated">
+            <div class="picsum-img-wrapper">
               <div class="vertical-helper">
               </div>
               <img [src]="file.link" alt="Gallery Picture {{i + 1}}">
               <div class="image-blur">
               </div>
+              <!--
+              stl-model-viewer requires typescript version 3.7 and up
+              this has to wait for the angular upgrade
+              <div *ngIf="file.contentType=='application/sla'">
+                <stl-model-viewer stlModel="file.link"></stl-model-viewer>
+              </div>-->
             </div>
-            <!--
-            stl-model-viewer requires typescript version 3.7 and up
-            this has to wait for the angular upgrade
-            <div *ngIf="file.contentType=='application/sla'">
-              <stl-model-viewer stlModel="file.link"></stl-model-viewer>
-            </div>-->
-          </div>
-        </ng-template>
+          </ng-template>
+        </div>
       </ngb-carousel>
     </div>
   </div>
@@ -160,6 +160,7 @@
             <th class="align-middle text-center" scope="col">{{translationFields.labels.latestVersion}}</th>
             <th class="align-middle text-center" scope="col">{{translationFields.labels.file}}</th>
             <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields.labels.gallery}}</th>
           </tr>
         </thead>
         <tbody>
@@ -171,6 +172,9 @@
             <td *ngIf="userCanDownload" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
             <td *ngIf="!userCanDownload" class="align-middle text-center">{{file.filename}}</td>
             <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
+            <td class="align-middle text-center">
+              <fa-icon [icon]="file.gallery ? checkIcon : crossIcon"></fa-icon>
+            </td>
           </tr>
         </tbody>
       </table>
