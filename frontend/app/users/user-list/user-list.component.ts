@@ -20,7 +20,7 @@ import { ModalButton } from '../../helper/modal.button';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
-  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
+  @ViewChild('spinnerContainer', { static: false }) spinnerContainerRef: ElementRef;
   private userIsAdmin: Boolean;
   listView: Boolean = false;
   private loadingRoles: Boolean;

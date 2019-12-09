@@ -1,6 +1,6 @@
 <div #spinnerContainer>
-  <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size"
-    [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+  <ngx-spinner [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size" [color]="spinnerConfig.color"
+    [type]="spinnerConfig.type">{{spinnerConfig.loadingText}}</ngx-spinner>
 </div>
 <div>
   <div class="row spacing text-center">
@@ -9,12 +9,16 @@
     </div>
     <div class="col-md-4 col-xl-3">
       <app-back-button class="spacing-right-xs"></app-back-button>
-      <app-edit-button [editLink]="editLink" *ngIf="order.shared || (userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')))"></app-edit-button>
-      <app-delete-button *ngIf="userIsLoggedIn && loggedInUser && (loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin'))"
+      <app-edit-button [editLink]="editLink"
+        *ngIf="order.shared || (userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')))">
+      </app-edit-button>
+      <app-delete-button
+        *ngIf="userIsLoggedIn && loggedInUser && (loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin'))"
         class="spacing-right-xs" (click)="delete()"></app-delete-button>
-      <button *ngIf="machine && machine.type === '3d-printer' && userIsLoggedIn && loggedInUser && loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')"
-        (click)="startPrintJob()" [disabled]="!printFilesAvailable" [title]="translationFields.tooltips.print" type="button"
-        class="btn btn-primary spacing-right-xs">
+      <button
+        *ngIf="machine && machine.type === '3d-printer' && userIsLoggedIn && loggedInUser && loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')"
+        (click)="startPrintJob()" [disabled]="!printFilesAvailable" [title]="translationFields.tooltips.print"
+        type="button" class="btn btn-primary spacing-right-xs">
         <fa-icon [icon]="processIcon"></fa-icon>
       </button>
     </div>
@@ -169,7 +173,8 @@
               <fa-icon class="text-success" *ngIf="!file.deprecated" [icon]="toggleOnIcon"></fa-icon>
               <fa-icon class="text-danger" *ngIf="file.deprecated" [icon]="toggleOffIcon"></fa-icon>
             </td>
-            <td *ngIf="userCanDownload" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
+            <td *ngIf="userCanDownload" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a>
+            </td>
             <td *ngIf="!userCanDownload" class="align-middle text-center">{{file.filename}}</td>
             <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
             <td class="align-middle text-center">

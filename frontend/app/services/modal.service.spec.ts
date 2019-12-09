@@ -8,7 +8,7 @@ describe('ModalService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [ModalService],
-      imports: [NgbModalModule.forRoot(), RouterTestingModule]
+      imports: [NgbModalModule, RouterTestingModule]
     });
   });
 

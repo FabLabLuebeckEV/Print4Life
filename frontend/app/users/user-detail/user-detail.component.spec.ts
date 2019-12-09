@@ -22,7 +22,7 @@ describe('UserDetailComponent', () => {
         UserDetailComponent, BackButtonComponent, EditButtonComponent
       ],
       imports: [
-        NgbModule.forRoot(),
+        NgbModule,
         HttpClientTestingModule,
         RouterTestingModule,
         FontAwesomeModule,

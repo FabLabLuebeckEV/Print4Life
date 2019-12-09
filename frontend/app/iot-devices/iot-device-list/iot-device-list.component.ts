@@ -21,7 +21,7 @@ import { ModalButton } from '../../helper/modal.button';
   styleUrls: ['./iot-device-list.component.css']
 })
 export class IotDeviceListComponent implements OnInit {
-  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
+  @ViewChild('spinnerContainer', { static: false }) spinnerContainerRef: ElementRef;
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
   listView: Boolean = false;

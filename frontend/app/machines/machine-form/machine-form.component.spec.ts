@@ -21,7 +21,7 @@ describe('MachineFormComponent', () => {
     TestBed.configureTestingModule({
       declarations: [MachineFormComponent, BackButtonComponent],
       imports: [
-        NgbModule.forRoot(),
+        NgbModule,
         RouterTestingModule,
         HttpClientTestingModule,
         FontAwesomeModule,

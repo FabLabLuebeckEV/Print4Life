@@ -11,7 +11,7 @@ import {
 describe('ErrorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [NgbModule.forRoot(), HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
+      imports: [NgbModule, HttpClientTestingModule, RouterTestingModule, TranslateModule.forRoot()],
       providers: [NgbActiveModal, ErrorService, TranslateService]
     });
   });

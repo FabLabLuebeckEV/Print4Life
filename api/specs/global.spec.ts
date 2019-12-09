@@ -76,11 +76,34 @@ export const testUserNormal = {
   activated: true,
   createdAt: undefined
 };
+export const testUserNormal2 = {
+  id: '',
+  firstname: 'Hans',
+  lastname: 'Der Tester',
+  username: 'Hansi3',
+  password: 'VeryInsecurePW3',
+  email: 'hansi3@example.com',
+  address: {
+    street: 'Middlehofer Straße 42',
+    zipCode: '421337',
+    city: 'Geldhausen',
+    country: 'Luxemburg',
+  },
+  role: {
+    role: 'user'
+  },
+  preferredLanguage: {
+    language: undefined
+  },
+  activated: true,
+  createdAt: undefined
+};
 export const newTimeout = 60 * 1000;
 
 let token;
 let tokenEditor;
 let tokenNormal;
+let tokenNormal2;
 
 server.run();
 /* setup testUser */
@@ -202,7 +225,7 @@ function createNormalUser () {
           if (response && response.body && response.body.login && response.body.login.token) {
             tokenNormal = response.body.login.token.split('JWT')[1].trim();
             await newUser.save();
-            startJasmin();
+            createNormalUser2();
           }
         }
       );
@@ -220,6 +243,54 @@ function createNormalUser () {
       };
       testUserNormal.id = user.id;
       tokenNormal = jwt.sign(signObj, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
+      createNormalUser2();
+    }
+  });
+}
+
+function createNormalUser2 () {
+  /* setup testUser */
+  User.findOne({ username: testUserNormal2.username }).then(async (user) => {
+    if (!user) {
+      testUserNormal2.createdAt = new Date();
+      testUserNormal2.id = undefined;
+      let newUser = new User({
+        ...testUserNormal2
+      });
+      const role = new Role();
+      if (testUserNormal2.role) {
+        role.role = 'user';
+      }
+      newUser.role = role;
+      newUser = await newUser.save();
+      testUserNormal2.id = newUser.id;
+      await request.post(
+        `${config.baseUrlBackend}users/login`, {
+          headers: { 'content-type': 'application/json' },
+          json: true,
+          body: { username: testUserNormal2.username, password: testUserNormal2.password }
+        }, async (err, response) => {
+          if (response && response.body && response.body.login && response.body.login.token) {
+            tokenNormal2 = response.body.login.token.split('JWT')[1].trim();
+            await newUser.save();
+            startJasmin();
+          }
+        }
+      );
+    } else {
+      const signObj = {
+        _id: user._id,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        address: user.address ? user.address.toJSON() : undefined,
+        password: user.password,
+        role: user.role.toJSON(),
+        createdAt: user.createdAt
+      };
+      testUserNormal2.id = user.id;
+      tokenNormal2 = jwt.sign(signObj, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
       startJasmin();
     }
   });
@@ -237,3 +308,4 @@ function startJasmin () {
 export const getTestUserToken = () => `JWT ${token}`;
 export const getTestEditorToken = () => `JWT ${tokenEditor}`;
 export const getTestUserNormalToken = () => `JWT ${tokenNormal}`;
+export const getTestUserNormalToken2 = () => `JWT ${tokenNormal2}`;

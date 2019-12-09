@@ -46,7 +46,7 @@ describe('MachineListComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         FontAwesomeModule,
-        NgbModule.forRoot(),
+        NgbModule,
         TranslateModule.forRoot()],
       providers: [NgxSpinnerService, ConfigService, MachineService, FablabService, TranslateService]
     })

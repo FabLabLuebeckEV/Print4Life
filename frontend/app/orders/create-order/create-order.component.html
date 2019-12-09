@@ -1,6 +1,6 @@
 <div #spinnerContainer>
-  <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size"
-    [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+  <ngx-spinner [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size" [color]="spinnerConfig.color"
+    [type]="spinnerConfig.type">{{spinnerConfig.loadingText}}</ngx-spinner>
 </div>
 
 <router-outlet></router-outlet>

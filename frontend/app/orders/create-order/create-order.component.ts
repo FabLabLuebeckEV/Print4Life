@@ -33,10 +33,10 @@ const localStorageCommentKey = 'orderManagementOrderFormComment';
   styleUrls: ['./create-order.component.css']
 })
 export class CreateOrderComponent implements OnInit, OnDestroy {
-  @ViewChild('createOrderForm') createOrderForm;
-  @ViewChild('commentContent') commentContentField;
-  @ViewChild('fileUpload') fileUpload: UploadComponent;
-  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
+  @ViewChild('createOrderForm', { static: false }) createOrderForm;
+  @ViewChild('commentContent', { static: false }) commentContentField;
+  @ViewChild('fileUpload', { static: false }) fileUpload: UploadComponent;
+  @ViewChild('spinnerContainer', { static: false }) spinnerContainerRef: ElementRef;
   config: any;
   spinnerConfig: SpinnerConfig;
   publicIcon: Icon;
@@ -366,7 +366,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       }
       this.orderService.updateOrder(orderCopy, this.sharedView).then((result) => {
         if (result) {
-          if (this.machines && isArray(this.machines)) {
+          if (this.machines && Array.isArray(this.machines)) {
             const machine = this.machines.find((machine) => {
               return this.order.machine._id === machine._id;
             });
@@ -840,10 +840,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       this.spinnerConfig = new SpinnerConfig(
         translations['upload'].spinnerLoadingText, this.config.spinnerConfig.bdColor,
         this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
-      if (translations.hasOwnProperty('orderForm') && isObject(translations.orderForm) &&
-        translations.hasOwnProperty('deviceTypes') && isObject(translations.deviceTypes) &&
-        translations.hasOwnProperty('status') && isObject(translations.status) &&
-        translations.hasOwnProperty('date') && isObject(translations.date)) {
+      if (translations.hasOwnProperty('orderForm') && translations.orderForm !== null && typeof translations.orderForm === 'object' &&
+        translations.hasOwnProperty('deviceTypes') && translations.deviceTypes !== null && typeof translations.deviceTypes === 'object' &&
+        translations.hasOwnProperty('status') && translations.status !== null && typeof translations.status === 'object' &&
+        translations.hasOwnProperty('date') && translations.date !== null && typeof translations.date === 'object') {
 
         const shownMachineTypes = [];
         const shownStatus = [];
