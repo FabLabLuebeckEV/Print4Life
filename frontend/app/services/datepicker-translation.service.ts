@@ -3,7 +3,7 @@ import { NgbDateStruct, NgbDatepickerI18n } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
-export class DatePickerTranslationService implements NgbDatepickerI18n {
+export class DatePickerTranslationService extends NgbDatepickerI18n {
     weekdays = {
         short: []
     };
@@ -12,6 +12,7 @@ export class DatePickerTranslationService implements NgbDatepickerI18n {
         long: []
     };
     constructor(private translateService: TranslateService) {
+        super();
         this.translateService.onLangChange.subscribe(() => {
             this._translate();
         });

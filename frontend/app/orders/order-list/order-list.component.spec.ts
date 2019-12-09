@@ -33,7 +33,7 @@ describe('OrderListComponent', () => {
         AddButtonComponent
       ],
       imports: [
-        NgbModule.forRoot(),
+        NgbModule,
         HttpClientTestingModule,
         RouterTestingModule,
         FontAwesomeModule,

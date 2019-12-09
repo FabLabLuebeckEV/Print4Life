@@ -31,7 +31,7 @@ describe('IotDeviceListComponent', () => {
       imports: [
         NgxSpinnerModule,
         RouterTestingModule,
-        NgbModule.forRoot(),
+        NgbModule,
         HttpClientTestingModule,
         FontAwesomeModule,
         FormsModule,

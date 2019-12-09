@@ -24,7 +24,7 @@ describe('UserFormComponent', () => {
       ],
       providers: [TranslateService],
       imports: [
-        NgbModule.forRoot(),
+        NgbModule,
         RouterTestingModule,
         FontAwesomeModule,
         FormsModule,

@@ -90,7 +90,7 @@ import { UserActivationComponent } from './users/user-activation/user-activation
         FontAwesomeModule,
         HttpClientModule,
         ngfModule,
-        NgbModule.forRoot(),
+        NgbModule,
         RouterModule.forRoot(appRoutes, {
             scrollPositionRestoration: 'enabled',
             anchorScrolling: 'enabled',

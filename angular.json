@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ng6": {
+    "ng8": {
       "root": "",
       "sourceRoot": "frontend",
       "projectType": "application",
@@ -71,21 +71,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ng6:build"
+            "browserTarget": "ng8:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ng6:build:production"
+              "browserTarget": "ng8:build:production"
             },
             "staging": {
-              "browserTarget": "ng6:build:staging"
+              "browserTarget": "ng8:build:staging"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ng6:build"
+            "browserTarget": "ng8:build"
           }
         },
         "test": {
@@ -121,7 +121,7 @@
         }
       }
     },
-    "ng6-e2e": {
+    "ng8-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -129,14 +129,14 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "frontend/e2e/protractor.conf.js",
-            "devServerTarget": "ng6:serve"
+            "devServerTarget": "ng8:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ng6:serve:production"
+              "devServerTarget": "ng8:serve:production"
             },
             "staging": {
-              "devServerTarget": "ng6:serve:staging"
+              "devServerTarget": "ng8:serve:staging"
             }
           }
         },
@@ -152,5 +152,5 @@
       }
     }
   },
-  "defaultProject": "ng6"
+  "defaultProject": "ng8"
 }

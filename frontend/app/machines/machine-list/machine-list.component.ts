@@ -21,7 +21,7 @@ import { ModalButton } from '../../helper/modal.button';
   styleUrls: ['./machine-list.component.css']
 })
 export class MachineListComponent implements OnInit {
-  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
+  @ViewChild('spinnerContainer', { static: false }) spinnerContainerRef: ElementRef;
   private config: any;
   filter: any = {
     originMachineTypes: [], // origin for backend containing all machine types

@@ -32,7 +32,7 @@ describe('CreateOrderComponent', () => {
         FormsModule,
         HttpClientTestingModule,
         NgSelectModule,
-        NgbModule.forRoot(),
+        NgbModule,
         FontAwesomeModule,
         TranslateModule.forRoot(),
         NgxSpinnerModule
