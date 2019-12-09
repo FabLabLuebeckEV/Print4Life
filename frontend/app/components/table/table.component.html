@@ -13,6 +13,10 @@
         <span *ngIf="!item.obj[header].href && !item.obj[header].badge">{{item.obj[header].label}}</span>
         <span *ngIf="item.obj[header].badge && !item.obj[header].href" [class]="item.obj[header].class">{{item.obj[header].label}}</span>
         <span *ngIf="item.obj[header].icon">&nbsp;</span>
+        <div class="preview-image-container" *ngIf="item.obj[header].image || item.obj[header].image === false">
+          <img class="preview-image" [src]="item.obj[header].image" *ngIf="item.obj[header].image"/>
+          <div class="vertical-helper"></div>
+        </div>
         <fa-icon *ngIf="item.obj[header].icon" [icon]="item.obj[header].icon"></fa-icon>
       </td>
       <td>

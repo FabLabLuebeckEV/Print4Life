@@ -1,0 +1,22 @@
+.preview-image-container {
+    width: 200px;
+    height: 100px;
+}
+.preview-image {
+    object-fit: contain;
+    max-width: 200px;
+    max-height: 100px;
+
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: table-caption;
+}
+
+.vertical-helper {
+    vertical-align: middle;
+    height: 100%;
+    display: inline-block;
+}

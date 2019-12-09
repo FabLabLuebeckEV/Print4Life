@@ -634,6 +634,7 @@
     },
     "tableComponent": {
         "id": "ID",
+        "Gallery Image": "Vorschaubild",
         "Device ID": "Gerät ID",
         "Type": "Typ",
         "Device Type": "Maschinen Typ",

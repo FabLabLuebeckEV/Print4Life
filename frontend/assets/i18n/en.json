@@ -633,6 +633,7 @@
     },
     "tableComponent": {
         "id": "ID",
+        "Gallery Image": "Preview Image",
         "Device ID": "Device ID",
         "Type": "Type",
         "Device Type": "Device Type",

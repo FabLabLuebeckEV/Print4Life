@@ -426,6 +426,18 @@ export class OrderListComponent implements OnInit {
                 item.button2.refId = order._id;
                 item.button2.tooltip = this.translationFields.buttons.deleteLabel;
               }
+              item.obj['Gallery Image'] = {image : false};
+              if (order.files) {
+                order.files.forEach(file => {
+                  console.log("file: ", file);
+                  if (file.gallery) {
+                    item.obj['Gallery Image'].image = `${routes.backendUrl}/` +
+                      `${routes.paths.backend.orders.root}/${order._id}/` +
+                      `${routes.paths.backend.orders.files}/${file.id}?token=${this.userService.getToken()}`;
+                  } 
+                });
+              }
+
               resolve(item);
             }));
           }
@@ -435,6 +447,7 @@ export class OrderListComponent implements OnInit {
           results = await Promise.all(promises);
           results.forEach((item) => {
             this.orders.push(item);
+            console.log(item);
           });
 
           this.visibleOrders = undefined;
@@ -586,9 +599,9 @@ export class OrderListComponent implements OnInit {
   private _initHeaders(): Array<String> {
     const headers = {
       user: [
-        'id', 'Created at', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type'
+        'id', 'Gallery Image', 'Created at', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type'
       ],
-      editor: ['id', 'Created at', 'Schedule Start Date',
+      editor: ['id', 'Gallery Image', 'Created at', 'Schedule Start Date',
         'Schedule End Date', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type']
     };
     if (this.userIsLoggedIn && (this.loggedInUser && this.loggedInUser.role && this.loggedInUser.role.role === 'editor' || this.userIsAdmin)
