@@ -597,7 +597,10 @@ export class OrderListComponent implements OnInit {
 
   private _initHeaders(): Array<String> {
     const headers = {
-      user: [
+      userNoImage: [
+        'id', 'Created at', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type'
+      ],
+      userImage: [
         'id', 'Gallery Image', 'Created at', 'Fablab', 'Projectname', 'Owner', 'Editor', 'Status', 'Device Type'
       ],
       editor: ['id', 'Gallery Image', 'Created at', 'Schedule Start Date',
@@ -606,8 +609,10 @@ export class OrderListComponent implements OnInit {
     if (this.userIsLoggedIn && (this.loggedInUser && this.loggedInUser.role && this.loggedInUser.role.role === 'editor' || this.userIsAdmin)
       || this.unfinishedOrders) {
       return headers.editor;
+    } else if (this.userIsLoggedIn) {
+      return headers.userImage;
     } else {
-      return headers.user;
+      return headers.userNoImage;
     }
 
   }
