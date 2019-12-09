@@ -1289,14 +1289,17 @@ async function addGallery (req, res) {
   if (!file) {
     return res.status(404).send({ message: 'Requested File could not be found' });
   }
-  if (req.body.gallery) {
-    order.files.forEach((file) => {
-      file.gallery = false;
-    });
-  }
+
   if (file.contentType === 'image/png' || file.contentType === 'image/jpeg') {
+    if (req.body.gallery) {
+      order.files.forEach((file) => {
+        file.gallery = false;
+      });
+    }
     file.gallery = req.body.gallery;
+
     await Order.update(order);
+
     return res.status(204).send();
   }
   return res.status(400).send({ message: 'File type not suitable for gallery' });
