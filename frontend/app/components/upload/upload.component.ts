@@ -147,6 +147,11 @@ export class UploadComponent implements OnInit {
   }
 
   public emitFileChange(files) {
+    files.forEach(file => {
+      if (typeof file.gallery === 'undefined') {
+        file.gallery = false;
+      }
+    });
     if (files && files.length) {
       this.fileChangeEvent.emit(files.length);
     } else {
@@ -176,4 +181,11 @@ export class UploadComponent implements OnInit {
     }));
   }
 
+  private selectGalleryFile(file) {
+    this.files.forEach(f => {
+      f['gallery'] = false;
+    });
+    file['gallery'] = true;
+  }
 }
+

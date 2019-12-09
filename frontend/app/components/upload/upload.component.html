@@ -24,40 +24,46 @@
 
     <div class="offset-md-1 col-md-8" style="margin-bottom: 40px">
       <div style="margin-bottom: 40px">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>{{translationFields.labels.name}}</th>
-              <th>{{translationFields.labels.type}}</th>
-              <th>{{translationFields.labels.size}}</th>
-              <th>{{translationFields.labels.actions}}</th>
-              <th>{{translationFields.labels.gallery}}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of files;let i=index">
-              <td>
-                <!-- <div *ngIf="['image/gif','image/png','image/jpeg'].indexOf(item.type)>=0">
-                  <div class="previewIcon" [ngfBackground]="item"></div>
-                </div> -->
-                <strong>{{ item.name }}</strong>
-              </td>
-              <td nowrap>
-                {{ item.type }}
-              </td>
-              <td nowrap>
-                {{ item.size/1024/1024 | number:'.2' }} MB
-              </td>
-              <td nowrap>
-                <app-delete-button (click)="files.splice(i,1); emitFileChange(files);"></app-delete-button>
-              </td>
-              <td>
-                <input type="checkbox" [(ngModel)]="item.gallery" [disabled]="!(item.type==='image/png' || item.type==='image/jpeg' || item.type==='application/sla' )" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
+        <form>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>{{translationFields.labels.name}}</th>
+                <th>{{translationFields.labels.type}}</th>
+                <th>{{translationFields.labels.size}}</th>
+                <th>{{translationFields.labels.actions}}</th>
+                <th>{{translationFields.labels.gallery}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of files;let i=index">
+                <td>
+                  <!-- <div *ngIf="['image/gif','image/png','image/jpeg'].indexOf(item.type)>=0">
+                    <div class="previewIcon" [ngfBackground]="item"></div>
+                  </div> -->
+                  <strong>{{ item.name }}</strong>
+                </td>
+                <td nowrap>
+                  {{ item.type }}
+                </td>
+                <td nowrap>
+                  {{ item.size/1024/1024 | number:'.2' }} MB
+                </td>
+                <td nowrap>
+                  <app-delete-button (click)="files.splice(i,1); emitFileChange(files);"></app-delete-button>
+                </td>
+                <td>
+                  <input
+                    type="radio"
+                    name="test"
+                    [value]="item.name" 
+                    (change)="selectGalleryFile(item)"
+                    [disabled]="!(item.type==='image/png' || item.type==='image/jpeg' || item.type==='application/sla' )" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
         <div  class="text-center">
           <h5 *ngIf="files.length">{{translationFields.labels.queueTitle}} {{ files.length }}</h5>
 
@@ -75,7 +81,7 @@
           <button type="button" class="btn btn-warning btn-s spacing-top spacing-right" (click)="cancel()" [disabled]="!httpEmitter">
             <fa-icon [icon]="warningIcon"></fa-icon> Cancel all
           </button> -->
-        {{translationFields.labels.virusCheck}}
+          {{translationFields.labels.virusCheck}}
         <br>
           <button type="button" class="btn btn-danger btn-s spacing-top spacing-right"
             (click)="files.length=0; emitFileChange(files);" [disabled]="!files.length">

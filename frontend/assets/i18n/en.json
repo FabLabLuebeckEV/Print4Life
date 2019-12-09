@@ -79,7 +79,7 @@
             "type": "Type",
             "size": "Size",
             "actions": "Actions",
-            "gallery": "Gallery",
+            "gallery": "Preview Picture",
             "virusCheck": "Uploaded files will be validated with a virus scanner. Please be patient, this may take some time",
             "queueTitle": "Total Queued Files: ",
             "removeAllButton": "Remove all from Queue",
