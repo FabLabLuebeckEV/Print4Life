@@ -31,17 +31,20 @@
         <div *ngFor="let file of order.files; index as i">
           <ng-template ngbSlide *ngIf="(file.contentType=='image/png' || file.contentType=='image/jpeg') && !file.deprecated">
             <div class="picsum-img-wrapper">
-              <div class="vertical-helper">
-              </div>
-              <img [src]="file.link" alt="Gallery Picture {{i + 1}}">
-              <div class="image-blur">
+              <div *ngIf="!(file.contentType=='application/sla')">
+                <div class="vertical-helper">
+                </div>
+                <img [src]="file.link" alt="Gallery Picture {{i + 1}}">
+                <div class="image-blur">
+                </div>
               </div>
               <!--
               stl-model-viewer requires typescript version 3.7 and up
               this has to wait for the angular upgrade
+              -->
               <div *ngIf="file.contentType=='application/sla'">
                 <stl-model-viewer stlModel="file.link"></stl-model-viewer>
-              </div>-->
+              </div>
             </div>
           </ng-template>
         </div>

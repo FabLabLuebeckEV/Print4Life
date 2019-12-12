@@ -49,6 +49,7 @@ import { AddButtonComponent } from './components/add-button/add-button.component
 import { EditButtonComponent } from './components/edit-button/edit-button.component';
 import { DeleteButtonComponent } from './components/delete-button/delete-button.component';
 import { UserActivationComponent } from './users/user-activation/user-activation.component';
+import { StlModelViewerModule } from 'angular-stl-model-viewer';
 
 @NgModule({
     declarations: [
@@ -91,6 +92,7 @@ import { UserActivationComponent } from './users/user-activation/user-activation
         HttpClientModule,
         ngfModule,
         NgbModule,
+        StlModelViewerModule,
         RouterModule.forRoot(appRoutes, {
             scrollPositionRestoration: 'enabled',
             anchorScrolling: 'enabled',

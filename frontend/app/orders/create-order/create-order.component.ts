@@ -533,6 +533,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   public fileChangeEventHandler(event) {
+    console.log('fileChangeEventHandler', event);
     this.inUploadQueue = event && event > 0;
   }
 

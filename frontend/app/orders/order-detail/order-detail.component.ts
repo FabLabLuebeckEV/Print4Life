@@ -45,7 +45,7 @@ export class OrderDetailComponent implements OnInit {
     undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   ownerLink: String;
 
-  @ViewChild('GalleryCarousel')
+  @ViewChild('GalleryCarousel', {static: false})
   galleryCarousel: ElementRef;
 
   order: Order = new Order(

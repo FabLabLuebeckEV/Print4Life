@@ -17,8 +17,16 @@
 
       <div class="inline-block spacing-top">
         {{translationFields.labels.multiple}}
-        <input ngfSelect multiple type="file" [(files)]="files" [accept]="accept" [maxSize]="maxSize"
-          [(lastInvalids)]="lastInvalids" (filesChange)="lastFileAt=getDate(); emitFileChange(files);" />
+        <input 
+          ngfSelect multiple 
+          type="file" 
+          [maxSize]="maxSize"
+          [(lastInvalids)]="lastInvalids" 
+          #fileInput
+          (change)="lastFileAt=getDate(); emitFileChange($event);" />
+          <!--[accept]="accept" 
+          [(files)]="files" 
+          --->
       </div>
     </div>
 

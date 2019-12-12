@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { routes } from 'frontend/app/config/routes';
 import { HttpClient, HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
@@ -13,10 +13,13 @@ import { environment } from 'frontend/environments/environment.staging';
   styleUrls: ['./upload.component.css']
 })
 export class UploadComponent implements OnInit {
+  @ViewChild('fileInput', {static: false })
+  fileInput;
+
   @Output() uploadingEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() fileChangeEvent: EventEmitter<number> = new EventEmitter();
   accept = '*';
-  files: File[] = [];
+  files: Array<any> = [];
   config: any;
   progress: number;
   hasBaseDropZoneOver = false;
@@ -146,14 +149,20 @@ export class UploadComponent implements OnInit {
     this.uploadingEvent.emit(uploading);
   }
 
-  public emitFileChange(files) {
-    files.forEach(file => {
+  public emitFileChange(event) {
+    console.log(event);
+    console.log((event.target as HTMLInputElement));
+    console.log(JSON.parse(JSON.stringify(this.files)));
+    console.log(JSON.parse(JSON.stringify(this.fileInput.nativeElement)));
+    this.files.forEach(file => {
+      console.log(file);
       if (typeof file.gallery === 'undefined') {
         file.gallery = false;
       }
     });
-    if (files && files.length) {
-      this.fileChangeEvent.emit(files.length);
+    if (this.files && this.files.length) {
+      console.log('emitting ', this.files.length);
+      this.fileChangeEvent.emit(this.files.length);
     } else {
       this.fileChangeEvent.emit(0);
     }
