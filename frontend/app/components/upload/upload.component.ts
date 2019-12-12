@@ -19,7 +19,7 @@ export class UploadComponent implements OnInit {
   @Output() uploadingEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() fileChangeEvent: EventEmitter<number> = new EventEmitter();
   accept = '*';
-  files: Array<any> = [];
+  files: File[] = [];
   config: any;
   progress: number;
   hasBaseDropZoneOver = false;
@@ -156,8 +156,8 @@ export class UploadComponent implements OnInit {
     console.log(JSON.parse(JSON.stringify(this.fileInput.nativeElement)));
     this.files.forEach(file => {
       console.log(file);
-      if (typeof file.gallery === 'undefined') {
-        file.gallery = false;
+      if (typeof file['gallery'] === 'undefined') {
+        file['gallery'] = false;
       }
     });
     if (this.files && this.files.length) {

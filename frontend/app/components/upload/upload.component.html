@@ -20,13 +20,12 @@
         <input 
           ngfSelect multiple 
           type="file" 
+          [accept]="accept" 
+          [(files)]="files" 
           [maxSize]="maxSize"
           [(lastInvalids)]="lastInvalids" 
           #fileInput
-          (change)="lastFileAt=getDate(); emitFileChange($event);" />
-          <!--[accept]="accept" 
-          [(files)]="files" 
-          --->
+          (filesChange)="lastFileAt=getDate(); emitFileChange(files);" />
       </div>
     </div>
 

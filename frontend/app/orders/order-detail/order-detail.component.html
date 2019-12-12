@@ -29,7 +29,7 @@
           [pauseOnHover]="true"
           interval="10000">
         <div *ngFor="let file of order.files; index as i">
-          <ng-template ngbSlide *ngIf="(file.contentType=='image/png' || file.contentType=='image/jpeg') && !file.deprecated">
+          <ng-template ngbSlide *ngIf="(file.contentType=='image/png' || file.contentType=='image/jpeg' ||file.contentType=='application/sla') && !file.deprecated">
             <div class="picsum-img-wrapper">
               <div *ngIf="!(file.contentType=='application/sla')">
                 <div class="vertical-helper">
