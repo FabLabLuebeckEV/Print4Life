@@ -352,6 +352,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     } else if (!orderCopy.machine.type) {
       orderCopy.machine._id = 'unknown';
       // orderCopy.machine.type = 'unknown';
+    } else if (!orderCopy.machine._id) {
+      orderCopy.machine._id = 'unknown';
     }
     if (this.editView) {
       const promises = [];
@@ -652,7 +654,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
         this.order.machine['shownType'] = await this._translateMachineType(this.order.machine.type);
         this.order.machine.type = this.machineService.uncamelCase(this.order.machine.type);
-        if (this.order.machine.type.toLowerCase() !== 'unknown' && this.order.machine._id !== '' && this.order.machine._id !== 'unkown') {
+        if (this.order.machine.type.toLowerCase() !== 'unknown' && this.order.machine._id !== '' && this.order.machine._id !== 'unknown') {
           try {
             const result: any =
               await this.machineService.getSchedules(this.order.machine.type as string, this.order.machine._id as string);
