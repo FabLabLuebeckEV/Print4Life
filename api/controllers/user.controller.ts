@@ -719,17 +719,21 @@ async function login (req, res) {
   } catch (err) {
     const msg = { error: 'User not found.', stack: err };
     logger.error(msg);
-    res.status(404).send(msg);
+    res.status(401).send(msg);
+    return;
   }
-
-  logger.info(`User "${user.username}" was found in DB and tried to login with a bad password.`);
+  if (typeof user === 'undefined' || user === null) {
+    const msg = { error: 'User not found.' };
+    res.status(401).send(msg);
+    return;
+  }
 
   let login;
   try {
     login = await userService.login(user, req.body.password);
   } catch (err) {
     const msg = {
-      type: err.type, error: err.msg, stack: err, data: undefined, login: { success: false }
+      type: err.type, error: err.message, stack: err, data: undefined, login: { success: false }
     };
     logger.error(msg);
     if (err.type === ErrorType.USER_DEACTIVATED) {
@@ -743,7 +747,14 @@ async function login (req, res) {
   if (login && login.success) {
     logger.info(`${user.username} successfully logged in with token ${login.token}`);
     res.status(200).send({ login });
+    return;
   }
+
+  const msg = {
+    error: 'User does not exist',
+    login: { success: false }
+  };
+  res.status(401).send(msg);
 }
 
 /**
