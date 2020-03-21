@@ -76,10 +76,10 @@
               {{fablab.name}}
             </td>
           </tr>
-          <tr [hidden]="!order.isBatched">
+          <tr [hidden]="!order.isBatched" class="collapseToggle" data-toggle="collapse" data-target="#chartExpand"  aria-expanded="false" aria-controls="chartExpand">
             <td class="align-middle text-center">{{translationFields.labels.batched}}</td>
             <td class="align-middle text-center">
-              <div class="spinner-container">
+              <div class="spinner-container" >
                 <canvas #chartCanvas>
                   {{chart}}
                 </canvas>
@@ -90,6 +90,37 @@
               </mat-progress-spinner>
               <mat-progress-spinner [value]="100" [strokeWidth]="10" [diameter]="100" id="spinner_all" class="spinner-combi">
               </mat-progress-spinner>-->
+            </td>
+          </tr>
+          <tr class="collapse" id="chartExpand">
+            <td colspan="2">
+              <div >
+                <table class="table table-striped">
+                  <tbody>
+                    <tr>
+                      <th>
+                        FabLab
+                      </th>
+                      <th>
+                        Anzahl
+                      </th>
+                      <th>
+                        Status
+                      </th>
+                    </tr>
+                    <tr class="finished_batches" *ngFor="let batch of order.batch.finished">
+                      <td>{{batch.fablab.name}}</td><!--TODO: Link auf Besitzer!-->
+                      <td>{{batch.number}}</td>
+                      <td>{{batch.status}}</td>
+                    </tr>
+                    <tr class="accepted_batches" *ngFor="let batch of order.batch.accepted">
+                      <td>{{batch.fablab.name}}</td><!--TODO: Link auf Besitzer!-->
+                      <td>{{batch.number}}</td>
+                      <td>{{batch.status}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </td>
           </tr>
         </tbody>

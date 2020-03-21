@@ -80,6 +80,9 @@ const attributes = {
       },
       fablab: {
         type: String
+      },
+      status: {
+        type: String
       }
     }],
     finished: [{
@@ -87,6 +90,9 @@ const attributes = {
         type: Number
       },
       fablab: {
+        type: String
+      },
+      status: {
         type: String
       }
     }]

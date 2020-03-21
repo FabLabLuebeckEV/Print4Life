@@ -154,6 +154,9 @@ export class OrderDetailComponent implements OnInit {
               if (this.order.batch['finished']) {
                 this.order.batch['finished'].forEach(batch => {
                   result.order.batch.finishedCount += batch.number;
+                  this.fablabService.getFablab(batch.fablab).then(result => {
+                    batch.fablab = result.fablab;
+                  });
                 });
               }
 
@@ -161,6 +164,9 @@ export class OrderDetailComponent implements OnInit {
               if (this.order.batch['accepted']) {
                 this.order.batch['accepted'].forEach(batch => {
                   this.order.batch['acceptedCount'] += batch.number;
+                  this.fablabService.getFablab(batch.fablab).then(result => {
+                    batch.fablab = result.fablab;
+                  });
                 });
               }
 

@@ -7,28 +7,19 @@
     height: 150px !important;
 }
 
-.spinner-combi {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-}
-
-#spinner_finished, #spinner_finished ::ng-deep circle {
-    stroke: #00ff00;
-    z-index: 2;
-}
-
-#spinner_accepted, #spinner_accepted ::ng-deep circle {
-    stroke: #ffff00;
-    z-index: 1;
-}
-
-#spinner_all, #spinner_all ::ng-deep circle {
-    stroke: #ff0000;
-    z-index: 0;
+.collapseToggle {
+    cursor: pointer;
 }
 
 #chartCanvas {
     height: 150px !important;
     width: 150px !important;
+}
+
+.finished_batches {
+    color: #45B29D;
+}
+
+.accepted_batches {
+    color: #EFC94C;
 }
