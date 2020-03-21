@@ -52,10 +52,9 @@ export class AdminGuard implements CanActivate {
             });
         }
        return new Promise<boolean>((res, rej) => {
-            res(isAdmin.valueOf())
+            res(isAdmin.valueOf());
         });
-      
-    }
+   }
 }
 
 export const appRoutes: Routes = [

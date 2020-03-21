@@ -25,10 +25,10 @@
           <label for="role">{{translationFields.labels.isActivated}}</label><br>
           <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="fablab.activated">
             <label ngbButtonLabel class="btn btn-outline-success">
-              <input ngbButton type="radio" [value]="true">{{translationFields.buttons.activatedTrue}}
+              <input ngbButton type="radio" [value]="true" [disabled]=!isAdmin>{{translationFields.buttons.activatedTrue}}
             </label>
             <label ngbButtonLabel class="btn btn-outline-danger">
-              <input ngbButton type="radio" [value]="false">{{translationFields.buttons.activatedFalse}}
+              <input ngbButton type="radio" [value]="false" [disabled]=!isAdmin>{{translationFields.buttons.activatedFalse}}
             </label>
           </div>
         </div>
