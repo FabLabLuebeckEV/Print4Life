@@ -115,7 +115,10 @@ export const routes = {
             },
             fablabs: {
                 root: 'fablabs',
-                getById: ':id'
+                getById: ':id',
+                update: 'edit',
+                profile: 'profile',
+                register: 'register'
             }
         },
     }
