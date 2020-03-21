@@ -109,14 +109,14 @@
                       </th>
                     </tr>
                     <tr class="finished_batches" *ngFor="let batch of order.batch.finished">
-                      <td>{{batch.fablab.name}}</td><!--TODO: Link auf Besitzer!-->
-                      <td>{{batch.number}}</td>
-                      <td>{{batch.status}}</td>
+                      <td><b>{{batch.fablab.name}}</b></td><!--TODO: Link auf Besitzer!-->
+                      <td><b>{{batch.number}}</b></td>
+                      <td><b>{{batch.status}}</b></td>
                     </tr>
                     <tr class="accepted_batches" *ngFor="let batch of order.batch.accepted">
-                      <td>{{batch.fablab.name}}</td><!--TODO: Link auf Besitzer!-->
-                      <td>{{batch.number}}</td>
-                      <td>{{batch.status}}</td>
+                      <td><b>{{batch.fablab.name}}</b></td><!--TODO: Link auf Besitzer!-->
+                      <td><b>{{batch.number}}</b></td>
+                      <td><b>{{batch.status}}</b></td>
                     </tr>
                   </tbody>
                 </table>
