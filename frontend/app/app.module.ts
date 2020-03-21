@@ -28,6 +28,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthGuard } from './config/app.routes';
 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 export function translateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }
@@ -49,6 +51,8 @@ import { AddButtonComponent } from './components/add-button/add-button.component
 import { EditButtonComponent } from './components/edit-button/edit-button.component';
 import { DeleteButtonComponent } from './components/delete-button/delete-button.component';
 import { UserActivationComponent } from './users/user-activation/user-activation.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
     declarations: [
@@ -82,6 +86,7 @@ import { UserActivationComponent } from './users/user-activation/user-activation
         UserActivationComponent,
     ],
     imports: [
+        MatProgressSpinnerModule,
         ReactiveFormsModule,
         BrowserModule,
         NgxSpinnerModule,
@@ -102,7 +107,8 @@ import { UserActivationComponent } from './users/user-activation/user-activation
                 useFactory: translateHttpLoaderFactory,
                 deps: [HttpClient]
             }
-        })
+        }),
+        BrowserAnimationsModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }, // magic for cors

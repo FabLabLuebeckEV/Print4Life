@@ -16,6 +16,8 @@ import { ScheduleService } from 'frontend/app/services/schedule.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
+import { Chart } from 'chart.js';
+import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-order-detail',
@@ -23,6 +25,7 @@ import { ModalButton } from '../../helper/modal.button';
   styleUrls: ['./order-detail.component.css']
 })
 export class OrderDetailComponent implements OnInit {
+  @ViewChild('chartCanvas', {static: false}) chartCanvas: ElementRef;
   private config: any;
   userIsLoggedIn: boolean;
   loggedInUser: User;
@@ -36,6 +39,7 @@ export class OrderDetailComponent implements OnInit {
   toggleOffIcon: Icon;
   spinnerConfig: SpinnerConfig;
   editLink: String;
+  chart: Array<any> = [];
   editor: User = new User(
     undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   editorLink: String;
@@ -57,7 +61,7 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     false,
     undefined,
-    {isBatched: false, count: 0}
+    {isBatched: false, number: 0}
   );
   schedule: Schedule;
   machine: any;
@@ -139,6 +143,55 @@ export class OrderDetailComponent implements OnInit {
           this.orderService.getOrderById(params.get('id')).then(async (result) => {
             if (result && result.order) {
               this.order = result.order;
+              if (this.order.batch && this.order.batch['number'] && this.order.batch['number'] > 0) {
+                this.order['isBatched'] = true;
+              }
+              this.order.batch['finishedCount'] = 0;
+              if (this.order.batch['finished']) {
+                this.order.batch['finished'].forEach(batch => {
+                  result.order.batch.finishedCount += batch.number;
+                });
+              }
+
+              this.order.batch['acceptedCount'] = 0;
+              if (this.order.batch['accepted']) {
+                this.order.batch['accepted'].forEach(batch => {
+                  this.order.batch['acceptedCount'] += batch.number;
+                });
+              }
+              console.log("chart: ", this.chartCanvas);
+              if (this.chartCanvas) {
+                this.chart = new Chart(this.chartCanvas.nativeElement.getContext('2d'), {
+                  type: 'doughnut',
+                  data: {
+                    labels: [
+                      'assigned',
+                      'finished',
+                      'open'
+                    ],
+                    datasets:[
+                      {
+                        data: [
+                          this.order.batch['finishedCount'],
+                          this.order.batch['acceptedCount'],
+                          this.order.batch['number'] - this.order.batch['acceptedCount'] - this.order.batch['finishedCount']
+                        ],
+                        backgroundColor: [
+                          '#45B29D',
+                          '#EFC94C',
+                          '#DF5A49'
+                        ]
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                  }
+                });
+              }
+              console.log('result is', this.order);
+
               this.userIsLoggedIn = this.userService.isLoggedIn();
               this.loggedInUser = await this.userService.getUser();
               this.userCanDownload = this.order.shared as boolean || (this.loggedInUser && this.loggedInUser.role &&

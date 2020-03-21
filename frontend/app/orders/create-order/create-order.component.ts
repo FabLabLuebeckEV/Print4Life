@@ -69,7 +69,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     undefined, undefined, undefined, undefined,
     undefined, undefined, [],
     undefined, this.sMachine, undefined,
-    this.shippingAddress, false, false, undefined, {isBatched: false, number: 0});
+    this.shippingAddress, false, false, undefined, {number: 0});
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
   schedule: Schedule = new Schedule('', undefined, undefined, '', { type: '', id: '' }, '');
@@ -615,7 +615,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
 
   private async _initializeOrder(id) {
-    console.log("_initializeOrder called for id ", id);
+    console.log('_initializeOrder called for id ', id);
     if (!this.sharedView) {
       this.loggedInUser = await this.userService.getUser();
     }
@@ -653,7 +653,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           this.loggedInUser = await this.userService.getNamesOfUser(this.order.owner);
         }
       }
-      console.log("checking batch order: ", this.order);
+      console.log('checking batch order: ', this.order);
       if (this.order.batch && this.order.batch['number'] && this.order.batch['number'] > 0) {
         this.order['isBatched'] = true;
       }

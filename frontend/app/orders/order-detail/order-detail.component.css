@@ -1,3 +1,34 @@
 .spacing-right-xs {
     margin: 5px;
 }
+
+.spinner-container {
+    position: relative;
+    height: 150px !important;
+}
+
+.spinner-combi {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#spinner_finished, #spinner_finished ::ng-deep circle {
+    stroke: #00ff00;
+    z-index: 2;
+}
+
+#spinner_accepted, #spinner_accepted ::ng-deep circle {
+    stroke: #ffff00;
+    z-index: 1;
+}
+
+#spinner_all, #spinner_all ::ng-deep circle {
+    stroke: #ff0000;
+    z-index: 0;
+}
+
+#chartCanvas {
+    height: 150px !important;
+    width: 150px !important;
+}

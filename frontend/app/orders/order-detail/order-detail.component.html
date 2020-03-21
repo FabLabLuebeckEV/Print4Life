@@ -76,10 +76,27 @@
               {{fablab.name}}
             </td>
           </tr>
+          <tr [hidden]="!order.isBatched">
+            <td class="align-middle text-center">{{translationFields.labels.batched}}</td>
+            <td class="align-middle text-center">
+              <div class="spinner-container">
+                <canvas #chartCanvas>
+                  {{chart}}
+                </canvas>
+              </div>
+              <!--<mat-progress-spinner [value]="10" [strokeWidth]="13" [diameter]="102" id="spinner_finished" class="spinner-combi">
+              </mat-progress-spinner>
+              <mat-progress-spinner [value]="40" [strokeWidth]="12" [diameter]="101" id="spinner_accepted" class="spinner-combi">
+              </mat-progress-spinner>
+              <mat-progress-spinner [value]="100" [strokeWidth]="10" [diameter]="100" id="spinner_all" class="spinner-combi">
+              </mat-progress-spinner>-->
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
   </div>
+
   <div class="row spacing text-center">
     <div class="col-md-12">
       <h2>{{translationFields.labels.comments}}
