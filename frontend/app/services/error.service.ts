@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { Router } from '@angular/router';
 import { ModalService } from './modal.service';
 import { ModalButton } from '../helper/modal.button';
+import { NgxSpinnerService } from "ngx-spinner";
 
 export enum ErrorType {
   TOKEN_EXPIRED,
@@ -36,13 +37,14 @@ export interface Error {
 })
 export class ErrorService {
   isOpen = false;
-  constructor(private modalService: ModalService, private userService: UserService, private router: Router) {
+  constructor(private modalService: ModalService, private userService: UserService, private router: Router, private spinner: NgxSpinnerService) {
   }
 
   public showError(err: Error) {
     let secondButton;
     let modalRef;
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    this.spinner.hide();
     if (!this.isOpen) {
       if (err.hasOwnProperty('type') && (err.type as ErrorType === ErrorType.TOKEN_EXPIRED as ErrorType ||
         err.type as ErrorType === ErrorType.UNAUTHORIZED as ErrorType)) {
