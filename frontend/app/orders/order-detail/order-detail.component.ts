@@ -87,7 +87,11 @@ export class OrderDetailComponent implements OnInit {
       file: '',
       addressTitle: '',
       latestVersion: '',
-      scheduledFor: ''
+      scheduledFor: '',
+      batched: '',
+      batchAssigned: '',
+      batchOpen: '',
+      batchFinished: ''
     },
     modals: {
       ok: '',
@@ -159,37 +163,8 @@ export class OrderDetailComponent implements OnInit {
                   this.order.batch['acceptedCount'] += batch.number;
                 });
               }
-              console.log("chart: ", this.chartCanvas);
-              if (this.chartCanvas) {
-                this.chart = new Chart(this.chartCanvas.nativeElement.getContext('2d'), {
-                  type: 'doughnut',
-                  data: {
-                    labels: [
-                      'assigned',
-                      'finished',
-                      'open'
-                    ],
-                    datasets:[
-                      {
-                        data: [
-                          this.order.batch['finishedCount'],
-                          this.order.batch['acceptedCount'],
-                          this.order.batch['number'] - this.order.batch['acceptedCount'] - this.order.batch['finishedCount']
-                        ],
-                        backgroundColor: [
-                          '#45B29D',
-                          '#EFC94C',
-                          '#DF5A49'
-                        ]
-                      }
-                    ]
-                  },
-                  options: {
-                    responsive: true,
-                    maintainAspectRatio: false
-                  }
-                });
-              }
+
+              this.loadChart();
               console.log('result is', this.order);
 
               this.userIsLoggedIn = this.userService.isLoggedIn();
@@ -260,6 +235,39 @@ export class OrderDetailComponent implements OnInit {
           });
         }
       });
+  }
+
+  public loadChart() {
+    if (this.chartCanvas) {
+      this.chart = new Chart(this.chartCanvas.nativeElement.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: [
+            this.translationFields.labels.batchFinished,
+            this.translationFields.labels.batchAssigned,
+            this.translationFields.labels.batchOpen
+          ],
+          datasets: [
+            {
+              data: [
+                this.order.batch['finishedCount'],
+                this.order.batch['acceptedCount'],
+                this.order.batch['number'] - this.order.batch['acceptedCount'] - this.order.batch['finishedCount']
+              ],
+              backgroundColor: [
+                '#45B29D',
+                '#EFC94C',
+                '#DF5A49'
+              ]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    }
   }
 
   public startPrintJob() {
@@ -369,7 +377,11 @@ export class OrderDetailComponent implements OnInit {
           file: translations['orderDetail'].labels.file,
           addressTitle: translations['orderDetail'].labels.addressTitle,
           latestVersion: translations['orderDetail'].labels.latestVersion,
-          scheduledFor: translations['orderDetail'].labels.scheduledFor
+          scheduledFor: translations['orderDetail'].labels.scheduledFor,
+          batched: translations['orderDetail'].labels.batched,
+          batchAssigned: translations['orderDetail'].labels.batchAssigned,
+          batchOpen: translations['orderDetail'].labels.batchOpen,
+          batchFinished: translations['orderDetail'].labels.batchFinished
         },
         modals: {
           ok: translations['orderDetail'].modals.ok,
@@ -388,6 +400,7 @@ export class OrderDetailComponent implements OnInit {
           fileSelectLabel: translations['orderDetail'].modals.fileSelectLabel,
         }
       };
+      this.loadChart();
     }));
   }
 }

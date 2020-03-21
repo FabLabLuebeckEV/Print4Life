@@ -556,7 +556,11 @@
             "file": "File",
             "addressTitle": "Shippingaddress",
             "latestVersion": "Latest Version",
-            "scheduledFor": "Scheduled for"
+            "scheduledFor": "Scheduled for",
+            "batched": "Production status:",
+            "batchAssigned": "Assigned",
+            "batchOpen": "Open",
+            "batchFinished": "Finished"
         },
         "modals": {
             "ok": "Yes",

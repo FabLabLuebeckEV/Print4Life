@@ -557,7 +557,11 @@
             "file": "Datei",
             "addressTitle": "Lieferadresse",
             "latestVersion": "Aktuelle Version",
-            "scheduledFor": "Geplant für"
+            "scheduledFor": "Geplant für",
+            "batched": "Produktionsstatus:",
+            "batchAssigned": "Zugewiesen",
+            "batchOpen": "Offen",
+            "batchFinished": "Erledigt"
         },
         "modals": {
             "ok": "Ja",
