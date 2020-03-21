@@ -56,7 +56,8 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     undefined,
     false,
-    undefined
+    undefined,
+    {isBatched: false, count: 0}
   );
   schedule: Schedule;
   machine: any;

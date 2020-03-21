@@ -122,6 +122,29 @@
           </ng-select>
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h4>{{translationFields.labels.batchTitle}}</h4>
+        </div>
+      </div>
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-check spacing-top">
+              <input type="checkbox" class="form-check-input form-control" id="isBatched"
+                [(ngModel)]="order.isBatched" name="isBatched" #isBatched="ngModel">
+              <label class="form-check-label spacing-right-xs" for="isBatched">{{translationFields.labels.batchDescription}}</label>
+            </div>
+          </div>
+          <div class="col-md-12 spacing-top">
+            <div *ngIf="order.isBatched">
+              <label for="batchNumber">{{translationFields.labels.batchNumber}}</label>
+              <input type="number" class="form-control" id="batchNumber" required 
+                [(ngModel)]="order.batch.number" name="batchNumber" #batchNumber="ngModel">
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="row">
         <div class="col-md-12 text-center">
@@ -366,7 +389,7 @@
       </div>
 
       <div class="form-check spacing-top">
-        <input type="checkbox" class="form-check-input" id="copyright" required [(ngModel)]="order.fileCopyright"
+        <input type="checkbox" class="form-check-input form-control" id="copyright" required [(ngModel)]="order.fileCopyright"
           name="copyright" #copyright="ngModel" [disabled]="!inUploadQueue && order.files && !order.files.length " />
         <label class="form-check-label spacing-right-xs" for="copyright">{{translationFields.labels.copyright}}</label>
         <div [hidden]="copyright.valid || copyright.pristine" class="alert alert-danger">

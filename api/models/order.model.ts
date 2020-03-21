@@ -69,6 +69,27 @@ const attributes = {
   fileCopyright: {
     type: Boolean,
     default: false
+  },
+  batch: {
+    number: {
+      type: Number
+    },
+    accepted: [{
+      number: {
+        type: Number
+      },
+      fablab: {
+        type: String
+      }
+    }],
+    finished: [{
+      number: {
+        type: Number
+      },
+      fablab: {
+        type: String
+      }
+    }]
   }
 };
 

@@ -462,7 +462,10 @@
             "startDate": "Start Date",
             "endDate": "End Date",
             "copyright": "Are you the owner of the files and have their copyright?",
-            "fablab": "Fablab"
+            "fablab": "Fablab",
+            "batchTitle": "Copy count",
+            "batchDescription": "Do you want multiple copies to be manufactured?",
+            "batchNumber": "Requested amount:"
         },
         "modals": {
             "ok": "Ok",

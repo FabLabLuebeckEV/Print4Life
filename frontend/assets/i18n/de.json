@@ -463,7 +463,10 @@
             "startDate": "Startdatum",
             "endDate": "Enddatum",
             "copyright": "Sind Sie der Eigentümer der Dateien und haben sie deren Copyright?",
-            "fablab": "Fablab"
+            "fablab": "Fablab",
+            "batchTitle": "Stückzahl",
+            "batchDescription": "Sollen mehrere Kopien gefertigt werden?",
+            "batchNumber": "Gewünschte Anzahl:"
         },
         "modals": {
             "ok": "Ok",

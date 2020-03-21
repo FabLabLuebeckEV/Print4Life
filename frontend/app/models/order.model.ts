@@ -30,7 +30,8 @@ export class Order {
         public shippingAddress: Address,
         public shared: Boolean,
         public fileCopyright: Boolean,
-        public token: String
+        public token: String,
+        public batch: Object
     ) { }
 }
 

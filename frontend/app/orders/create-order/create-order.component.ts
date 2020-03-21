@@ -23,6 +23,7 @@ import { ValidationService } from 'frontend/app/services/validation.service';
 import { Icon } from '@fortawesome/fontawesome-svg-core';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
+import { transformAll } from '@angular/compiler/src/render3/r3_ast';
 
 const localStorageOrderKey = 'orderManagementOrderFormOrder';
 const localStorageCommentKey = 'orderManagementOrderFormComment';
@@ -68,7 +69,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     undefined, undefined, undefined, undefined,
     undefined, undefined, [],
     undefined, this.sMachine, undefined,
-    this.shippingAddress, false, false, undefined);
+    this.shippingAddress, false, false, undefined, {isBatched: false, number: 0});
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
   schedule: Schedule = new Schedule('', undefined, undefined, '', { type: '', id: '' }, '');
@@ -148,7 +149,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
       startDate: '',
       endDate: '',
       copyright: '',
-      fablab: ''
+      fablab: '',
+      batchTitle: '',
+      batchNumber: '',
+      batchDescription: ''
     },
     modals: {
       ok: '',
@@ -611,6 +615,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
 
 
   private async _initializeOrder(id) {
+    console.log("_initializeOrder called for id ", id);
     if (!this.sharedView) {
       this.loggedInUser = await this.userService.getUser();
     }
@@ -647,6 +652,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         } else {
           this.loggedInUser = await this.userService.getNamesOfUser(this.order.owner);
         }
+      }
+      console.log("checking batch order: ", this.order);
+      if (this.order.batch && this.order.batch['number'] && this.order.batch['number'] > 0) {
+        this.order['isBatched'] = true;
       }
 
       if (this.order.machine.hasOwnProperty('type') && this.order.machine.type) {
@@ -950,7 +959,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             startDate: translations['orderForm'].labels.startDate,
             endDate: translations['orderForm'].labels.endDate,
             copyright: translations['orderForm'].labels.copyright,
-            fablab: translations['orderForm'].labels.fablab
+            fablab: translations['orderForm'].labels.fablab,
+            batchTitle: translations['orderForm'].labels.batchTitle,
+            batchNumber: translations['orderForm'].labels.batchNumber,
+            batchDescription: translations['orderForm'].labels.batchDescription
           },
           modals: {
             ok: translations['orderForm'].modals.ok,
