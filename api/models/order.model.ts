@@ -52,8 +52,7 @@ const attributes = {
       required: true
     },
     _id: {
-      type: String,
-      required: true
+      type: String
     },
     schedule: {
       id: {
