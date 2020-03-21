@@ -189,7 +189,9 @@ export class OrderDetailComponent implements OnInit {
                   const result = await this.machineService.get(this.order.machine.type, this.order.machine._id);
                   const type = this.machineService.camelCaseTypes(this.order.machine.type);
                   this.machine = result[`${type}`];
-                  this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
+                  if (this.machine !== null && typeof this.machine !== 'undefined') {
+                    this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
+                  }
                 } else if (this.order.machine.type.toLowerCase() !== 'unknown' && this.order.machine._id === 'unknown') {
                   this.machine = { type: this.order.machine.type, deviceName: this.translationFields.labels.machineNotSet };
                 } else {
