@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { Router } from '@angular/router';
 import { ModalService } from './modal.service';
 import { ModalButton } from '../helper/modal.button';
-import { NgxSpinnerService } from "ngx-spinner";
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export enum ErrorType {
   TOKEN_EXPIRED,
@@ -37,7 +37,8 @@ export interface Error {
 })
 export class ErrorService {
   isOpen = false;
-  constructor(private modalService: ModalService, private userService: UserService, private router: Router, private spinner: NgxSpinnerService) {
+  constructor(private modalService: ModalService, private userService: UserService,
+      private router: Router, private spinner: NgxSpinnerService) {
   }
 
   public showError(err: Error) {
