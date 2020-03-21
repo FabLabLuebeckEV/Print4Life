@@ -141,10 +141,9 @@ export const appRoutes: Routes = [
         component: UserListComponent,
         runGuardsAndResolvers: 'always',
         children: [
-            {
-                path: routes.paths.frontend.fablabs.update + '/:id', component: FablabFormComponent, canActivate: [AdminGuard]},
-        {path: routes.paths.frontend.fablabs.profile, component: FablabFormComponent},
-        {path: routes.paths.frontend.fablabs.register, component: FablabFormComponent}
+        {path: routes.paths.frontend.fablabs.update + '/:id', component: FablabFormComponent, canActivate: [AdminGuard]},
+            { path: routes.paths.frontend.fablabs.profile, component: FablabFormComponent, canActivate: [AuthGuard]},
+            { path: routes.paths.frontend.fablabs.register, component: FablabFormComponent, canActivate: [AuthGuard]}
         ]
     },
     {
