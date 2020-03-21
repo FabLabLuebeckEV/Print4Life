@@ -59,7 +59,7 @@ import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component
         DashboardComponent,
         TableComponent,
         OrderListComponent,
-        MachineFormComponent, 
+        MachineFormComponent,
         CreateOrderComponent,
         MessageModalComponent,
         MachineDetailComponent,

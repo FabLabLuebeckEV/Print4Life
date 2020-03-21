@@ -31,7 +31,7 @@ export class FablabFormComponent implements OnInit {
   editView: Boolean;
   profileView: Boolean;
   fablabId: String;
-
+  isAdmin: Boolean;
   address: Address = new Address(undefined, undefined, undefined, undefined);
   preferredLanguage = new Language('en'); // default en/english
   fablab: Fablab = new Fablab(
@@ -129,6 +129,7 @@ export class FablabFormComponent implements OnInit {
 
   async ngOnInit() {
     this.loggedInUser = await this.userService.getUser();
+    this.isAdmin = await this.userService.isAdmin();
     if (this.profileView) {
       this.fablabId = this.loggedInUser.fablabId;
     }
