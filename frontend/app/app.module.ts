@@ -10,7 +10,7 @@ import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { MachineListComponent } from './machines/machine-list/machine-list.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { appRoutes } from './config/app.routes';
+import { appRoutes, AdminGuard, AuthGuard } from './config/app.routes';
 import { MachineService } from './services/machine.service';
 import { FablabService } from './services/fablab.service';
 import { TableComponent } from './components/table/table.component';
@@ -26,7 +26,6 @@ import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { AuthGuard } from './config/app.routes';
 
 export function translateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -51,7 +50,6 @@ import { DeleteButtonComponent } from './components/delete-button/delete-button.
 import { UserActivationComponent } from './users/user-activation/user-activation.component';
 import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component';
 
-
 @NgModule({
     declarations: [
         AppComponent,
@@ -61,7 +59,7 @@ import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component
         DashboardComponent,
         TableComponent,
         OrderListComponent,
-        MachineFormComponent,
+        MachineFormComponent, 
         CreateOrderComponent,
         MessageModalComponent,
         MachineDetailComponent,
@@ -109,7 +107,7 @@ import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }, // magic for cors
-        MachineService, FablabService, ConfigService, AuthGuard,
+        MachineService, FablabService, ConfigService, AuthGuard, AdminGuard,
         { provide: NgbDatepickerI18n, useClass: DatePickerTranslationService }
     ],
     bootstrap: [AppComponent],

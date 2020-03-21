@@ -129,8 +129,7 @@ export class FablabFormComponent implements OnInit {
 
   async ngOnInit() {
     this.loggedInUser = await this.userService.getUser();
-    if(this.profileView)
-    {
+    if (this.profileView) {
       this.fablabId = this.loggedInUser.fablabId;
     }
     await this._initializeFablab(this.fablabId);

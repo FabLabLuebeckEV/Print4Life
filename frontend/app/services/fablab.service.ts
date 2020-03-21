@@ -27,7 +27,6 @@ export class FablabService {
   }
   public updateFablab(fablab): Promise<any> {
      return this.http.put(`${this.rootPath}/${fablab._id}`, fablab).toPromise();
-  
-  }
+     }
 
 }

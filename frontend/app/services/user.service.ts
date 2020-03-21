@@ -12,22 +12,27 @@ export class UserService {
   private p: String;
   private token: String = '';
   private user: User;
-  constructor(private http: HttpClient, private translateService: TranslateService) {
+  constructor(
+    private http: HttpClient,
+    private translateService: TranslateService
+  ) {
     this.token = localStorage.getItem(this.tokenStorageName);
     this.p = routes.backendUrl + '/' + routes.paths.backend.users.root;
-    this.getUser().then((user) => {
-      this.user = user;
-      this._setUserLanguage();
-    }).catch(() => {
-      this.user = undefined;
-    });
+    this.getUser()
+      .then(user => {
+        this.user = user;
+        this._setUserLanguage();
+      })
+      .catch(() => {
+        this.user = undefined;
+      });
   }
 
   public getRoles(): Promise<any> {
-    return this.http.get(`${this.p}/${routes.paths.backend.users.getRoles}`).toPromise();
+    return this.http
+      .get(`${this.p}/${routes.paths.backend.users.getRoles}`)
+      .toPromise();
   }
-
-
 
   public createUser(user): Promise<any> {
     return this.http.post(`${this.p}/`, user).toPromise();
@@ -38,7 +43,12 @@ export class UserService {
   }
 
   public changePassword(id, oldPassword, newPassword): Promise<any> {
-    return this.http.put(`${this.p}/${id}/${routes.paths.backend.users.changePassword}`, { oldPassword, newPassword }).toPromise();
+    return this.http
+      .put(`${this.p}/${id}/${routes.paths.backend.users.changePassword}`, {
+        oldPassword,
+        newPassword
+      })
+      .toPromise();
   }
 
   public deleteUser(id): Promise<any> {
@@ -54,7 +64,9 @@ export class UserService {
   }
 
   public async getNamesOfUser(id: String): Promise<any> {
-    const result = await this.http.get(`${this.p}/${id}/${routes.paths.backend.users.getNames}`).toPromise();
+    const result = await this.http
+      .get(`${this.p}/${id}/${routes.paths.backend.users.getNames}`)
+      .toPromise();
     if (result && result.hasOwnProperty('user')) {
       return result['user'];
     }
@@ -62,7 +74,9 @@ export class UserService {
   }
 
   public async findOwn(): Promise<any> {
-    const result = await this.http.get(`${this.p}/${routes.paths.backend.users.findown}`).toPromise();
+    const result = await this.http
+      .get(`${this.p}/${routes.paths.backend.users.findown}`)
+      .toPromise();
     if (result && result.hasOwnProperty('user')) {
       return result['user'];
     }
@@ -71,18 +85,22 @@ export class UserService {
 
   public login(user): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.p}/${routes.paths.backend.users.login}`, user).toPromise().then((result: any) => {
-        const login = result && result.login ? result.login : undefined;
-        if (login && login['success']) {
-          this.token = login['token'];
-          localStorage.setItem(this.tokenStorageName, this.token.toString());
-          resolve(login);
-        } else {
-          reject(login ? login : { error: 'No login message received' });
-        }
-      }).catch((err) => {
-        reject(err);
-      });
+      this.http
+        .post(`${this.p}/${routes.paths.backend.users.login}`, user)
+        .toPromise()
+        .then((result: any) => {
+          const login = result && result.login ? result.login : undefined;
+          if (login && login['success']) {
+            this.token = login['token'];
+            localStorage.setItem(this.tokenStorageName, this.token.toString());
+            resolve(login);
+          } else {
+            reject(login ? login : { error: 'No login message received' });
+          }
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
   }
 
@@ -99,7 +117,9 @@ export class UserService {
   }
 
   public count(query) {
-    return this.http.post(`${this.p}/${routes.paths.backend.users.count}`, { query: query }).toPromise();
+    return this.http
+      .post(`${this.p}/${routes.paths.backend.users.count}`, { query: query })
+      .toPromise();
   }
 
   public search(query, limit?, skip?) {
@@ -113,7 +133,9 @@ export class UserService {
       body.limit = limit;
       body.skip = skip;
     }
-    return this.http.post(`${this.p}/${routes.paths.backend.users.search}`, body).toPromise();
+    return this.http
+      .post(`${this.p}/${routes.paths.backend.users.search}`, body)
+      .toPromise();
   }
 
   public logout(): Promise<any> {
@@ -166,15 +188,27 @@ export class UserService {
   }
 
   public claimActivation(userId) {
-    return this.http.put(`${this.p}/${userId}/${routes.paths.backend.users.activationRequest}`, undefined).toPromise();
+    return this.http
+      .put(
+        `${this.p}/${userId}/${routes.paths.backend.users.activationRequest}`,
+        undefined
+      )
+      .toPromise();
   }
 
   public activateUser(userId) {
-    return this.http.put(`${this.p}/${userId}/${routes.paths.backend.users.activate}`, undefined).toPromise();
+    return this.http
+      .put(
+        `${this.p}/${userId}/${routes.paths.backend.users.activate}`,
+        undefined
+      )
+      .toPromise();
   }
 
   public async resetPassword(email) {
-    return this.http.post(`${this.p}/${routes.paths.backend.users.resetPassword}/`, email).toPromise();
+    return this.http
+      .post(`${this.p}/${routes.paths.backend.users.resetPassword}/`, email)
+      .toPromise();
   }
 
   public getLocalStorageTokenName(): string {
@@ -187,7 +221,10 @@ export class UserService {
   }
 
   private _setUserLanguage() {
-    if (this.user.preferredLanguage && this.user.preferredLanguage.hasOwnProperty('language')) {
+    if (
+      this.user.preferredLanguage &&
+      this.user.preferredLanguage.hasOwnProperty('language')
+    ) {
       this.translateService.use(this.user.preferredLanguage.language + '');
     }
   }

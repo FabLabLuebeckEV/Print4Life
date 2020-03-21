@@ -37,6 +37,26 @@ export class AuthGuard implements CanActivate {
         return isLoggedIn;
     }
 }
+@Injectable()
+export class AdminGuard implements CanActivate {
+    constructor(private userService: UserService, private errorService: ErrorService) { }
+   async canActivate():  Promise<boolean> {
+        const isAdmin = await this.userService.isAdmin();
+        if (!isAdmin) {
+            this.errorService.showError({
+                type: ErrorType.UNAUTHORIZED,
+                status: 401,
+                statusText: 'Unauthorized',
+                stack: 'You need to login as Admin to visit this route!',
+                data: undefined
+            });
+        }
+       return new Promise<boolean>((res, rej) => {
+            res(isAdmin.valueOf())
+        });
+      
+    }
+}
 
 export const appRoutes: Routes = [
     {
@@ -122,7 +142,8 @@ export const appRoutes: Routes = [
         component: UserListComponent,
         runGuardsAndResolvers: 'always',
         children: [
-        {path: routes.paths.frontend.fablabs.update + '/:id', component: FablabFormComponent},
+            {
+                path: routes.paths.frontend.fablabs.update + '/:id', component: FablabFormComponent, canActivate: [AdminGuard]},
         {path: routes.paths.frontend.fablabs.profile, component: FablabFormComponent},
         {path: routes.paths.frontend.fablabs.register, component: FablabFormComponent}
         ]
