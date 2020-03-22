@@ -197,7 +197,8 @@ async function create (req, res) {
   // check admin permissions, see #178
   const token = req.headers.authorization.split('JWT')[1].trim();
   const user = await userService.getUserByToken(token);
-  if (userService.ownsFablab(user._id)) {
+  const ownFablab = await userService.ownsFablab(user._id);
+  if (ownFablab) {
     const msg = {
       err: 'FORBIDDEN',
       message: 'User already owns a fablab!'
