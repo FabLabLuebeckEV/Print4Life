@@ -243,49 +243,7 @@ export class FablabListComponent implements OnInit {
           `${user.obj[`Name`].label} ${this.translationFields.modals.deleteQuestion2}`], deleteButton, abortButton);
       modalRef.result.then((result) => {
         if (result === deleteButton.returnValue) {
-          this.userService.deleteUser(user.obj.id.label).then((result) => {
-            result = result.user;
-            const oldUser = this.visibleFablabs[userIdx];
-            this.fablabs.forEach((item) => {
-              if (oldUser.obj.id.label === item.obj.id.label) {
-                this.fablabs[userIdx].obj = {};
-                this.fablabs[userIdx].obj['id'] = { label: result._id };
-                this.fablabs[userIdx].obj['Username'] = { label: result.username };
-                this.fablabs[userIdx].obj['Firstname'] = { label: result.firstname };
-                this.fablabs[userIdx].obj['Lastname'] = { label: result.lastname };
-                this.fablabs[userIdx].obj['Fablab'] = {
-                  label: result.fablab && result.fablab.name ? result.fablab.name : '-'
-                };
-                this.fablabs[userIdx].obj['Role'] = { label: result.role.role };
-                this.fablabs[userIdx].obj['Active'] = {
-                  label: result.activated && result.activated === true ?
-                    this.translationFields.badges.active :
-                    this.translationFields.badges.inactive,
-                  badge: true,
-                  class: result.activated && result.activated === true ? 'badge badge-success' : 'badge badge-danger'
-                };
-              }
-            });
-            this.fablabs[userIdx].obj = {};
-            this.fablabs[userIdx].obj['id'] = { label: result._id };
-            this.fablabs[userIdx].obj['Username'] = { label: result.username };
-            this.fablabs[userIdx].obj['Firstname'] = { label: result.firstname };
-            this.fablabs[userIdx].obj['Lastname'] = { label: result.lastname };
-            this.fablabs[userIdx].obj['Fablab'] = {
-              label: result.fablab && result.fablab.name ? result.fablab.name : '-'
-            };
-            this.fablabs[userIdx].obj['Role'] = { label: result.role.role };
-            this.fablabs[userIdx].obj['Active'] = {
-              label: result.activated && result.activated === true ?
-                this.translationFields.badges.active :
-                this.translationFields.badges.inactive,
-              badge: true,
-              class: result.activated && result.activated === true ? 'badge badge-success' : 'badge badge-danger'
-            };
-            if ((this.filter.selectedRoles && this.filter.selectedRoles.length > 0)) {
-              this.init();
-            }
-          });
+          this.fablabService.updateFablab({ _id: user.obj[`id`].label, activated: false});
         }
       });
     }
