@@ -2,7 +2,7 @@ This file is part of OrdersPlatform.
 
 OrdersPlatform is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
+the Free Software Foundation, either version 2 of the License, or
 (at your option) any later version.
 
 OrdersPlatform is distributed in the hope that it will be useful,
@@ -17,7 +17,7 @@ Diese Datei ist Teil von OrdersPlatform.
 
 OrdersPlatform ist Freie Software: Sie können es unter den Bedingungen
 der GNU General Public License, wie von der Free Software Foundation,
-Version 3 der Lizenz oder (nach Ihrer Wahl) jeder neueren
+Version 2 der Lizenz oder (nach Ihrer Wahl) jeder neueren
 veröffentlichten Version, weiter verteilen und/oder modifizieren.
 
 OrdersPlatform wird in der Hoffnung, dass es nützlich sein wird, aber
