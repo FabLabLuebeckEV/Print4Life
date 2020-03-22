@@ -649,7 +649,10 @@
         "Active": "Active",
         "Successful Orders": "Successful Orders",
         "Schedule Start Date": "Scheduled Start Date",
-        "Schedule End Date": "Scheduled End Date"
+        "Schedule End Date": "Scheduled End Date",
+        "Name": "Name",
+        "City": "City",
+        "FOwner": "Owner"
     },
     "loginModal": {
         "title": "Login",

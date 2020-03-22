@@ -650,7 +650,10 @@
         "Active": "Aktiviert",
         "Successful Orders": "Erfolgreiche Aufträge",
         "Schedule Start Date": "Geplantes Start Datum",
-        "Schedule End Date": "Geplantes End Datum"
+        "Schedule End Date": "Geplantes End Datum",
+        "Name": "Name",
+        "City": "Stadt",
+        "FOwner": "Besitzer"
     },
     "loginModal": {
         "title": "Einloggen",

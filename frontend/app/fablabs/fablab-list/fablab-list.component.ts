@@ -24,8 +24,8 @@ export class FablabListComponent implements OnInit {
   private userIsAdmin: Boolean;
   listView: Boolean = false;
   private loadingFablabs: Boolean;
-  private users: Array<TableItem> = [];
-  private visibleUsers: Array<TableItem> = [];
+  private fablabs: Array<TableItem> = [];
+  private visibleFablabs: Array<TableItem> = [];
   headers: Array<String>;
   spinnerConfig: SpinnerConfig;
   jumpArrow: Icon;
@@ -92,7 +92,7 @@ export class FablabListComponent implements OnInit {
     this.config = this.configService.getConfig();
     this.jumpArrow = this.config.icons.forward;
     this.searchIcon = this.config.icons.search;
-    this.headers = ['id', 'Name', 'City', 'Owner', 'Active' ];
+    this.headers = ['id', 'Name', 'City', 'FOwner', 'Active' ];
     this.router.events.subscribe(() => {
       const route = this.location.path();
       if (route === `/${routes.paths.frontend.fablabs.root}` && !this.listView) {
@@ -116,19 +116,21 @@ export class FablabListComponent implements OnInit {
         this.init();
       });
       this.loadingFablabs = true;
-      this.visibleUsers = [];
-      this.users = [];
+      this.visibleFablabs = [];
+      this.fablabs = [];
       await this._loadFablabs();
       this.userIsAdmin = await this.userService.isAdmin();
       this._translate();
-      this.init();
+      await this.init();
     }
   }
 
   async init() {
-    this.users = new Array();
-    this.visibleUsers = undefined;
-    this._loadFablabs();
+    this.fablabs = new Array();
+    this.visibleFablabs = undefined;
+    await this._loadFablabs();
+    console.log({visibleLabs: this.visibleFablabs,
+    msg: 'TESTMESSAGE'});
   }
 
   searchInit() {
@@ -199,9 +201,10 @@ export class FablabListComponent implements OnInit {
         arr.push(item);
       }
 
-      this.users = this.users.concat(arr);
-      this.visibleUsers = undefined;
-      this.visibleUsers = JSON.parse(JSON.stringify(this.users));
+      this.fablabs = this.fablabs.concat(arr);
+      console.log(this.fablabs);
+      this.visibleFablabs = undefined;
+      this.visibleFablabs = JSON.parse(JSON.stringify(this.fablabs));
     }
     this.loadingFablabs = false;
     this.spinner.hide();
@@ -212,10 +215,10 @@ export class FablabListComponent implements OnInit {
     try {
       const copy = await this._loadFablabs();
       if (copy.length > 0) {
-        this.visibleUsers = copy;
+        this.visibleFablabs = copy;
       }
     } catch (err) {
-      this.visibleUsers = undefined;
+      this.visibleFablabs = undefined;
     }
   }
 
@@ -223,7 +226,7 @@ export class FablabListComponent implements OnInit {
     if (event.label === this.translationFields.buttons.deleteLabel) {
       let user: TableItem;
       let userIdx: number;
-      this.visibleUsers.forEach((item, idx) => {
+      this.visibleFablabs.forEach((item, idx) => {
         if (event.refId === item.button1.refId || event.refId === item.button2.refId) {
           user = item;
           userIdx = idx;
@@ -240,19 +243,19 @@ export class FablabListComponent implements OnInit {
         if (result === deleteButton.returnValue) {
           this.userService.deleteUser(user.obj.id.label).then((result) => {
             result = result.user;
-            const oldUser = this.visibleUsers[userIdx];
-            this.users.forEach((item) => {
+            const oldUser = this.visibleFablabs[userIdx];
+            this.fablabs.forEach((item) => {
               if (oldUser.obj.id.label === item.obj.id.label) {
-                this.users[userIdx].obj = {};
-                this.users[userIdx].obj['id'] = { label: result._id };
-                this.users[userIdx].obj['Username'] = { label: result.username };
-                this.users[userIdx].obj['Firstname'] = { label: result.firstname };
-                this.users[userIdx].obj['Lastname'] = { label: result.lastname };
-                this.users[userIdx].obj['Fablab'] = {
+                this.fablabs[userIdx].obj = {};
+                this.fablabs[userIdx].obj['id'] = { label: result._id };
+                this.fablabs[userIdx].obj['Username'] = { label: result.username };
+                this.fablabs[userIdx].obj['Firstname'] = { label: result.firstname };
+                this.fablabs[userIdx].obj['Lastname'] = { label: result.lastname };
+                this.fablabs[userIdx].obj['Fablab'] = {
                   label: result.fablab && result.fablab.name ? result.fablab.name : '-'
                 };
-                this.users[userIdx].obj['Role'] = { label: result.role.role };
-                this.users[userIdx].obj['Active'] = {
+                this.fablabs[userIdx].obj['Role'] = { label: result.role.role };
+                this.fablabs[userIdx].obj['Active'] = {
                   label: result.activated && result.activated === true ?
                     this.translationFields.badges.active :
                     this.translationFields.badges.inactive,
@@ -261,16 +264,16 @@ export class FablabListComponent implements OnInit {
                 };
               }
             });
-            this.users[userIdx].obj = {};
-            this.users[userIdx].obj['id'] = { label: result._id };
-            this.users[userIdx].obj['Username'] = { label: result.username };
-            this.users[userIdx].obj['Firstname'] = { label: result.firstname };
-            this.users[userIdx].obj['Lastname'] = { label: result.lastname };
-            this.users[userIdx].obj['Fablab'] = {
+            this.fablabs[userIdx].obj = {};
+            this.fablabs[userIdx].obj['id'] = { label: result._id };
+            this.fablabs[userIdx].obj['Username'] = { label: result.username };
+            this.fablabs[userIdx].obj['Firstname'] = { label: result.firstname };
+            this.fablabs[userIdx].obj['Lastname'] = { label: result.lastname };
+            this.fablabs[userIdx].obj['Fablab'] = {
               label: result.fablab && result.fablab.name ? result.fablab.name : '-'
             };
-            this.users[userIdx].obj['Role'] = { label: result.role.role };
-            this.users[userIdx].obj['Active'] = {
+            this.fablabs[userIdx].obj['Role'] = { label: result.role.role };
+            this.fablabs[userIdx].obj['Active'] = {
               label: result.activated && result.activated === true ?
                 this.translationFields.badges.active :
                 this.translationFields.badges.inactive,
