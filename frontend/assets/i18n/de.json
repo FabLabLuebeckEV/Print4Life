@@ -561,7 +561,10 @@
             "batched": "Produktionsstatus",
             "batchAssigned": "Zugewiesen",
             "batchOpen": "Offen",
-            "batchFinished": "Erledigt"
+            "batchFinished": "Erledigt",
+            "imanufacture": "Ich fertige",
+            "count": "Stück",
+            "helpnow": "Jetzt unterstützen"
         },
         "modals": {
             "ok": "Ja",

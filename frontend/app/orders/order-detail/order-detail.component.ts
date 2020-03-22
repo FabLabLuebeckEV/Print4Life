@@ -92,7 +92,10 @@ export class OrderDetailComponent implements OnInit {
       batched: '',
       batchAssigned: '',
       batchOpen: '',
-      batchFinished: ''
+      batchFinished: '',
+      imanufacture: '',
+      count: '',
+      helpnow: ''
     },
     modals: {
       ok: '',
@@ -163,6 +166,8 @@ export class OrderDetailComponent implements OnInit {
                     batch.fablab = result.fablab;
                   });
                 });
+              } else {
+                this.order.batch['finished'] = [];
               }
 
               const loggedInUser = await this.userService.findOwn();
@@ -178,6 +183,8 @@ export class OrderDetailComponent implements OnInit {
                     batch.fablab = result.fablab;
                   });
                 });
+              } else {
+                this.order.batch['accepted'] = [];
               }
 
               this.loadChart();
@@ -273,7 +280,7 @@ export class OrderDetailComponent implements OnInit {
       if (result === orderButton.returnValue) {
         if (this.myBatch > 0) {
           let found = false;
-    
+
           const loggedInUser = await this.userService.findOwn();
           this.order.batch['accepted'].forEach( element => {
             if (element.fablab._id === loggedInUser.fablabId) {
@@ -281,15 +288,17 @@ export class OrderDetailComponent implements OnInit {
               found = true;
             }
           });
-    
+
           if (!found) {
-            this.order.batch['accepted'].append({
+            console.log(this.order.batch['accepted']);
+            this.order.batch['accepted'].push({
               fablab: loggedInUser.fablabId,
               number: this.myBatch,
               status: 'zugewiesen'
             });
+            
           }
-    
+
           await this.orderService.updateOrder(this.order);
           window.location.reload();
         }
@@ -297,7 +306,7 @@ export class OrderDetailComponent implements OnInit {
     });
 
 
-    
+
   }
 
   public loadChart() {
@@ -454,7 +463,10 @@ export class OrderDetailComponent implements OnInit {
           batched: translations['orderDetail'].labels.batched,
           batchAssigned: translations['orderDetail'].labels.batchAssigned,
           batchOpen: translations['orderDetail'].labels.batchOpen,
-          batchFinished: translations['orderDetail'].labels.batchFinished
+          batchFinished: translations['orderDetail'].labels.batchFinished,
+          imanufacture: translations['orderDetail'].labels.imanufacture,
+          count: translations['orderDetail'].labels.count,
+          helpnow: translations['orderDetail'].labels.helpnow
         },
         modals: {
           ok: translations['orderDetail'].modals.ok,

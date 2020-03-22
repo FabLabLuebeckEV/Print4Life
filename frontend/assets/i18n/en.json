@@ -560,7 +560,10 @@
             "batched": "Production status",
             "batchAssigned": "Assigned",
             "batchOpen": "Open",
-            "batchFinished": "Finished"
+            "batchFinished": "Finished",
+            "imanufacture": "I will manufacture",
+            "count": "pieces",
+            "helpnow": "Support now"
         },
         "modals": {
             "ok": "Yes",
