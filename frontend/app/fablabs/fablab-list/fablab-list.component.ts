@@ -167,10 +167,9 @@ export class FablabListComponent implements OnInit {
       fablabs = fablabs.fablabs;
       for (const fablab of fablabs) {
         const item = new TableItem();
-        if(fablab.owner) {
+        if (fablab.owner) {
           const result = await this.userService.getProfile(fablab.owner);
-          if(result)
-          {
+          if (result) {
             fablab.owner = result;
           }// , href: `./${fablab._id}`
         }
