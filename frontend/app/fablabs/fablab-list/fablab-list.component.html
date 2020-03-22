@@ -1,0 +1,62 @@
+<div #spinnerContainer>
+  <ngx-spinner [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size" [color]="spinnerConfig.color"
+    [type]="spinnerConfig.type">{{spinnerConfig.loadingText}}</ngx-spinner>
+</div>
+<router-outlet>
+</router-outlet>
+<div *ngIf="listView">
+  <div class="row">
+    <div class="col-md-3">
+      <label for="fablabs">{{translationFields.filterLabel.users}}</label>
+      <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false"
+        [items]=filter.allFablabs bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabs" (close)="init()"
+        (remove)="init()" (clear)="init()" name="fablabs" #fablabs="ngModel">
+      </ng-select>
+    </div>
+    <div class="col-md-3">
+      <form>
+        <label for="search">{{translationFields.filterLabel.search}}</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search"
+            #search="ngModel">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary" (click)="searchInit()" type="submit">
+              <fa-icon [icon]="searchIcon"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 fablab-list-container">
+      <app-table (buttonEvent)="eventHandler($event)" [items]="visibleFablabs" [headers]="headers"></app-table>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <form>
+        <div class="row">
+          <div class="col-1 col-md-5">
+          </div>
+          <div class="col-7 col-md-2 text-center">
+            <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
+            <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage"
+              name="jumpToPage" #jumpToPage="ngModel">
+          </div>
+          <div class="col-1 align-self-end">
+            <button [disabled]="!paginationObj.jumpToPage" type="submit" class="btn btn-primary"
+              (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
+              <fa-icon [icon]="jumpArrow"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+      <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems"
+        [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="pageChanged()"
+        [maxSize]="paginationObj.maxSize" [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks"
+        aria-label="Default pagination"></ngb-pagination>
+    </div>
+  </footer>
+</div>

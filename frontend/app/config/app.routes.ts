@@ -18,7 +18,8 @@ import { IotDeviceListComponent } from '../iot-devices/iot-device-list/iot-devic
 import { IotDeviceFormComponent } from '../iot-devices/iot-device-form/iot-device-form.component';
 import { IotDeviceDetailComponent } from '../iot-devices/iot-device-detail/iot-device-detail.component';
 import { UserActivationComponent } from '../users/user-activation/user-activation.component';
-
+import { FablabFormComponent } from '../fablabs/fablab-form/fablab-form.component';
+import { FablabListComponent } from '../fablabs/fablab-list/fablab-list.component';
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(private userService: UserService, private errorService: ErrorService) { }
@@ -36,6 +37,25 @@ export class AuthGuard implements CanActivate {
         }
         return isLoggedIn;
     }
+}
+@Injectable()
+export class AdminGuard implements CanActivate {
+    constructor(private userService: UserService, private errorService: ErrorService) { }
+   async canActivate():  Promise<boolean> {
+        const isAdmin = await this.userService.isAdmin();
+        if (!isAdmin) {
+            this.errorService.showError({
+                type: ErrorType.UNAUTHORIZED,
+                status: 401,
+                statusText: 'Unauthorized',
+                stack: 'You need to login as Admin to visit this route!',
+                data: undefined
+            });
+        }
+       return new Promise<boolean>((res, rej) => {
+            res(isAdmin.valueOf());
+        });
+   }
 }
 
 export const appRoutes: Routes = [
@@ -115,6 +135,16 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent, },
             { path: routes.paths.frontend.users.profile, component: UserFormComponent },
             { path: ':id', component: UserDetailComponent }
+        ]
+    },
+    {
+        path: routes.paths.frontend.fablabs.root,
+        component: FablabListComponent,
+        runGuardsAndResolvers: 'always',
+        children: [
+        {path: routes.paths.frontend.fablabs.update + '/:id', component: FablabFormComponent, canActivate: [AdminGuard]},
+            { path: routes.paths.frontend.fablabs.profile, component: FablabFormComponent, canActivate: [AuthGuard]},
+            { path: routes.paths.frontend.fablabs.register, component: FablabFormComponent, canActivate: [AuthGuard]}
         ]
     },
     {

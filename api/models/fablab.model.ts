@@ -14,6 +14,10 @@ const attributes = {
     type: Boolean,
     required: true,
     default: true
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
   }
 };
 

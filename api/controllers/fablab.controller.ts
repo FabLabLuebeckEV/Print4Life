@@ -197,12 +197,13 @@ async function create (req, res) {
   // check admin permissions, see #178
   const token = req.headers.authorization.split('JWT')[1].trim();
   const user = await userService.getUserByToken(token);
-
-  if (user.role.role !== 'admin') {
+  const ownFablab = await userService.ownsFablab(user._id);
+  if (ownFablab) {
     const msg = {
       err: 'FORBIDDEN',
-      message: 'User can not create FabLabs!'
+      message: 'User already owns a fablab!'
     };
+
     res.status(403).send(msg);
     return;
   }
@@ -300,14 +301,7 @@ async function update (req, res) {
   const token = req.headers.authorization.split('JWT')[1].trim();
   const user = await userService.getUserByToken(token);
 
-  if (user.role.role !== 'admin') {
-    const msg = {
-      err: 'FORBIDDEN',
-      message: 'User can not update FabLabs!'
-    };
 
-    return res.status(403).send(msg);
-  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -324,6 +318,14 @@ async function update (req, res) {
       const msg = { error: `Fablab by id '${req.params.id}' not found` };
       logger.error(msg);
       return res.status(404).send(msg);
+    }
+    if (fablab.owner !== user._id && (user.role.role !== 'admin')) {
+      const msg = {
+        err: 'FORBIDDEN',
+        message: 'User doesn\'t own this fablab!'
+      };
+
+      return res.status(403).send(msg);
     }
     fablab = await fablabService.update(req.params.id, req.body);
     logger.info(`PUT Fablab with result ${JSON.stringify(fablab)}`);

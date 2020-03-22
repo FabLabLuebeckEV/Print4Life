@@ -128,7 +128,13 @@
             "login": "Login",
             "profile": "Show User Profile",
             "listUsers": "List Users"
-        }
+        },
+        "fablabs": {
+                "title": "Fablab",
+                "signUp": "Register Fablab",
+                "profile": "Show Fablab Profile",
+                "listFablabs": "List Fablabs"
+            }
     },
     "deviceTypes": {
         "lasercutter": "Lasercutter",
@@ -641,6 +647,40 @@
             "changePassword": "change"
         }
     },
+    "fablabForm": {
+        "createTitle": "Register Fablab",
+        "editTitle": "Edit Fablab",
+        "labels": {
+            "name": "Name",
+            "isActivated": "Account activated",
+            "createSubmit": "Register",
+            "editSubmit": "Edit",
+            "fablab": "Fablab"
+        },
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "createSuccessHeader": "Fablab created",
+            "updateSuccessHeader": "Fablab updated",
+            "createSuccess": "The Fablab was successfully created!",
+            "updateSuccess": "The Fablab was successfully updated!",
+            "errorHeader": "Error",
+            "updateError": "Error while trying to update the Fablab!",
+            "createError": "Error while trying to create the Fablab!"
+        },
+        "messages": {
+            "name": "Name is required",
+            "street": "Street is required",
+            "zipCode": "Zip code is required",
+            "city": "City is required",
+            "country": "Country is required",
+            "notAssigned": "Not assigned"
+        },
+        "buttons": {
+            "activatedTrue": "active",
+            "activatedFalse": "inactive"
+        }
+    },
     "tableComponent": {
         "id": "ID",
         "Device ID": "Device ID",
@@ -663,7 +703,10 @@
         "Active": "Active",
         "Successful Orders": "Successful Orders",
         "Schedule Start Date": "Scheduled Start Date",
-        "Schedule End Date": "Scheduled End Date"
+        "Schedule End Date": "Scheduled End Date",
+        "Name": "Name",
+        "City": "City",
+        "FOwner": "Owner"
     },
     "loginModal": {
         "title": "Login",
