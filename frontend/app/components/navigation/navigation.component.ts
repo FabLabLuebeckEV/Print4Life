@@ -28,6 +28,7 @@ export class NavigationComponent implements OnInit {
   iotDevicesDropdown: Dropdown = { name: '', elements: [] };
   languageDropdown: Dropdown = { name: '', elements: [] };
   userDropdown: Dropdown = { name: '', elements: [] };
+  fablabDropdown: Dropdown = {name: '', elements: []};
   userIsLoggedIn: Boolean;
   userIsAdmin: Boolean;
   user: User;
@@ -61,7 +62,7 @@ export class NavigationComponent implements OnInit {
 
   private _translate() {
     this.translateService.stream(
-      ['navigation', 'languages', 'dropdown.machines', 'dropdown.orders', 'dropdown.users', 'dropdown.iotDevices']
+      ['navigation', 'languages', 'dropdown.machines', 'dropdown.fablabs', 'dropdown.orders', 'dropdown.users', 'dropdown.iotDevices']
     ).subscribe((translations => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.title = translations['navigation'].title;
@@ -154,11 +155,37 @@ export class NavigationComponent implements OnInit {
         ]
       };
 
+      this.fablabDropdown = {
+        name: translations['dropdown.fablabs'].title,
+        elements: []
+      };
+
+      this.fablabDropdown.elements.push({
+        name: translations['dropdown.fablabs'].listFablabs,
+        routerHref: `${routes.paths.frontend.fablabs.root}/`
+      });
+
+      if (this.userIsLoggedIn) {
+        if (!this.user.fablabId) {
+          this.fablabDropdown.elements.push({
+            name: translations['dropdown.fablabs'].create,
+            routerHref: `${routes.paths.frontend.fablabs.root}/${routes.paths.frontend.fablabs.register}`
+          });
+        } else {
+          this.fablabDropdown.elements.push({
+            name: translations['dropdown.fablabs'].profile,
+            routerHref: `${routes.paths.frontend.fablabs.root}/${routes.paths.frontend.fablabs.profile}`
+          });
+        }
+      }
+
 
       this.userDropdown = {
         name: translations['dropdown.users'].title,
         elements: []
       };
+
+
 
       if (this.user) {
         this.userDropdown.elements.push({

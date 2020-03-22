@@ -128,6 +128,12 @@
       "login": "Einloggen",
       "profile": "Benutzerprofil anzeigen",
       "listUsers": "Benutzerliste"
+    },
+    "fablabs": {
+      "title": "Fablab",
+      "signUp": "Registrieren",
+      "profile": "Fablabprofil anzeigen",
+      "listFablabs": "Fablab Liste"
     }
   },
   "deviceTypes": {

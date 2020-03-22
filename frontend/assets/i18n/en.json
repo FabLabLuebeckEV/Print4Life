@@ -128,7 +128,13 @@
             "login": "Login",
             "profile": "Show User Profile",
             "listUsers": "List Users"
-        }
+        },
+        "fablabs": {
+                "title": "Fablab",
+                "signUp": "Register Fablab",
+                "profile": "Show Fablab Profile",
+                "listFablabs": "List Fablabs"
+            }
     },
     "deviceTypes": {
         "lasercutter": "Lasercutter",
