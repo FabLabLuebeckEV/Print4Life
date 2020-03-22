@@ -5,6 +5,7 @@ export class Fablab {
     public _id: String,
     public name: String,
     public address: Address,
-    public activated: Boolean
+    public activated: Boolean,
+    public owner: String
   ) {}
 }
