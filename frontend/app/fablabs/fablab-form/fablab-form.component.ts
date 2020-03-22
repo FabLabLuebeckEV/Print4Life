@@ -136,7 +136,7 @@ export class FablabFormComponent implements OnInit {
       this.fablabId = this.loggedInUser.fablabId;
     }
     await this._initializeFablab(this.fablabId);
-    this.isOwner = this.fablab.owner == this.loggedInUser._id;
+    this.isOwner = this.fablab.owner === this.loggedInUser._id;
     this._translate();
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
