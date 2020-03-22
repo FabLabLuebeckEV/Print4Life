@@ -24,46 +24,46 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-11 table-spacing">
+    <div class="col-md-11 table-spacing table-inverse">
       <table class="table table-striped">
         <tbody>
           <tr>
-            <td class="align-middle text-center">{{translationFields.labels.owner}}</td>
-            <td class="align-middle text-center">
+            <td class="align-middle">{{translationFields.labels.owner}}</td>
+            <td class="align-middle">
               <a *ngIf=userIsLoggedIn [routerLink]="ownerLink">{{ owner.fullname }}</a>
               <span *ngIf=!userIsLoggedIn>{{ owner.fullname }}</span>
             </td>
           </tr>
           <tr *ngIf="order.shippingAddress">
-            <td class="align-middle text-center">{{translationFields.labels.addressTitle}}</td>
-            <td class="align-middle text-center">{{order.shippingAddress.street}}<br>{{order.shippingAddress.zipCode
+            <td class="align-middle">{{translationFields.labels.addressTitle}}</td>
+            <td class="align-middle">{{order.shippingAddress.street}}<br>{{order.shippingAddress.zipCode
               + " " +
               order.shippingAddress.city}}<br>{{order.shippingAddress.country}}</td>
           </tr>
-          <tr>
-            <td class="align-middle text-center">{{translationFields.labels.editor}}</td>
-            <td class="align-middle text-center">
+          <tr *ngIf="!order.isBatched">
+            <td class="align-middle">{{translationFields.labels.editor}}</td>
+            <td class="align-middle">
               <a *ngIf=userIsLoggedIn [routerLink]="editorLink">{{ editor.fullname }}</a>
               <span *ngIf=!userIsLoggedIn>{{ editor.fullname }}</span>
             </td>
           </tr>
-          <tr>
-            <td class="align-middle text-center">{{translationFields.labels.status}}</td>
-            <td class="align-middle text-center">
+          <tr *ngIf="!order.isBatched">
+            <td class="align-middle">{{translationFields.labels.status}}</td>
+            <td class="align-middle">
               <span class="badge badge-secondary">{{order['shownStatus']}}</span>
             </td>
           </tr>
           <tr>
-            <td class="align-middle text-center">{{translationFields.labels.createdAt}}</td>
-            <td class="align-middle text-center">{{order['shownCreatedAt']}}</td>
+            <td class="align-middle">{{translationFields.labels.createdAt}}</td>
+            <td class="align-middle">{{order['shownCreatedAt']}}</td>
           </tr>
           <tr *ngIf="schedule && schedule.startDate && schedule.endDate">
-            <td class="align-middle text-center">{{translationFields.labels.scheduledFor}}</td>
-            <td class="align-middle text-center">{{schedule.shownStartDate}} - {{schedule.shownEndDate}}</td>
+            <td class="align-middle">{{translationFields.labels.scheduledFor}}</td>
+            <td class="align-middle">{{schedule.shownStartDate}} - {{schedule.shownEndDate}}</td>
           </tr>
           <tr *ngIf="machine">
-            <td class="align-middle text-center">{{translationFields.labels.machine}}</td>
-            <td class="align-middle text-center">
+            <td class="align-middle">{{translationFields.labels.machine}}</td>
+            <td class="align-middle">
               <a *ngIf="userIsLoggedIn && machine.deviceName" [routerLink]="machine.detailView">{{ machine.deviceName
                 }}</a>
               <span *ngIf="!userIsLoggedIn && machine.deviceName">{{ machine.deviceName }}</span>
@@ -71,18 +71,32 @@
             </td>
           </tr>
           <tr *ngIf="fablab">
-            <td class="align-middle text-center">{{translationFields.labels.fablab}}</td>
-            <td class="align-middle text-center">
+            <td class="align-middle">{{translationFields.labels.fablab}}</td>
+            <td class="align-middle">
               {{fablab.name}}
             </td>
           </tr>
+          <tr *ngIf="order.isBatched" class="assignRow">
+            <td>
+              Ich fertige
+            </td>
+            <td>
+              <div>
+                <input type="number" class="form-control" id="batchNumber" 
+                  [(ngModel)]="order.batch.number" name="batchNumber" #batchNumber="ngModel">
+                <label for="batchNumber">Stück</label>
+                <button type="button"  class="btn btn-primary">Jetzt unterstützen</button>
+              </div>
+            </td>
+          </tr>
           <tr [hidden]="!order.isBatched" class="collapseToggle" data-toggle="collapse" data-target="#chartExpand"  aria-expanded="false" aria-controls="chartExpand">
-            <td class="align-middle text-center">{{translationFields.labels.batched}}</td>
-            <td class="align-middle text-center">
+            <td class="align-middle">{{translationFields.labels.batched}}</td>
+            <td class="align-middle spinner-td">
               <div class="spinner-container" >
                 <canvas #chartCanvas>
                   {{chart}}
                 </canvas>
+
               </div>
               <!--<mat-progress-spinner [value]="10" [strokeWidth]="13" [diameter]="102" id="spinner_finished" class="spinner-combi">
               </mat-progress-spinner>
@@ -92,39 +106,38 @@
               </mat-progress-spinner>-->
             </td>
           </tr>
-          <tr class="collapse" id="chartExpand">
-            <td colspan="2">
-              <div >
-                <table class="table table-striped">
-                  <tbody>
-                    <tr>
-                      <th>
-                        FabLab
-                      </th>
-                      <th>
-                        Anzahl
-                      </th>
-                      <th>
-                        Status
-                      </th>
-                    </tr>
-                    <tr class="finished_batches" *ngFor="let batch of order.batch.finished">
-                      <td><b>{{batch.fablab.name}}</b></td><!--TODO: Link auf Besitzer!-->
-                      <td><b>{{batch.number}}</b></td>
-                      <td><b>{{batch.status}}</b></td>
-                    </tr>
-                    <tr class="accepted_batches" *ngFor="let batch of order.batch.accepted">
-                      <td><b>{{batch.fablab.name}}</b></td><!--TODO: Link auf Besitzer!-->
-                      <td><b>{{batch.number}}</b></td>
-                      <td><b>{{batch.status}}</b></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </td>
-          </tr>
+          
         </tbody>
       </table>
+      <div class="collapse" id="chartExpand">
+        <div >
+          <table class="table table-striped">
+            <tbody>
+              <tr>
+                <th>
+                  FabLab
+                </th>
+                <th>
+                  Anzahl
+                </th>
+                <th>
+                  Status
+                </th>
+              </tr>
+              <tr class="finished_batches" *ngFor="let batch of order.batch.finished">
+                <td><b>{{batch.fablab.name}}</b></td><!--TODO: Link auf Besitzer!-->
+                <td><b>{{batch.number}}</b></td>
+                <td><b>{{batch.status}}</b></td>
+              </tr>
+              <tr class="accepted_batches" *ngFor="let batch of order.batch.accepted">
+                <td><b>{{batch.fablab.name}}</b></td><!--TODO: Link auf Besitzer!-->
+                <td><b>{{batch.number}}</b></td>
+                <td><b>{{batch.status}}</b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -245,20 +245,21 @@ export class OrderDetailComponent implements OnInit {
 
   public loadChart() {
     if (this.chartCanvas) {
+      const remaining = this.order.batch['number'] - this.order.batch['acceptedCount'] - this.order.batch['finishedCount'];
       this.chart = new Chart(this.chartCanvas.nativeElement.getContext('2d'), {
         type: 'doughnut',
         data: {
           labels: [
-            this.translationFields.labels.batchFinished,
-            this.translationFields.labels.batchAssigned,
-            this.translationFields.labels.batchOpen
+            this.translationFields.labels.batchFinished + ' : ' + this.order.batch['finishedCount'],
+            this.translationFields.labels.batchAssigned + ' : ' + this.order.batch['acceptedCount'],
+            this.translationFields.labels.batchOpen + ' : ' + remaining
           ],
           datasets: [
             {
               data: [
                 this.order.batch['finishedCount'],
                 this.order.batch['acceptedCount'],
-                this.order.batch['number'] - this.order.batch['acceptedCount'] - this.order.batch['finishedCount']
+                remaining
               ],
               backgroundColor: [
                 '#45B29D',
@@ -270,7 +271,16 @@ export class OrderDetailComponent implements OnInit {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          tooltips: {
+            enabled: false
+          },
+          legend: {
+            labels: {
+              fontSize: 20,
+              fontFamily: 'Roboto'
+            }
+          }
         }
       });
     }

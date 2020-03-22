@@ -4,7 +4,11 @@
 
 .spinner-container {
     position: relative;
-    height: 150px !important;
+    height: 250px !important;
+    width: 800px !important;
+    /*margin-left:auto;
+    margin-right:auto;
+    text-align: center;*/
 }
 
 .collapseToggle {
@@ -12,8 +16,8 @@
 }
 
 #chartCanvas {
-    height: 150px !important;
-    width: 150px !important;
+    height: 250px !important;
+    width: 250px !important;
 }
 
 .finished_batches {
@@ -22,4 +26,34 @@
 
 .accepted_batches {
     color: #EFC94C;
+}
+
+.table {
+    font-size: 20px;
+}
+
+.table td:nth-child(1) {
+    padding-left: 40px;
+    font-weight: bold;
+}
+
+.table td:nth-child(2) {
+    padding-left: 150px;
+}
+
+.spinner-td {
+    padding-left: 0px !important;
+}
+
+.assignRow input, .assignRow label {
+    display:inline;
+    width: inherit;
+}
+
+.assignRow label {
+    margin-left:10px;
+}
+
+.assignRow button {
+    margin-left: 20px;
 }

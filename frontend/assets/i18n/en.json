@@ -557,7 +557,7 @@
             "addressTitle": "Shippingaddress",
             "latestVersion": "Latest Version",
             "scheduledFor": "Scheduled for",
-            "batched": "Production status:",
+            "batched": "Production status",
             "batchAssigned": "Assigned",
             "batchOpen": "Open",
             "batchFinished": "Finished"
