@@ -45,25 +45,14 @@ export class FablabFormComponent implements OnInit {
 
   translationFields = {
     title: '',
-    shownRoles: [],
-    shownLanguages: [],
     labels: {
-      username: '',
-      firstName: '',
-      secondName: '',
-      password: '',
-      passwordValidation: '',
-      email: '',
-      role: '',
+      name: '',
       isActivated: '',
       street: '',
       zipCode: '',
       city: '',
       country: '',
       submit: '',
-      fablab: '',
-      changePassword: '',
-      preferredLanguage: ''
     },
     modals: {
       ok: '',
@@ -72,32 +61,18 @@ export class FablabFormComponent implements OnInit {
       successMessage: '',
       errorHeader: '',
       errorMessage: '',
-      updatePasswordSuccessHeader: '',
-      updatePasswordSuccess: '',
-      updatePasswordErrorHeader: '',
-      updatePasswordError: ''
     },
     messages: {
-      username: '',
-      firstName: '',
-      secondName: '',
-      password: '',
-      passwordValidation: '',
-      passwordValidationWrong: '',
-      email: '',
-      role: '',
+      name: '',
       street: '',
       zipCode: '',
       city: '',
       country: '',
       notAssigned: '',
-      preferredLanguage: ''
     },
     buttons: {
       activatedTrue: '',
-      activatedFalse: '',
-      changePassword: ''
-    }
+      activatedFalse: '',    }
   };
 
   constructor(
@@ -237,103 +212,57 @@ export class FablabFormComponent implements OnInit {
 
   private _translate() {
     this.translateService
-      .get(['userForm', 'roles', 'languages', 'address'])
+      .get(['fablabForm', 'address'])
       .subscribe(translations => {
-        const shownRoles = [];
-        this.validRoles.forEach(role => {
-          const translated = translations['roles'][`${role}`];
-          if (translated) {
-            shownRoles.push(translated);
-          }
-        });
-
-        const shownLanguages = [];
-        this.validLanguages.forEach(lang => {
-          const translated = translations['languages'][`${lang}`];
-          if (translated) {
-            shownLanguages.push(translated);
-          }
-        });
-
         this.translationFields = {
           title:
             !this.editView && !this.profileView
-              ? translations['userForm'].createTitle
-              : translations['userForm'].editTitle,
-          shownRoles: shownRoles,
-          shownLanguages: shownLanguages,
+              ? translations['fablabForm'].createTitle
+              : translations['fablabForm'].editTitle,
           labels: {
-            username: translations['userForm'].labels.username,
-            firstName: translations['userForm'].labels.firstName,
-            secondName: translations['userForm'].labels.secondName,
-            password: translations['userForm'].labels.password,
-            passwordValidation:
-              translations['userForm'].labels.passwordValidation,
-            email: translations['userForm'].labels.email,
-            role: translations['userForm'].labels.role,
-            isActivated: translations['userForm'].labels.isActivated,
+            name: translations['fablabForm'].labels.name,
+            isActivated: translations['fablabForm'].labels.isActivated,
             street: translations['address'].street,
             zipCode: translations['address'].zipCode,
             city: translations['address'].city,
             country: translations['address'].country,
             submit:
               !this.editView && !this.profileView
-                ? translations['userForm'].labels.createSubmit
-                : translations['userForm'].labels.editSubmit,
-            fablab: translations['userForm'].labels.fablab,
-            changePassword: translations['userForm'].labels.changePassword,
-            preferredLanguage: translations['userForm'].labels.preferredLanguage
+                ? translations['fablabForm'].labels.createSubmit
+                : translations['fablabForm'].labels.editSubmit
           },
           modals: {
-            ok: translations['userForm'].modals.ok,
-            okReturnValue: translations['userForm'].modals.okReturnValue,
+            ok: translations['fablabForm'].modals.ok,
+            okReturnValue: translations['fablabForm'].modals.okReturnValue,
             successHeader:
               this.editView || this.profileView
-                ? translations['userForm'].modals.updateSuccessHeader
-                : translations['userForm'].modals.createSuccessHeader,
+                ? translations['fablabForm'].modals.updateSuccessHeader
+                : translations['fablabForm'].modals.createSuccessHeader,
             successMessage:
               this.editView || this.profileView
-                ? translations['userForm'].modals.updateSuccess
-                : translations['userForm'].modals.createSuccess,
-            errorHeader: translations['userForm'].modals.errorHeader,
+                ? translations['fablabForm'].modals.updateSuccess
+                : translations['fablabForm'].modals.createSuccess,
+            errorHeader: translations['fablabForm'].modals.errorHeader,
             errorMessage:
               this.editView || this.profileView
-                ? translations['userForm'].modals.updateError
-                : translations['userForm'].modals.createError,
-            updatePasswordSuccessHeader:
-              translations['userForm'].modals.updatePasswordSuccessHeader,
-            updatePasswordSuccess:
-              translations['userForm'].modals.updatePasswordSuccess,
-            updatePasswordErrorHeader:
-              translations['userForm'].modals.updatePasswordErrorHeader,
-            updatePasswordError:
-              translations['userForm'].modals.updatePasswordError
+                ? translations['fablabForm'].modals.updateError
+                : translations['fablabForm'].modals.createError
           },
           messages: {
-            username: translations['userForm'].messages.username,
-            firstName: translations['userForm'].messages.firstName,
-            secondName: translations['userForm'].messages.secondName,
-            password: translations['userForm'].messages.password,
-            passwordValidation:
-              translations['userForm'].messages.passwordValidation,
-            passwordValidationWrong:
-              translations['userForm'].messages.passwordValidationWrong,
-            email: translations['userForm'].messages.email,
-            role: translations['userForm'].messages.role,
-            street: translations['userForm'].messages.street,
-            zipCode: translations['userForm'].messages.zipCode,
-            city: translations['userForm'].messages.city,
-            country: translations['userForm'].messages.country,
-            notAssigned: translations['userForm'].messages.notAssigned,
-            preferredLanguage:
-              translations['userForm'].messages.preferredLanguage
+            name: translations['fablabForm'].messages.name,
+            street: translations['fablabForm'].messages.street,
+            zipCode: translations['fablabForm'].messages.zipCode,
+            city: translations['fablabForm'].messages.city,
+            country: translations['fablabForm'].messages.country,
+            notAssigned: translations['fablabForm'].messages.notAssigned
           },
           buttons: {
-            activatedTrue: translations['userForm'].buttons.activatedTrue,
-            activatedFalse: translations['userForm'].buttons.activatedFalse,
-            changePassword: translations['userForm'].buttons.changePassword
+            activatedTrue: translations['fablabForm'].buttons.activatedTrue,
+            activatedFalse: translations['fablabForm'].buttons.activatedFalse
           }
         };
       });
+              console.log(this.translationFields);
+
   }
 }

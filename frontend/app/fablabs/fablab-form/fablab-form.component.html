@@ -12,11 +12,11 @@
     <form (ngSubmit)="onSubmit()" #createUserForm="ngForm">
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="username">{{translationFields.labels.username}}</label>
+          <label for="username">{{translationFields.labels.name}}</label>
           <input type="text" class="form-control" id="name" required [(ngModel)]="fablab.name" name="name"
             [disabled]="editView || profileView" #username="ngModel">
           <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
-            {{translationFields.messages.username}}
+            {{translationFields.messages.name}}
           </div>
         </div>
       </div>

@@ -627,6 +627,40 @@
             "changePassword": "change"
         }
     },
+    "fablabForm": {
+        "createTitle": "Register Fablab",
+        "editTitle": "Edit Fablab",
+        "labels": {
+            "name": "Name",
+            "isActivated": "Account activated",
+            "createSubmit": "Register",
+            "editSubmit": "Edit",
+            "fablab": "Fablab"
+        },
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "createSuccessHeader": "Fablab created",
+            "updateSuccessHeader": "Fablab updated",
+            "createSuccess": "The Fablab was successfully created!",
+            "updateSuccess": "The Fablab was successfully updated!",
+            "errorHeader": "Error",
+            "updateError": "Error while trying to update the Fablab!",
+            "createError": "Error while trying to create the Fablab!"
+        },
+        "messages": {
+            "name": "Name is required",
+            "street": "Street is required",
+            "zipCode": "Zip code is required",
+            "city": "City is required",
+            "country": "Country is required",
+            "notAssigned": "Not assigned"
+        },
+        "buttons": {
+            "activatedTrue": "active",
+            "activatedFalse": "inactive"
+        }
+    },
     "tableComponent": {
         "id": "ID",
         "Device ID": "Device ID",
