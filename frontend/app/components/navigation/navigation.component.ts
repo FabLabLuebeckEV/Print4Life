@@ -160,12 +160,13 @@ export class NavigationComponent implements OnInit {
         elements: []
       };
 
-      this.fablabDropdown.elements.push({
-        name: translations['dropdown.fablabs'].listFablabs,
-        routerHref: `${routes.paths.frontend.fablabs.root}/`
-      });
 
       if (this.userIsLoggedIn) {
+
+        this.fablabDropdown.elements.push({
+          name: translations['dropdown.fablabs'].listFablabs,
+          routerHref: `${routes.paths.frontend.fablabs.root}/`
+        });
         if (!this.user.fablabId) {
           this.fablabDropdown.elements.push({
             name: translations['dropdown.fablabs'].create,
