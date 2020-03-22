@@ -148,6 +148,8 @@ export class OrderDetailComponent implements OnInit {
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
     });
+    this.loggedInUser = await this.userService.getUser();
+    console.log(this.loggedInUser);
 
     this.route.paramMap
       .subscribe(async (params) => {

@@ -119,7 +119,7 @@
               </table>
             </td>
           </tr>
-          <tr *ngIf="order.isBatched" class="assignRow">
+          <tr *ngIf="order.isBatched && this.loggedInUser.fablabId && this.loggedInUser.fablabId !== ''" class="assignRow">
             <td>
                 {{translationFields.labels.imanufacture}}
             </td>
