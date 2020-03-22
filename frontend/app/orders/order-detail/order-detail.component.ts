@@ -296,7 +296,6 @@ export class OrderDetailComponent implements OnInit {
               number: this.myBatch,
               status: 'zugewiesen'
             });
-            
           }
 
           await this.orderService.updateOrder(this.order);
