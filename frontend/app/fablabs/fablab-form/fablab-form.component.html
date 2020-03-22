@@ -37,7 +37,7 @@
       <div class="form-group row">
         <div class="col-md-12">
           <label for="street">{{translationFields.labels.street}}</label>
-          <input type="text" class="form-control" id="street" [(ngModel)]="fablab.address.street" name="street" #street="ngModel">
+          <input type="text" class="form-control"  [disabled]="profileView && !isOwner" id="street" [(ngModel)]="fablab.address.street" name="street" #street="ngModel">
           <div [hidden]="street.valid || street.pristine" class="alert alert-danger">
             {{translationFields.messages.street}}
           </div>
@@ -46,16 +46,16 @@
       <div class="form-group row">
         <div class="col-md-4">
           <label for="zipCode">{{translationFields.labels.zipCode}}</label>
-          <input type="text" class="form-control" id="zipCode" [(ngModel)]="fablab.address.zipCode" name="zipCode"
+          <input type="text" class="form-control" [disabled]="profileView && !isOwner" id="zipCode" [(ngModel)]="fablab.address.zipCode" name="zipCode"
             #zipCode="ngModel">
-          <div [hidden]="zipCode.valid || zipCode.pristine" class="alert alert-danger">
+          <div [hidden]="zipCode.valid || zipCode.pristine"  class="alert alert-danger">
             {{translationFields.messages.zipCode}}
           </div>
         </div>
         <div class="col-md-8">
           <label for="city">{{translationFields.labels.city}}</label>
-          <input type="text" class="form-control" id="city" [(ngModel)]="fablab.address.city" name="city" #city="ngModel">
-          <div [hidden]="city.valid || city.pristine" class="alert alert-danger">
+          <input type="text" class="form-control" [disabled]="profileView && !isOwner" id="city" [(ngModel)]="fablab.address.city" name="city" #city="ngModel">
+          <div [hidden]="city.valid || city.pristine"  class="alert alert-danger">
             {{translationFields.messages.city}}
           </div>
         </div>
@@ -63,14 +63,14 @@
       <div class="form-group row">
         <div class="col-md-6">
           <label for="country">{{translationFields.labels.country}}</label>
-          <input type="text" class="form-control" id="country" [(ngModel)]="fablab.address.country" name="country"
+          <input type="text" class="form-control" [disabled]="profileView && !isOwner" id="country" [(ngModel)]="fablab.address.country" name="country"
             #country="ngModel">
-          <div [hidden]="country.valid || country.pristine" class="alert alert-danger">
+          <div [hidden]="country.valid || country.pristine"  class="alert alert-danger">
             {{translationFields.messages.country}}
           </div>
         </div>
       </div>  
-      <button type="submit" class="btn btn-success" [disabled]="!createUserForm.form.valid ">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success" [hidden]="profileView && !isOwner"  [disabled]="!createUserForm.form.valid ">{{translationFields.labels.submit}}</button>
     <!--|| (!editView && !profileView)-->
     </form>
   </div>

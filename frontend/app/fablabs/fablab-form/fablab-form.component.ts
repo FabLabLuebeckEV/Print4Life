@@ -32,6 +32,7 @@ export class FablabFormComponent implements OnInit {
   profileView: Boolean;
   fablabId: String;
   isAdmin: Boolean;
+  isOwner: Boolean;
   address: Address = new Address(undefined, undefined, undefined, undefined);
   preferredLanguage = new Language('en'); // default en/english
   fablab: Fablab = new Fablab(
@@ -135,6 +136,7 @@ export class FablabFormComponent implements OnInit {
       this.fablabId = this.loggedInUser.fablabId;
     }
     await this._initializeFablab(this.fablabId);
+    this.isOwner = this.fablab.owner == this.loggedInUser._id;
     this._translate();
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
@@ -144,15 +146,6 @@ export class FablabFormComponent implements OnInit {
 
   onSubmit() {
     const fablabCopy = JSON.parse(JSON.stringify(this.fablab));
-         if (
-          !fablabCopy.address ||
-          !fablabCopy.address.city ||
-          !fablabCopy.address.country ||
-          !fablabCopy.address.street ||
-          !fablabCopy.address.zipCode
-        ) {
-          delete fablabCopy.address;
-        }
         if (this.editView || this.profileView) {
           this.fablabService
             .updateFablab(fablabCopy)
@@ -191,6 +184,7 @@ export class FablabFormComponent implements OnInit {
                   this.translationFields.modals.successHeader,
                   this.translationFields.modals.successMessage
                 );
+                this.loggedInUser.fablabId = res['fablab']._id;
               }
             })
             .catch(err => {
