@@ -188,6 +188,7 @@ export class FablabFormComponent implements OnInit {
                   this.translationFields.modals.successMessage
                 );
                 this.loggedInUser.fablabId = res['fablab']._id;
+                this.userService.updateUser(this.loggedInUser);
               }
             })
             .catch(err => {
