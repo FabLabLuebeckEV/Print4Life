@@ -19,6 +19,7 @@ import { IotDeviceFormComponent } from '../iot-devices/iot-device-form/iot-devic
 import { IotDeviceDetailComponent } from '../iot-devices/iot-device-detail/iot-device-detail.component';
 import { UserActivationComponent } from '../users/user-activation/user-activation.component';
 import { FablabFormComponent } from '../fablabs/fablab-form/fablab-form.component';
+import { FablabListComponent } from '../fablabs/fablab-list/fablab-list.component';
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(private userService: UserService, private errorService: ErrorService) { }
@@ -138,7 +139,7 @@ export const appRoutes: Routes = [
     },
     {
         path: routes.paths.frontend.fablabs.root,
-        component: UserListComponent,
+        component: FablabListComponent,
         runGuardsAndResolvers: 'always',
         children: [
         {path: routes.paths.frontend.fablabs.update + '/:id', component: FablabFormComponent, canActivate: [AdminGuard]},

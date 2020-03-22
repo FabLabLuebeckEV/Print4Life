@@ -49,6 +49,7 @@ import { EditButtonComponent } from './components/edit-button/edit-button.compon
 import { DeleteButtonComponent } from './components/delete-button/delete-button.component';
 import { UserActivationComponent } from './users/user-activation/user-activation.component';
 import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component';
+import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component';
 
 @NgModule({
     declarations: [
@@ -80,7 +81,8 @@ import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component
         EditButtonComponent,
         DeleteButtonComponent,
         UserActivationComponent,
-        FablabFormComponent
+        FablabFormComponent,
+        FablabListComponent
     ],
     imports: [
         ReactiveFormsModule,
