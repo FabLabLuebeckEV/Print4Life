@@ -264,9 +264,7 @@ export class UserService implements ModelService {
 
   public async ownsFablab (_id) {
     const fablab = await Fablab.findOne({ owner: _id });
-    console.log(fablab);
     const owner = (fablab != null);
-    console.log(owner);
     return owner;
   }
 
