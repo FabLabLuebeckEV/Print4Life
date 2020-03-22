@@ -319,7 +319,7 @@ async function update (req, res) {
       logger.error(msg);
       return res.status(404).send(msg);
     }
-    if (fablab.owner !== user._id) {
+    if (fablab.owner !== user._id && (user.role.role !== 'admin')) {
       const msg = {
         err: 'FORBIDDEN',
         message: 'User doesn\'t own this fablab!'
