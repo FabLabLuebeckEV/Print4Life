@@ -129,8 +129,6 @@ export class FablabListComponent implements OnInit {
     this.fablabs = new Array();
     this.visibleFablabs = undefined;
     await this._loadFablabs();
-    console.log({visibleLabs: this.visibleFablabs,
-    msg: 'TESTMESSAGE'});
   }
 
   searchInit() {
@@ -169,14 +167,20 @@ export class FablabListComponent implements OnInit {
       fablabs = fablabs.fablabs;
       for (const fablab of fablabs) {
         const item = new TableItem();
-        // const result = await this.userService.getProfile(fablab.owner);
-        // if(result && result.user)
-        // {
-        //   fablab.owner = result.user;
-        // }, href: `./${fablab._id}`
+        if(fablab.owner) {
+          const result = await this.userService.getProfile(fablab.owner);
+          if(result)
+          {
+            fablab.owner = result;
+          }// , href: `./${fablab._id}`
+        }
         item.obj['Name'] = { label: fablab.name};
         item.obj['City'] = { label: fablab.address.city };
-        item.obj['Owner'] = { label: fablab.owner };
+        if (fablab.owner) {
+          item.obj['Owner'] = { label: fablab.owner.username };
+        } else {
+          item.obj['Owner'] = '';
+        }
                item.obj['Active'] = {
           label: fablab.activated && fablab.activated === true ?
             this.translationFields.badges.active :
@@ -201,8 +205,7 @@ export class FablabListComponent implements OnInit {
         arr.push(item);
       }
 
-      this.fablabs = this.fablabs.concat(arr);
-      console.log(this.fablabs);
+      this.fablabs = arr;
       this.visibleFablabs = undefined;
       this.visibleFablabs = JSON.parse(JSON.stringify(this.fablabs));
     }
