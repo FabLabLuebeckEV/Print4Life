@@ -62,7 +62,8 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     false,
     undefined,
-    {isBatched: false, number: 0}
+    {number: 0, accepted: [], acceptedCount: 0, finished: [], finishedCount: 0},
+    false
   );
   schedule: Schedule;
   machine: any;

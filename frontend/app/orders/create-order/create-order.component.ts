@@ -69,7 +69,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     undefined, undefined, undefined, undefined,
     undefined, undefined, [],
     undefined, this.sMachine, undefined,
-    this.shippingAddress, false, false, undefined, {number: 0});
+    this.shippingAddress, false, false, undefined, {number: 0, accepted: [], acceptedCount: 0, finished: [], finishedCount: 0}, false);
   orderId: String;
   comment: Comment = new Comment(undefined, undefined, undefined);
   schedule: Schedule = new Schedule('', undefined, undefined, '', { type: '', id: '' }, '');
