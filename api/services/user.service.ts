@@ -9,6 +9,7 @@ import Language, { languageSchema } from '../models/language';
 import { ErrorType, IError } from '../services/router.service';
 import logger from '../logger';
 import ModelService from './model.service';
+import Fablab from '../models/fablab.model';
 /* eslint-enable no-unused-vars */
 
 export class UserService implements ModelService {
@@ -258,6 +259,12 @@ export class UserService implements ModelService {
     const user = await this.get(_id);
     user.activated = false;
     return this.update(user);
+  }
+
+
+  public async ownsFablab (_id) {
+    const fablab = await Fablab.findOne({ owner: _id });
+    return (!!fablab);
   }
 
   /**
