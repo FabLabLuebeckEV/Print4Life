@@ -577,7 +577,11 @@
             "printHeader": "Druckauftrag starten",
             "addressLabel": "Octoprint URL",
             "apiKeyLabel": "Octoprint API Key",
-            "fileSelectLabel": "Druckdatei"
+            "fileSelectLabel": "Druckdatei",
+            "batchOrderQuestion": "Bist du sicher, dass du dich zur Fertigung verpflichten möchtest?",
+            "batchOrderWarning": "Der Auftraggeber ist auf diese Teile angewiesen. Bitte registriere dich nur, wenn du diesen Auftrag auch erfüllen kannst",
+            "batchOrderAccept": "Annehmen",
+            "batchOrderAbort": "Doch nicht"
         }
     },
     "userForm": {

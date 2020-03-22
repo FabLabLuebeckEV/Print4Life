@@ -32,6 +32,7 @@ export class OrderDetailComponent implements OnInit {
   loadingOrder: boolean;
   userCanDownload: boolean;
   printFilesAvailable: boolean;
+  myBatch: Number = 0;
   editIcon: Icon;
   deleteIcon: Icon;
   processIcon: Icon;
@@ -107,7 +108,11 @@ export class OrderDetailComponent implements OnInit {
       printHeader: '',
       addressLabel: '',
       apiKeyLabel: '',
-      fileSelectLabel: ''
+      fileSelectLabel: '',
+      batchOrderQuestion: '',
+      batchOrderWarning: '',
+      batchOrderAccept: '',
+      batchOrderAbort: ''
     }
   };
 
@@ -160,9 +165,14 @@ export class OrderDetailComponent implements OnInit {
                 });
               }
 
+              const loggedInUser = await this.userService.findOwn();
+
               this.order.batch['acceptedCount'] = 0;
               if (this.order.batch['accepted']) {
                 this.order.batch['accepted'].forEach(batch => {
+                  if (batch.fablab === loggedInUser.fablabId) {
+                    this.myBatch = batch.number;
+                  }
                   this.order.batch['acceptedCount'] += batch.number;
                   this.fablabService.getFablab(batch.fablab).then(result => {
                     batch.fablab = result.fablab;
@@ -241,6 +251,53 @@ export class OrderDetailComponent implements OnInit {
           });
         }
       });
+  }
+
+  public async submitBatch() {
+    const orderButton = new ModalButton(
+      this.translationFields.modals.batchOrderAccept,
+      'btn btn-primary',
+      this.translationFields.modals.deleteReturnValue);
+
+    const abortButton = new ModalButton(
+      this.translationFields.modals.batchOrderAbort,
+      'btn btn-secondary',
+      this.translationFields.modals.abortReturnValue);
+
+    const modalRef = this.modalService.openMsgModal(
+      this.translationFields.modals.batchOrderQuestion,
+      'modal-header header-danger',
+      [`${this.translationFields.modals.batchOrderWarning}`],
+      orderButton, abortButton);
+    modalRef.result.then(async (result) => {
+      if (result === orderButton.returnValue) {
+        if (this.myBatch > 0) {
+          let found = false;
+    
+          const loggedInUser = await this.userService.findOwn();
+          this.order.batch['accepted'].forEach( element => {
+            if (element.fablab._id === loggedInUser.fablabId) {
+              element.number = this.myBatch;
+              found = true;
+            }
+          });
+    
+          if (!found) {
+            this.order.batch['accepted'].append({
+              fablab: loggedInUser.fablabId,
+              number: this.myBatch,
+              status: 'zugewiesen'
+            });
+          }
+    
+          await this.orderService.updateOrder(this.order);
+          window.location.reload();
+        }
+      }
+    });
+
+
+    
   }
 
   public loadChart() {
@@ -414,6 +471,10 @@ export class OrderDetailComponent implements OnInit {
           addressLabel: translations['orderDetail'].modals.addressLabel,
           apiKeyLabel: translations['orderDetail'].modals.apiKeyLabel,
           fileSelectLabel: translations['orderDetail'].modals.fileSelectLabel,
+          batchOrderQuestion: translations['orderDetail'].modals.batchOrderQuestion,
+          batchOrderWarning: translations['orderDetail'].modals.batchOrderWarning,
+          batchOrderAbort: translations['orderDetail'].modals.batchOrderAbort,
+          batchOrderAccept: translations['orderDetail'].modals.batchOrderAccept
         }
       };
       this.loadChart();

@@ -32,12 +32,12 @@
     font-size: 20px;
 }
 
-.table td:nth-child(1) {
+#descriptionTable td:nth-child(1) {
     padding-left: 40px;
     font-weight: bold;
 }
 
-.table td:nth-child(2) {
+#descriptionTable td:nth-child(2) {
     padding-left: 150px;
 }
 
@@ -56,4 +56,16 @@
 
 .assignRow button {
     margin-left: 20px;
+}
+
+.assignRow, .assignRow > td {
+    background-color: white !important;
+}
+
+#chartExpand > td {
+    background-color: white !important;
+}
+
+.filling-row {
+    width: 100%;
 }

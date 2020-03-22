@@ -576,7 +576,11 @@
             "printHeader": "Start Printjob",
             "addressLabel": "Octoprint URL",
             "apiKeyLabel": "Octoprint API Key",
-            "fileSelectLabel": "Print File"
+            "fileSelectLabel": "Print File",
+            "batchOrderQuestion": "Are you sure you want to sign up for manufacturing this batch?",
+            "batchOrderWarning": "The client needs these parts. Please only register, if you can deliver this batch",
+            "batchOrderAccept": "Accept",
+            "batchOrderAbort": "Reject"
         }
     },
     "userForm": {
