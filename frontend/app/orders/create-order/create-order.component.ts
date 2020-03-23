@@ -476,6 +476,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           machineObj[`${this.machineService.camelCaseTypes(type)}s`] : undefined;
         if (machineObj) {
           for (let i = 0; i < machineObj.length; i++) {
+            console.log("loading fablab with id: ", machineObj[i].fablabId);
+            console.log("loaded fablab: ", await this.fablabService.getFablab(machineObj[i].fablabId));
             const resFab = await this.fablabService.getFablab(machineObj[i].fablabId);
             const fablab = resFab.fablab;
             machineObj[i].fablab = fablab;
