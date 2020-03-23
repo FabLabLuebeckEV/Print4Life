@@ -176,9 +176,9 @@ export class FablabListComponent implements OnInit {
         item.obj['Name'] = { label: fablab.name};
         item.obj['City'] = { label: fablab.address.city };
         if (fablab.owner) {
-          item.obj['Owner'] = { label: fablab.owner.username };
+          item.obj['FOwner'] = { label: fablab.owner.username };
         } else {
-          item.obj['Owner'] = '';
+          item.obj['FOwner'] = '';
         }
                item.obj['Active'] = {
           label: fablab.activated && fablab.activated === true ?
