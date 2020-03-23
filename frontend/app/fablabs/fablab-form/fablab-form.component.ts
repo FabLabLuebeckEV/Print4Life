@@ -194,7 +194,10 @@ export class FablabFormComponent implements OnInit {
   private async _initializeFablab(id) {
     if (id !== undefined) {
       try {
-        this.fablab = await this.fablabService.getFablab(id);
+        const fablab = await this.fablabService.getFablab(id);
+        if (fablab) {
+          this.fablab = fablab['fablab'];
+        }
 
       } catch (err) {
           this.fablab = new Fablab(
