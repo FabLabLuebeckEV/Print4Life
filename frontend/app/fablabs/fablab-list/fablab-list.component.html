@@ -6,29 +6,6 @@
 </router-outlet>
 <div *ngIf="listView">
   <div class="row">
-    <div class="col-md-3">
-      <label for="fablabs">{{translationFields.filterLabel.users}}</label>
-      <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false"
-        [items]=filter.allFablabs bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabs" (close)="init()"
-        (remove)="init()" (clear)="init()" name="fablabs" #fablabs="ngModel">
-      </ng-select>
-    </div>
-    <div class="col-md-3">
-      <form>
-        <label for="search">{{translationFields.filterLabel.search}}</label>
-        <div class="input-group">
-          <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search"
-            #search="ngModel">
-          <div class="input-group-append">
-            <button class="btn btn-outline-primary" (click)="searchInit()" type="submit">
-              <fa-icon [icon]="searchIcon"></fa-icon>
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="row">
     <div class="col-md-12 fablab-list-container">
       <app-table (buttonEvent)="eventHandler($event)" [items]="visibleFablabs" [headers]="headers"></app-table>
     </div>
