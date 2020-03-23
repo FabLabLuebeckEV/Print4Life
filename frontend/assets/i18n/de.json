@@ -469,7 +469,10 @@
       "startDate": "Startdatum",
       "endDate": "Enddatum",
       "copyright": "Sind Sie der Eigentümer der Dateien und haben sie deren Copyright?",
-      "fablab": "Fablab"
+      "fablab": "Fablab",
+      "batchTitle": "Stückzahl",
+      "batchDescription": "Sollen mehrere Kopien gefertigt werden?",
+      "batchNumber": "Gewünschte Anzahl:"
     },
     "modals": {
       "ok": "Ok",
@@ -585,7 +588,14 @@
       "file": "Datei",
       "addressTitle": "Lieferadresse",
       "latestVersion": "Aktuelle Version",
-      "scheduledFor": "Geplant für"
+      "scheduledFor": "Geplant für",
+      "batched": "Produktionsstatus",
+      "batchAssigned": "Zugewiesen",
+      "batchOpen": "Offen",
+      "batchFinished": "Erledigt",
+      "imanufacture": "Ich fertige",
+      "count": "Stück",
+      "helpnow": "Jetzt unterstützen"
     },
     "modals": {
       "ok": "Ja",
@@ -601,7 +611,11 @@
       "printHeader": "Druckauftrag starten",
       "addressLabel": "Octoprint URL",
       "apiKeyLabel": "Octoprint API Key",
-      "fileSelectLabel": "Druckdatei"
+      "fileSelectLabel": "Druckdatei",
+      "batchOrderQuestion": "Bist du sicher, dass du dich zur Fertigung verpflichten möchtest?",
+      "batchOrderWarning": "Der Auftraggeber ist auf diese Teile angewiesen. Bitte registriere dich nur, wenn du diesen Auftrag auch erfüllen kannst",
+      "batchOrderAccept": "Annehmen",
+      "batchOrderAbort": "Doch nicht"
     }
   },
   "userForm": {
