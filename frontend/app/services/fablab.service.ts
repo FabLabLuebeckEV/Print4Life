@@ -15,7 +15,7 @@ export class FablabService {
   public async getFablab(id): Promise<any> {
     const result = await this.http.get(`${this.rootPath}/${id}`).toPromise();
     if (result && result.hasOwnProperty('fablab')) {
-      return result['fablab'];
+      return result;
     }
     return undefined;
   }
