@@ -6,6 +6,8 @@ import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 
+import { TranslationModel } from '../models/translation.model';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -14,17 +16,7 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
   userIsLoggedIn: Boolean;
   user: User;
-  translationFields = {
-    title: '',
-    order: '',
-    management: '',
-    system: '',
-    accountQuestion: '',
-    accountCreation: '',
-    buttons: {
-      login: ''
-    }
-  };
+  translationFields: TranslationModel.Dashboard = {};
 
   constructor(
     private modalService: ModalService,
@@ -46,6 +38,7 @@ export class DashboardComponent implements OnInit {
 
   private _translate() {
     this.translateService.get(['dashboard']).subscribe((translations => {
+      /*
       this.translationFields.title = translations['dashboard'].title;
       this.translationFields.order = translations['dashboard'].order;
       this.translationFields.management = translations['dashboard'].management;
@@ -53,6 +46,9 @@ export class DashboardComponent implements OnInit {
       this.translationFields.accountQuestion = translations['dashboard'].accountQuestion;
       this.translationFields.accountCreation = translations['dashboard'].accountCreation;
       this.translationFields.buttons.login = translations['dashboard']['buttons'] ? translations['dashboard']['buttons'].login : 'f';
+      */
+      this.translationFields = translations.dashboard;
+      console.log('translation fields: ', this.translationFields);
     }));
   }
 

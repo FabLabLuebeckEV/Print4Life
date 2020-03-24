@@ -17,7 +17,7 @@
         class="spacing-right-xs" (click)="delete()"></app-delete-button>
       <button
         *ngIf="machine && machine.type === '3d-printer' && userIsLoggedIn && loggedInUser && loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')"
-        (click)="startPrintJob()" [disabled]="!printFilesAvailable" [title]="translationFields.tooltips.print"
+        (click)="startPrintJob()" [disabled]="!printFilesAvailable" [title]="translationFields.buttons.tooltips.print"
         type="button" class="btn btn-primary spacing-right-xs">
         <fa-icon [icon]="processIcon"></fa-icon>
       </button>
