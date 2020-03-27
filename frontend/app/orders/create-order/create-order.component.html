@@ -4,11 +4,11 @@
 </div>
 
 <router-outlet></router-outlet>
-<ng-template #tipContent>{{translationFields.publicHint}}</ng-template>
-<ng-template #privateTipContent>{{translationFields.privateHint}}</ng-template>
+<ng-template #tipContent>{{translationFields?.publicHint}}</ng-template>
+<ng-template #privateTipContent>{{translationFields?.privateHint}}</ng-template>
 <div class="row spacing">
   <div class="col-md-12 text-center">
-    <h1>{{translationFields.title}}</h1>
+    <h1>{{translationFields?.title}}</h1>
   </div>
   <div class="container">
     <app-back-button class="spacing-right-xs"></app-back-button>
@@ -19,18 +19,18 @@
     <form (ngSubmit)="onSubmit()" #createOrderForm="ngForm">
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="projectname">{{translationFields.labels.projectName}}</label>
+          <label for="projectname">{{translationFields?.labels.projectName}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <input type="text" class="form-control" id="projectname" required [(ngModel)]="order.projectname"
             name="projectname" #projectname="ngModel">
           <div [hidden]="projectname.valid || projectname.pristine" class="alert alert-danger">
-            {{translationFields.messages.projectName}}
+            {{translationFields?.messages.projectName}}
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-6">
-          <label for="fablab">{{translationFields.labels.fablab}}</label>
+          <label for="fablab">{{translationFields?.labels.fablab}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name" required
             [(ngModel)]="order.fablabId" id="fablab" name="fablab" #fablab="ngModel"
@@ -42,7 +42,7 @@
         </div>
 
         <div class="col-md-6">
-          <label for="selectedMachineType">{{translationFields.labels.machineType}}</label>
+          <label for="selectedMachineType">{{translationFields?.labels.machineType}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingMachineTypes" [items]=translationFields.shownMachineTypes
             [(ngModel)]="order.machine['shownType']" id="selectedMachineType" name="selectedMachineType"
@@ -50,14 +50,14 @@
             required [disabled]="!order.fablabId">
           </ng-select>
           <div [hidden]="selectedMachineType.valid || selectedMachineType.pristine" class="alert alert-danger">
-            {{translationFields.messages.machineType}}
+            {{translationFields?.messages.machineType}}
           </div>
         </div>
       </div>
 
       <div *ngIf="order.machine.type && machines && machines.length >= 0" class="form-group row">
         <div class="col-md-6">
-          <label for="selectedMachine">{{translationFields.labels.selectedMachine}}</label>
+          <label for="selectedMachine">{{translationFields?.labels.selectedMachine}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingMachinesForType" [items]=machines bindValue="_id" bindLabel="deviceName"
             [(ngModel)]="order.machine._id" id="selectedMachine" name="selectedMachine" #selectedMachine="ngModel"
@@ -70,11 +70,11 @@
             </ng-template>
           </ng-select>
           <div [hidden]="selectedMachine.valid || selectedMachine.pristine" class="alert alert-danger">
-            {{translationFields.messages.selectedMachine}}
+            {{translationFields?.messages.selectedMachine}}
           </div>
         </div>
         <div *ngIf="order.machine && order.machine.deviceName && !sharedView" class="col-md-4">
-          <label for="selectedMachineDetailView">{{translationFields.labels.selectedMachineInfo}}:</label>
+          <label for="selectedMachineDetailView">{{translationFields?.labels.selectedMachineInfo}}:</label>
           <div>
             <a [routerLink]="order.machine.detailView" name="selectedMachineDetailView">
               <button type="button" class="btn btn-primary">{{ order.machine.deviceName }}</button>
@@ -84,7 +84,7 @@
       </div>
       <div class="form-group row">
         <div *ngIf="editView" class="col-md-12">
-          <label for="status">{{translationFields.labels.status}}</label>
+          <label for="status">{{translationFields?.labels.status}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingStatus" [items]=translationFields.shownStatus bindValue="_id" bindLabel="name"
             [(ngModel)]="order.shownStatus" (change)="statusChanged(order.shownStatus)" id="status" name="status"
@@ -92,16 +92,16 @@
             [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
           </ng-select>
           <div [hidden]="status.valid || status.pristine" class="alert alert-danger">
-            {{translationFields.messages.status}}
+            {{translationFields?.messages.status}}
           </div>
           <div [hidden]="!doneStatus.original.includes(order.status)" class="alert alert-warning">
-            {{translationFields.messages.statusDeprecated}}
+            {{translationFields?.messages.statusDeprecated}}
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-6">
-          <label for="owner">{{translationFields.labels.owner}}</label>
+          <label for="owner">{{translationFields?.labels.owner}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <input *ngIf="!sharedView" type="text" class="form-control" id="owner" required name="owner"
             [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" disabled>
@@ -111,7 +111,7 @@
         </div>
 
         <div class="col-md-6">
-          <label for="editor">{{translationFields.labels.editor}}</label>
+          <label for="editor">{{translationFields?.labels.editor}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
           <ng-select [loading]="loadingEditors" [items]=editors bindValue="_id" bindLabel="shownName"
             [(ngModel)]="order.editor" id="editor" name="editor" #editor="ngModel" groupBy="fablabName"
@@ -124,7 +124,7 @@
       </div>
       <div class="row">
         <div class="col-md-12 text-center">
-          <h4>{{translationFields.labels.batchTitle}}</h4>
+          <h4>{{translationFields?.labels.batchTitle}}</h4>
         </div>
       </div>
       <div>
@@ -133,12 +133,12 @@
             <div class="form-check spacing-top">
               <input type="checkbox" class="form-check-input form-control" id="isBatched"
                 [(ngModel)]="order.isBatched" name="isBatched" #isBatched="ngModel">
-              <label class="form-check-label spacing-right-xs" for="isBatched">{{translationFields.labels.batchDescription}}</label>
+              <label class="form-check-label spacing-right-xs" for="isBatched">{{translationFields?.labels.batchDescription}}</label>
             </div>
           </div>
           <div class="col-md-12 spacing-top">
             <div *ngIf="order.isBatched">
-              <label for="batchNumber">{{translationFields.labels.batchNumber}}</label>
+              <label for="batchNumber">{{translationFields?.labels.batchNumber}}</label>
               <input type="number" class="form-control" id="batchNumber" required 
                 [(ngModel)]="order.batch.number" name="batchNumber" #batchNumber="ngModel">
             </div>
@@ -148,7 +148,7 @@
 
       <div class="row">
         <div class="col-md-12 text-center">
-          <h4>{{translationFields.labels.addressTitle}}</h4>
+          <h4>{{translationFields?.labels.addressTitle}}</h4>
         </div>
       </div>
       <div class="row">
@@ -165,37 +165,37 @@
       <div>
         <div class="row">
           <div class="col-md-6">
-            <label for="street">{{translationFields.labels.street}}</label>
+            <label for="street">{{translationFields?.street}}</label>
             <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="street"
               required [(ngModel)]="order.shippingAddress.street" name="street" #street="ngModel">
             <div [hidden]="street.valid || street.pristine" class="alert alert-danger">
-              {{translationFields.messages.street}}
+              {{translationFields?.messages.street}}
             </div>
           </div>
           <div class="col-md-6">
-            <label for="city">{{translationFields.labels.city}}</label>
+            <label for="city">{{translationFields?.city}}</label>
             <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="city" required
               [(ngModel)]="order.shippingAddress.city" name="city" #city="ngModel">
             <div [hidden]="city.valid || city.pristine" class="alert alert-danger">
-              {{translationFields.messages.city}}
+              {{translationFields?.messages.city}}
             </div>
           </div>
         </div>
         <div class="row spacing-top">
           <div class="col-md-6">
-            <label for="zipCode">{{translationFields.labels.zipCode}}</label>
+            <label for="zipCode">{{translationFields?.zipCode}}</label>
             <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="zipCode"
               required [(ngModel)]="order.shippingAddress.zipCode" name="zipCode" #zipCode="ngModel">
             <div [hidden]="zipCode.valid || zipCode.pristine" class="alert alert-danger">
-              {{translationFields.messages.zipCode}}
+              {{translationFields?.messages.zipCode}}
             </div>
           </div>
           <div class="col-md-6">
-            <label for="country">{{translationFields.labels.country}}</label>
+            <label for="country">{{translationFields?.country}}</label>
             <input type="text" [disabled]="selectedAddressKey !== 'newAddress'" class="form-control" id="country"
               required [(ngModel)]="order.shippingAddress.country" name="country" #country="ngModel">
             <div [hidden]="country.valid || country.pristine" class="alert alert-danger">
-              {{translationFields.messages.country}}
+              {{translationFields?.messages.country}}
             </div>
           </div>
         </div>
@@ -204,7 +204,7 @@
       <div *ngIf="editView">
         <div class="row spacing-top">
           <div class="col-md-3">
-            <label for="datePickerStart">{{translationFields.labels.datePickerStart}}</label>
+            <label for="datePickerStart">{{translationFields?.labels.datePickerStart}}</label>
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerStart" id="datePickerStart"
                 [(ngModel)]="schedule.startDay" ngbDatepicker #datePickerStart="ngbDatepicker" [required]="false"
@@ -217,25 +217,25 @@
               </div>
               <div [hidden]="datePickerStart.pristine || datePickerEnd.pristine || !datePickerError"
                 class="alert alert-danger">
-                {{translationFields.messages.datePicker}}
+                {{translationFields?.messages.datePicker}}
               </div>
             </div>
           </div>
 
           <div class="col-md-3">
-            <label for="timePickerStart">{{translationFields.labels.timePickerStart}}</label>
+            <label for="timePickerStart">{{translationFields?.labels.timePickerStart}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerStart" id="timePickerStart" [spinners]="false"
               [(ngModel)]="schedule.startTime" #timePickerStart="ngModel"
               [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
             </ngb-timepicker>
             <div [hidden]="timePickerStart.pristine || timePickerEnd.pristine || !timePickerError"
               class="alert alert-danger">
-              {{translationFields.messages.timePicker}}
+              {{translationFields?.messages.timePicker}}
             </div>
           </div>
 
           <div class="col-md-3">
-            <label for="datePickerEnd">{{translationFields.labels.datePickerEnd}}</label>
+            <label for="datePickerEnd">{{translationFields?.labels.datePickerEnd}}</label>
             <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd"
                 [(ngModel)]="schedule.endDay" ngbDatepicker #datePickerEnd="ngbDatepicker"
@@ -248,20 +248,20 @@
               </div>
               <div [hidden]="datePickerStart.pristine || datePickerEnd.pristine || !datePickerError"
                 class="alert alert-danger">
-                {{translationFields.messages.datePicker}}
+                {{translationFields?.messages.datePicker}}
               </div>
             </div>
           </div>
 
           <div class="col-md-3">
-            <label for="timePickerEnd">{{translationFields.labels.timePickerEnd}}</label>
+            <label for="timePickerEnd">{{translationFields?.labels.timePickerEnd}}</label>
             <ngb-timepicker class="spacing-top" name="timePickerEnd" id="timePickerEnd" [spinners]="false"
               [(ngModel)]="schedule.endTime" #timePickerEnd="ngModel"
               [disabled]="orderIsDone || !order.machine || !order.machine.deviceName || !loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
             </ngb-timepicker>
             <div [hidden]="timePickerStart.pristine || timePickerEnd.pristine || !timePickerError"
               class="alert alert-danger">
-              {{translationFields.messages.timePicker}}
+              {{translationFields?.messages.timePicker}}
             </div>
           </div>
         </div>
@@ -273,7 +273,7 @@
             <div class="col-md-12 text-center">
               <button type="button" class="btn btn-outline-secondary" (click)="isCollapsed = !isCollapsed"
                 [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">
-                <h4>{{translationFields.labels.machineSchedule}}</h4>
+                <h4>{{translationFields?.labels.machineSchedule}}</h4>
               </button>
             </div>
             <div id="collapseExample" class="col-md-12 table-spacing-top table-spacing-bottom"
@@ -282,8 +282,8 @@
                 <table class="table table-striped">
                   <thead>
                     <tr>
-                      <th class="align-middle text-center" scope="col">{{translationFields.labels.startDate}}</th>
-                      <th class="align-middle text-center" scope="col">{{translationFields.labels.endDate}}</th>
+                      <th class="align-middle text-center" scope="col">{{translationFields?.labels.startDate}}</th>
+                      <th class="align-middle text-center" scope="col">{{translationFields?.labels.endDate}}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -308,7 +308,7 @@
         <!-- Files -->
         <div *ngIf="!orderIsDone" class="form-group row table-spacing">
           <div class="col-md-12 text-center">
-            <h4>{{translationFields.labels.fileUpload}}</h4>
+            <h4>{{translationFields?.labels.fileUpload}}</h4>
           </div>
         </div>
 
@@ -322,7 +322,7 @@
           <div class="row table-spacing">
             <div class="col-md-12 text-center">
               <h4>
-                {{translationFields.labels.files}}
+                {{translationFields?.labels.files}}
                 <fa-icon class="spacing" [icon]="privateIcon" [ngbTooltip]="privateTipContent"></fa-icon>
               </h4>
             </div>
@@ -330,9 +330,9 @@
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th class="align-middle text-center" scope="col">{{translationFields.labels.latestVersion}}</th>
-                    <th class="align-middle text-center" scope="col">{{translationFields.labels.file}}</th>
-                    <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
+                    <th class="align-middle text-center" scope="col">{{translationFields?.labels.latestVersion}}</th>
+                    <th class="align-middle text-center" scope="col">{{translationFields?.labels.file}}</th>
+                    <th class="align-middle text-center" scope="col">{{translationFields?.labels.createdAt}}</th>
                     <th *ngIf="userCanDownload" class="align-middle text-center" scope="col"></th>
                   </tr>
                 </thead>
@@ -363,13 +363,13 @@
         <div *ngIf="!editView">
           <div class="form-group row table-spacing">
             <div class="col-md-12 text-center">
-              <h4>{{translationFields.labels.comments}}</h4>
+              <h4>{{translationFields?.labels.comments}}</h4>
             </div>
           </div>
 
           <div class="form-group row">
             <div class="col-md-12">
-              <label for="author">{{translationFields.labels.author}}</label>
+              <label for="author">{{translationFields?.labels.author}}</label>
               <input type="text" class="form-control" id="author" required name="author"
                 [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" disabled>
             </div>
@@ -377,11 +377,11 @@
 
           <div class="form-group row">
             <div class="col-md-12">
-              <label for="content">{{translationFields.labels.content}}</label>
+              <label for="content">{{translationFields?.labels.content}}</label>
               <textarea type="text" class="form-control" id="content" required [(ngModel)]="comment.content"
                 name="content" #content="ngModel"></textarea>
               <div [hidden]="content.valid || content.pristine" class="alert alert-danger">
-                {{translationFields.messages.content}}
+                {{translationFields?.messages.content}}
               </div>
             </div>
           </div>
@@ -391,20 +391,20 @@
       <div class="form-check spacing-top">
         <input type="checkbox" class="form-check-input form-control" id="copyright" required [(ngModel)]="order.fileCopyright"
           name="copyright" #copyright="ngModel" [disabled]="!inUploadQueue && order.files && !order.files.length " />
-        <label class="form-check-label spacing-right-xs" for="copyright">{{translationFields.labels.copyright}}</label>
+        <label class="form-check-label spacing-right-xs" for="copyright">{{translationFields?.labels.copyright}}</label>
         <div [hidden]="copyright.valid || copyright.pristine" class="alert alert-danger">
-          {{translationFields.messages.copyright}}
+          {{translationFields?.messages.copyright}}
         </div>
       </div>
       <button type="submit" class="btn btn-success spacing-top"
-        [disabled]="!createOrderForm.form.valid || datePickerError || timePickerError || !scheduleValid">{{translationFields.labels.submit}}</button>
+        [disabled]="!createOrderForm.form.valid || datePickerError || timePickerError || !scheduleValid">{{translationFields?.labels.submit}}</button>
     </form>
 
     <!-- Print comments to this order as a table -->
     <div *ngIf="editView">
       <div class="row">
         <div class="col-md-12 text-center">
-          <h4>{{translationFields.labels.comments}}</h4>
+          <h4>{{translationFields?.labels.comments}}</h4>
         </div>
       </div>
 
@@ -413,9 +413,9 @@
           <table class="table table-striped">
             <thead>
               <tr>
-                <th class="align-middle text-center" scope="col">{{translationFields.labels.author}}</th>
-                <th class="align-middle text-center" scope="col">{{translationFields.labels.content}}</th>
-                <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
+                <th class="align-middle text-center" scope="col">{{translationFields?.labels.author}}</th>
+                <th class="align-middle text-center" scope="col">{{translationFields?.labels.content}}</th>
+                <th class="align-middle text-center" scope="col">{{translationFields?.labels.createdAt}}</th>
               </tr>
             </thead>
             <tbody>
@@ -432,7 +432,7 @@
       <!-- Submit Comment Form -->
       <div *ngIf="!orderIsDone" class="row">
         <div class="col-md-12 text-center">
-          <h5>{{translationFields.labels.newComment}}</h5>
+          <h5>{{translationFields?.labels.newComment}}</h5>
         </div>
       </div>
     </div>
@@ -440,23 +440,23 @@
     <form *ngIf="editView && !orderIsDone" (ngSubmit)="onSubmitComment(createCommentForm)" #createCommentForm="ngForm">
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="author">{{translationFields.labels.author}}</label>
+          <label for="author">{{translationFields?.labels.author}}</label>
           <input type="text" class="form-control" id="author" required name="author"
             [value]="loggedInUser.firstname + ' ' + loggedInUser.lastname" disabled>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="content">{{translationFields.labels.content}}</label>
+          <label for="content">{{translationFields?.labels.content}}</label>
           <textarea type="text" class="form-control" id="content" required [(ngModel)]="comment.content" name="content"
             #content="ngModel"></textarea>
           <div [hidden]="content.valid || content.pristine" class="alert alert-danger">
-            {{translationFields.messages.content}}
+            {{translationFields?.messages.content}}
           </div>
         </div>
       </div>
       <button type="submit" class="btn btn-success"
-        [disabled]="!createCommentForm.form.valid || submitting">{{translationFields.labels.sendComment}}</button>
+        [disabled]="!createCommentForm.form.valid || submitting">{{translationFields?.labels.sendComment}}</button>
     </form>
   </div>
 </div>

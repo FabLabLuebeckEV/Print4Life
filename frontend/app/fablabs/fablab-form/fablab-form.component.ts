@@ -13,6 +13,8 @@ import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 import { Fablab } from 'frontend/app/models/fablab.model';
 
+import { TranslationModel } from '../../models/translation.model';
+
 interface Dropdown {
   name: String;
   elements: Array<Object>;
@@ -43,36 +45,16 @@ export class FablabFormComponent implements OnInit {
     undefined
   );
 
-  translationFields = {
-    title: '',
-    labels: {
-      name: '',
-      isActivated: '',
-      street: '',
-      zipCode: '',
-      city: '',
-      country: '',
-      submit: '',
+  translationFields: TranslationModel.FablabForm & TranslationModel.Address & {
+    title?: String,
+    labels?: {
+      submit?: String
     },
-    modals: {
-      ok: '',
-      okReturnValue: '',
-      successHeader: '',
-      successMessage: '',
-      errorHeader: '',
-      errorMessage: '',
-    },
-    messages: {
-      name: '',
-      street: '',
-      zipCode: '',
-      city: '',
-      country: '',
-      notAssigned: '',
-    },
-    buttons: {
-      activatedTrue: '',
-      activatedFalse: '',    }
+    modals?: {
+      successHeader?: String,
+      successMessage?: String,
+      errorMessage?: String
+    }
   };
 
   constructor(
@@ -217,55 +199,35 @@ export class FablabFormComponent implements OnInit {
     this.translateService
       .get(['fablabForm', 'address'])
       .subscribe(translations => {
-        this.translationFields = {
-          title:
+        this.translationFields = TranslationModel.translationUnroll(
+          translations,
+          {zw: {
+            title:
             !this.editView && !this.profileView
               ? translations['fablabForm'].createTitle
               : translations['fablabForm'].editTitle,
-          labels: {
-            name: translations['fablabForm'].labels.name,
-            isActivated: translations['fablabForm'].labels.isActivated,
-            street: translations['address'].street,
-            zipCode: translations['address'].zipCode,
-            city: translations['address'].city,
-            country: translations['address'].country,
-            submit:
-              !this.editView && !this.profileView
+            labels: {
+              submit: !this.editView && !this.profileView
                 ? translations['fablabForm'].labels.createSubmit
                 : translations['fablabForm'].labels.editSubmit
-          },
-          modals: {
-            ok: translations['fablabForm'].modals.ok,
-            okReturnValue: translations['fablabForm'].modals.okReturnValue,
-            successHeader:
+            },
+            modals: {
+              successHeader:
               this.editView || this.profileView
                 ? translations['fablabForm'].modals.updateSuccessHeader
                 : translations['fablabForm'].modals.createSuccessHeader,
-            successMessage:
-              this.editView || this.profileView
-                ? translations['fablabForm'].modals.updateSuccess
-                : translations['fablabForm'].modals.createSuccess,
-            errorHeader: translations['fablabForm'].modals.errorHeader,
-            errorMessage:
-              this.editView || this.profileView
-                ? translations['fablabForm'].modals.updateError
-                : translations['fablabForm'].modals.createError
-          },
-          messages: {
-            name: translations['fablabForm'].messages.name,
-            street: translations['fablabForm'].messages.street,
-            zipCode: translations['fablabForm'].messages.zipCode,
-            city: translations['fablabForm'].messages.city,
-            country: translations['fablabForm'].messages.country,
-            notAssigned: translations['fablabForm'].messages.notAssigned
-          },
-          buttons: {
-            activatedTrue: translations['fablabForm'].buttons.activatedTrue,
-            activatedFalse: translations['fablabForm'].buttons.activatedFalse
-          }
-        };
-      });
-              console.log(this.translationFields);
-
+              successMessage:
+                this.editView || this.profileView
+                  ? translations['fablabForm'].modals.updateSuccess
+                  : translations['fablabForm'].modals.createSuccess,
+              errorMessage:
+                this.editView || this.profileView
+                  ? translations['fablabForm'].modals.updateError
+                  : translations['fablabForm'].modals.createError
+            }
+          }}
+        );
+      console.log(this.translationFields);
+    });
   }
 }

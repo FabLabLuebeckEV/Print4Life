@@ -12,23 +12,23 @@
     <table class="table table-striped">
       <tbody>
         <tr>
-          <td class="align-middle text-center">{{translationFields.labels.deviceId}}</td>
+          <td class="align-middle text-center">{{translationFields?.labels.deviceId}}</td>
           <td class="align-middle text-center">{{iotDevice.deviceId}}</td>
         </tr>
         <tr>
-          <td class="align-middle text-center">{{translationFields.labels.deviceType}}</td>
+          <td class="align-middle text-center">{{translationFields?.labels.deviceType}}</td>
           <td class="align-middle text-center">{{iotDevice.deviceType}}</td>
         </tr>
         <tr>
-          <td class="align-middle text-center">{{translationFields.labels.clientId}}</td>
+          <td class="align-middle text-center">{{translationFields?.labels.clientId}}</td>
           <td class="align-middle text-center">{{iotDevice.clientId}}</td>
         </tr>
         <tr *ngIf="iotDevice.password">
-          <td class="align-middle text-center">{{translationFields.labels.username}}</td>
+          <td class="align-middle text-center">{{translationFields?.labels.username}}</td>
           <td class="align-middle text-center">{{iotDevice.username}}</td>
         </tr>
         <tr *ngIf="iotDevice.password">
-          <td class="align-middle text-center">{{translationFields.labels.password}}</td>
+          <td class="align-middle text-center">{{translationFields?.labels.password}}</td>
           <td class="align-middle text-center">{{iotDevice.password}}</td>
         </tr>
         <tr>
@@ -57,7 +57,7 @@
     <table class="table table-striped">
       <thead>
         <td class="align-middle text-center">Topic</td>
-        <td class="align-middle text-center">{{translationFields.labels.dataformat}}</td>
+        <td class="align-middle text-center">{{translationFields?.labels.dataformat}}</td>
       </thead>
       <tbody>
         <tr *ngFor="let event of iotDevice.events">

@@ -7,14 +7,14 @@
 <div *ngIf="listView">
   <div class="row">
     <div class="col-md-4 offset-1">
-      <label for="roles">{{translationFields.filterLabel.roles}}</label>
+      <label for="roles">{{translationFields?.filterLabel.roles}}</label>
       <ng-select [multiple]="true" [loading]="loadingRoles" [hideSelected]="true" [closeOnSelect]="false"
         [items]=filter.validRoles [(ngModel)]="filter.shownRoles" id="roles" (change)="_changeHandlerRoles($event)"
         (close)="init()" (remove)="init()" (clear)="init()" name="roles" #roles="ngModel">
       </ng-select>
     </div>
     <div class="col-md-3">
-      <label for="fablabs">{{translationFields.filterLabel.fablabs}}</label>
+      <label for="fablabs">{{translationFields?.filterLabel.fablabs}}</label>
       <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false"
         [items]=filter.allFablabs bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabs" (close)="init()"
         (remove)="init()" (clear)="init()" name="fablabs" #fablabs="ngModel">
@@ -22,7 +22,7 @@
     </div>
     <div class="col-md-3">
       <form>
-        <label for="search">{{translationFields.filterLabel.search}}</label>
+        <label for="search">{{translationFields?.filterLabel.search}}</label>
         <div class="input-group">
           <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search"
             #search="ngModel">
@@ -48,7 +48,7 @@
           <div class="col-1 col-md-5">
           </div>
           <div class="col-7 col-md-2 text-center">
-            <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
+            <label for="jumpToPage">{{translationFields?.paginationLabel}}</label>
             <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage"
               name="jumpToPage" #jumpToPage="ngModel">
           </div>

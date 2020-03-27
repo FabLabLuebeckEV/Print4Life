@@ -19,6 +19,8 @@ import { ModalButton } from '../../helper/modal.button';
 import { Chart } from 'chart.js';
 import { ViewChild, ElementRef } from '@angular/core';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.component.html',
@@ -69,56 +71,7 @@ export class OrderDetailComponent implements OnInit {
   machine: any;
   fablab: any;
 
-  translationFields = {
-    tooltips: {
-      delete: '',
-      print: '',
-    },
-    labels: {
-      owner: '',
-      editor: '',
-      status: '',
-      createdAt: '',
-      machine: '',
-      machineNotSet: '',
-      fablab: '',
-      comments: '',
-      author: '',
-      content: '',
-      files: '',
-      file: '',
-      addressTitle: '',
-      latestVersion: '',
-      scheduledFor: '',
-      batched: '',
-      batchAssigned: '',
-      batchOpen: '',
-      batchFinished: '',
-      imanufacture: '',
-      count: '',
-      helpnow: ''
-    },
-    modals: {
-      ok: '',
-      abort: '',
-      cancel: '',
-      deleteReturnValue: '',
-      abortReturnValue: '',
-      cancelReturnValue: '',
-      deleteHeader: '',
-      deleteQuestion: '',
-      deleteQuestion2: '',
-      deleteWarning: '',
-      printHeader: '',
-      addressLabel: '',
-      apiKeyLabel: '',
-      fileSelectLabel: '',
-      batchOrderQuestion: '',
-      batchOrderWarning: '',
-      batchOrderAccept: '',
-      batchOrderAbort: ''
-    }
-  };
+  translationFields: TranslationModel.OrderDetail & TranslationModel.DeviceTypes & TranslationModel.Status & TranslationModel.Date;
 
   constructor(
     private route: ActivatedRoute,
@@ -404,7 +357,7 @@ export class OrderDetailComponent implements OnInit {
 
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
-    this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date', 'buttonTooltips']).subscribe((translations => {
+    this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
       if (this.order) {
         if (this.schedule) {
           this.schedule['shownStartDate'] = this.genericService.translateDate(
@@ -441,56 +394,8 @@ export class OrderDetailComponent implements OnInit {
         });
       }
 
-      this.translationFields = {
-        tooltips: {
-          delete: translations['orderDetail'].buttons.tooltips.delete,
-          print: translations['orderDetail'].buttons.tooltips.print,
-        },
-        labels: {
-          owner: translations['orderDetail'].labels.owner,
-          editor: translations['orderDetail'].labels.editor,
-          status: translations['orderDetail'].labels.status,
-          createdAt: translations['orderDetail'].labels.createdAt,
-          machine: translations['orderDetail'].labels.machine,
-          machineNotSet: translations['orderDetail'].labels.machineNotSet,
-          fablab: translations['orderDetail'].labels.fablab,
-          comments: translations['orderDetail'].labels.comments,
-          author: translations['orderDetail'].labels.author,
-          content: translations['orderDetail'].labels.content,
-          files: translations['orderDetail'].labels.files,
-          file: translations['orderDetail'].labels.file,
-          addressTitle: translations['orderDetail'].labels.addressTitle,
-          latestVersion: translations['orderDetail'].labels.latestVersion,
-          scheduledFor: translations['orderDetail'].labels.scheduledFor,
-          batched: translations['orderDetail'].labels.batched,
-          batchAssigned: translations['orderDetail'].labels.batchAssigned,
-          batchOpen: translations['orderDetail'].labels.batchOpen,
-          batchFinished: translations['orderDetail'].labels.batchFinished,
-          imanufacture: translations['orderDetail'].labels.imanufacture,
-          count: translations['orderDetail'].labels.count,
-          helpnow: translations['orderDetail'].labels.helpnow
-        },
-        modals: {
-          ok: translations['orderDetail'].modals.ok,
-          abort: translations['orderDetail'].modals.abort,
-          cancel: translations['orderDetail'].modals.cancel,
-          deleteReturnValue: translations['orderDetail'].modals.deleteReturnValue,
-          abortReturnValue: translations['orderDetail'].modals.abortReturnValue,
-          cancelReturnValue: translations['orderDetail'].modals.cancelReturnValue,
-          deleteHeader: translations['orderDetail'].modals.deleteHeader,
-          deleteQuestion: translations['orderDetail'].modals.deleteQuestion,
-          deleteQuestion2: translations['orderDetail'].modals.deleteQuestion2,
-          deleteWarning: translations['orderDetail'].modals.deleteWarning,
-          printHeader: translations['orderDetail'].modals.printHeader,
-          addressLabel: translations['orderDetail'].modals.addressLabel,
-          apiKeyLabel: translations['orderDetail'].modals.apiKeyLabel,
-          fileSelectLabel: translations['orderDetail'].modals.fileSelectLabel,
-          batchOrderQuestion: translations['orderDetail'].modals.batchOrderQuestion,
-          batchOrderWarning: translations['orderDetail'].modals.batchOrderWarning,
-          batchOrderAbort: translations['orderDetail'].modals.batchOrderAbort,
-          batchOrderAccept: translations['orderDetail'].modals.batchOrderAccept
-        }
-      };
+      this.translationFields = TranslationModel.translationUnroll(translations);
+
       this.loadChart();
     }));
   }

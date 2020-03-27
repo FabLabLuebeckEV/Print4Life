@@ -1,7 +1,7 @@
 <router-outlet></router-outlet>
 <div class="row spacing">
   <div class="col-md-12 text-center">
-    <h1>{{translationFields.title}}</h1>
+    <h1>{{translationFields?.title}}</h1>
   </div>
   <div class="container text-left">
     <app-back-button></app-back-button>
@@ -12,66 +12,66 @@
     <form (ngSubmit)="onSubmit()" #createUserForm="ngForm">
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="username">{{translationFields.labels.username}}</label>
+          <label for="username">{{translationFields?.labels.username}}</label>
           <input type="text" class="form-control" id="username" required [(ngModel)]="user.username" name="username"
             [disabled]="editView || profileView" #username="ngModel">
           <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
-            {{translationFields.messages.username}}
+            {{translationFields?.messages.username}}
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-6">
-          <label for="firstname">{{translationFields.labels.firstName}}</label>
+          <label for="firstname">{{translationFields?.labels.firstName}}</label>
           <input type="text" class="form-control" id="firstname" required [(ngModel)]="user.firstname" name="firstname"
             #firstname="ngModel">
           <div [hidden]="firstname.valid || firstname.pristine" class="alert alert-danger">
-            {{translationFields.messages.firstName}}
+            {{translationFields?.messages.firstName}}
           </div>
         </div>
         <div class="col-md-6">
-          <label for="lastname">{{translationFields.labels.secondName}}</label>
+          <label for="lastname">{{translationFields?.labels.secondName}}</label>
           <input type="text" class="form-control" id="lastname" required [(ngModel)]="user.lastname" name="lastname"
             #lastname="ngModel">
           <div [hidden]="lastname.valid || lastname.pristine" class="alert alert-danger">
-            {{translationFields.messages.secondName}}
+            {{translationFields?.messages.secondName}}
           </div>
         </div>
       </div>
       <div *ngIf="!editView && !profileView" class="form-group row">
         <div class="col-md-6">
-          <label for="password">{{translationFields.labels.password}}</label>
+          <label for="password">{{translationFields?.labels.password}}</label>
           <input type="password" class="form-control" id="password" required [(ngModel)]="user.password" name="password"
             #password="ngModel" [ngModelOptions]="{updateOn: 'blur'}">
           <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
-            {{translationFields.messages.password}}
+            {{translationFields?.messages.password}}
           </div>
         </div>
         <div class="col-md-6">
-          <label for="validation">{{translationFields.labels.passwordValidation}}</label>
+          <label for="validation">{{translationFields?.labels.passwordValidation}}</label>
           <input type="password" class="form-control" [ngClass]="{'ng-invalid': user.password !== user.passwordValidation}"
             id="validation" required [(ngModel)]="user.passwordValidation" name="validation" #validation="ngModel"
             [ngModelOptions]="{updateOn: 'blur'}">
           <div [hidden]="validation.valid || validation.pristine || !user.passwordValidation" class="alert alert-danger">
-            {{translationFields.messages.passwordValidation}}
+            {{translationFields?.messages.passwordValidation}}
           </div>
           <div [hidden]="!user.passwordValidation || !user.password || user.passwordValidation && user.password && user.passwordValidation === user.password"
             class="alert alert-danger">
-            {{translationFields.messages.passwordValidationWrong}}
+            {{translationFields?.messages.passwordValidationWrong}}
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-6">
-          <label for="email">{{translationFields.labels.email}}</label>
+          <label for="email">{{translationFields?.labels.email}}</label>
           <input type="text" class="form-control" id="email" required [(ngModel)]="user.email" name="email" #email="ngModel">
           <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
-            {{translationFields.messages.email}}
+            {{translationFields?.messages.email}}
           </div>
         </div>
         <div class="col-md-6">
-          <label for="fablabId">{{translationFields.labels.fablab}}</label>
-          <ng-select [loading]="loadingFablabs" [placeholder]="translationFields.messages.notAssigned" [items]=fablabs
+          <label for="fablabId">{{translationFields?.labels.fablab}}</label>
+          <ng-select [loading]="loadingFablabs" [placeholder]="translationFields?.messages.notAssigned" [items]=fablabs
             bindValue="_id" bindLabel="name" [(ngModel)]="user.fablabId" id="fablabId" name="fablabId" #fablabId="ngModel">
           </ng-select>
         </div>
@@ -79,75 +79,75 @@
 
       <div *ngIf="editView || profileView" class="form-group row">
         <div class="col-md-6">
-          <label for="role">{{translationFields.labels.role}}</label>
-          <ng-select [loading]="loadingRoles" [items]=translationFields.shownRoles [(ngModel)]="user['shownRole']" id="role"
+          <label for="role">{{translationFields?.labels.role}}</label>
+          <ng-select [loading]="loadingRoles" [items]=translationFields?.shownRoles [(ngModel)]="user['shownRole']" id="role"
             name="role" #role="ngModel" (change)="roleChanged(user['shownRole'])" [disabled]=!isAdmin required>
           </ng-select>
           <div [hidden]="role.valid || role.pristine" class="alert alert-danger">
-            {{translationFields.messages.role}}
+            {{translationFields?.messages.role}}
           </div>
         </div>
         <div class="col-md-3">
-          <label for="role">{{translationFields.labels.isActivated}}</label><br>
+          <label for="role">{{translationFields?.labels.isActivated}}</label><br>
           <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="user.activated">
             <label ngbButtonLabel class="btn btn-outline-success">
-              <input ngbButton type="radio" [value]="true">{{translationFields.buttons.activatedTrue}}
+              <input ngbButton type="radio" [value]="true">{{translationFields?.buttons.activatedTrue}}
             </label>
             <label ngbButtonLabel class="btn btn-outline-danger">
-              <input ngbButton type="radio" [value]="false">{{translationFields.buttons.activatedFalse}}
+              <input ngbButton type="radio" [value]="false">{{translationFields?.buttons.activatedFalse}}
             </label>
           </div>
         </div>
         <div *ngIf="(editView || profileView) && profileView && loggedInUser && user && loggedInUser._id === user._id"
           class="col-md-3">
-          <label for="role">{{translationFields.labels.changePassword}}</label><br>
-          <button type="button" class="btn btn-warning" (click)="_changePassword()">{{translationFields.buttons.changePassword}}</button>
+          <label for="role">{{translationFields?.labels.changePassword}}</label><br>
+          <button type="button" class="btn btn-warning" (click)="_changePassword()">{{translationFields?.buttons.changePassword}}</button>
         </div>
       </div>
 
       <div class="form-group row">
         <div class="col-md-12">
-          <label for="street">{{translationFields.labels.street}}</label>
+          <label for="street">{{translationFields?.street}}</label>
           <input type="text" class="form-control" id="street" [(ngModel)]="user.address.street" name="street" #street="ngModel">
           <div [hidden]="street.valid || street.pristine" class="alert alert-danger">
-            {{translationFields.messages.street}}
+            {{translationFields?.messages.street}}
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-4">
-          <label for="zipCode">{{translationFields.labels.zipCode}}</label>
+          <label for="zipCode">{{translationFields?.zipCode}}</label>
           <input type="text" class="form-control" id="zipCode" [(ngModel)]="user.address.zipCode" name="zipCode"
             #zipCode="ngModel">
           <div [hidden]="zipCode.valid || zipCode.pristine" class="alert alert-danger">
-            {{translationFields.messages.zipCode}}
+            {{translationFields?.messages.zipCode}}
           </div>
         </div>
         <div class="col-md-8">
-          <label for="city">{{translationFields.labels.city}}</label>
+          <label for="city">{{translationFields?.city}}</label>
           <input type="text" class="form-control" id="city" [(ngModel)]="user.address.city" name="city" #city="ngModel">
           <div [hidden]="city.valid || city.pristine" class="alert alert-danger">
-            {{translationFields.messages.city}}
+            {{translationFields?.messages.city}}
           </div>
         </div>
       </div>
       <div class="form-group row">
         <div class="col-md-6">
-          <label for="country">{{translationFields.labels.country}}</label>
+          <label for="country">{{translationFields?.country}}</label>
           <input type="text" class="form-control" id="country" [(ngModel)]="user.address.country" name="country"
             #country="ngModel">
           <div [hidden]="country.valid || country.pristine" class="alert alert-danger">
-            {{translationFields.messages.country}}
+            {{translationFields?.messages.country}}
           </div>
         </div>
         <div class="col-md-6">
-          <label for="preferredLanguage">{{translationFields.labels.preferredLanguage}}</label>
-          <ng-select [loading]="loadingLanguages" [items]=translationFields.shownLanguages [(ngModel)]="user['shownLanguage']"
+          <label for="preferredLanguage">{{translationFields?.labels.preferredLanguage}}</label>
+          <ng-select [loading]="loadingLanguages" [items]=translationFields?.shownLanguages [(ngModel)]="user['shownLanguage']"
             id="language" name="language" #language="ngModel" (change)="languageChanged(user['shownLanguage'])">
           </ng-select>
         </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!createUserForm.form.valid || (!editView && !profileView && user.password !== user.passwordValidation)">{{translationFields.labels.submit}}</button>
+      <button type="submit" class="btn btn-success" [disabled]="!createUserForm.form.valid || (!editView && !profileView && user.password !== user.passwordValidation)">{{translationFields?.labels.submit}}</button>
     </form>
   </div>
 </div>

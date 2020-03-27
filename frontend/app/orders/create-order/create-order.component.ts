@@ -25,6 +25,8 @@ import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 import { transformAll } from '@angular/compiler/src/render3/r3_ast';
 
+import { TranslationModel } from '../../models/translation.model';
+
 const localStorageOrderKey = 'orderManagementOrderFormOrder';
 const localStorageCommentKey = 'orderManagementOrderFormComment';
 
@@ -109,83 +111,23 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   loggedInUser: User = new User(
     undefined, '', '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   userCanDownload: boolean;
-  translationFields = {
-    title: '',
-    shownMachineTypes: [],
-    shownStatus: [],
-    shownShippingAddresses: [],
-    shownAddress: '',
-    publicHint: '',
-    privateHint: '',
-    labels: {
-      submit: '',
-      sendComment: '',
-      projectName: '',
-      owner: '',
-      editor: '',
-      status: '',
-      machineType: '',
-      selectedMachine: '',
-      selectedMachineInfo: '',
-      comments: '',
-      newComment: '',
-      author: '',
-      content: '',
-      createdAt: '',
-      street: '',
-      zipCode: '',
-      city: '',
-      country: '',
-      addressTitle: '',
-      fileUpload: '',
-      files: '',
-      file: '',
-      latestVersion: '',
-      datePickerStart: '',
-      datePickerEnd: '',
-      timePickerStart: '',
-      timePickerEnd: '',
-      machineSchedule: '',
-      startDate: '',
-      endDate: '',
-      copyright: '',
-      fablab: '',
-      batchTitle: '',
-      batchNumber: '',
-      batchDescription: ''
-    },
-    modals: {
-      ok: '',
-      okReturnValue: '',
-      createCommentError: '',
-      createCommentSuccessHeader: '',
-      createCommentSuccess: '',
-      orderSuccessHeader: '',
-      orderSuccess: '',
-      errorHeader: '',
-      error: '',
-      orderSharedLinkSuccessHeader: '',
-      orderSharedLinkSuccess: ''
-    },
-    messages: {
-      projectName: '',
-      owner: '',
-      status: '',
-      statusDeprecated: '',
-      machineType: '',
-      selectedMachine: '',
-      unnamedFablab: '',
-      author: '',
-      content: '',
-      datePicker: '',
-      timePicker: '',
-      copyright: '',
-      street: '',
-      zipCode: '',
-      city: '',
-      country: '',
-    }
-  };
+
+  translationFields: TranslationModel.OrderForm & TranslationModel.DeviceTypes &
+      TranslationModel.Status & TranslationModel.Date &
+      TranslationModel.Address & TranslationModel.Upload &
+      {
+        title?: String,
+        modals?: {
+          error?: String,
+          orderSuccess?: String,
+          orderSuccessHeader?: String
+        },
+        labels?: {
+          submit?: String
+        }
+        shownShippingAddresses?: String,
+        shownMachineTypes?: String
+      };
 
   constructor(
     private machineService: MachineService,
@@ -201,7 +143,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private spinner: NgxSpinnerService,
     private scheduleService: ScheduleService,
-    private validationService: ValidationService) {
+    private validationService: ValidationService
+  ) {
     this.config = this.configService.getConfig();
     this.spinnerConfig = new SpinnerConfig(
       '', this.config.spinnerConfig.bdColor,
@@ -228,6 +171,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         this.orderId = params.id;
       }
     });
+
+    console.log('test');
   }
 
   ngOnDestroy() {
@@ -921,89 +866,17 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
             });
           }
         }
-        this.translationFields = {
-          title: this.editView ? translations['orderForm'].editTitle : translations['orderForm'].createTitle,
+
+        this.translationFields = TranslationModel.translationUnroll(translations, {data: {
+          title: translations['orderForm'].createTitle,
           shownMachineTypes: shownMachineTypes,
           shownStatus: shownStatus,
           shownShippingAddresses: shownShippingAddresses,
-          shownAddress: 'TBA',
-          publicHint: translations['orderForm'].publicHint,
-          privateHint: translations['orderForm'].privateHint,
           labels: {
-            submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.createSubmit,
-            sendComment: translations['orderForm'].labels.sendComment,
-            projectName: translations['orderForm'].labels.projectName,
-            owner: translations['orderForm'].labels.owner,
-            editor: translations['orderForm'].labels.editor,
-            status: translations['orderForm'].labels.status,
-            machineType: translations['orderForm'].labels.machineType,
-            selectedMachine: translations['orderForm'].labels.selectedMachine,
-            selectedMachineInfo: translations['orderForm'].labels.selectedMachineInfo,
-            comments: translations['orderForm'].labels.comments,
-            newComment: translations['orderForm'].labels.newComment,
-            author: translations['orderForm'].labels.author,
-            content: translations['orderForm'].labels.content,
-            createdAt: translations['orderForm'].labels.createdAt,
-            street: translations['address'].street,
-            zipCode: translations['address'].zipCode,
-            city: translations['address'].city,
-            country: translations['address'].country,
-            addressTitle: translations['orderForm'].labels.addressTitle,
-            fileUpload: translations['orderForm'].labels.fileUpload,
-            files: translations['orderForm'].labels.files,
-            file: translations['orderForm'].labels.file,
-            latestVersion: translations['orderForm'].labels.latestVersion,
-            datePickerStart: translations['orderForm'].labels.datePickerStart,
-            datePickerEnd: translations['orderForm'].labels.datePickerEnd,
-            timePickerStart: translations['orderForm'].labels.timePickerStart,
-            timePickerEnd: translations['orderForm'].labels.timePickerEnd,
-            machineSchedule: translations['orderForm'].labels.machineSchedule,
-            startDate: translations['orderForm'].labels.startDate,
-            endDate: translations['orderForm'].labels.endDate,
-            copyright: translations['orderForm'].labels.copyright,
-            fablab: translations['orderForm'].labels.fablab,
-            batchTitle: translations['orderForm'].labels.batchTitle,
-            batchNumber: translations['orderForm'].labels.batchNumber,
-            batchDescription: translations['orderForm'].labels.batchDescription
-          },
-          modals: {
-            ok: translations['orderForm'].modals.ok,
-            okReturnValue: translations['orderForm'].modals.okReturnValue,
-            createCommentError: translations['orderForm'].modals.createCommentError,
-            createCommentSuccess: translations['orderForm'].modals.createCommentSuccess,
-            createCommentSuccessHeader: translations['orderForm'].modals.createCommentSuccessHeader,
-            orderSuccessHeader: this.editView
-              ? translations['orderForm'].modals.updateOrderSuccessHeader
-              : translations['orderForm'].modals.createOrderSuccessHeader,
-            orderSuccess: this.editView
-              ? translations['orderForm'].modals.updateOrderSuccess
-              : translations['orderForm'].modals.createOrderSuccess,
-            errorHeader: translations['orderForm'].modals.errorHeader,
-            error: this.editView
-              ? translations['orderForm'].modals.updateError
-              : translations['orderForm'].modals.createError,
-            orderSharedLinkSuccessHeader: translations['orderForm'].modals.orderSharedLinkSuccessHeader,
-            orderSharedLinkSuccess: translations['orderForm'].modals.orderSharedLinkSuccess
-          },
-          messages: {
-            projectName: translations['orderForm'].messages.projectName,
-            owner: translations['orderForm'].messages.owner,
-            status: translations['orderForm'].messages.status,
-            statusDeprecated: translations['orderForm'].messages.statusDeprecated,
-            machineType: translations['orderForm'].messages.machineType,
-            selectedMachine: translations['orderForm'].messages.selectedMachine,
-            unnamedFablab: translations['orderForm'].messages.unnamedFablab,
-            author: translations['orderForm'].messages.author,
-            content: translations['orderForm'].messages.content,
-            datePicker: translations['orderForm'].messages.datePicker,
-            timePicker: translations['orderForm'].messages.timePicker,
-            copyright: translations['orderForm'].messages.copyright,
-            street: translations['orderForm'].messages.street,
-            zipCode: translations['orderForm'].messages.zipCode,
-            city: translations['orderForm'].messages.city,
-            country: translations['orderForm'].messages.country,
+            submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.createSubmit
           }
-        };
+        }});
+        console.log(this.translationFields);
       }
     }));
   }

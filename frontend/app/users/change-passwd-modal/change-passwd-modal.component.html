@@ -1,23 +1,23 @@
 <div class="modal-header header-primary">
-  <h4 class="modal-title">{{translationFields.title}}</h4>
+  <h4 class="modal-title">{{translationFields?.title}}</h4>
   <button type="button" class="close" aria-label="Close" (click)="closeModal('dismiss')">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
   <form (ngSubmit)="changePassword()" #changePasswdForm="ngForm">
-    <label for="oldPassword">{{translationFields.labels.oldPassword}}</label>
-    <input type="password" id="oldPassword" #oldPassword="ngModel" class="form-control" placeholder={{translationFields.labels.oldPassword}}
+    <label for="oldPassword">{{translationFields?.labels.oldPassword}}</label>
+    <input type="password" id="oldPassword" #oldPassword="ngModel" class="form-control" placeholder={{translationFields?.labels.oldPassword}}
       [(ngModel)]="passwords.oldPassword" name="oldPassword" />
-    <label for="password">{{translationFields.labels.password}}</label>
-    <input type="password" id="password" #password="ngModel" class="form-control" placeholder={{translationFields.labels.password}}
+    <label for="password">{{translationFields?.labels.password}}</label>
+    <input type="password" id="password" #password="ngModel" class="form-control" placeholder={{translationFields?.labels.password}}
       [(ngModel)]="passwords.password" name="password" />
-    <label for="password2">{{translationFields.labels.password2}}</label>
-    <input type="password" id="password2" #password2="ngModel" class="form-control" placeholder={{translationFields.labels.password2}}
+    <label for="password2">{{translationFields?.labels.password2}}</label>
+    <input type="password" id="password2" #password2="ngModel" class="form-control" placeholder={{translationFields?.labels.password2}}
       [(ngModel)]="passwords.password2" name="password2" />
     <div class="row">
       <div class="col-sm-6">
-        <button class="btn btn-success spacing-top spacing-right" type="submit" [disabled]="!changePasswdForm.form.valid || passwords.password !== passwords.password2">{{translationFields.modals.buttonLabel}}</button>
+        <button class="btn btn-success spacing-top spacing-right" type="submit" [disabled]="!changePasswdForm.form.valid || passwords.password !== passwords.password2">{{translationFields?.modals.buttonLabel}}</button>
       </div>
     </div>
   </form>

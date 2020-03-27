@@ -1,6 +1,6 @@
 <div class="row spacing">
   <div class="col-md-12 text-center">
-    <h1>{{translationFields.title}}</h1>
+    <h1>{{translationFields?.title}}</h1>
   </div>
   <div class="container text-left">
     <app-back-button></app-back-button>
@@ -8,8 +8,8 @@
 </div>
 <div *ngIf="!editView" class="col-md-6 center-buttons">
   <div class="btn-group spacing btn-group-toggle" data-toggle="buttons" role="group" aria-label="Machine selection">
-    <button *ngFor="let type of translationFields.shownMachineTypes" (click)="_selectType(type); machineForm.reset()"
-      type="button" [class.active]="type === translationFields.shownType"
+    <button *ngFor="let type of translationFields?.shownMachineTypes" (click)="_selectType(type); machineForm.reset()"
+      type="button" [class.active]="type === translationFields?.shownType"
       class="btn btn-outline-primary">{{type}}</button>
   </div>
 </div>
@@ -17,67 +17,67 @@
   <div class="col-md-12">
     <div class="container">
       <form (ngSubmit)="onSubmit()" #machineForm="ngForm">
-        <h2 *ngIf="selectedType" class="col-md-12 header-left-bound">{{translationFields.generalData}}</h2>
+        <h2 *ngIf="selectedType" class="col-md-12 header-left-bound">{{translationFields?.generalData}}</h2>
         <div *ngIf="selectedType" class="form-group row">
           <div class="col-md-6">
-            <label for="deviceName">{{translationFields.labels.deviceName}}</label>
+            <label for="deviceName">{{translationFields?.labels.deviceName}}</label>
             <input type="text" class="form-control" id="deviceName" required [(ngModel)]="model.deviceName"
               name="deviceName" #deviceName="ngModel">
             <div [hidden]="deviceName.valid || deviceName.pristine" class="alert alert-danger">
-              {{translationFields.messages.deviceName}}
+              {{translationFields?.messages.deviceName}}
             </div>
           </div>
           <div class="col-md-6">
-            <label for="fablabId">{{translationFields.labels.fablab}}</label>
+            <label for="fablabId">{{translationFields?.labels.fablab}}</label>
             <ng-select [loading]="loadingFablabs" [items]=fablabs bindValue="_id" bindLabel="name"
               [(ngModel)]="model.fablabId" id="fablabId" name="fablabId" #fablabId="ngModel" required>
             </ng-select>
             <div [hidden]="fablabId.valid || fablabId.pristine" class="alert alert-danger">
-              {{translationFields.messages.fablab}}
+              {{translationFields?.messages.fablab}}
             </div>
           </div>
         </div>
 
         <div *ngIf="selectedType" class="form-group row">
           <div class="col-md-6">
-            <label for="manufacturer">{{translationFields.labels.manufacturer}}</label>
+            <label for="manufacturer">{{translationFields?.labels.manufacturer}}</label>
             <input type="text" class="form-control" id="manufacturer" required [(ngModel)]="model.manufacturer"
               name="manufacturer" #manufacturer="ngModel">
             <div [hidden]="manufacturer.valid || manufacturer.pristine" class="alert alert-danger">
-              {{translationFields.messages.manufacturer}}
+              {{translationFields?.messages.manufacturer}}
             </div>
           </div>
 
           <div class="col-md-6">
-            <label for="status">{{translationFields.labels.isActivated}}</label><br>
+            <label for="status">{{translationFields?.labels.isActivated}}</label><br>
             <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="model.activated">
               <label ngbButtonLabel class="btn btn-outline-success" [class.active]="model.activated">
-                <input ngbButton type="radio" [value]="true">{{translationFields.buttons.activatedTrue}}
+                <input ngbButton type="radio" [value]="true">{{translationFields?.buttons.activatedTrue}}
               </label>
               <label ngbButtonLabel class="btn btn-outline-danger" [class.active]="!model.activated">
-                <input ngbButton type="radio" [value]="false">{{translationFields.buttons.activatedFalse}}
+                <input ngbButton type="radio" [value]="false">{{translationFields?.buttons.activatedFalse}}
               </label>
             </div>
           </div>
         </div>
         <h2 *ngIf="selectedType" class="col-md-12 header-left-bound">
-          {{shownType}} {{translationFields.labels.data}}
+          {{shownType}} {{translationFields?.labels.data}}
         </h2>
 
         <div *ngIf="selectedType === '3d-printer'">
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="camSoftware">{{translationFields.labels.camSoftware}}</label>
+              <label for="camSoftware">{{translationFields?.labels.camSoftware}}</label>
               <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware"
                 name="camSoftware" #camSoftware="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="nozzleDiameter">{{translationFields.labels.nozzleDiameter}}</label>
+              <label for="nozzleDiameter">{{translationFields?.labels.nozzleDiameter}}</label>
               <input type="number" class="form-control" id="nozzleDiameter" [(ngModel)]="model.nozzleDiameter"
                 name="nozzleDiameter" #nozzleDiameter="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="materials">{{translationFields.labels.materials}}</label>
+              <label for="materials">{{translationFields?.labels.materials}}</label>
               <ng-select [multiple]="true" [loading]="loadingMaterials" [hideSelected]="true" [closeOnSelect]="false"
                 [items]=materialsArr bindLabel="material" [(ngModel)]="model.materials" id="materials" name="materials"
                 #materials="ngModel" required>
@@ -87,17 +87,17 @@
 
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="printVolumeX">{{translationFields.labels.printVolume}} X (mm)</label>
+              <label for="printVolumeX">{{translationFields?.labels.printVolume}} X (mm)</label>
               <input type="number" class="form-control" id="printVolumeX" [(ngModel)]="model.printVolumeX"
                 name="printVolumeX" #printVolumeX="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printVolumeY">{{translationFields.labels.printVolume}} Y (mm)</label>
+              <label for="printVolumeY">{{translationFields?.labels.printVolume}} Y (mm)</label>
               <input type="number" class="form-control" id="printVolumeY" [(ngModel)]="model.printVolumeY"
                 name="printVolumeY" #printVolumeY="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printVolumeZ">{{translationFields.labels.printVolume}} Z (mm)</label>
+              <label for="printVolumeZ">{{translationFields?.labels.printVolume}} Z (mm)</label>
               <input type="number" class="form-control" id="printVolumeZ" [(ngModel)]="model.printVolumeZ"
                 name="printVolumeZ" #printVolumeZ="ngModel">
             </div>
@@ -105,17 +105,17 @@
 
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="printResolutionX">{{translationFields.labels.printResolution}} X (micron)</label>
+              <label for="printResolutionX">{{translationFields?.labels.printResolution}} X (micron)</label>
               <input type="number" class="form-control" id="printResolutionX" [(ngModel)]="model.printResolutionX"
                 name="printResolutionX" #printResolutionX="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printResolutionY">{{translationFields.labels.printResolution}} Y (micron)</label>
+              <label for="printResolutionY">{{translationFields?.labels.printResolution}} Y (micron)</label>
               <input type="number" class="form-control" id="printResolutionY" [(ngModel)]="model.printResolutionY"
                 name="printResolutionY" #printResolutionY="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="printResolutionZ">{{translationFields.labels.printResolution}} Z (micron)</label>
+              <label for="printResolutionZ">{{translationFields?.labels.printResolution}} Z (micron)</label>
               <input type="number" class="form-control" id="printResolutionZ" [(ngModel)]="model.printResolutionZ"
                 name="printResolutionZ" #printResolutionZ="ngModel">
             </div>
@@ -123,18 +123,18 @@
 
           <div class="form-group row">
             <div class="col-md-6">
-              <label for="numberOfExtruders">{{translationFields.labels.numberOfExtruders}}</label>
+              <label for="numberOfExtruders">{{translationFields?.labels.numberOfExtruders}}</label>
               <input type="number" class="form-control" id="numberOfExtruders" [(ngModel)]="model.numberOfExtruders"
                 name="numberOfExtruders" #numberOfExtruders="ngModel">
             </div>
             <div class="col-md-6">
-              <label for="informationLink">{{translationFields.labels.informationLink}}</label>
+              <label for="informationLink">{{translationFields?.labels.informationLink}}</label>
               <input type="url" class="form-control" id="informationLink" [(ngModel)]="model.informationLink"
                 name="informationLink" #informationLink="ngModel">
             </div>
           </div>
           <div class="form-group row">
-            <label for="comment">{{translationFields.labels.comment}}</label>
+            <label for="comment">{{translationFields?.labels.comment}}</label>
             <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment"
               #comment="ngModel">
           </div>
@@ -143,17 +143,17 @@
         <div *ngIf="selectedType === 'Milling Machine'">
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="camSoftware">{{translationFields.labels.camSoftware}}</label>
+              <label for="camSoftware">{{translationFields?.labels.camSoftware}}</label>
               <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware"
                 name="camSoftware" #camSoftware="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="movementSpeed">{{translationFields.labels.movementSpeed}}</label>
+              <label for="movementSpeed">{{translationFields?.labels.movementSpeed}}</label>
               <input type="number" class="form-control" id="movementSpeed" [(ngModel)]="model.movementSpeed"
                 name="movementSpeed" #movementSpeed="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="stepSize">{{translationFields.labels.stepSize}}</label>
+              <label for="stepSize">{{translationFields?.labels.stepSize}}</label>
               <input type="number" class="form-control" id="stepSize" [(ngModel)]="model.stepSize" name="stepSize"
                 #stepSize="ngModel">
             </div>
@@ -161,17 +161,17 @@
 
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="workspaceX">{{translationFields.labels.workspace}} X (mm)</label>
+              <label for="workspaceX">{{translationFields?.labels.workspace}} X (mm)</label>
               <input type="number" class="form-control" id="workspaceX" [(ngModel)]="model.workspaceX" name="workspaceX"
                 #workspaceX="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="workspaceY">{{translationFields.labels.workspace}} Y (mm)</label>
+              <label for="workspaceY">{{translationFields?.labels.workspace}} Y (mm)</label>
               <input type="number" class="form-control" id="workspaceY" [(ngModel)]="model.workspaceY" name="workspaceY"
                 #workspaceY="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="workspaceZ">{{translationFields.labels.workspace}} Z (mm)</label>
+              <label for="workspaceZ">{{translationFields?.labels.workspace}} Z (mm)</label>
               <input type="number" class="form-control" id="workspaceZ" [(ngModel)]="model.workspaceZ" name="workspaceZ"
                 #workspaceZ="ngModel">
             </div>
@@ -179,7 +179,7 @@
 
           <div class="form-group row">
             <div class="col-md-12">
-              <label for="comment">{{translationFields.labels.comment}}</label>
+              <label for="comment">{{translationFields?.labels.comment}}</label>
               <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment"
                 #comment="ngModel">
             </div>
@@ -189,15 +189,15 @@
         <div *ngIf="selectedType === 'Other Machine'">
           <div class="form-group row">
             <div class="col-md-6">
-              <label for="typeOfMachine">{{translationFields.labels.typeOfMachine}}</label>
+              <label for="typeOfMachine">{{translationFields?.labels.typeOfMachine}}</label>
               <input type="text" class="form-control" id="typeOfMachine" required [(ngModel)]="model.typeOfMachine"
                 name="typeOfMachine" #typeOfMachine="ngModel">
               <div [hidden]="typeOfMachine.valid || typeOfMachine.pristine" class="alert alert-danger">
-                {{translationFields.messages.typeOfMachine}}
+                {{translationFields?.messages.typeOfMachine}}
               </div>
             </div>
             <div class="col-md-6">
-              <label for="comment">{{translationFields.labels.comment}}</label>
+              <label for="comment">{{translationFields?.labels.comment}}</label>
               <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment"
                 #comment="ngModel">
             </div>
@@ -207,19 +207,19 @@
         <div *ngIf="selectedType === 'Lasercutter'">
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="laserTypes">{{translationFields.labels.laserTypes}}</label>
+              <label for="laserTypes">{{translationFields?.labels.laserTypes}}</label>
               <ng-select [multiple]="true" [loading]="loadingLaserTypes" [hideSelected]="true" [closeOnSelect]="false"
                 [items]=laserTypesArr bindLabel="laserType" [(ngModel)]="model.laserTypes" id="laserTypes"
                 name="laserTypes" #laserTypes="ngModel" required>
               </ng-select>
             </div>
             <div class="col-md-4">
-              <label for="laserPower">{{translationFields.labels.laserPower}}</label>
+              <label for="laserPower">{{translationFields?.labels.laserPower}}</label>
               <input type="number" class="form-control" id="laserPower" [(ngModel)]="model.laserPower" name="laserPower"
                 #laserPower="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="maxResolution">{{translationFields.labels.maxResolution}}</label>
+              <label for="maxResolution">{{translationFields?.labels.maxResolution}}</label>
               <input type="number" class="form-control" id="maxResolution" [(ngModel)]="model.maxResolution"
                 name="maxResolution" #maxResolution="ngModel">
             </div>
@@ -227,17 +227,17 @@
 
           <div class="form-group row">
             <div class="col-md-4">
-              <label for="workspaceX">{{translationFields.labels.workspace}} X (mm)</label>
+              <label for="workspaceX">{{translationFields?.labels.workspace}} X (mm)</label>
               <input type="number" class="form-control" id="workspaceX" [(ngModel)]="model.workspaceX" name="workspaceX"
                 #workspaceX="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="workspaceY">{{translationFields.labels.workspace}} Y (mm)</label>
+              <label for="workspaceY">{{translationFields?.labels.workspace}} Y (mm)</label>
               <input type="number" class="form-control" id="workspaceY" [(ngModel)]="model.workspaceY" name="workspaceY"
                 #workspaceY="ngModel">
             </div>
             <div class="col-md-4">
-              <label for="workspaceZ">{{translationFields.labels.workspace}} Z (mm)</label>
+              <label for="workspaceZ">{{translationFields?.labels.workspace}} Z (mm)</label>
               <input type="number" class="form-control" id="workspaceZ" [(ngModel)]="model.workspaceZ" name="workspaceZ"
                 #workspaceZ="ngModel">
             </div>
@@ -245,12 +245,12 @@
 
           <div class="form-group row">
             <div class="col-md-6">
-              <label for="camSoftware">{{translationFields.labels.camSoftware}}</label>
+              <label for="camSoftware">{{translationFields?.labels.camSoftware}}</label>
               <input type="text" class="form-control" id="camSoftware" [(ngModel)]="model.camSoftware"
                 name="camSoftware" #camSoftware="ngModel">
             </div>
             <div class="col-md-6">
-              <label for="comment">{{translationFields.labels.comment}}</label>
+              <label for="comment">{{translationFields?.labels.comment}}</label>
               <input type="text" class="form-control" id="comment" [(ngModel)]="model.comment" name="comment"
                 #comment="ngModel">
             </div>
@@ -258,7 +258,7 @@
         </div>
 
         <button *ngIf="selectedType" type="submit" class="btn btn-success"
-          [disabled]="!machineForm.form.valid">{{translationFields.labels.submit}}</button>
+          [disabled]="!machineForm.form.valid">{{translationFields?.labels.submit}}</button>
       </form>
     </div>
   </div>
