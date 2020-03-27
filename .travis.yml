@@ -1,0 +1,27 @@
+addons: 
+  ssh_known_hosts: sandbox.ipoesse.de
+
+language: node_js
+
+branches: 
+  only:
+    - develop
+
+install:
+  - npm install
+
+
+script: npm run deploy-staging
+
+before_deploy:
+  - openssl aes-256-cbc -K $encrypted_<...>_key -iv $encrypted_<...>_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/deploy_rsa
+  - ssh-add /tmp/deploy_rsa
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/dist deploy@sandbox.ipoesse.de:/var/www/html/Print4Life/dist && ssh deploy@sandbox.ipoesse.de 'pm2 restart Print4Life-api'
+  on:
+    branch: develop
