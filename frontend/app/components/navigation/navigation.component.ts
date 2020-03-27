@@ -169,7 +169,7 @@ export class NavigationComponent implements OnInit {
         });
         if (!this.user.fablabId) {
           this.fablabDropdown.elements.push({
-            name: translations['dropdown.fablabs'].create,
+            name: translations['dropdown.fablabs'].signUp,
             routerHref: `${routes.paths.frontend.fablabs.root}/${routes.paths.frontend.fablabs.register}`
           });
         } else {
