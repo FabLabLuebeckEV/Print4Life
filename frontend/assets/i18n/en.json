@@ -623,7 +623,7 @@
             "updatePasswordSuccessHeader": "Password updated",
             "updatePasswordSuccess": "Use the new password from now on.",
             "updatePasswordErrorHeader": "Failed",
-            "updatePassworderror": "The current password was wrong"
+            "updatePasswordError": "The current password was wrong"
         },
         "messages": {
             "username": "Username is required",

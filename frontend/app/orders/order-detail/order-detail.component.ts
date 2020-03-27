@@ -71,7 +71,6 @@ export class OrderDetailComponent implements OnInit {
   machine: any;
   fablab: any;
 
-  //'orderDetail', 'deviceTypes', 'status', 'date'
   translationFields: TranslationModel.OrderDetail & TranslationModel.DeviceTypes & TranslationModel.Status & TranslationModel.Date;
 
   constructor(
@@ -395,12 +394,8 @@ export class OrderDetailComponent implements OnInit {
         });
       }
 
-      this.translationFields = {
-        ...translations['orderDetail'],
-        ...translations['deviceTypes'],
-        ...translations['status'], 
-        ...translations['date']
-      };
+      this.translationFields = TranslationModel.translationUnroll(translations);
+
       this.loadChart();
     }));
   }

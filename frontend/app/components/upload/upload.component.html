@@ -4,19 +4,19 @@
 
     <div class="col-md-3">
 
-      <h3>{{translationFields.labels.title}}</h3>
+      <h3>{{translationFields?.labels.title}}</h3>
 
       <div class="inline-block">
         <div ngfDrop [(validDrag)]="baseDropValid" (fileOver)="hasBaseDropZoneOver=$event" [(files)]="files"
           [accept]="accept" [maxSize]="maxSize" [(dragFiles)]="dragFiles" [(lastInvalids)]="lastInvalids"
           class="my-drop-zone" [class.invalid-drag]="baseDropValid===false" [class.valid-drag]="baseDropValid"
           (filesChange)="lastFileAt=getDate(); emitFileChange(files);">
-          <div class="dropzone-label text-center">{{translationFields.labels.dropzone}}</div>
+          <div class="dropzone-label text-center">{{translationFields?.labels.dropzone}}</div>
         </div>
       </div>
 
       <div class="inline-block spacing-top">
-        {{translationFields.labels.multiple}}
+        {{translationFields?.labels.multiple}}
         <input ngfSelect multiple type="file" [(files)]="files" [accept]="accept" [maxSize]="maxSize"
           [(lastInvalids)]="lastInvalids" (filesChange)="lastFileAt=getDate(); emitFileChange(files);" />
       </div>
@@ -28,10 +28,10 @@
         <table class="table">
           <thead>
             <tr>
-              <th>{{translationFields.labels.name}}</th>
-              <th>{{translationFields.labels.type}}</th>
-              <th>{{translationFields.labels.size}}</th>
-              <th>{{translationFields.labels.actions}}</th>
+              <th>{{translationFields?.labels.name}}</th>
+              <th>{{translationFields?.labels.type}}</th>
+              <th>{{translationFields?.labels.size}}</th>
+              <th>{{translationFields?.labels.actions}}</th>
               <th>Gallerie</th>
             </tr>
           </thead>
@@ -60,7 +60,7 @@
         </table>
 
         <div>
-          <h5 *ngIf="files.length">{{translationFields.labels.queueTitle}} {{ files.length }}</h5>
+          <h5 *ngIf="files.length">{{translationFields?.labels.queueTitle}} {{ files.length }}</h5>
 
           <!-- <ng-container *ngIf="lastFileAt">
             <p>
@@ -78,7 +78,7 @@
           </button> -->
           <button type="button" class="btn btn-danger btn-s spacing-top spacing-right"
             (click)="files.length=0; emitFileChange(files);" [disabled]="!files.length">
-            <fa-icon [icon]="deleteIcon"></fa-icon> {{translationFields.labels.removeAllButton}}
+            <fa-icon [icon]="deleteIcon"></fa-icon> {{translationFields?.labels.removeAllButton}}
           </button>
         </div>
       </div>

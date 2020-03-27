@@ -4,120 +4,122 @@
 </div>
 <router-outlet>
 </router-outlet>
-<div *ngIf="listView || outstandingOrders || unfinishedOrders">
-  <div class="row">
-    <div *ngIf="listView" class="col-md-1 text-center spacing-top-xxxxl">
-      <app-add-button *ngIf="userIsLoggedIn && listView" [createLink]="createLink"></app-add-button>
-    </div>
-    <div *ngIf="listView" class="col-md-3">
-      <label for="status">{{translationFields.filterLabel.status}}</label>
-      <ng-select [multiple]="true" [loading]="loadingStatus" [hideSelected]="true" [closeOnSelect]="false"
-        [items]=filter.validStatus bindLabel="status" [(ngModel)]="filter.shownStatus" id="status"
-        (change)="changeHandlerStatus($event)" (close)="init()" (remove)="init()" (clear)="init()" name="status"
-        #status="ngModel">
-      </ng-select>
-    </div>
-    <div [class]="listView ? 'col-md-3' : unfinishedOrders ? 'col-md-2 offset-md-1' : 'col-md-6 offset-md-1'">
-      <label for="machineType">{{translationFields.filterLabel.machines}}</label>
-      <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false"
-        [items]=filter.machineTypes bindLabel="machineType" [(ngModel)]="filter.shownMachineTypes" id="machineType"
-        (change)="changeHandlerMachineType($event)" (close)="init()" (remove)="init()" (clear)="init()"
-        name="machineType" #machineType="ngModel">
-      </ng-select>
-    </div>
-    <div *ngIf="unfinishedOrders" class="col-md-3">
-      <label for="fablabs">{{translationFields.filterLabel.fablabs}}</label>
-      <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false"
-        [items]=filter.fablabs bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabs"
-        (change)="changeHandlerFablab($event)" (close)="init()" (remove)="init()" (clear)="init()" name="fablabs"
-        #fablabs="ngModel">
-      </ng-select>
-    </div>
-    <div *ngIf="unfinishedOrders" class="col-md-3">
-      <label for="datePickerStart">{{translationFields.filterLabel.startDay}}</label>
-      <div class="input-group">
-        <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerStart" id="datePickerStart"
-          [(ngModel)]="filter.schedule.startDay" ngbDatepicker #datePickerStart="ngbDatepicker"
-          (change)="transformStringToDateObj($event.currentTarget.value, true)"
-          (dateSelect)="changeHandlerStartDay($event)" [required]="false">
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button">
-            <fa-icon [icon]="calendarIcon"></fa-icon>
-          </button>
-          <button class="btn btn-outline-danger" (click)="changeHandlerStartDay(undefined)" type="button">
-            <fa-icon [icon]="trashIcon"></fa-icon>
-          </button>
-        </div>
-        <div [hidden]="!datePickerError" class="alert alert-danger">
-          {{translationFields.messages.datePicker}}
-        </div>
+<div *ngIf="translationFields">
+  <div *ngIf="listView || outstandingOrders || unfinishedOrders">
+    <div class="row">
+      <div *ngIf="listView" class="col-md-1 text-center spacing-top-xxxxl">
+        <app-add-button *ngIf="userIsLoggedIn && listView" [createLink]="createLink"></app-add-button>
       </div>
-
-      <div class="spacing-top-xs">
-        <label for="datePickerEnd">{{translationFields.filterLabel.endDay}}</label>
+      <div *ngIf="listView" class="col-md-3">
+        <label for="status">{{translationFields?.filterLabel.status}}</label>
+        <ng-select [multiple]="true" [loading]="loadingStatus" [hideSelected]="true" [closeOnSelect]="false"
+          [items]=filter.validStatus bindLabel="status" [(ngModel)]="filter.shownStatus" id="status"
+          (change)="changeHandlerStatus($event)" (close)="init()" (remove)="init()" (clear)="init()" name="status"
+          #status="ngModel">
+        </ng-select>
+      </div>
+      <div [class]="listView ? 'col-md-3' : unfinishedOrders ? 'col-md-2 offset-md-1' : 'col-md-6 offset-md-1'">
+        <label for="machineType">{{translationFields?.filterLabel.machines}}</label>
+        <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false"
+          [items]=filter.machineTypes bindLabel="machineType" [(ngModel)]="filter.shownMachineTypes" id="machineType"
+          (change)="changeHandlerMachineType($event)" (close)="init()" (remove)="init()" (clear)="init()"
+          name="machineType" #machineType="ngModel">
+        </ng-select>
+      </div>
+      <div *ngIf="unfinishedOrders" class="col-md-3">
+        <label for="fablabs">{{translationFields?.filterLabel.fablabs}}</label>
+        <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false"
+          [items]=filter.fablabs bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabs"
+          (change)="changeHandlerFablab($event)" (close)="init()" (remove)="init()" (clear)="init()" name="fablabs"
+          #fablabs="ngModel">
+        </ng-select>
+      </div>
+      <div *ngIf="unfinishedOrders" class="col-md-3">
+        <label for="datePickerStart">{{translationFields?.filterLabel.startDay}}</label>
         <div class="input-group">
-          <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd"
-            [(ngModel)]="filter.schedule.endDay" ngbDatepicker #datePickerEnd="ngbDatepicker"
-            (change)="transformStringToDateObj($event.currentTarget.value, false)"
-            (dateSelect)="changeHandlerEndDay($event)" [required]="false">
+          <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerStart" id="datePickerStart"
+            [(ngModel)]="filter.schedule.startDay" ngbDatepicker #datePickerStart="ngbDatepicker"
+            (change)="transformStringToDateObj($event.currentTarget.value, true)"
+            (dateSelect)="changeHandlerStartDay($event)" [required]="false">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button">
+            <button class="btn btn-outline-secondary" (click)="datePickerStart.toggle()" type="button">
               <fa-icon [icon]="calendarIcon"></fa-icon>
             </button>
-            <button class="btn btn-outline-danger" (click)="changeHandlerEndDay(undefined)" type="button">
+            <button class="btn btn-outline-danger" (click)="changeHandlerStartDay(undefined)" type="button">
               <fa-icon [icon]="trashIcon"></fa-icon>
             </button>
           </div>
           <div [hidden]="!datePickerError" class="alert alert-danger">
-            {{translationFields.messages.datePicker}}
+            {{translationFields?.messages.datePicker}}
+          </div>
+        </div>
+
+        <div class="spacing-top-xs">
+          <label for="datePickerEnd">{{translationFields?.filterLabel.endDay}}</label>
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" name="datePickerEnd" id="datePickerEnd"
+              [(ngModel)]="filter.schedule.endDay" ngbDatepicker #datePickerEnd="ngbDatepicker"
+              (change)="transformStringToDateObj($event.currentTarget.value, false)"
+              (dateSelect)="changeHandlerEndDay($event)" [required]="false">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" (click)="datePickerEnd.toggle()" type="button">
+                <fa-icon [icon]="calendarIcon"></fa-icon>
+              </button>
+              <button class="btn btn-outline-danger" (click)="changeHandlerEndDay(undefined)" type="button">
+                <fa-icon [icon]="trashIcon"></fa-icon>
+              </button>
+            </div>
+            <div [hidden]="!datePickerError" class="alert alert-danger">
+              {{translationFields?.messages.datePicker}}
+            </div>
           </div>
         </div>
       </div>
+
+      <div [class]="unfinishedOrders ? 'col-md-2' : 'col-md-3'">
+        <form>
+          <label for="search">{{translationFields?.filterLabel.search}}</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search"
+              #search="ngModel">
+            <div class="input-group-append">
+              <button class="btn btn-outline-primary" (click)="searchInit()" type="submit">
+                <fa-icon [icon]="searchIcon"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 order-list-container">
+        <app-table (buttonEvent)="eventHandler($event)" [items]="visibleOrders" [headers]="headers"></app-table>
+      </div>
     </div>
 
-    <div [class]="unfinishedOrders ? 'col-md-2' : 'col-md-3'">
-      <form>
-        <label for="search">{{translationFields.filterLabel.search}}</label>
-        <div class="input-group">
-          <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search"
-            #search="ngModel">
-          <div class="input-group-append">
-            <button class="btn btn-outline-primary" (click)="searchInit()" type="submit">
-              <fa-icon [icon]="searchIcon"></fa-icon>
-            </button>
+    <footer class="footer">
+      <div class="container">
+        <form>
+          <div class="row">
+            <div class="col-1 col-md-5"></div>
+            <div class="col-md-2 col-7 text-center">
+              <label for="jumpToPage">{{translationFields?.paginationLabel}}</label>
+              <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage"
+                name="jumpToPage" #jumpToPage="ngModel">
+            </div>
+            <div class="col-md-1 col-2 align-self-end">
+              <button [disabled]="!paginationObj.jumpToPage" type="submit" class="btn btn-primary"
+                (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
+                <fa-icon [icon]="jumpArrow"></fa-icon>
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+        <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems"
+          [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="pageChanged($event)"
+          [maxSize]="paginationObj.maxSize" [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks"
+          aria-label="Default pagination"></ngb-pagination>
+      </div>
+    </footer>
   </div>
-  <div class="row">
-    <div class="col-md-12 order-list-container">
-      <app-table (buttonEvent)="eventHandler($event)" [items]="visibleOrders" [headers]="headers"></app-table>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container">
-      <form>
-        <div class="row">
-          <div class="col-1 col-md-5"></div>
-          <div class="col-md-2 col-7 text-center">
-            <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
-            <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage"
-              name="jumpToPage" #jumpToPage="ngModel">
-          </div>
-          <div class="col-md-1 col-2 align-self-end">
-            <button [disabled]="!paginationObj.jumpToPage" type="submit" class="btn btn-primary"
-              (click)="paginationObj.page = paginationObj.jumpToPage; paginationObj.JumpToPage = undefined;">
-              <fa-icon [icon]="jumpArrow"></fa-icon>
-            </button>
-          </div>
-        </div>
-      </form>
-      <ngb-pagination class="d-flex justify-content-center spacing-top-xs" [collectionSize]="paginationObj.totalItems"
-        [(page)]="paginationObj.page" [pageSize]="paginationObj.perPage" (pageChange)="pageChanged($event)"
-        [maxSize]="paginationObj.maxSize" [rotate]="paginationObj.rotate" [boundaryLinks]="paginationObj.boundaryLinks"
-        aria-label="Default pagination"></ngb-pagination>
-    </div>
-  </footer>
 </div>

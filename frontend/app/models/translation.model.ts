@@ -1,5 +1,56 @@
 // TODO: In mehrere Klassen aufsplitten und Unions verwenden
 export module TranslationModel {
+    export function translationUnroll(...unpackFrom: Object[]): Object {
+        const queue = [];
+        unpackFrom.forEach(unpack => {
+            Object.keys(unpack).forEach(key => {
+                queue.push({
+                    value: unpack[key],
+                    path: []
+                });
+            });
+        });
+
+        const unpackTo = {};
+        while (queue.length > 0) {
+            const current = queue.pop();
+
+            if (typeof current.value !== 'object' || Array.isArray(current.value)) {
+                // It is value, move to target
+
+                let descend = unpackTo;
+                let lastDescend = descend;
+                let lastKey = '';
+                current.path.forEach(key => {
+                    if (typeof descend[key] !== 'object' ) {
+                        if (descend[key] !== null && typeof descend[key] !== 'undefined') {
+                            console.warn('Potentially overshadowing translation value: ', current);
+                        }
+                        descend[key] = {};
+                    }
+                    lastDescend = descend;
+                    lastKey = key;
+                    descend = descend[key];
+
+                });
+                lastDescend[lastKey] = current.value;
+            } else if (current.value !== null) {
+                // It is Object, also unpack
+                Object.keys(current.value).forEach(key => {
+                    queue.push({
+                        value: current.value[key],
+                        path: [
+                            ...current.path,
+                            key
+                        ]
+                    });
+                });
+            }
+        }
+
+        return unpackTo;
+    }
+
     export class Buttons {
         back?: {
             tooltip?: String
@@ -650,7 +701,7 @@ export module TranslationModel {
             updatePasswordSuccessHeader?: String,
             updatePasswordSuccess?: String,
             updatePasswordErrorHeader?: String,
-            updatePassworderror?: String
+            updatePasswordError?: String
         };
         messages?: {
             username?: String,

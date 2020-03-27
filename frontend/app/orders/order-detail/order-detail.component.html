@@ -17,7 +17,7 @@
         class="spacing-right-xs" (click)="delete()"></app-delete-button>
       <button
         *ngIf="machine && machine.type === '3d-printer' && userIsLoggedIn && loggedInUser && loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')"
-        (click)="startPrintJob()" [disabled]="!printFilesAvailable" [title]="translationFields.buttons.tooltips.print"
+        (click)="startPrintJob()" [disabled]="!printFilesAvailable" [title]="translationFields?.buttons.tooltips.print"
         type="button" class="btn btn-primary spacing-right-xs">
         <fa-icon [icon]="processIcon"></fa-icon>
       </button>
@@ -28,41 +28,41 @@
       <table class="table table-striped" id="descriptionTable">
         <tbody>
           <tr>
-            <td class="align-middle">{{translationFields.labels.owner}}</td>
+            <td class="align-middle">{{translationFields?.labels.owner}}</td>
             <td class="align-middle">
               <a *ngIf=userIsLoggedIn [routerLink]="ownerLink">{{ owner.fullname }}</a>
               <span *ngIf=!userIsLoggedIn>{{ owner.fullname }}</span>
             </td>
           </tr>
           <tr *ngIf="order.shippingAddress">
-            <td class="align-middle">{{translationFields.labels.addressTitle}}</td>
+            <td class="align-middle">{{translationFields?.labels.addressTitle}}</td>
             <td class="align-middle">{{order.shippingAddress.street}}<br>{{order.shippingAddress.zipCode
               + " " +
               order.shippingAddress.city}}<br>{{order.shippingAddress.country}}</td>
           </tr>
           <tr *ngIf="!order.isBatched">
-            <td class="align-middle">{{translationFields.labels.editor}}</td>
+            <td class="align-middle">{{translationFields?.labels.editor}}</td>
             <td class="align-middle">
               <a *ngIf=userIsLoggedIn [routerLink]="editorLink">{{ editor.fullname }}</a>
               <span *ngIf=!userIsLoggedIn>{{ editor.fullname }}</span>
             </td>
           </tr>
           <tr *ngIf="!order.isBatched">
-            <td class="align-middle">{{translationFields.labels.status}}</td>
+            <td class="align-middle">{{translationFields?.labels.status}}</td>
             <td class="align-middle">
               <span class="badge badge-secondary">{{order['shownStatus']}}</span>
             </td>
           </tr>
           <tr>
-            <td class="align-middle">{{translationFields.labels.createdAt}}</td>
+            <td class="align-middle">{{translationFields?.labels.createdAt}}</td>
             <td class="align-middle">{{order['shownCreatedAt']}}</td>
           </tr>
           <tr *ngIf="schedule && schedule.startDate && schedule.endDate">
-            <td class="align-middle">{{translationFields.labels.scheduledFor}}</td>
+            <td class="align-middle">{{translationFields?.labels.scheduledFor}}</td>
             <td class="align-middle">{{schedule.shownStartDate}} - {{schedule.shownEndDate}}</td>
           </tr>
           <tr *ngIf="machine">
-            <td class="align-middle">{{translationFields.labels.machine}}</td>
+            <td class="align-middle">{{translationFields?.labels.machine}}</td>
             <td class="align-middle">
               <a *ngIf="userIsLoggedIn && machine.deviceName" [routerLink]="machine.detailView">{{ machine.deviceName
                 }}</a>
@@ -71,13 +71,13 @@
             </td>
           </tr>
           <tr *ngIf="fablab">
-            <td class="align-middle">{{translationFields.labels.fablab}}</td>
+            <td class="align-middle">{{translationFields?.labels.fablab}}</td>
             <td class="align-middle">
               {{fablab.name}}
             </td>
           </tr>
           <tr [hidden]="!order.isBatched" class="collapseToggle" data-toggle="collapse" data-target="#chartExpand"  aria-expanded="false" aria-controls="chartExpand">
-            <td class="align-middle">{{translationFields.labels.batched}}</td>
+            <td class="align-middle">{{translationFields?.labels.batched}}</td>
             <td class="align-middle spinner-td">
               <div class="spinner-container" >
                 <canvas #chartCanvas>
@@ -121,15 +121,15 @@
           </tr>
           <tr *ngIf="order.isBatched && this.loggedInUser.fablabId && this.loggedInUser.fablabId !== ''" class="assignRow">
             <td>
-                {{translationFields.labels.imanufacture}}
+                {{translationFields?.labels.imanufacture}}
             </td>
             <td>
               <div>
                 <input type="number" class="form-control" id="myBatchCount" 
                   [(ngModel)]="myBatch" name="myBatch" #myBatchCount="ngModel">
                 <label for="myBatchCount">
-                    {{translationFields.labels.count}}</label>
-                <button type="button"  class="btn btn-primary" (click)="submitBatch()">{{translationFields.labels.helpnow}}</button>
+                    {{translationFields?.labels.count}}</label>
+                <button type="button"  class="btn btn-primary" (click)="submitBatch()">{{translationFields?.labels.helpnow}}</button>
               </div>
             </td>
           </tr>
@@ -139,7 +139,7 @@
 
   <div class="row spacing text-center filling-row">
     <div class="col-md-12">
-      <h2>{{translationFields.labels.comments}}
+      <h2>{{translationFields?.labels.comments}}
         <span class="badge badge-primary spacing text-center">{{ order.comments.length }}</span>
       </h2>
     </div>
@@ -149,9 +149,9 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.author}}</th>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.content}}</th>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.author}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.content}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.createdAt}}</th>
           </tr>
         </thead>
         <tbody>
@@ -169,7 +169,7 @@
   </div>
   <div class="row spacing text-center filling-row">
     <div class="col-md-12">
-      <h2>{{translationFields.labels.files}}
+      <h2>{{translationFields?.labels.files}}
         <span class="badge badge-primary spacing text-center">{{ order.files.length }}</span>
       </h2>
     </div>
@@ -179,9 +179,9 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.latestVersion}}</th>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.file}}</th>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.latestVersion}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.file}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.createdAt}}</th>
           </tr>
         </thead>
         <tbody>

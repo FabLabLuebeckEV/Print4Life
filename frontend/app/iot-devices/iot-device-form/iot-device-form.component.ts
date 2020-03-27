@@ -13,6 +13,8 @@ import { debounceTime } from 'rxjs/operators';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-iot-device-form',
   templateUrl: './iot-device-form.component.html',
@@ -52,32 +54,8 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
 
   regEx: RegExp = new RegExp('^[a-zA-Z0-9\s\.\-\_]+$');
 
-  translationFields = {
-    title: '',
-    labels: {
-      deviceId: '',
-      deviceType: '',
-      submit: ''
-    },
-    messages: {
-      deviceId: '',
-      deviceId2: '',
-      deviceId3: '',
-      eventsNotValid: ''
-    },
-    buttons: {
-      deleteTooltip: ''
-    },
-    modals: {
-      errorHeader: '',
-      successHeader: '',
-      ok: '',
-      username: '',
-      password: '',
-      dataformat: '',
-      saveHint: ''
-    }
-  };
+  translationFields: TranslationModel.IotDevicesForm;
+
   constructor(
     private translateService: TranslateService,
     private configService: ConfigService,
@@ -98,6 +76,36 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngAfterViewChecked() {
+    this.formSubscription = this.deviceIdRef.valueChanges
+    .pipe(debounceTime(1000))
+    .subscribe(async (newValue) => {
+      let deviceIdValid = true;
+      if (!newValue.length) {
+        this.deviceIdErrorMessage = this.translationFields.messages.deviceId;
+      }
+      await this.checkDeviceId(newValue);
+      if (this.deviceIdAlreadyTaken) {
+        this.deviceIdErrorMessage = this.translationFields.messages.deviceId2;
+      }
+      deviceIdValid = this.regEx.test(newValue);
+      if (!deviceIdValid || !(newValue.length > 0 && newValue.length < 37)) {
+        this.deviceIdErrorMessage = this.translationFields.messages.deviceId3;
+      }
+      this.deviceIdValid = this.deviceIdRef.pristine ? true : !this.deviceIdAlreadyTaken &&
+        deviceIdValid && newValue.length > 0 && newValue.length < 37;
+      this.iotDevice.deviceId = newValue;
+    });
+
+    this.eventFormGroupSubscription = this.eventFormGroup.valueChanges.pipe(debounceTime(200))
+    .subscribe(async (changed) => {
+      const invalidEvents = changed.events.filter(event => {
+        return !this.regEx.test(event.topic) || !event.dataformat;
+      });
+      this.eventsValid = !invalidEvents.length;
+    });
+  }
+
   ngOnInit() {
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
@@ -107,33 +115,6 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
       events: this.fb.array([this.fb.group({ topic: '', dataformat: '' })])
     });
 
-    this.formSubscription = this.deviceIdRef.valueChanges
-      .pipe(debounceTime(1000))
-      .subscribe(async (newValue) => {
-        let deviceIdValid = true;
-        if (!newValue.length) {
-          this.deviceIdErrorMessage = this.translationFields.messages.deviceId;
-        }
-        await this.checkDeviceId(newValue);
-        if (this.deviceIdAlreadyTaken) {
-          this.deviceIdErrorMessage = this.translationFields.messages.deviceId2;
-        }
-        deviceIdValid = this.regEx.test(newValue);
-        if (!deviceIdValid || !(newValue.length > 0 && newValue.length < 37)) {
-          this.deviceIdErrorMessage = this.translationFields.messages.deviceId3;
-        }
-        this.deviceIdValid = this.deviceIdRef.pristine ? true : !this.deviceIdAlreadyTaken &&
-          deviceIdValid && newValue.length > 0 && newValue.length < 37;
-        this.iotDevice.deviceId = newValue;
-      });
-
-    this.eventFormGroupSubscription = this.eventFormGroup.valueChanges.pipe(debounceTime(200))
-      .subscribe(async (changed) => {
-        const invalidEvents = changed.events.filter(event => {
-          return !this.regEx.test(event.topic) || !event.dataformat;
-        });
-        this.eventsValid = !invalidEvents.length;
-      });
     this.init();
   }
 
@@ -224,32 +205,7 @@ export class IotDeviceFormComponent implements OnInit, OnDestroy {
 
   private _translate() {
     this.translateService.get(['iotDevicesForm']).subscribe((translations => {
-      this.translationFields = {
-        title: translations['iotDevicesForm'].createTitle,
-        buttons: {
-          deleteTooltip: translations['iotDevicesForm'].buttons.deleteTooltip,
-        },
-        labels: {
-          deviceId: translations['iotDevicesForm'].labels.deviceId,
-          deviceType: translations['iotDevicesForm'].labels.deviceType,
-          submit: translations['iotDevicesForm'].labels.submit
-        },
-        messages: {
-          deviceId: translations['iotDevicesForm'].messages.deviceId,
-          deviceId2: translations['iotDevicesForm'].messages.deviceId2,
-          deviceId3: translations['iotDevicesForm'].messages.deviceId3,
-          eventsNotValid: translations['iotDevicesForm'].messages.eventsNotValid
-        },
-        modals: {
-          errorHeader: translations['iotDevicesForm'].modals.errorHeader,
-          ok: translations['iotDevicesForm'].modals.ok,
-          successHeader: translations['iotDevicesForm'].modals.successHeader,
-          username: translations['iotDevicesForm'].modals.username,
-          password: translations['iotDevicesForm'].modals.password,
-          dataformat: translations['iotDevicesForm'].modals.dataformat,
-          saveHint: translations['iotDevicesForm'].modals.saveHint
-        }
-      };
+      this.translationFields = TranslationModel.translationUnroll(translations);
     }));
   }
 }

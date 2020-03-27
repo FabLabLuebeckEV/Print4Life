@@ -13,6 +13,8 @@ import { GenericService } from 'frontend/app/services/generic.service';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-iot-device-detail',
   templateUrl: './iot-device-detail.component.html',
@@ -31,26 +33,7 @@ export class IotDeviceDetailComponent implements OnInit {
   );
   private loggedInUser: User;
   userIsLoggedIn: boolean;
-  translationFields = {
-    labels: {
-      deviceId: '',
-      mqttHeader: '',
-      username: '',
-      password: '',
-      dataformat: '',
-      clientId: '',
-      deviceType: ''
-    },
-    modals: {
-      ok: '',
-      deleteReturnValue: '',
-      abort: '',
-      abortReturnValue: '',
-      deleteHeader: '',
-      deleteQuestion: '',
-      deleteWarning: ''
-    }
-  };
+  translationFields: TranslationModel.IotDeviceDetail;
 
   constructor(
     private route: ActivatedRoute,
@@ -139,26 +122,8 @@ export class IotDeviceDetailComponent implements OnInit {
         && translations.iotDeviceDetail.hasOwnProperty('modals')
         && translations.iotDeviceDetail.modals !== null
         && typeof translations.iotDeviceDetail.modals === 'object') {
-        this.translationFields = {
-          labels: {
-            deviceId: translations['iotDeviceDetail'].labels.deviceId,
-            mqttHeader: translations['iotDeviceDetail'].labels.deviceId,
-            username: translations['iotDeviceDetail'].labels.username,
-            password: translations['iotDeviceDetail'].labels.password,
-            dataformat: translations['iotDeviceDetail'].labels.dataformat,
-            clientId: translations['iotDeviceDetail'].labels.clientId,
-            deviceType: translations['iotDeviceDetail'].labels.deviceType,
-          },
-          modals: {
-            ok: translations['iotDeviceDetail'].modals.ok,
-            deleteReturnValue: translations['iotDeviceDetail'].modals.deleteReturnValue,
-            abort: translations['iotDeviceDetail'].modals.abort,
-            abortReturnValue: translations['iotDeviceDetail'].modals.abortReturnValue,
-            deleteHeader: translations['iotDeviceDetail'].modals.deleteHeader,
-            deleteQuestion: translations['iotDeviceDetail'].modals.deleteQuestion,
-            deleteWarning: translations['iotDeviceDetail'].modals.deleteWarning
-          }
-        };
+
+        this.translationFields = TranslationModel.translationUnroll(translations);
       }
     }));
   }

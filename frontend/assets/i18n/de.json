@@ -649,7 +649,7 @@
       "updatePasswordSuccessHeader": "Passwort aktualisiert",
       "updatePasswordSuccess": "Benutzen Sie von nun an das neue Passwort.",
       "updatePasswordErrorHeader": "Fehlgeschlagen",
-      "updatePassworderror": "Das aktuelle Passwort war falsch."
+      "updatePasswordError": "Das aktuelle Passwort war falsch."
     },
     "messages": {
       "username": "Der Benutzername wird benötigt",

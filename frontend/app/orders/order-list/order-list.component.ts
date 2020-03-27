@@ -19,6 +19,8 @@ import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 import { NavigationComponent } from 'frontend/app/components/navigation/navigation.component';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-order-list',
   templateUrl: './order-list.component.html',
@@ -78,6 +80,9 @@ export class OrderListComponent implements OnInit {
     maxPages: 0,
     jumpToPage: undefined
   };
+
+  translationFields: TranslationModel.OrderList & TranslationModel.DeviceTypes & TranslationModel.Status;
+  /*
   translationFields = {
     paginationLabel: '',
     filterLabel: {
@@ -107,6 +112,7 @@ export class OrderListComponent implements OnInit {
       datePicker: ''
     }
   };
+  */
 
   constructor(
     private orderService: OrderService,
@@ -718,35 +724,9 @@ export class OrderListComponent implements OnInit {
         }
       });
 
-      this.translationFields = {
-        paginationLabel: translations['orderList'].paginationLabel,
-        filterLabel: {
-          machines: translations['orderList']['filterLabel'].machines,
-          status: translations['orderList']['filterLabel'].status,
-          fablabs: translations['orderList']['filterLabel'].fablabs,
-          startDay: translations['orderList']['filterLabel'].startDay,
-          endDay: translations['orderList']['filterLabel'].endDay,
-          search: translations['orderList']['filterLabel'].search
-        },
-        spinnerLoadingText: translations['orderList'].spinnerLoadingText,
-        buttons: {
-          deleteLabel: translations['orderList'].buttons.deleteLabel,
-          updateLabel: translations['orderList'].buttons.updateLabel
-        },
-        modals: {
-          yes: translations['orderList'].modals.yes,
-          abort: translations['orderList'].modals.abort,
-          deleteValue: translations['orderList'].modals.deleteValue,
-          abortValue: translations['orderList'].modals.abortValue,
-          deleteHeader: translations['orderList'].modals.deleteHeader,
-          deleteQuestion: translations['orderList'].modals.deleteQuestion,
-          deleteQuestion2: translations['orderList'].modals.deleteQuestion2,
-          deleteWarning: translations['orderList'].modals.deleteWarning
-        },
-        messages: {
-          datePicker: translations['orderList'].messages.datePicker
-        }
-      };
+      this.translationFields = TranslationModel.translationUnroll(
+        translations
+      );
     }));
   }
 }

@@ -9,7 +9,7 @@
             <app-add-button *ngIf="userIsAdmin && listView" [createLink]="newLink"></app-add-button>
         </div>
         <div class="col-md-3">
-            <label for="status">{{translationFields.filterLabel.type}}</label>
+            <label for="status">{{translationFields?.filterLabel.type}}</label>
             <ng-select [multiple]="true" [loading]="loadingMachineTypes" [hideSelected]="true" [closeOnSelect]="false"
                 [items]=filter.machineTypes [(ngModel)]="filter.shownMachineTypes" id="machineTypeFilter"
                 (close)="filterHandler()" (remove)="filterHandler()" (clear)="filterHandler()"
@@ -17,7 +17,7 @@
             </ng-select>
         </div>
         <div class="col-md-3">
-            <label for="fablabFilter">{{translationFields.filterLabel.fablab}}</label>
+            <label for="fablabFilter">{{translationFields?.filterLabel.fablab}}</label>
             <ng-select [multiple]="true" [loading]="loadingFablabs" [hideSelected]="true" [closeOnSelect]="false"
                 [items]=filter.fablabs bindLabel="name" [(ngModel)]="filter.selectedFablabs" id="fablabFilter"
                 (close)="filterHandler()" (remove)="filterHandler()" (clear)="filterHandler()"
@@ -25,7 +25,7 @@
             </ng-select>
         </div>
         <div class="col-md-2">
-            <label for="activationFilter">{{translationFields.filterLabel.activation}}</label>
+            <label for="activationFilter">{{translationFields?.filterLabel.activation}}</label>
             <ng-select [multiple]="true" [hideSelected]="true" [closeOnSelect]="false"
                 [items]="filter.translatedActivated" [(ngModel)]="filter.shownActivated" id="activationFilter"
                 (close)="filterHandler()" (remove)="filterHandler()" (clear)="filterHandler()"
@@ -34,7 +34,7 @@
         </div>
         <div class="col-md-2">
             <form>
-                <label for="search">{{translationFields.filterLabel.search}}</label>
+                <label for="search">{{translationFields?.filterLabel.search}}</label>
                 <div class="input-group">
                     <input type="text" class="form-control" id="search" [(ngModel)]="filter.searchTerm" name="search"
                         #search="ngModel">
@@ -59,7 +59,7 @@
                     <div class="col-1 col-md-5">
                     </div>
                     <div class="col-7 col-md-2 text-center">
-                        <label for="jumpToPage">{{translationFields.paginationLabel}}</label>
+                        <label for="jumpToPage">{{translationFields?.paginationLabel}}</label>
                         <input type="text" class="form-control" id="jumpToPage" [(ngModel)]="paginationObj.jumpToPage"
                             name="jumpToPage" #jumpToPage="ngModel">
                     </div>

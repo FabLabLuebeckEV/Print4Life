@@ -1,23 +1,23 @@
 <div class="modal-header header-primary">
-  <h4 class="modal-title">{{translationFields.title}}</h4>
+  <h4 class="modal-title">{{translationFields?.title}}</h4>
   <button type="button" class="close" aria-label="Close" (click)="closeModal('dismiss')">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
   <form (ngSubmit)="login()" #loginForm="ngForm">
-    <label for="username">{{translationFields.labels.username}}</label>
-    <input type="text" id="username" #username="ngModel" class="form-control" placeholder={{translationFields.labels.username}}
+    <label for="username">{{translationFields?.labels.username}}</label>
+    <input type="text" id="username" #username="ngModel" class="form-control" placeholder={{translationFields?.labels.username}}
       [(ngModel)]="loginData.username" name="username" />
-    <label for="password" class="spacing-top">{{translationFields.labels.password}}</label>
-    <input type="password" id="password" #password="ngModel" class="form-control" placeholder={{translationFields.labels.password}}
+    <label for="password" class="spacing-top">{{translationFields?.labels.password}}</label>
+    <input type="password" id="password" #password="ngModel" class="form-control" placeholder={{translationFields?.labels.password}}
       [(ngModel)]="loginData.password" name="password" />
     <div class="row">
       <div class="col-8">
-        <button class="btn btn-primary spacing-top" type="button" (click)="resetPassword(); closeModal('');">{{translationFields.labels.resetPassword}}</button>
+        <button class="btn btn-primary spacing-top" type="button" (click)="resetPassword(); closeModal('');">{{translationFields?.labels.resetPassword}}</button>
       </div>
       <div class="col-4  text-right">
-        <button class="btn btn-primary spacing-top spacing-right" type="submit" [disabled]="!loginForm.form.valid">{{translationFields.labels.login}}</button>
+        <button class="btn btn-primary spacing-top spacing-right" type="submit" [disabled]="!loginForm.form.valid">{{translationFields?.labels.login}}</button>
       </div>
     </div>
   </form>

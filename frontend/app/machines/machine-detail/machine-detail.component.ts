@@ -12,6 +12,8 @@ import { DeleteButtonType } from 'frontend/app/components/delete-button/delete-b
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-machine-detail',
   templateUrl: './machine-detail.component.html',
@@ -39,20 +41,9 @@ export class MachineDetailComponent implements OnInit {
   machineSubObjects: Array<Object> = [];
   machineSubArrays: Array<Object> = [];
   loading: Boolean = true;
-  translationFields = {
-    modals: {
-      yes: '',
-      no: '',
-      deleteReturnValue: '',
-      abortReturnValue: '',
-      deleteHeader: '',
-      deleteMessage: '',
-      deleteMessage2: ''
-    },
-    buttons: {
-      toggleTooltip: ''
-    }
-  };
+
+  translationFields: TranslationModel.MachineDetail & TranslationModel.DeviceTypes;
+
   params: any = {
   };
 
@@ -348,20 +339,7 @@ export class MachineDetailComponent implements OnInit {
     this.translateService.get(['machineDetail', 'deviceTypes']).subscribe((translations => {
       this._prepareScheduleProp(this.machineSchedules, 'schedules');
 
-      this.translationFields = {
-        modals: {
-          deleteHeader: translations['machineDetail'].modals.deleteHeader,
-          deleteMessage: translations['machineDetail'].modals.deleteMessage,
-          deleteMessage2: translations['machineDetail'].modals.deleteMessage2,
-          yes: translations['machineDetail'].modals.yes,
-          no: translations['machineDetail'].modals.no,
-          deleteReturnValue: translations['machineDetail'].modals.deleteReturnValue,
-          abortReturnValue: translations['machineDetail'].modals.abortReturnValue,
-        },
-        buttons: {
-          toggleTooltip: translations['machineDetail'].buttons.toggleTooltip
-        }
-      };
+      this.translationFields = TranslationModel.translationUnroll(translations);
 
       this.machineProps['title'] = translations['machineDetail'].titles.machineProps;
     }));

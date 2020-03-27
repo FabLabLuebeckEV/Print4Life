@@ -14,6 +14,8 @@ import { FablabService } from 'frontend/app/services/fablab.service';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-fablab-list',
   templateUrl: './fablab-list.component.html',
@@ -30,33 +32,8 @@ export class FablabListComponent implements OnInit {
   spinnerConfig: SpinnerConfig;
   jumpArrow: Icon;
   searchIcon: Icon;
-  translationFields = {
-    paginationLabel: '',
-    filterLabel: {
-      roles: '',
-      fablabs: '',
-      search: ''
-    },
-    spinnerLoadingText: '',
-    buttons: {
-      activateLabel: '',
-      updateLabel: '',
-      deleteLabel: ''
-    },
-    modals: {
-      yes: '',
-      abort: '',
-      deleteValue: '',
-      abortValue: '',
-      deleteHeader: '',
-      deleteQuestion: '',
-      deleteQuestion2: ''
-    },
-    badges: {
-      active: '',
-      inactive: ''
-    }
-  };
+  translationFields: TranslationModel.Roles & TranslationModel.UserList;
+
   private filter = {
     validRoles: [],
     originalRoles: [],
@@ -118,7 +95,7 @@ export class FablabListComponent implements OnInit {
       this.loadingFablabs = true;
       this.visibleFablabs = [];
       this.fablabs = [];
-      await this._loadFablabs();
+      // await this._loadFablabs();
       this.userIsAdmin = await this.userService.isAdmin();
       this._translate();
       await this.init();
@@ -270,33 +247,7 @@ export class FablabListComponent implements OnInit {
         }
       });
 
-      this.translationFields = {
-        paginationLabel: translations['userList'].paginationLabel,
-        filterLabel: {
-          roles: translations['userList']['filterLabel'].roles,
-          fablabs: translations['userList']['filterLabel'].fablabs,
-          search: translations['userList']['filterLabel'].search
-        },
-        spinnerLoadingText: translations['userList'].spinnerLoadingText,
-        buttons: {
-          deleteLabel: translations['userList'].buttons.deleteLabel,
-          updateLabel: translations['userList'].buttons.updateLabel,
-          activateLabel: translations['userList'].buttons.activateLabel
-        },
-        modals: {
-          yes: translations['userList'].modals.yes,
-          abort: translations['userList'].modals.abort,
-          deleteValue: translations['userList'].modals.deleteValue,
-          abortValue: translations['userList'].modals.abortValue,
-          deleteHeader: translations['userList'].modals.deleteHeader,
-          deleteQuestion: translations['userList'].modals.deleteQuestion,
-          deleteQuestion2: translations['userList'].modals.deleteQuestion2
-        },
-        badges: {
-          active: translations['userList'].badges.active,
-          inactive: translations['userList'].badges.inactive
-        }
-      };
+      this.translationFields = TranslationModel.translationUnroll(translations);
     }));
   }
 
