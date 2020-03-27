@@ -1,6 +1,8 @@
 addons: 
   ssh_known_hosts: sandbox.ipoesse.de
 
+language: node_js
+
 branches: 
   only:
     - develop
