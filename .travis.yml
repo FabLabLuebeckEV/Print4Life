@@ -25,6 +25,6 @@ before_deploy:
 deploy:
   provider: script
   skip_cleanup: true
-  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/dist deploy@sandbox.ipoesse.de:/var/www/html/Print4Life/dist && ssh deploy@sandbox.ipoesse.de 'pm2 restart Print4Life-api'
+  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/dist deploy@sandbox.ipoesse.de:/var/www/html/Print4Life && ssh deploy@sandbox.ipoesse.de 'pm2 restart Print4Life-api'
   on:
     branch: develop
