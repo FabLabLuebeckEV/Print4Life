@@ -14,9 +14,9 @@ import { Observable } from 'rxjs';
 import { ErrorService, ErrorType } from '../services/error.service';
 import { UserListComponent } from '../users/user-list/user-list.component';
 import { UserDetailComponent } from '../users/user-detail/user-detail.component';
-import { IotDeviceListComponent } from '../iot-devices/iot-device-list/iot-device-list.component';
+/*import { IotDeviceListComponent } from '../iot-devices/iot-device-list/iot-device-list.component';
 import { IotDeviceFormComponent } from '../iot-devices/iot-device-form/iot-device-form.component';
-import { IotDeviceDetailComponent } from '../iot-devices/iot-device-detail/iot-device-detail.component';
+import { IotDeviceDetailComponent } from '../iot-devices/iot-device-detail/iot-device-detail.component';*/
 import { UserActivationComponent } from '../users/user-activation/user-activation.component';
 import { FablabFormComponent } from '../fablabs/fablab-form/fablab-form.component';
 import { FablabListComponent } from '../fablabs/fablab-list/fablab-list.component';
@@ -75,7 +75,7 @@ export const appRoutes: Routes = [
         component: MachineListComponent,
         runGuardsAndResolvers: 'always',
     },
-    {
+    /*{
         path: routes.paths.frontend.iotDevices.root,
         component: IotDeviceListComponent,
         runGuardsAndResolvers: 'always',
@@ -84,7 +84,7 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.iotDevices.create, component: IotDeviceFormComponent },
             { path: routes.paths.frontend.iotDevices.detail + '/:id', component: IotDeviceDetailComponent }
         ]
-    },
+    },*/
     {
         path: routes.paths.frontend.orders.root,
         component: OrderListComponent,
