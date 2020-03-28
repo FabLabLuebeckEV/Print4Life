@@ -4,8 +4,8 @@ import * as path from 'path';
 import config from '../config/config';
 import logger from '../logger';
 
-// const env = process.env.NODE_ENV;
-
+const env = process.env.NODE_ENV;
+let email:Email;
 const transporter = Nodemailer.createTransport(config.email);
 
 transporter.verify((error, success) => {
@@ -16,26 +16,24 @@ transporter.verify((error, success) => {
   }
 });
 
-// if (env !== 'dev' && env !== 'prod') {
-const email = new Email({
-  message: {
-    from: config.email.from
-  },
-  send: true,
-  transport: {
-    jsonTransport: true
-  }
-});
-logger.info(config);
-logger.info(email);
-/* } else {
+if (env !== 'dev' && env !== 'prod') {
+  email = new Email({
+    message: {
+      from: config.email.from
+    },
+    send: true,
+    transport: transporter
+  });
+  logger.info(config);
+  logger.info(email);
+} else {
   email = new Email({
     message: {
       from: config.email.auth.from
     },
     transport: transporter
   });
-} */
+}
 
 export interface EmailOptions {
   preferredLanguage: string;
