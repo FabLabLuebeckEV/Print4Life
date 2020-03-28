@@ -29,7 +29,7 @@ if (env !== 'dev' && env !== 'prod') {
 } else {
   email = new Email({
     message: {
-      from: config.email.auth.from
+      from: config.email.from
     },
     transport: transporter
   });
