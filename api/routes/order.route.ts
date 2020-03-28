@@ -30,7 +30,6 @@ router.route('/status/outstanding').get(orderCtrl.getOutstandingStatus);
 
 router.route('/:id/comment').post(orderCtrl.createComment);
 
-
 router.route('/:id').get(orderCtrl.get);
 
 router.route('/:id/files').post(upload.array('file'), orderCtrl.uploadFile);

@@ -97,6 +97,8 @@ async function create (req, res) {
     }
   }
 
+  req.body.activated = false;
+
   if (!reject) {
     userService.create(req.body).then((user) => {
       userService.selfActivateUser(user, true);
