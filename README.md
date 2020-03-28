@@ -1,5 +1,5 @@
 # IoT FabLab Order Management
-
+[![Build Status](https://travis-ci.com/FabLabLuebeckEV/Print4Life.svg?branch=develop)](https://travis-ci.com/FabLabLuebeckEV/Print4Life)
 ## Requirements
 
 * Node > 12.13.1
