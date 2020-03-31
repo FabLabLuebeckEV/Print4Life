@@ -53,7 +53,6 @@ export class MachineService {
       params = params.append('limit', limit.toString());
       params = params.append('skip', skip.toString());
     }
-    console.log("get all machines of type ", type);
     if (limit >= 0 && skip >= 0 || query) {
       return this.http.get(`${this.rootPath}/${type}s`, { params: params }).toPromise();
     } else {
@@ -126,7 +125,6 @@ export class MachineService {
         resolve(erg);
       });
     }
-    console.log("heyho");
     return this.http.get(`${this.rootPath}/${type}s/${id}`).toPromise();
   }
 
