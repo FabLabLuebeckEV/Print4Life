@@ -265,7 +265,7 @@ export class OrderDetailComponent implements OnInit {
   }
 
   public loadChart() {
-    if (this.chartCanvas) {
+    if (this.chartCanvas && this.translationFields) {
       const remaining = this.order.batch['number'] - this.order.batch['acceptedCount'] - this.order.batch['finishedCount'];
       this.chart = new Chart(this.chartCanvas.nativeElement.getContext('2d'), {
         type: 'doughnut',
