@@ -874,7 +874,18 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
           shownShippingAddresses: shownShippingAddresses,
           labels: {
             submit: this.editView ? translations['orderForm'].labels.editSubmit : translations['orderForm'].labels.createSubmit
-          }
+          },
+          modals: {
+            error: this.editView
+              ? translations['orderForm'].modals.updateError
+              : translations['orderForm'].modals.createError,
+            orderSuccess: this.editView
+              ? translations['orderForm'].modals.updateOrderSuccess
+              : translations['orderForm'].modals.createOrderSuccess,
+            orderSuccessHeader: this.editView
+              ? translations['orderForm'].modals.updateOrderSuccessHeader
+              : translations['orderForm'].modals.createOrderSuccessHeader
+          },
         }});
         console.log(this.translationFields);
       }
