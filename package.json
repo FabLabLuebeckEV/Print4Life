@@ -37,7 +37,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run build && npm run test-local && npm run apidocs"
+      "pre-push": "npm run lint && npm run apidocs"
     }
   },
   "keywords": [],
