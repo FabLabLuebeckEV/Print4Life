@@ -22,9 +22,9 @@
             <div class="col-sm mx-auto">
               <div class="hide-small-center">
                 <h3 class="right">
-                  {{ translationFields.order }}<br>
-                  {{ translationFields.management }}<br>
-                  {{ translationFields.system }}
+                  {{ translationFields?.order }}<br>
+                  {{ translationFields?.management }}<br>
+                  {{ translationFields?.system }}
                 </h3>
               </div>
               <div class="hide-large-center">
@@ -43,9 +43,9 @@
               </div>
               <div class="hide-large-center">
                 <h3 class="right">
-                  {{ translationFields.order }}<br>
-                  {{ translationFields.management }}<br>
-                  {{ translationFields.system }}
+                  {{ translationFields?.order }}<br>
+                  {{ translationFields?.management }}<br>
+                  {{ translationFields?.system }}
                 </h3>
               </div>
             </div>
@@ -53,7 +53,7 @@
           <div class="row subtitle-font" style="padding-top: 10%; padding-bottom: 2%">
             <div class="col-sm" style="text-align: center">
               <button class="btn btn-primary" [disabled]="userIsLoggedIn"
-                (click)="login()">{{ translationFields.buttons.login }}</button>
+                (click)="login()">{{ translationFields?.buttons.login }}</button>
             </div>
           </div>
           <div class="row subtitle-font">

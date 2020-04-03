@@ -33,7 +33,7 @@ export class UploadComponent implements OnInit {
   lastInvalids: any;
   baseDropValid: any;
   dragFiles: any;
-  translationFields = new TranslationModel.Upload();
+  translationFields: TranslationModel.Upload;
 
 
   constructor(

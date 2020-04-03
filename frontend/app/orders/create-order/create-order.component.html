@@ -36,7 +36,7 @@
             [(ngModel)]="order.fablabId" id="fablab" name="fablab" #fablab="ngModel"
             (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)">
             <ng-template ng-optgroup-tmp let-item="item">
-              {{item.fablabName || translationFields.messages.unnamedFablab}}
+              {{item.fablabName || translationFields?.messages.unnamedFablab}}
             </ng-template>
           </ng-select>
         </div>
@@ -44,7 +44,7 @@
         <div class="col-md-6">
           <label for="selectedMachineType">{{translationFields?.labels.machineType}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingMachineTypes" [items]=translationFields.shownMachineTypes
+          <ng-select [loading]="loadingMachineTypes" [items]=translationFields?.shownMachineTypes
             [(ngModel)]="order.machine['shownType']" id="selectedMachineType" name="selectedMachineType"
             #selectedMachineType="ngModel" (change)="machineTypeChanged(order.machine['shownType'], order.fablabId)"
             required [disabled]="!order.fablabId">
@@ -63,7 +63,7 @@
             [(ngModel)]="order.machine._id" id="selectedMachine" name="selectedMachine" #selectedMachine="ngModel"
             groupBy="fablabName" (change)="machineSelected(selectedMachine)" [virtualScroll]=true>
             <ng-template ng-optgroup-tmp let-item="item">
-              {{item.fablabName || translationFields.messages.unnamedFablab}}
+              {{item.fablabName || translationFields?.messages.unnamedFablab}}
             </ng-template>
             <ng-template ng-label-tmp let-item="item">
               {{ item.deviceName }}
@@ -86,7 +86,7 @@
         <div *ngIf="editView" class="col-md-12">
           <label for="status">{{translationFields?.labels.status}}</label>
           <fa-icon class="spacing" [icon]="publicIcon" [ngbTooltip]="tipContent"></fa-icon>
-          <ng-select [loading]="loadingStatus" [items]=translationFields.shownStatus bindValue="_id" bindLabel="name"
+          <ng-select [loading]="loadingStatus" [items]=translationFields?.shownStatus bindValue="_id" bindLabel="name"
             [(ngModel)]="order.shownStatus" (change)="statusChanged(order.shownStatus)" id="status" name="status"
             #status="ngModel" required
             [disabled]="!loggedInUser.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
@@ -117,7 +117,7 @@
             [(ngModel)]="order.editor" id="editor" name="editor" #editor="ngModel" groupBy="fablabName"
             [disabled]="!order.fablabId && !editView || !loggedInUser || !loggedInUser.role || !loggedInUser.role.role || loggedInUser.role.role !== 'editor' && loggedInUser.role.role !== 'admin'">
             <ng-template ng-optgroup-tmp let-item="item">
-              {{item.fablabName || translationFields.messages.unnamedFablab}}
+              {{item.fablabName || translationFields?.messages.unnamedFablab}}
             </ng-template>
           </ng-select>
         </div>
@@ -158,7 +158,7 @@
             <button *ngFor="let key of shippingAddressKeys; let index=index" (click)="_selectAddress(key)" type="button"
               [class.active]="key === selectedAddressKey" [disabled]="sharedView && !editView"
               class="btn btn-outline-primary">{{
-              translationFields.shownShippingAddresses[index] }}</button>
+              translationFields?.shownShippingAddresses[index] }}</button>
           </div>
         </div>
       </div>

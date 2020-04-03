@@ -769,12 +769,17 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   private _selectAddress(address) {
+    /*
     this.createOrderForm.controls['street'].reset();
     this.createOrderForm.controls['city'].reset();
     this.createOrderForm.controls['zipCode'].reset();
     this.createOrderForm.controls['country'].reset();
+    */
     this.selectedAddressKey = address;
+    console.log('shipping addresses: ', this.shippingAddresses);
+    console.log('address: ', address);
     this.order.shippingAddress = JSON.parse(JSON.stringify(this.shippingAddresses[`${address}`]));
+    console.log('new value: ', this.order.shippingAddress);
   }
 
   private _translate() {
