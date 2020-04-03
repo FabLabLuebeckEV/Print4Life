@@ -6,6 +6,7 @@ import { LoginModalComponent } from '../../users/login-modal/login-modal.compone
 import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
 import { ModalService } from '../../services/modal.service';
+import { HostListener } from '@angular/core';
 
 interface Dropdown {
   name: String;
@@ -32,6 +33,7 @@ export class NavigationComponent implements OnInit {
   userIsLoggedIn: Boolean;
   userIsAdmin: Boolean;
   user: User;
+  menuExtra: Boolean = false;
 
   constructor(
     private translateService: TranslateService,
@@ -47,6 +49,13 @@ export class NavigationComponent implements OnInit {
   async ngOnInit() {
     this.userIsAdmin = await this.userService.isAdmin();
     this._init();
+  }
+
+
+  @HostListener('window:scroll', ['$event']) // for window scroll events
+  onScroll(event) {
+    this.menuExtra = (window.pageYOffset > 1000);
+    console.log(this.menuExtra);
   }
 
   public switchLanguage(language) {

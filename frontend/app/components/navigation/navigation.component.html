@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-xl navbar-light bg-light">
+<!--<nav class="navbar navbar-expand-xl navbar-light bg-light">
   <a class="navbar-brand" href="#">
     <img src="assets/img/fablab-logo.png" width="30" height="30" class="d-inline-block align-top" alt="Fablab-Logo" />
     {{title}}
@@ -24,10 +24,6 @@
         <app-dropdown [dropdown]="orderDropdown">
         </app-dropdown>
       </li>
-      <!--<li class="nav-item right-stretch">
-        <app-dropdown [dropdown]="iotDevicesDropdown">
-        </app-dropdown>
-      </li> -->
       <li class="nav-item right-stretch">
         <app-dropdown [dropdown]="fablabDropdown">
         </app-dropdown>
@@ -49,11 +45,28 @@
         <button class="btn btn-primary" (click)="_register()">{{register}}</button>
       </li>
     </ul>
-
-
-    <!-- <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
   </div>
 </nav>
+-->
+
+<header id="header" [ngClass]="menuExtra ? 'reveal':'alt'">
+  <h1 id="logo"><a href="index.html"><img id="logo" src="/assets/img/logo.png" alt="logo" /></a></h1>
+  <nav id="nav">
+    <ul>
+      <li class="current"><a href="index.html">Home</a></li>
+      <li>
+        <a href="#blog">Blog</a>
+      </li>
+      <li>
+        <a href="#team">Team</a>
+      </li>
+      <li>
+        <a href="#contact">Kontakt</a>
+      </li>
+      <li><a href="#" class="button primary">Sign Up</a></li>
+      <li>
+        <a (click)="_login()" class="button primary">Sign In</a>
+      </li>
+    </ul>
+  </nav>
+</header>

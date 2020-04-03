@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { routes } from './config/routes';
 import { ConfigService } from './config/config.service';
 import { LanguageService } from './services/language.service';
+import { faTwitter, faFacebook, faGithub} from '@fortawesome/free-brands-svg-icons';
 
 @Component({
     selector: 'app-root',
@@ -16,6 +17,9 @@ export class AppComponent {
     privacyPolicy: String;
     imprint: String;
     config;
+    twitterIcon = faTwitter;
+    facebookIcon = faFacebook;
+    githubIcon = faGithub;
     constructor(private translateService: TranslateService, private http: HttpClient,
             private configService: ConfigService, private languageService: LanguageService) {
         this.config = this.configService.getConfig();

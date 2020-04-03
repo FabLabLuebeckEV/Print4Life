@@ -5,3 +5,20 @@
 .spacing-right {
     margin-right: 10px;
 }
+
+:host-context() {
+    font-size: 14px;
+}
+
+input {
+    font-size: 1rem !important;
+}
+
+.row {
+    margin-top: 0px;
+}
+
+.row > .col-6 {
+    padding: 0px;
+    padding-left: 20px;
+}

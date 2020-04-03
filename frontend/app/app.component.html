@@ -1,9 +1,50 @@
-<app-navigation></app-navigation>
-<router-outlet></router-outlet>
-<footer class="footer">
-    <div class="container text-center">
-        <span *ngIf="softwareName && version" class="text-muted">{{softwareName}} - Version {{version}}</span>
-        <span class="text-muted"> - <a href="https://www.fablab-luebeck.de/de/datenschutz">{{privacyPolicy}}</a></span>
-        <span class="text-muted"> - <a href="https://www.fablab-luebeck.de/de/impressum">{{imprint}}</a></span>
+<div class="appcontainer">
+    <app-navigation></app-navigation>
+    <div class="maincontainer">
+        <router-outlet></router-outlet>
     </div>
-</footer>
+    
+    <footer class="footer">
+        <ul class="icons">
+            <li><fa-icon [icon]="twitterIcon" class="icon brands circle fa-twitter"></fa-icon></li>
+            <li><fa-icon [icon]="facebookIcon" class="icon brands circle fa-facebook-f"></fa-icon></li>
+            <li><a href="https://github.com/FabLabLuebeckEV/Print4Life"><fa-icon [icon]="githubIcon" class="icon brands circle fa-github"></fa-icon></a></li>
+        </ul>
+        
+        <div class="row logo-row mb-4 mt-4">
+            <div class="col-sm my-auto mx-auto">
+                <img alt="EAJS Logo" height="100%" style="padding-left: 3%"
+                src="assets/img/logos/EASJ_logo_dk_black_300dpi.png" />
+            </div>
+            <div class="col-sm my-auto mx-auto">
+                <img alt="Open Campus Logo" height="100%" src="assets/img/logos/open-campus_black.svg" />
+            </div>
+            <div class="col-sm my-auto mx-auto">
+                <img alt="TzL Lübeck Logo" height="100%"
+                src="assets/img/logos/ALL_TZL_Logo_Schriftzug mit_Standort ohne_Original_Bachorski.svg" class="img-responsive">
+            </div>
+            <div class="col-sm my-auto mx-auto">
+                <img alt="FabLab Lübeck Logo" height="100%" src="assets/img/logos/FabLab_Luebeck.svg" class="img-responsive">
+            </div>
+            <div class="col-sm my-auto mx-auto">
+                <img alt="EAL Danmark Logo" height="100%" src="assets/img/logos/EAL-logoDK-green-background.svg"
+                class="img-responsive">
+            </div>
+            <div class="col-sm my-auto mx-auto">
+                <img alt="FabLab Danmark Logo" height="100%" src="assets/img/logos/FabLab_DANMARK_logo.svg"
+                class="img-responsive">
+            </div>
+            <div class="col-sm my-auto mx-auto">
+                <img alt="Open Campus" height="100%" style="padding-right: 3%"
+                src="assets/img/logos/Logo_FH_Kiel_2Zeiler_deu_HKS41.svg" class="img-responsive">
+            </div>
+        </div>
+        
+        <div class="container text-center">
+            <span *ngIf="softwareName && version" class="text-muted">{{softwareName}} - Version {{version}}</span>
+            <span class="text-muted"> - <a href="https://www.fablab-luebeck.de/de/datenschutz">{{privacyPolicy}}</a></span>
+            <span class="text-muted"> - <a href="https://www.fablab-luebeck.de/de/impressum">{{imprint}}</a></span>
+        </div>
+        
+    </footer>
+</div>

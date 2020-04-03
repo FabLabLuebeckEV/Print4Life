@@ -6,3 +6,60 @@
         padding-bottom: 30px;
     }
 }
+
+.appcontainer {
+    min-height: 100%;
+}
+
+footer > :last-child {
+    margin-bottom: 0;
+}
+
+footer.major {
+    padding-top: 3em;
+}
+
+#banner .inner footer {
+    margin: 3em 0 0 0;
+}
+
+#footer {
+    background: #E8EEF4;
+    color: #7c8081;
+    padding: 5em 5em 10em 5em;
+    text-align: center;
+}
+
+#footer .copyright {
+    font-size: 0.8em;
+    line-height: 1em;
+}
+
+#footer .copyright a {
+    color: inherit;
+}
+
+#footer .copyright li {
+    display: inline-block;
+    margin-left: 1em;
+    padding-left: 1em;
+    border-left: dotted 1px;
+}
+
+#footer .copyright li:first-child {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.icons {
+    text-align: center;
+}
+
+.logo-row img {
+    height: 30px;
+}
+
+.logo-row {
+    padding-bottom: 20px;
+}
