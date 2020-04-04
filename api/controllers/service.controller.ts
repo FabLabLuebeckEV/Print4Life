@@ -7,7 +7,7 @@ function contact (req, res) {
   emailService.sendMail({
     preferredLanguage: 'de',
     template: 'contact',
-    to: 'ian@ipoesse.de',
+    to: 'koch@fablab-luebeck.de',
     cc: contactValues.email,
     locals:
         {

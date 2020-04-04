@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from '../services/modal.service';
+import { ModalButton } from '../helper/modal.button';
 import { LoginModalComponent } from '../users/login-modal/login-modal.component';
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { ServiceService } from '../services/service.service';
-
+import { MessageModalComponent } from '../components/message-modal/message-modal.component';
 import { TranslationModel } from '../models/translation.model';
 
 @Component({
@@ -17,7 +18,7 @@ import { TranslationModel } from '../models/translation.model';
 export class DashboardComponent implements OnInit {
   userIsLoggedIn: Boolean;
   user: User;
-  translationFields: TranslationModel.Dashboard = {};
+  translationFields: TranslationModel.Dashboard  = {};
 
   contactData = {
     name : '',
@@ -73,8 +74,19 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  sendContactMessage() {
+  async sendContactMessage() {
+    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+
     console.log(this.contactData);
-    this.serviceService.sendContactForm({contact: this.contactData});
+    this.serviceService.sendContactForm({contact: this.contactData}).catch();
+    this.modalService.openMsgModal(
+      'Erfolgreich verschickt',
+      'modal-header header-success',
+      ['Du erhältst eine Kopie deiner Nachricht per Email', 'Unser Team wird sich bald bei dir melden'],
+      okButton,
+      undefined
+    ).result.then(async (login) => {
+    }).catch((err) => {
+    });
   }
 }
