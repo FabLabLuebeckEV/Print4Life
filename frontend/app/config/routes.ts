@@ -62,6 +62,10 @@ export const routes = {
                 root: 'octoprint',
                 uploadFile: 'uploadFile',
                 print: 'print'
+            },
+            service: {
+                root: 'service',
+                contact: 'contact'
             }
         },
         frontend: {

@@ -5,6 +5,7 @@ import { LoginModalComponent } from '../users/login-modal/login-modal.component'
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
+import { ServiceService } from '../services/service.service';
 
 import { TranslationModel } from '../models/translation.model';
 
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit {
     private translateService: TranslateService,
     private userService: UserService,
     private router: Router,
+    private serviceService: ServiceService
   ) {
     this._translate();
     this.translateService.onLangChange.subscribe(() => {
@@ -73,5 +75,6 @@ export class DashboardComponent implements OnInit {
 
   sendContactMessage() {
     console.log(this.contactData);
+    this.serviceService.sendContactForm({contact: this.contactData});
   }
 }

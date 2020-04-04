@@ -13,6 +13,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { appRoutes, AdminGuard, AuthGuard } from './config/app.routes';
 import { MachineService } from './services/machine.service';
 import { FablabService } from './services/fablab.service';
+import { ServiceService } from './services/service.service';
 import { TableComponent } from './components/table/table.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MachineFormComponent } from './machines/machine-form/machine-form.component';
@@ -115,7 +116,7 @@ import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }, // magic for cors
-        MachineService, FablabService, ConfigService, AuthGuard, AdminGuard,
+        MachineService, FablabService, ConfigService, ServiceService, AuthGuard, AdminGuard,
         { provide: NgbDatepickerI18n, useClass: DatePickerTranslationService }
     ],
     bootstrap: [AppComponent],

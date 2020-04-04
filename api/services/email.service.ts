@@ -39,6 +39,7 @@ export interface EmailOptions {
   preferredLanguage: string;
   template: string;
   to: string;
+  cc?: string;
   locals: any;
 }
 
@@ -49,6 +50,7 @@ function sendMail (options: EmailOptions) {
       template: dir,
       message: {
         to: options.to,
+        cc: options.cc
       },
       locals: options.locals
     })
