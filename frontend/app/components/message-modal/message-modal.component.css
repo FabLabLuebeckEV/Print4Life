@@ -1,0 +1,8 @@
+.close {
+    min-width: inherit!important;
+}
+
+.modal-footer {
+    text-align: center;
+    display: inherit !important;
+}

@@ -60,7 +60,7 @@
     }
   },
   "dashboard": {
-    "title": "Willkommen zur Fablab - Auftragsverwaltung!",
+    "title": "Willkommen zu Print4Life!",
     "order": "Order",
     "management": "Management",
     "system": "System",
@@ -85,7 +85,7 @@
     }
   },
   "navigation": {
-    "title": "Auftragsverwaltung",
+    "title": "Print4Life",
     "login": "Einloggen",
     "logout": "Ausloggen",
     "register": "Registrieren",

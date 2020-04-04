@@ -89,4 +89,22 @@ export class DashboardComponent implements OnInit {
     }).catch((err) => {
     });
   }
+
+  register() {
+    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    const newsletterButton = new ModalButton('Zum Newsletter', 'btn primary', 'newsletter');
+
+    this.modalService.openMsgModal(
+      'Noch nicht verfügbar',
+      'modal-header header-warning',
+      ['Die Anmeldung ist noch nicht freigeschaltet', 'Um bei Programmstart benachrichtigt zu werden, abboniere unseren Newsletter'],
+      okButton,
+      newsletterButton
+    ).result.then((result) => {
+      if (result === newsletterButton.returnValue) {
+        window.location.href = '#cta';
+      }
+    }).catch((err) => {
+    });
+  }
 }
