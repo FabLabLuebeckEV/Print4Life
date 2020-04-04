@@ -413,3 +413,11 @@ input, select, textarea {
 .newsletterbar {
     margin-top: 30px;
 }
+
+small {
+    font-size: 80% !important;
+}
+
+#team > .row > .col-4 {
+    padding: 50px;
+}
