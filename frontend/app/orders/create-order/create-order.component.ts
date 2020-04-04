@@ -189,6 +189,10 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     await this._loadFablabs();
     await this._loadStatus();
     await this._initializeOrder(this.orderId);
+    if (this.loggedInUser){
+      this.router.navigateByUrl('/');
+      return;
+    };
     this.orderIsDone = this.doneStatus.original.includes(this.order.status as string);
     await this._loadAddresses();
     this.machineSelected();

@@ -121,7 +121,8 @@ export class NavigationComponent implements OnInit {
           },
         ]
       };
-
+/*
+// Gast Orders entfernt
       if (!this.userIsLoggedIn) {
         this.orderDropdown.elements.push({
           name: translations['dropdown.orders'].createShared,
@@ -129,7 +130,7 @@ export class NavigationComponent implements OnInit {
             '/' + routes.paths.frontend.orders.shared.root +
             '/' + routes.paths.frontend.orders.shared.create
         });
-      }
+      }*/
       this.languageDropdown = {
         name: translations['languages'].title,
         elements: [
