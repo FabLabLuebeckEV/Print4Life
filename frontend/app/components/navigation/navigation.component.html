@@ -54,18 +54,42 @@
   <nav id="nav">
     <ul>
       <li class="current"><a href="index.html">Home</a></li>
-      <li>
+      <li *ngIf="!userIsLoggedIn">
         <a href="#blog">Blog</a>
       </li>
-      <li>
+      <li *ngIf="!userIsLoggedIn">
         <a href="#team">Team</a>
       </li>
-      <li>
+      <li *ngIf="!userIsLoggedIn">
         <a href="#contact">Kontakt</a>
       </li>
-      <li><a href="#" class="button primary">Sign Up</a></li>
-      <li>
+      <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
+        <app-dropdown [dropdown]="machineDropdown">
+        </app-dropdown>
+      </li>
+      <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
+        <app-dropdown [dropdown]="orderDropdown">
+        </app-dropdown>
+      </li>
+      <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
+        <app-dropdown [dropdown]="fablabDropdown">
+        </app-dropdown>
+      </li>
+      <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
+        <app-dropdown [dropdown]="userDropdown">
+        </app-dropdown>
+      </li>
+      <li *ngIf="userIsLoggedIn" class="nav-item right-stretch" >
+        <app-dropdown [dropdown]="languageDropdown" (switchLanguageEvent)="switchLanguage($event)"></app-dropdown>
+      </li>
+      <li *ngIf="!userIsLoggedIn">
+        <a href="#" class="button primary">Sign Up</a>
+      </li>
+      <li *ngIf="!userIsLoggedIn">
         <a (click)="_login()" class="button primary">Sign In</a>
+      </li>
+      <li *ngIf="userIsLoggedIn">
+        <a (click)="_logout()" class="button primary">Sign Out</a>
       </li>
     </ul>
   </nav>

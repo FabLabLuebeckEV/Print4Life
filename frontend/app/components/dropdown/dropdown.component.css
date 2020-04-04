@@ -5,3 +5,7 @@
 :host {
     display: block;
 }
+
+button {
+    min-width: 150px !important;
+}
