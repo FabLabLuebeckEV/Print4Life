@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  register() {
+  register(type: String) {
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     const newsletterButton = new ModalButton('Zum Newsletter', 'btn primary', 'newsletter');
 
