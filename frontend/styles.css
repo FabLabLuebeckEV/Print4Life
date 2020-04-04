@@ -244,9 +244,9 @@ input, select, textarea {
 		border-bottom: dotted 1px;
 	}
 
-		a:hover {
-			border-bottom-color: transparent;
-		}
+	a:hover {
+		border-bottom-color: transparent;
+	}
 
 	strong, b {
 		font-weight: 400;
@@ -3176,8 +3176,8 @@ input[type="submit"].primary,
 input[type="reset"].primary,
 button.primary,
 .button.primary {
-    background: #45B29D;
-    border-color: #45B29D;
+    background: #45B29D !important;
+    border-color: #45B29D !important;
     color: #fff !important;
 }
 

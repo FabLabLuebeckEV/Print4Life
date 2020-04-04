@@ -409,3 +409,7 @@ input, select, textarea {
     letter-spacing: 0.025em;
     line-height: 1.75em !important;
 }
+
+.newsletterbar {
+    margin-top: 30px;
+}
