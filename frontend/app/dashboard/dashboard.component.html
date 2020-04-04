@@ -245,7 +245,7 @@ Du sollst natürlich nicht auf den Materialkosten sitzenbleiben. Wir arbeiten ak
 <article id="contact">
 
   <header class="special">
-      <span ><img id="heart" src="/assets/img/contact.png"></span>
+    <span ><img id="heart" src="/assets/img/contact.png"></span>
     <h2>Schreib uns</h2>
     <p>Über dieses Kontaktformular kannst du uns einfach und schnell erreichen.</p>
   </header>
@@ -255,19 +255,19 @@ Du sollst natürlich nicht auf den Materialkosten sitzenbleiben. Wir arbeiten ak
 
     <!-- Content -->
       <div class="content">
-        <form>
+        <form (ngSubmit)="sendContactMessage()" #loginForm="ngForm">
           <div class="row gtr-50">
             <div class="col-6 col-12-mobile">
-              <input type="text" name="name" placeholder="Name" />
+              <input type="text" name="name" placeholder="Name" [(ngModel)]="contactData.name"/>
             </div>
             <div class="col-6 col-12-mobile">
-              <input type="text" name="email" placeholder="Email" />
+              <input type="text" name="email" placeholder="Email" [(ngModel)]="contactData.email"/>
             </div>
             <div class="col-12">
-              <input type="text" name="subject" placeholder="Subject" />
+              <input type="text" name="subject" placeholder="Subject" [(ngModel)]="contactData.subject"/>
             </div>
             <div class="col-12">
-              <textarea name="message" placeholder="Message" rows="7"></textarea>
+              <textarea name="message" placeholder="Message" rows="7" [(ngModel)]="contactData.message"></textarea>
             </div>
             <div class="col-12">
               <ul class="buttons">

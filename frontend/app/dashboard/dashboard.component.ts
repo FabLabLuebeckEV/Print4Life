@@ -18,6 +18,13 @@ export class DashboardComponent implements OnInit {
   user: User;
   translationFields: TranslationModel.Dashboard = {};
 
+  contactData = {
+    name : '',
+    email : '',
+    subject: '',
+    message: ''
+  };
+
   constructor(
     private modalService: ModalService,
     private translateService: TranslateService,
@@ -62,5 +69,9 @@ export class DashboardComponent implements OnInit {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.user = undefined;
     });
+  }
+
+  sendContactMessage() {
+    console.log(this.contactData);
   }
 }
