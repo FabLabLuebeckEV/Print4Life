@@ -96,7 +96,12 @@ const attributes = {
         type: String
       }
     }]
-  }
+  },
+  blueprintId: {
+    type: String,
+    minlength: 24,
+    maxlength: 24
+  },
 };
 
 export const orderSchema = mongoose.Schema(attributes);
