@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
 import { ModalService } from '../../services/modal.service';
 import { HostListener } from '@angular/core';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface Dropdown {
   name: String;
@@ -34,6 +36,9 @@ export class NavigationComponent implements OnInit {
   userIsAdmin: Boolean;
   user: User;
   menuExtra: Boolean = false;
+  menuIcon = faBars;
+  closeIcon = faTimes;
+  sideMenu: Boolean = false;
 
   constructor(
     private translateService: TranslateService,
@@ -253,5 +258,9 @@ export class NavigationComponent implements OnInit {
 
   private _register() {
     this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}`]);
+  }
+
+  private _toggleSideMenu() {
+    this.sideMenu = !this.sideMenu;
   }
 }
