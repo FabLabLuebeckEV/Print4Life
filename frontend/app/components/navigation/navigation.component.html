@@ -52,7 +52,7 @@
   <header id="{{(i == 1)?'header':'navPanel'}}" [ngClass]="menuExtra ? 'reveal':'alt'">
     <h1 id="logo"><a href="index.html"><img id="logo" src="/assets/img/logo.png" alt="logo" /></a></h1>
     <div class="closeMenu" *ngIf="i == 2">
-      <a (click)="_toggleSideMenu()">
+      <a (click)="toggleSideMenu()">
         <fa-icon class="closeicon" [icon]="closeIcon"></fa-icon>
       </a>
     </div>
@@ -104,5 +104,5 @@
 </div>
 
 <div id="navButton">
-  <a href="#navPanel" class="toggle" (click)="_toggleSideMenu()"><fa-icon class="menuicon" [icon]="menuIcon"></fa-icon></a>
+  <a href="#navPanel" class="toggle" (click)="toggleSideMenu()"><fa-icon class="menuicon" [icon]="menuIcon"></fa-icon></a>
 </div>

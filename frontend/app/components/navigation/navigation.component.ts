@@ -260,7 +260,7 @@ export class NavigationComponent implements OnInit {
     this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}`]);
   }
 
-  private _toggleSideMenu() {
+  toggleSideMenu() {
     this.sideMenu = !this.sideMenu;
   }
 }
