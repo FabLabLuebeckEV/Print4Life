@@ -7,6 +7,7 @@ import scheduleRoute from './schedule.route';
 import statisticRoute from './statistic.route';
 import iotDeviceRoute from './iot-device.route';
 import octoprintRoute from './octoprint.route';
+import blueprintRoute from './blueprint.route';
 
 import serviceRoute from './service.route';
 
@@ -40,5 +41,6 @@ router.use('/statistics/', statisticRoute);
 router.use('/iot-devices/', iotDeviceRoute);
 router.use('/octoprint/', octoprintRoute);
 router.use('/service/', serviceRoute);
+router.use('/blueprints/', blueprintRoute);
 
 export default router;
