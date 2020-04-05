@@ -19,6 +19,10 @@ export const blueprintSchema = new Schema({
     type: String,
     required: true
   },
+  image: {
+    type: String,
+    required: true
+  },
   materials: [materialSchema]
 });
 
