@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcrypt';
 import { materialSchema } from './material.model';
 
 const { Schema } = { Schema: mongoose.Schema };
