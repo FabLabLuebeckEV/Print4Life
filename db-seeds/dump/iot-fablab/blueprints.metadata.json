@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"iot-fablab-dev.blueprints"}],"uuid":"1a6f02b1d2374a3ab53037a3e35f34e3"}

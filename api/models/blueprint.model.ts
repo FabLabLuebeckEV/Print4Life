@@ -19,7 +19,7 @@ export const blueprintSchema = new Schema({
     type: String,
     required: true
   },
-  materials: materialSchema
+  materials: [materialSchema]
 });
 
 export const Blueprint = mongoose.model('Blueprint', blueprintSchema);
