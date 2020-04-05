@@ -100,6 +100,10 @@ async function create (req, res) {
   req.body.activated = false;
 
   if (!reject) {
+    if (req.body.role && req.body.role.role !== 'user' && req.body.role.role !== 'editor') {
+      req.body.role.role = 'user';
+    }
+
     userService.create(req.body).then((user) => {
       userService.selfActivateUser(user, true);
       res.status(200).send({ user });

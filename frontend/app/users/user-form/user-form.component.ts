@@ -40,6 +40,8 @@ export class UserFormComponent implements OnInit {
   fablabs: Array<any>;
   loggedInUser: User;
 
+  type: String;
+
   address: Address = new Address(undefined, undefined, undefined, undefined);
   role: Role = new Role('user'); // default on register is user
   preferredLanguage = new Language('en'); // default en/english
@@ -47,6 +49,7 @@ export class UserFormComponent implements OnInit {
     undefined, undefined, undefined, undefined,
     undefined, undefined, undefined, this.address,
     this.role, this.preferredLanguage, false, undefined, undefined);
+  clinicNumber: String;
 
   translationFields: TranslationModel.UserForm & TranslationModel.Roles &
     TranslationModel.Languages & TranslationModel.Address &
@@ -83,6 +86,12 @@ export class UserFormComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params.id) {
         this.userId = params.id;
+      }
+      if (params.type) {
+        this.type = params.type;
+        if (this.user && this.type === 'Maker') {
+          this.user.role.role = 'editor';
+        }
       }
     });
   }
@@ -165,6 +174,10 @@ export class UserFormComponent implements OnInit {
               this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
           });
       } else {
+        if (this.type === 'Klinik') {
+          // TODO: Addresse & Kliniknummer in Klinikum auslagern
+        }
+
         this.userService.createUser(userCopy)
           .then(res => {
             if (res) {
@@ -217,10 +230,18 @@ export class UserFormComponent implements OnInit {
         this.user.role = this.user.hasOwnProperty('role') ? this.user.role : this.role;
         this.user.preferredLanguage = this.user.hasOwnProperty('preferredLanguage') ? this.user.preferredLanguage : this.preferredLanguage;
       } catch (err) {
-        this.user = new User(
-          undefined, undefined, undefined, undefined,
-          undefined, undefined, undefined, this.address,
-          this.role, this.preferredLanguage, false, undefined, undefined);
+        if (this.type === 'Maker') {
+          this.address = new Address('NA', '', 'NA', '');
+          this.user = new User(
+            undefined, undefined, undefined, undefined,
+            undefined, undefined, undefined, this.address,
+            {role: 'editor'}, this.preferredLanguage, false, undefined, undefined);
+        } else {
+          this.user = new User(
+            undefined, undefined, undefined, undefined,
+            undefined, undefined, undefined, this.address,
+            {role: 'user'}, this.preferredLanguage, false, undefined, undefined);
+        }
       }
     }
   }
@@ -340,9 +361,6 @@ export class UserFormComponent implements OnInit {
       this.translationFields = TranslationModel.translationUnroll(
         translations,
         {zw: {
-          title: !this.editView && !this.profileView
-          ? translations['userForm'].createTitle
-          : translations['userForm'].editTitle,
           shownRoles: shownRoles,
           shownLanguages: shownLanguages,
           modals: {
@@ -363,7 +381,11 @@ export class UserFormComponent implements OnInit {
           }
         }}
       );
-      this.translationFields.title = translations['languages'].title;
+      if (!this.editView && !this.profileView) {
+        this.translationFields.title = translations['userForm'].createTitle;
+      } else {
+        this.translationFields.title = translations['userForm'].editTitle;
+      }
     }));
   }
 }

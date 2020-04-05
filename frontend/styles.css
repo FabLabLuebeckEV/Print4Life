@@ -801,17 +801,8 @@ input, select, textarea {
 						margin-top: -20px;
 					}
 
-						.row.gtr-50.gtr-uniform > * {
-							padding-top: 20px;
-						}
-
-				.row {
-					margin-top: -40px;
-					margin-left: -40px;
-				}
-
-					.row > * {
-						padding: 40px 0 0 40px;
+					.row.gtr-50.gtr-uniform > * {
+						padding-top: 20px;
 					}
 
 					.row.gtr-uniform {
@@ -2989,4 +2980,12 @@ button.primary:hover,
 .button.primary:hover {
     background: #96dad1 !important;
     border-color: #96dad1 !important;
+}
+
+.ng-select input[type="text"] {
+	caret-color: transparent;
+}
+
+.ng-select .ng-select-container {
+    height: 50px !important;
 }

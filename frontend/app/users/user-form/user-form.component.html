@@ -69,7 +69,7 @@
             {{translationFields?.messages.email}}
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" *ngIf="type === 'Maker'">
           <label for="fablabId">{{translationFields?.labels.fablab}}</label>
           <ng-select [loading]="loadingFablabs" [placeholder]="translationFields?.messages.notAssigned" [items]=fablabs
             bindValue="_id" bindLabel="name" [(ngModel)]="user.fablabId" id="fablabId" name="fablabId" #fablabId="ngModel">
@@ -105,49 +105,92 @@
         </div>
       </div>
 
-      <div class="form-group row">
-        <div class="col-md-12">
-          <label for="street">{{translationFields?.street}}</label>
-          <input type="text" class="form-control" id="street" [(ngModel)]="user.address.street" name="street" #street="ngModel">
-          <div [hidden]="street.valid || street.pristine" class="alert alert-danger">
-            {{translationFields?.messages.street}}
+      <div *ngIf="type!=='Maker'">
+        <div class="form-group row">
+          <div class="col-md-6">
+            <label for="street">{{translationFields?.street}}</label>
+            <input type="text" class="form-control" id="street" [(ngModel)]="user.address.street" name="street" #street="ngModel">
+            <div [hidden]="street.valid || street.pristine" class="alert alert-danger">
+              {{translationFields?.messages.street}}
+            </div>
           </div>
+          <div class="col-md-6">
+            <label for="zipCode">{{translationFields?.zipCode}}</label>
+            <input type="text" class="form-control" id="zipCode" [(ngModel)]="user.address.zipCode" name="zipCode"
+              #zipCode="ngModel">
+            <div [hidden]="zipCode.valid || zipCode.pristine" class="alert alert-danger">
+              {{translationFields?.messages.zipCode}}
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-6">
+            <label for="city">{{translationFields?.city}}</label>
+            <input type="text" class="form-control" id="city" [(ngModel)]="user.address.city" name="city" #city="ngModel">
+            <div [hidden]="city.valid || city.pristine" class="alert alert-danger">
+              {{translationFields?.messages.city}}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="country">{{translationFields?.country}}</label>
+            <input type="text" class="form-control" id="country" [(ngModel)]="user.address.country" name="country"
+              #country="ngModel">
+            <div [hidden]="country.valid || country.pristine" class="alert alert-danger">
+              {{translationFields?.messages.country}}
+            </div>
+          </div>
+        </div>
+          <div class="form-group row">
+            <div class="col-md-6">
+              <label for="clinicNum">Kliniknummer</label>
+              <input type="text" class="form-control" id="clinicNum" [(ngModel)]="clinicNumber" name="clinicNum" #clinicNum="ngModel">
+              <div [hidden]="clinicNum.valid || clinicNum.pristine" class="alert alert-danger">
+                {{translationFields?.messages.clinicNum}}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="phone">Telefonnummer</label>
+              <input type="text" class="form-control" id="phone" [(ngModel)]="user.phone" name="phone"
+                #phone="ngModel">
+              <div [hidden]="phone.valid || phone.pristine" class="alert alert-danger">
+                {{translationFields?.messages.country}}
+              </div>
+            </div>
+          </div>
+        </div>
+     
+        <div *ngIf="type === 'Maker'">
+          <div class="form-group row">
+            <div class="col-md-6">
+              <label for="zipCode">{{translationFields?.zipCode}}</label>
+              <input type="text" class="form-control" id="zipCode" [(ngModel)]="user.address.zipCode" name="zipCode"
+                #zipCode="ngModel">
+              <div [hidden]="zipCode.valid || zipCode.pristine" class="alert alert-danger">
+                {{translationFields?.messages.zipCode}}
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="country">{{translationFields?.country}}</label>
+              <input type="text" class="form-control" id="country" [(ngModel)]="user.address.country" name="country"
+                #country="ngModel">
+              <div [hidden]="country.valid || country.pristine" class="alert alert-danger">
+                {{translationFields?.messages.country}}
+              </div>
+            </div>
         </div>
       </div>
-      <div class="form-group row">
-        <div class="col-md-4">
-          <label for="zipCode">{{translationFields?.zipCode}}</label>
-          <input type="text" class="form-control" id="zipCode" [(ngModel)]="user.address.zipCode" name="zipCode"
-            #zipCode="ngModel">
-          <div [hidden]="zipCode.valid || zipCode.pristine" class="alert alert-danger">
-            {{translationFields?.messages.zipCode}}
-          </div>
-        </div>
-        <div class="col-md-8">
-          <label for="city">{{translationFields?.city}}</label>
-          <input type="text" class="form-control" id="city" [(ngModel)]="user.address.city" name="city" #city="ngModel">
-          <div [hidden]="city.valid || city.pristine" class="alert alert-danger">
-            {{translationFields?.messages.city}}
-          </div>
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-md-6">
-          <label for="country">{{translationFields?.country}}</label>
-          <input type="text" class="form-control" id="country" [(ngModel)]="user.address.country" name="country"
-            #country="ngModel">
-          <div [hidden]="country.valid || country.pristine" class="alert alert-danger">
-            {{translationFields?.messages.country}}
-          </div>
-        </div>
-        <div class="col-md-6">
+
+      <div class="row">
+        <div class="col-md-6 ">
           <label for="preferredLanguage">{{translationFields?.labels.preferredLanguage}}</label>
           <ng-select [loading]="loadingLanguages" [items]=translationFields?.shownLanguages [(ngModel)]="user['shownLanguage']"
             id="language" name="language" #language="ngModel" (change)="languageChanged(user['shownLanguage'])">
           </ng-select>
         </div>
+        <div class="col-md-6 submitcont">
+          <button type="submit" class="btn btn-success submitbtn" [disabled]="!createUserForm.form.valid || (!editView && !profileView && user.password !== user.passwordValidation)">{{translationFields?.labels.submit}}</button>
+        </div>
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!createUserForm.form.valid || (!editView && !profileView && user.password !== user.passwordValidation)">{{translationFields?.labels.submit}}</button>
     </form>
   </div>
 </div>
