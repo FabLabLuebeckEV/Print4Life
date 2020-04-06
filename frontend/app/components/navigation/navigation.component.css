@@ -250,7 +250,7 @@ padding:1.25em;
 
 }
 #header{
-padding:3.5em;
+    padding:1.5em;
 }
 
 
@@ -456,7 +456,7 @@ div.navPanel-visible #navPanel {
 #header #logo{
     width: 30%;
     height: auto;
-    max-width: 250px;
+    max-width: 175px;
 }
 
 #header #logo img, #header #logo a {

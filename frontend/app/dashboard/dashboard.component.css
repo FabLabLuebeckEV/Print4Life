@@ -418,3 +418,17 @@ small {
 #team > .row > .col-4 {
     padding: 50px;
 }
+
+#contact {
+    background-color: #f8f6f6;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+#team {
+    padding: 40px;
+}
+
+#team .row section p {
+    padding: 20px;
+}
