@@ -432,3 +432,8 @@ small {
 #team .row section p {
     padding: 20px;
 }
+
+a.klinik {
+    background-color: #DF5A49 !important;
+    border-color: #DF5A49 !important;
+}
