@@ -1,3 +1,5 @@
+@import url("//fonts.googleapis.com/css?family=Lato:300,400,900");
+
 /* You can add global styles to this file, and also import other style files */
 .ng-valid[required],
 .ng-valid.required {
@@ -114,16 +116,8 @@
     height: 40px;
     text-align: center;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-@font-face {
-    font-family: "Poppins-Regular";
-    src: url("/assets/webfonts/Poppins-Regular.eot");
-    src:
-    url("/assets/webfonts/Poppins-Regular.woff") format("woff"),
-    url("/assets/webfonts/Poppins-Regular.otf") format("opentype"),
-    url("/assets/webfonts/Poppins-Regular.svg#Poppins-Regular") format("svg");
+html, body { 
+	height: 100%;
 }
     
 html, body, div, span, applet, object,
@@ -143,7 +137,7 @@ section, summary, time, mark, audio, video {
     font-size: 100% !important;
     font: inherit !important;
     vertical-align: baseline;
-    font-family:Poppins !important;
+    font-family:Lato !important;
 }
     
 article, aside, details, figcaption, figure,
@@ -197,32 +191,28 @@ input, select, textarea {
 
 /* Basic */
 
-	html {
-		box-sizing: border-box;
-	}
+html {
+	box-sizing: border-box;
+}
 
-	*, *:before, *:after {
-		box-sizing: inherit;
-	}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
 
-	body {
-		background: #f3f6fa !important;
-	}
-
-		body.is-preload *, body.is-preload *:before, body.is-preload *:after {
-			-moz-animation: none !important;
-			-webkit-animation: none !important;
-			-ms-animation: none !important;
-			animation: none !important;
-			-moz-transition: none !important;
-			-webkit-transition: none !important;
-			-ms-transition: none !important;
-			transition: none !important;
-		}
+body.is-preload *, body.is-preload *:before, body.is-preload *:after {
+	-moz-animation: none !important;
+	-webkit-animation: none !important;
+	-ms-animation: none !important;
+	animation: none !important;
+	-moz-transition: none !important;
+	-webkit-transition: none !important;
+	-ms-transition: none !important;
+	transition: none !important;
+}
 
 	body {
 		color: #7c8081 !important;
-		font-family: 'Poppins', sans-serif !important;
+		font-family: 'Lato', sans-serif !important;
 		font-size: 15pt !important;
 		font-weight: 300;
 		letter-spacing: 0.025em;
@@ -2116,21 +2106,25 @@ input, select, textarea {
 
 /* Icons */
 
-	ul.icons {
-		list-style: none;
-		padding-left: 0;
-		cursor: default;
-	}
+ul.icons {
+	list-style: none;
+	padding-left: 0;
+	cursor: default;
+}
 
-		ul.icons li {
-			display: inline-block;
-			line-height: 1em;
-			padding-left: 0.5em;
-		}
+ul.icons li {
+	display: inline-block;
+	line-height: 1em;
+	padding-left: 0.5em;
+}
 
-			ul.icons li:first-child {
-				padding-left: 0;
-			}
+ul.icons li:first-child {
+	padding-left: 0;
+}
+
+ul.icons a {
+	border:none;
+}
 
 /* Featured Icons */
 
@@ -2436,21 +2430,21 @@ input, select, textarea {
 
 /* CTA */
 
-	#cta {
-		background-attachment: scroll, scroll, scroll, fixed;
-		background-color: #645862;
-		background-image: url("/assets/img/light-tl.svg"), url("/assets/img/light-tr.svg"), url("/assets/img/overlay.png"), url("/assets/img/netz.jpeg");
-		background-position: top left, top right, top left, bottom center;
-		background-repeat: no-repeat, no-repeat, repeat, no-repeat;
-		background-size: 25em, 25em, auto, cover;
-		color: #fff !important;
-		padding: 5em;
-		text-align: center;
-	}
+#cta {
+	background-attachment: scroll, scroll, scroll, fixed;
+	background-color: #f8f6f6;
+	background-image: url("/assets/img/light-tl.svg"), url("/assets/img/light-tr.svg"), url("/assets/img/overlay.png"), url("/assets/img/netz.jpeg");
+	background-position: top left, top right, top left, bottom center;
+	background-repeat: no-repeat, no-repeat, repeat, no-repeat;
+	background-size: 25em, 25em, auto, cover;
+	color: #fff !important;
+	padding: 5em;
+	text-align: center;
+}
 
-		#cta header {
-			margin-bottom: 3em;
-		}
+#cta header {
+	margin-bottom: 3em;
+}
 
 /* Footer */
 

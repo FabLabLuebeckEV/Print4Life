@@ -1,0 +1,11 @@
+.order {
+    padding: 30px;
+    min-height: 300px;
+    text-align: center;
+}
+
+@media screen and (max-width: 980px) {
+    .order {
+        padding: 15px;
+    }
+}

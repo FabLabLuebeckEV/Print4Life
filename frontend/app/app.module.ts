@@ -25,6 +25,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
 import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
+import { OpenOrdersComponent } from './orders/open-orders/open-orders.component';
+import { OrderGridComponent } from './components/order-grid/order-grid.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -70,6 +72,8 @@ import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component
         MessageModalComponent,
         MachineDetailComponent,
         OrderDetailComponent,
+        OpenOrdersComponent,
+        OrderGridComponent,
         UserFormComponent,
         BackButtonComponent,
         LoginModalComponent,
