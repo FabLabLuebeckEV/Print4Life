@@ -11,8 +11,23 @@
             </p>
             <p>
                 <fa-icon class="locationIcon" [icon]="locationIcon"></fa-icon>
-                {{order.shippingAddress.city}}
+                {{order.shippingAddress.city}} (~{{order.distance | number:'1.1-1'}}km)
+                <br>
+                <small>
+                    Klinikname
+                </small>
             </p>
+            <div class="chart" *ngIf="order.batchData">
+                <canvas
+                    baseChart
+                    [data]="order.batchData"
+                    [labels]="doughnutChartLabels"
+                    [chartType]="doughnutChartType"
+                    [colors]="doughnutChartColors"
+                >
+                </canvas>
+            </div>
+
             <div class="row buttons">
                 <a class="button primary" href="{{orderAcceptRoute}}/{{order._id}}">
                     Unterstützen

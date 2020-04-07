@@ -58,6 +58,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component';
 import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component';
 
+import { ChartsModule } from 'ng2-charts';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -104,6 +106,7 @@ import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component
         HttpClientModule,
         ngfModule,
         NgbModule,
+        ChartsModule,
         RouterModule.forRoot(appRoutes, {
             scrollPositionRestoration: 'enabled',
             anchorScrolling: 'enabled',

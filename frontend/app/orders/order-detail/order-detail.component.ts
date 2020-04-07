@@ -42,7 +42,7 @@ export class OrderDetailComponent implements OnInit {
   toggleOffIcon: Icon;
   spinnerConfig: SpinnerConfig;
   editLink: String;
-  chart: Array<any> = [];
+  chart: Chart;
   editor: User = new User(
     undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   editorLink: String;
