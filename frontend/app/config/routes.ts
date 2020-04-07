@@ -34,7 +34,7 @@ export const routes = {
                 search: 'search',
                 files: 'files',
                 shared: 'shared'
-            },
+            }, /*
             iotDevices: {
                 root: 'iot-devices',
                 create: '',
@@ -42,7 +42,7 @@ export const routes = {
                 search: 'search',
                 deviceTypes: 'types',
                 count: 'count'
-            },
+            },*/
             machines: {
                 root: 'machines',
                 byId: ':type/:id',
