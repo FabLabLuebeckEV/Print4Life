@@ -27,7 +27,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
     async ngOnChanges() {
         if (this.orders) {
             this.orders.forEach(order => {
-                let objectURL = 'data:image/jpeg;base64,' + order.blueprint.image;
+                const objectURL = 'data:image/jpeg;base64,' + order.blueprint.image;
                 order.blueprint.imageURL = this.domSanitizer.bypassSecurityTrustUrl(objectURL);
             });
         }
