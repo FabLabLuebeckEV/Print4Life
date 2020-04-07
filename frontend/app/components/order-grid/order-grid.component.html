@@ -1,8 +1,23 @@
 <div class="row">
-    <div class="col-lg-4 col-sm-6 col-12 order">
-        Hallo Welt!
+    <div class="col-lg-4 col-sm-6 col-12 order" *ngFor="let order of orders">
+        <div class="inner">
+            <h3>
+                {{order.blueprint.name}}
+            </h3>
+            <br>
+            <img [src]="order.blueprint.imageURL">
+            <p>
+                {{order.blueprint.shortDescription}}
+            </p>
+            <p>
+                <fa-icon class="locationIcon" [icon]="locationIcon"></fa-icon>
+                {{order.shippingAddress.city}}
+            </p>
+            <div class="row buttons">
+                <a class="button primary" href="{{orderAcceptRoute}}/{{order._id}}">
+                    Unterstützen
+                </a>
+            </div>
+        </div>
     </div>
 </div>
-<p>
-    it works again!
-</p>

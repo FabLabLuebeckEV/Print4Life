@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 
 import { OrderService } from '../../services/order.service';
+import { BlueprintService } from '../../services/blueprint.service';
 
 @Component({
     selector: 'app-open-orders',
@@ -11,7 +12,7 @@ export class OpenOrdersComponent implements OnInit {
 
     orders: Array<any>;
 
-    constructor(public orderService: OrderService) {
+    constructor(public orderService: OrderService, public blueprintService: BlueprintService) {
 
     }
 
@@ -20,6 +21,21 @@ export class OpenOrdersComponent implements OnInit {
     }
 
     private async init() {
-        this.orders = await this.orderService.getAllOrders();
+        const query = {
+            $and: [
+                {
+                    blueprintId: {
+                        $exists: true
+                    }
+                }
+            ]
+        };
+        const ret = await this.orderService.getAllOrders(query);
+        for (let i = 0; i < ret.orders.length; i++) {
+            ret.orders[i].blueprint = (await this.blueprintService.getBlueprint(ret.orders[i].blueprintId)).blueprint;
+        }
+        this.orders = ret.orders;
+
+        console.log('orders: ', JSON.parse(JSON.stringify(this.orders)));
     }
 }
