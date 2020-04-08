@@ -3,6 +3,9 @@ import validatorService from '../services/validator.service';
 import { OrderService } from '../services/order.service';
 import FileService from '../services/file.service';
 import config from '../config/config';
+
+import ServiceController from '../controllers/service.controller';
+
 /* eslint-disable no-unused-vars */
 import { IError, ErrorType } from '../services/router.service';
 import ScheduleService from '../services/schedule.service';
@@ -197,9 +200,20 @@ function getAll (req, res) {
   }
 * @apiPermission none
 */
-function search (req, res) {
+async function search (req, res) {
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   orderService.getAll(req.body.query, req.body.limit, req.body.skip).then((orders) => {
+    for (let i = 0; i < orders.length; i += 1) {
+      logger.info(`type of order: ${typeof orders[i]}`);
+      logger.info(`searching distance for ${orders[i].shippingAddress.zipCode} ${user.address.zipCode}`);
+      orders[i].distance = ServiceController.calculateDistance(orders[i].shippingAddress.zipCode, user.address.zipCode);
+      logger.info(`result is ${orders[i].distance}`);
+    }
+    logger.info(`orders is now ${JSON.stringify(orders)}`);
+
     if (orders.length === 0) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
