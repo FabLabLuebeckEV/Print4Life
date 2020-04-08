@@ -1,22 +1,24 @@
 
 import emailService from '../services/email.service';
+import app from '../App';
 
 function calculateDistance (x: number, y: number): number {
   // Woanders hin machen
   const geolocations = {};
   geolocations['1'] = [8.327379, 53.30830];
   geolocations['2'] = [8.421820, 50.00490];
-  /*const csv = require('csv-parser');
+  console.log(app.express);
+  /* const csv = require('csv-parser');
   const fs = require('fs');
-  
+
   fs.createReadStream('dist/assets/PLZ.csv')
     .pipe(csv())
     .on('data', (row) => {
       geolocations[row.PLZ] = [parseFloat(row.Lon), parseFloat(row.Lat)];
     })
     .on('end', () => {
-      
-    });*/
+
+    }); */
   let distance;
   try {
     const lat1 = (geolocations[x.toString()])[1];

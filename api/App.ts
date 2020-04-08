@@ -13,6 +13,8 @@ class App {
     this.express = express();
     this.setCorsOptions();
     this.mountRoutes();
+
+    console.log("created app component");
   }
 
   private mountRoutes (): void {
@@ -52,4 +54,4 @@ class App {
   }
 }
 
-export default new App().express;
+export default new App();

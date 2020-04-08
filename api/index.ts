@@ -26,10 +26,10 @@ const credentials = { key: privateKey, cert: certificate };
 
 if (credentials && credentials.key && credentials.cert && process.env
   && (process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'staging')) {
-  serverInstance = https.createServer(credentials, app);
+  serverInstance = https.createServer(credentials, app.express);
   logger.info('Starting HTTPs Server!');
 } else {
-  serverInstance = http.createServer(app);
+  serverInstance = http.createServer(app.express);
   logger.info('Starting HTTP Server!');
 }
 
