@@ -189,7 +189,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     await this._loadFablabs();
     await this._loadStatus();
     await this._initializeOrder(this.orderId);
-    if (this.loggedInUser) {
+    if (!this.loggedInUser) {
       this.router.navigateByUrl('/');
       return;
     }
