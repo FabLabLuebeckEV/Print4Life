@@ -1,47 +1,40 @@
-addons: 
+addons:
   ssh_known_hosts: sandbox.ipoesse.de
 language: node_js
 node_js:
-  - 12
+- 12
 os: linux
 dist: bionic
-
-branches: 
+branches:
   only:
-    - develop
-
+  - develop
 install:
-  - npm install
-
-
+- npm install
 script: npm run deploy-staging
-
 before_deploy:
-  - openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
-  - eval "$(ssh-agent -s)"
-  - chmod 600 /tmp/deploy_rsa
-  - ssh-add /tmp/deploy_rsa
-
+- openssl aes-256-cbc -K $encrypted_84f7f15250c2_key -iv $encrypted_84f7f15250c2_iv
+  -in deploy-rsa.enc -out /tmp/deploy_rsa -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/deploy_rsa
+- ssh-add /tmp/deploy_rsa
 deploy:
   provider: script
   skip_cleanup: true
-  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/dist deploy@sandbox.ipoesse.de:/var/www/html/Print4Life && ssh deploy@sandbox.ipoesse.de 'pm2 restart Print4Life-api'
+  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/dist deploy@sandbox.ipoesse.de:/var/www/html/Print4Life
+    && ssh deploy@sandbox.ipoesse.de 'pm2 restart Print4Life-api'
   on:
     branch: develop
-
 after_success:
-  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-  - chmod +x send.sh
-  - ./send.sh success $WEBHOOK_URL
-
+- wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+- chmod +x send.sh
+- "./send.sh success $WEBHOOK_URL"
 after_failure:
-  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-  - chmod +x send.sh
-  - ./send.sh failure $WEBHOOK_URL
-
+- wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+- chmod +x send.sh
+- "./send.sh failure $WEBHOOK_URL"
 notifications:
   email:
     recipients:
-      - ian-github@ipoesse.de
+    - ian-github@ipoesse.de
     on_success: always
     on_failure: always
