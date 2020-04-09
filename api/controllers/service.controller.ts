@@ -14,7 +14,7 @@ function calculateDistance (x: number, y: number): number {
     distance = Math.sqrt(dx * dx + dy * dy);
   } catch (error) {
     // Unbekannte PLZ
-    distance = 0;
+    distance = -1;
   }
   return distance;
 }

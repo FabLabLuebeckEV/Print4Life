@@ -55,7 +55,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
             this.orders.forEach(async order => {
                 const objectURL = 'data:image/jpeg;base64,' + order.blueprint.image;
                 order.blueprint.imageURL = this.domSanitizer.bypassSecurityTrustUrl(objectURL);
-                order.distance = Math.random() * 10.0;
+                // order.distance = Math.random() * 10.0;
                 if (order.batch && order.batch['number'] && order.batch['number'] > 0) {
                     order['isBatched'] = true;
                     order.batch['finishedCount'] = 0;

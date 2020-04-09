@@ -208,14 +208,21 @@ async function search (req, res) {
   orderService.getAll(req.body.query, req.body.limit, req.body.skip).lean().then((orders) => {
     for (let i = 0; i < orders.length; i += 1) {
       if (user.address && orders[i].shippingAddress) {
-        logger.info(`type of order: ${typeof orders[i]}`);
-        logger.info(`searching distance for ${orders[i].shippingAddress.zipCode} ${user.address.zipCode}`);
         orders[i].distance = ServiceController.calculateDistance(orders[i].shippingAddress.zipCode,
           user.address.zipCode);
-        logger.info(`result is ${orders[i].distance}`);
       }
     }
-    logger.info(`orders is now ${JSON.stringify(orders)}`);
+
+    orders.sort((a, b) => {
+      if (a.distance === -1) {
+        return 1;
+      }
+      if (b.distance === -1) {
+        return -1;
+      }
+
+      return Math.sign(a.distance - b.distance);
+    });
 
     if (orders.length === 0) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
