@@ -205,7 +205,7 @@ async function search (req, res) {
   const user = await userService.getUserByToken(token);
 
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
-  orderService.getAll(req.body.query, req.body.limit, req.body.skip).then((orders) => {
+  orderService.getAll(req.body.query, req.body.limit, req.body.skip).lean().then((orders) => {
     for (let i = 0; i < orders.length; i += 1) {
       if (user.address && orders[i].shippingAddress) {
         logger.info(`type of order: ${typeof orders[i]}`);
