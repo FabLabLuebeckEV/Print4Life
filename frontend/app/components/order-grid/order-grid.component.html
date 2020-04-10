@@ -10,8 +10,13 @@
                 {{order.blueprint.shortDescription}}
             </p>
             <p>
-                <fa-icon class="locationIcon" [icon]="locationIcon"></fa-icon>
-                {{order.shippingAddress.city}} (~{{order.distance | number:'1.1-1'}}km)
+                <fa-icon class="locationIcon" [icon]="locationIcon" ></fa-icon>
+                <span *ngIf="order.distance > 0">
+                    {{order.shippingAddress.city}} (~{{order.distance | number:'1.1-1'}}km)
+                </span>
+                <span *ngIf="! (order.distance > 0)">
+                    {{order.shippingAddress.city}}
+                </span>
                 <br>
                 <small>
                     Klinikname
