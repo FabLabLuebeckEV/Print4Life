@@ -1,104 +1,62 @@
-<!--<nav class="navbar navbar-expand-xl navbar-light bg-light">
-  <a class="navbar-brand" href="#">
-    <img src="assets/img/fablab-logo.png" width="30" height="30" class="d-inline-block align-top" alt="Fablab-Logo" />
-    {{title}}
-  </a>
-  <button class="navbar-toggler" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
-    data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-    aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" routerLink="" routerLinkActive="active">
-          <span class="sr-only"></span>
-        </a>
-      </li>
-      <li class="nav-item right-stretch">
-        <app-dropdown [dropdown]="machineDropdown">
-        </app-dropdown>
-      </li>
-      <li class="nav-item right-stretch">
-        <app-dropdown [dropdown]="orderDropdown">
-        </app-dropdown>
-      </li>
-      <li class="nav-item right-stretch">
-        <app-dropdown [dropdown]="fablabDropdown">
-        </app-dropdown>
-      </li>
-      <li class="nav-item right-stretch">
-        <app-dropdown [dropdown]="userDropdown">
-        </app-dropdown>
-      </li>
-      <li class="nav-item right-stretch" >
-        <app-dropdown [dropdown]="languageDropdown" (switchLanguageEvent)="switchLanguage($event)"></app-dropdown>
-      </li>
-      <li *ngIf="!userIsLoggedIn" class="nav-item">
-        <button class="btn btn-primary" (click)="_login()">{{login}}</button>
-      </li>
-      <li *ngIf="userIsLoggedIn" class="nav-item">
-        <button class="btn btn-primary" (click)="_logout()">{{logout}}</button>
-      </li>
-      <li *ngIf="!userIsLoggedIn" style="margin-left: 15px" class="nav-item">
-        <button class="btn btn-primary" (click)="_register()">{{register}}</button>
-      </li>
-    </ul>
-  </div>
-</nav>
--->
 <div *ngFor="let i of [1, 2]" [ngClass]="sideMenu ? 'navPanel-visible':''">
   <header id="{{(i == 1)?'header':'navPanel'}}" [ngClass]="menuExtra ? 'reveal':'alt'">
-    <h1 id="logo"><a href="index.html"><img id="logo" src="/assets/img/logo.png" alt="logo" /></a></h1>
     <div class="closeMenu" *ngIf="i == 2">
       <a (click)="toggleSideMenu()">
         <fa-icon class="closeicon" [icon]="closeIcon"></fa-icon>
       </a>
     </div>
-    <nav id="nav">
-      <ul>
-        <li class="current"><a href="index.html">Home</a></li>
-        <li *ngIf="!userIsLoggedIn">
-          <a href="#blog">Blog</a>
-        </li>
-        <li *ngIf="!userIsLoggedIn">
-          <a href="#team">Team</a>
-        </li>
-        <li *ngIf="!userIsLoggedIn">
-          <a href="#contact">Kontakt</a>
-        </li>
-        <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
-          <app-dropdown [dropdown]="machineDropdown">
-          </app-dropdown>
-        </li>
-        <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
-          <app-dropdown [dropdown]="orderDropdown">
-          </app-dropdown>
-        </li>
-        <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
-          <app-dropdown [dropdown]="fablabDropdown">
-          </app-dropdown>
-        </li>
-        <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
-          <app-dropdown [dropdown]="userDropdown">
-          </app-dropdown>
-        </li>
-        <li *ngIf="userIsLoggedIn" class="nav-item right-stretch" >
-          <app-dropdown [dropdown]="languageDropdown" (switchLanguageEvent)="switchLanguage($event)"></app-dropdown>
-        </li>
-        <!--
-        <li *ngIf="!userIsLoggedIn">
-          <a (click)="_register()" class="(i == 1)?'button primary':''">Sign Up</a>
-        </li>
-        -->
-        <li *ngIf="!userIsLoggedIn">
-          <a (click)="_login()" [ngClass]="(i == 1)?'button primary':''">Sign In</a>
-        </li>
-        <li *ngIf="userIsLoggedIn">
-          <a (click)="_logout()" [ngClass]="(i == 1)?'button primary':''">Sign Out</a>
-        </li>
-      </ul>
+    <nav id="nav" class="grid">
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <h1><a href="index.html"><img id="logo" src="/assets/img/logo.svg" alt="logo" /></a></h1>
+        </div>
+        <div class="col-6">
+          <ul>
+            <li class="current"><a href="index.html">Startseite</a></li>
+            <li *ngIf="!userIsLoggedIn">
+              <a href="#blog">Über Print4Life</a>
+            </li>
+            <li *ngIf="!userIsLoggedIn">
+              <a href="#team">FAQ</a>
+            </li>
+            <li *ngIf="!userIsLoggedIn">
+              <a href="#contact">Kontakt</a>
+            </li>
+            <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
+              <app-dropdown [dropdown]="machineDropdown">
+              </app-dropdown>
+            </li>
+            <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
+              <app-dropdown [dropdown]="orderDropdown">
+              </app-dropdown>
+            </li>
+            <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
+              <app-dropdown [dropdown]="fablabDropdown">
+              </app-dropdown>
+            </li>
+            <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
+              <app-dropdown [dropdown]="userDropdown">
+              </app-dropdown>
+            </li>
+            <li *ngIf="userIsLoggedIn" class="nav-item right-stretch" >
+              <app-dropdown [dropdown]="languageDropdown" (switchLanguageEvent)="switchLanguage($event)"></app-dropdown>
+            </li>
+            <!--
+            <li *ngIf="!userIsLoggedIn">
+              <a (click)="_register()" class="(i == 1)?'button primary':''">Sign Up</a>
+            </li>
+            -->
+            <li *ngIf="!userIsLoggedIn">
+              <a (click)="_login()" [ngClass]="(i == 1)?'button primary':''">Login</a>
+            </li>
+            <li *ngIf="userIsLoggedIn">
+              <a (click)="_logout()" [ngClass]="(i == 1)?'button primary':''">Logout</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      
     </nav>
   </header>
 </div>
