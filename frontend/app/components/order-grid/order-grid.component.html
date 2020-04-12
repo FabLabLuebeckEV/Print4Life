@@ -32,11 +32,29 @@
                 >
                 </canvas>
             </div>
-
-            <div class="row buttons">
+            {{order.myFinishedBatch}}
+            {{order.myAcceptedBatch}}
+            <div class="row buttons" *ngIf="!order.myFinishedBatch && !order.myAcceptedBatch">
                 <a class="button primary" >
                     Unterstützen
                 </a>
+            </div>
+            <div class="updateBatch" *ngIf="order.myFinishedBatch || order.myAcceptedBatch">
+                <div class="row">
+                    <div class="col-lg-9 col-12">
+                        <label for="accepted">Angenommene Anzahl</label>
+                        <input type="number" id="accepted" #accepted="ngModel" class="form-control"
+                        [(ngModel)]="order.myAcceptedBatch" name="accepted" />
+                    </div>
+                    <div class="col-lg-3 col-12">
+                        <a class="button primary">aktualisieren</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        {{order.myFinishedBatch}}Stk. fertiggestellt
+                    </div>
+                </div>
             </div>
         </div>
     </div>

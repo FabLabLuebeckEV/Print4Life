@@ -26,6 +26,7 @@ import { MachineDetailComponent } from './machines/machine-detail/machine-detail
 import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 import { OpenOrdersComponent } from './orders/open-orders/open-orders.component';
+import { AcceptedOrdersComponent } from './orders/accepted-orders/accepted-orders.component';
 import { OrderGridComponent } from './components/order-grid/order-grid.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -75,6 +76,7 @@ import { ChartsModule } from 'ng2-charts';
         MachineDetailComponent,
         OrderDetailComponent,
         OpenOrdersComponent,
+        AcceptedOrdersComponent,
         OrderGridComponent,
         UserFormComponent,
         BackButtonComponent,

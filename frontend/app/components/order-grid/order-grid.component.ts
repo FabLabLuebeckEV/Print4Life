@@ -51,6 +51,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
     }
 
     async ngOnChanges() {
+        const loggedInUser = await this.userService.findOwn();
         if (this.orders) {
             this.orders.forEach(async order => {
                 const objectURL = 'data:image/jpeg;base64,' + order.blueprint.image;
@@ -60,38 +61,40 @@ export class OrderGridComponent implements OnInit, OnChanges {
                     order['isBatched'] = true;
                     order.batch['finishedCount'] = 0;
                     if (order.batch['finished']) {
-                        order.batch['finished'].forEach(batch => {
+                      order.batch['finished'].forEach(batch => {
                         order.batch.finishedCount += batch.number;
                         this.fablabService.getFablab(batch.fablab).then(result => {
                             batch.fablab = result.fablab;
                         });
-                        });
+                        if (batch.fablab === loggedInUser.fablabId) {
+                          order.myFinishedBatch = batch.number;
+                        }
+                      });
                     } else {
                     order.batch['finished'] = [];
                     }
 
-                    const loggedInUser = await this.userService.findOwn();
 
                     order.batch['acceptedCount'] = 0;
                     if (order.batch['accepted']) {
-                        order.batch['accepted'].forEach(batch => {
+                      order.batch['accepted'].forEach(batch => {
                         if (batch.fablab === loggedInUser.fablabId) {
-                            this.myBatch = batch.number;
+                            order.myAcceptedBatch = batch.number;
                         }
                         order.batch['acceptedCount'] += batch.number;
                         this.fablabService.getFablab(batch.fablab).then(result => {
                             batch.fablab = result.fablab;
                         });
-                        });
+                      });
                     } else {
-                        order.batch['accepted'] = [];
+                      order.batch['accepted'] = [];
                     }
                     const remaining = order.batch['number'] - order.batch['acceptedCount'] - order.batch['finishedCount'];
 
                     order.batchData = [
-                        remaining,
-                        order.batch['acceptedCount'],
-                        order.batch['finishedCount'],
+                      remaining,
+                      order.batch['acceptedCount'],
+                      order.batch['finishedCount'],
                     ];
                 }
             });
