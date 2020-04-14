@@ -121,7 +121,6 @@ html body {
     font-size: 20px; 
     line-height: 32px; 
     color: #334D5C; 
-    background-color: #F7F7F7; 
     font-weight: 400;
 }
 body h1 {
@@ -162,6 +161,7 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
     width: 1148px;
     margin-left:auto;
     margin-right:auto;
+    
 }
 .grid .indent-left {
     padding-left:58px;
@@ -176,3 +176,13 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
  .mat-raised-button.mat-secondary, .mat-fab.mat-secondary, .mat-mini-fab.mat-secondary {
     background-color: #DF5A49;
 }
+
+body #navButton {
+    display:none;
+}
+
+body .appcontainer .maincontainer{
+    margin-top: 58px;
+}
+
+

@@ -3,15 +3,15 @@
     margin-bottom: 54px;
 }
 
-.grid ul {
+#general ul {
     list-style:none;
     padding-left:0px;
     padding-bottom:0px;
 }
-.grid li:nth-child(1) {
+#general li:nth-child(1) {
     padding-top: 0px;
 }
-.grid li {
+#general li {
     padding-top: 32px;
 }
 
@@ -21,4 +21,83 @@
 #general-img {
     width:100%;
 }
+.general-text {
+    float: left;
+}
+
+.general-image {
+    float: right;
+}
+
+#general{
+    -moz-box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);;
+    -webkit-box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);
+    box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);   
+    background-color: #F7F7F7; 
+    width:100%; 
+}
+
+#howto {
+    background-color: #ffffff;
+    width:100%;
+    text-align: center;
+}
+
+.clinic-howto {
+    float: right;
+    padding-bottom: 24px;
+    color: #DF5A49;
+}
+.maker-howto {
+    float: left;
+    padding-bottom: 24px;
+    color: #45B29D;
+}
+.maker-howto a {
+    color: #45B29D;
+}
+.maker-howto h1 {
+    margin-bottom: 24px;
+}
+.clinic-howto h1 {
+    margin-bottom: 24px;
+}
+#howto h1 {
+    text-align: center;
+}
+#howto .space {
+    padding-top: 68px;
+    padding-bottom: 68px;
+}
+
+.maker-underline {
+    border: 2px solid #45B29D !important;
+    width: 10%;
+    margin-left:auto;
+    margin-right:auto;
+}
+.clinic-underline {
+    border: 2px solid #DF5A49 !important;
+    width: 10%;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#howto ul {
+    margin-top:68px;
+}
+
+
+#howto ul {
+    list-style:none;
+    padding-left:0px;
+    padding-bottom:0px;
+}
+#howto li:nth-child(1) {
+    padding-top: 0px;
+}
+#howto li {
+    padding-top: 32px;
+}
+
 
