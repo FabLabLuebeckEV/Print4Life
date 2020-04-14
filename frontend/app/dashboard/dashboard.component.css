@@ -40,18 +40,17 @@
 #howto {
     background-color: #ffffff;
     width:100%;
+}
+.center-text {
     text-align: center;
 }
-
 .clinic-howto {
     float: right;
     padding-bottom: 24px;
-    color: #DF5A49;
 }
 .maker-howto {
     float: left;
     padding-bottom: 24px;
-    color: #45B29D;
 }
 .maker-howto a {
     color: #45B29D;
@@ -75,16 +74,14 @@
     width: 10%;
     margin-left:auto;
     margin-right:auto;
+    margin-bottom:68px;
 }
 .clinic-underline {
     border: 2px solid #DF5A49 !important;
     width: 10%;
     margin-left:auto;
     margin-right:auto;
-}
-
-#howto ul {
-    margin-top:68px;
+    margin-bottom:68px;
 }
 
 
@@ -93,11 +90,49 @@
     padding-left:0px;
     padding-bottom:0px;
 }
-#howto li:nth-child(1) {
+.howto-basic li:nth-child(1) {
     padding-top: 0px;
 }
-#howto li {
-    padding-top: 32px;
+.howto-basic li {
+    padding-top: 58px;
+}
+.howto-list {
+    padding-bottom:68px;
+}
+.maker-text {
+    color: #45B29D;
+}
+.clinic-text {
+    color: #DF5A49;
+}
+.clinic-text a {
+    color: #DF5A49;
+}
+#howto-image-search {
+    width: 102px;
+    padding-top: 0px;
+}
+
+#howto-image-print {
+    width: 216px;
+    padding-top: 58px;
+}
+#howto-image-deliver {
+    width:138px;
+    padding-top: 58px;
+}
+
+#howto-image-order {
+    width: 164px;
+    padding-top: 58px;
+}
+#howto-image-wait {
+    width: 176px;
+    padding-top: 5px;
+}
+#howto-image-receive {
+    width: 166px;
+    padding-top: 58px;
 }
 
 
