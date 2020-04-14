@@ -170,13 +170,6 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
     padding-right:58px;
 } 
 
-.mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
-    background-color: #45B29D;
-}
- .mat-raised-button.mat-secondary, .mat-fab.mat-secondary, .mat-mini-fab.mat-secondary {
-    background-color: #DF5A49;
-}
-
 body #navButton {
     display:none;
 }
