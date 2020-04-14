@@ -156,7 +156,7 @@ body .mat-button-base {
     padding-top: 7px;
     padding-bottom: 7px;
 }
-.grid .mat-secondary {
+.button-bar .mat-secondary {
     float:right;
 }
 
@@ -193,4 +193,10 @@ body .appcontainer .maincontainer{
     margin-top: 58px;
 }
 
+.maker {
+    color: #45B29D;
+}
 
+.klinik {
+    color: #DF5A49;
+}

@@ -135,4 +135,44 @@
     padding-top: 58px;
 }
 
+.portfolio {
+    width: 100%;
+    background-color: #F7F7F7;
+}
 
+.portfolio .grid > h1, .portfolio .grid > .subtitle {
+    text-align: center; 
+}
+
+.portfolio {
+    padding-top: 68px;
+    padding-bottom: 86px;
+}
+
+.portfolio .grid > .subtitle {
+    margin-top: 36px;
+    margin-bottom: 68px;
+}
+
+
+.portfolio .portfolio_grid {
+    display:inline-block;
+    text-align: center;
+}
+
+.portfolio .portfolio_grid .row .part{
+    padding-right: 58px;
+}
+
+.portfolio .part {
+    margin-bottom: 66px;
+}
+
+.portfolio .part h1{
+    margin-bottom: 28px;
+}
+
+.portfolio .signup_buttons div{
+    display: inline-block;
+    text-align: center;
+}
