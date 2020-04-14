@@ -164,12 +164,18 @@
     padding-right: 58px;
 }
 
+.portfolio .portfolio_grid .row .part:nth-last-child(1){
+    padding-right: 0px;
+}
+
 .portfolio .part {
     margin-bottom: 66px;
 }
 
 .portfolio .part h1{
     margin-bottom: 28px;
+    display: flex;
+    justify-content: center;
 }
 
 .portfolio .signup_buttons div{
