@@ -176,3 +176,136 @@
     display: inline-block;
     text-align: center;
 }
+
+#products {
+    background-color:#ffffff;
+    width:100%;
+    text-align:center;
+    margin-top: 68px;
+}
+
+#product h1 {
+    padding-top: 68px;
+    padding-bottom: 24px;
+}
+
+.left-product {
+    float:left;
+}
+
+.right-product {
+    float:right;
+}
+
+.product-item {
+    padding-bottom:24px;
+}
+
+.product-image {
+ width:100%;
+ padding-top: 68px;
+ padding-bottom: 68px;
+}
+.product-text {
+
+}
+
+#community-files {
+    width:100%;
+    background-color: #F7F7F7;
+    text-align:center;
+    padding-top: 68px;
+    padding-bottom: 68px;
+}
+.community-button {
+    padding-top: 68px;
+}
+
+.community-text {
+    padding-top: 68px;
+}
+
+#FAQ {
+    background-color: #ffffff;
+    padding-top: 68px;
+    padding-bottom: 68px;
+    width:100%;
+
+}
+.left-faq {
+    float: left;
+}
+
+.right-faq {
+    float:right;
+}
+.text-faq {
+    padding-top:24px;
+}
+.faq-button {
+    padding-top: 68px;
+    padding-bottom: 68px;
+    text-align:center;
+}
+
+.left-faq h1 {
+    padding-top: 68px;
+}
+.right-faq h1 {
+    padding-top: 68px;
+}
+
+
+#FAQ ul {
+    list-style:none;
+    padding-left:0px;
+    padding-bottom:0px;
+}
+#FAQ li:nth-child(1) {
+    padding-top: 0px;
+}
+#FAQ li {
+    padding-top: 58px;
+}
+
+#newsletter {
+    background-color:#F7F7F7;
+    width:100%;
+    padding-top: 68px;
+    padding-bottom: 68px;
+    text-align: center;
+    -moz-box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);;
+    -webkit-box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);
+    box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);   
+}
+
+.newsletter-text {
+    padding-bottom: 58px;
+    padding-top: 58px;
+
+}
+
+#newsticker {
+    background-color: #FFFFFF;
+    padding-top: 68px;
+    padding-bottom: 68px;
+    width:100%;
+
+}
+.right-newsticker {
+    float: right;
+
+}
+.left-newsticker{
+    float: left;
+}
+.newsticker-image {
+    width: 100%;
+    margin-top: 68px;
+}
+.newsticker-date {
+    text-align: right;
+}
+.newsticker-text {
+    padding-top: 24px;
+}
