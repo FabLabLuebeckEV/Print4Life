@@ -32,6 +32,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
 
 export function translateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -99,6 +100,7 @@ import { ChartsModule } from 'ng2-charts';
     ],
     imports: [
         MatProgressSpinnerModule,
+        MatButtonModule,
         ReactiveFormsModule,
         BrowserModule,
         NgxSpinnerModule,
