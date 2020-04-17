@@ -1,58 +1,136 @@
-<div class="row">
-    <div class="col-lg-4 col-sm-6 col-12 order" *ngFor="let order of orders">
-        <div class="inner">
-            <h3>
-                {{order.blueprint.name}}
-            </h3>
-            <br>
-            <img [src]="order.blueprint.imageURL">
-            <p>
-                {{order.blueprint.shortDescription}}
-            </p>
-            <p>
-                <fa-icon class="locationIcon" [icon]="locationIcon" ></fa-icon>
-                <span *ngIf="order.distance > 0">
-                    {{order.shippingAddress.city}} (~{{order.distance | number:'1.1-1'}}km)
-                </span>
-                <span *ngIf="! (order.distance > 0)">
-                    {{order.shippingAddress.city}}
-                </span>
-                <br>
-                <small>
-                    Klinikname
-                </small>
-            </p>
-            <div class="chart" *ngIf="order.batchData">
-                <canvas
-                    baseChart
-                    [data]="order.batchData"
-                    [labels]="doughnutChartLabels"
-                    [chartType]="doughnutChartType"
-                    [colors]="doughnutChartColors"
-                >
-                </canvas>
-            </div>
-            {{order.myFinishedBatch}}
-            {{order.myAcceptedBatch}}
-            <div class="row buttons" *ngIf="!order.myFinishedBatch && !order.myAcceptedBatch">
-                <a class="button primary" >
-                    Unterstützen
-                </a>
-            </div>
-            <div class="updateBatch" *ngIf="order.myFinishedBatch || order.myAcceptedBatch">
-                <div class="row">
-                    <div class="col-lg-9 col-12">
-                        <label for="accepted">Angenommene Anzahl</label>
-                        <input type="number" id="accepted" #accepted="ngModel" class="form-control"
-                        [(ngModel)]="order.myAcceptedBatch" name="accepted" />
-                    </div>
-                    <div class="col-lg-3 col-12">
-                        <a class="button primary">aktualisieren</a>
-                    </div>
+<div class="grid-3">
+    <div class="" *ngFor="let order of orders">
+        <div class="order"  [ngClass]="{
+            'finished': order.myFinishedBatch > 0 && order.myAcceptedBatch === 0,
+            'participating': order.participating
+        }">
+            <div class="inner indent-left indent-right">
+                <div class="statusBadge" *ngIf="order.participating">
+                    In Arbeit
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        {{order.myFinishedBatch}}Stk. fertiggestellt
+                <div class="statusBadge" *ngIf="order.myFinishedBatch > 0 && order.batch.remaining === 0">
+                    Erledigt
+                </div>
+                <div class="title">
+                    {{order.blueprint.name}}
+                </div>
+                <div class="maker text-mid count" *ngIf="order.myAcceptedBatch !== 0">
+                    Du bist für {{order.myAcceptedBatch}} Stück eingetragen
+                </div>
+                <div class="maker text-mid count" *ngIf="order.myAcceptedBatch === 0 &&  order.myFinishedBatch > 0">
+                    Du hast {{order.myFinishedBatch}} Stück beigetragen
+                </div>
+                <div class="klinik text-mid count" *ngIf="order.myAcceptedBatch === 0 && order.myFinishedBatch === 0">
+                    {{order.batch.number}} Stück
+                </div>
+                <br>
+                <img [src]="order.blueprint.imageURL">
+                <p class="location">
+                    <fa-icon class="locationIcon" [icon]="locationIcon" ></fa-icon>
+                    <span *ngIf="order.distance > 0">
+                        {{order.shippingAddress.city}} (~{{order.distance | number:'1.1-1'}}km)
+                    </span>
+                    <span *ngIf="! (order.distance > 0)">
+                        {{order.shippingAddress.city}}
+                    </span>
+                    <br>
+                </p>
+                <div class="klinikname">
+                    Klinikname
+                </div>
+                <div class="chart" *ngIf="order.batchData">
+                    <div class="row">
+                        <div class="col-4 text-small">
+                            Offen
+                        </div>
+                        <div class="col-4 text-small">
+                            Vergeben
+                        </div>
+                        <div class="col-4 text-small">
+                            Erledigt
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 text-small remaining">
+                            {{order.batch.remaining}}
+                        </div>
+                        <div class="col-4 text-small accepted">
+                            {{order.batch.acceptedCount}}
+                        </div>
+                        <div class="col-4 text-small finished">
+                            {{order.batch.finishedCount}}
+                        </div>
+                    </div>
+                    <div class="barchart" fxLayout="row" fxLayoutGap="0px">
+                        <div *ngIf="order.batch.remaining > 0" [fxFlex]="order.batch.remaining/order.batch.number*100" class="remaining"></div>
+                        <div *ngIf="order.batch.acceptedCount > 0" [fxFlex]="order.batch.acceptedCount/order.batch.number*100" class="accepted"></div>
+                        <div *ngIf="order.batch.finishedCount > 0" [fxFlex]="order.batch.finishedCount/order.batch.number*100" class="finished"></div>
+                    </div>
+                    <!--
+                    <canvas
+                        baseChart
+                        [data]="order.batchData"
+                        [labels]="doughnutChartLabels"
+                        [chartType]="doughnutChartType"
+                        [colors]="doughnutChartColors"
+                    >
+                    </canvas>
+                    -->
+                </div>
+                <div class="buttons text-mid">
+                    <div class="iconbutton" *ngIf="order.myAcceptedBatch > 0">
+                        <fa-icon class="arrowIcon" [icon]="arrowIcon" ></fa-icon>
+                        <a class="button primary" >
+                            Auftrag auf "Erledigt" setzen
+                        </a>
+                    </div>
+                    <div class="iconbutton" *ngIf="order.myFinishedBatch > 0 || order.myAcceptedBatch > 0">
+                        <fa-icon class="arrowIcon" [icon]="arrowIcon" ></fa-icon>
+                        <a class="button primary" >
+                            Versanddaten anzeigen
+                        </a>
+                    </div>
+                    <div class="iconbutton" *ngIf="false">
+                        <fa-icon class="arrowIcon" [icon]="arrowIcon" ></fa-icon>
+                        <a class="button primary" >
+                            Auftrag zurückziehen
+                        </a>
+                    </div>
+                    <div class="iconbutton text-center support" *ngIf="order.batch.remaining > 0 && order.myFinishedBatch !== 0 && order.myAcceptedBatch === 0 && !order.showInput">
+                        <button mat-raised-button color="primary" class="text-mid" (click)="order.toggleInput()">Erneut unterstützen</button>
+                    </div>
+                    <div class="iconbutton support" *ngIf="order.batch.remaining > 0 && order.myAcceptedBatch === 0 && order.myFinishedBatch === 0 && order.showInput">
+                        <div class="maker">
+                            Welche Stückzahl schaffst du innerhalb der nächsten 2 Tage?
+                        </div>
+                        <div class="inputButtonCombi">
+                            <mat-form-field class="example-full-width">
+                                <input matInput [(ngModel)]="order.myNewAcceptedBatch">
+                            </mat-form-field>
+                            <button mat-raised-button color="primary" class="text-mid" (click)="support(order)">Senden</button>
+                            <br style="clear:right">
+                        </div>
+                    </div>
+                    <div class="iconbutton text-center support" *ngIf="order.batch.remaining > 0 && order.myFinishedBatch === 0 && order.myAcceptedBatch === 0 && !order.showInput">
+                        <div class="maker">
+                            Möchtest du diese Einrichtung unterstützen?
+                        </div>
+                        <button mat-raised-button color="primary" class="text-mid" (click)="order.toggleInput()">Unterstützen</button>
+                    </div>
+                    <div class="iconbutton support" *ngIf="order.batch.remaining > 0 && order.myAcceptedBatch === 0 && order.showInput">
+                        <div class="maker">
+                            Welche Stückzahl schaffst du innerhalb der nächsten 2 Tage?
+                        </div>
+                        <div class="inputButtonCombi">
+                            <mat-form-field class="example-full-width">
+                                <input matInput [(ngModel)]="order.myNewAcceptedBatch">
+                            </mat-form-field>
+                            <button mat-raised-button color="primary" class="text-mid" (click)="support(order)">Senden</button>
+                            <br style="clear:right">
+                        </div>
+                    </div>
+                    <div class="iconbutton support text-center maker" *ngIf="order.batch.remaining === 0">
+                        <i>Abgeschlossener Auftrag</i>
                     </div>
                 </div>
             </div>

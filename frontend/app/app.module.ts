@@ -60,7 +60,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component';
 import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component';
 
+import { MatFormFieldModule, MatInputModule } from '@angular/material';
+
 import { ChartsModule } from 'ng2-charts';
+
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
     declarations: [
@@ -99,6 +103,9 @@ import { ChartsModule } from 'ng2-charts';
         FablabListComponent
     ],
     imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        FlexLayoutModule,
         MatProgressSpinnerModule,
         MatButtonModule,
         ReactiveFormsModule,

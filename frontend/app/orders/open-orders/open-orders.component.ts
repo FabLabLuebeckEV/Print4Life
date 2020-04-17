@@ -21,6 +21,11 @@ export class OpenOrdersComponent implements OnInit {
     }
 
     private async init() {
+        this.loadOrders();
+    }
+
+    public async  loadOrders() {
+        console.log('openorders loadOrders called');
         const query = {
             $and: [
                 {
