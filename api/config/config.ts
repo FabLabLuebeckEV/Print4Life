@@ -146,7 +146,12 @@ const publicRoutes = [
     url: `${baseUrl}fablabs`,
     canChilds: true,
     methods: ['GET']
+  },
+  { url: `${baseUrl}hospitals`,
+   canChilds: true,
+    methods: ['GET']
   }
+
 ];
 const dev = {
   jwtSecret,
