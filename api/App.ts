@@ -5,14 +5,31 @@ import * as bodyParser from 'body-parser';
 import routes from './routes/index.route';
 import config from './config/config';
 import routerService from './services/router.service';
+import logger from './logger';
+
+const csv = require('csv-parser');
+const fs = require('fs');
 
 class App {
   public express: express.Express;
+
+  public geolocations = {};
 
   constructor () {
     this.express = express();
     this.setCorsOptions();
     this.mountRoutes();
+
+    logger.info('created app component');
+
+    fs.createReadStream('dist/assets/PLZ.csv')
+      .pipe(csv())
+      .on('data', (row) => {
+        this.geolocations[row.PLZ] = [parseFloat(row.Lon), parseFloat(row.Lat)];
+      })
+      .on('end', () => {
+
+      });
   }
 
   private mountRoutes (): void {
@@ -52,4 +69,4 @@ class App {
   }
 }
 
-export default new App().express;
+export default new App();

@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col-lg-4 col-sm-6 col-12 order" *ngFor="let order of orders">
+        <div class="inner">
+            <h3>
+                {{order.blueprint.name}}
+            </h3>
+            <br>
+            <img [src]="order.blueprint.imageURL">
+            <p>
+                {{order.blueprint.shortDescription}}
+            </p>
+            <p>
+                <fa-icon class="locationIcon" [icon]="locationIcon" ></fa-icon>
+                <span *ngIf="order.distance > 0">
+                    {{order.shippingAddress.city}} (~{{order.distance | number:'1.1-1'}}km)
+                </span>
+                <span *ngIf="! (order.distance > 0)">
+                    {{order.shippingAddress.city}}
+                </span>
+                <br>
+                <small>
+                    Klinikname
+                </small>
+            </p>
+            <div class="chart" *ngIf="order.batchData">
+                <canvas
+                    baseChart
+                    [data]="order.batchData"
+                    [labels]="doughnutChartLabels"
+                    [chartType]="doughnutChartType"
+                    [colors]="doughnutChartColors"
+                >
+                </canvas>
+            </div>
+
+            <div class="row buttons">
+                <a class="button primary" >
+                    Unterstützen
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { ServiceService } from '../services/service.service';
 import { MessageModalComponent } from '../components/message-modal/message-modal.component';
 import { TranslationModel } from '../models/translation.model';
+import { routes } from '../config/routes';
 
 @Component({
   selector: 'app-dashboard',
@@ -91,6 +92,9 @@ export class DashboardComponent implements OnInit {
   }
 
   register(type: String) {
+
+    this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}/${type}`]);
+    /*
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     const newsletterButton = new ModalButton('Zum Newsletter', 'btn primary', 'newsletter');
 
@@ -105,6 +109,6 @@ export class DashboardComponent implements OnInit {
         window.location.href = '#cta';
       }
     }).catch((err) => {
-    });
+    });*/
   }
 }

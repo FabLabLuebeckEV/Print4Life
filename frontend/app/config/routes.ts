@@ -70,6 +70,9 @@ export const routes = {
             service: {
                 root: 'service',
                 contact: 'contact'
+            },
+            blueprints: {
+                root: 'blueprints'
             }
         },
         frontend: {
@@ -92,6 +95,7 @@ export const routes = {
                 getAllOrders: '',
                 getStatus: 'status',
                 getOrder: 'getOrder',
+                accept: 'accept',
                 shared: {
                     root: 'shared',
                     create: 'create',
