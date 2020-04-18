@@ -208,3 +208,12 @@ body .appcontainer .maincontainer{
 .klinik {
     color: #DF5A49;
 }
+
+.neutral {
+    color: #5286A4;
+}
+
+.neutral.mat-button-base {
+    color: white;
+    background-color: #5286A4;
+}
