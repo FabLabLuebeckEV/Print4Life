@@ -7,11 +7,11 @@
         </div>
         <div class="col-12 col-md-6">
             <div class="myMatInput email">
-                <input type="text" placeholder="Email*" [(ngModel)]="loginData.username">
+                <input type="text" placeholder="Email*" [(ngModel)]="loginData.username" (keyup.enter)="login()">
             </div>
 
             <div class="myMatInput password">
-                <input type="password" placeholder="Passwort*" [(ngModel)]="loginData.password">
+                <input type="password" placeholder="Passwort*" [(ngModel)]="loginData.password" (keyup.enter)="login()">
             </div>
         </div>
         <div class="col-12 col-md-3">
@@ -21,7 +21,7 @@
         <div class="col-12 col-md-3">
         </div>
         <div class="col-12 col-md-3">
-            <a class="forgot">Passwort vergessen?</a>
+            <a class="forgot" (click)="resetPassword()">Passwort vergessen?</a>
         </div>
         <div class="col-12 col-md-3">
             <button mat-raised-button class="neutral" (click)="login()">Anmelden</button>

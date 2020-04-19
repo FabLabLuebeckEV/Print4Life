@@ -2,32 +2,6 @@
     min-width: inherit!important;
 }
 
-.modal-footer {
-    text-align: center;
-}
-
-
-.modal-header, .modal-body, .modal-footer {
-    border: none;
-}
-
-.modal-title {
-    padding: 20px;
-    width: 100%;
-    text-align:center;
-}
-
-.modal-content {
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.4);
-}
-
-.modal-body {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 0px;
-}
-
 .modal-header .close {
     display: none;
 }

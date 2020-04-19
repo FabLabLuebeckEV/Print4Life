@@ -10,10 +10,6 @@
     <input type="text" id="inputField" [(ngModel)]="inputString" name="inputField" #inputField="ngModel">
   </div>
   <div class="modal-footer">
-    <div class="row">
-      <div class="col-sm-12">
-        <button *ngIf="button1" type="submit" [class]="button1.class" (click)="close(inputString)">{{button1.label}}</button>
-      </div>
-    </div>
-  </div>
+    <button mat-raised-button color="accent" *ngIf="button1" type="submit" [ngClass]="button1.class" (click)="close(inputString)">{{button1.label}}</button>
+  </div>  
 </form>

@@ -285,3 +285,30 @@ body .modal-dialog {
     max-width: 700px;
     margin: 200px auto;
 }
+
+
+body .modal-footer {
+    text-align: center;
+}
+
+
+body .modal-header, body .modal-body, body .modal-footer {
+    border: none;
+}
+
+body .modal-title {
+    padding: 20px;
+    width: 100%;
+    text-align:center;
+}
+
+body .modal-content {
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.4);
+}
+
+body .modal-body {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0px;
+}
