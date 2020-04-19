@@ -127,17 +127,6 @@ footer.major {
     text-align: right;
 }
 
-.footer .spacer {
-    display: flex;
-}
-
-.footer .spacer .spacer-bar {
-    height: 0px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #E7E7E7;
-}
-
 .footer .partners-label {
     margin-top: 50px;
     margin-bottom: 30px;

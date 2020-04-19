@@ -235,6 +235,17 @@ body #navButton {
     z-index: 1;
 }
 
+.spacer {
+    display: flex;
+}
+
+.spacer .spacer-bar {
+    height: 0px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #E7E7E7;
+}
+
 body .gray-box:nth-child(1) {
     -moz-box-shadow: 0 12px 14px -14px rgba(209, 209, 209, 0.9);
     -webkit-box-shadow: 0 12px 14px -14px rgba(209, 209, 209, 0.9);
