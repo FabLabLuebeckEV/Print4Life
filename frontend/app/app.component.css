@@ -69,6 +69,41 @@ footer.major {
 }
 
 .footer {
-    padding-top: 40px;
+    padding-top: 200px;
+    display: inherit;
+    background-color: #F7F7F7;
+    /*
     box-shadow: 0 -2px 2px 0 rgba(0, 0, 0, 0.075);
+    */
+}
+
+.footer .links, .footer .links > .col-12 {
+    display: flex;
+}
+
+.footer .links ul {
+    list-style: none;
+    padding: 0px;
+}
+
+.footer .links .logo {
+    text-align: left;
+}
+
+.footer .links .logo img{
+    margin-bottom: 50px;
+}
+
+.footer .links .logo > div {
+    width: 60%;
+    margin-left: auto;
+}
+
+.footer .links .logo ul {
+    display: flex;
+}
+
+.footer .links .logo .follow {
+    display: grid;
+    grid: 33% 33% 33%;
 }

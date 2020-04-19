@@ -6,5 +6,7 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./dashboard.component.css']
 })
 export class AboutUsComponent implements OnInit {
-    
+
+  ngOnInit() {
+  }
 }
