@@ -151,8 +151,12 @@ body .mat-button-base {
     font-size: 20px;
     line-height: 32px;
 }
+
 .grid .mat-button-base {
     min-width: 46%;
+}
+
+body .mat-button-base {
     padding-top: 7px;
     padding-bottom: 7px;
 }
@@ -271,4 +275,13 @@ body .gray-box:nth-child(1) {
     height: 100%;
     resize: none;
     overflow: hidden;
+}
+
+body .modal-backdrop.show {
+    opacity: .1;
+}
+
+body .modal-dialog {
+    max-width: 700px;
+    margin: 200px auto;
 }

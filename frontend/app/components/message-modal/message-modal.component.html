@@ -11,6 +11,10 @@
   <a href="{{link}}" style="word-break: break-word;">{{link}}</a>
 </div>
 <div class="modal-footer">
-  <button *ngIf="button1" type="button" [class]="button1.class" (click)="close('button1')">{{button1.label}}</button>
-  <button *ngIf="button2" type="button" [class]="button2.class" (click)="close('button2')">{{button2.label}}</button>
+  <div *ngIf="button1">
+    <button mat-raised-button color="primary" [ngClass]="button1.class" (click)="close('button1')">{{button1.label}}</button>
+  </div>
+  <div *ngIf="button2">
+    <button mat-raised-button color="accent" [ngClass]="button2.class" (click)="close('button2')">{{button2.label}}</button>
+  </div>
 </div>

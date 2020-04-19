@@ -4,5 +4,50 @@
 
 .modal-footer {
     text-align: center;
-    display: inherit !important;
+}
+
+
+.modal-header, .modal-body, .modal-footer {
+    border: none;
+}
+
+.modal-title {
+    padding: 20px;
+    width: 100%;
+    text-align:center;
+}
+
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.4);
+}
+
+.modal-body {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+.modal-header .close {
+    display: none;
+}
+
+.modal-footer {
+    margin-bottom: 25px;
+    padding-top: 0px;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.modal-footer div {
+    display: table-cell;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.modal-footer div button {
+    width: 100%;
 }

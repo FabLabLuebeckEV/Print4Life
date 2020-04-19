@@ -44,14 +44,14 @@ export class ErrorService {
   public showError(err: Error) {
     let secondButton;
     let modalRef;
-    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    const okButton = new ModalButton('Ok', 'neutral', 'Ok');
     this.spinner.hide();
     if (!this.isOpen) {
       if (err.hasOwnProperty('type') && (err.type as ErrorType === ErrorType.TOKEN_EXPIRED as ErrorType ||
         err.type as ErrorType === ErrorType.UNAUTHORIZED as ErrorType)) {
         this.userService.logout();
         this.router.navigate(['/']);
-        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', [err.stack],
+        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header', [err.stack],
           okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then(() => {
@@ -63,7 +63,7 @@ export class ErrorService {
           secondButton = new ModalButton(activateRequestResult, 'btn btn-success', activateRequestResult);
           err.stack = err.stack ? err.stack : 'The User is deactivated. Please request an Activation!';
         }
-        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger',
+        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header',
           [err.stack], okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then((result) => {
