@@ -22,6 +22,7 @@ import { FablabFormComponent } from '../fablabs/fablab-form/fablab-form.componen
 import { FablabListComponent } from '../fablabs/fablab-list/fablab-list.component';
 
 import { AboutUsComponent } from '../about-us/about-us.component';
+import { FaqComponent } from '../faq/faq.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -116,6 +117,11 @@ export const appRoutes: Routes = [
     {
         path: `${routes.paths.frontend.aboutus.root}`,
         component: AboutUsComponent,
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: `${routes.paths.frontend.faq.root}`,
+        component: FaqComponent,
         runGuardsAndResolvers: 'always'
     },
     {

@@ -58,6 +58,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component';
 import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component';
 
+import { FaqComponent } from './faq/faq.component';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -90,7 +92,8 @@ import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component
         UserActivationComponent,
         FablabFormComponent,
         AboutUsComponent,
-        FablabListComponent
+        FablabListComponent,
+        FaqComponent
     ],
     imports: [
         MatProgressSpinnerModule,

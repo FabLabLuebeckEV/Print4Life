@@ -40,6 +40,7 @@ export class NavigationComponent implements OnInit {
   closeIcon = faTimes;
   sideMenu: Boolean = false;
   aboutUsLink = routes.paths.frontend.aboutus.root;
+  faqLink = routes.paths.frontend.faq.root;
 
   constructor(
     private translateService: TranslateService,

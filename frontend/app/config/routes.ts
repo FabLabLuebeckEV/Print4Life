@@ -72,6 +72,9 @@ export const routes = {
             aboutus: {
                 root: 'about-us'
             },
+            faq: {
+                root: 'faq'
+            },
             users: {
                 root: 'users',
                 signup: 'signup',
