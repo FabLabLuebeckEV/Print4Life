@@ -19,3 +19,19 @@
 .kontakt h1 {
     margin-bottom: 30px;
 }
+
+.kontakt .anmerkung {
+    color: #9a9d9f;
+}
+
+.kontakt .name, .kontakt .email  {
+    width: 60%;
+}
+
+.kontakt .frage {
+    height: 200px;
+}
+
+.kontakt .send {
+    width: 100%;
+}

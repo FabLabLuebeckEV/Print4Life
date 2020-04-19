@@ -60,6 +60,8 @@ import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component
 
 import { FaqComponent } from './faq/faq.component';
 
+import { MatFormFieldModule, MatInputModule } from '@angular/material';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -96,6 +98,8 @@ import { FaqComponent } from './faq/faq.component';
         FaqComponent
     ],
     imports: [
+        MatFormFieldModule,
+        MatInputModule,
         MatProgressSpinnerModule,
         MatButtonModule,
         ReactiveFormsModule,
