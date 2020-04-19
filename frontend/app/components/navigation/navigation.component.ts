@@ -39,6 +39,7 @@ export class NavigationComponent implements OnInit {
   menuIcon = faBars;
   closeIcon = faTimes;
   sideMenu: Boolean = false;
+  aboutUsLink = routes.paths.frontend.aboutus.root;
 
   constructor(
     private translateService: TranslateService,

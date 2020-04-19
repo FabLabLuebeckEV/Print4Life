@@ -14,7 +14,7 @@
           <ul>
             <li class="current"><a href="index.html">Startseite</a></li>
             <li *ngIf="!userIsLoggedIn">
-              <a href="#blog">Über Print4Life</a>
+              <a href="{{aboutUsLink}}">Über Print4Life</a>
             </li>
             <li *ngIf="!userIsLoggedIn">
               <a href="#team">FAQ</a>

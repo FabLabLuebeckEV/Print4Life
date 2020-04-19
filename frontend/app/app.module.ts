@@ -34,6 +34,7 @@ import { MatButtonModule } from '@angular/material/button';
 export function translateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }
+import { AboutUsComponent } from './about-us/about-us.component';
 import { UserFormComponent } from './users/user-form/user-form.component';
 import { BackButtonComponent } from './components/back-button/back-button.component';
 import { LoginModalComponent } from './users/login-modal/login-modal.component';
@@ -88,6 +89,7 @@ import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component
         DeleteButtonComponent,
         UserActivationComponent,
         FablabFormComponent,
+        AboutUsComponent,
         FablabListComponent
     ],
     imports: [

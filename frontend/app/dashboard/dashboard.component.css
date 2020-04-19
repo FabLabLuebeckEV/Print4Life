@@ -30,9 +30,6 @@
 }
 
 #general{
-    -moz-box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);;
-    -webkit-box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);
-    box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);   
     background-color: #F7F7F7; 
     width:100%; 
 }
@@ -212,13 +209,9 @@
  padding-top: 68px;
  padding-bottom: 68px;
 }
-.product-text {
-
-}
 
 #community-files {
     width:100%;
-    background-color: #F7F7F7;
     text-align:center;
     padding-top: 68px;
     padding-bottom: 68px;
@@ -232,7 +225,6 @@
 }
 
 #FAQ {
-    background-color: #ffffff;
     padding-top: 68px;
     padding-bottom: 68px;
     width:100%;
@@ -275,7 +267,6 @@
 }
 
 #newsletter {
-    background-color:#F7F7F7;
     width:100%;
     padding-top: 68px;
     padding-bottom: 68px;

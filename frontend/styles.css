@@ -201,12 +201,12 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
     background-color: #DF5A49;
 }
 
-body #navButton {
-    display:none;
+.appcontainer .maincontainer >*:nth-child(2) >*:nth-child(1){
+    padding-top: 58px;
 }
 
-body .appcontainer .maincontainer{
-    margin-top: 58px;
+body #navButton {
+    display:none;
 }
 
 .maker {
@@ -224,4 +224,19 @@ body .appcontainer .maincontainer{
 .neutral.mat-button-base {
     color: white;
     background-color: #5286A4;
+}
+
+.gray-box {
+    background: #F7F7F7;
+    -moz-box-shadow: 0 2px 14px rgba(209, 209, 209, 0.5);
+    -webkit-box-shadow: 0 2px 14px rgba(209, 209, 209, 0.5);
+    box-shadow: 0px 2px 14px rgba(209, 209, 209, 0.5);
+    position: relative;
+    z-index: 1;
+}
+
+body .gray-box:nth-child(1) {
+    -moz-box-shadow: 0 12px 14px -14px rgba(209, 209, 209, 0.9);
+    -webkit-box-shadow: 0 12px 14px -14px rgba(209, 209, 209, 0.9);
+    box-shadow: 0px 12px 14px -14px rgba(209, 209, 209, 0.9);
 }

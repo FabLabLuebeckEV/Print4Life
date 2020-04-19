@@ -37,6 +37,10 @@
     padding-top: 38px;
 }
 
+#header {
+    background-color: #F7F7F7;
+}
+
 #header nav ul li {
     display: inline-block;
     margin-left: 0;
