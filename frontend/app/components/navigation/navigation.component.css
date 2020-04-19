@@ -67,3 +67,13 @@
     padding: 0px;
     margin: 0px;
 }
+
+.underline {
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom-style:solid;
+    border-bottom-color: #334d5c;
+    border-bottom-width: 3px;
+    box-shadow: 0px 4px 4px -6px black;
+}
