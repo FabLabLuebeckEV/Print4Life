@@ -73,7 +73,8 @@ export const routes = {
                 root: 'about-us'
             },
             faq: {
-                root: 'faq'
+                root: 'faq',
+                contact: 'kontakt'
             },
             users: {
                 root: 'users',

@@ -41,6 +41,8 @@ export class NavigationComponent implements OnInit {
   sideMenu: Boolean = false;
   aboutUsLink = routes.paths.frontend.aboutus.root;
   faqLink = routes.paths.frontend.faq.root;
+  contactLink = routes.paths.frontend.faq.root;
+  contactFragment = routes.paths.frontend.faq.contact;
 
   constructor(
     private translateService: TranslateService,

@@ -8,19 +8,19 @@
     <nav id="nav" class="grid">
       <div class="row">
         <div class="col-12 col-sm-6">
-          <h1><a href="index.html"><img id="logo" src="/assets/img/logo.svg" alt="logo" /></a></h1>
+          <h1><a [routerLink]="['']"><img id="logo" src="/assets/img/logo.svg" alt="logo" /></a></h1>
         </div>
         <div class="col-6">
           <ul>
-            <li class="current"><a href="index.html">Startseite</a></li>
+            <li class="current"><a [routerLink]="['']">Startseite</a></li>
             <li *ngIf="!userIsLoggedIn">
-              <a href="{{aboutUsLink}}">Über Print4Life</a>
+              <a [routerLink]="[aboutUsLink]">Über Print4Life</a>
             </li>
             <li *ngIf="!userIsLoggedIn">
-              <a href="{{faqLink}}">FAQ</a>
+              <a [routerLink]="[faqLink]">FAQ</a>
             </li>
             <li *ngIf="!userIsLoggedIn">
-              <a href="#contact">Kontakt</a>
+              <a [routerLink]="[contactLink]" fragment="{{contactFragment}}">Kontakt</a>
             </li>
             <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
               <app-dropdown [dropdown]="machineDropdown">
