@@ -178,6 +178,14 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
     padding-right:58px;
 } 
 
+.grid .indent-left-half {
+    padding-left: 29px;
+}
+
+.grid .indent-right-half {
+    padding-right: 29px;
+}
+
 .grid .large-indent-left {
     padding-left: 316px;
 }
