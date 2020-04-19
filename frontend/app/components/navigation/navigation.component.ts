@@ -43,6 +43,7 @@ export class NavigationComponent implements OnInit {
   faqLink = routes.paths.frontend.faq.root;
   contactLink = routes.paths.frontend.faq.root;
   contactFragment = routes.paths.frontend.faq.contact;
+  loginLink = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
 
   constructor(
     private translateService: TranslateService,

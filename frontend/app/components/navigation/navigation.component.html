@@ -47,10 +47,10 @@
             </li>
             -->
             <li *ngIf="!userIsLoggedIn">
-              <a (click)="_login()" [ngClass]="(i == 1)?'button primary':''">Login</a>
+              <a [routerLink]="[loginLink]" [ngClass]="(i == 1)?'button primary':''" class="underline">Anmelden</a>
             </li>
             <li *ngIf="userIsLoggedIn">
-              <a (click)="_logout()" [ngClass]="(i == 1)?'button primary':''">Logout</a>
+              <a (click)="_logout()" [ngClass]="(i == 1)?'button primary':''">Abmelden</a>
             </li>
           </ul>
         </div>

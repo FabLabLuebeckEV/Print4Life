@@ -59,6 +59,7 @@ import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component
 import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component';
 
 import { FaqComponent } from './faq/faq.component';
+import { LoginComponent } from './login/login.component';
 
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
 
@@ -95,7 +96,8 @@ import { MatFormFieldModule, MatInputModule } from '@angular/material';
         FablabFormComponent,
         AboutUsComponent,
         FablabListComponent,
-        FaqComponent
+        FaqComponent,
+        LoginComponent
     ],
     imports: [
         MatFormFieldModule,

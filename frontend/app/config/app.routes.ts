@@ -24,6 +24,8 @@ import { FablabListComponent } from '../fablabs/fablab-list/fablab-list.componen
 import { AboutUsComponent } from '../about-us/about-us.component';
 import { FaqComponent } from '../faq/faq.component';
 
+import { LoginComponent } from '../login/login.component';
+
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(private userService: UserService, private errorService: ErrorService) { }
@@ -148,6 +150,7 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.users.signup, component: UserFormComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent, },
             { path: routes.paths.frontend.users.profile, component: UserFormComponent },
+            { path: routes.paths.frontend.users.login, component: LoginComponent},
             { path: ':id', component: UserDetailComponent }
         ]
     },
