@@ -22,6 +22,7 @@ script:
   - zip -r ../latest ./*
   - cd ..
   - mkdir -p dpl_cd_upload
+  - FILENAME=`date +"%d.%m.%Y_%H:%M".zip`
   - mv latest.zip dpl_cd_upload/`date +"%d.%m.%Y_%H:%M".zip`
 
 deploy:
@@ -38,7 +39,7 @@ deploy:
   access_key_id: $aws_key
   secret_access_key: $aws_secret_access_key
   bucket: travisdeploy
-  key: latest.zip
+  key: FILENAME
   bundle_type: zip
   application: print4life
   deployment_group: print4life
