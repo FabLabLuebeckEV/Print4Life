@@ -3,4 +3,8 @@ version: 0.0
 os: linux
 files:
   - source: ./
-    destination: /home/ubuntu/print4life
+    destination: /var/www/html/dist
+hooks:
+  AfterInstall:
+    - location: /var/www/html/rebuild.sh
+      runas: ubuntu
