@@ -5,6 +5,9 @@ files:
   - source: ./
     destination: /var/www/html/dist
 hooks:
+  BeforeInstall:
+    - location: /var/www/html/cleanup.sh
+      runas: ubuntu
   AfterInstall:
     - location: /var/www/html/rebuild.sh
       runas: ubuntu
