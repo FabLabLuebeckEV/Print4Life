@@ -23,7 +23,7 @@ script:
   - cd ..
   - mkdir -p dpl_cd_upload
   - FILENAME=`date +"%d.%m.%Y_%H:%M".zip`
-  - mv latest.zip dpl_cd_upload/`date +"%d.%m.%Y_%H:%M".zip`
+  - mv latest.zip dpl_cd_upload/`echo $FILENAME`
 
 deploy:
 - provider: s3
