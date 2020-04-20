@@ -29,10 +29,12 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
 
 export function translateHttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
 }
+import { AboutUsComponent } from './about-us/about-us.component';
 import { UserFormComponent } from './users/user-form/user-form.component';
 import { BackButtonComponent } from './components/back-button/back-button.component';
 import { LoginModalComponent } from './users/login-modal/login-modal.component';
@@ -55,6 +57,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component';
 import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component';
+
+import { FaqComponent } from './faq/faq.component';
+import { LoginComponent } from './login/login.component';
+
+import { MatFormFieldModule, MatInputModule } from '@angular/material';
 
 @NgModule({
     declarations: [
@@ -87,10 +94,16 @@ import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component
         DeleteButtonComponent,
         UserActivationComponent,
         FablabFormComponent,
-        FablabListComponent
+        AboutUsComponent,
+        FablabListComponent,
+        FaqComponent,
+        LoginComponent
     ],
     imports: [
+        MatFormFieldModule,
+        MatInputModule,
         MatProgressSpinnerModule,
+        MatButtonModule,
         ReactiveFormsModule,
         BrowserModule,
         NgxSpinnerModule,

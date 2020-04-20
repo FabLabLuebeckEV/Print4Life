@@ -1,0 +1,39 @@
+.description, .team, .team > .col-12 {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.team, .ranking, .supported {
+    padding-top: 100px;
+}
+
+.team > h1 .ranking > h1, .supported > h1 {
+    margin-bottom: 20px;
+}
+
+.team .text-center, .ranking .text-center, .supported .text-center {
+    width: 100%;
+}
+
+
+.member {
+    text-align: center;
+}
+
+.member h1 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.member .content {
+    margin-top: 15px; 
+}
+
+.member, .team, .ranking, .supported {
+    margin-bottom: 70px;
+}
+
+.col-12 img {
+    width: 100%;
+    height: auto;
+}

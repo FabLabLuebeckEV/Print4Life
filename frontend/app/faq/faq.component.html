@@ -1,0 +1,92 @@
+<div class="gray-box faq">
+    <div class="grid">
+        <div class="col-6 indent-left indent-right">
+            <div class="question neutral">
+                Lorem ipsum dolor sit amet?
+            </div>
+            <div class="answer">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.    
+            </div>
+        </div>
+
+        <div class="col-6 indent-left indent-right">
+            <div class="question neutral">
+                Lorem ipsum dolor sit amet?
+            </div>
+            <div class="answer">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.
+            </div>
+        </div>
+
+        <div class="col-6 indent-left indent-right">
+            <div class="question neutral">
+                Lorem ipsum dolor sit amet?
+            </div>
+            <div class="answer">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr. Exorcizamus te, omnis immunde spiritus,
+                omnis satanica potestas, omnis incursio
+                infernalis adversarii, omnis legio, omnis
+                congregatio et secta diabolica. sed diam
+            </div>
+        </div>
+
+        <div class="col-6 indent-left indent-right">
+            <div class="question neutral">
+                Lorem ipsum dolor sit amet?
+            </div>
+            <div class="answer">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren.
+            </div>
+        </div>
+
+        <div class="col-6 indent-left indent-right">
+            <div class="question neutral">
+                Lorem ipsum dolor sit amet?
+            </div>
+            <div class="answer">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            </div>
+        </div>
+
+        <div class="col-6 indent-left indent-right">
+            <div class="question neutral">
+                Lorem ipsum dolor sit amet?
+            </div>
+            <div class="answer">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            </div>
+        </div>
+    </div>
+</div> 
+<div class="kontakt" id="kontakt">
+    <div class="grid">
+        <div class="col-12 col-md-6 indent-right">
+            <h1>
+                Kontakt
+            </h1>
+            <div>
+                Gibt es noch eine Frage, die auf dieser Seite nicht gestellt und beantwortet wurde? 
+                Dann fülle gerne dieses Formular aus und wir melden uns bei dir!
+            </div>
+        </div>
+        <div class="col-12 col-md-6 indent-right indent-left">
+            <div class="myMatInput name">
+                <input type="" placeholder="Name*" [(ngModel)]="contactData.name">
+            </div>
+            <div class="myMatInput neutral email">
+                <input type="" placeholder="E-Mail-Adresse*" [(ngModel)]="contactData.email">
+            </div>
+            <div class="myMatInput neutral frage">
+                <textarea type="" placeholder="Deine Frage*" [(ngModel)]="contactData.message"></textarea>
+            </div>
+            <div class="row">
+                <div class="col-6 anmerkung">
+                    *Pflichtfeld
+                </div>
+                <div class="col-6">
+                    <button mat-raised-button color="primary" class="send" (click)="sendContactMessage()">Frage senden</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

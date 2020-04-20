@@ -69,6 +69,13 @@ export const routes = {
             }
         },
         frontend: {
+            aboutus: {
+                root: 'about-us'
+            },
+            faq: {
+                root: 'faq',
+                contact: 'kontakt'
+            },
             users: {
                 root: 'users',
                 signup: 'signup',

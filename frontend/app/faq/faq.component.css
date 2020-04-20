@@ -1,0 +1,37 @@
+.faq .grid, .kontakt .grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.faq .grid .question {
+    margin-bottom: 10px;
+}
+
+.faq .grid .answer {
+    margin-bottom: 40px;
+}
+
+.kontakt {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.kontakt h1 {
+    margin-bottom: 30px;
+}
+
+.kontakt .anmerkung {
+    color: #9a9d9f;
+}
+
+.kontakt .name, .kontakt .email  {
+    width: 60%;
+}
+
+.kontakt .frage {
+    height: 200px;
+}
+
+.kontakt .send {
+    width: 100%;
+}

@@ -1,0 +1,20 @@
+.login .row{
+    width: 100%;
+}
+
+.login button {
+    width: 100%;
+}
+
+.login .forgot {
+    color: #8a9ca6;
+    text-decoration: underline;
+}
+
+.login {
+    margin-bottom: 200px;
+}
+
+h1 {
+    margin-bottom: 30px;
+}

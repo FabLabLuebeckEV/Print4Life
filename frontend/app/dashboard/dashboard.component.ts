@@ -6,8 +6,6 @@ import { LoginModalComponent } from '../users/login-modal/login-modal.component'
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
-import { ServiceService } from '../services/service.service';
-import { MessageModalComponent } from '../components/message-modal/message-modal.component';
 import { TranslationModel } from '../models/translation.model';
 
 @Component({
@@ -20,19 +18,11 @@ export class DashboardComponent implements OnInit {
   user: User;
   translationFields: TranslationModel.Dashboard  = {};
 
-  contactData = {
-    name : '',
-    email : '',
-    subject: '',
-    message: ''
-  };
-
   constructor(
     private modalService: ModalService,
     private translateService: TranslateService,
     private userService: UserService,
-    private router: Router,
-    private serviceService: ServiceService
+    private router: Router
   ) {
     this._translate();
     this.translateService.onLangChange.subscribe(() => {
@@ -71,22 +61,6 @@ export class DashboardComponent implements OnInit {
     }).catch((err) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.user = undefined;
-    });
-  }
-
-  async sendContactMessage() {
-    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
-
-    console.log(this.contactData);
-    this.serviceService.sendContactForm({contact: this.contactData}).catch();
-    this.modalService.openMsgModal(
-      'Erfolgreich verschickt',
-      'modal-header header-success',
-      ['Du erhältst eine Kopie deiner Nachricht per Email', 'Unser Team wird sich bald bei dir melden'],
-      okButton,
-      undefined
-    ).result.then(async (login) => {
-    }).catch((err) => {
     });
   }
 
