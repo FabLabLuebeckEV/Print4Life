@@ -18,7 +18,9 @@ install:
 - npm install
 script: 
   - npm run deploy-staging
-  - zip -r latest dist/*
+  - cd dist
+  - zip -r ../latest ./*
+  - cd ..
   - mkdir -p dpl_cd_upload
   - mv latest.zip dpl_cd_upload
 
