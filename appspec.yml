@@ -4,6 +4,10 @@ os: linux
 files:
   - source: ./
     destination: /var/www/html/dist
+permissions:
+  owner: www-data
+  group: www-data
+  mode: 770
 hooks:
   BeforeInstall:
     - location: ./scripts/cleanup.sh
