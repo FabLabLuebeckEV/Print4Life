@@ -9,6 +9,7 @@
 .login .forgot {
     color: #8a9ca6;
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .login {
