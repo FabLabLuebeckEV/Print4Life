@@ -46,10 +46,11 @@ deploy:
   region: eu-central-1
   on: *2
 
-
-notifications:
-  email:
-    recipients:
-    - ian-github@ipoesse.de
-    on_success: always
-    on_failure: always
+after_script:
+- wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+- chmod +x send.sh
+- "./send.sh success $WEBHOOK_URL"
+after_failure:
+- wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+- chmod +x send.sh
+- "./send.sh failure $WEBHOOK_URL"
