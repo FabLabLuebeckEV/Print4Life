@@ -16,7 +16,11 @@ cache:
 
 install:
 - npm install
-script: npm run deploy-staging
+script: 
+  - npm run deploy-staging
+  - zip -r latest dist/*
+  - mkdir -p dpl_cd_upload
+  - mv latest.zip dpl_cd_upload
 before_deploy:
 - openssl aes-256-cbc -K $encrypted_84f7f15250c2_key -iv $encrypted_84f7f15250c2_iv
   -in deploy-rsa.enc -out /tmp/deploy_rsa -d
@@ -28,7 +32,7 @@ deploy:
 - provider: s3
   access_key_id: $aws_key
   secret_access_key: $aws_secret_access_key
-  local_dir: $TRAVIS_BUILD_DIR/dist
+  local_dir: $TRAVIS_BUILD_DIR/dpl_cd_upload
   skip_cleanup: true
   on: &2
     branch: develop
