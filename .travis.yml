@@ -28,7 +28,7 @@ deploy:
 - provider: s3
   access_key_id: $aws_key
   secret_access_key: $aws_secret_access_key
-  local_dir: dpl_cd_upload
+  local_dir: $TRAVIS_BUILD_DIR/dist
   skip_cleanup: true
   on: &2
     branch: develop
