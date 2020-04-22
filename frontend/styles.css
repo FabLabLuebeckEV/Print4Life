@@ -157,8 +157,8 @@ body .mat-button-base {
 }
 
 body .mat-button-base {
-    padding-top: 7px;
-    padding-bottom: 7px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .button-bar .mat-secondary {
     float:right;
