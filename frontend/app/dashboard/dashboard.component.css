@@ -3,6 +3,19 @@
     margin-bottom: 54px;
 }
 
+a {
+    text-decoration: underline;
+}
+
+.maker-howto a:hover {
+    color: #58C8B2;
+}
+
+
+.clinic-howto a:hover {
+    color: #F5705F;
+}
+
 #general ul {
     list-style:none;
     padding-left:0px;
