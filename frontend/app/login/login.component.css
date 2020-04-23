@@ -19,3 +19,16 @@
 h1 {
     margin-bottom: 30px;
 }
+
+
+@media only screen and (max-width: 770px) { 
+    .forgot-row {
+        margin-top: -10px;
+        margin-bottom: 20px !important;
+        text-align: center;
+    }
+
+    .myMatInput input{
+        text-align: center;
+    }
+}
