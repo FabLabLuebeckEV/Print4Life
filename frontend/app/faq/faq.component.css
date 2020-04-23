@@ -18,11 +18,11 @@
 
 @media only screen and (max-width: 1050px) {
     .kontakt .col-12.indent-right{
-        padding-right: 20px !important;
+        padding-right: 0px !important;
     }
 
     .kontakt .col-12.indent-left{
-        padding-left: 20px !important;
+        padding-left: 0px !important;
     }
 }
 
@@ -31,12 +31,28 @@
         padding-left: 0px;
         padding-right: 0px;
     }
-}
-
-@media only screen and (max-width: 767px) {
+    
     .grid .indent-right, .grid .indent-left {
         padding-left: 0px !important;
         padding-right: 0px !important;
+    }
+
+    .kontakt .name, .kontakt .email  {
+        width: 100% !important;
+    }
+
+    .kontakt .name input, .kontakt .email input {
+        text-align: center;
+    } 
+
+    .kontakt .frage textarea::placeholder {
+        text-align: center;
+    }
+
+    .kontakt .anmerkung {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        text-align: center;
     }
 }
 

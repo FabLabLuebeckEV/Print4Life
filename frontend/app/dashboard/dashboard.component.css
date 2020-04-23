@@ -231,6 +231,8 @@ a {
 @media only screen and (max-width: 770px) {
     .portfolio .signup_buttons div button {
         margin-bottom: 20px;
+    }
+    button {
         width: 100%;
     }
 }
