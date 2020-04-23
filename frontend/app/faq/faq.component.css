@@ -16,6 +16,23 @@
     margin-bottom: 50px;
 }
 
+@media only screen and (max-width: 1050px) {
+    .kontakt .col-12.indent-right{
+        padding-right: 20px !important;
+    }
+
+    .kontakt .col-12.indent-left{
+        padding-left: 20px !important;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .kontakt .col-12 {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
+
 .kontakt h1 {
     margin-bottom: 30px;
 }
