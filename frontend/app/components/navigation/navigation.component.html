@@ -12,15 +12,15 @@
         </div>
         <div class="col-9 col-lg-6">
           <ul>
-            <li class="current"><a [routerLink]="['']">Startseite</a></li>
+            <li class="current"><a [routerLink]="['']" (click)="toggleSideMenu()">Startseite</a></li>
             <li *ngIf="!userIsLoggedIn">
-              <a [routerLink]="[aboutUsLink]">Über Print4Life</a>
+              <a [routerLink]="[aboutUsLink]" (click)="toggleSideMenu()">Über Print4Life</a>
             </li>
             <li *ngIf="!userIsLoggedIn">
-              <a [routerLink]="[faqLink]">FAQ</a>
+              <a [routerLink]="[faqLink]" (click)="toggleSideMenu()">FAQ</a>
             </li>
             <li *ngIf="!userIsLoggedIn">
-              <a [routerLink]="[contactLink]" fragment="{{contactFragment}}">Kontakt</a>
+              <a [routerLink]="[contactLink]" fragment="{{contactFragment}}" (click)="toggleSideMenu()">Kontakt</a>
             </li>
             <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
               <app-dropdown [dropdown]="machineDropdown">
@@ -47,10 +47,10 @@
             </li>
             -->
             <li *ngIf="!userIsLoggedIn">
-              <a [routerLink]="[loginLink]" [ngClass]="(i == 1)?'button primary':''" class="underline">Anmelden</a>
+              <a [routerLink]="[loginLink]" [ngClass]="(i == 1)?'button primary':''" class="underline" (click)="toggleSideMenu()">Anmelden</a>
             </li>
             <li *ngIf="userIsLoggedIn">
-              <a (click)="_logout()" [ngClass]="(i == 1)?'button primary':''">Abmelden</a>
+              <a (click)="_logout()" [ngClass]="(i == 1)?'button primary':''" (click)="toggleSideMenu()">Abmelden</a>
             </li>
           </ul>
         </div>
