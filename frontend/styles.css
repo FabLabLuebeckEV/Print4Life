@@ -173,8 +173,16 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
     width: 1148px;
     margin-left:auto;
     margin-right:auto;
-    
 }
+
+@media only screen and (max-width: 1150px) {
+    .grid {
+        width: inherit;
+        padding-left:50px;
+        padding-right: 50px;
+    }
+}
+
 .grid .indent-left {
     padding-left:58px;
 } 
