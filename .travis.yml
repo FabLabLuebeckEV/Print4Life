@@ -1,29 +1,48 @@
-addons:
-  ssh_known_hosts: sandbox.ipoesse.de
 language: node_js
 node_js:
 - 12
 os: linux
 dist: bionic
+
 branches:
   only:
   - develop
+cache: 
+  directories:
+    - node_modules
+
 install:
 - npm install
-script: npm run deploy-staging
-before_deploy:
-- openssl aes-256-cbc -K $encrypted_84f7f15250c2_key -iv $encrypted_84f7f15250c2_iv
-  -in deploy-rsa.enc -out /tmp/deploy_rsa -d
-- eval "$(ssh-agent -s)"
-- chmod 600 /tmp/deploy_rsa
-- ssh-add /tmp/deploy_rsa
+script: 
+  - npm run deploy-staging
+  - cd dist
+  - zip -r ../latest ./*
+  - cd ..
+  - mkdir -p dpl_cd_upload
+  - FILENAME=`date +"%d.%m.%Y_%H:%M".zip`
+  - mv latest.zip dpl_cd_upload/`echo $FILENAME`
+
 deploy:
-  provider: script
+- provider: s3
+  access_key_id: $aws_key
+  secret_access_key: $aws_secret_access_key
+  local_dir: $TRAVIS_BUILD_DIR/dpl_cd_upload
   skip_cleanup: true
-  script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/dist deploy@sandbox.ipoesse.de:/var/www/html/Print4Life
-    && ssh deploy@sandbox.ipoesse.de 'sudo pm2 restart Print4Life-api'
-  on:
+  on: &2
     branch: develop
+  bucket: travisdeploy
+  region: eu-central-1
+- provider: codedeploy
+  access_key_id: $aws_key
+  secret_access_key: $aws_secret_access_key
+  bucket: travisdeploy
+  key: $FILENAME
+  bundle_type: zip
+  application: print4life
+  deployment_group: print4life
+  region: eu-central-1
+  on: *2
+
 after_success:
 - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
 - chmod +x send.sh
@@ -32,9 +51,3 @@ after_failure:
 - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
 - chmod +x send.sh
 - "./send.sh failure $WEBHOOK_URL"
-notifications:
-  email:
-    recipients:
-    - ian-github@ipoesse.de
-    on_success: always
-    on_failure: always

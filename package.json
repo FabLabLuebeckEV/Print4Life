@@ -13,7 +13,7 @@
   "description": "An order-management for the fablab connected to an IBM Watson IoT Platform to connect their machinery to this order and planning process",
   "scripts": {
     "apidocs": "shx rm -rf docs/api && apidoc -i api -o docs/api",
-    "deploy-staging": "ng build --configuration=staging && npm run api-build",
+    "deploy-staging": "ng build --configuration=staging && npm run api-build && cp appspec.yml dist/ && mkdir -p dist/scripts && cp *.sh dist/scripts",
     "deploy-prod": "ng build --configuration=production && npm run api-build",
     "build": "ng build && npm run api-build",
     "test": "npm run ng-test && npm run api-test",
