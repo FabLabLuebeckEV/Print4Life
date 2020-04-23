@@ -28,6 +28,21 @@ a {
     margin-bottom: 32px;
 }
 
+
+@media only screen and (max-width: 1060px) {
+    .small-clear {
+        clear: both;
+    }
+
+    .button-bar {
+        padding-top: 40px;
+    }
+
+    .button-bar button {
+        margin-bottom: 20px;
+        width: 100%;
+    }
+}
 .button-bar {
     padding-bottom: 54px;
 }
@@ -177,6 +192,12 @@ a {
     text-align: center;
 }
 
+
+@media only screen and (max-width: 765px) {
+    .portfolio .portfolio_grid .row .part{
+        padding-right: 0px !important;
+    }
+}
 .portfolio .portfolio_grid .row .part{
     padding-right: 58px;
 }
@@ -193,6 +214,14 @@ a {
     margin-bottom: 28px;
     display: flex;
     justify-content: center;
+}
+
+
+@media only screen and (max-width: 770px) {
+    .portfolio .signup_buttons div button {
+        margin-bottom: 20px;
+        width: 100%;
+    }
 }
 
 .portfolio .signup_buttons div{

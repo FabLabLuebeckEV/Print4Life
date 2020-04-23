@@ -8,6 +8,8 @@ import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { TranslationModel } from '../models/translation.model';
 
+import { routes } from '../config/routes';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -17,6 +19,8 @@ export class DashboardComponent implements OnInit {
   userIsLoggedIn: Boolean;
   user: User;
   translationFields: TranslationModel.Dashboard  = {};
+  contactLink = routes.paths.frontend.faq.root;
+  contactFragment = routes.paths.frontend.faq.contact;
 
   constructor(
     private modalService: ModalService,

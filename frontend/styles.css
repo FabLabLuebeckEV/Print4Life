@@ -199,6 +199,16 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
     padding-right: 29px;
 }
 
+@media only screen and (max-width: 1150px) {
+    .grid .large-indent-left {
+        padding-left: 0px !important;
+    }
+    .grid .large-indent-right {
+        padding-right: 0px !important;
+    }
+}
+
+
 .grid .large-indent-left {
     padding-left: 316px;
 }
@@ -229,10 +239,6 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
 
 .appcontainer .maincontainer >*:nth-child(2) >*:nth-child(1){
     padding-top: 58px;
-}
-
-body #navButton {
-    display:none;
 }
 
 .maker {
