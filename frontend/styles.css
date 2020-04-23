@@ -152,13 +152,14 @@ body .mat-button-base {
     line-height: 32px;
 }
 
-.grid .mat-button-base {
-    min-width: 46%;
+.grid .mat-button-base.neutral {
+    padding-left: 45px;
+    padding-right: 45px;
 }
 
 body .mat-button-base {
-    padding-top: 7px;
-    padding-bottom: 7px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .button-bar .mat-secondary {
     float:right;
@@ -204,6 +205,19 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
 .mat-raised-button.mat-secondary, .mat-fab.mat-secondary, .mat-mini-fab.mat-secondary {
     background-color: #DF5A49;
 }
+
+.mat-primary:hover {
+    background-color:#58C8B2;
+}
+
+.mat-accent:hover {
+    background-color: #F5705F;
+}
+
+.mat-button-base.neutral:hover {
+    background-color: #649BBB;
+}
+
 
 .appcontainer .maincontainer >*:nth-child(2) >*:nth-child(1){
     padding-top: 58px;

@@ -37,6 +37,12 @@
     padding-top: 38px;
 }
 
+
+#nav a:hover {
+    color:#5286A4;
+    text-decoration: none;
+}
+
 #header {
     background-color: #F7F7F7;
 }
@@ -69,7 +75,7 @@
 }
 
 .underline {
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     padding-left: 10px;
     padding-right: 10px;
     border-bottom-style:solid;
