@@ -100,6 +100,16 @@ a {
     padding-bottom: 68px;
 }
 
+
+@media only screen and (max-width: 1060px) {
+    #howto .indent-right, #howto .indent-left, .portfolio .indent-right, .portfolio .indent-left, #products .indent-right, #products .indent-left,
+        #community-files .indent-right, #community-files .indent-left, #FAQ .indent-right, #FAQ .indent-left, #newsletter .indent-right, #newsletter .indent-left,
+        #newsticker .indent-right, #newsticker .indent-left, .left-newsticker.indent-left, .right-newsticker.indent-left, .left-newsticker.indent-right, .right-newsticker.indent-right {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+}
+
 .maker-underline {
     border: 2px solid #45B29D !important;
     width: 10%;

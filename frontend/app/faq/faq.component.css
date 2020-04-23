@@ -33,6 +33,13 @@
     }
 }
 
+@media only screen and (max-width: 1060px) {
+    .grid .indent-right, .grid .indent-left {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+}
+
 .kontakt h1 {
     margin-bottom: 30px;
 }
