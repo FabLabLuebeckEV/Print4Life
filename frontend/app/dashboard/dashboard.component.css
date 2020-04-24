@@ -12,6 +12,13 @@ a {
 }
 
 
+@media only screen and (min-width: 1060px) {
+.clinic-howto {
+    border-left: #D8D8D8 solid 1px;
+}
+}
+
+
 .clinic-howto a:hover {
     color: #F5705F;
 }
