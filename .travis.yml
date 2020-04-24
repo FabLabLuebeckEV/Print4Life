@@ -51,7 +51,7 @@ deploy:
   local_dir: $TRAVIS_BUILD_DIR/dpl_cd_upload
   skip_cleanup: true
   on: &3
-    branch: develop
+    branch: master
   bucket: travisdeploy
   region: eu-central-1
 - provider: codedeploy
