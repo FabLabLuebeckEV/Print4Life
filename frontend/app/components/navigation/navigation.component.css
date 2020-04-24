@@ -286,6 +286,9 @@ div.navPanel-visible #navPanel {
     z-index: 100;
 }*/
 
+.landscape-logo {
+    display: none;
+}
 
 @media screen and (max-width: 840px) {
     #navButton {
@@ -299,8 +302,19 @@ div.navPanel-visible #navPanel {
     }
 
 
-    #header {
+    #header #nav >.row {
         display: none;
+    }
+
+    #header .landscape-logo {
+        display: inherit !important;
+        width: 100%;
+        text-align: center;
+    }
+
+    #header .landscape-logo img {
+        max-height: 100px;
+        margin-top: 10px;
     }
 }
 
