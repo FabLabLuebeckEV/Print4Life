@@ -51,21 +51,24 @@
             </div>
         </div>
         <div class="col-12 col-md-6 indent-right indent-left">
-            <div class="myMatInput name">
-                <input type="" placeholder="Name*" [(ngModel)]="contactData.name">
-            </div>
-            <div class="myMatInput neutral email">
-                <input type="" placeholder="E-Mail-Adresse*" [(ngModel)]="contactData.email">
-            </div>
-            <div class="myMatInput neutral frage">
-                <textarea type="" placeholder="Deine Frage*" [(ngModel)]="contactData.message"></textarea>
-            </div>
+            <mat-form-field appearance="outline" class="name neutral"  color="warn">
+                <mat-label>Name* </mat-label>
+                <input matInput placeholder="" [(ngModel)]="contactData.name"/>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="email neutral"  color="warn">
+                <mat-label>E-Mail-Adresse* </mat-label>
+                <input matInput placeholder="" [(ngModel)]="contactData.email"  />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="frage neutral" color="warn">
+                <mat-label>Deine Frage* </mat-label>
+                <textarea cdkTextareaAutosize cdkAutosizeMinRows="8" cdkAutosizeMaxRows="8" matInput placeholder="" [(ngModel)]="contactData.message"></textarea>
+            </mat-form-field>
             <div class="row">
                 <div class="col-12 col-md-6 anmerkung">
                     *Pflichtfeld
                 </div>
                 <div class="col-12 col-md-6">
-                    <button mat-raised-button color="primary" class="send" (click)="sendContactMessage()">Frage senden</button>
+                    <button mat-raised-button color="warn" class="send" (click)="sendContactMessage()">Frage senden</button>
                 </div>
             </div>
         </div>

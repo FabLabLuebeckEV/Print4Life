@@ -74,13 +74,13 @@ export class DashboardComponent implements OnInit {
 
     this.modalService.openMsgModal(
       'Noch nicht verfügbar',
-      'modal-header header-warning',
-      ['Die Anmeldung ist noch nicht freigeschaltet', 'Um bei Programmstart benachrichtigt zu werden, abboniere unseren Newsletter'],
+      'modal-header',
+      ['Die Anmeldung ist noch nicht freigeschaltet', 'Um bei Programmstart benachrichtigt zu werden, aboniere unseren Newsletter'],
       okButton,
       newsletterButton
     ).result.then((result) => {
       if (result === newsletterButton.returnValue) {
-        window.location.href = '#cta';
+        window.location.href = '#newsletter';
       }
     }).catch((err) => {
     });

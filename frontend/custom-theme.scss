@@ -103,6 +103,39 @@ $bv-secondary: (
     )
 );
 
+$bv-neutral: (
+    50 : #eaf0f4,
+    100 : #cbdbe4,
+    200 : #a9c3d2,
+    300 : #86aabf,
+    400 : #6c98b2,
+    500 : #5286a4,
+    600 : #4b7e9c,
+    700 : #417392,
+    800 : #386989,
+    900 : #285678,
+    A100 : #bce1ff,
+    A200 : #89cbff,
+    A400 : #56b4ff,
+    A700 : #3ca9ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
@@ -111,9 +144,10 @@ $ng8-accent: mat-palette($bv-secondary);
 
 // The warn palette is optional (defaults to red).
 $ng8-warn: mat-palette($mat-red);
+$ng8-neutral: mat-palette($bv-neutral);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$ng8-theme: mat-light-theme($ng8-primary, $ng8-accent, $ng8-warn);
+$ng8-theme: mat-light-theme($ng8-primary, $ng8-accent, $ng8-neutral);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component

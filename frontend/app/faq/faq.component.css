@@ -41,18 +41,9 @@
         width: 100% !important;
     }
 
-    .kontakt .name input, .kontakt .email input {
-        text-align: center;
-    } 
-
-    .kontakt .frage textarea::placeholder {
-        text-align: center;
-    }
-
     .kontakt .anmerkung {
         margin-top: -10px;
         margin-bottom: 20px;
-        text-align: center;
     }
 }
 
@@ -69,7 +60,7 @@
 }
 
 .kontakt .frage {
-    height: 200px;
+    width: 100%;
 }
 
 .kontakt .send {

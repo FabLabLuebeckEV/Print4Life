@@ -20,8 +20,8 @@
         <div class="small-clear">
         </div>
         <div class="button-bar col-12 col-lg-6">
-            <button mat-raised-button color="primary">Als Maker registrieren</button>
-            <button mat-raised-button color="accent">Als Suchender registrieren</button>
+            <button mat-raised-button color="primary" (click)="register('maker')">Als Maker registrieren</button>
+            <button mat-raised-button color="accent" (click)="register('klinik')">Als Suchender registrieren</button>
         </div>
     </div>
 </div> <!--End of general-->
@@ -244,10 +244,10 @@
         </div>
         <div class="signup_buttons indent-left indent-right">
             <div class="col-12 col-md-6">
-                <button mat-raised-button color="primary">Als Maker registrieren</button>
+                <button mat-raised-button color="primary" (click)="register('maker')">Als Maker registrieren</button>
             </div>
             <div class="col-12 col-md-6">
-                <button mat-raised-button color="accent">Als Suchender registrieren</button>
+                <button mat-raised-button color="accent" (click)="register('klinik')">Als Suchender registrieren</button>
             </div>
         </div>
     </div>       
@@ -343,7 +343,7 @@
         </div>
         <br style="clear:left">
         <div class="faq-button">
-            <button mat-raised-button class="neutral">Weitere Fragen ansehen</button>      
+            <button mat-raised-button class="neutral" [routerLink]="[contactLink]">Weitere Fragen ansehen</button>      
     
         </div>
     </div>

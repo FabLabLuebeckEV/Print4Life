@@ -20,6 +20,9 @@ h1 {
     margin-bottom: 30px;
 }
 
+.email mat-form-field, .password mat-form-field {
+    width: 100%;
+}
 
 @media only screen and (max-width: 770px) { 
     .forgot-row {

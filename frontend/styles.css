@@ -224,11 +224,11 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
     background-color: #DF5A49;
 }
 
-.mat-primary:hover {
+button.mat-primary:hover {
     background-color:#58C8B2;
 }
 
-.mat-accent:hover {
+button.mat-accent:hover {
     background-color: #F5705F;
 }
 
