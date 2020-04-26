@@ -248,6 +248,10 @@ button.mat-accent:hover {
     background-color: #F5705F;
 }
 
+button.mat-secondary {
+    color: white;
+}
+
 .mat-button-base.neutral:hover {
     background-color: #649BBB;
 }

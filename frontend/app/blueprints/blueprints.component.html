@@ -5,7 +5,8 @@
     <div class="subtitle">
         Wählen Sie Ihr gewünschtes Produkt aus:
     </div>
-
+</div>
+<div class="cont">
     <div class="grid-3">
         <div class="" *ngFor="let blueprint of blueprints">
             <div class="blueprint">
@@ -29,6 +30,8 @@
                 <div class="cost klinik">
                     {{blueprint.costs}} €
                 </div>
+                
+                <button mat-raised-button color="secondary">Auftrag anlegen</button>
             </div>
         </div>
     </div>
