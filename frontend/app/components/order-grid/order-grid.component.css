@@ -164,11 +164,3 @@
 .order .support .maker {
     margin-bottom:20px;
 }
-
-.grid-3 {
-    display: grid;
-    grid-template-columns: 30.4878% 30.4878% 30.4878%;
-    column-gap: 50px;
-
-    margin-bottom: 100px;
-}

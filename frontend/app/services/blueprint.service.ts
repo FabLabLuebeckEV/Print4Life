@@ -7,19 +7,27 @@ import { Fablab } from '../models/fablab.model';
   providedIn: 'root'
 })
 export class BlueprintService {
-    private rootPath: String;
+  private rootPath: String;
 
-    constructor(
-        public http: HttpClient
-    ) {
-        this.rootPath = routes.backendUrl + '/' + routes.paths.backend.blueprints.root;
-    }
+  constructor(
+    public http: HttpClient
+  ) {
+    this.rootPath = routes.backendUrl + '/' + routes.paths.backend.blueprints.root;
+  }
 
-    public async getBlueprint(id): Promise<any> {
-        const result = await this.http.get(`${this.rootPath}/${id}`).toPromise();
-        if (result && result.hasOwnProperty('blueprint')) {
-          return result;
-        }
-        return undefined;
+  public async getBlueprint(id): Promise<any> {
+    const result = await this.http.get(`${this.rootPath}/${id}`).toPromise();
+    if (result && result.hasOwnProperty('blueprint')) {
+      return result;
     }
+    return undefined;
+  }
+
+  public async getBlueprints(): Promise<any> {
+    const result = await this.http.get(`${this.rootPath}`).toPromise();
+    if (result && result.hasOwnProperty('blueprints')) {
+      return result;
+    }
+    return undefined;
+  }
 }

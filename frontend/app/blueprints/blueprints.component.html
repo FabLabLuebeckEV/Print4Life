@@ -1,0 +1,35 @@
+<div class="gray-box">
+    <h1>
+        Produktübersicht
+    </h1>
+    <div class="subtitle">
+        Wählen Sie Ihr gewünschtes Produkt aus:
+    </div>
+
+    <div class="grid-3">
+        <div class="" *ngFor="let blueprint of blueprints">
+            <div class="blueprint">
+                <div class="title">
+                    {{blueprint.name}}
+                </div>
+
+                <div class="productionTime text-mid klinik">
+                    Fertigungsdauer pro Stück: <b>~{{blueprint.productionTimeMinutes}} Min.</b>
+                </div>
+
+                <img [src]="blueprint.imageURL">
+
+                <p class="description">
+                    {{blueprint.shortDescription}}
+                </p>
+
+                <div class="costLabel">
+                    Fertigungskosten pro Stück:
+                </div>
+                <div class="cost klinik">
+                    {{blueprint.costs}} €
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
