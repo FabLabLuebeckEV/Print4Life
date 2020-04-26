@@ -28,6 +28,8 @@ import { FaqComponent } from '../faq/faq.component';
 import { LoginComponent } from '../login/login.component';
 
 import { AcceptedOrdersComponent } from '../orders/accepted-orders/accepted-orders.component';
+import { BlueprintsComponent } from '../blueprints/blueprints.component';
+
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(private userService: UserService, private errorService: ErrorService) { }
@@ -77,6 +79,11 @@ export const appRoutes: Routes = [
             { path: `${routes.paths.frontend.machines.update}/:type/:id`, component: MachineFormComponent, canActivate: [AuthGuard], },
             { path: `${routes.paths.frontend.machines.getById}`, component: MachineDetailComponent }
         ]
+    },
+    {
+        path: `${routes.paths.frontend.blueprints.root}/${routes.paths.frontend.blueprints.list}`, 
+        component: BlueprintsComponent,
+        runGuardsAndResolvers: 'always',
     },
     {
         path: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}`,

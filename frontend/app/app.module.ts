@@ -68,6 +68,7 @@ import { FaqComponent } from './faq/faq.component';
 import { LoginComponent } from './login/login.component';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { BlueprintsComponent } from './blueprints/blueprints.component';
 
 @NgModule({
     declarations: [
@@ -78,6 +79,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         DashboardComponent,
         TableComponent,
         OrderListComponent,
+        BlueprintsComponent,
         MachineFormComponent,
         CreateOrderComponent,
         MessageModalComponent,

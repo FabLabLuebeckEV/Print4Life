@@ -79,6 +79,10 @@ export const routes = {
             aboutus: {
                 root: 'about-us'
             },
+            blueprints: {
+                root: 'blueprints',
+                list: 'list'
+            },
             faq: {
                 root: 'faq',
                 contact: 'kontakt'
