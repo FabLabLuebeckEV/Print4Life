@@ -201,15 +201,20 @@ function getAll (req, res) {
 * @apiPermission none
 */
 async function search (req, res) {
-  const token = req.headers.authorization.split('JWT')[1].trim();
-  const user = await userService.getUserByToken(token);
+  let user;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    user = await userService.getUserByToken(token);
+  }
 
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   orderService.getAll(req.body.query, req.body.limit, req.body.skip).lean().then((orders) => {
     for (let i = 0; i < orders.length; i += 1) {
-      if (user.address && orders[i].shippingAddress) {
+      if (user && user.address && orders[i].shippingAddress) {
         orders[i].distance = ServiceController.calculateDistance(orders[i].shippingAddress.zipCode,
           user.address.zipCode);
+      } else {
+        orders[i].distance = -1;
       }
     }
 

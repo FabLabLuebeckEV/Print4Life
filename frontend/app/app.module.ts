@@ -26,6 +26,7 @@ import { MachineDetailComponent } from './machines/machine-detail/machine-detail
 import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 import { OpenOrdersComponent } from './orders/open-orders/open-orders.component';
+import { AcceptedOrdersComponent } from './orders/accepted-orders/accepted-orders.component';
 import { OrderGridComponent } from './components/order-grid/order-grid.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -60,11 +61,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component';
 import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component';
 
+import { MatFormFieldModule, MatInputModule } from '@angular/material';
+
 import { ChartsModule } from 'ng2-charts';
 import { FaqComponent } from './faq/faq.component';
 import { LoginComponent } from './login/login.component';
 
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
     declarations: [
@@ -81,6 +84,7 @@ import { MatFormFieldModule, MatInputModule } from '@angular/material';
         MachineDetailComponent,
         OrderDetailComponent,
         OpenOrdersComponent,
+        AcceptedOrdersComponent,
         OrderGridComponent,
         UserFormComponent,
         BackButtonComponent,
@@ -107,6 +111,7 @@ import { MatFormFieldModule, MatInputModule } from '@angular/material';
     imports: [
         MatFormFieldModule,
         MatInputModule,
+        FlexLayoutModule,
         MatProgressSpinnerModule,
         MatButtonModule,
         ReactiveFormsModule,

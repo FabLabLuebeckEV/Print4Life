@@ -27,6 +27,7 @@ import { FaqComponent } from '../faq/faq.component';
 
 import { LoginComponent } from '../login/login.component';
 
+import { AcceptedOrdersComponent } from '../orders/accepted-orders/accepted-orders.component';
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(private userService: UserService, private errorService: ErrorService) { }
@@ -139,7 +140,7 @@ export const appRoutes: Routes = [
     },
     {
         path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`,
-        component: OrderListComponent,
+        component: AcceptedOrdersComponent,
         runGuardsAndResolvers: 'always'
     },
     {

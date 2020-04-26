@@ -2,17 +2,23 @@ import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 
 import { OrderService } from '../../services/order.service';
 import { BlueprintService } from '../../services/blueprint.service';
+import { User } from 'frontend/app/models/user.model';
+import { UserService } from 'frontend/app/services/user.service';
 
 @Component({
-    selector: 'app-open-orders',
-    templateUrl: './open-orders.component.html',
-    styleUrls: ['./open-orders.component.css']
+    selector: 'app-accepted-orders',
+    templateUrl: './accepted-orders.component.html',
+    styleUrls: ['./accepted-orders.component.css']
 })
-export class OpenOrdersComponent implements OnInit {
+export class AcceptedOrdersComponent implements OnInit {
 
     orders: Array<any>;
+    loggedInUser: User;
 
-    constructor(public orderService: OrderService, public blueprintService: BlueprintService) {
+    constructor(
+        public orderService: OrderService,
+        public blueprintService: BlueprintService,
+        public userService: UserService) {
 
     }
 
@@ -21,16 +27,19 @@ export class OpenOrdersComponent implements OnInit {
     }
 
     private async init() {
-        this.loadOrders();
-    }
-
-    public async  loadOrders() {
-        console.log('openorders loadOrders called');
+        this.loggedInUser = await this.userService.getUser();
         const query = {
             $and: [
                 {
                     blueprintId: {
                         $exists: true
+                    }
+                },
+                {
+                    'batch.accepted': {
+                        $elemMatch: {
+                            fablab: this.loggedInUser.fablabId
+                        }
                     }
                 }
             ]
