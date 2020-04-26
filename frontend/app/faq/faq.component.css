@@ -1,0 +1,68 @@
+.faq .grid, .kontakt .grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.faq .grid .question {
+    margin-bottom: 10px;
+}
+
+.faq .grid .answer {
+    margin-bottom: 40px;
+}
+
+.kontakt {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+@media only screen and (max-width: 1050px) {
+    .kontakt .col-12.indent-right{
+        padding-right: 0px !important;
+    }
+
+    .kontakt .col-12.indent-left{
+        padding-left: 0px !important;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .kontakt .col-12 {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    
+    .grid .indent-right, .grid .indent-left {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+
+    .kontakt .name, .kontakt .email  {
+        width: 100% !important;
+    }
+
+    .kontakt .anmerkung {
+        margin-top: -10px;
+        margin-bottom: 20px;
+    }
+}
+
+.kontakt h1 {
+    margin-bottom: 30px;
+}
+
+.kontakt .anmerkung {
+    color: #9a9d9f;
+}
+
+.kontakt .name, .kontakt .email  {
+    width: 60%;
+}
+
+.kontakt .frage {
+    width: 100%;
+}
+
+.kontakt .send {
+    width: 100%;
+}

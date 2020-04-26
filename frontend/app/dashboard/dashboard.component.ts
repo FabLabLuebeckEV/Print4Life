@@ -6,8 +6,6 @@ import { LoginModalComponent } from '../users/login-modal/login-modal.component'
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
-import { ServiceService } from '../services/service.service';
-import { MessageModalComponent } from '../components/message-modal/message-modal.component';
 import { TranslationModel } from '../models/translation.model';
 import { routes } from '../config/routes';
 
@@ -20,20 +18,14 @@ export class DashboardComponent implements OnInit {
   userIsLoggedIn: Boolean;
   user: User;
   translationFields: TranslationModel.Dashboard  = {};
-
-  contactData = {
-    name : '',
-    email : '',
-    subject: '',
-    message: ''
-  };
+  contactLink = routes.paths.frontend.faq.root;
+  contactFragment = routes.paths.frontend.faq.contact;
 
   constructor(
     private modalService: ModalService,
     private translateService: TranslateService,
     private userService: UserService,
-    private router: Router,
-    private serviceService: ServiceService
+    private router: Router
   ) {
     this._translate();
     this.translateService.onLangChange.subscribe(() => {
@@ -75,22 +67,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  async sendContactMessage() {
-    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
-
-    console.log(this.contactData);
-    this.serviceService.sendContactForm({contact: this.contactData}).catch();
-    this.modalService.openMsgModal(
-      'Erfolgreich verschickt',
-      'modal-header header-success',
-      ['Du erhältst eine Kopie deiner Nachricht per Email', 'Unser Team wird sich bald bei dir melden'],
-      okButton,
-      undefined
-    ).result.then(async (login) => {
-    }).catch((err) => {
-    });
-  }
-
   register(type: String) {
 
     this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}/${type}`]);
@@ -100,13 +76,13 @@ export class DashboardComponent implements OnInit {
 
     this.modalService.openMsgModal(
       'Noch nicht verfügbar',
-      'modal-header header-warning',
-      ['Die Anmeldung ist noch nicht freigeschaltet', 'Um bei Programmstart benachrichtigt zu werden, abboniere unseren Newsletter'],
+      'modal-header',
+      ['Die Anmeldung ist noch nicht freigeschaltet', 'Um bei Programmstart benachrichtigt zu werden, aboniere unseren Newsletter'],
       okButton,
       newsletterButton
     ).result.then((result) => {
       if (result === newsletterButton.returnValue) {
-        window.location.href = '#cta';
+        window.location.href = '#newsletter';
       }
     }).catch((err) => {
     });*/

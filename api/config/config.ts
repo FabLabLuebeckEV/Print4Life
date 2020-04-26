@@ -147,8 +147,9 @@ const publicRoutes = [
     canChilds: true,
     methods: ['GET']
   },
-  { url: `${baseUrl}hospitals`,
-   canChilds: true,
+  {
+    url: `${baseUrl}hospitals`,
+    canChilds: true,
     methods: ['GET']
   }
 

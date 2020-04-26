@@ -39,6 +39,11 @@ export class NavigationComponent implements OnInit {
   menuIcon = faBars;
   closeIcon = faTimes;
   sideMenu: Boolean = false;
+  aboutUsLink = routes.paths.frontend.aboutus.root;
+  faqLink = routes.paths.frontend.faq.root;
+  contactLink = routes.paths.frontend.faq.root;
+  contactFragment = routes.paths.frontend.faq.contact;
+  loginLink = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
 
   constructor(
     private translateService: TranslateService,

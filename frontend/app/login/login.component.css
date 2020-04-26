@@ -1,0 +1,37 @@
+.login .row{
+    width: 100%;
+}
+
+.login button {
+    width: 100%;
+}
+
+.login .forgot {
+    color: #8a9ca6;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.login {
+    margin-bottom: 200px;
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+.email mat-form-field, .password mat-form-field {
+    width: 100%;
+}
+
+@media only screen and (max-width: 770px) { 
+    .forgot-row {
+        margin-top: -10px;
+        margin-bottom: 20px !important;
+        text-align: center;
+    }
+
+    .myMatInput input{
+        text-align: center;
+    }
+}
