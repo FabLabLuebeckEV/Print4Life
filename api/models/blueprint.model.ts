@@ -23,6 +23,14 @@ export const blueprintSchema = new Schema({
     type: String,
     required: true
   },
+  costs: {
+    type: Number,
+    required: true
+  },
+  productionTimeMinutes: {
+    type: Number,
+    required: true
+  },
   materials: [materialSchema]
 });
 
