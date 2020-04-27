@@ -245,7 +245,7 @@ export class NavigationComponent implements OnInit {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.user = await this.userService.getUser();
       this.userIsAdmin = await this.userService.isAdmin();
-      if (this.user.role.role === 'Maker') {
+      if (this.user.role.role === 'editor') {
         this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`]);
       } else {
         this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`]);
