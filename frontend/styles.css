@@ -5,12 +5,6 @@
     /* green */
 }
 
-.ng-invalid:not(form),
-.ng-invalid:not(form).ng-valid {
-    border-left: 10px solid #a94442;
-    /* red */
-}
-
 .right {
     text-align: right;
 }
@@ -233,6 +227,10 @@ body .mat-form-field:not(.mat-focused) mat-label {
 
 .mat-form-field .mat-form-field-wrapper {
     padding-bottom: 0px;
+}
+
+.mat-form-field.mat-form-field-invalid .mat-form-field-outline > div {
+    border-color: #DF5A49;
 }
 
 @media only screen and (max-width: 1150px) {

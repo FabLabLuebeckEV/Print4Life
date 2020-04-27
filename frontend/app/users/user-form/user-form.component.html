@@ -10,7 +10,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Nachname*</mat-label>
-        <input type="password" matInput [(ngModel)]="user.lastname">
+        <input matInput [(ngModel)]="user.lastname">
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -18,9 +18,10 @@
         <input type="password" matInput [(ngModel)]="user.password">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline"  [ngClass]="{'ng-invalid': user.password !== user.passwordValidation && this.dirty}">
         <mat-label>Passwort wiederholen*</mat-label>
-        <input matInput [(ngModel)]="user.passwordValidation">
+        <input type="password" matInput [errorStateMatcher]="passwordErrorStateMatcher"
+          [(ngModel)]="user.passwordValidation">
       </mat-form-field>
 
       <mat-form-field appearance="outline">

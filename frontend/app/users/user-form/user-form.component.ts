@@ -14,6 +14,8 @@ import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 
 import { TranslationModel } from '../../models/translation.model';
+import { ErrorStateMatcher } from '@angular/material';
+import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 
 interface Dropdown {
   name: String;
@@ -41,6 +43,8 @@ export class UserFormComponent implements OnInit {
   loggedInUser: User;
 
   type: String;
+
+  passwordErrorStateMatcher = new PasswordErrorStateMatcher(this);
 
   address: Address = new Address(undefined, undefined, undefined, undefined);
   role: Role = new Role('user'); // default on register is user
@@ -98,6 +102,10 @@ export class UserFormComponent implements OnInit {
 
   public register() {
     console.log('user is now: ', this.user);
+
+    this.userService.createUser(this.user).then(event => {
+      console.log('register user event: ', event);
+    });
   }
 
   async ngOnInit() {
@@ -106,6 +114,7 @@ export class UserFormComponent implements OnInit {
     await this._loadLanguages();
     this.loggedInUser = await this.userService.getUser();
     if (this.profileView) {
+      console.log('profile view');
       this.user = this.loggedInUser;
       if (!this.user.hasOwnProperty('address')) {
         this.user.address = new Address('', '', '', '');
@@ -235,19 +244,24 @@ export class UserFormComponent implements OnInit {
         this.user.address = this.user.hasOwnProperty('address') ? this.user.address : this.address;
         this.user.role = this.user.hasOwnProperty('role') ? this.user.role : this.role;
         this.user.preferredLanguage = this.user.hasOwnProperty('preferredLanguage') ? this.user.preferredLanguage : this.preferredLanguage;
+        console.log('found user ', this.user);
       } catch (err) {
-        if (this.type === 'maker') {
-          this.address = new Address('NA', '', 'NA', '');
-          this.user = new User(
-            undefined, undefined, undefined, undefined,
-            undefined, undefined, undefined, this.address,
-            {role: 'editor'}, this.preferredLanguage, false, undefined, undefined);
-        } else {
-          this.user = new User(
-            undefined, undefined, undefined, undefined,
-            undefined, undefined, undefined, this.address,
-            {role: 'user'}, this.preferredLanguage, false, undefined, undefined);
-        }
+        
+      }
+    } else {
+      if (this.type === 'maker') {
+        console.log('initializing maker');
+        this.address = new Address('NA', '', '', 'NA');
+        this.user = new User(
+          undefined, undefined, undefined, undefined,
+          undefined, undefined, undefined, this.address,
+          {role: 'editor'}, this.preferredLanguage, false, undefined, undefined);
+      } else {
+        console.log('initializing klinik');
+        this.user = new User(
+          undefined, undefined, undefined, undefined,
+          undefined, undefined, undefined, this.address,
+          {role: 'user'}, this.preferredLanguage, false, undefined, undefined);
       }
     }
   }
@@ -393,5 +407,16 @@ export class UserFormComponent implements OnInit {
         this.translationFields.title = translations['userForm'].editTitle;
       }
     }));
+  }
+}
+
+export class PasswordErrorStateMatcher implements ErrorStateMatcher {
+  constructor(private userFormComponent: UserFormComponent) {
+
+  }
+  isErrorState(control: FormControl | null,
+      form: FormGroupDirective | NgForm | null): boolean {
+
+    return control.touched && this.userFormComponent.user.password !== this.userFormComponent.user.passwordValidation;
   }
 }
