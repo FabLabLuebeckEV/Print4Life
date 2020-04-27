@@ -4,3 +4,39 @@
     width: 100%;
 }
 
+h1 {
+    margin-bottom: 40px;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.address, .submit {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.address div:nth-child(1) {
+    padding-right: 10px;
+}
+
+.address div:nth-child(2) {
+    padding-left: 10px;
+}
+
+.submit div:nth-child(2) {
+    text-align: right;
+}
+
+.submit {
+    margin-top: 20px;
+}
+
+.grid {
+    margin-bottom: 50px;
+}
+
+.required {
+    color: #c0cacf;
+}

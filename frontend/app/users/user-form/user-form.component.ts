@@ -89,11 +89,15 @@ export class UserFormComponent implements OnInit {
       }
       if (params.type) {
         this.type = params.type;
-        if (this.user && this.type === 'Maker') {
+        if (this.user && this.type === 'maker') {
           this.user.role.role = 'editor';
         }
       }
     });
+  }
+
+  public register() {
+    console.log('user is now: ', this.user);
   }
 
   async ngOnInit() {
@@ -115,6 +119,8 @@ export class UserFormComponent implements OnInit {
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
     });
+
+    console.log('user is: ', this.user);
   }
 
   onSubmit() {
@@ -230,7 +236,7 @@ export class UserFormComponent implements OnInit {
         this.user.role = this.user.hasOwnProperty('role') ? this.user.role : this.role;
         this.user.preferredLanguage = this.user.hasOwnProperty('preferredLanguage') ? this.user.preferredLanguage : this.preferredLanguage;
       } catch (err) {
-        if (this.type === 'Maker') {
+        if (this.type === 'maker') {
           this.address = new Address('NA', '', 'NA', '');
           this.user = new User(
             undefined, undefined, undefined, undefined,
