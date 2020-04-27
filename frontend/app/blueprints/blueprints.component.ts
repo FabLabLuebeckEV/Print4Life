@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { BlueprintService } from '../services/blueprint.service';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import { routes } from '../config/routes';
+
 @Component({
   selector: 'app-blueprints',
   templateUrl: './blueprints.component.html',
@@ -11,6 +13,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class BlueprintsComponent implements OnInit {
 
   blueprints: Array<any>;
+  createOrderLink = '/' + routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.create;
 
   constructor(
     private blueprintService: BlueprintService,

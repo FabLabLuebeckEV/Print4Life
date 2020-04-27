@@ -31,7 +31,8 @@
                     {{blueprint.costs}} €
                 </div>
                 
-                <button mat-raised-button color="secondary">Auftrag anlegen</button>
+                <button mat-raised-button color="accent" [routerLink]="[createOrderLink]" 
+                    [queryParams]="{blueprint: blueprint._id}">Auftrag anlegen</button>
             </div>
         </div>
     </div>
