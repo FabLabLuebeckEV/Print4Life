@@ -81,7 +81,7 @@ export const appRoutes: Routes = [
         ]
     },
     {
-        path: `${routes.paths.frontend.blueprints.root}/${routes.paths.frontend.blueprints.list}`, 
+        path: `${routes.paths.frontend.blueprints.root}/${routes.paths.frontend.blueprints.list}`,
         component: BlueprintsComponent,
         runGuardsAndResolvers: 'always',
     },
