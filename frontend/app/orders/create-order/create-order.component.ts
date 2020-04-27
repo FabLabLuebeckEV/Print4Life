@@ -6,6 +6,8 @@ import { UserService } from 'frontend/app/services/user.service';
 import { Order } from 'frontend/app/models/order.model';
 import { Address } from 'frontend/app/models/address.model';
 import { OrderService } from 'frontend/app/services/order.service';
+import { ModalService } from 'frontend/app/services/modal.service';
+import { ModalButton } from 'frontend/app/helper/modal.button';
 
 
 @Component({
@@ -44,12 +46,18 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   blueprint: any;
   loggedInUser: any;
 
+  agb = false;
+  company = false;
+
+  checkboxLabel = false;
+
   constructor(
     private route: ActivatedRoute,
     private blueprintService: BlueprintService,
     private domSanitizer: DomSanitizer,
     private userService: UserService,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private modalService: ModalService
   ) {
 
   }
@@ -75,7 +83,20 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
   }
 
   createOrder() {
-    console.log(this.order);
-    this.orderService.createOrder(this.order);
+    if (this.agb && this.company) {
+      console.log(this.order);
+      this.orderService.createOrder(this.order).then(event => {
+        const okButton = new ModalButton('Ok', 'neutral', 'Ok');
+        const modalRef = this.modalService.openMsgModal('Bestellung erfolgreich angelegt', 'modal-header', [
+          'Vielen Dank für Deine Bestellung',
+          'Überprüfe den Status gern unter \'Meine Aufträge\''
+        ], okButton, undefined);
+
+        modalRef.result.then(() => {
+        });
+      });
+    } else {
+      this.checkboxLabel = true;
+    }
   }
 }

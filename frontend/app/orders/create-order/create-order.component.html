@@ -19,11 +19,14 @@
         *Pflichtfeld
       </div>
       <div class="legals indent-left-half">
+        <div class="klinik text-small" *ngIf="checkboxLabel">
+          Bitte bestätige die Hinweisfelder
+        </div>
         <div class="agb">
-          <mat-checkbox class="wrap">Ja, ich stimme den <a>AGB</a> von print4life zu.</mat-checkbox>
+          <mat-checkbox class="wrap" [(ngModel)]="agb">Ja, ich stimme den <a>AGB</a> von print4life zu.</mat-checkbox>
         </div>
         <div class="company">
-          <mat-checkbox class="wrap">Hiermit bestätige ich, dass ich für ein Unternehmen, Institut, eine öffentliche Einrichtung oder einen Verein bestelle.</mat-checkbox>
+          <mat-checkbox class="wrap" [(ngModel)]="company">Hiermit bestätige ich, dass ich für ein Unternehmen, Institut, eine öffentliche Einrichtung oder einen Verein bestelle.</mat-checkbox>
         </div>
         Ich nehme die <a>Datenschutzerklärung</a> von print4life zur Kenntnis.
         <br>

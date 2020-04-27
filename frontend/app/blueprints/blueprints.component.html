@@ -28,9 +28,9 @@
                     Fertigungskosten pro Stück:
                 </div>
                 <div class="cost klinik">
-                    {{blueprint.costs}} €
+                    {{blueprint.costs | number:'1.2-2'}} €
                 </div>
-                
+
                 <button mat-raised-button color="accent" [routerLink]="[createOrderLink]" 
                     [queryParams]="{blueprint: blueprint._id}">Auftrag anlegen</button>
             </div>

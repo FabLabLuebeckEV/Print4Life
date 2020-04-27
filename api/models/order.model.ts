@@ -100,6 +100,10 @@ const attributes = {
     minlength: 24,
     maxlength: 24
   },
+  thankyouText: {
+    type: String,
+    required: true
+  }
 };
 
 export const orderSchema = mongoose.Schema(attributes);
