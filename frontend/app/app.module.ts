@@ -61,7 +61,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component';
 import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component';
 
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatCheckboxModule } from '@angular/material';
 
 import { ChartsModule } from 'ng2-charts';
 import { FaqComponent } from './faq/faq.component';
@@ -116,6 +116,7 @@ import { BlueprintsComponent } from './blueprints/blueprints.component';
         FlexLayoutModule,
         MatProgressSpinnerModule,
         MatButtonModule,
+        MatCheckboxModule,
         ReactiveFormsModule,
         BrowserModule,
         NgxSpinnerModule,
