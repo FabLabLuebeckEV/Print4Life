@@ -147,7 +147,7 @@ body a {
 }
 body .mat-button-base {
     font-family: "Roboto Condensed", "Helvetica Neue", sans-serif;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 20px;
     line-height: 32px;
 }
@@ -198,6 +198,37 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
 
 .grid .indent-right-half {
     padding-right: 29px;
+}
+
+mat-checkbox.wrap .mat-checkbox-label {
+    white-space: normal;
+}
+
+mat-checkbox.wrap .mat-checkbox-inner-container {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+mat-checkbox .mat-checkbox-frame {
+    border-width: 1px;
+    border-radius: 3px;
+}
+
+mat-checkbox .mat-checkbox-inner-container {
+    width: 24px;
+    height: 24px;
+}
+
+mat-checkbox .mat-checkbox-layout {
+    display: inline-flex;
+}
+
+mat-checkbox .mat-checkbox-layout .mat-checkbox-label {
+    line-height: 32px;
+}
+
+.mat-form-field .mat-form-field-wrapper {
+    padding-bottom: 0px;
 }
 
 @media only screen and (max-width: 1150px) {
