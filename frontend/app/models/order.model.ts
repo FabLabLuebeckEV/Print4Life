@@ -31,6 +31,8 @@ export class Order {
         public shared: Boolean,
         public fileCopyright: Boolean,
         public token: String,
+        public thankyouText: String,
+        public blueprintId: String,
         public batch: {
                 number: number
                 accepted: Array<any>,

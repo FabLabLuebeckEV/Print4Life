@@ -6,8 +6,7 @@ import fileSchema from './file.model';
 const attributes = {
   comments: [commentSchema],
   fablabId: {
-    type: String,
-    required: true
+    type: String
   },
   projectname: {
     type: String,
@@ -49,7 +48,6 @@ const attributes = {
   machine: {
     type: {
       type: String,
-      required: true
     },
     _id: {
       type: String
