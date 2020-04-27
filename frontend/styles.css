@@ -227,6 +227,10 @@ mat-checkbox .mat-checkbox-layout .mat-checkbox-label {
     line-height: 32px;
 }
 
+body .mat-form-field:not(.mat-focused) mat-label {
+    color: #c0cacf;
+}
+
 .mat-form-field .mat-form-field-wrapper {
     padding-bottom: 0px;
 }
@@ -440,6 +444,10 @@ body .modal-body {
     border-color: #45B29D;
     background-color: white;
     box-shadow: none;
+}
+
+body mat-form-field .mat-form-field-outline > div {
+    border-width: 2px !important;
 }
 
 .inputButtonCombi mat-form-field .mat-form-field-underline {
