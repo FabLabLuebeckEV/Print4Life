@@ -102,7 +102,7 @@ export class UserFormComponent implements OnInit {
 
   public register() {
     this.userService.createUser(this.user).then(event => {
-      console.log('register user event: ', event);
+      this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}/${this.type}/${routes.paths.frontend.users.thankyou}`]);
     });
   }
 
