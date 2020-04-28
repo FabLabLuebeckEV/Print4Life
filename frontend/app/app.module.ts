@@ -70,6 +70,8 @@ import { LoginComponent } from './login/login.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BlueprintsComponent } from './blueprints/blueprints.component';
 
+import { UserSignupConfirmationComponent } from './users/user-signup-confirmation/user-signup-confirmation.component';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -95,6 +97,7 @@ import { BlueprintsComponent } from './blueprints/blueprints.component';
         InputModalComponent,
         ChangePasswdModalComponent,
         UserDetailComponent,
+        UserSignupConfirmationComponent,
         UploadComponent,
         IotDeviceListComponent,
         IotDeviceFormComponent,

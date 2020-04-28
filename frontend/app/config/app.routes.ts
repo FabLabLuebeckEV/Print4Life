@@ -30,6 +30,8 @@ import { LoginComponent } from '../login/login.component';
 import { AcceptedOrdersComponent } from '../orders/accepted-orders/accepted-orders.component';
 import { BlueprintsComponent } from '../blueprints/blueprints.component';
 
+import { UserSignupConfirmationComponent } from '../users/user-signup-confirmation/user-signup-confirmation.component';
+
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(private userService: UserService, private errorService: ErrorService) { }
@@ -157,6 +159,7 @@ export const appRoutes: Routes = [
         children: [
             { path: routes.paths.frontend.users.activate + '/:id', component: UserActivationComponent },
             { path: routes.paths.frontend.users.signup + '/:type', component: UserFormComponent },
+            { path: routes.paths.frontend.users.signup + '/:type/thankyou', component: UserSignupConfirmationComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent, },
             { path: routes.paths.frontend.users.profile, component: UserFormComponent },
             { path: routes.paths.frontend.users.login, component: LoginComponent},

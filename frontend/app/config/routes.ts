@@ -90,6 +90,7 @@ export const routes = {
             users: {
                 root: 'users',
                 signup: 'signup',
+                thankyou: 'thankyou',
                 login: 'login',
                 update: 'edit',
                 list: 'list',

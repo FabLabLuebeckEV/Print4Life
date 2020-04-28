@@ -101,8 +101,6 @@ export class UserFormComponent implements OnInit {
   }
 
   public register() {
-    console.log('user is now: ', this.user);
-
     this.userService.createUser(this.user).then(event => {
       console.log('register user event: ', event);
     });
