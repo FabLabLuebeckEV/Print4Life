@@ -246,7 +246,7 @@ export class UserFormComponent implements OnInit {
         this.user.preferredLanguage = this.user.hasOwnProperty('preferredLanguage') ? this.user.preferredLanguage : this.preferredLanguage;
         console.log('found user ', this.user);
       } catch (err) {
-        
+
       }
     } else {
       if (this.type === 'maker') {

@@ -113,12 +113,12 @@ export class UserService implements ModelService {
   }
 
   /**
-     * This method gets a user by its username
-     * @param username the username to search for
+     * This method gets a user by its email
+     * @param email the email to search for
      * @returns a promise with the result
      */
-  public async getUserByUsername (username) {
-    return User.findOne({ username });
+  public async getUserByEmail (email) {
+    return User.findOne({ email });
   }
 
   /**

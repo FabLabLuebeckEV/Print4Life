@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
     translationFields: TranslationModel.LoginModal;
 
     loginData = {
-        username : '',
-        password: ''
+      email : '',
+      password: ''
     };
 
     constructor (
