@@ -10,8 +10,8 @@ export const environment = {
   upload: {
     maxSize: 1024 * 1024 * 20 // 20 MiB
   },
-  backendUrl: 'https://print4life.fablab-luebeck.de:3000/api/v1',
-  frontendUrl: 'https://print4life.fablab-luebeck.de',
+  backendUrl: 'https://print4.life:3000/api/v1',
+  frontendUrl: 'https://print4.life',
   production: true,
   env: RUN_ENV.PROD
 };
