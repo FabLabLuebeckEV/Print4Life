@@ -51,7 +51,7 @@ export class UserFormComponent implements OnInit {
 
   address: Address = new Address(undefined, undefined, undefined, undefined);
   role: Role = new Role('user'); // default on register is user
-  preferredLanguage = new Language('en'); // default en/english
+  preferredLanguage = new Language('de'); // default de/german
   user: User = new User(
     undefined, undefined, undefined, undefined,
     undefined, undefined, undefined, this.address,
