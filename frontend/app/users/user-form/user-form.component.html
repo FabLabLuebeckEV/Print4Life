@@ -62,63 +62,63 @@
   <div class="col-12 col-lg-6 indent-right">
     <h1>Als Suchende*r registrieren:</h1>
     <div class="indent-left">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" color="accent">
         <mat-label>Vorname*</mat-label>
         <input matInput [(ngModel)]="user.firstname">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" color="accent">
         <mat-label>Nachname*</mat-label>
         <input matInput [(ngModel)]="user.lastname">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" color="accent">
         <mat-label>Passwort*</mat-label>
         <input type="password" matInput [(ngModel)]="user.password">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" color="accent">
         <mat-label>Passwort wiederholen*</mat-label>
         <input type="password" matInput [errorStateMatcher]="passwordErrorStateMatcher"
           [(ngModel)]="user.passwordValidation">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" color="accent">
         <mat-label>E-Mail-Adresse*</mat-label>
         <input matInput [(ngModel)]="user.email">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" color="accent">
         <mat-label>Telefonnummer*</mat-label>
         <input matInput [(ngModel)]="hospital.phone">
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" color="accent">
         <mat-label>Name der Klinik/Arztpraxis/...*</mat-label>
         <input matInput [(ngModel)]="hospital.name">
       </mat-form-field>
       
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" color="accent">
         <mat-label>Straße und Hausnummer der Einrichtung*</mat-label>
         <input matInput [(ngModel)]="hospital.address.street">
       </mat-form-field>
 
       <div class="address">
         <div class="col-6">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" color="accent">
             <mat-label>PLZ der Einrichtung*</mat-label>
             <input matInput [(ngModel)]="hospital.address.zipCode">
           </mat-form-field>
         </div>
         <div class="col-6">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" color="accent">
             <mat-label>Stadt der Einrichtung*</mat-label>
             <input matInput [(ngModel)]="hospital.address.city">
           </mat-form-field>
         </div>
       </div>
 
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" color="accent">
         <mat-label>Kliniknummer*</mat-label>
         <input matInput [(ngModel)]="hospital.hospitalNumber">
       </mat-form-field>
@@ -130,7 +130,7 @@
           </span>
         </div>
         <div class="col-6">
-          <button mat-raised-button color="primary" (click)="register()">Jetzt registrieren</button>
+          <button mat-raised-button color="accent" (click)="register()">Jetzt registrieren</button>
         </div>
       </div>
     </div>
