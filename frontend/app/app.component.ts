@@ -6,6 +6,8 @@ import { ConfigService } from './config/config.service';
 import { LanguageService } from './services/language.service';
 import { faTwitter, faFacebook, faGithub} from '@fortawesome/free-brands-svg-icons';
 
+
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -20,6 +22,10 @@ export class AppComponent {
     twitterIcon = faTwitter;
     facebookIcon = faFacebook;
     githubIcon = faGithub;
+
+    legalNoticeRoute = `/${routes.paths.frontend.legal_notice.root}`;
+    privacyRoute = `/${routes.paths.frontend.privacy.root}`;
+
     constructor(private translateService: TranslateService, private http: HttpClient,
             private configService: ConfigService, private languageService: LanguageService) {
         this.config = this.configService.getConfig();
