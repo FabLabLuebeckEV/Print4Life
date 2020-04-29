@@ -63,6 +63,7 @@ import { LoginComponent } from './login/login.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import { LegalNoticeComponent } from './legal-notice/legal-notice.component';
 
 @NgModule({
     declarations: [
@@ -99,7 +100,8 @@ import { MatFormFieldModule, MatInputModule } from '@angular/material';
         FablabListComponent,
         FaqComponent,
         LoginComponent,
-        PrivacyComponent
+        PrivacyComponent,
+        LegalNoticeComponent
     ],
     imports: [
         MatFormFieldModule,

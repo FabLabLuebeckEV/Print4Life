@@ -26,6 +26,7 @@ import { FaqComponent } from '../faq/faq.component';
 import { PrivacyComponent } from '../privacy/privacy.component';
 
 import { LoginComponent } from '../login/login.component';
+import { LegalNoticeComponent } from '../legal-notice/legal-notice.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -130,6 +131,11 @@ export const appRoutes: Routes = [
     {
         path: `${routes.paths.frontend.privacy.root}`,
         component: PrivacyComponent,
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: `${routes.paths.frontend.legal_notice.root}`,
+        component: LegalNoticeComponent,
         runGuardsAndResolvers: 'always'
     },
     {
