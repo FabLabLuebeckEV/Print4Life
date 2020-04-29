@@ -25,7 +25,7 @@ describe('OrderDetailComponent', () => {
       ],
       providers: [TranslateService],
       imports: [
-        NgbModule.forRoot(),
+        NgbModule,
         HttpClientTestingModule,
         RouterTestingModule,
         FontAwesomeModule,

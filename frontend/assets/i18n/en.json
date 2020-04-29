@@ -128,7 +128,13 @@
             "login": "Login",
             "profile": "Show User Profile",
             "listUsers": "List Users"
-        }
+        },
+        "fablabs": {
+                "title": "Fablab",
+                "signUp": "Register Fablab",
+                "profile": "Show Fablab Profile",
+                "listFablabs": "List Fablabs"
+            }
     },
     "deviceTypes": {
         "lasercutter": "Lasercutter",
@@ -462,7 +468,10 @@
             "startDate": "Start Date",
             "endDate": "End Date",
             "copyright": "Are you the owner of the files and have their copyright?",
-            "fablab": "Fablab"
+            "fablab": "Fablab",
+            "batchTitle": "Copy count",
+            "batchDescription": "Do you want multiple copies to be manufactured?",
+            "batchNumber": "Requested amount:"
         },
         "modals": {
             "ok": "Ok",
@@ -553,7 +562,14 @@
             "file": "File",
             "addressTitle": "Shippingaddress",
             "latestVersion": "Latest Version",
-            "scheduledFor": "Scheduled for"
+            "scheduledFor": "Scheduled for",
+            "batched": "Production status",
+            "batchAssigned": "Assigned",
+            "batchOpen": "Open",
+            "batchFinished": "Finished",
+            "imanufacture": "I will manufacture",
+            "count": "pieces",
+            "helpnow": "Support now"
         },
         "modals": {
             "ok": "Yes",
@@ -569,7 +585,11 @@
             "printHeader": "Start Printjob",
             "addressLabel": "Octoprint URL",
             "apiKeyLabel": "Octoprint API Key",
-            "fileSelectLabel": "Print File"
+            "fileSelectLabel": "Print File",
+            "batchOrderQuestion": "Are you sure you want to sign up for manufacturing this batch?",
+            "batchOrderWarning": "The client needs these parts. Please only register, if you can deliver this batch",
+            "batchOrderAccept": "Accept",
+            "batchOrderAbort": "Reject"
         }
     },
     "userForm": {
@@ -603,7 +623,7 @@
             "updatePasswordSuccessHeader": "Password updated",
             "updatePasswordSuccess": "Use the new password from now on.",
             "updatePasswordErrorHeader": "Failed",
-            "updatePassworderror": "The current password was wrong"
+            "updatePasswordError": "The current password was wrong"
         },
         "messages": {
             "username": "Username is required",
@@ -625,6 +645,40 @@
             "activatedTrue": "active",
             "activatedFalse": "inactive",
             "changePassword": "change"
+        }
+    },
+    "fablabForm": {
+        "createTitle": "Register Fablab",
+        "editTitle": "Edit Fablab",
+        "labels": {
+            "name": "Name",
+            "isActivated": "Account activated",
+            "createSubmit": "Register",
+            "editSubmit": "Edit",
+            "fablab": "Fablab"
+        },
+        "modals": {
+            "ok": "Ok",
+            "okReturnValue": "Ok",
+            "createSuccessHeader": "Fablab created",
+            "updateSuccessHeader": "Fablab updated",
+            "createSuccess": "The Fablab was successfully created!",
+            "updateSuccess": "The Fablab was successfully updated!",
+            "errorHeader": "Error",
+            "updateError": "Error while trying to update the Fablab!",
+            "createError": "Error while trying to create the Fablab!"
+        },
+        "messages": {
+            "name": "Name is required",
+            "street": "Street is required",
+            "zipCode": "Zip code is required",
+            "city": "City is required",
+            "country": "Country is required",
+            "notAssigned": "Not assigned"
+        },
+        "buttons": {
+            "activatedTrue": "active",
+            "activatedFalse": "inactive"
         }
     },
     "tableComponent": {
@@ -649,7 +703,10 @@
         "Active": "Active",
         "Successful Orders": "Successful Orders",
         "Schedule Start Date": "Scheduled Start Date",
-        "Schedule End Date": "Scheduled End Date"
+        "Schedule End Date": "Scheduled End Date",
+        "Name": "Name",
+        "City": "City",
+        "FOwner": "Owner"
     },
     "loginModal": {
         "title": "Login",

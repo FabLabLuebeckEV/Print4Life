@@ -15,13 +15,15 @@ import { User } from 'frontend/app/models/user.model';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-machine-list',
   templateUrl: './machine-list.component.html',
   styleUrls: ['./machine-list.component.css']
 })
 export class MachineListComponent implements OnInit {
-  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
+  @ViewChild('spinnerContainer', { static: false }) spinnerContainerRef: ElementRef;
   private config: any;
   filter: any = {
     originMachineTypes: [], // origin for backend containing all machine types
@@ -83,30 +85,9 @@ export class MachineListComponent implements OnInit {
       }
     }
   };
-  translationFields = {
-    paginationLabel: '',
-    filterLabel: {
-      type: '',
-      search: '',
-      fablab: '',
-      activation: ''
-    },
-    spinnerLoadingText: '',
-    buttons: {
-      deleteLabel: '',
-      toggleLabel: '',
-      updateLabel: ''
-    },
-    modals: {
-      yes: '',
-      abort: '',
-      deleteValue: '',
-      abortValue: '',
-      deleteHeader: '',
-      deleteQuestion: '',
-      deleteQuestion2: ''
-    }
-  };
+
+  translationFields: TranslationModel.MachineList & TranslationModel.DeviceTypes;
+
   headers: Array<String> = [];
 
 
@@ -516,30 +497,9 @@ export class MachineListComponent implements OnInit {
         }
       });
 
-      this.translationFields = {
-        paginationLabel: translations['machineList'].paginationLabel,
-        filterLabel: {
-          type: translations['machineList'].filterLabel.type,
-          search: translations['machineList'].filterLabel.search,
-          fablab: translations['machineList'].filterLabel.fablab,
-          activation: translations['machineList'].filterLabel.activation
-        },
-        spinnerLoadingText: translations['machineList'].spinnerLoadingText,
-        buttons: {
-          deleteLabel: translations['machineList'].buttons.deleteLabel,
-          toggleLabel: translations['machineList'].buttons.toggleLabel,
-          updateLabel: translations['machineList'].buttons.updateLabel
-        },
-        modals: {
-          yes: translations['machineList'].modals.yes,
-          abort: translations['machineList'].modals.abort,
-          deleteValue: translations['machineList'].modals.deleteValue,
-          abortValue: translations['machineList'].modals.abortValue,
-          deleteHeader: translations['machineList'].modals.deleteHeader,
-          deleteQuestion: translations['machineList'].modals.deleteQuestion,
-          deleteQuestion2: translations['machineList'].modals.deleteQuestion2
-        }
-      };
+      this.translationFields = TranslationModel.translationUnroll(
+        translations
+      );
     }));
   }
 }

@@ -17,7 +17,7 @@ describe('NavigationComponent', () => {
       declarations: [NavigationComponent, DropdownComponent],
       imports: [
         RouterTestingModule,
-        NgbModule.forRoot(),
+        NgbModule,
         TranslateModule.forRoot(),
         HttpClientTestingModule],
       providers: [TranslateService]

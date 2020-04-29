@@ -12,7 +12,7 @@ describe('InputModalComponent', () => {
     TestBed.configureTestingModule({
       declarations: [InputModalComponent],
       providers: [NgbActiveModal],
-      imports: [FormsModule, NgbModule.forRoot()]
+      imports: [FormsModule, NgbModule]
     })
       .compileComponents();
   }));

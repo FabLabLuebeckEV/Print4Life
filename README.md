@@ -1,8 +1,8 @@
 # IoT FabLab Order Management
-
+[![Build Status](https://travis-ci.com/FabLabLuebeckEV/Print4Life.svg?branch=develop)](https://travis-ci.com/FabLabLuebeckEV/Print4Life)
 ## Requirements
 
-* Node > 10.6
+* Node > 12.13.1
 * MongoDB (or at least a server with it)
 	* Locally:
 	```bash

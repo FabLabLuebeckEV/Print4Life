@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { Router } from '@angular/router';
 import { ModalService } from './modal.service';
 import { ModalButton } from '../helper/modal.button';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export enum ErrorType {
   TOKEN_EXPIRED,
@@ -36,19 +37,21 @@ export interface Error {
 })
 export class ErrorService {
   isOpen = false;
-  constructor(private modalService: ModalService, private userService: UserService, private router: Router) {
+  constructor(private modalService: ModalService, private userService: UserService,
+      private router: Router, private spinner: NgxSpinnerService) {
   }
 
   public showError(err: Error) {
     let secondButton;
     let modalRef;
-    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    const okButton = new ModalButton('Ok', 'neutral', 'Ok');
+    this.spinner.hide();
     if (!this.isOpen) {
       if (err.hasOwnProperty('type') && (err.type as ErrorType === ErrorType.TOKEN_EXPIRED as ErrorType ||
         err.type as ErrorType === ErrorType.UNAUTHORIZED as ErrorType)) {
         this.userService.logout();
         this.router.navigate(['/']);
-        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger', [err.stack],
+        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header', [err.stack],
           okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then(() => {
@@ -60,13 +63,13 @@ export class ErrorService {
           secondButton = new ModalButton(activateRequestResult, 'btn btn-success', activateRequestResult);
           err.stack = err.stack ? err.stack : 'The User is deactivated. Please request an Activation!';
         }
-        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header header-danger',
+        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header',
           [err.stack], okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then((result) => {
           if (result === activateRequestResult) {
             this.userService.claimActivation(err.data.userId).then(() => {
-              this.modalService.openMsgModal(`Activation Request sent!`, 'modal-header header-success',
+              this.modalService.openMsgModal(`Activation Request sent!`, 'modal-header',
                 ['An Admin was informed that you wish an activation of your user account!'], okButton, undefined);
             });
           }

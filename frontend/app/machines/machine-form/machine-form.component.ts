@@ -8,6 +8,8 @@ import { ConfigService } from '../../config/config.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from '../../services/modal.service';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-machine-form',
   templateUrl: './machine-form.component.html',
@@ -26,51 +28,19 @@ export class MachineFormComponent implements OnInit {
   loadingFablabs: Boolean;
   loadingMaterials: Boolean;
   loadingLaserTypes: Boolean;
-  translationFields = {
-    title: '',
-    shownMachineTypes: [],
-    shownType: '',
-    generalData: '',
-    labels: {
-      submit: '',
-      deviceName: '',
-      fablab: '',
-      manufacturer: '',
-      data: '',
-      camSoftware: '',
-      nozzleDiameter: '',
-      materials: '',
-      printVolume: '',
-      printResolution: '',
-      numberOfExtruders: '',
-      comment: '',
-      movementSpeed: '',
-      stepSize: '',
-      workspace: '',
-      laserTypes: '',
-      laserPower: '',
-      maxResolution: '',
-      typeOfMachine: '',
-      isActivated: '',
-      informationLink: ''
+
+  translationFields: TranslationModel.MachineForm & TranslationModel.DeviceTypes & {
+    modals?: {
+      successHeader?: String,
+      successMessage?: String,
+      errorMessage?: String
     },
-    buttons: {
-      activatedTrue: '',
-      activatedFalse: ''
+    labels?: {
+      submit?: String
     },
-    modals: {
-      ok: '',
-      error: '',
-      successHeader: '',
-      successMessage: '',
-      errorMessage: ''
-    },
-    messages: {
-      deviceName: '',
-      fablab: '',
-      manufacturer: '',
-      typeOfMachine: ''
-    }
+    shownType?: String,
+    title?: String,
+    shownMachineTypes?: Array<String>
   };
 
   constructor(
@@ -170,20 +140,22 @@ export class MachineFormComponent implements OnInit {
   }
 
   private _selectType(type) {
-    this.translationFields.shownType = type;
-    this.translateService.get(['deviceTypes']).subscribe((translations => {
-      this.machineTypes.forEach((machineType) => {
-        const type = translations['deviceTypes'][`${this.machineService.camelCaseTypes(machineType)}`];
-        if (type) {
-          if (this.translationFields.shownType === type) {
-            this.selectedType = machineType;
+    if (typeof this.translationFields !== 'undefined') {
+      this.translationFields.shownType = type;
+      this.translateService.get(['deviceTypes']).subscribe((translations => {
+        this.machineTypes.forEach((machineType) => {
+          const type = translations['deviceTypes'][`${this.machineService.camelCaseTypes(machineType)}`];
+          if (type) {
+            if (this.translationFields.shownType === type) {
+              this.selectedType = machineType;
+            }
           }
-        }
-      });
-    }));
-    this.model = this._initModel(this.selectedType);
-    this.loadingMaterials = true;
-    this._loadMaterials(this.selectedType);
+        });
+      }));
+      this.model = this._initModel(this.selectedType);
+      this.loadingMaterials = true;
+      this._loadMaterials(this.selectedType);
+    }
   }
 
   private async _loadMachineTypes() {
@@ -237,56 +209,26 @@ export class MachineFormComponent implements OnInit {
           shownMachineTypes.push(translated);
         }
       });
-      this.translationFields = {
-        title: this.editView ? translations['machineForm'].editTitle : translations['machineForm'].createTitle,
-        shownMachineTypes: shownMachineTypes,
-        shownType: translations['deviceTypes'][`${this.machineService.camelCaseTypes(this.selectedType)}`],
-        generalData: translations['machineForm'].generalData,
-        modals: {
-          ok: translations['machineForm'].modals.ok,
-          error: translations['machineForm'].modals.error,
-          successHeader: this.editView
-            ? translations['machineForm'].modals.updatingSuccessHeader
-            : translations['machineForm'].modals.creatingSuccessHeader,
-          successMessage: this.editView
-            ? translations['machineForm'].modals.updatingSuccessMsg
-            : translations['machineForm'].modals.creatingSuccessMsg,
-          errorMessage: this.editView ? translations['machineForm'].modals.updatingError : ''
-        },
-        buttons: {
-          activatedTrue: translations['machineForm'].buttons.activatedTrue,
-          activatedFalse: translations['machineForm'].buttons.activatedFalse
-        },
-        labels: {
-          submit: this.editView ? translations['machineForm'].labels.edit : translations['machineForm'].labels.create,
-          deviceName: translations['machineForm'].labels.deviceName,
-          fablab: translations['machineForm'].labels.fablab,
-          manufacturer: translations['machineForm'].labels.manufacturer,
-          data: translations['machineForm'].labels.data,
-          camSoftware: translations['machineForm'].labels.camSoftware,
-          nozzleDiameter: translations['machineForm'].labels.nozzleDiameter,
-          materials: translations['machineForm'].labels.materials,
-          printVolume: translations['machineForm'].labels.printVolume,
-          printResolution: translations['machineForm'].labels.printResolution,
-          numberOfExtruders: translations['machineForm'].labels.numberOfExtruders,
-          comment: translations['machineForm'].labels.comment,
-          movementSpeed: translations['machineForm'].labels.movementSpeed,
-          stepSize: translations['machineForm'].labels.stepSize,
-          workspace: translations['machineForm'].labels.workspace,
-          laserTypes: translations['machineForm'].labels.laserTypes,
-          laserPower: translations['machineForm'].labels.laserPower,
-          maxResolution: translations['machineForm'].labels.maxResolution,
-          typeOfMachine: translations['machineForm'].labels.typeOfMachine,
-          isActivated: translations['machineForm'].labels.isActivated,
-          informationLink: translations['machineForm'].labels.informationLink
-        },
-        messages: {
-          deviceName: translations['machineForm'].messages.deviceName,
-          fablab: translations['machineForm'].messages.fablab,
-          manufacturer: translations['machineForm'].messages.manufacturer,
-          typeOfMachine: translations['machineForm'].messages.typeOfMachine,
-        }
-      };
+      this.translationFields = TranslationModel.translationUnroll(
+        translations,
+        {zw: {
+          title: this.editView ? translations['machineForm'].editTitle : translations['machineForm'].createTitle,
+          shownMachineTypes: shownMachineTypes,
+          shownType: translations['deviceTypes'][`${this.machineService.camelCaseTypes(this.selectedType)}`],
+          modals: {
+            successHeader: this.editView
+              ? translations['machineForm'].modals.updatingSuccessHeader
+              : translations['machineForm'].modals.creatingSuccessHeader,
+            successMessage: this.editView
+              ? translations['machineForm'].modals.updatingSuccessMsg
+              : translations['machineForm'].modals.creatingSuccessMsg,
+            errorMessage: this.editView ? translations['machineForm'].modals.updatingError : ''
+          },
+          labels: {
+            submit: this.editView ? translations['machineForm'].labels.edit : translations['machineForm'].labels.create,
+          }
+        }}
+      );
     }));
   }
 

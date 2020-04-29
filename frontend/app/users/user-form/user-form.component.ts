@@ -13,6 +13,8 @@ import { ChangePasswdModalComponent } from '../change-passwd-modal/change-passwd
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 
+import { TranslationModel } from '../../models/translation.model';
+
 interface Dropdown {
   name: String;
   elements: Array<Object>;
@@ -45,62 +47,22 @@ export class UserFormComponent implements OnInit {
     undefined, undefined, undefined, undefined,
     undefined, undefined, undefined, this.address,
     this.role, this.preferredLanguage, false, undefined, undefined);
-  translationFields = {
-    title: '',
-    shownRoles: [],
-    shownLanguages: [],
-    labels: {
-      username: '',
-      firstName: '',
-      secondName: '',
-      password: '',
-      passwordValidation: '',
-      email: '',
-      role: '',
-      isActivated: '',
-      street: '',
-      zipCode: '',
-      city: '',
-      country: '',
-      submit: '',
-      fablab: '',
-      changePassword: '',
-      preferredLanguage: ''
-    },
-    modals: {
-      ok: '',
-      okReturnValue: '',
-      successHeader: '',
-      successMessage: '',
-      errorHeader: '',
-      errorMessage: '',
-      updatePasswordSuccessHeader: '',
-      updatePasswordSuccess: '',
-      updatePasswordErrorHeader: '',
-      updatePasswordError: ''
-    },
-    messages: {
-      username: '',
-      firstName: '',
-      secondName: '',
-      password: '',
-      passwordValidation: '',
-      passwordValidationWrong: '',
-      email: '',
-      role: '',
-      street: '',
-      zipCode: '',
-      city: '',
-      country: '',
-      notAssigned: '',
-      preferredLanguage: ''
-    },
-    buttons: {
-      activatedTrue: '',
-      activatedFalse: '',
-      changePassword: ''
-    }
-  };
+
+  translationFields: TranslationModel.UserForm & TranslationModel.Roles &
+    TranslationModel.Languages & TranslationModel.Address &
+    {
+      title?: String,
+      shownRoles?: Array<String>,
+      shownLanguages?: Array<String>,
+      modals?: {
+        successHeader?: String,
+        successMessage?: String,
+        errorMessage?: String,
+      },
+      labels?: {
+        submit?: String
+      }
+    };
 
   constructor(
     private userService: UserService,
@@ -374,72 +336,34 @@ export class UserFormComponent implements OnInit {
         });
       }
 
-      this.translationFields = {
-        title: !this.editView && !this.profileView
+
+      this.translationFields = TranslationModel.translationUnroll(
+        translations,
+        {zw: {
+          title: !this.editView && !this.profileView
           ? translations['userForm'].createTitle
           : translations['userForm'].editTitle,
-        shownRoles: shownRoles,
-        shownLanguages: shownLanguages,
-        labels: {
-          username: translations['userForm'].labels.username,
-          firstName: translations['userForm'].labels.firstName,
-          secondName: translations['userForm'].labels.secondName,
-          password: translations['userForm'].labels.password,
-          passwordValidation: translations['userForm'].labels.passwordValidation,
-          email: translations['userForm'].labels.email,
-          role: translations['userForm'].labels.role,
-          isActivated: translations['userForm'].labels.isActivated,
-          street: translations['address'].street,
-          zipCode: translations['address'].zipCode,
-          city: translations['address'].city,
-          country: translations['address'].country,
-          submit: !this.editView && !this.profileView
-            ? translations['userForm'].labels.createSubmit
-            : translations['userForm'].labels.editSubmit,
-          fablab: translations['userForm'].labels.fablab,
-          changePassword: translations['userForm'].labels.changePassword,
-          preferredLanguage: translations['userForm'].labels.preferredLanguage
-        },
-        modals: {
-          ok: translations['userForm'].modals.ok,
-          okReturnValue: translations['userForm'].modals.okReturnValue,
-          successHeader: this.editView || this.profileView
-            ? translations['userForm'].modals.updateSuccessHeader
-            : translations['userForm'].modals.createSuccessHeader,
-          successMessage: this.editView || this.profileView
-            ? translations['userForm'].modals.updateSuccess
-            : translations['userForm'].modals.createSuccess,
-          errorHeader: translations['userForm'].modals.errorHeader,
-          errorMessage: this.editView || this.profileView
-            ? translations['userForm'].modals.updateError
-            : translations['userForm'].modals.createError,
-          updatePasswordSuccessHeader: translations['userForm'].modals.updatePasswordSuccessHeader,
-          updatePasswordSuccess: translations['userForm'].modals.updatePasswordSuccess,
-          updatePasswordErrorHeader: translations['userForm'].modals.updatePasswordErrorHeader,
-          updatePasswordError: translations['userForm'].modals.updatePasswordError
-        },
-        messages: {
-          username: translations['userForm'].messages.username,
-          firstName: translations['userForm'].messages.firstName,
-          secondName: translations['userForm'].messages.secondName,
-          password: translations['userForm'].messages.password,
-          passwordValidation: translations['userForm'].messages.passwordValidation,
-          passwordValidationWrong: translations['userForm'].messages.passwordValidationWrong,
-          email: translations['userForm'].messages.email,
-          role: translations['userForm'].messages.role,
-          street: translations['userForm'].messages.street,
-          zipCode: translations['userForm'].messages.zipCode,
-          city: translations['userForm'].messages.city,
-          country: translations['userForm'].messages.country,
-          notAssigned: translations['userForm'].messages.notAssigned,
-          preferredLanguage: translations['userForm'].messages.preferredLanguage
-        },
-        buttons: {
-          activatedTrue: translations['userForm'].buttons.activatedTrue,
-          activatedFalse: translations['userForm'].buttons.activatedFalse,
-          changePassword: translations['userForm'].buttons.changePassword
-        }
-      };
+          shownRoles: shownRoles,
+          shownLanguages: shownLanguages,
+          modals: {
+            successHeader: this.editView || this.profileView
+              ? translations['userForm'].modals.updateSuccessHeader
+              : translations['userForm'].modals.createSuccessHeader,
+            successMessage: this.editView || this.profileView
+              ? translations['userForm'].modals.updateSuccess
+              : translations['userForm'].modals.createSuccess,
+            errorMessage: this.editView || this.profileView
+              ? translations['userForm'].modals.updateError
+              : translations['userForm'].modals.createError,
+          },
+          labels: {
+            submit: !this.editView && !this.profileView
+              ? translations['userForm'].labels.createSubmit
+              : translations['userForm'].labels.editSubmit,
+          }
+        }}
+      );
+      this.translationFields.title = translations['languages'].title;
     }));
   }
 }

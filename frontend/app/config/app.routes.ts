@@ -14,10 +14,19 @@ import { Observable } from 'rxjs';
 import { ErrorService, ErrorType } from '../services/error.service';
 import { UserListComponent } from '../users/user-list/user-list.component';
 import { UserDetailComponent } from '../users/user-detail/user-detail.component';
-import { IotDeviceListComponent } from '../iot-devices/iot-device-list/iot-device-list.component';
+/*import { IotDeviceListComponent } from '../iot-devices/iot-device-list/iot-device-list.component';
 import { IotDeviceFormComponent } from '../iot-devices/iot-device-form/iot-device-form.component';
-import { IotDeviceDetailComponent } from '../iot-devices/iot-device-detail/iot-device-detail.component';
+import { IotDeviceDetailComponent } from '../iot-devices/iot-device-detail/iot-device-detail.component';*/
 import { UserActivationComponent } from '../users/user-activation/user-activation.component';
+import { FablabFormComponent } from '../fablabs/fablab-form/fablab-form.component';
+import { FablabListComponent } from '../fablabs/fablab-list/fablab-list.component';
+
+import { AboutUsComponent } from '../about-us/about-us.component';
+import { FaqComponent } from '../faq/faq.component';
+import { PrivacyComponent } from '../privacy/privacy.component';
+
+import { LoginComponent } from '../login/login.component';
+import { LegalNoticeComponent } from '../legal-notice/legal-notice.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -37,6 +46,25 @@ export class AuthGuard implements CanActivate {
         return isLoggedIn;
     }
 }
+@Injectable()
+export class AdminGuard implements CanActivate {
+    constructor(private userService: UserService, private errorService: ErrorService) { }
+   async canActivate():  Promise<boolean> {
+        const isAdmin = await this.userService.isAdmin();
+        if (!isAdmin) {
+            this.errorService.showError({
+                type: ErrorType.UNAUTHORIZED,
+                status: 401,
+                statusText: 'Unauthorized',
+                stack: 'You need to login as Admin to visit this route!',
+                data: undefined
+            });
+        }
+       return new Promise<boolean>((res, rej) => {
+            res(isAdmin.valueOf());
+        });
+   }
+}
 
 export const appRoutes: Routes = [
     {
@@ -55,7 +83,7 @@ export const appRoutes: Routes = [
         component: MachineListComponent,
         runGuardsAndResolvers: 'always',
     },
-    {
+    /*{
         path: routes.paths.frontend.iotDevices.root,
         component: IotDeviceListComponent,
         runGuardsAndResolvers: 'always',
@@ -64,7 +92,7 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.iotDevices.create, component: IotDeviceFormComponent },
             { path: routes.paths.frontend.iotDevices.detail + '/:id', component: IotDeviceDetailComponent }
         ]
-    },
+    },*/
     {
         path: routes.paths.frontend.orders.root,
         component: OrderListComponent,
@@ -73,7 +101,7 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent },
-            {
+            /*{
                 path:
                     routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.create,
                 component: CreateOrderComponent
@@ -87,8 +115,28 @@ export const appRoutes: Routes = [
                 path:
                     routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.detail + '/:id',
                 component: OrderDetailComponent
-            }
+            }*/
         ]
+    },
+    {
+        path: `${routes.paths.frontend.aboutus.root}`,
+        component: AboutUsComponent,
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: `${routes.paths.frontend.faq.root}`,
+        component: FaqComponent,
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: `${routes.paths.frontend.privacy.root}`,
+        component: PrivacyComponent,
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: `${routes.paths.frontend.legal_notice.root}`,
+        component: LegalNoticeComponent,
+        runGuardsAndResolvers: 'always'
     },
     {
         path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}`,
@@ -114,7 +162,18 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.users.signup, component: UserFormComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent, },
             { path: routes.paths.frontend.users.profile, component: UserFormComponent },
+            { path: routes.paths.frontend.users.login, component: LoginComponent},
             { path: ':id', component: UserDetailComponent }
+        ]
+    },
+    {
+        path: routes.paths.frontend.fablabs.root,
+        component: FablabListComponent,
+        runGuardsAndResolvers: 'always',
+        children: [
+        {path: routes.paths.frontend.fablabs.update + '/:id', component: FablabFormComponent, canActivate: [AdminGuard]},
+            { path: routes.paths.frontend.fablabs.profile, component: FablabFormComponent, canActivate: [AuthGuard]},
+            { path: routes.paths.frontend.fablabs.register, component: FablabFormComponent, canActivate: [AuthGuard]}
         ]
     },
     {

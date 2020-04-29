@@ -10,6 +10,7 @@ import { FablabService } from 'frontend/app/services/fablab.service';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 
+import { TranslationModel } from '../../models/translation.model';
 @Component({
   selector: 'app-user-detail',
   templateUrl: './user-detail.component.html',
@@ -25,38 +26,7 @@ export class UserDetailComponent implements OnInit {
   user: User = new User(
     undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
-  translationFields = {
-    labels: {
-      username: '',
-      firstname: '',
-      lastname: '',
-      email: '',
-      address: {
-        title: '',
-        street: '',
-        city: '',
-        country: '',
-        zipCode: ''
-      },
-      activated: '',
-      role: '',
-      preferredLanguage: '',
-      fablab: ''
-    },
-    modals: {
-      ok: '',
-      abort: '',
-      deactivateReturnValue: '',
-      abortReturnValue: '',
-      deleteHeader: '',
-      deleteQuestion: '',
-      deleteQuestion2: ''
-    },
-    badges: {
-      active: '',
-      inactive: ''
-    }
-  };
+  translationFields: TranslationModel.UserDetail;
 
   constructor(
     private route: ActivatedRoute,
@@ -134,38 +104,7 @@ export class UserDetailComponent implements OnInit {
         });
       }
       if (translations['userDetail'].labels && translations['userDetail'].modals && translations['userDetail'].badges) {
-        this.translationFields = {
-          labels: {
-            username: translations['userDetail'].labels.username,
-            firstname: translations['userDetail'].labels.firstname,
-            lastname: translations['userDetail'].labels.lastname,
-            email: translations['userDetail'].labels.email,
-            address: {
-              title: translations['userDetail'].labels.address.title,
-              street: translations['userDetail'].labels.address.street,
-              city: translations['userDetail'].labels.address.city,
-              country: translations['userDetail'].labels.address.country,
-              zipCode: translations['userDetail'].labels.address.zipCode
-            },
-            activated: translations['userDetail'].labels.activated,
-            role: translations['userDetail'].labels.role,
-            preferredLanguage: translations['userDetail'].labels.preferredLanguage,
-            fablab: translations['userDetail'].labels.fablab
-          },
-          modals: {
-            ok: translations['userDetail'].modals.ok,
-            abort: translations['userDetail'].modals.abort,
-            deactivateReturnValue: translations['userDetail'].modals.deactivateReturnValue,
-            abortReturnValue: translations['userDetail'].modals.abortReturnValue,
-            deleteHeader: translations['userDetail'].modals.deleteHeader,
-            deleteQuestion: translations['userDetail'].modals.deleteQuestion,
-            deleteQuestion2: translations['userDetail'].modals.deleteQuestion2
-          },
-          badges: {
-            active: translations['userDetail'].badges.active,
-            inactive: translations['userDetail'].badges.inactive
-          }
-        };
+        this.translationFields = TranslationModel.translationUnroll(translations);
       }
     });
   }

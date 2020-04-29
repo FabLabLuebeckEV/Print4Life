@@ -8,11 +8,11 @@ describe('MessageModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MessageModalComponent],
-      imports: [NgbModule.forRoot()],
+      declarations: [MessageModalComponent],
+      imports: [NgbModule],
       providers: [NgbActiveModal]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

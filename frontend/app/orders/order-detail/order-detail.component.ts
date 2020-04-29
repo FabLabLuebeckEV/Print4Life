@@ -16,6 +16,10 @@ import { ScheduleService } from 'frontend/app/services/schedule.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
+import { Chart } from 'chart.js';
+import { ViewChild, ElementRef } from '@angular/core';
+
+import { TranslationModel } from '../../models/translation.model';
 
 @Component({
   selector: 'app-order-detail',
@@ -23,12 +27,14 @@ import { ModalButton } from '../../helper/modal.button';
   styleUrls: ['./order-detail.component.css']
 })
 export class OrderDetailComponent implements OnInit {
+  @ViewChild('chartCanvas', {static: false}) chartCanvas: ElementRef;
   private config: any;
   userIsLoggedIn: boolean;
   loggedInUser: User;
   loadingOrder: boolean;
   userCanDownload: boolean;
   printFilesAvailable: boolean;
+  myBatch: Number = 0;
   editIcon: Icon;
   deleteIcon: Icon;
   processIcon: Icon;
@@ -36,6 +42,7 @@ export class OrderDetailComponent implements OnInit {
   toggleOffIcon: Icon;
   spinnerConfig: SpinnerConfig;
   editLink: String;
+  chart: Chart;
   editor: User = new User(
     undefined, undefined, '', '', undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined);
   editorLink: String;
@@ -56,51 +63,15 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     undefined,
     false,
-    undefined
+    undefined,
+    {number: 0, accepted: [], acceptedCount: 0, finished: [], finishedCount: 0},
+    false
   );
   schedule: Schedule;
   machine: any;
   fablab: any;
 
-  translationFields = {
-    tooltips: {
-      delete: '',
-      print: '',
-    },
-    labels: {
-      owner: '',
-      editor: '',
-      status: '',
-      createdAt: '',
-      machine: '',
-      machineNotSet: '',
-      fablab: '',
-      comments: '',
-      author: '',
-      content: '',
-      files: '',
-      file: '',
-      addressTitle: '',
-      latestVersion: '',
-      scheduledFor: ''
-    },
-    modals: {
-      ok: '',
-      abort: '',
-      cancel: '',
-      deleteReturnValue: '',
-      abortReturnValue: '',
-      cancelReturnValue: '',
-      deleteHeader: '',
-      deleteQuestion: '',
-      deleteQuestion2: '',
-      deleteWarning: '',
-      printHeader: '',
-      addressLabel: '',
-      apiKeyLabel: '',
-      fileSelectLabel: ''
-    }
-  };
+  translationFields: TranslationModel.OrderDetail & TranslationModel.DeviceTypes & TranslationModel.Status & TranslationModel.Date;
 
   constructor(
     private route: ActivatedRoute,
@@ -130,6 +101,8 @@ export class OrderDetailComponent implements OnInit {
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
     });
+    this.loggedInUser = await this.userService.getUser();
+    console.log(this.loggedInUser);
 
     this.route.paramMap
       .subscribe(async (params) => {
@@ -138,6 +111,41 @@ export class OrderDetailComponent implements OnInit {
           this.orderService.getOrderById(params.get('id')).then(async (result) => {
             if (result && result.order) {
               this.order = result.order;
+              if (this.order.batch && this.order.batch['number'] && this.order.batch['number'] > 0) {
+                this.order['isBatched'] = true;
+              }
+              this.order.batch['finishedCount'] = 0;
+              if (this.order.batch['finished']) {
+                this.order.batch['finished'].forEach(batch => {
+                  result.order.batch.finishedCount += batch.number;
+                  this.fablabService.getFablab(batch.fablab).then(result => {
+                    batch.fablab = result.fablab;
+                  });
+                });
+              } else {
+                this.order.batch['finished'] = [];
+              }
+
+              const loggedInUser = await this.userService.findOwn();
+
+              this.order.batch['acceptedCount'] = 0;
+              if (this.order.batch['accepted']) {
+                this.order.batch['accepted'].forEach(batch => {
+                  if (batch.fablab === loggedInUser.fablabId) {
+                    this.myBatch = batch.number;
+                  }
+                  this.order.batch['acceptedCount'] += batch.number;
+                  this.fablabService.getFablab(batch.fablab).then(result => {
+                    batch.fablab = result.fablab;
+                  });
+                });
+              } else {
+                this.order.batch['accepted'] = [];
+              }
+
+              this.loadChart();
+              console.log('result is', this.order);
+
               this.userIsLoggedIn = this.userService.isLoggedIn();
               this.loggedInUser = await this.userService.getUser();
               this.userCanDownload = this.order.shared as boolean || (this.loggedInUser && this.loggedInUser.role &&
@@ -189,7 +197,9 @@ export class OrderDetailComponent implements OnInit {
                   const result = await this.machineService.get(this.order.machine.type, this.order.machine._id);
                   const type = this.machineService.camelCaseTypes(this.order.machine.type);
                   this.machine = result[`${type}`];
-                  this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
+                  if (this.machine !== null && typeof this.machine !== 'undefined') {
+                    this.machine['detailView'] = `/${routes.paths.frontend.machines.root}/${type}s/${this.machine._id}/`;
+                  }
                 } else if (this.order.machine.type.toLowerCase() !== 'unknown' && this.order.machine._id === 'unknown') {
                   this.machine = { type: this.order.machine.type, deviceName: this.translationFields.labels.machineNotSet };
                 } else {
@@ -204,6 +214,97 @@ export class OrderDetailComponent implements OnInit {
           });
         }
       });
+  }
+
+  public async submitBatch() {
+    const orderButton = new ModalButton(
+      this.translationFields.modals.batchOrderAccept,
+      'btn btn-primary',
+      this.translationFields.modals.deleteReturnValue);
+
+    const abortButton = new ModalButton(
+      this.translationFields.modals.batchOrderAbort,
+      'btn btn-secondary',
+      this.translationFields.modals.abortReturnValue);
+
+    const modalRef = this.modalService.openMsgModal(
+      this.translationFields.modals.batchOrderQuestion,
+      'modal-header header-danger',
+      [`${this.translationFields.modals.batchOrderWarning}`],
+      orderButton, abortButton);
+    modalRef.result.then(async (result) => {
+      if (result === orderButton.returnValue) {
+        if (this.myBatch > 0) {
+          let found = false;
+
+          const loggedInUser = await this.userService.findOwn();
+          this.order.batch['accepted'].forEach( element => {
+            if (element.fablab._id === loggedInUser.fablabId) {
+              element.number = this.myBatch;
+              found = true;
+            }
+          });
+
+          if (!found) {
+            console.log(this.order.batch['accepted']);
+            this.order.batch['accepted'].push({
+              fablab: loggedInUser.fablabId,
+              number: this.myBatch,
+              status: 'zugewiesen'
+            });
+          }
+
+          await this.orderService.updateOrder(this.order);
+          window.location.reload();
+        }
+      }
+    });
+
+
+
+  }
+
+  public loadChart() {
+    if (this.chartCanvas && this.translationFields) {
+      const remaining = this.order.batch['number'] - this.order.batch['acceptedCount'] - this.order.batch['finishedCount'];
+      this.chart = new Chart(this.chartCanvas.nativeElement.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: [
+            this.translationFields.labels.batchFinished + ' : ' + this.order.batch['finishedCount'],
+            this.translationFields.labels.batchAssigned + ' : ' + this.order.batch['acceptedCount'],
+            this.translationFields.labels.batchOpen + ' : ' + remaining
+          ],
+          datasets: [
+            {
+              data: [
+                this.order.batch['finishedCount'],
+                this.order.batch['acceptedCount'],
+                remaining
+              ],
+              backgroundColor: [
+                '#45B29D',
+                '#EFC94C',
+                '#DF5A49'
+              ]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          tooltips: {
+            enabled: false
+          },
+          legend: {
+            labels: {
+              fontSize: 20,
+              fontFamily: 'Roboto'
+            }
+          }
+        }
+      });
+    }
   }
 
   public startPrintJob() {
@@ -256,7 +357,7 @@ export class OrderDetailComponent implements OnInit {
 
   private _translate() {
     const currentLang = this.translateService.currentLang || this.translateService.getDefaultLang();
-    this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date', 'buttonTooltips']).subscribe((translations => {
+    this.translateService.get(['orderDetail', 'deviceTypes', 'status', 'date']).subscribe((translations => {
       if (this.order) {
         if (this.schedule) {
           this.schedule['shownStartDate'] = this.genericService.translateDate(
@@ -293,45 +394,9 @@ export class OrderDetailComponent implements OnInit {
         });
       }
 
-      this.translationFields = {
-        tooltips: {
-          delete: translations['orderDetail'].buttons.tooltips.delete,
-          print: translations['orderDetail'].buttons.tooltips.print,
-        },
-        labels: {
-          owner: translations['orderDetail'].labels.owner,
-          editor: translations['orderDetail'].labels.editor,
-          status: translations['orderDetail'].labels.status,
-          createdAt: translations['orderDetail'].labels.createdAt,
-          machine: translations['orderDetail'].labels.machine,
-          machineNotSet: translations['orderDetail'].labels.machineNotSet,
-          fablab: translations['orderDetail'].labels.fablab,
-          comments: translations['orderDetail'].labels.comments,
-          author: translations['orderDetail'].labels.author,
-          content: translations['orderDetail'].labels.content,
-          files: translations['orderDetail'].labels.files,
-          file: translations['orderDetail'].labels.file,
-          addressTitle: translations['orderDetail'].labels.addressTitle,
-          latestVersion: translations['orderDetail'].labels.latestVersion,
-          scheduledFor: translations['orderDetail'].labels.scheduledFor
-        },
-        modals: {
-          ok: translations['orderDetail'].modals.ok,
-          abort: translations['orderDetail'].modals.abort,
-          cancel: translations['orderDetail'].modals.cancel,
-          deleteReturnValue: translations['orderDetail'].modals.deleteReturnValue,
-          abortReturnValue: translations['orderDetail'].modals.abortReturnValue,
-          cancelReturnValue: translations['orderDetail'].modals.cancelReturnValue,
-          deleteHeader: translations['orderDetail'].modals.deleteHeader,
-          deleteQuestion: translations['orderDetail'].modals.deleteQuestion,
-          deleteQuestion2: translations['orderDetail'].modals.deleteQuestion2,
-          deleteWarning: translations['orderDetail'].modals.deleteWarning,
-          printHeader: translations['orderDetail'].modals.printHeader,
-          addressLabel: translations['orderDetail'].modals.addressLabel,
-          apiKeyLabel: translations['orderDetail'].modals.apiKeyLabel,
-          fileSelectLabel: translations['orderDetail'].modals.fileSelectLabel,
-        }
-      };
+      this.translationFields = TranslationModel.translationUnroll(translations);
+
+      this.loadChart();
     }));
   }
 }

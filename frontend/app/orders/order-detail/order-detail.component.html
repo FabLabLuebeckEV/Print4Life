@@ -1,6 +1,6 @@
 <div #spinnerContainer>
-  <ngx-spinner [loadingText]="spinnerConfig.loadingText" [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size"
-    [color]="spinnerConfig.color" [type]="spinnerConfig.type"></ngx-spinner>
+  <ngx-spinner [bdColor]="spinnerConfig.bdColor" [size]="spinnerConfig.size" [color]="spinnerConfig.color"
+    [type]="spinnerConfig.type">{{spinnerConfig.loadingText}}</ngx-spinner>
 </div>
 <div>
   <div class="row spacing text-center">
@@ -9,57 +9,61 @@
     </div>
     <div class="col-md-4 col-xl-3">
       <app-back-button class="spacing-right-xs"></app-back-button>
-      <app-edit-button [editLink]="editLink" *ngIf="order.shared || (userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')))"></app-edit-button>
-      <app-delete-button *ngIf="userIsLoggedIn && loggedInUser && (loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin'))"
+      <app-edit-button [editLink]="editLink"
+        *ngIf="order.shared || (userIsLoggedIn && loggedInUser && (loggedInUser && loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')))">
+      </app-edit-button>
+      <app-delete-button
+        *ngIf="userIsLoggedIn && loggedInUser && (loggedInUser._id && owner && owner._id && loggedInUser._id === owner._id || loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin'))"
         class="spacing-right-xs" (click)="delete()"></app-delete-button>
-      <button *ngIf="machine && machine.type === '3d-printer' && userIsLoggedIn && loggedInUser && loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')"
-        (click)="startPrintJob()" [disabled]="!printFilesAvailable" [title]="translationFields.tooltips.print" type="button"
-        class="btn btn-primary spacing-right-xs">
+      <button
+        *ngIf="machine && machine.type === '3d-printer' && userIsLoggedIn && loggedInUser && loggedInUser.role && loggedInUser.role.role && (loggedInUser.role.role === 'editor' || loggedInUser.role.role === 'admin')"
+        (click)="startPrintJob()" [disabled]="!printFilesAvailable" [title]="translationFields?.buttons.tooltips.print"
+        type="button" class="btn btn-primary spacing-right-xs">
         <fa-icon [icon]="processIcon"></fa-icon>
       </button>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-11 table-spacing">
-      <table class="table table-striped">
+    <div class="col-md-11 table-spacing table-inverse">
+      <table class="table table-striped" id="descriptionTable">
         <tbody>
           <tr>
-            <td class="align-middle text-center">{{translationFields.labels.owner}}</td>
-            <td class="align-middle text-center">
+            <td class="align-middle">{{translationFields?.labels.owner}}</td>
+            <td class="align-middle">
               <a *ngIf=userIsLoggedIn [routerLink]="ownerLink">{{ owner.fullname }}</a>
               <span *ngIf=!userIsLoggedIn>{{ owner.fullname }}</span>
             </td>
           </tr>
           <tr *ngIf="order.shippingAddress">
-            <td class="align-middle text-center">{{translationFields.labels.addressTitle}}</td>
-            <td class="align-middle text-center">{{order.shippingAddress.street}}<br>{{order.shippingAddress.zipCode
+            <td class="align-middle">{{translationFields?.labels.addressTitle}}</td>
+            <td class="align-middle">{{order.shippingAddress.street}}<br>{{order.shippingAddress.zipCode
               + " " +
               order.shippingAddress.city}}<br>{{order.shippingAddress.country}}</td>
           </tr>
-          <tr>
-            <td class="align-middle text-center">{{translationFields.labels.editor}}</td>
-            <td class="align-middle text-center">
+          <tr *ngIf="!order.isBatched">
+            <td class="align-middle">{{translationFields?.labels.editor}}</td>
+            <td class="align-middle">
               <a *ngIf=userIsLoggedIn [routerLink]="editorLink">{{ editor.fullname }}</a>
               <span *ngIf=!userIsLoggedIn>{{ editor.fullname }}</span>
             </td>
           </tr>
-          <tr>
-            <td class="align-middle text-center">{{translationFields.labels.status}}</td>
-            <td class="align-middle text-center">
+          <tr *ngIf="!order.isBatched">
+            <td class="align-middle">{{translationFields?.labels.status}}</td>
+            <td class="align-middle">
               <span class="badge badge-secondary">{{order['shownStatus']}}</span>
             </td>
           </tr>
           <tr>
-            <td class="align-middle text-center">{{translationFields.labels.createdAt}}</td>
-            <td class="align-middle text-center">{{order['shownCreatedAt']}}</td>
+            <td class="align-middle">{{translationFields?.labels.createdAt}}</td>
+            <td class="align-middle">{{order['shownCreatedAt']}}</td>
           </tr>
           <tr *ngIf="schedule && schedule.startDate && schedule.endDate">
-            <td class="align-middle text-center">{{translationFields.labels.scheduledFor}}</td>
-            <td class="align-middle text-center">{{schedule.shownStartDate}} - {{schedule.shownEndDate}}</td>
+            <td class="align-middle">{{translationFields?.labels.scheduledFor}}</td>
+            <td class="align-middle">{{schedule.shownStartDate}} - {{schedule.shownEndDate}}</td>
           </tr>
           <tr *ngIf="machine">
-            <td class="align-middle text-center">{{translationFields.labels.machine}}</td>
-            <td class="align-middle text-center">
+            <td class="align-middle">{{translationFields?.labels.machine}}</td>
+            <td class="align-middle">
               <a *ngIf="userIsLoggedIn && machine.deviceName" [routerLink]="machine.detailView">{{ machine.deviceName
                 }}</a>
               <span *ngIf="!userIsLoggedIn && machine.deviceName">{{ machine.deviceName }}</span>
@@ -67,30 +71,87 @@
             </td>
           </tr>
           <tr *ngIf="fablab">
-            <td class="align-middle text-center">{{translationFields.labels.fablab}}</td>
-            <td class="align-middle text-center">
+            <td class="align-middle">{{translationFields?.labels.fablab}}</td>
+            <td class="align-middle">
               {{fablab.name}}
+            </td>
+          </tr>
+          <tr [hidden]="!order.isBatched" class="collapseToggle" data-toggle="collapse" data-target="#chartExpand"  aria-expanded="false" aria-controls="chartExpand">
+            <td class="align-middle">{{translationFields?.labels.batched}}</td>
+            <td class="align-middle spinner-td">
+              <div class="spinner-container" >
+                <canvas #chartCanvas>
+                  {{chart}}
+                </canvas>
+
+              </div>
+            </td>
+          </tr>
+          <tr>
+
+          </tr>
+          <tr class="collapse" id="chartExpand">
+            <td colspan="2" >
+              <table class="table table-striped" >
+                <tbody>
+                  <tr>
+                    <th>
+                      Fertigendes FabLab
+                    </th>
+                    <th>
+                      Zugewiesene Anzahl
+                    </th>
+                    <th>
+                      Status
+                    </th>
+                  </tr>
+                  <tr class="finished_batches" *ngFor="let batch of order.batch.finished">
+                    <td><b>{{batch.fablab.name}}</b></td><!--TODO: Link auf Besitzer!-->
+                    <td><b>{{batch.number}}</b></td>
+                    <td><b>{{batch.status}}</b></td>
+                  </tr>
+                  <tr class="accepted_batches" *ngFor="let batch of order.batch.accepted">
+                    <td><b>{{batch.fablab.name}}</b></td><!--TODO: Link auf Besitzer!-->
+                    <td><b>{{batch.number}}</b></td>
+                    <td><b>{{batch.status}}</b></td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr *ngIf="order.isBatched && this.loggedInUser.fablabId && this.loggedInUser.fablabId !== ''" class="assignRow">
+            <td>
+                {{translationFields?.labels.imanufacture}}
+            </td>
+            <td>
+              <div>
+                <input type="number" class="form-control" id="myBatchCount" 
+                  [(ngModel)]="myBatch" name="myBatch" #myBatchCount="ngModel">
+                <label for="myBatchCount">
+                    {{translationFields?.labels.count}}</label>
+                <button type="button"  class="btn btn-primary" (click)="submitBatch()">{{translationFields?.labels.helpnow}}</button>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
-    </div>
   </div>
-  <div class="row spacing text-center">
+
+  <div class="row spacing text-center filling-row">
     <div class="col-md-12">
-      <h2>{{translationFields.labels.comments}}
+      <h2>{{translationFields?.labels.comments}}
         <span class="badge badge-primary spacing text-center">{{ order.comments.length }}</span>
       </h2>
     </div>
   </div>
-  <div class="row spacing" *ngIf="order.comments && order.comments.length > 0">
+  <div class="row spacing filling-row" *ngIf="order.comments && order.comments.length > 0">
     <div class="col-md-11 table-spacing">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.author}}</th>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.content}}</th>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.author}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.content}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.createdAt}}</th>
           </tr>
         </thead>
         <tbody>
@@ -106,21 +167,21 @@
       </table>
     </div>
   </div>
-  <div class="row spacing text-center">
+  <div class="row spacing text-center filling-row">
     <div class="col-md-12">
-      <h2>{{translationFields.labels.files}}
+      <h2>{{translationFields?.labels.files}}
         <span class="badge badge-primary spacing text-center">{{ order.files.length }}</span>
       </h2>
     </div>
   </div>
-  <div class="row spacing" *ngIf="order.files && order.files.length > 0">
+  <div class="row spacing filling-row" *ngIf="order.files && order.files.length > 0">
     <div class="col-md-11 table-spacing">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.latestVersion}}</th>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.file}}</th>
-            <th class="align-middle text-center" scope="col">{{translationFields.labels.createdAt}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.latestVersion}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.file}}</th>
+            <th class="align-middle text-center" scope="col">{{translationFields?.labels.createdAt}}</th>
           </tr>
         </thead>
         <tbody>
@@ -129,7 +190,8 @@
               <fa-icon class="text-success" *ngIf="!file.deprecated" [icon]="toggleOnIcon"></fa-icon>
               <fa-icon class="text-danger" *ngIf="file.deprecated" [icon]="toggleOffIcon"></fa-icon>
             </td>
-            <td *ngIf="userCanDownload" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a></td>
+            <td *ngIf="userCanDownload" class="align-middle text-center"><a [href]="file.link">{{file.filename}}</a>
+            </td>
             <td *ngIf="!userCanDownload" class="align-middle text-center">{{file.filename}}</td>
             <td class="align-middle text-center">{{file.shownCreatedAt}}</td>
           </tr>

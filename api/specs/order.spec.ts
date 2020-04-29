@@ -2,7 +2,8 @@ import 'jasmine';
 import * as request from 'request';
 import config from '../config/config';
 import {
-  getTestUserToken, getTestUserNormalToken, newTimeout// , testUserNormal, testUserEditor
+  getTestUserToken, getTestUserNormalToken, newTimeout, // , testUserNormal, testUserEditor
+  getTestUserNormalToken2, testUserNormal
 } from './global.spec';
 
 const endpoint = config.baseUrlBackend;
@@ -10,7 +11,7 @@ export const testOrder = {
   projectname: 'unscheinBar',
   comments: [],
   editor: '5bc9849df2a4ed082b73a6f9',
-  owner: '5bc9849df2a4ed082b73a6f9',
+  owner: testUserNormal.id,
   fablabId: '5b453ddb5cf4a9574849e98a',
   files: [],
   status: 'new',
@@ -30,6 +31,7 @@ describe('Order Controller', () => {
   let originalTimeout;
   const authorizationHeader = getTestUserToken();
   const authorizationHeaderNormal = getTestUserNormalToken();
+  const authorizationHeaderNormal2 = getTestUserNormalToken2();
   beforeEach(() => {
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
     jasmine.DEFAULT_TIMEOUT_INTERVAL = newTimeout;
@@ -190,13 +192,13 @@ describe('Order Controller', () => {
   });
 
 
-  it('should not update the order if the user is not admin or editor', (done) => {
+  it('should not update the order if the user is not admin, editor or owner', (done) => {
     const testBody = JSON.parse(JSON.stringify(testOrder));
 
     request({
       uri: `${endpoint}orders/`,
       method: 'POST',
-      headers: { 'content-type': 'application/json', authorization: authorizationHeader },
+      headers: { 'content-type': 'application/json', authorization: authorizationHeaderNormal },
       json: true,
       body: testBody
     }, (error, response) => {
@@ -204,7 +206,7 @@ describe('Order Controller', () => {
       request({
         uri: `${endpoint}orders/${response.body.order._id}`,
         method: 'PUT',
-        headers: { 'content-type': 'application/json', authorization: authorizationHeaderNormal },
+        headers: { 'content-type': 'application/json', authorization: authorizationHeaderNormal2 },
         json: true,
         body: response.body.order
       }, (error, response2) => {
@@ -214,12 +216,28 @@ describe('Order Controller', () => {
           method: 'GET',
           headers: { 'content-type': 'application/json', authorization: authorizationHeader },
           json: true
-        }, (error, response) => {
-          expect(response.statusCode).toEqual(200);
-          expect(response.body.order).toBeDefined();
-          expect(response.body.order.projectname).toEqual(testBody.projectname);
+        }, (error, response3) => {
+          expect(response3.statusCode).toEqual(200);
+          expect(response3.body.order).toBeDefined();
+          expect(response3.body.order.projectname).toEqual(testBody.projectname);
 
-          done();
+          request({
+            uri: `${endpoint}orders/${response.body.order._id}`,
+            method: 'PUT',
+            headers: { 'content-type': 'application/json', authorization: authorizationHeaderNormal },
+            json: true,
+            body: response.body.order
+          }, (error, response4) => {
+            expect(response4.statusCode).toEqual(200);
+            expect(response4.body.order).toBeDefined();
+
+            expect(response4.body.order.projectname).toEqual('updated');
+
+            expect(response4.body.order.token).toBeDefined();
+            expect(response4.body.order.editor).toEqual(testBody.editor);
+            expect(response4.body.order.status).toEqual(testBody.status);
+            done();
+          });
         });
       });
     });

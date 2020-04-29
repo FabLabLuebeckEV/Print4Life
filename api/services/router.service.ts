@@ -2,6 +2,7 @@ import logger from '../logger';
 import validatorService from './validator.service';
 import config from '../config/config';
 
+/* eslint-disable no-unused-vars */
 export enum ErrorType {
   TOKEN_EXPIRED,
   USER_DEACTIVATED,
@@ -21,6 +22,7 @@ export enum ErrorType {
   IOT_DEVICE_EXISTS,
   OCTOPRINT_ERROR
 }
+/* eslint-enable no-unused-vars */
 
 /* eslint-disable no-restricted-globals */
 export interface IError extends Error {

@@ -18,7 +18,7 @@ export class InputModalComponent implements OnInit {
 
   ngOnInit() {
     if (!this.titleClass) {
-      this.titleClass = 'modal-header header-primary';
+      this.titleClass = 'modal-header';
     }
   }
 

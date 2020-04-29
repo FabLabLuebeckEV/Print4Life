@@ -6,6 +6,9 @@ import { LoginModalComponent } from '../../users/login-modal/login-modal.compone
 import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
 import { ModalService } from '../../services/modal.service';
+import { HostListener } from '@angular/core';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface Dropdown {
   name: String;
@@ -28,9 +31,19 @@ export class NavigationComponent implements OnInit {
   iotDevicesDropdown: Dropdown = { name: '', elements: [] };
   languageDropdown: Dropdown = { name: '', elements: [] };
   userDropdown: Dropdown = { name: '', elements: [] };
+  fablabDropdown: Dropdown = {name: '', elements: []};
   userIsLoggedIn: Boolean;
   userIsAdmin: Boolean;
   user: User;
+  menuExtra: Boolean = false;
+  menuIcon = faBars;
+  closeIcon = faTimes;
+  sideMenu: Boolean = false;
+  aboutUsLink = routes.paths.frontend.aboutus.root;
+  faqLink = routes.paths.frontend.faq.root;
+  contactLink = routes.paths.frontend.faq.root;
+  contactFragment = routes.paths.frontend.faq.contact;
+  loginLink = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
 
   constructor(
     private translateService: TranslateService,
@@ -48,6 +61,13 @@ export class NavigationComponent implements OnInit {
     this._init();
   }
 
+
+  @HostListener('window:scroll', ['$event']) // for window scroll events
+  onScroll(event) {
+    this.menuExtra = (window.pageYOffset > 1000);
+    console.log(this.menuExtra);
+  }
+
   public switchLanguage(language) {
     this.translateService.use(language);
     this._translate();
@@ -61,7 +81,7 @@ export class NavigationComponent implements OnInit {
 
   private _translate() {
     this.translateService.stream(
-      ['navigation', 'languages', 'dropdown.machines', 'dropdown.orders', 'dropdown.users', 'dropdown.iotDevices']
+      ['navigation', 'languages', 'dropdown.machines', 'dropdown.fablabs', 'dropdown.orders', 'dropdown.users', 'dropdown.iotDevices']
     ).subscribe((translations => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.title = translations['navigation'].title;
@@ -120,7 +140,8 @@ export class NavigationComponent implements OnInit {
           },
         ]
       };
-
+/*
+// Gast Orders entfernt
       if (!this.userIsLoggedIn) {
         this.orderDropdown.elements.push({
           name: translations['dropdown.orders'].createShared,
@@ -128,7 +149,7 @@ export class NavigationComponent implements OnInit {
             '/' + routes.paths.frontend.orders.shared.root +
             '/' + routes.paths.frontend.orders.shared.create
         });
-      }
+      }*/
       this.languageDropdown = {
         name: translations['languages'].title,
         elements: [
@@ -154,11 +175,38 @@ export class NavigationComponent implements OnInit {
         ]
       };
 
+      this.fablabDropdown = {
+        name: translations['dropdown.fablabs'].title,
+        elements: []
+      };
+
+
+      if (this.userIsLoggedIn) {
+
+        this.fablabDropdown.elements.push({
+          name: translations['dropdown.fablabs'].listFablabs,
+          routerHref: `${routes.paths.frontend.fablabs.root}/`
+        });
+        if (!this.user.fablabId) {
+          this.fablabDropdown.elements.push({
+            name: translations['dropdown.fablabs'].signUp,
+            routerHref: `${routes.paths.frontend.fablabs.root}/${routes.paths.frontend.fablabs.register}`
+          });
+        } else {
+          this.fablabDropdown.elements.push({
+            name: translations['dropdown.fablabs'].profile,
+            routerHref: `${routes.paths.frontend.fablabs.root}/${routes.paths.frontend.fablabs.profile}`
+          });
+        }
+      }
+
 
       this.userDropdown = {
         name: translations['dropdown.users'].title,
         elements: []
       };
+
+
 
       if (this.user) {
         this.userDropdown.elements.push({
@@ -215,5 +263,9 @@ export class NavigationComponent implements OnInit {
 
   private _register() {
     this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}`]);
+  }
+
+  toggleSideMenu() {
+    this.sideMenu = !this.sideMenu;
   }
 }

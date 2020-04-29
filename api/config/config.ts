@@ -301,7 +301,7 @@ const testLocal = {
   connections: {
     mongo: {
       host: process.env.MONGO_HOST || 'mongodb://127.0.0.1:27017/',
-      database: process.env.MONGO_DBNAME || 'iot-fablab-dev'
+      database: process.env.MONGO_DBNAME || 'iot-fablab-test'
     }
   },
   rawBaseUrl: baseUrl,

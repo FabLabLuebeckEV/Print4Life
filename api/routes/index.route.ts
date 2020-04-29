@@ -8,6 +8,8 @@ import statisticRoute from './statistic.route';
 import iotDeviceRoute from './iot-device.route';
 import octoprintRoute from './octoprint.route';
 
+import serviceRoute from './service.route';
+
 const router = express.Router();
 
 /**
@@ -37,5 +39,6 @@ router.use('/schedules/', scheduleRoute);
 router.use('/statistics/', statisticRoute);
 router.use('/iot-devices/', iotDeviceRoute);
 router.use('/octoprint/', octoprintRoute);
+router.use('/service/', serviceRoute);
 
 export default router;

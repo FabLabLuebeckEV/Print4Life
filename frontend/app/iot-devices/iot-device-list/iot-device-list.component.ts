@@ -15,13 +15,15 @@ import { UserService } from 'frontend/app/services/user.service';
 import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-iot-device-list',
   templateUrl: './iot-device-list.component.html',
   styleUrls: ['./iot-device-list.component.css']
 })
 export class IotDeviceListComponent implements OnInit {
-  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
+  @ViewChild('spinnerContainer', { static: false }) spinnerContainerRef: ElementRef;
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
   listView: Boolean = false;
@@ -49,26 +51,7 @@ export class IotDeviceListComponent implements OnInit {
     jumpToPage: undefined
   };
 
-  translationFields = {
-    paginationLabel: '',
-    buttons: {
-      detailLabel: '',
-      deleteLabel: ''
-    },
-    modals: {
-      yes: '',
-      abort: '',
-      abortValue: '',
-      deleteValue: '',
-      deleteHeader: '',
-      deleteQuestion: '',
-      deleteQuestion2: '',
-      deleteWarning: ''
-    },
-    filterLabel: {
-      search: ''
-    }
-  };
+  translationFields: TranslationModel.IotDeviceList;
 
   constructor(
     private router: Router,
@@ -109,6 +92,7 @@ export class IotDeviceListComponent implements OnInit {
         this.iotDevices = [];
         this.init();
       });
+      this._translate();
       this.userIsLoggedIn = await this.userService.isLoggedIn();
       this.userIsAdmin = await this.userService.isAdmin();
       this.init();
@@ -223,26 +207,7 @@ export class IotDeviceListComponent implements OnInit {
         translations['iotDeviceList'].spinnerLoadingText, this.config.spinnerConfig.bdColor,
         this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
 
-      this.translationFields = {
-        paginationLabel: translations['iotDeviceList'].paginationLabel,
-        buttons: {
-          detailLabel: translations['iotDeviceList'].buttons.detailLabel,
-          deleteLabel: translations['iotDeviceList'].buttons.deleteLabel
-        },
-        modals: {
-          yes: translations['iotDeviceList'].modals.yes,
-          abort: translations['iotDeviceList'].modals.abort,
-          abortValue: translations['iotDeviceList'].modals.abortValue,
-          deleteValue: translations['iotDeviceList'].modals.deleteValue,
-          deleteHeader: translations['iotDeviceList'].modals.deleteHeader,
-          deleteQuestion: translations['iotDeviceList'].modals.deleteQuestion,
-          deleteQuestion2: translations['iotDeviceList'].modals.deleteQuestion2,
-          deleteWarning: translations['iotDeviceList'].modals.deleteWarning,
-        },
-        filterLabel: {
-          search: translations['iotDeviceList'].filterLabel.search
-        }
-      };
+      this.translationFields = TranslationModel.translationUnroll(translations);
     }));
   }
 }

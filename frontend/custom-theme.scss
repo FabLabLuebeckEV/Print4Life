@@ -1,0 +1,156 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ng8-primary: mat-palette($mat-indigo);
+$ng8-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$ng8-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$ng8-theme: mat-light-theme($ng8-primary, $ng8-accent, $ng8-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($ng8-theme);
+
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+$bv-primary: (
+    50: #e9f6f3,
+    100: #c7e8e2,
+    200: #a2d9ce,
+    300: #7dc9ba,
+    400: #61beac,
+    500: #45b29d,
+    600: #3eab95,
+    700: #36a28b,
+    800: #2e9981,
+    900: #1f8a6f,
+    A100: #c5fff0,
+    A200: #92ffe2,
+    A400: #5fffd5,
+    A700: #46ffce,
+    contrast: (
+        50: white,
+        100: white,
+        200: white,
+        300: white,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: white,
+        A200: white,
+        A400: white,
+        A700: white,
+    )
+);
+
+$bv-secondary: (
+    50: #fbebe9,
+    100: #f5cec8,
+    200: #efada4,
+    300: #e98c80,
+    400: #e47364,
+    500: #df5a49,
+    600: #db5242,
+    700: #d74839,
+    800: #d23f31,
+    900: #ca2e21,
+    A100: #ffffff,
+    A200: #ffd3d0,
+    A400: #ffa39d,
+    A700: #ff8b84,
+    contrast: (
+        50: white,
+        100: white,
+        200: white,
+        300: white,
+        400: white,
+        500: white,
+        600: white,
+        700: white,
+        800: white,
+        900: white,
+        A100: white,
+        A200: white,
+        A400: white,
+        A700: white,
+    )
+);
+
+$bv-neutral: (
+    50 : #eaf0f4,
+    100 : #cbdbe4,
+    200 : #a9c3d2,
+    300 : #86aabf,
+    400 : #6c98b2,
+    500 : #5286a4,
+    600 : #4b7e9c,
+    700 : #417392,
+    800 : #386989,
+    900 : #285678,
+    A100 : #bce1ff,
+    A200 : #89cbff,
+    A400 : #56b4ff,
+    A700 : #3ca9ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ng8-primary: mat-palette($bv-primary);
+$ng8-accent: mat-palette($bv-secondary);
+
+// The warn palette is optional (defaults to red).
+$ng8-warn: mat-palette($mat-red);
+$ng8-neutral: mat-palette($bv-neutral);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$ng8-theme: mat-light-theme($ng8-primary, $ng8-accent, $ng8-neutral);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($ng8-theme);
+

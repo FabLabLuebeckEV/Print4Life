@@ -1,689 +1,771 @@
 {
-    "buttons": {
-        "back": {
-            "tooltip": "Zurück"
-        },
-        "add": {
-            "tooltip": "Neu anlegen"
-        },
-        "edit": {
-            "tooltip": "Ändern"
-        },
-        "delete": {
-            "deleteTooltip": "Löschen",
-            "toggleTooltip": "Aktiv Status wechseln"
-        }
+  "buttons": {
+    "back": {
+      "tooltip": "Zurück"
     },
-    "date": {
-        "dateFormat": "DD.MM.YYYY",
-        "dateTimeFormat": "DD.MM.YYYY HH:mm"
+    "add": {
+      "tooltip": "Neu anlegen"
     },
-    "weekdays": {
-        "short": {
-            "monday": "Mo",
-            "tuesday": "Di",
-            "wednesday": "Mi",
-            "thursday": "Do",
-            "friday": "Fr",
-            "saturday": "Sa",
-            "sunday": "So"
-        }
+    "edit": {
+      "tooltip": "Ändern"
     },
-    "months": {
-        "short": {
-            "january": "Jan",
-            "february": "Feb",
-            "march": "Mär",
-            "april": "Apr",
-            "may": "Mai",
-            "june": "Jun",
-            "july": "Jul",
-            "august": "Aug",
-            "september": "Sep",
-            "october": "Okt",
-            "november": "Nov",
-            "december": "Dez"
-        },
-        "long": {
-            "january": "Januar",
-            "february": "Februar",
-            "march": "März",
-            "april": "April",
-            "may": "Mai",
-            "june": "Juni",
-            "july": "Juli",
-            "august": "August",
-            "september": "September",
-            "october": "Oktober",
-            "november": "November",
-            "december": "Dezember"
-        }
-    },
-    "dashboard": {
-        "title": "Willkommen zur Fablab - Auftragsverwaltung!",
-        "order": "Order",
-        "management": "Management",
-        "system": "System",
-        "accountQuestion": "Noch keinen Account?",
-        "accountCreation": "Registrieren",
-        "buttons": {
-            "login": "Einloggen"
-        }
-    },
-    "upload": {
-        "labels": {
-            "title": "Dateien auswählen",
-            "dropzone": "Dropzone",
-            "multiple": "Mehrere Dateien",
-            "name": "Name",
-            "type": "Typ",
-            "size": "Größe",
-            "actions": "Aktionen",
-            "queueTitle": "Gesamtanzahl an Dateien zum Upload: ",
-            "removeAllButton": "Alle aus Warteschlange entfernen",
-            "spinnerLoadingText": "Dateien werden hochgeladen..."
-        }
-    },
-    "navigation": {
-        "title": "Auftragsverwaltung",
-        "login": "Einloggen",
-        "logout": "Ausloggen",
-        "register": "Registrieren",
-        "privacyPolicy": "Datenschutz",
-        "imprint": "Impressum"
-    },
-    "languages": {
-        "title": "Sprachauswahl",
-        "german": "Deutsch",
-        "english": "Englisch",
-        "danish": "Dänisch",
-        "de": "Deutsch",
-        "en": "Englisch",
-        "dk": "Dänisch"
-    },
-    "dropdown": {
-        "machines": {
-            "title": "Maschinen",
-            "listMachines": "Maschinenliste",
-            "createMachine": "Maschine anlegen",
-            "listSuccessfulOrders": "Machinenstatistik anzeigen"
-        },
-        "orders": {
-            "title": "Aufträge",
-            "listOrders": "Auftragsliste",
-            "createOrder": "Auftrag anlegen",
-            "createShared": "Gast Auftrag anlegen",
-            "outstandingOrders": "Herausragende Projekte",
-            "unfinishedOrders": "Offene Aufträge",
-            "myOrders": "Meine Aufträge"
-        },
-        "iotDevices": {
-            "title": "IoT Geräte",
-            "createIotDevice": "IoT Gerät hinzufügen",
-            "listIotDevices": "Meine IoT Geräte"
-        },
-        "users": {
-            "title": "Benutzer",
-            "signUp": "Registrieren",
-            "login": "Einloggen",
-            "profile": "Benutzerprofil anzeigen",
-            "listUsers": "Benutzerliste"
-        }
-    },
-    "deviceTypes": {
-        "lasercutter": "Lasercutter",
-        "otherMachine": "Andere Machine",
-        "millingMachine": "Fräsmaschine",
-        "3d-printer": "3D Drucker",
-        "unknown": "Unbekannt"
-    },
-    "materialTypes": {
-        "printerMaterial": "Drucker Material"
-    },
-    "status": {
-        "new": "Neu",
-        "assigned": "Zugewiesen",
-        "production": "In Produktion",
-        "shipment": "Im Versand",
-        "archived": "Archiviert",
-        "representive": "Veröffentlicht",
-        "deleted": "Gelöscht",
-        "completed": "Abgeschlossen"
-    },
-    "roles": {
-        "guest": "Gast",
-        "user": "Benutzer",
-        "editor": "Bearbeiter",
-        "admin": "Administrator"
-    },
-    "iotDeviceList": {
-        "paginationLabel": "Springe zur Seite",
-        "spinnerLoadingText": "Lade IoT Geräte",
-        "buttons": {
-            "deleteLabel": "Löschen",
-            "detailLabel": "Gerätedetails"
-        },
-        "modals": {
-            "yes": "Ja",
-            "abort": "Nein",
-            "abortValue": "Abbrechen",
-            "deleteValue": "Löschen",
-            "deleteHeader": "Möchten Sie das Gerät wirklich löschen?",
-            "deleteQuestion": "Sind Sie sich sicher, dass Sie",
-            "deleteQuestion2": "dieses Gerät wirklich entfernen möchten?",
-            "deleteWarning": "Das Löschen eines Geräts entfernt auch dessen Zugang zu Watson/MQTT."
-        },
-        "filterLabel": {
-            "search": "Suche"
-        }
-    },
-    "machineList": {
-        "paginationLabel": "Springe zur Seite",
-        "filterLabel": {
-            "type": "Filter nach Maschinentyp:",
-            "search": "Suche nach:",
-            "fablab": "Filter nach Fablab:",
-            "activation": "Filter nach Aktivierung:"
-        },
-        "spinnerLoadingText": "Lade Maschinen",
-        "buttons": {
-            "deleteLabel": "Löschen",
-            "toggleLabel": "Aktiv Status wechseln",
-            "updateLabel": "Ändern"
-        },
-        "modals": {
-            "yes": "Ja",
-            "abort": "Nein",
-            "deleteValue": "Deaktivieren",
-            "abortValue": "Abbrechen",
-            "deleteHeader": "Möchten den Status der Maschine ändern?",
-            "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "den Aktiv Status wechseln wollen?"
-        },
-        "activations": {
-            "active": "Aktive",
-            "inactive": "Inaktive"
-        }
-    },
-    "machineForm": {
-        "createTitle": "Maschine anlegen",
-        "editTitle": "Maschine bearbeiten",
-        "generalData": "Allgemeine Maschinendaten",
-        "labels": {
-            "create": "Anlegen",
-            "edit": "Aktualisieren",
-            "deviceName": "Name der Maschine",
-            "fablab": "Fablab",
-            "manufacturer": "Hersteller",
-            "data": "Daten",
-            "camSoftware": "Cam Software",
-            "nozzleDiameter": "Durchmesser Düse(n) (mm)",
-            "materials": "Materialien",
-            "printVolume": "Druckvolumen",
-            "printResolution": "Druckauflösung",
-            "numberOfExtruders": "Anzahl von Extrudern",
-            "comment": "Kommentar",
-            "movementSpeed": "Bewegungsgeschwindigkeit (m/s)",
-            "stepSize": "Schrittgröße (micron)",
-            "workspace": "Arbeitsfläche",
-            "laserTypes": "Lasertypen",
-            "laserPower": "Leistung des Lasers (Watt)",
-            "maxResolution": "Maximale Auflösung (micron)",
-            "typeOfMachine": "Typ der Maschine",
-            "isActivated": "Status",
-            "informationLink": "Mehr Informationen (Link)"
-        },
-        "buttons": {
-            "activatedTrue": "Aktiv",
-            "activatedFalse": "Inaktiv"
-        },
-        "modals": {
-            "ok": "Ok",
-            "error": "Fehler",
-            "updatingError": "Es ist ein Fehler beim Aktualisieren der Maschine aufgetreten",
-            "updatingSuccessHeader": "Maschine erfolgreich aktualisiert",
-            "updatingSuccessMsg": "Aktualisieren der Maschine war erfolgreich!",
-            "creatingSuccessHeader": "Maschine erfolgreich angelegt",
-            "creatingSuccessMsg": "Die Anlage der Maschine war erfolgreich!"
-        },
-        "messages": {
-            "deviceName": "Der Name der Maschine wird benötigt",
-            "fablab": "Fablab wird benötigt",
-            "manufacturer": "Hersteller wird benötigt",
-            "typeOfMachine": "Der Typ der Maschine wird benötigt"
-        }
-    },
-    "machineDetail": {
-        "labels": {
-            "active": "Aktiv",
-            "inactive": "Inaktiv"
-        },
-        "titles": {
-            "machineProps": "Maschinen Daten",
-            "laserTypes": "Laser Typen",
-            "fablab": "Fablab",
-            "materials": "Materialien",
-            "successfulOrders": "Erfolgreiche Aufträge",
-            "schedules": "Maschinenplanung"
-        },
-        "modals": {
-            "yes": "Ja",
-            "no": "Nein",
-            "deleteReturnValue": "Löschen",
-            "abortReturnValue": "Abbrechen",
-            "deleteHeader": "Möchten den Status der Maschine ändern?",
-            "deleteMessage": "Sind Sie sicher, dass Sie",
-            "deleteMessage2": "den Aktiv Status wechseln wollen?"
-        },
-        "buttons": {
-            "toggleTooltip": "Aktiv Status wechseln"
-        },
-        "props": {
-            "activated": "Aktiv-Status",
-            "deviceName": "Name der Maschine",
-            "type": "Typ",
-            "manufacturer": "Hersteller",
-            "workspaceX": "Arbeitsfläche X (mm)",
-            "workspaceY": "Arbeitsfläche Y (mm)",
-            "workspaceZ": "Arbeitsfläche Z (mm)",
-            "maxResolution": "Maximale Auflösung (micron)",
-            "laserPower": "Leistung des Lasers (Watt)",
-            "comment": "Kommentar",
-            "name": "Name",
-            "phone": "Telefon",
-            "mail": "E-Mail",
-            "laserType": "Lasertyp",
-            "material": "Material",
-            "camSoftware": "Kamera Software",
-            "movementSpeed": "Bewegungsgeschwindigkeit (m/s)",
-            "stepSize": "Schrittgröße",
-            "typeOfMachine": "Typ der Machine",
-            "printVolumeX": "Druckvolumen X (mm)",
-            "printVolumeY": "Druckvolumen Y (mm)",
-            "printVolumeZ": "Druckvolumen Z (mm)",
-            "printResolutionX": "Druckauflösung X",
-            "printResolutionY": "Druckauflösung Y",
-            "printResolutionZ": "Druckauflösung Z",
-            "nozzleDiameter": "Durchmesser Düse(n) (mm)",
-            "numberOfExtruders": "Anzahl von Extrudern",
-            "street": "Straße",
-            "zipCode": "Postleitzahl",
-            "city": "Stadt",
-            "country": "Land",
-            "projectname": "Projektname",
-            "shownStartDate": "Startdatum",
-            "shownEndDate": "Enddatum",
-            "informationLink": "Mehr Informationen"
-        }
-    },
-    "userList": {
-        "title": "Benutzerliste",
-        "spinnerLoadingText": "Lade Benutzer",
-        "paginationLabel": "Springe zur Seite",
-        "filterLabel": {
-            "roles": "Filter nach Rolle:",
-            "fablabs": "Filter nach Fablab:",
-            "search": "Suche nach:"
-        },
-        "buttons": {
-            "deleteLabel": "Deaktivieren",
-            "updateLabel": "Ändern"
-        },
-        "modals": {
-            "yes": "Ja",
-            "abort": "Nein",
-            "deleteValue": "Deaktivieren",
-            "abortValue": "Abbrechen",
-            "deleteHeader": "Möchten Sie den Nutzer wirklich deaktivieren?",
-            "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "deaktivieren wollen?"
-        },
-        "badges": {
-            "active": "Aktiv",
-            "inactive": "Inaktiv"
-        }
-    },
-    "orderList": {
-        "paginationLabel": "Springe zur Seite",
-        "filterLabel": {
-            "machines": "Filter nach Maschinentyp:",
-            "status": "Filter nach Status:",
-            "fablabs": "Filter nach Fablab:",
-            "startDay": "Filter nach geplanten Start Tag:",
-            "endDay": "Filter nach geplanten End Tag:",
-            "search": "Suche nach:"
-        },
-        "spinnerLoadingText": "Lade Aufträge",
-        "buttons": {
-            "deleteLabel": "Löschen",
-            "updateLabel": "Ändern"
-        },
-        "modals": {
-            "yes": "Ja",
-            "abort": "Nein",
-            "deleteValue": "Löschen",
-            "abortValue": "Abbrechen",
-            "deleteHeader": "Möchten Sie wirklich diesen Auftrag löschen?",
-            "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "löschen wollen?",
-            "deleteWarning": "Das Löschen des Auftrags entfernt auch alle alten Dateien und behält nur die letzten aktuellen Dateien!"
-        },
-        "messages": {
-            "datePicker": "Das Startdatum ist größer als das Enddatum"
-        }
-    },
-    "address": {
-        "street": "Straße",
-        "zipCode": "PLZ",
-        "city": "Stadt",
-        "country": "Land"
-    },
-    "iotDeviceDetail": {
-        "labels": {
-            "deviceId": "Gerätename",
-            "mqttHeader": "MQTT Zugangsdaten",
-            "username": "Benutzername",
-            "password": "Passwort",
-            "dataformat": "Datenformat",
-            "clientId": "Client ID",
-            "deviceType": "Geräte Typ"
-        },
-        "modals": {
-            "ok": "Ja",
-            "abort": "Nein",
-            "abortReturnValue": "Abbrechen",
-            "deleteReturnValue": "Löschen",
-            "deleteHeader": "Gerät löschen",
-            "deleteQuestion": "Sind Sie sich sicher, dass Sie dieses Gerät wirklich entfernen möchten?",
-            "deleteWarning": "Das Löschen eines Geräts entfernt auch dessen Zugang zu Watson/MQTT."
-        }
-    },
-    "iotDevicesForm": {
-        "createTitle": "IoT Gerät hinzufügen",
-        "buttons": {
-            "deleteTooltip": "Löschen"
-        },
-        "labels": {
-            "deviceId": "Gerätename",
-            "deviceType": "Gerätetyp wählen",
-            "submit": "Hinzufügen"
-        },
-        "messages": {
-            "deviceId": "Der Name ist nicht gesetzt.",
-            "deviceId2": "Der Name ist bereits vergeben.",
-            "deviceId3": "Der Name ist ungültig, erlaubt sind: 1 bis 36 Zeichen, a-z, A-Z, 0-9, '.', '-' und '_'",
-            "eventsNotValid": "Füge mindestens ein Event hinzu bzw. mindestens eins scheint fehlerhaft zu sein."
-        },
-        "modals": {
-            "ok": "Okay",
-            "errorHeader": "Fehler",
-            "successHeader": "MQTT Zugangsdaten",
-            "username": "Benutzername",
-            "password": "Passwort",
-            "dataformat": "Datenformat",
-            "saveHint": "Verwende die folgenden Daten für dein Gerät:"
-        }
-    },
-    "orderForm": {
-        "createTitle": "Auftrag anlegen",
-        "editTitle": "Auftrag bearbeiten",
-        "publicHint": "Dieses Feld wird für dich und die Welt öffentlich sein.",
-        "privateHint": "Dies wird nur für dich, die Bearbeiter und Administratoren sichtbar sein.",
-        "labels": {
-            "editSubmit": "Aktualisieren",
-            "createSubmit": "Anlegen",
-            "sendComment": "Kommentar absenden",
-            "projectName": "Projektname",
-            "owner": "Ersteller",
-            "editor": "Bearbeiter",
-            "status": "Status",
-            "machineType": "Maschinentyp",
-            "selectedMachine": "Ausgewählte Maschine",
-            "selectedMachineInfo": "Info",
-            "comments": "Kommentare",
-            "newComment": "Neuer Kommentar",
-            "author": "Author",
-            "content": "Inhalt",
-            "createdAt": "Erstellt am",
-            "addressTitle": "Liefer-/Abholadresse",
-            "shippingAddresses": {
-                "userAddress": "Deine Adresse",
-                "fablabAddress": "Dein FabLab",
-                "newAddress": "Neue Adresse"
-            },
-            "fileUpload": "Dateiupload",
-            "files": "Aktuelle Dateien",
-            "file": "Datei",
-            "latestVersion": "Aktuelle Version",
-            "datePickerStart": "Starttag der Bearbeitung",
-            "datePickerEnd": "Endtag der Bearbeitung",
-            "timePickerStart": "Startzeit am Starttag",
-            "timePickerEnd": "Endzeit am Endtag",
-            "machineSchedule": "Maschinenplanung",
-            "startDate": "Startdatum",
-            "endDate": "Enddatum",
-            "copyright": "Sind Sie der Eigentümer der Dateien und haben sie deren Copyright?",
-            "fablab": "Fablab"
-        },
-        "modals": {
-            "ok": "Ok",
-            "okReturnValue": "Ok",
-            "createCommentError": "Es ist ein Fehler beim Absenden eines neuen Kommentars aufgetreten.",
-            "createCommentSuccessHeader": "Kommentar wurde erfolgreich hinzugefügt",
-            "createCommentSuccess": "Dein Kommentar wurde gespeichert!",
-            "createOrderSuccessHeader": "Auftrag angelegt",
-            "updateOrderSuccessHeader": "Auftrag aktualisiert",
-            "createOrderSuccess": "Der Auftrag wurde erfolgreich angelegt!",
-            "updateOrderSuccess": "Der Auftrag wurde erfolgreich aktualisiert!",
-            "errorHeader": "Fehler",
-            "updateError": "Ein Fehler ist beim Aktualisieren aufgetreten!",
-            "createError": "Ein Fehler ist beim Anlegen aufgetreten!",
-            "orderSharedLinkSuccessHeader": "Gastauftrags Link sichern",
-            "orderSharedLinkSuccess": "Sichern Sie die folgenden Link, um auf den Auftrag zuzugreifen: "
-        },
-        "messages": {
-            "projectName": "Der Projektname wird benötigt",
-            "owner": "Der Name des Erstellers wird benötigt",
-            "status": "Der Status wird benötigt",
-            "statusDeprecated": "Achtung! Bei diesem Status werden alle alten und nicht aktuellen Dateien aus diesem Auftrag gelöscht!",
-            "machineType": "Der Maschinentyp wird benötigt",
-            "selectedMachine": "Die Maschine wird benötigt",
-            "unnamedFablab": "Unbekanntes FabLab",
-            "author": "Der Name des Authors wird benötigt",
-            "content": "Der Inhalt des Kommentars wird benötigt",
-            "datePicker": "Das Startdatum ist größer als das Enddatum",
-            "timePicker": "Die Start- und Endzeit ist falsch. Bitte das Datum und die Zeiten prüfen",
-            "copyright": "Wenn Sie Dateien hochladen wollen oder hochgeladen haben, müssen Sie bestätigen, dass sie der Urheber der Daten sind.",
-            "street": "Die Straße wird benötigt",
-            "zipCode": "Die Postleitzahl wird benötigt",
-            "city": "Die Stadt wird benötigt",
-            "country": "Das Land wird benötigt"
-        }
-    },
-    "userDetail": {
-        "labels": {
-            "username": "Benutzername",
-            "firstname": "Vorname",
-            "lastname": "Nachnahme",
-            "email": "Emailadresse",
-            "address": {
-                "title": "Adresse",
-                "street": "Straße",
-                "city": "Stadt",
-                "zipCode": "PLZ",
-                "country": "Land"
-            },
-            "activated": "Aktiviert",
-            "role": "Rolle",
-            "preferredLanguage": "Bevorzugte Sprache",
-            "fablab": "Fablab"
-        },
-        "modals": {
-            "ok": "Ja",
-            "abort": "Nein",
-            "deactivateReturnValue": "Deaktivieren",
-            "abortReturnValue": "Abbrechen",
-            "deleteHeader": "Wollen Sie wirklich diesen Benutzer deaktivieren?",
-            "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "den benutzer deaktivieren wollen?"
-        },
-        "badges": {
-            "active": "Aktiv",
-            "inactive": "Inaktiv"
-        }
-    },
-    "orderDetail": {
-        "buttons": {
-            "tooltips": {
-                "delete": "Löschen",
-                "print": "Auftrag über Octoprint drucken"
-            }
-        },
-        "labels": {
-            "owner": "Ersteller",
-            "editor": "Bearbeiter",
-            "status": "Status",
-            "createdAt": "Erstellt am",
-            "machine": "Maschine",
-            "machineNotSet": "Nicht gesetzt",
-            "fablab": "Fablab",
-            "comments": "Kommentare",
-            "author": "Author",
-            "content": "Inhalt",
-            "files": "Dateien",
-            "file": "Datei",
-            "addressTitle": "Lieferadresse",
-            "latestVersion": "Aktuelle Version",
-            "scheduledFor": "Geplant für"
-        },
-        "modals": {
-            "ok": "Ja",
-            "abort": "Nein",
-            "cancel": "Abbrechen",
-            "deleteReturnValue": "Löschen",
-            "abortReturnValue": "Abbrechen",
-            "cancelReturnValue": "Abbrechen",
-            "deleteHeader": "Wollen Sie wirklich diesen Auftrag löschen?",
-            "deleteQuestion": "Sind Sie sicher, dass Sie",
-            "deleteQuestion2": "löschen wollen?",
-            "deleteWarning": "Das Löschen des Auftrags entfernt auch alle alten Dateien und behält nur die letzten aktuellen Dateien!",
-            "printHeader": "Druckauftrag starten",
-            "addressLabel": "Octoprint URL",
-            "apiKeyLabel": "Octoprint API Key",
-            "fileSelectLabel": "Druckdatei"
-        }
-    },
-    "userForm": {
-        "createTitle": "Benutzer registrieren",
-        "editTitle": "Benutzer bearbeiten",
-        "labels": {
-            "username": "Benutzername",
-            "firstName": "Vorname",
-            "secondName": "Nachname",
-            "password": "Passwort",
-            "passwordValidation": "Passwort Bestätigung",
-            "email": "E-Mail Adresse",
-            "role": "Rolle",
-            "isActivated": "Account aktiviert",
-            "createSubmit": "Registrieren",
-            "editSubmit": "Aktualisieren",
-            "fablab": "Fablab",
-            "changePassword": "Passwort Ändern",
-            "preferredLanguage": "Bevorzugte Sprache"
-        },
-        "modals": {
-            "ok": "Ok",
-            "okReturnValue": "Ok",
-            "createSuccessHeader": "Benutzer registriert",
-            "updateSuccessHeader": "Benutzer aktualisiert",
-            "createSuccess": "Der Benutzer wurde erfolgreich registriert!",
-            "updateSuccess": "Der Benutzer wurde erfolgreich aktualisiert!",
-            "errorHeader": "Fehler",
-            "updateError": "Fehler beim Aktualisieren des Benutzers!",
-            "createError": "Fehler beim Registrieren des Benutzers!",
-            "updatePasswordSuccessHeader": "Passwort aktualisiert",
-            "updatePasswordSuccess": "Benutzen Sie von nun an das neue Passwort.",
-            "updatePasswordErrorHeader": "Fehlgeschlagen",
-            "updatePassworderror": "Das aktuelle Passwort war falsch."
-        },
-        "messages": {
-            "username": "Der Benutzername wird benötigt",
-            "firstName": "Der Vorname wird benötigt",
-            "secondName": "Der Nachname wird benötigt",
-            "password": "Das Passwort wird benötigt",
-            "passwordValidation": "Das Passwort muss bestätigt werden",
-            "passwordValidationWrong": "Das Passwort und die Bestätigung stimmen nicht über ein!",
-            "email": "Die E-Mail Adresse wird benötigt",
-            "role": "Die Rolle wird benötigt",
-            "street": "Die Straße wird benötigt",
-            "zipCode": "Die Postleitzahl wird benötigt",
-            "city": "Die Stadt wird benötigt",
-            "country": "Das Land wird benötigt",
-            "notAssigned": "Keine Zuweisung",
-            "preferredLanguage": "Eine bevorzugte Sprache wird benötigt"
-        },
-        "buttons": {
-            "activatedTrue": "Aktiv",
-            "activatedFalse": "Inaktiv",
-            "changePassword": "Ändern"
-        }
-    },
-    "tableComponent": {
-        "id": "ID",
-        "Device ID": "Gerät ID",
-        "Type": "Typ",
-        "Device Type": "Maschinen Typ",
-        "Device Name": "Maschinen Name",
-        "Manufacturer": "Hersteller",
-        "Fablab": "Fablab",
-        "Description": "Beschreibung",
-        "Comment": "Kommentar",
-        "Created at": "Erstellt am",
-        "Projectname": "Projektname",
-        "Owner": "Ersteller",
-        "Editor": "Bearbeiter",
-        "Status": "Status",
-        "Username": "Benutzername",
-        "Firstname": "Vorname",
-        "Lastname": "Nachname",
-        "Role": "Rolle",
-        "Active": "Aktiviert",
-        "Successful Orders": "Erfolgreiche Aufträge",
-        "Schedule Start Date": "Geplantes Start Datum",
-        "Schedule End Date": "Geplantes End Datum"
-    },
-    "loginModal": {
-        "title": "Einloggen",
-        "labels": {
-            "username": "Benutzername",
-            "password": "Passwort",
-            "login": "Einloggen",
-            "resetPassword": "Passwort vergessen?"
-        },
-        "modals": {
-            "title": "Passwort zurücksetzen",
-            "inputLabel": "E-Mail Adresse",
-            "buttonLabel": "Zurücksetzen",
-            "successHeader": "Password wurde zurückgesetzt!",
-            "successMessage": "Bitte überprüfen Sie Ihre E-Mails.",
-            "errorHeader": "Ein Fehler ist aufgetreten",
-            "errorMessage": "Wir konnten das Passwort nicht zurücksetzen."
-        }
-    },
-    "changePasswdModal": {
-        "title": "Passwort ändern",
-        "labels": {
-            "oldPassword": "Altes Password",
-            "password": "Passwort",
-            "password2": "Passwort bestätigen"
-        },
-        "modals": {
-            "title": "Passwort Ändern",
-            "buttonLabel": "Aktualisieren",
-            "successHeader": "Erldigt",
-            "successMessage": "Verwenden Sie von nun an Ihr neues Passwort.",
-            "errorHeader": "Ein Fehler ist aufgetreten",
-            "errorMessage": "Wir konnten das Passwort nicht ändern."
-        }
+    "delete": {
+      "deleteTooltip": "Löschen",
+      "toggleTooltip": "Aktiv Status wechseln"
     }
+  },
+  "date": {
+    "dateFormat": "DD.MM.YYYY",
+    "dateTimeFormat": "DD.MM.YYYY HH:mm"
+  },
+  "weekdays": {
+    "short": {
+      "monday": "Mo",
+      "tuesday": "Di",
+      "wednesday": "Mi",
+      "thursday": "Do",
+      "friday": "Fr",
+      "saturday": "Sa",
+      "sunday": "So"
+    }
+  },
+  "months": {
+    "short": {
+      "january": "Jan",
+      "february": "Feb",
+      "march": "Mär",
+      "april": "Apr",
+      "may": "Mai",
+      "june": "Jun",
+      "july": "Jul",
+      "august": "Aug",
+      "september": "Sep",
+      "october": "Okt",
+      "november": "Nov",
+      "december": "Dez"
+    },
+    "long": {
+      "january": "Januar",
+      "february": "Februar",
+      "march": "März",
+      "april": "April",
+      "may": "Mai",
+      "june": "Juni",
+      "july": "Juli",
+      "august": "August",
+      "september": "September",
+      "october": "Oktober",
+      "november": "November",
+      "december": "Dezember"
+    }
+  },
+  "dashboard": {
+    "title": "Willkommen zu Print4Life!",
+    "order": "Order",
+    "management": "Management",
+    "system": "System",
+    "accountQuestion": "Noch keinen Account?",
+    "accountCreation": "Registrieren",
+    "buttons": {
+      "login": "Einloggen"
+    }
+  },
+  "upload": {
+    "labels": {
+      "title": "Dateien auswählen",
+      "dropzone": "Dropzone",
+      "multiple": "Mehrere Dateien",
+      "name": "Name",
+      "type": "Typ",
+      "size": "Größe",
+      "actions": "Aktionen",
+      "queueTitle": "Gesamtanzahl an Dateien zum Upload: ",
+      "removeAllButton": "Alle aus Warteschlange entfernen",
+      "spinnerLoadingText": "Dateien werden hochgeladen..."
+    }
+  },
+  "navigation": {
+    "title": "Print4Life",
+    "login": "Einloggen",
+    "logout": "Ausloggen",
+    "register": "Registrieren",
+    "privacyPolicy": "Datenschutz",
+    "imprint": "Impressum"
+  },
+  "languages": {
+    "title": "Sprachauswahl",
+    "german": "Deutsch",
+    "english": "Englisch",
+    "danish": "Dänisch",
+    "de": "Deutsch",
+    "en": "Englisch",
+    "dk": "Dänisch"
+  },
+  "dropdown": {
+    "machines": {
+      "title": "Maschinen",
+      "listMachines": "Maschinenliste",
+      "createMachine": "Maschine anlegen",
+      "listSuccessfulOrders": "Machinenstatistik anzeigen"
+    },
+    "orders": {
+      "title": "Aufträge",
+      "listOrders": "Auftragsliste",
+      "createOrder": "Auftrag anlegen",
+      "createShared": "Gast Auftrag anlegen",
+      "outstandingOrders": "Herausragende Projekte",
+      "unfinishedOrders": "Offene Aufträge",
+      "myOrders": "Meine Aufträge"
+    },
+    "iotDevices": {
+      "title": "IoT Geräte",
+      "createIotDevice": "IoT Gerät hinzufügen",
+      "listIotDevices": "Meine IoT Geräte"
+    },
+    "users": {
+      "title": "Benutzer",
+      "signUp": "Registrieren",
+      "login": "Einloggen",
+      "profile": "Benutzerprofil anzeigen",
+      "listUsers": "Benutzerliste"
+    },
+    "fablabs": {
+      "title": "Fablab",
+      "signUp": "Registrieren",
+      "profile": "Fablabprofil anzeigen",
+      "listFablabs": "Fablab Liste"
+    }
+  },
+  "deviceTypes": {
+    "lasercutter": "Lasercutter",
+    "otherMachine": "Andere Machine",
+    "millingMachine": "Fräsmaschine",
+    "3d-printer": "3D Drucker",
+    "unknown": "Unbekannt"
+  },
+  "materialTypes": {
+    "printerMaterial": "Drucker Material"
+  },
+  "status": {
+    "new": "Neu",
+    "assigned": "Zugewiesen",
+    "production": "In Produktion",
+    "shipment": "Im Versand",
+    "archived": "Archiviert",
+    "representive": "Veröffentlicht",
+    "deleted": "Gelöscht",
+    "completed": "Abgeschlossen"
+  },
+  "roles": {
+    "guest": "Gast",
+    "user": "Benutzer",
+    "editor": "Bearbeiter",
+    "admin": "Administrator"
+  },
+  "iotDeviceList": {
+    "paginationLabel": "Springe zur Seite",
+    "spinnerLoadingText": "Lade IoT Geräte",
+    "buttons": {
+      "deleteLabel": "Löschen",
+      "detailLabel": "Gerätedetails"
+    },
+    "modals": {
+      "yes": "Ja",
+      "abort": "Nein",
+      "abortValue": "Abbrechen",
+      "deleteValue": "Löschen",
+      "deleteHeader": "Möchten Sie das Gerät wirklich löschen?",
+      "deleteQuestion": "Sind Sie sich sicher, dass Sie",
+      "deleteQuestion2": "dieses Gerät wirklich entfernen möchten?",
+      "deleteWarning": "Das Löschen eines Geräts entfernt auch dessen Zugang zu Watson/MQTT."
+    },
+    "filterLabel": {
+      "search": "Suche"
+    }
+  },
+  "machineList": {
+    "paginationLabel": "Springe zur Seite",
+    "filterLabel": {
+      "type": "Filter nach Maschinentyp:",
+      "search": "Suche nach:",
+      "fablab": "Filter nach Fablab:",
+      "activation": "Filter nach Aktivierung:"
+    },
+    "spinnerLoadingText": "Lade Maschinen",
+    "buttons": {
+      "deleteLabel": "Löschen",
+      "toggleLabel": "Aktiv Status wechseln",
+      "updateLabel": "Ändern"
+    },
+    "modals": {
+      "yes": "Ja",
+      "abort": "Nein",
+      "deleteValue": "Deaktivieren",
+      "abortValue": "Abbrechen",
+      "deleteHeader": "Möchten den Status der Maschine ändern?",
+      "deleteQuestion": "Sind Sie sicher, dass Sie",
+      "deleteQuestion2": "den Aktiv Status wechseln wollen?"
+    },
+    "activations": {
+      "active": "Aktive",
+      "inactive": "Inaktive"
+    }
+  },
+  "machineForm": {
+    "createTitle": "Maschine anlegen",
+    "editTitle": "Maschine bearbeiten",
+    "generalData": "Allgemeine Maschinendaten",
+    "labels": {
+      "create": "Anlegen",
+      "edit": "Aktualisieren",
+      "deviceName": "Name der Maschine",
+      "fablab": "Fablab",
+      "manufacturer": "Hersteller",
+      "data": "Daten",
+      "camSoftware": "Cam Software",
+      "nozzleDiameter": "Durchmesser Düse(n) (mm)",
+      "materials": "Materialien",
+      "printVolume": "Druckvolumen",
+      "printResolution": "Druckauflösung",
+      "numberOfExtruders": "Anzahl von Extrudern",
+      "comment": "Kommentar",
+      "movementSpeed": "Bewegungsgeschwindigkeit (m/s)",
+      "stepSize": "Schrittgröße (micron)",
+      "workspace": "Arbeitsfläche",
+      "laserTypes": "Lasertypen",
+      "laserPower": "Leistung des Lasers (Watt)",
+      "maxResolution": "Maximale Auflösung (micron)",
+      "typeOfMachine": "Typ der Maschine",
+      "isActivated": "Status",
+      "informationLink": "Mehr Informationen (Link)"
+    },
+    "buttons": {
+      "activatedTrue": "Aktiv",
+      "activatedFalse": "Inaktiv"
+    },
+    "modals": {
+      "ok": "Ok",
+      "error": "Fehler",
+      "updatingError": "Es ist ein Fehler beim Aktualisieren der Maschine aufgetreten",
+      "updatingSuccessHeader": "Maschine erfolgreich aktualisiert",
+      "updatingSuccessMsg": "Aktualisieren der Maschine war erfolgreich!",
+      "creatingSuccessHeader": "Maschine erfolgreich angelegt",
+      "creatingSuccessMsg": "Die Anlage der Maschine war erfolgreich!"
+    },
+    "messages": {
+      "deviceName": "Der Name der Maschine wird benötigt",
+      "fablab": "Fablab wird benötigt",
+      "manufacturer": "Hersteller wird benötigt",
+      "typeOfMachine": "Der Typ der Maschine wird benötigt"
+    }
+  },
+  "machineDetail": {
+    "labels": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "titles": {
+      "machineProps": "Maschinen Daten",
+      "laserTypes": "Laser Typen",
+      "fablab": "Fablab",
+      "materials": "Materialien",
+      "successfulOrders": "Erfolgreiche Aufträge",
+      "schedules": "Maschinenplanung"
+    },
+    "modals": {
+      "yes": "Ja",
+      "no": "Nein",
+      "deleteReturnValue": "Löschen",
+      "abortReturnValue": "Abbrechen",
+      "deleteHeader": "Möchten den Status der Maschine ändern?",
+      "deleteMessage": "Sind Sie sicher, dass Sie",
+      "deleteMessage2": "den Aktiv Status wechseln wollen?"
+    },
+    "buttons": {
+      "toggleTooltip": "Aktiv Status wechseln"
+    },
+    "props": {
+      "activated": "Aktiv-Status",
+      "deviceName": "Name der Maschine",
+      "type": "Typ",
+      "manufacturer": "Hersteller",
+      "workspaceX": "Arbeitsfläche X (mm)",
+      "workspaceY": "Arbeitsfläche Y (mm)",
+      "workspaceZ": "Arbeitsfläche Z (mm)",
+      "maxResolution": "Maximale Auflösung (micron)",
+      "laserPower": "Leistung des Lasers (Watt)",
+      "comment": "Kommentar",
+      "name": "Name",
+      "phone": "Telefon",
+      "mail": "E-Mail",
+      "laserType": "Lasertyp",
+      "material": "Material",
+      "camSoftware": "Kamera Software",
+      "movementSpeed": "Bewegungsgeschwindigkeit (m/s)",
+      "stepSize": "Schrittgröße",
+      "typeOfMachine": "Typ der Machine",
+      "printVolumeX": "Druckvolumen X (mm)",
+      "printVolumeY": "Druckvolumen Y (mm)",
+      "printVolumeZ": "Druckvolumen Z (mm)",
+      "printResolutionX": "Druckauflösung X",
+      "printResolutionY": "Druckauflösung Y",
+      "printResolutionZ": "Druckauflösung Z",
+      "nozzleDiameter": "Durchmesser Düse(n) (mm)",
+      "numberOfExtruders": "Anzahl von Extrudern",
+      "street": "Straße",
+      "zipCode": "Postleitzahl",
+      "city": "Stadt",
+      "country": "Land",
+      "projectname": "Projektname",
+      "shownStartDate": "Startdatum",
+      "shownEndDate": "Enddatum",
+      "informationLink": "Mehr Informationen"
+    }
+  },
+  "userList": {
+    "title": "Benutzerliste",
+    "spinnerLoadingText": "Lade Benutzer",
+    "paginationLabel": "Springe zur Seite",
+    "filterLabel": {
+      "roles": "Filter nach Rolle:",
+      "fablabs": "Filter nach Fablab:",
+      "search": "Suche nach:"
+    },
+    "buttons": {
+      "deleteLabel": "Deaktivieren",
+      "updateLabel": "Ändern"
+    },
+    "modals": {
+      "yes": "Ja",
+      "abort": "Nein",
+      "deleteValue": "Deaktivieren",
+      "abortValue": "Abbrechen",
+      "deleteHeader": "Möchten Sie den Nutzer wirklich deaktivieren?",
+      "deleteQuestion": "Sind Sie sicher, dass Sie",
+      "deleteQuestion2": "deaktivieren wollen?"
+    },
+    "badges": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    }
+  },
+  "orderList": {
+    "paginationLabel": "Springe zur Seite",
+    "filterLabel": {
+      "machines": "Filter nach Maschinentyp:",
+      "status": "Filter nach Status:",
+      "fablabs": "Filter nach Fablab:",
+      "startDay": "Filter nach geplanten Start Tag:",
+      "endDay": "Filter nach geplanten End Tag:",
+      "search": "Suche nach:"
+    },
+    "spinnerLoadingText": "Lade Aufträge",
+    "buttons": {
+      "deleteLabel": "Löschen",
+      "updateLabel": "Ändern"
+    },
+    "modals": {
+      "yes": "Ja",
+      "abort": "Nein",
+      "deleteValue": "Löschen",
+      "abortValue": "Abbrechen",
+      "deleteHeader": "Möchten Sie wirklich diesen Auftrag löschen?",
+      "deleteQuestion": "Sind Sie sicher, dass Sie",
+      "deleteQuestion2": "löschen wollen?",
+      "deleteWarning": "Das Löschen des Auftrags entfernt auch alle alten Dateien und behält nur die letzten aktuellen Dateien!"
+    },
+    "messages": {
+      "datePicker": "Das Startdatum ist größer als das Enddatum"
+    }
+  },
+  "address": {
+    "street": "Straße",
+    "zipCode": "PLZ",
+    "city": "Stadt",
+    "country": "Land"
+  },
+  "iotDeviceDetail": {
+    "labels": {
+      "deviceId": "Gerätename",
+      "mqttHeader": "MQTT Zugangsdaten",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "dataformat": "Datenformat",
+      "clientId": "Client ID",
+      "deviceType": "Geräte Typ"
+    },
+    "modals": {
+      "ok": "Ja",
+      "abort": "Nein",
+      "abortReturnValue": "Abbrechen",
+      "deleteReturnValue": "Löschen",
+      "deleteHeader": "Gerät löschen",
+      "deleteQuestion": "Sind Sie sich sicher, dass Sie dieses Gerät wirklich entfernen möchten?",
+      "deleteWarning": "Das Löschen eines Geräts entfernt auch dessen Zugang zu Watson/MQTT."
+    }
+  },
+  "iotDevicesForm": {
+    "createTitle": "IoT Gerät hinzufügen",
+    "buttons": {
+      "deleteTooltip": "Löschen"
+    },
+    "labels": {
+      "deviceId": "Gerätename",
+      "deviceType": "Gerätetyp wählen",
+      "submit": "Hinzufügen"
+    },
+    "messages": {
+      "deviceId": "Der Name ist nicht gesetzt.",
+      "deviceId2": "Der Name ist bereits vergeben.",
+      "deviceId3": "Der Name ist ungültig, erlaubt sind: 1 bis 36 Zeichen, a-z, A-Z, 0-9, '.', '-' und '_'",
+      "eventsNotValid": "Füge mindestens ein Event hinzu bzw. mindestens eins scheint fehlerhaft zu sein."
+    },
+    "modals": {
+      "ok": "Okay",
+      "errorHeader": "Fehler",
+      "successHeader": "MQTT Zugangsdaten",
+      "username": "Benutzername",
+      "password": "Passwort",
+      "dataformat": "Datenformat",
+      "saveHint": "Verwende die folgenden Daten für dein Gerät:"
+    }
+  },
+  "orderForm": {
+    "createTitle": "Auftrag anlegen",
+    "editTitle": "Auftrag bearbeiten",
+    "publicHint": "Dieses Feld wird für dich und die Welt öffentlich sein.",
+    "privateHint": "Dies wird nur für dich, die Bearbeiter und Administratoren sichtbar sein.",
+    "labels": {
+      "editSubmit": "Aktualisieren",
+      "createSubmit": "Anlegen",
+      "sendComment": "Kommentar absenden",
+      "projectName": "Projektname",
+      "owner": "Ersteller",
+      "editor": "Bearbeiter",
+      "status": "Status",
+      "machineType": "Maschinentyp",
+      "selectedMachine": "Ausgewählte Maschine",
+      "selectedMachineInfo": "Info",
+      "comments": "Kommentare",
+      "newComment": "Neuer Kommentar",
+      "author": "Author",
+      "content": "Inhalt",
+      "createdAt": "Erstellt am",
+      "addressTitle": "Liefer-/Abholadresse",
+      "shippingAddresses": {
+        "userAddress": "Deine Adresse",
+        "fablabAddress": "Dein FabLab",
+        "newAddress": "Neue Adresse"
+      },
+      "fileUpload": "Dateiupload",
+      "files": "Aktuelle Dateien",
+      "file": "Datei",
+      "latestVersion": "Aktuelle Version",
+      "datePickerStart": "Starttag der Bearbeitung",
+      "datePickerEnd": "Endtag der Bearbeitung",
+      "timePickerStart": "Startzeit am Starttag",
+      "timePickerEnd": "Endzeit am Endtag",
+      "machineSchedule": "Maschinenplanung",
+      "startDate": "Startdatum",
+      "endDate": "Enddatum",
+      "copyright": "Sind Sie der Eigentümer der Dateien und haben sie deren Copyright?",
+      "fablab": "Fablab",
+      "batchTitle": "Stückzahl",
+      "batchDescription": "Sollen mehrere Kopien gefertigt werden?",
+      "batchNumber": "Gewünschte Anzahl:"
+    },
+    "modals": {
+      "ok": "Ok",
+      "okReturnValue": "Ok",
+      "createCommentError": "Es ist ein Fehler beim Absenden eines neuen Kommentars aufgetreten.",
+      "createCommentSuccessHeader": "Kommentar wurde erfolgreich hinzugefügt",
+      "createCommentSuccess": "Dein Kommentar wurde gespeichert!",
+      "createOrderSuccessHeader": "Auftrag angelegt",
+      "updateOrderSuccessHeader": "Auftrag aktualisiert",
+      "createOrderSuccess": "Der Auftrag wurde erfolgreich angelegt!",
+      "updateOrderSuccess": "Der Auftrag wurde erfolgreich aktualisiert!",
+      "errorHeader": "Fehler",
+      "updateError": "Ein Fehler ist beim Aktualisieren aufgetreten!",
+      "createError": "Ein Fehler ist beim Anlegen aufgetreten!",
+      "orderSharedLinkSuccessHeader": "Gastauftrags Link sichern",
+      "orderSharedLinkSuccess": "Sichern Sie die folgenden Link, um auf den Auftrag zuzugreifen: "
+    },
+    "messages": {
+      "projectName": "Der Projektname wird benötigt",
+      "owner": "Der Name des Erstellers wird benötigt",
+      "status": "Der Status wird benötigt",
+      "statusDeprecated": "Achtung! Bei diesem Status werden alle alten und nicht aktuellen Dateien aus diesem Auftrag gelöscht!",
+      "machineType": "Der Maschinentyp wird benötigt",
+      "selectedMachine": "Die Maschine wird benötigt",
+      "unnamedFablab": "Unbekanntes FabLab",
+      "author": "Der Name des Authors wird benötigt",
+      "content": "Der Inhalt des Kommentars wird benötigt",
+      "datePicker": "Das Startdatum ist größer als das Enddatum",
+      "timePicker": "Die Start- und Endzeit ist falsch. Bitte das Datum und die Zeiten prüfen",
+      "copyright": "Wenn Sie Dateien hochladen wollen oder hochgeladen haben, müssen Sie bestätigen, dass sie der Urheber der Daten sind.",
+      "street": "Die Straße wird benötigt",
+      "zipCode": "Die Postleitzahl wird benötigt",
+      "city": "Die Stadt wird benötigt",
+      "country": "Das Land wird benötigt"
+    }
+  },
+  "fablabDetail": {
+    "labels": {
+      "name": "Name",
+      "address": {
+        "title": "Adresse",
+        "street": "Straße",
+        "city": "Stadt",
+        "zipCode": "PLZ",
+        "country": "Land"
+      }
+    },
+    "modals": {
+      "ok": "Ja",
+      "abort": "Nein",
+      "deactivateReturnValue": "Deaktivieren",
+      "abortReturnValue": "Abbrechen",
+      "deleteHeader": "Wollen Sie wirklich dieses Fablab deaktivieren?",
+      "deleteQuestion": "Sind Sie sicher, dass Sie",
+      "deleteQuestion2": "dieses Fablab deaktivieren wollen?"
+    },
+    "badges": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    }
+  },
+  "userDetail": {
+    "labels": {
+      "username": "Benutzername",
+      "firstname": "Vorname",
+      "lastname": "Nachnahme",
+      "email": "Emailadresse",
+      "address": {
+        "title": "Adresse",
+        "street": "Straße",
+        "city": "Stadt",
+        "zipCode": "PLZ",
+        "country": "Land"
+      },
+      "activated": "Aktiviert",
+      "role": "Rolle",
+      "preferredLanguage": "Bevorzugte Sprache",
+      "fablab": "Fablab"
+    },
+    "modals": {
+      "ok": "Ja",
+      "abort": "Nein",
+      "deactivateReturnValue": "Deaktivieren",
+      "abortReturnValue": "Abbrechen",
+      "deleteHeader": "Wollen Sie wirklich diesen Benutzer deaktivieren?",
+      "deleteQuestion": "Sind Sie sicher, dass Sie",
+      "deleteQuestion2": "den benutzer deaktivieren wollen?"
+    },
+    "badges": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    }
+  },
+  "orderDetail": {
+    "buttons": {
+      "tooltips": {
+        "delete": "Löschen",
+        "print": "Auftrag über Octoprint drucken"
+      }
+    },
+    "labels": {
+      "owner": "Ersteller",
+      "editor": "Bearbeiter",
+      "status": "Status",
+      "createdAt": "Erstellt am",
+      "machine": "Maschine",
+      "machineNotSet": "Nicht gesetzt",
+      "fablab": "Fablab",
+      "comments": "Kommentare",
+      "author": "Author",
+      "content": "Inhalt",
+      "files": "Dateien",
+      "file": "Datei",
+      "addressTitle": "Lieferadresse",
+      "latestVersion": "Aktuelle Version",
+      "scheduledFor": "Geplant für",
+      "batched": "Produktionsstatus",
+      "batchAssigned": "Zugewiesen",
+      "batchOpen": "Offen",
+      "batchFinished": "Erledigt",
+      "imanufacture": "Ich fertige",
+      "count": "Stück",
+      "helpnow": "Jetzt unterstützen"
+    },
+    "modals": {
+      "ok": "Ja",
+      "abort": "Nein",
+      "cancel": "Abbrechen",
+      "deleteReturnValue": "Löschen",
+      "abortReturnValue": "Abbrechen",
+      "cancelReturnValue": "Abbrechen",
+      "deleteHeader": "Wollen Sie wirklich diesen Auftrag löschen?",
+      "deleteQuestion": "Sind Sie sicher, dass Sie",
+      "deleteQuestion2": "löschen wollen?",
+      "deleteWarning": "Das Löschen des Auftrags entfernt auch alle alten Dateien und behält nur die letzten aktuellen Dateien!",
+      "printHeader": "Druckauftrag starten",
+      "addressLabel": "Octoprint URL",
+      "apiKeyLabel": "Octoprint API Key",
+      "fileSelectLabel": "Druckdatei",
+      "batchOrderQuestion": "Bist du sicher, dass du dich zur Fertigung verpflichten möchtest?",
+      "batchOrderWarning": "Der Auftraggeber ist auf diese Teile angewiesen. Bitte registriere dich nur, wenn du diesen Auftrag auch erfüllen kannst",
+      "batchOrderAccept": "Annehmen",
+      "batchOrderAbort": "Doch nicht"
+    }
+  },
+  "userForm": {
+    "createTitle": "Benutzer registrieren",
+    "editTitle": "Benutzer bearbeiten",
+    "labels": {
+      "username": "Benutzername",
+      "firstName": "Vorname",
+      "secondName": "Nachname",
+      "password": "Passwort",
+      "passwordValidation": "Passwort Bestätigung",
+      "email": "E-Mail Adresse",
+      "role": "Rolle",
+      "isActivated": "Account aktiviert",
+      "createSubmit": "Registrieren",
+      "editSubmit": "Aktualisieren",
+      "fablab": "Fablab",
+      "changePassword": "Passwort Ändern",
+      "preferredLanguage": "Bevorzugte Sprache"
+    },
+    "modals": {
+      "ok": "Ok",
+      "okReturnValue": "Ok",
+      "createSuccessHeader": "Benutzer registriert",
+      "updateSuccessHeader": "Benutzer aktualisiert",
+      "createSuccess": "Der Benutzer wurde erfolgreich registriert!",
+      "updateSuccess": "Der Benutzer wurde erfolgreich aktualisiert!",
+      "errorHeader": "Fehler",
+      "updateError": "Fehler beim Aktualisieren des Benutzers!",
+      "createError": "Fehler beim Registrieren des Benutzers!",
+      "updatePasswordSuccessHeader": "Passwort aktualisiert",
+      "updatePasswordSuccess": "Benutzen Sie von nun an das neue Passwort.",
+      "updatePasswordErrorHeader": "Fehlgeschlagen",
+      "updatePasswordError": "Das aktuelle Passwort war falsch."
+    },
+    "messages": {
+      "username": "Der Benutzername wird benötigt",
+      "firstName": "Der Vorname wird benötigt",
+      "secondName": "Der Nachname wird benötigt",
+      "password": "Das Passwort wird benötigt",
+      "passwordValidation": "Das Passwort muss bestätigt werden",
+      "passwordValidationWrong": "Das Passwort und die Bestätigung stimmen nicht über ein!",
+      "email": "Die E-Mail Adresse wird benötigt",
+      "role": "Die Rolle wird benötigt",
+      "street": "Die Straße wird benötigt",
+      "zipCode": "Die Postleitzahl wird benötigt",
+      "city": "Die Stadt wird benötigt",
+      "country": "Das Land wird benötigt",
+      "notAssigned": "Keine Zuweisung",
+      "preferredLanguage": "Eine bevorzugte Sprache wird benötigt"
+    },
+    "buttons": {
+      "activatedTrue": "Aktiv",
+      "activatedFalse": "Inaktiv",
+      "changePassword": "Ändern"
+    }
+  },
+  "fablabForm": {
+    "createTitle": "Fablab registrieren",
+    "editTitle": "Fablab bearbeiten",
+    "labels": {
+      "name": "Name",
+      "isActivated": "Fablab aktiviert",
+      "createSubmit": "Registrieren",
+      "editSubmit": "Aktualisieren",
+      "fablab": "Fablab"
+    },
+    "modals": {
+      "ok": "Ok",
+      "okReturnValue": "Ok",
+      "createSuccessHeader": "Fablab registriert",
+      "updateSuccessHeader": "Fablab aktualisiert",
+      "createSuccess": "Das Fablab wurde erfolgreich registriert!",
+      "updateSuccess": "Das Fablab wurde erfolgreich aktualisiert!",
+      "errorHeader": "Fehler",
+      "updateError": "Fehler beim Aktualisieren des Fablabs!",
+      "createError": "Fehler beim Registrieren des Fablabs!"
+    },
+    "messages": {
+      "name": "Der Name wird benötigt",
+      "street": "Die Straße wird benötigt",
+      "zipCode": "Die Postleitzahl wird benötigt",
+      "city": "Die Stadt wird benötigt",
+      "country": "Das Land wird benötigt",
+      "notAssigned": "Keine Zuweisung"
+    },
+    "buttons": {
+      "activatedTrue": "Aktiv",
+      "activatedFalse": "Inaktiv"
+    }
+  },
+  "tableComponent": {
+    "id": "ID",
+    "Device ID": "Gerät ID",
+    "Type": "Typ",
+    "Device Type": "Maschinen Typ",
+    "Device Name": "Maschinen Name",
+    "Manufacturer": "Hersteller",
+    "Fablab": "Fablab",
+    "Description": "Beschreibung",
+    "Comment": "Kommentar",
+    "Created at": "Erstellt am",
+    "Projectname": "Projektname",
+    "Owner": "Ersteller",
+    "Editor": "Bearbeiter",
+    "Status": "Status",
+    "Username": "Benutzername",
+    "Firstname": "Vorname",
+    "Lastname": "Nachname",
+    "Role": "Rolle",
+    "Active": "Aktiviert",
+    "Successful Orders": "Erfolgreiche Aufträge",
+    "Schedule Start Date": "Geplantes Start Datum",
+    "Schedule End Date": "Geplantes End Datum",
+    "Name": "Name",
+    "City": "Stadt",
+    "FOwner": "Besitzer"
+  },
+  "loginModal": {
+    "title": "Einloggen",
+    "labels": {
+      "username": "Benutzername",
+      "password": "Passwort",
+      "login": "Einloggen",
+      "resetPassword": "Passwort vergessen?"
+    },
+    "modals": {
+      "title": "Passwort zurücksetzen",
+      "inputLabel": "E-Mail Adresse",
+      "buttonLabel": "Zurücksetzen",
+      "successHeader": "Password wurde zurückgesetzt!",
+      "successMessage": "Bitte überprüfen Sie Ihre E-Mails.",
+      "errorHeader": "Ein Fehler ist aufgetreten",
+      "errorMessage": "Wir konnten das Passwort nicht zurücksetzen."
+    }
+  },
+  "changePasswdModal": {
+    "title": "Passwort ändern",
+    "labels": {
+      "oldPassword": "Altes Password",
+      "password": "Passwort",
+      "password2": "Passwort bestätigen"
+    },
+    "modals": {
+      "title": "Passwort Ändern",
+      "buttonLabel": "Aktualisieren",
+      "successHeader": "Erldigt",
+      "successMessage": "Verwenden Sie von nun an Ihr neues Passwort.",
+      "errorHeader": "Ein Fehler ist aufgetreten",
+      "errorMessage": "Wir konnten das Passwort nicht ändern."
+    }
+  }
 }

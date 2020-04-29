@@ -5,8 +5,7 @@ import { DashboardComponent } from './dashboard.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { NgbModalStack } from '@ng-bootstrap/ng-bootstrap/modal/modal-stack';
-import { ScrollBar } from '@ng-bootstrap/ng-bootstrap/util/scrollbar';
+// import { NgbModalStack } from '@ng-bootstrap/ng-bootstrap/modal/modal-stack.d';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -23,8 +22,7 @@ describe('DashboardComponent', () => {
       providers: [
         TranslateService,
         NgbModal,
-        NgbModalStack,
-        ScrollBar
+        // NgbModalStack
       ]
     })
       .compileComponents();

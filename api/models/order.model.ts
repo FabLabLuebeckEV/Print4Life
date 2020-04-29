@@ -52,8 +52,7 @@ const attributes = {
       required: true
     },
     _id: {
-      type: String,
-      required: true
+      type: String
     },
     schedule: {
       id: {
@@ -70,6 +69,33 @@ const attributes = {
   fileCopyright: {
     type: Boolean,
     default: false
+  },
+  batch: {
+    number: {
+      type: Number
+    },
+    accepted: [{
+      number: {
+        type: Number
+      },
+      fablab: {
+        type: String
+      },
+      status: {
+        type: String
+      }
+    }],
+    finished: [{
+      number: {
+        type: Number
+      },
+      fablab: {
+        type: String
+      },
+      status: {
+        type: String
+      }
+    }]
   }
 };
 

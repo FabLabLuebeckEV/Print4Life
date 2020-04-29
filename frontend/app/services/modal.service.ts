@@ -47,7 +47,7 @@ export class ModalService {
     return this.modalService.open(comp, settings);
   }
 
-  public openSuccessMsg(okLabel: string, okReturnValue: string, successHeader: string, successMessage: string, ) {
+  public openSuccessMsg(okLabel: String, okReturnValue: String, successHeader: String, successMessage: String, ) {
     const okButton = new ModalButton(okLabel, 'btn btn-primary', okReturnValue);
     this.openMsgModal(successHeader, 'modal-header header-success',
       [successMessage], okButton, undefined).result.then(() => {
@@ -55,7 +55,7 @@ export class ModalService {
       });
   }
 
-  public openErrMsg(errHeader: string, errMessage: string, okLabel: string, okReturnValue: string) {
+  public openErrMsg(errHeader: String, errMessage: String, okLabel: String, okReturnValue: String) {
     const okButton = new ModalButton(okLabel, 'btn btn-primary', okReturnValue);
     this.openMsgModal(errHeader, 'modal-header header-danger', [errMessage],
       okButton, undefined);

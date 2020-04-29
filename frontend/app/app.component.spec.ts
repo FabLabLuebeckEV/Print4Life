@@ -19,7 +19,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent, NavigationComponent, DropdownComponent
       ],
-      imports: [RouterTestingModule, NgbModule.forRoot(), TranslateModule.forRoot(), HttpClientTestingModule],
+      imports: [RouterTestingModule, NgbModule, TranslateModule.forRoot(), HttpClientTestingModule],
       providers: [TranslateService]
     }).compileComponents();
   }));

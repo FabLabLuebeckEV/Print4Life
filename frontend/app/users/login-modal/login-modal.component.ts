@@ -8,6 +8,8 @@ import { ModalButton } from '../../helper/modal.button';
 import { Router } from '@angular/router';
 import { routes } from '../../config/routes';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-login-modal',
   templateUrl: './login-modal.component.html',
@@ -16,24 +18,7 @@ import { routes } from '../../config/routes';
 export class LoginModalComponent implements OnInit {
   response: Object;
   loginData = { username: '', password: '' };
-  translationFields = {
-    title: '',
-    labels: {
-      username: '',
-      password: '',
-      login: '',
-      resetPassword: ''
-    },
-    modals: {
-      title: '',
-      inputLabel: '',
-      buttonLabel: '',
-      successHeader: '',
-      successMessage: '',
-      errorHeader: '',
-      errorMessage: ''
-    }
-  };
+  translationFields: TranslationModel.LoginModal;
 
   constructor(
     private userService: UserService,
@@ -91,24 +76,7 @@ export class LoginModalComponent implements OnInit {
   private _translate() {
     this.translateService.get(['loginModal']).subscribe((translations => {
       if (translations && translations['loginModal'] && translations['loginModal'].title) {
-        this.translationFields = {
-          title: translations['loginModal'].title,
-          labels: {
-            username: translations['loginModal'].labels.username,
-            password: translations['loginModal'].labels.password,
-            login: translations['loginModal'].labels.login,
-            resetPassword: translations['loginModal'].labels.resetPassword
-          },
-          modals: {
-            title: translations['loginModal'].modals.title,
-            inputLabel: translations['loginModal'].modals.inputLabel,
-            buttonLabel: translations['loginModal'].modals.buttonLabel,
-            successHeader: translations['loginModal'].modals.successHeader,
-            successMessage: translations['loginModal'].modals.successMessage,
-            errorHeader: translations['loginModal'].modals.errorHeader,
-            errorMessage: translations['loginModal'].modals.errorMessage
-          }
-        };
+        this.translationFields = TranslationModel.translationUnroll(translations);
       }
     }));
   }

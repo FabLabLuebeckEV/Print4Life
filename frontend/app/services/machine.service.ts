@@ -118,6 +118,13 @@ export class MachineService {
 
   public get(machineType, id) {
     const type = this.camelCaseTypes(machineType);
+    if (id === '') {
+      return new Promise((resolve, reject) => {
+        const erg = {};
+        erg[`${type}s`] = [];
+        resolve(erg);
+      });
+    }
     return this.http.get(`${this.rootPath}/${type}s/${id}`).toPromise();
   }
 

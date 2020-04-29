@@ -1,0 +1,76 @@
+<div class="gray-box faq">
+    <div class="grid">
+        <div class="col-12 col-md-6 indent-left indent-right">
+            <div class="question neutral">
+                Wie setzen sich die Kosten für Suchende zusammen?
+            </div>
+            <div class="answer">
+                Die Suchenden zahlen den Makern die Materialkosten, Versandkosten und einen geringen Prozentsatz für die Abnutzung der Maschinen aus. Dies wird im Vorhinein berechnet und ist als Aufwandsentschädigung bei verfügbaren Teilen anzusehen.    
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 indent-left indent-right">
+            <div class="question neutral">
+                Wie kann ich helfen, dieses Projekt bekannt zu machen?
+            </div>
+            <div class="answer">
+                Je größer die Community ist, desto mehr können wir schaffen. Uns hilft alles: Berichte in der Presse, in Newslettern, auf Social Media. Auf <a href="">Presse</a> findest du Material, das bei Bedarf verwendet, weitergegeben und veröffentlicht werden darf.
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 indent-left indent-right">
+            <div class="question neutral">
+                Wie kommen die hergestellten Hilfsmittel zu meiner Klinik?
+            </div>
+            <div class="answer">
+                Die Maker versenden die Hilfsmittel per Post. Wir wissen, dass das nicht optimal ist und arbeiten an einer Infrastruktur, um Hilfsmittel gesammelt liefern zu können.
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 indent-left indent-right">
+            <div class="question neutral">
+                Wie erhalten Maker das Materialentgeld?
+            </div>
+            <div class="answer">
+                In der Anfangsphase des Projekts werden wir die Auszahlungen händisch durchführen. Dafür kontaktieren wir dich über deine hinterlegte E-Mail-Adresse. Behalte also deinen Posteingang im Auge und <a href="#kontakt">kontaktiere uns</a>, wenn du lange nichts von uns hörst. 
+            </div>
+        </div>
+    </div>
+</div> 
+<div class="kontakt" id="kontakt">
+    <div class="grid">
+        <div class="col-12 col-md-6 indent-right">
+            <h1>
+                Kontakt
+            </h1>
+            <div>
+                Gibt es noch eine Frage, die auf dieser Seite nicht gestellt und beantwortet wurde?
+                <br>
+                Du hast einen Vorschlag für ein Hilfsmittel, das wir produzieren sollen?
+                Dann fülle gerne dieses Formular aus und wir melden uns bei dir!
+            </div>
+        </div>
+        <div class="col-12 col-md-6 indent-right indent-left">
+            <mat-form-field appearance="outline" class="name neutral"  color="warn">
+                <mat-label>Name* </mat-label>
+                <input matInput placeholder="" [(ngModel)]="contactData.name"/>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="email neutral"  color="warn">
+                <mat-label>E-Mail-Adresse* </mat-label>
+                <input matInput placeholder="" [(ngModel)]="contactData.email"  />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="frage neutral" color="warn">
+                <mat-label>Deine Frage* </mat-label>
+                <textarea cdkTextareaAutosize cdkAutosizeMinRows="8" cdkAutosizeMaxRows="8" matInput placeholder="" [(ngModel)]="contactData.message"></textarea>
+            </mat-form-field>
+            <div class="row">
+                <div class="col-12 col-md-6 anmerkung">
+                    *Pflichtfeld
+                </div>
+                <div class="col-12 col-md-6">
+                    <button mat-raised-button color="warn" class="send" (click)="sendContactMessage()">Frage senden</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,8 +5,7 @@ import config from '../config/config';
 import logger from '../logger';
 
 const env = process.env.NODE_ENV;
-let email: Email;
-
+let email:Email;
 const transporter = Nodemailer.createTransport(config.email);
 
 transporter.verify((error, success) => {
@@ -23,14 +22,14 @@ if (env !== 'dev' && env !== 'prod') {
       from: config.email.from
     },
     send: true,
-    transport: {
-      jsonTransport: true
-    }
+    transport: transporter
   });
+  logger.info(config);
+  logger.info(email);
 } else {
   email = new Email({
     message: {
-      from: config.email.auth.from
+      from: config.email.from
     },
     transport: transporter
   });
@@ -40,6 +39,7 @@ export interface EmailOptions {
   preferredLanguage: string;
   template: string;
   to: string;
+  cc?: string;
   locals: any;
 }
 
@@ -50,6 +50,7 @@ function sendMail (options: EmailOptions) {
       template: dir,
       message: {
         to: options.to,
+        cc: options.cc
       },
       locals: options.locals
     })

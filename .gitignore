@@ -7,3 +7,4 @@ docs/api
 dev-mongo
 .nvmrc
 .vscode/settings.json
+ecosystem*

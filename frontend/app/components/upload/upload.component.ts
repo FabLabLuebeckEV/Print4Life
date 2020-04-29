@@ -7,6 +7,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'frontend/environments/environment.staging';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.component.html',
@@ -31,31 +33,22 @@ export class UploadComponent implements OnInit {
   lastInvalids: any;
   baseDropValid: any;
   dragFiles: any;
-  translationFields = {
-    labels: {
-      title: '',
-      dropzone: '',
-      multiple: '',
-      name: '',
-      type: '',
-      size: '',
-      actions: '',
-      queueTitle: '',
-      removeAllButton: ''
-    }
-  };
+  translationFields: TranslationModel.Upload;
+
 
   constructor(
     public HttpClient: HttpClient,
     private configService: ConfigService,
     private translateService: TranslateService
   ) {
+    console.log('test');
     this.config = this.configService.getConfig();
     this.checkIcon = this.config.icons.toggleOn;
     this.warningIcon = this.config.icons.warning;
     this.deleteIcon = this.config.icons.delete;
     this.uploadIcon = this.config.icons.upload;
     this.maxSize = environment.upload.maxSize;
+
   }
 
   cancel() {
@@ -128,19 +121,7 @@ export class UploadComponent implements OnInit {
   private _translate() {
     this.translateService.get(['upload']).subscribe((translations => {
       if (translations.hasOwnProperty('upload') && translations.upload.hasOwnProperty('labels')) {
-        this.translationFields = {
-          labels: {
-            title: translations['upload'].labels.title,
-            dropzone: translations['upload'].labels.dropzone,
-            multiple: translations['upload'].labels.multiple,
-            name: translations['upload'].labels.name,
-            type: translations['upload'].labels.type,
-            size: translations['upload'].labels.size,
-            actions: translations['upload'].labels.actions,
-            queueTitle: translations['upload'].labels.queueTitle,
-            removeAllButton: translations['upload'].labels.removeAllButton
-          }
-        };
+        this.translationFields = TranslationModel.translationUnroll(translations);
       }
     }));
   }

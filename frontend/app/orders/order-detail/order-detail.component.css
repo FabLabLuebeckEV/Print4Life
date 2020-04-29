@@ -1,3 +1,71 @@
 .spacing-right-xs {
     margin: 5px;
 }
+
+.spinner-container {
+    position: relative;
+    height: 250px !important;
+    width: 800px !important;
+    /*margin-left:auto;
+    margin-right:auto;
+    text-align: center;*/
+}
+
+.collapseToggle {
+    cursor: pointer;
+}
+
+#chartCanvas {
+    height: 250px !important;
+    width: 250px !important;
+}
+
+.finished_batches {
+    color: #45B29D;
+}
+
+.accepted_batches {
+    color: #EFC94C;
+}
+
+.table {
+    font-size: 20px;
+}
+
+#descriptionTable td:nth-child(1) {
+    padding-left: 40px;
+    font-weight: bold;
+}
+
+#descriptionTable td:nth-child(2) {
+    padding-left: 150px;
+}
+
+.spinner-td {
+    padding-left: 0px !important;
+}
+
+.assignRow input, .assignRow label {
+    display:inline;
+    width: inherit;
+}
+
+.assignRow label {
+    margin-left:10px;
+}
+
+.assignRow button {
+    margin-left: 20px;
+}
+
+.assignRow, .assignRow > td {
+    background-color: white !important;
+}
+
+#chartExpand > td {
+    background-color: white !important;
+}
+
+.filling-row {
+    width: 100%;
+}

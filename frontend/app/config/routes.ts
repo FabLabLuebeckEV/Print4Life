@@ -62,9 +62,26 @@ export const routes = {
                 root: 'octoprint',
                 uploadFile: 'uploadFile',
                 print: 'print'
+            },
+            service: {
+                root: 'service',
+                contact: 'contact'
             }
         },
         frontend: {
+            aboutus: {
+                root: 'about-us'
+            },
+            faq: {
+                root: 'faq',
+                contact: 'kontakt'
+            },
+            privacy: {
+                root: 'privacy'
+            },
+            legal_notice: {
+                root: 'legal-notice',
+            },
             users: {
                 root: 'users',
                 signup: 'signup',
@@ -115,7 +132,10 @@ export const routes = {
             },
             fablabs: {
                 root: 'fablabs',
-                getById: ':id'
+                getById: ':id',
+                update: 'edit',
+                profile: 'profile',
+                register: 'register'
             }
         },
     }

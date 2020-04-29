@@ -19,13 +19,15 @@ import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 import { NavigationComponent } from 'frontend/app/components/navigation/navigation.component';
 
+import { TranslationModel } from '../../models/translation.model';
+
 @Component({
   selector: 'app-order-list',
   templateUrl: './order-list.component.html',
   styleUrls: ['./order-list.component.css']
 })
 export class OrderListComponent implements OnInit {
-  @ViewChild('spinnerContainer') spinnerContainerRef: ElementRef;
+  @ViewChild('spinnerContainer', { static: false }) spinnerContainerRef: ElementRef;
   private config: any;
   private userIsLoggedIn: boolean;
   private userIsAdmin: Boolean;
@@ -78,6 +80,9 @@ export class OrderListComponent implements OnInit {
     maxPages: 0,
     jumpToPage: undefined
   };
+
+  translationFields: TranslationModel.OrderList & TranslationModel.DeviceTypes & TranslationModel.Status;
+  /*
   translationFields = {
     paginationLabel: '',
     filterLabel: {
@@ -107,6 +112,7 @@ export class OrderListComponent implements OnInit {
       datePicker: ''
     }
   };
+  */
 
   constructor(
     private orderService: OrderService,
@@ -127,7 +133,7 @@ export class OrderListComponent implements OnInit {
     this.spinnerConfig = new SpinnerConfig(
       'Loading Orders', this.config.spinnerConfig.bdColor,
       this.config.spinnerConfig.size, this.config.spinnerConfig.color, this.config.spinnerConfig.type);
-    this.createLink = `./${routes.paths.frontend.orders.create}`;
+    this.createLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.create}`;
     this.plusIcon = this.config.icons.add;
     this.calendarIcon = this.config.icons.calendar;
     this.jumpArrow = this.config.icons.forward;
@@ -265,7 +271,7 @@ export class OrderListComponent implements OnInit {
           if (result && result.status && this.filter.originalValidStatus.length) {
             query.$and.push({ $nor: [] });
             let statusArr = [];
-            if (isArray(result.status)) {
+            if (Array.isArray(result.status)) {
               statusArr = result.status.filter((status) => {
                 return !this.filter.originalValidStatus.includes(status);
               });
@@ -284,7 +290,7 @@ export class OrderListComponent implements OnInit {
 
       if (!query.$and) {
         query.$and = [];
-      } else if (query.$and && isArray(query.$and)) {
+      } else if (query.$and && Array.isArray(query.$and)) {
         // if search term is defined add to mongo query
         if (this.filter.searchTerm) {
           query.$and.push({ $text: { $search: this.filter.searchTerm } });
@@ -497,7 +503,7 @@ export class OrderListComponent implements OnInit {
   transformStringToDateObj(event: string, isStartDay: boolean) {
     const split = event.split('-');
     if (split.length === 3) {
-      const date = { year: Number.parseInt(split[0], 10), month: Number.parseInt(split[1], 10), day: Number.parseInt(split[2]) };
+      const date = { year: Number.parseInt(split[0], 10), month: Number.parseInt(split[1], 10), day: Number.parseInt(split[2], 10) };
       isStartDay ? this.changeHandlerStartDay(date) : this.changeHandlerEndDay(date);
     }
   }
@@ -718,35 +724,9 @@ export class OrderListComponent implements OnInit {
         }
       });
 
-      this.translationFields = {
-        paginationLabel: translations['orderList'].paginationLabel,
-        filterLabel: {
-          machines: translations['orderList']['filterLabel'].machines,
-          status: translations['orderList']['filterLabel'].status,
-          fablabs: translations['orderList']['filterLabel'].fablabs,
-          startDay: translations['orderList']['filterLabel'].startDay,
-          endDay: translations['orderList']['filterLabel'].endDay,
-          search: translations['orderList']['filterLabel'].search
-        },
-        spinnerLoadingText: translations['orderList'].spinnerLoadingText,
-        buttons: {
-          deleteLabel: translations['orderList'].buttons.deleteLabel,
-          updateLabel: translations['orderList'].buttons.updateLabel
-        },
-        modals: {
-          yes: translations['orderList'].modals.yes,
-          abort: translations['orderList'].modals.abort,
-          deleteValue: translations['orderList'].modals.deleteValue,
-          abortValue: translations['orderList'].modals.abortValue,
-          deleteHeader: translations['orderList'].modals.deleteHeader,
-          deleteQuestion: translations['orderList'].modals.deleteQuestion,
-          deleteQuestion2: translations['orderList'].modals.deleteQuestion2,
-          deleteWarning: translations['orderList'].modals.deleteWarning
-        },
-        messages: {
-          datePicker: translations['orderList'].messages.datePicker
-        }
-      };
+      this.translationFields = TranslationModel.translationUnroll(
+        translations
+      );
     }));
   }
 }
