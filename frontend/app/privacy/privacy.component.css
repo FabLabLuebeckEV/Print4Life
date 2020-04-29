@@ -1,0 +1,29 @@
+
+.privacy h1, .privacy h2, .privacy h3, .privacy h4 {
+    margin-bottom: 20px;
+}
+
+.privacy h1 {
+    font-size: 36px;
+    line-height: 48px;
+}
+
+
+.privacy h2 {
+    font-size: 30px;
+    line-height: 42px;
+}
+
+
+.privacy h3 {
+    font-size: 28px;
+    line-height: 38px;
+}
+
+.privacy h4 {
+    font-size: 24px;
+    line-height: 32px;
+}
+.privacy p {
+    margin-bottom: 50px;
+}
