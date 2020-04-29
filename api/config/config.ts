@@ -150,7 +150,7 @@ const publicRoutes = [
   {
     url: `${baseUrl}hospitals`,
     canChilds: true,
-    methods: ['GET']
+    methods: ['POST']
   }
 
 ];

@@ -16,6 +16,9 @@ import { ModalButton } from '../../helper/modal.button';
 import { TranslationModel } from '../../models/translation.model';
 import { ErrorStateMatcher } from '@angular/material';
 import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { Hospital } from 'frontend/app/models/hospital.model';
+
+import { HospitalService } from '../../services/hospital.service';
 
 interface Dropdown {
   name: String;
@@ -53,7 +56,9 @@ export class UserFormComponent implements OnInit {
     undefined, undefined, undefined, undefined,
     undefined, undefined, undefined, this.address,
     this.role, this.preferredLanguage, false, undefined, undefined);
-  clinicNumber: String;
+  hospital: Hospital = new Hospital(
+    undefined, undefined, this.address, false, undefined, undefined, undefined
+  );
 
   translationFields: TranslationModel.UserForm & TranslationModel.Roles &
     TranslationModel.Languages & TranslationModel.Address &
@@ -80,7 +85,8 @@ export class UserFormComponent implements OnInit {
     private genericService: GenericService,
     private route: ActivatedRoute,
     private fablabService: FablabService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private hospitalService: HospitalService
   ) {
     this.router.events.subscribe(async () => {
       const route = this.location.path();
@@ -101,7 +107,17 @@ export class UserFormComponent implements OnInit {
   }
 
   public register() {
+    if (this.type === 'klinik') {
+      this.hospital.address.country = 'N/A';
+      this.user.address = this.hospital.address;
+    }
+
     this.userService.createUser(this.user).then(event => {
+      if (this.type === 'klinik') {
+        console.log(event);
+        this.hospital.owner = event.user._id;
+        this.hospitalService.createHospital(this.hospital);
+      }
       this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}/${this.type}/${routes.paths.frontend.users.thankyou}`]);
     });
   }

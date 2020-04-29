@@ -5,11 +5,11 @@ import { Hospital } from '../models/hospital.model';
 @Injectable({
   providedIn: 'root'
 })
-export class FablabService {
+export class HospitalService {
   private rootPath: String;
 
   constructor(private http: HttpClient) {
-    this.rootPath = routes.backendUrl + '/' + routes.paths.backend.fablabs.root;
+    this.rootPath = routes.backendUrl + '/' + routes.paths.backend.hospitals.root;
   }
 
   public async getHospital(id): Promise<any> {
@@ -25,7 +25,7 @@ export class FablabService {
   public createHospital(hospital: Hospital): Promise<any> {
     return this.http.post(`${this.rootPath}/`, hospital).toPromise();
   }
-  public updateFablab(hospital): Promise<any> {
+  public updateHospital(hospital): Promise<any> {
     return this.http.put(`${this.rootPath}/${hospital._id}`, hospital)
         .toPromise();
      }
