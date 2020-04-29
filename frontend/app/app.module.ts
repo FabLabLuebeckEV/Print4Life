@@ -60,6 +60,7 @@ import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component
 
 import { FaqComponent } from './faq/faq.component';
 import { LoginComponent } from './login/login.component';
+import { PrivacyComponent } from './privacy/privacy.component';
 
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
 
@@ -97,7 +98,8 @@ import { MatFormFieldModule, MatInputModule } from '@angular/material';
         AboutUsComponent,
         FablabListComponent,
         FaqComponent,
-        LoginComponent
+        LoginComponent,
+        PrivacyComponent
     ],
     imports: [
         MatFormFieldModule,

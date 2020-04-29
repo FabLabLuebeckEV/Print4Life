@@ -76,6 +76,9 @@ export const routes = {
                 root: 'faq',
                 contact: 'kontakt'
             },
+            privacy: {
+                root: 'privacy'
+            },
             users: {
                 root: 'users',
                 signup: 'signup',

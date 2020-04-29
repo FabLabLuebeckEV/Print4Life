@@ -23,6 +23,7 @@ import { FablabListComponent } from '../fablabs/fablab-list/fablab-list.componen
 
 import { AboutUsComponent } from '../about-us/about-us.component';
 import { FaqComponent } from '../faq/faq.component';
+import { PrivacyComponent } from '../privacy/privacy.component';
 
 import { LoginComponent } from '../login/login.component';
 
@@ -124,6 +125,11 @@ export const appRoutes: Routes = [
     {
         path: `${routes.paths.frontend.faq.root}`,
         component: FaqComponent,
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: `${routes.paths.frontend.privacy.root}`,
+        component: PrivacyComponent,
         runGuardsAndResolvers: 'always'
     },
     {
