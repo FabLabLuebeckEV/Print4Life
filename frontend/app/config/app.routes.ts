@@ -157,7 +157,7 @@ export const appRoutes: Routes = [
         component: UserListComponent,
         runGuardsAndResolvers: 'always',
         children: [
-            { path: routes.paths.frontend.users.activate + '/:id', component: UserActivationComponent },
+            { path: routes.paths.frontend.users.activate + '/:id/:type', component: UserActivationComponent },
             { path: routes.paths.frontend.users.signup + '/:type', component: UserFormComponent },
             { path: routes.paths.frontend.users.signup + '/:type/thankyou', component: UserSignupConfirmationComponent },
             { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent, },

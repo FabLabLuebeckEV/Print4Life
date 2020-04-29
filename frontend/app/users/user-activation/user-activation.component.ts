@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { UserService } from 'frontend/app/services/user.service';
+import { routes } from '../../config/routes';
 
 @Component({
   selector: 'app-user-activation',
@@ -12,6 +13,9 @@ export class UserActivationComponent implements OnInit {
   userId: String;
   activationStatus: boolean;
   status: String = '';
+  type: String = '';
+
+  loginRoute: String = '/' + routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
 
   constructor(
     private router: Router,
@@ -25,6 +29,7 @@ export class UserActivationComponent implements OnInit {
     this.route.params.subscribe(params => {
       if (params.id) {
         this.userId = params.id;
+        this.type = params.type;
       }
     });
   }
