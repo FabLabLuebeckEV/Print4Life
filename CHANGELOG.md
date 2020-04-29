@@ -5,7 +5,12 @@
 * multilanguage support for English, German and Danish (/LF0380/)
 
 ### No Version number yet
-* Upgrade from Angular 6 to 8
+
+### Version 0.8
+* upgrade from Angular 6 to 8
+* implemented new Design
+* implemented print4life-idea (makers and hospitals)
+* switch login to email and password
 
 ### Version 0.7
 * users can activate themselfs by a link via email

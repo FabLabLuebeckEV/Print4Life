@@ -9,7 +9,7 @@
     }
   },
   "name": "fablab-order-management",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "An order-management for the fablab connected to an IBM Watson IoT Platform to connect their machinery to this order and planning process",
   "scripts": {
     "apidocs": "shx rm -rf docs/api && apidoc -i api -o docs/api",
