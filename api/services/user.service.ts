@@ -183,6 +183,13 @@ export class UserService implements ModelService {
   public selfActivateUser (user, newUser: boolean) {
     if (user.role.role !== 'guest') {
       let options: EmailOptions;
+      let url = `${config.baseUrlFrontend}/users/activate/${user._id}/`;
+      if (user.role.role === 'user') {
+        url += 'klinik';
+      } else {
+        url += 'maker';
+      }
+
       if (!user.activated) {
         options = {
           preferredLanguage: user.preferredLanguage.language || 'en',
@@ -194,7 +201,7 @@ export class UserService implements ModelService {
             userName: `${user.firstname} ${user.lastname}`,
             userEmail: user.email,
             id: user._id,
-            url: `${config.baseUrlFrontend}/users/activate/${user._id}`,
+            url,
             newUser
           }
         };

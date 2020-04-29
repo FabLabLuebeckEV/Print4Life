@@ -1143,8 +1143,13 @@ async function activateUser (req, res) {
   try {
     const user = await userService.get(req.params.id);
     if (user) {
+      if (user.role.role === 'user') {
+        logger.info('hospital requested activation, informing admins');
+        await userService.informAdmins(user, false);
+      }
       user.activated = true;
       user.save();
+
       return res.status(200).send({ msg: 'Account activated' });
     }
     const msg = { error: 'GET User by id with no result.' };
