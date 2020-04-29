@@ -14,7 +14,7 @@
   "scripts": {
     "apidocs": "shx rm -rf docs/api && apidoc -i api -o docs/api",
     "deploy-staging": "ng build --configuration=staging && npm run api-build && cp appspec.yml dist/ && mkdir -p dist/scripts && cp *.sh dist/scripts",
-    "deploy-prod": "ng build --configuration=production && npm run api-build",
+    "deploy-prod": "ng build --configuration=production && npm run api-build && cp appspec.yml dist/ && mkdir -p dist/scripts && cp *.sh dist/scripts",
     "build": "ng build && npm run api-build",
     "test": "npm run ng-test && npm run api-test",
     "test-local": "npm run ng-test && npm run api-test-local",
