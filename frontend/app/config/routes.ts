@@ -79,6 +79,9 @@ export const routes = {
             privacy: {
                 root: 'privacy'
             },
+            legal_notice: {
+                root: 'legal-notice',
+            },
             users: {
                 root: 'users',
                 signup: 'signup',
