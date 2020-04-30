@@ -329,10 +329,17 @@ div.navPanel-visible #navPanel {
     padding-left: 10px;
     padding-right: 10px;
     border-bottom-style:solid;
-    border-bottom-color: #334d5c;
     border-bottom-width: 3px;
     box-shadow: 0px 4px 4px -6px black;
     width: 100%;
+}
+
+.underline.maker {
+    border-bottom-color: #45B29D;
+}
+
+.underline.klinik {
+    border-bottom-color: #df5a49;
 }
 
 #header nav .dropdown {
@@ -359,6 +366,15 @@ div.navPanel-visible #navPanel {
     box-shadow: 0px 4px 4px -6px black;
 }
 
+#header nav .dropdown:hover ul.maker {
+    border-bottom-color: #45B29D;
+}
+
+
+#header nav .dropdown:hover ul.klinik {
+    border-bottom-color: #df5a49;
+}
+
 #header nav .dropdown ul {
     display: none;
     line-height: initial;
@@ -373,4 +389,18 @@ div.navPanel-visible #navPanel {
 
 #navPanel .dropdown li {
     padding-left: 30px;
+}
+
+#header .hint {
+    position: absolute;
+    top: 35px;
+    color: #c0cacf;
+}
+
+#header .account{
+    min-width: 140px;
+    max-width: 140px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }

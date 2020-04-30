@@ -22,7 +22,7 @@
               </a>
               <ul>
                 <li>
-                  <a (click)="toggleSideMenu()" [routerLink]="[acceptedOrdersLink]">
+                  <a (click)="toggleSideMenu()" [routerLink]="[myOrdersLink]">
                     Meine Aufträge
                   </a>
                 </li>
@@ -50,8 +50,28 @@
             <li *ngIf="!userIsLoggedIn">
               <a [routerLink]="[loginLink]" [ngClass]="(i == 1)?'button primary':''" class="underline" (click)="toggleSideMenu()">Anmelden</a>
             </li>
-            <li *ngIf="userIsLoggedIn">
-              <a (click)="_logout()" [ngClass]="(i == 1)?'button primary':''" (click)="toggleSideMenu()">Abmelden</a>
+            <li class="dropdown account" *ngIf="userIsLoggedIn">
+              <div class="hint text-mid">
+                Eingeloggt als
+              </div>
+              <a class="underline klinik" *ngIf="userType === 'klinik'">
+                {{hospital?.name}}
+              </a>
+              <a class="underline maker" *ngIf="userType === 'maker'">
+                {{user.firstname}} {{user.lastname}}
+              </a>
+              <ul
+                [ngClass]="{
+                  maker: userType === 'maker',
+                  klinik: userType === 'klinik'
+                }"
+              >
+                <li>
+                  <a (click)="toggleSideMenu()" (click)="_logout()" [routerLink]="[myOrdersLink]">
+                    Abmelden
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>

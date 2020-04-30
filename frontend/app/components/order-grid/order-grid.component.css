@@ -165,3 +165,19 @@
 .order .support .maker {
     margin-bottom:20px;
 }
+
+.participatingBadge {
+    display: none;
+}
+
+.finishedBadge {
+    display: none;
+}
+
+.order.finished .finishedBadge {
+    display: inherit;
+}
+
+.order.participating .participatingBadge {
+    display: inherit;
+}

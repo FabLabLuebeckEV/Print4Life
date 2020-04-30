@@ -13,6 +13,7 @@ import { Color, Label } from 'ng2-charts';
 import { EventEmitter } from '@angular/core';
 
 import Deepcopy from 'rfdc';
+import { User } from 'frontend/app/models/user.model';
 
 @Component({
   selector: 'app-order-grid',
@@ -44,6 +45,10 @@ export class OrderGridComponent implements OnInit, OnChanges {
   myBatch = 0;
   deepcopy = new Deepcopy();
 
+  ownUser: User;
+
+  userType = '';
+
   constructor(
     public domSanitizer: DomSanitizer,
     public fablabService: FablabService,
@@ -53,7 +58,12 @@ export class OrderGridComponent implements OnInit, OnChanges {
   }
 
   async ngOnInit() {
-
+    this.ownUser = (await this.userService.findOwn());
+    this.userType = 'maker';
+    if (this.ownUser.role.role === 'user') {
+      this.userType = 'klinik';
+    }
+    console.log(this.ownUser);
   }
 
   ngAfterViewInit() {
@@ -79,6 +89,15 @@ export class OrderGridComponent implements OnInit, OnChanges {
         order.toggleInput = function() {
           order.showInput = !order.showInput;
         };
+
+        console.log('owner: ', order.owner);
+        console.log('user id: ', this.ownUser._id);
+
+        if (order.owner === this.ownUser._id) {
+          order.own = true;
+        } else {
+          order.own = false;
+        }
 
         const objectURL = 'data:image/jpeg;base64,' + order.blueprint.image;
         order.blueprint.imageURL = this.domSanitizer.bypassSecurityTrustUrl(objectURL);

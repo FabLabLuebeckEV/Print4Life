@@ -3,6 +3,8 @@ import HospitalService from '../services/hospital.service';
 import UserService from '../services/user.service';
 import validatorService from '../services/validator.service';
 
+import { searchableTextFields } from '../models/hospital.model';
+
 const hospitalService = new HospitalService();
 const userService = new UserService();
 
@@ -58,6 +60,27 @@ async function create (req, res) {
       logger.error(msg);
       res.status(400).send(msg);
     });
+}
+
+async function search (req, res) {
+  req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
+  hospitalService.getAll(req.body.query, req.body.limit, req.body.skip).lean().then((hospitals) => {
+    if (hospitals.length === 0) {
+      logger.info(`POST search for hospitals with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
+      res.status(204).send({ hospitals });
+    } else if (req.body.limit && req.body.skip) {
+      logger.info(`POST search for hospitals with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds partial results ${JSON.stringify(hospitals)}`);
+      res.status(206).send({ hospitals });
+    } else {
+      logger.info(`POST search for hospitals with query ${JSON.stringify(req.body.query)}, `
+        + `limit ${req.body.limit} skip ${req.body.skip} `
+        + `holds results ${JSON.stringify(hospitals)}`);
+      res.status(200).send({ hospitals });
+    }
+  });
 }
 
 
@@ -128,5 +151,5 @@ async function deleteById (req, res) {
 }
 
 export default {
-  get, getAll, create, update, deleteById
+  get, getAll, create, update, deleteById, search
 };

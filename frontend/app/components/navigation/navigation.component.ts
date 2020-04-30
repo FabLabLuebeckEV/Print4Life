@@ -9,6 +9,8 @@ import { ModalService } from '../../services/modal.service';
 import { HostListener } from '@angular/core';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { HospitalService } from 'frontend/app/services/hospital.service';
+import { Hospital } from 'frontend/app/models/hospital.model';
 
 interface Dropdown {
   name: String;
@@ -44,14 +46,17 @@ export class NavigationComponent implements OnInit {
   contactLink = routes.paths.frontend.faq.root;
   contactFragment = routes.paths.frontend.faq.contact;
   loginLink = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
-  acceptedOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.acceptedOrders;
+  myOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.acceptedOrders;
   openOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.unfinishedOrders;
+  userType: String;
+  hospital: Hospital;
 
   constructor(
     private translateService: TranslateService,
     private userService: UserService,
     private modalService: ModalService,
-    private router: Router
+    private router: Router,
+    private hospitalService: HospitalService
   ) {
     this.router.events.subscribe(async () => {
       this._init();
@@ -77,7 +82,21 @@ export class NavigationComponent implements OnInit {
 
   private async _init() {
     this.userIsLoggedIn = this.userService.isLoggedIn();
-    this.user = await this.userService.getUser();
+    if (this.userIsLoggedIn) {
+      this.user = await this.userService.findOwn();
+      console.log('user is ', this.user);
+
+      if (this.user.role.role === 'user') {
+        this.myOrdersLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`;
+        this.userType = 'klinik';
+        this.hospital = await this.hospitalService.findOwn();
+
+        console.log(this.hospital);
+      } else {
+        this.myOrdersLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`;
+        this.userType = 'maker';
+      }
+    }
     this._translate();
   }
 

@@ -1,14 +1,14 @@
 <div class="grid-3">
     <div class="" *ngFor="let order of orders">
         <div class="order"  [ngClass]="{
-            'finished': order.myFinishedBatch > 0 && order.myAcceptedBatch === 0,
-            'participating': order.participating
+            'finished': order.myFinishedBatch > 0 && order.myAcceptedBatch === 0 || userType === 'klinik' && order.batch.remaining === 0,
+            'participating': order.participating || userType === 'klinik' && order.batch.acceptedCount > 0 && order.own
         }">
             <div class="inner indent-left indent-right">
-                <div class="statusBadge" *ngIf="order.participating">
+                <div class="statusBadge participatingBadge">
                     In Arbeit
                 </div>
-                <div class="statusBadge" *ngIf="order.myFinishedBatch > 0 && order.batch.remaining === 0">
+                <div class="statusBadge finishedBadge">
                     Erledigt
                 </div>
                 <div class="title">
@@ -111,13 +111,13 @@
                             <br style="clear:right">
                         </div>
                     </div>
-                    <div class="iconbutton text-center support" *ngIf="order.batch.remaining > 0 && order.myFinishedBatch === 0 && order.myAcceptedBatch === 0 && !order.showInput">
+                    <div class="iconbutton text-center support" *ngIf="order.batch.remaining > 0 && order.myFinishedBatch === 0 && order.myAcceptedBatch === 0 && !order.showInput && userType === 'maker'">
                         <div class="maker">
                             Möchtest du diese Einrichtung unterstützen?
                         </div>
                         <button mat-raised-button color="primary" class="text-mid" (click)="order.toggleInput()">Unterstützen</button>
                     </div>
-                    <div class="iconbutton support" *ngIf="order.batch.remaining > 0 && order.myAcceptedBatch === 0 && order.showInput">
+                    <div class="iconbutton support" *ngIf="order.batch.remaining > 0 && order.myAcceptedBatch === 0 && order.showInput && userType === 'maker'">
                         <div class="maker">
                             Welche Stückzahl schaffst du innerhalb der nächsten 2 Tage?
                         </div>

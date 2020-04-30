@@ -141,8 +141,8 @@ export class UserService {
   public logout(): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
-        localStorage.removeItem(this.tokenStorageName);
         this.token = '';
+        localStorage.removeItem(this.tokenStorageName);
         this.user = undefined;
         resolve();
       } catch (err) {
