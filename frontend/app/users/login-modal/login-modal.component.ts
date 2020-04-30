@@ -39,7 +39,7 @@ export class LoginModalComponent implements OnInit {
     try {
       this.response = await this.userService.login(this.loginData);
       this.activeModal.close(this.response);
-      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`]);
+      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`]);
     } catch (err) {
       this.activeModal.close(err);
     }

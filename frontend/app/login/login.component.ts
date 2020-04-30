@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
   async login() {
     try {
       await this.userService.login(this.loginData);
-      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`]);
+      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`]);
     } catch (err) {
     }
   }

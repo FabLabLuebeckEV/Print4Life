@@ -44,7 +44,7 @@ export class NavigationComponent implements OnInit {
   contactLink = routes.paths.frontend.faq.root;
   contactFragment = routes.paths.frontend.faq.contact;
   loginLink = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
-  myOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.myOrders;
+  acceptedOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.acceptedOrders;
   openOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.unfinishedOrders;
 
   constructor(

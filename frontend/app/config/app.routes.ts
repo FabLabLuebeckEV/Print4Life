@@ -26,6 +26,7 @@ import { AboutUsComponent } from '../about-us/about-us.component';
 import { FaqComponent } from '../faq/faq.component';
 
 import { LoginComponent } from '../login/login.component';
+import { MyOrdersComponent } from '../orders/my-orders/my-orders.component';
 
 import { AcceptedOrdersComponent } from '../orders/accepted-orders/accepted-orders.component';
 import { BlueprintsComponent } from '../blueprints/blueprints.component';
@@ -148,8 +149,13 @@ export const appRoutes: Routes = [
         runGuardsAndResolvers: 'always'
     },
     {
-        path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`,
+        path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`,
         component: AcceptedOrdersComponent,
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`,
+        component: MyOrdersComponent,
         runGuardsAndResolvers: 'always'
     },
     {

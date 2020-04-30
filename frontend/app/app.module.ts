@@ -71,6 +71,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { BlueprintsComponent } from './blueprints/blueprints.component';
 
 import { UserSignupConfirmationComponent } from './users/user-signup-confirmation/user-signup-confirmation.component';
+import { MyOrdersComponent } from './orders/my-orders/my-orders.component';
 
 @NgModule({
     declarations: [
@@ -111,7 +112,8 @@ import { UserSignupConfirmationComponent } from './users/user-signup-confirmatio
         AboutUsComponent,
         FablabListComponent,
         FaqComponent,
-        LoginComponent
+        LoginComponent,
+        MyOrdersComponent
     ],
     imports: [
         MatFormFieldModule,
