@@ -1,3 +1,3 @@
 #/bin/bash
-rm -r /var/www/html/node_modules/*
+rm /var/www/html/package.json
 rm -r /var/www/html/dist/*
