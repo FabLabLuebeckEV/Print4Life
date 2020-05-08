@@ -70,7 +70,12 @@ export class LoginComponent implements OnInit {
   async login() {
     try {
       await this.userService.login(this.loginData);
-      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`]);
+      const user = await this.userService.findOwn();
+      if (user.role.role === 'editor') {
+        this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`]);
+      } else {
+        this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`]);
+      }
     } catch (err) {
     }
   }
