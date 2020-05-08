@@ -4,7 +4,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { faMapMarkerAlt, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { routes } from '../../config/routes';
 
-import { FablabService } from '../../services/fablab.service';
 import { UserService } from '../../services/user.service';
 import { OrderService } from '../../services/order.service';
 
@@ -48,10 +47,10 @@ export class OrderGridComponent implements OnInit, OnChanges {
   ownUser: User;
 
   userType = '';
+  filterStatus: String = '';
 
   constructor(
     public domSanitizer: DomSanitizer,
-    public fablabService: FablabService,
     public userService: UserService,
     public orderService: OrderService
   ) {
@@ -73,6 +72,12 @@ export class OrderGridComponent implements OnInit, OnChanges {
     await this.loadOrders();
 
     console.log('orders: ', this.orders);
+  }
+
+  filter() {
+    if (this.filterStatus) {
+
+    }
   }
 
   async loadOrders() {
@@ -108,10 +113,8 @@ export class OrderGridComponent implements OnInit, OnChanges {
           if (order.batch['finished']) {
             order.batch['finished'].forEach(batch => {
               order.batch.finishedCount += batch.number;
-              this.fablabService.getFablab(batch.fablab).then(result => {
-                batch.fablab = result.fablab;
-              });
-              if (batch.fablab === loggedInUser.fablabId) {
+              
+              if (batch.user === loggedInUser._id) {
                 order.myFinishedBatch = batch.number;
               }
             });
@@ -122,14 +125,11 @@ export class OrderGridComponent implements OnInit, OnChanges {
           order.batch['acceptedCount'] = 0;
           if (order.batch['accepted']) {
             order.batch['accepted'].forEach(batch => {
-              if (batch.fablab === loggedInUser.fablabId) {
+              if (batch.user === loggedInUser._id) {
                 order.myAcceptedBatch = batch.number;
                 order.participating = true;
               }
               order.batch['acceptedCount'] += batch.number;
-              this.fablabService.getFablab(batch.fablab).then(result => {
-                batch.fablab = result.fablab;
-              });
             });
           } else {
             order.batch['accepted'] = [];
@@ -148,6 +148,32 @@ export class OrderGridComponent implements OnInit, OnChanges {
     }
   }
 
+  public async finishOwnBatch(order) {
+    let batch;
+    let batchIndex;
+    for (let i = 0; i < order.batch.accepted.length; i++) {
+      if (order.batch.accepted[i].user === this.ownUser._id) {
+        batch = order.batch.accepted[i];
+        batchIndex = i;
+        break;
+      }
+    }
+
+    order.batch.accepted.splice(batchIndex, 1);
+    order.batch.finished.push(batch);
+    delete order.participating;
+    delete order.finished;
+    delete order.completed;
+    delete order.myFinishedBatch;
+    delete order.myAcceptedBatch;
+    delete order.showInput;
+    delete order.blueprint;
+
+    await this.orderService.updateOrder(order);
+
+    this.reload.emit();
+  }
+
   public async support(order) {
     const orderCopy = this.deepcopy(order);
     console.log('orderCopy ', orderCopy);
@@ -158,7 +184,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
     if (newBatch && newBatch > 0) {
       let found = false;
       orderCopy.batch.accepted.forEach(batch => {
-        if (batch.fablab === loggedInUser.fablabId) {
+        if (batch.user === loggedInUser._id) {
           batch.number += newBatch;
           found = true;
         }
@@ -167,7 +193,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
       if (!found) {
         orderCopy.batch.accepted.push({
           number: newBatch,
-          fablab: loggedInUser.fablabId,
+          user: loggedInUser._id,
           status: 'Angenommen'
         });
       }
