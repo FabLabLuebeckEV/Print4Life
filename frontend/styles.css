@@ -480,3 +480,21 @@ body .mat-form-field-infix {
 
     margin-bottom: 100px;
 }
+
+body .mat-form-field-type-mat-select .mat-form-field-wrapper{
+    margin: 0px;
+}
+
+body .mat-form-field-type-mat-select .mat-form-field-outline div{
+    border-width: 0px !important;
+}
+
+body .mat-form-field-type-mat-select {
+    box-shadow: 0px 2px 4px #9E9E9E;
+    border-radius: 5px;
+}
+
+body .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+body .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+    transform: translateY(-1.59375em) scale(0.95);
+}
