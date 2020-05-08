@@ -48,6 +48,7 @@ export class NavigationComponent implements OnInit {
   loginLink = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
   myOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.acceptedOrders;
   openOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.unfinishedOrders;
+  createOrderLink = routes.paths.frontend.blueprints.root + '/' + routes.paths.frontend.blueprints.list;
   userType: String;
   hospital: Hospital;
 
