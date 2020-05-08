@@ -4,6 +4,8 @@ os: linux
 files:
   - source: ./
     destination: /var/www/html/dist
+  - source: ./node_modules
+    destination: /var/www/html/
 permissions:
   - object: /var/www/html/dist
     pattern: "**"

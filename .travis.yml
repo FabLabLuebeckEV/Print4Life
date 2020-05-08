@@ -17,6 +17,7 @@ install:
 script: 
   - if [ "$TRAVIS_BRANCH" = "develop" ]; then npm run deploy-staging; fi
   - if [ "$TRAVIS_BRANCH" = "master" ]; then npm run deploy-prod; fi
+  - cp -r node_modules dist
   - cd dist
   - zip -r ../latest ./*
   - cd ..
