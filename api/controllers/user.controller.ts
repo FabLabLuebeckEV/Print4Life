@@ -59,11 +59,11 @@ async function create (req, res) {
   let user;
   let reject = false;
   try {
-    user = await userService.getUserByUsername(req.body.username);
+    user = await userService.getUserByEmail(req.body.email);
     if (user) {
       const msg = {
-        type: ErrorType.USERNAME_EXISTS,
-        error: 'Malformed user. Username already exists!',
+        type: ErrorType.EMAIL_EXISTS,
+        error: 'Malformed user. Email already exists!',
         stack: undefined
       };
       logger.error(msg);
@@ -72,34 +72,19 @@ async function create (req, res) {
     }
   } catch (error) {
     const msg = {
-      error: `Error while getting the user by its username (${req.body.username})`,
+      error: `Error while getting the user by its email (${req.body.email})`,
       stack: error
     };
     logger.error(msg);
   }
 
-  if (!reject) {
-    try {
-      user = await userService.search({ email: req.body.email });
-      if (user && user.length > 0) {
-        const msg = {
-          type: ErrorType.EMAIL_EXISTS,
-          error: 'Malformed user. Email Address already exists!',
-          stack: undefined
-        };
-        logger.error(msg);
-        reject = true;
-        res.status(400).send(msg);
-      }
-    } catch (error) {
-      const msg = { error: `Error while getting the user by its email address (${req.body.email})`, stack: error };
-      logger.error(msg);
-    }
-  }
-
   req.body.activated = false;
 
   if (!reject) {
+    if (req.body.role && req.body.role.role !== 'user' && req.body.role.role !== 'editor') {
+      req.body.role.role = 'user';
+    }
+
     userService.create(req.body).then((user) => {
       userService.selfActivateUser(user, true);
       res.status(200).send({ user });
@@ -717,7 +702,7 @@ function getLanguages (req, res) {
 async function login (req, res) {
   let user;
   try {
-    user = await userService.getUserByUsername(req.body.username);
+    user = await userService.getUserByEmail(req.body.email);
   } catch (err) {
     const msg = { error: 'User not found.', stack: err };
     logger.error(msg);
@@ -1158,8 +1143,13 @@ async function activateUser (req, res) {
   try {
     const user = await userService.get(req.params.id);
     if (user) {
+      if (user.role.role === 'user') {
+        logger.info('hospital requested activation, informing admins');
+        await userService.informAdmins(user, false);
+      }
       user.activated = true;
       user.save();
+
       return res.status(200).send({ msg: 'Account activated' });
     }
     const msg = { error: 'GET User by id with no result.' };

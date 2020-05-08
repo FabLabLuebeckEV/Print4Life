@@ -10,39 +10,42 @@
         <a [routerLink]="['']"><img src="/assets/img/print4life_Logo-landscape.svg" alt="logo" /></a>
       </div>
       <div class="row">
-        <div class="col-3 col-lg-6">
+        <div class="col-3 col-lg-4">
           <h1><a [routerLink]="['']"><img id="logo" src="/assets/img/print4life_Logo.svg" alt="logo" /></a></h1>
         </div>
-        <div class="links col-9 col-lg-6">
+        <div class="links col-9 col-lg-8">
           <ul>
             <li class="current"><a [routerLink]="['']" (click)="toggleSideMenu()">Startseite</a></li>
-            <li *ngIf="!userIsLoggedIn">
+            <li class="dropdown" *ngIf="userIsLoggedIn">
+              <a class="underline">
+                Aufträge
+              </a>
+              <ul>
+                <li>
+                  <a (click)="toggleSideMenu()" [routerLink]="[myOrdersLink]">
+                    Meine Aufträge
+                  </a>
+                </li>
+                <li>
+                  <a (click)="toggleSideMenu()" [routerLink]="[openOrdersLink]">
+                    Offene Aufträge
+                  </a>
+                </li>
+                <li *ngIf="userType==='klinik'">
+                  <a (click)="toggleSideMenu()" [routerLink]="[createOrderLink]">
+                    Neuen Auftrag anlegen
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li>
               <a [routerLink]="[aboutUsLink]" (click)="toggleSideMenu()">Über Print4Life</a>
             </li>
-            <li *ngIf="!userIsLoggedIn">
+            <li>
               <a [routerLink]="[faqLink]" (click)="toggleSideMenu()">FAQ</a>
             </li>
-            <li *ngIf="!userIsLoggedIn">
+            <li>
               <a [routerLink]="[contactLink]" fragment="{{contactFragment}}" (click)="toggleSideMenu()">Kontakt</a>
-            </li>
-            <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
-              <app-dropdown [dropdown]="machineDropdown">
-              </app-dropdown>
-            </li>
-            <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
-              <app-dropdown [dropdown]="orderDropdown">
-              </app-dropdown>
-            </li>
-            <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
-              <app-dropdown [dropdown]="fablabDropdown">
-              </app-dropdown>
-            </li>
-            <li *ngIf="userIsLoggedIn" class="nav-item right-stretch">
-              <app-dropdown [dropdown]="userDropdown">
-              </app-dropdown>
-            </li>
-            <li *ngIf="userIsLoggedIn" class="nav-item right-stretch" >
-              <app-dropdown [dropdown]="languageDropdown" (switchLanguageEvent)="switchLanguage($event)"></app-dropdown>
             </li>
             <!--
             <li *ngIf="!userIsLoggedIn">
@@ -52,14 +55,32 @@
             <li *ngIf="!userIsLoggedIn">
               <a [routerLink]="[loginLink]" [ngClass]="(i == 1)?'button primary':''" class="underline" (click)="toggleSideMenu()">Anmelden</a>
             </li>
-            <li *ngIf="userIsLoggedIn">
-              <a (click)="_logout()" [ngClass]="(i == 1)?'button primary':''" (click)="toggleSideMenu()">Abmelden</a>
+            <li class="dropdown account" *ngIf="userIsLoggedIn">
+              <div class="hint text-mid">
+                Eingeloggt als
+              </div>
+              <a class="underline klinik" *ngIf="userType === 'klinik'">
+                {{hospital?.name}}
+              </a>
+              <a class="underline maker" *ngIf="userType === 'maker'">
+                {{user.firstname}} {{user.lastname}}
+              </a>
+              <ul
+                [ngClass]="{
+                  maker: userType === 'maker',
+                  klinik: userType === 'klinik'
+                }"
+              >
+                <li>
+                  <a (click)="toggleSideMenu()" (click)="_logout()" [routerLink]="[myOrdersLink]">
+                    Abmelden
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
-
       </div>
-      
     </nav>
   </header>
 </div>

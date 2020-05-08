@@ -25,6 +25,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
 import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
+import { OpenOrdersComponent } from './orders/open-orders/open-orders.component';
+import { AcceptedOrdersComponent } from './orders/accepted-orders/accepted-orders.component';
+import { OrderGridComponent } from './components/order-grid/order-grid.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -58,12 +61,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FablabFormComponent } from './fablabs/fablab-form/fablab-form.component';
 import { FablabListComponent } from './fablabs/fablab-list/fablab-list.component';
 
+import { MatFormFieldModule, MatInputModule, MatCheckboxModule, MatSelect, MatSelectModule } from '@angular/material';
+
+import { ChartsModule } from 'ng2-charts';
 import { FaqComponent } from './faq/faq.component';
 import { LoginComponent } from './login/login.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
 import { LegalNoticeComponent } from './legal-notice/legal-notice.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { BlueprintsComponent } from './blueprints/blueprints.component';
+
+import { UserSignupConfirmationComponent } from './users/user-signup-confirmation/user-signup-confirmation.component';
+import { MyOrdersComponent } from './orders/my-orders/my-orders.component';
 
 @NgModule({
     declarations: [
@@ -74,11 +84,15 @@ import { LegalNoticeComponent } from './legal-notice/legal-notice.component';
         DashboardComponent,
         TableComponent,
         OrderListComponent,
+        BlueprintsComponent,
         MachineFormComponent,
         CreateOrderComponent,
         MessageModalComponent,
         MachineDetailComponent,
         OrderDetailComponent,
+        OpenOrdersComponent,
+        AcceptedOrdersComponent,
+        OrderGridComponent,
         UserFormComponent,
         BackButtonComponent,
         LoginModalComponent,
@@ -86,6 +100,7 @@ import { LegalNoticeComponent } from './legal-notice/legal-notice.component';
         InputModalComponent,
         ChangePasswdModalComponent,
         UserDetailComponent,
+        UserSignupConfirmationComponent,
         UploadComponent,
         IotDeviceListComponent,
         IotDeviceFormComponent,
@@ -101,13 +116,17 @@ import { LegalNoticeComponent } from './legal-notice/legal-notice.component';
         FaqComponent,
         LoginComponent,
         PrivacyComponent,
-        LegalNoticeComponent
+        LegalNoticeComponent,
+        MyOrdersComponent
     ],
     imports: [
         MatFormFieldModule,
         MatInputModule,
+        FlexLayoutModule,
         MatProgressSpinnerModule,
         MatButtonModule,
+        MatCheckboxModule,
+        MatSelectModule,
         ReactiveFormsModule,
         BrowserModule,
         NgxSpinnerModule,
@@ -117,6 +136,7 @@ import { LegalNoticeComponent } from './legal-notice/legal-notice.component';
         HttpClientModule,
         ngfModule,
         NgbModule,
+        ChartsModule,
         RouterModule.forRoot(appRoutes, {
             scrollPositionRestoration: 'enabled',
             anchorScrolling: 'enabled',

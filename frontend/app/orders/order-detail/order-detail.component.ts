@@ -64,6 +64,8 @@ export class OrderDetailComponent implements OnInit {
     undefined,
     false,
     undefined,
+    undefined,
+    undefined,
     {number: 0, accepted: [], acceptedCount: 0, finished: [], finishedCount: 0},
     false
   );

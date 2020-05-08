@@ -1,0 +1,183 @@
+.row {
+    margin-left: 0px;
+}
+
+.order {
+    min-height: 300px;
+    text-align: center;
+    height: 100%;
+    margin-top: 40px;
+}
+
+.order.participating .inner {
+    border-width: 2px;
+    border-color: #EFC94C;
+}
+
+.order .statusBadge {
+    position: absolute;
+    color: white;
+    background-color: #EFC94C;
+    top: -22px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    right: 38px;
+    border-radius: 20px;
+}
+
+.order.participating .statusBadge {
+    color: white;
+    background-color: #EFC94C;
+}
+
+.order.finished .statusBadge {
+    color: white;
+    background-color: #45B29D;
+}
+
+.order .inner {
+    position: relative;
+    border-style: solid;
+    border-width: 1px;
+    width: 100%;
+    height: 100%;
+    border-width: 1px;
+    border-color: #E9E9E9;
+    border-radius: 5px;
+    padding-bottom: 34px;
+}
+
+.order .inner img {
+    max-width: 100%;
+    max-height: 300px;
+}
+
+.order .inner .locationIcon {
+    color: #df5A49;
+}
+
+.order .inner .buttons, .order .inner .updateBatch {
+    width: 100%;
+    text-align: left;
+}
+
+.order .inner .buttons a {
+    width: 100%;
+}
+
+
+@media screen and (max-width: 980px) {
+    .order {
+        padding: 15px;
+    }
+}
+
+.order .count {
+    min-height: 50px;
+}
+
+.order .title {
+    margin-top:28px;
+    margin-bottom: 8px;
+}
+
+.order .klinikname {
+    color: #8A9CA6;
+    margin-bottom: 36px;
+}
+
+.order .location {
+    margin-top: 20px !important;
+    margin-bottom: 15px !important;
+}
+
+.order .chart {
+    margin-top: 8px;
+}
+
+.order .chart .barchart {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.order .chart .row div:nth-child(1) {
+    text-align: left;
+}
+
+.order .chart .row div:nth-last-child(1) {
+    text-align: right;
+}
+
+
+.order .chart .barchart div{
+    height: 5px;
+}
+
+.order .chart .barchart div:nth-child(1){
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.order .chart .barchart div:nth-last-child(1){
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.order .chart .barchart .remaining{
+    background-color: #DF5A49;
+}
+
+.order .chart .barchart .accepted{
+    background-color: #EFC94C;
+}
+
+.order .chart .barchart .finished{
+    background-color: #45B29D;
+}
+
+.order .chart .row .remaining{
+    color: #DF5A49;
+}
+
+.order .chart .row .accepted{
+    color: #EFC94C;
+}
+
+.order .chart .row .finished{
+    color: #45B29D;
+}
+
+.order .buttons .iconbutton {
+    margin-bottom: 15px;
+}
+
+.order .buttons .iconbutton button{
+    width: 100%;
+}
+
+.order .buttons .iconbutton:nth-last-child(1) {
+    margin-bottom: 0px;
+}
+
+.order .support .maker {
+    margin-bottom:20px;
+}
+
+.participatingBadge {
+    display: none;
+}
+
+.finishedBadge {
+    display: none;
+}
+
+.order.finished .finishedBadge {
+    display: inherit;
+}
+
+.order.participating .participatingBadge {
+    display: inherit;
+}

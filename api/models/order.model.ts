@@ -6,8 +6,7 @@ import fileSchema from './file.model';
 const attributes = {
   comments: [commentSchema],
   fablabId: {
-    type: String,
-    required: true
+    type: String
   },
   projectname: {
     type: String,
@@ -49,7 +48,6 @@ const attributes = {
   machine: {
     type: {
       type: String,
-      required: true
     },
     _id: {
       type: String
@@ -78,7 +76,7 @@ const attributes = {
       number: {
         type: Number
       },
-      fablab: {
+      user: {
         type: String
       },
       status: {
@@ -89,13 +87,22 @@ const attributes = {
       number: {
         type: Number
       },
-      fablab: {
+      user: {
         type: String
       },
       status: {
         type: String
       }
     }]
+  },
+  blueprintId: {
+    type: String,
+    minlength: 24,
+    maxlength: 24
+  },
+  thankyouText: {
+    type: String,
+    required: true
   }
 };
 

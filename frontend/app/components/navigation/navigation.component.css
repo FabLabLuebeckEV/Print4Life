@@ -329,7 +329,78 @@ div.navPanel-visible #navPanel {
     padding-left: 10px;
     padding-right: 10px;
     border-bottom-style:solid;
+    border-bottom-width: 3px;
+    box-shadow: 0px 4px 4px -6px black;
+    width: 100%;
+}
+
+.underline.maker {
+    border-bottom-color: #45B29D;
+}
+
+.underline.klinik {
+    border-bottom-color: #df5a49;
+}
+
+#header nav .dropdown {
+    position: relative;
+}
+
+#header nav .dropdown:hover .underline {
+    border-bottom: none;
+    box-shadow: none;
+}
+
+#header nav .dropdown:hover ul {
+    display: grid;
+    position: absolute;
+    width: 100%;
+    top: 100px;
+    z-index: 200;
+
+    background-color: #F7F7F7;
+    padding-bottom: 20px;
+    border-bottom-style:solid;
     border-bottom-color: #334d5c;
     border-bottom-width: 3px;
     box-shadow: 0px 4px 4px -6px black;
+}
+
+#header nav .dropdown:hover ul.maker {
+    border-bottom-color: #45B29D;
+}
+
+
+#header nav .dropdown:hover ul.klinik {
+    border-bottom-color: #df5a49;
+}
+
+#header nav .dropdown ul {
+    display: none;
+    line-height: initial;
+    text-align: left;
+    padding-left: 10px;
+}
+
+#header nav .dropdown li {
+    line-height: initial;
+    margin-top: 20px;
+}
+
+#navPanel .dropdown li {
+    padding-left: 30px;
+}
+
+#header .hint {
+    position: absolute;
+    top: 35px;
+    color: #c0cacf;
+}
+
+#header .account{
+    min-width: 140px;
+    max-width: 140px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }

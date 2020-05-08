@@ -7,7 +7,6 @@ import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { TranslationModel } from '../models/translation.model';
-
 import { routes } from '../config/routes';
 
 @Component({
@@ -69,6 +68,9 @@ export class DashboardComponent implements OnInit {
   }
 
   register(type: String) {
+
+    this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}/${type}`]);
+    /*
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     const newsletterButton = new ModalButton('Zum Newsletter', 'btn primary', 'newsletter');
 
@@ -83,6 +85,6 @@ export class DashboardComponent implements OnInit {
         window.location.href = '#newsletter';
       }
     }).catch((err) => {
-    });
+    });*/
   }
 }
