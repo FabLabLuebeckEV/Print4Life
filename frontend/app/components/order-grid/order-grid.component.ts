@@ -13,6 +13,7 @@ import { EventEmitter } from '@angular/core';
 
 import Deepcopy from 'rfdc';
 import { User } from 'frontend/app/models/user.model';
+import { HospitalService } from 'frontend/app/services/hospital.service';
 
 @Component({
   selector: 'app-order-grid',
@@ -52,7 +53,8 @@ export class OrderGridComponent implements OnInit, OnChanges {
   constructor(
     public domSanitizer: DomSanitizer,
     public userService: UserService,
-    public orderService: OrderService
+    public orderService: OrderService,
+    public hospitalService: HospitalService
   ) {
   }
 
@@ -104,6 +106,8 @@ export class OrderGridComponent implements OnInit, OnChanges {
           order.own = false;
         }
 
+        order.hospital = await this.hospitalService.findByOwner(order.owner);
+
         const objectURL = 'data:image/jpeg;base64,' + order.blueprint.image;
         order.blueprint.imageURL = this.domSanitizer.bypassSecurityTrustUrl(objectURL);
         // order.distance = Math.random() * 10.0;
@@ -113,7 +117,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
           if (order.batch['finished']) {
             order.batch['finished'].forEach(batch => {
               order.batch.finishedCount += batch.number;
-              
+
               if (batch.user === loggedInUser._id) {
                 order.myFinishedBatch = batch.number;
               }

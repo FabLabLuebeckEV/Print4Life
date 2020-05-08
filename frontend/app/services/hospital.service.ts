@@ -33,6 +33,20 @@ export class HospitalService {
     return undefined;
   }
 
+  public async findByOwner(id): Promise<any> {
+    const result = await this.http.post(`${this.rootPath}/search`, {
+      query: {
+        owner: id
+      },
+      limit: undefined,
+      skip: undefined
+    }).toPromise();
+    if (result && result.hasOwnProperty('hospitals')) {
+      return result['hospitals'][0];
+    }
+    return undefined;
+  }
+
   public async getHospital(id): Promise<any> {
     const result = await this.http.get(`${this.rootPath}/${id}`).toPromise();
     if (result && result.hasOwnProperty('hospital')) {
