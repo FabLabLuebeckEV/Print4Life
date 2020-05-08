@@ -76,7 +76,7 @@ const attributes = {
       number: {
         type: Number
       },
-      fablab: {
+      user: {
         type: String
       },
       status: {
@@ -87,7 +87,7 @@ const attributes = {
       number: {
         type: Number
       },
-      fablab: {
+      user: {
         type: String
       },
       status: {
