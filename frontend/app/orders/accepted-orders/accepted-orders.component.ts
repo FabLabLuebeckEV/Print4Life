@@ -36,11 +36,22 @@ export class AcceptedOrdersComponent implements OnInit {
                     }
                 },
                 {
-                    'batch.accepted': {
-                        $elemMatch: {
-                            fablab: this.loggedInUser.fablabId
+                    $or: [
+                        {
+                            'batch.accepted': {
+                                $elemMatch: {
+                                    user: this.loggedInUser._id
+                                }
+                            }
+                        },
+                        {
+                            'batch.finished': {
+                                $elemMatch: {
+                                    user: this.loggedInUser._id
+                                }
+                            }
                         }
-                    }
+                    ]
                 }
             ]
         };
