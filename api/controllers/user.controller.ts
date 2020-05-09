@@ -85,8 +85,8 @@ async function create (req, res) {
       req.body.role.role = 'user';
     }
 
-    userService.create(req.body).then((user) => {
-      userService.selfActivateUser(user, true);
+    userService.create(req.body).then(async (user) => {
+      await userService.selfActivateUser(user, true);
       res.status(200).send({ user });
     }).catch((err) => {
       const msg = { error: 'Malformed user, one or more parameters wrong or missing', stack: err };
@@ -1072,7 +1072,11 @@ async function sendActivationRequest (req, res) {
   try {
     const user = await userService.get(req.params.id);
     if (user) {
-      userService.selfActivateUser(user, false);
+      const activationStatus = await userService.selfActivateUser(user, false);
+      if (!activationStatus) {
+        const msg = { error: 'No need to activate the user' };
+        return res.status(404).send(msg);
+      }
       return res.status(200).send({ msg: 'Confirmation email sent' });
     }
     const msg = { error: 'GET User by id with no result.' };

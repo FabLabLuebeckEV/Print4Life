@@ -10,7 +10,10 @@ import { ErrorType, IError } from '../services/router.service';
 import logger from '../logger';
 import ModelService from './model.service';
 import Fablab from '../models/fablab.model';
+import HospitalService from '../services/hospital.service';
 /* eslint-enable no-unused-vars */
+
+const hospitalService = new HospitalService();
 
 export class UserService implements ModelService {
   /* eslint-disable class-methods-use-this */
@@ -79,36 +82,56 @@ export class UserService implements ModelService {
     let error: IError;
 
     return new Promise((resolve, reject) => user.comparePassword(password, (err, isMatch) => {
-      if (isMatch && !err && user.activated) {
-        const signObj = {
-          _id: user._id,
-          username: user.username,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.email,
-          address: user.address ? user.address.toJSON() : undefined,
-          password: user.password,
-          role: user.role.toJSON(),
-          createdAt: user.createdAt
-        };
-        const token = jwt.sign(signObj, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
-        resolve({ success: true, token: `JWT ${token}` });
-      } else if (!user.activated) {
-        error = {
-          name: 'USER_DEACTIVATED',
-          data: { userId: user._id },
-          message: 'Your account is not activated.',
-          type: ErrorType.USER_DEACTIVATED
-        };
-        reject(error);
-      } else {
-        error = {
-          name: 'AUTHENTIFICATION_FAILED',
-          message: 'Authentication failed. Wrong password.',
-          type: ErrorType.AUTHENTIFICATION_FAILED
-        };
-        reject(error);
-      }
+      hospitalService.getAll({
+        owner: user._id
+      }).then((hospitals) => {
+        let hospitalValid = true;
+        if (user.role.role === 'user') {
+          if (hospitals.length !== 1) {
+            error = {
+              name: 'MALFORMED_ACCOUNT',
+              data: { userId: user._id },
+              message: 'There is an issue with your account. Please contact our team for help',
+              type: ErrorType.SERVER_ERROR
+            };
+            reject(error);
+          }
+          hospitalValid = hospitals[0].activated;
+        }
+
+        if (isMatch && !err && user.activated && hospitalValid) {
+          // check hospital activation, too
+
+          const signObj = {
+            _id: user._id,
+            username: user.username,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            address: user.address ? user.address.toJSON() : undefined,
+            password: user.password,
+            role: user.role.toJSON(),
+            createdAt: user.createdAt
+          };
+          const token = jwt.sign(signObj, config.jwtSecret, { expiresIn: config.jwtExpiryTime });
+          resolve({ success: true, token: `JWT ${token}` });
+        } else if (!user.activated || !hospitalValid) {
+          error = {
+            name: 'USER_DEACTIVATED',
+            data: { userId: user._id },
+            message: 'Your account is not activated.',
+            type: ErrorType.USER_DEACTIVATED
+          };
+          reject(error);
+        } else {
+          error = {
+            name: 'AUTHENTIFICATION_FAILED',
+            message: 'Authentication failed. Wrong password.',
+            type: ErrorType.AUTHENTIFICATION_FAILED
+          };
+          reject(error);
+        }
+      });
     }));
   }
 
@@ -145,10 +168,15 @@ export class UserService implements ModelService {
      * @param user is the new user
      * @param newUser boolean to indicate if it is a new user or a reactivation
      */
-  public informAdmins (user, newUser: boolean) {
-    if (user.role.role !== 'guest') {
+  public async informAdmins (user, newUser: boolean) {
+    if (user.role.role === 'user') {
       let options: EmailOptions;
-      if (!user.activated) {
+
+      const hospitals = await hospitalService.getAll({
+        owner: user._id
+      });
+
+      if (hospitals.length === 1 && user.activated && !hospitals[0].activated) {
         options = {
           preferredLanguage: '',
           template: 'activateNewUser',
@@ -158,8 +186,9 @@ export class UserService implements ModelService {
             adminName: '',
             userName: `${user.firstname} ${user.lastname}`,
             userEmail: user.email,
+            hospitalName: hospitals[0].name,
             id: user._id,
-            url: `${config.baseUrlFrontend}/users/edit/${user._id}`,
+            url: `${config.baseUrlFrontend}/hospital/activate/${user._id}`,
             newUser
           }
         };
@@ -180,7 +209,7 @@ export class UserService implements ModelService {
      * @param user is the new user
      * @param newUser boolean to indicate if it is a new user or a reactivation
      */
-  public selfActivateUser (user, newUser: boolean) {
+  public async selfActivateUser (user, newUser: boolean) {
     if (user.role.role !== 'guest') {
       let options: EmailOptions;
       let url = `${config.baseUrlFrontend}/users/activate/${user._id}/`;
@@ -192,7 +221,7 @@ export class UserService implements ModelService {
 
       if (!user.activated) {
         options = {
-          preferredLanguage: user.preferredLanguage.language || 'en',
+          preferredLanguage: user.preferredLanguage.language || 'de',
           template: 'selfActivateNewUser',
           to: user.email,
           locals:
@@ -206,8 +235,21 @@ export class UserService implements ModelService {
           }
         };
         emailService.sendMail(options);
+      } else if (user.role.role === 'user') {
+        const hospitals = await hospitalService.getAll({
+          owner: user._id
+        });
+
+        if (hospitals.length === 1) {
+          if (!hospitals[0].activated) {
+            await this.informAdmins(user, newUser);
+            return true;
+          }
+        }
       }
     }
+
+    return false;
   }
 
   /**
