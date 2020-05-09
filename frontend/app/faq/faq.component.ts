@@ -4,12 +4,15 @@ import { ModalButton } from '../helper/modal.button';
 import { MessageModalComponent } from '../components/message-modal/message-modal.component';
 import { ServiceService } from '../services/service.service';
 
+import { routes } from '../config/routes';
+
 @Component({
     selector: 'app-faq',
     templateUrl: './faq.component.html',
     styleUrls: ['./faq.component.css']
 })
 export class FaqComponent implements OnInit {
+  pressRoute = `/${routes.paths.frontend.press.root}`;
 
   contactData = {
     name : '',
