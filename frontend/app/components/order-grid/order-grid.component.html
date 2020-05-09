@@ -104,7 +104,7 @@
                     </div>
                     <div class="iconbutton" *ngIf="order.myFinishedBatch > 0 || order.myAcceptedBatch > 0">
                         <fa-icon class="arrowIcon" [icon]="arrowIcon" ></fa-icon>
-                        <a class="button primary" >
+                        <a class="button primary" [routerLink]="[orderShippingRoute]">
                             Versanddaten anzeigen
                         </a>
                     </div>

@@ -114,6 +114,7 @@ export const routes = {
                 getStatus: 'status',
                 getOrder: 'getOrder',
                 accept: 'accept',
+                shipping: 'shipping',
                 shared: {
                     root: 'shared',
                     create: 'create',

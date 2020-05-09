@@ -29,6 +29,7 @@ import { PrivacyComponent } from '../privacy/privacy.component';
 import { LoginComponent } from '../login/login.component';
 import { LegalNoticeComponent } from '../legal-notice/legal-notice.component';
 import { MyOrdersComponent } from '../orders/my-orders/my-orders.component';
+import { ShippingDetailsComponent } from '../orders/shipping-details/shipping-details.component';
 
 import { AcceptedOrdersComponent } from '../orders/accepted-orders/accepted-orders.component';
 import { BlueprintsComponent } from '../blueprints/blueprints.component';
@@ -113,6 +114,7 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent },
+            { path: routes.paths.frontend.orders.shipping, component: ShippingDetailsComponent }
             /*{
                 path:
                     routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.create,
