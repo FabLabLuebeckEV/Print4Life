@@ -15,10 +15,10 @@ export class PressComponent implements OnInit {
 
                 const selector = el.getAttribute('href');
                 const anchor = document.getElementById(selector.replace('#', ''));
-                if(anchor) {
+                if (anchor) {
                     window.scroll({top: anchor.offsetTop - 50, left: 0, behavior: 'smooth'});
                 }
-            })
-        })
+            });
+        });
     }
 }
