@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./shipping-details.component.css']
 })
 export class ShippingDetailsComponent implements OnInit {
-  
+
   async ngOnInit() {
 
   }

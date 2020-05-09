@@ -41,7 +41,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
   locationIcon = faMapMarkerAlt;
   arrowIcon = faChevronRight;
   orderAcceptRoute = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.accept;
-  orderShippingRoute = '/'+routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.shipping;
+  orderShippingRoute = '/' + routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.shipping;
 
   myBatch = 0;
   deepcopy = new Deepcopy();
