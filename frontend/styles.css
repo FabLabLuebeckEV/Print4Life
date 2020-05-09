@@ -502,3 +502,54 @@ body .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-
 body .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
     transform: translateY(-1.59375em) scale(0.95);
 }
+
+
+/* Hannah Utils */
+.mt-128 {
+    margin-top: 128px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+.mb-80 {
+    margin-bottom: 80px;
+}
+.mb-50 {
+    margin-bottom: 50px;
+}
+.mb-70 {
+    margin-bottom: 70px !important;
+}
+
+.mb-90 {
+    margin-bottom: 90px !important;
+}
+.mb-130 {
+    margin-bottom: 130px;
+}
+.mb-200 {
+    margin-bottom: 200px;
+}
+
+
+.list-with-arrows {
+    
+}
+
+.list-with-arrows li {
+    position: relative;
+    padding-left: 58px !important;
+   
+}
+
+.list-with-arrows li:before {
+    content: "";
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMWw4IDEwLjcyTDEuNzE2IDIzIiBzdHJva2Utd2lkdGg9IjEuOTIiIHN0cm9rZT0iIzUyODZBNCIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBvcGFjaXR5PSIuODAyIi8+PC9zdmc+');
+    width: 11px;
+    height: 24px;
+    position: absolute;
+    left:0;
+    top:5px;
+    background-size: 100%;
+}

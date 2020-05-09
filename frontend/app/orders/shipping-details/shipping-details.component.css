@@ -2,25 +2,6 @@
     font-size: 20px;
 }
 
-.mt-128 {
-    margin-top: 128px;
-}
-
-.mb-20 {
-    margin-bottom: 20px;
-}
-.mb-80 {
-    margin-bottom: 80px;
-}
-.mb-50 {
-    margin-bottom: 50px;
-}
-.mb-70 {
-    margin-bottom: 70px;
-}
-.mb-200 {
-    margin-bottom: 200px;
-}
 
 .text-left {
     text-align: left;
@@ -44,11 +25,6 @@
     margin-right: auto;
     font-weight: 300;
 }
-
-.pxy-50 {
-    
-}
-
 
 .link-with-arrow {
     color: #45B29D;
