@@ -133,7 +133,8 @@ export const routes = {
                 outstandingOrders: 'outstanding',
                 unfinishedOrders: 'unfinished',
                 myOrders: 'myOrders',
-                acceptedOrders: 'acceptedOrders'
+                acceptedOrders: 'acceptedOrders',
+                complete: 'complete'
             },
             iotDevices: {
                 root: 'iotDevices',

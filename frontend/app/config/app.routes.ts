@@ -7,6 +7,7 @@ import { CreateOrderComponent } from '../orders/create-order/create-order.compon
 import { MachineDetailComponent } from '../machines/machine-detail/machine-detail.component';
 import { routes } from './routes';
 import { OrderDetailComponent } from '../orders/order-detail/order-detail.component';
+import { CompleteOrderComponent } from '../orders/complete-order/complete-order.component';
 import { UserFormComponent } from '../users/user-form/user-form.component';
 import { Injectable } from '@angular/core';
 import { UserService } from '../services/user.service';
@@ -116,7 +117,8 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent },
-            { path: routes.paths.frontend.orders.shipping, component: ShippingDetailsComponent }
+            { path: routes.paths.frontend.orders.shipping, component: ShippingDetailsComponent },
+            { path: routes.paths.frontend.orders.complete, component: CompleteOrderComponent }
             /*{
                 path:
                     routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.create,
