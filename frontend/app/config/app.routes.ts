@@ -35,6 +35,7 @@ import { AcceptedOrdersComponent } from '../orders/accepted-orders/accepted-orde
 import { BlueprintsComponent } from '../blueprints/blueprints.component';
 
 import { UserSignupConfirmationComponent } from '../users/user-signup-confirmation/user-signup-confirmation.component';
+import { HospitalActivationComponent } from '../hospitals/hospital-activation/hospital-activation.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -133,6 +134,11 @@ export const appRoutes: Routes = [
         ]
     },
     {
+        path: `${routes.paths.frontend.hospitals.root}/${routes.paths.frontend.hospitals.activate}/:id`,
+        runGuardsAndResolvers: 'always',
+        component: HospitalActivationComponent
+    },
+    {
         path: `${routes.paths.frontend.aboutus.root}`,
         component: AboutUsComponent,
         runGuardsAndResolvers: 'always'
@@ -180,9 +186,9 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.users.activate + '/:id/:type', component: UserActivationComponent },
             { path: routes.paths.frontend.users.signup + '/:type', component: UserFormComponent },
             { path: routes.paths.frontend.users.signup + '/:type/thankyou', component: UserSignupConfirmationComponent },
-            { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent, },
+            { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent },
             { path: routes.paths.frontend.users.profile, component: UserFormComponent },
-            { path: routes.paths.frontend.users.login, component: LoginComponent},
+            { path: routes.paths.frontend.users.login, component: LoginComponent },
             { path: ':id', component: UserDetailComponent }
         ]
     },

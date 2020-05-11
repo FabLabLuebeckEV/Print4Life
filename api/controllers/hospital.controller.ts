@@ -1,8 +1,9 @@
 import logger from '../logger';
 import HospitalService from '../services/hospital.service';
 import UserService from '../services/user.service';
+import emailService from '../services/email.service';
 import validatorService from '../services/validator.service';
-
+import config from '../config/config';
 import { searchableTextFields } from '../models/hospital.model';
 
 const hospitalService = new HospitalService();
@@ -150,6 +151,49 @@ async function deleteById (req, res) {
   }
 }
 
+async function activate (req, res) {
+  const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
+  if (checkId) {
+    logger.error(checkId.error);
+    return res.status(checkId.status).send(checkId.error);
+  }
+
+  const token = req.headers.authorization.split('JWT')[1].trim();
+  const user = await userService.getUserByToken(token);
+  if (user.role.role !== 'admin') {
+    const msg = { err: 'FORBIDDEN', message: 'User can not update Hospitals!' };
+
+    return res.status(403).send(msg);
+  }
+
+  try {
+    const hospital = await hospitalService.update(req.params.id, { activated: true });
+
+    const user = await userService.get(hospital.owner);
+    const { email } = user;
+
+    const options = {
+      preferredLanguage: 'de',
+      template: 'hospitalActivated',
+      to: email,
+      locals:
+      {
+        userName: `${user.firstname} ${user.lastname}`,
+        hospitalName: hospital.name,
+        url: `${config.baseUrlFrontend}/users/login`,
+      }
+    };
+
+    emailService.sendMail(options);
+
+
+    return res.status(200).send({ hospital });
+  } catch (err) {
+    logger.error({ error: 'Malformed Request!', stack: err });
+    return res.status(400).send({ error: 'Malformed Request!', stack: err });
+  }
+}
+
 export default {
-  get, getAll, create, update, deleteById, search
+  get, getAll, create, update, deleteById, search, activate
 };

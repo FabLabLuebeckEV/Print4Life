@@ -188,7 +188,7 @@ export class UserService implements ModelService {
             userEmail: user.email,
             hospitalName: hospitals[0].name,
             id: user._id,
-            url: `${config.baseUrlFrontend}/hospital/activate/${user._id}`,
+            url: `${config.baseUrlFrontend}/hospitals/activate/${hospitals[0]._id}`,
             newUser
           }
         };

@@ -16,6 +16,8 @@ router.route('/:id').put(hospitalCtrl.update);
 
 router.route('/:id').delete(hospitalCtrl.deleteById);
 
+router.route('/:id/activate').put(hospitalCtrl.activate);
+
 router.route('/search').post(hospitalCtrl.search);
 
 export default router;

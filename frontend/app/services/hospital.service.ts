@@ -65,4 +65,9 @@ export class HospitalService {
       .toPromise();
     }
 
+
+  public activateHospital(id): Promise<any> {
+    return this.http.put(`${this.rootPath}/${id}/${routes.paths.backend.hospitals.activate}`,
+    undefined).toPromise();
+  }
 }

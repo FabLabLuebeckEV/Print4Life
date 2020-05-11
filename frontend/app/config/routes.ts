@@ -60,6 +60,7 @@ export const routes = {
             },
             hospitals: {
                 root: 'hospitals',
+                activate: 'activate',
                 getById: ':id'
             },
             octoprint: {
@@ -101,6 +102,10 @@ export const routes = {
                 update: 'edit',
                 list: 'list',
                 profile: 'profile',
+                activate: 'activate'
+            },
+            hospitals: {
+                root: 'hospitals',
                 activate: 'activate'
             },
             orders: {

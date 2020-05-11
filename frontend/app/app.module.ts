@@ -75,6 +75,7 @@ import { BlueprintsComponent } from './blueprints/blueprints.component';
 import { UserSignupConfirmationComponent } from './users/user-signup-confirmation/user-signup-confirmation.component';
 import { MyOrdersComponent } from './orders/my-orders/my-orders.component';
 import { ShippingDetailsComponent } from './orders/shipping-details/shipping-details.component';
+import { HospitalActivationComponent } from './hospitals/hospital-activation/hospital-activation.component';
 
 @NgModule({
     declarations: [
@@ -119,6 +120,7 @@ import { ShippingDetailsComponent } from './orders/shipping-details/shipping-det
         PrivacyComponent,
         LegalNoticeComponent,
         ShippingDetailsComponent,
+        HospitalActivationComponent,
         MyOrdersComponent
     ],
     imports: [
