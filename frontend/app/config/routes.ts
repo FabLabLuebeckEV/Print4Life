@@ -80,6 +80,9 @@ export const routes = {
             aboutus: {
                 root: 'about-us'
             },
+            press: {
+                root: 'press'
+            },
             blueprints: {
                 root: 'blueprints',
                 list: 'list'

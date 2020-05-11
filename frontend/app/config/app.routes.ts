@@ -36,6 +36,7 @@ import { BlueprintsComponent } from '../blueprints/blueprints.component';
 
 import { UserSignupConfirmationComponent } from '../users/user-signup-confirmation/user-signup-confirmation.component';
 import { HospitalActivationComponent } from '../hospitals/hospital-activation/hospital-activation.component';
+import { PressComponent } from '../press/press.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -141,6 +142,11 @@ export const appRoutes: Routes = [
     {
         path: `${routes.paths.frontend.aboutus.root}`,
         component: AboutUsComponent,
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: `${routes.paths.frontend.press.root}`,
+        component: PressComponent,
         runGuardsAndResolvers: 'always'
     },
     {

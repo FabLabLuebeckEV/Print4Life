@@ -377,26 +377,6 @@ a {
 }
 
 
-.list-with-arrows {
-    
-}
-
-.list-with-arrows li {
-    position: relative;
-    padding-left: 58px !important;
-   
-}
-
-.list-with-arrows li:before {
-    content: "";
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMWw4IDEwLjcyTDEuNzE2IDIzIiBzdHJva2Utd2lkdGg9IjEuOTIiIHN0cm9rZT0iIzUyODZBNCIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBvcGFjaXR5PSIuODAyIi8+PC9zdmc+');
-    width: 11px;
-    height: 24px;
-    position: absolute;
-    left:0;
-    top:5px;
-    background-size: 100%;
-}
 
 .list-with-arrows-small li {
     position: relative;

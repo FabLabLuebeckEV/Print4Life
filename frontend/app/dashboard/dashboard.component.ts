@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   translationFields: TranslationModel.Dashboard  = {};
   contactLink = routes.paths.frontend.faq.root;
   contactFragment = routes.paths.frontend.faq.contact;
+  pressRoute = `/${routes.paths.frontend.press.root}`;
 
   constructor(
     private modalService: ModalService,

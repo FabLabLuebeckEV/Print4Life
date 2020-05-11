@@ -76,6 +76,7 @@ import { UserSignupConfirmationComponent } from './users/user-signup-confirmatio
 import { MyOrdersComponent } from './orders/my-orders/my-orders.component';
 import { ShippingDetailsComponent } from './orders/shipping-details/shipping-details.component';
 import { HospitalActivationComponent } from './hospitals/hospital-activation/hospital-activation.component';
+import { PressComponent } from './press/press.component';
 
 @NgModule({
     declarations: [
@@ -121,7 +122,8 @@ import { HospitalActivationComponent } from './hospitals/hospital-activation/hos
         LegalNoticeComponent,
         ShippingDetailsComponent,
         HospitalActivationComponent,
-        MyOrdersComponent
+        MyOrdersComponent,
+        PressComponent
     ],
     imports: [
         MatFormFieldModule,
