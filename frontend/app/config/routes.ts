@@ -60,6 +60,7 @@ export const routes = {
             },
             hospitals: {
                 root: 'hospitals',
+                activate: 'activate',
                 getById: ':id'
             },
             octoprint: {
@@ -106,6 +107,10 @@ export const routes = {
                 profile: 'profile',
                 activate: 'activate'
             },
+            hospitals: {
+                root: 'hospitals',
+                activate: 'activate'
+            },
             orders: {
                 root: 'orders',
                 create: 'create',
@@ -128,7 +133,8 @@ export const routes = {
                 outstandingOrders: 'outstanding',
                 unfinishedOrders: 'unfinished',
                 myOrders: 'myOrders',
-                acceptedOrders: 'acceptedOrders'
+                acceptedOrders: 'acceptedOrders',
+                complete: 'complete'
             },
             iotDevices: {
                 root: 'iotDevices',

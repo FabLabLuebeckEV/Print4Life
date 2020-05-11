@@ -6,7 +6,6 @@ const attributes = {
   address: { type: addressSchema, required: true },
   activated: { type: Boolean, required: true, default: false },
   owner: { type: mongoose.Schema.Types.ObjectId, required: true, unique: true },
-  hospitalNumber: { type: String, required: true },
   phone: {
     type: String,
   },

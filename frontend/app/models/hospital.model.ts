@@ -7,7 +7,6 @@ export class Hospital {
         public address: Address,
         public activated: Boolean,
         public owner: String,
-        public hospitalNumber: String,
         public phone: String
     ) { }
 }

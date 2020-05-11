@@ -7,6 +7,7 @@ import { CreateOrderComponent } from '../orders/create-order/create-order.compon
 import { MachineDetailComponent } from '../machines/machine-detail/machine-detail.component';
 import { routes } from './routes';
 import { OrderDetailComponent } from '../orders/order-detail/order-detail.component';
+import { CompleteOrderComponent } from '../orders/complete-order/complete-order.component';
 import { UserFormComponent } from '../users/user-form/user-form.component';
 import { Injectable } from '@angular/core';
 import { UserService } from '../services/user.service';
@@ -35,6 +36,7 @@ import { AcceptedOrdersComponent } from '../orders/accepted-orders/accepted-orde
 import { BlueprintsComponent } from '../blueprints/blueprints.component';
 
 import { UserSignupConfirmationComponent } from '../users/user-signup-confirmation/user-signup-confirmation.component';
+import { HospitalActivationComponent } from '../hospitals/hospital-activation/hospital-activation.component';
 import { PressComponent } from '../press/press.component';
 
 @Injectable()
@@ -115,7 +117,8 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent },
-            { path: routes.paths.frontend.orders.shipping, component: ShippingDetailsComponent }
+            { path: routes.paths.frontend.orders.shipping, component: ShippingDetailsComponent },
+            { path: routes.paths.frontend.orders.complete, component: CompleteOrderComponent }
             /*{
                 path:
                     routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.create,
@@ -132,6 +135,11 @@ export const appRoutes: Routes = [
                 component: OrderDetailComponent
             }*/
         ]
+    },
+    {
+        path: `${routes.paths.frontend.hospitals.root}/${routes.paths.frontend.hospitals.activate}/:id`,
+        runGuardsAndResolvers: 'always',
+        component: HospitalActivationComponent
     },
     {
         path: `${routes.paths.frontend.aboutus.root}`,
@@ -186,9 +194,9 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.users.activate + '/:id/:type', component: UserActivationComponent },
             { path: routes.paths.frontend.users.signup + '/:type', component: UserFormComponent },
             { path: routes.paths.frontend.users.signup + '/:type/thankyou', component: UserSignupConfirmationComponent },
-            { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent, },
+            { path: routes.paths.frontend.users.update + '/:id', component: UserFormComponent },
             { path: routes.paths.frontend.users.profile, component: UserFormComponent },
-            { path: routes.paths.frontend.users.login, component: LoginComponent},
+            { path: routes.paths.frontend.users.login, component: LoginComponent },
             { path: ':id', component: UserDetailComponent }
         ]
     },

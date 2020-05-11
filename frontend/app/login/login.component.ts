@@ -5,6 +5,7 @@ import { routes } from '../config/routes';
 
 import { UserService } from '../services/user.service';
 import { ModalService } from '../services/modal.service';
+import { OrderService } from '../services/order.service';
 import { MessageModalComponent } from 'frontend/app/components/message-modal/message-modal.component';
 import { ModalButton } from '../helper/modal.button';
 import { InputModalComponent } from '../components/input-modal/input-modal.component';
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
   constructor(
     public router: Router,
     public userService: UserService,
+    public orderService: OrderService,
     public modalService: ModalService,
     private translateService: TranslateService,
   ) {
@@ -72,9 +74,40 @@ export class LoginComponent implements OnInit {
       await this.userService.login(this.loginData);
       const user = await this.userService.findOwn();
       if (user.role.role === 'editor') {
-        this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`]);
+        // Maker
+        const query = {
+          $or: [
+              {
+                  'batch.accepted': {
+                      $elemMatch: {
+                          user: user._id
+                      }
+                  }
+              },
+              {
+                  'batch.finished': {
+                      $elemMatch: {
+                          user: user._id
+                      }
+                  }
+              }
+          ]
+        };
+        const myOrders = await this.orderService.search(query);
+        if (myOrders) {
+          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`]);
+        } else {
+          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`]);
+        }
       } else {
-        this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`]);
+        // Suchender
+        const query = {owner: user._id};
+        const myOrders = await this.orderService.search(query);
+        if (myOrders) {
+          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`]);
+        } else {
+          this.router.navigate([`/${routes.paths.frontend.blueprints.root}/${routes.paths.frontend.blueprints.list}`]);
+        }
       }
     } catch (err) {
     }

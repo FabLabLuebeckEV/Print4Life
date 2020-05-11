@@ -25,6 +25,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { MachineDetailComponent } from './machines/machine-detail/machine-detail.component';
 import { ConfigService } from './config/config.service';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
+import { CompleteOrderComponent } from './orders/complete-order/complete-order.component';
 import { OpenOrdersComponent } from './orders/open-orders/open-orders.component';
 import { AcceptedOrdersComponent } from './orders/accepted-orders/accepted-orders.component';
 import { OrderGridComponent } from './components/order-grid/order-grid.component';
@@ -75,6 +76,7 @@ import { BlueprintsComponent } from './blueprints/blueprints.component';
 import { UserSignupConfirmationComponent } from './users/user-signup-confirmation/user-signup-confirmation.component';
 import { MyOrdersComponent } from './orders/my-orders/my-orders.component';
 import { ShippingDetailsComponent } from './orders/shipping-details/shipping-details.component';
+import { HospitalActivationComponent } from './hospitals/hospital-activation/hospital-activation.component';
 import { PressComponent } from './press/press.component';
 
 @NgModule({
@@ -92,6 +94,7 @@ import { PressComponent } from './press/press.component';
         MessageModalComponent,
         MachineDetailComponent,
         OrderDetailComponent,
+        CompleteOrderComponent,
         OpenOrdersComponent,
         AcceptedOrdersComponent,
         OrderGridComponent,
@@ -120,6 +123,7 @@ import { PressComponent } from './press/press.component';
         PrivacyComponent,
         LegalNoticeComponent,
         ShippingDetailsComponent,
+        HospitalActivationComponent,
         MyOrdersComponent,
         PressComponent
     ],

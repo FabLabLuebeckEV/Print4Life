@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { faMapMarkerAlt, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { routes } from '../../config/routes';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from '../../services/user.service';
 import { OrderService } from '../../services/order.service';
@@ -52,6 +53,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
   filterStatus: String = '';
 
   constructor(
+    private router: Router,
     public domSanitizer: DomSanitizer,
     public userService: UserService,
     public orderService: OrderService,
@@ -175,8 +177,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
     delete order.blueprint;
 
     await this.orderService.updateOrder(order);
-
-    this.reload.emit();
+    this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.complete}`]);
   }
 
   public async support(order) {
