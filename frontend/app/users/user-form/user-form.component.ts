@@ -57,7 +57,7 @@ export class UserFormComponent implements OnInit {
     undefined, undefined, undefined, this.address,
     this.role, this.preferredLanguage, false, undefined, undefined);
   hospital: Hospital = new Hospital(
-    undefined, undefined, this.address, false, undefined, undefined, undefined
+    undefined, undefined, this.address, false, undefined, undefined
   );
 
   translationFields: TranslationModel.UserForm & TranslationModel.Roles &
