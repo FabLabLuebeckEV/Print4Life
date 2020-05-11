@@ -8,3 +8,4 @@ dev-mongo
 .nvmrc
 .vscode/settings.json
 ecosystem*
+.DS_Store
