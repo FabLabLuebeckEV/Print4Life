@@ -404,3 +404,7 @@ div.navPanel-visible #navPanel {
     overflow: hidden;
     white-space: nowrap;
 }
+
+a:not([href]) {
+    color: #334D5C;
+}
