@@ -532,15 +532,9 @@ body .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-serv
     margin-bottom: 200px;
 }
 
-
-.list-with-arrows {
-    
-}
-
 .list-with-arrows li {
     position: relative;
-    padding-left: 58px !important;
-   
+    padding-left: 58px !important;   
 }
 
 .list-with-arrows li:before {
@@ -552,4 +546,15 @@ body .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-serv
     left:0;
     top:5px;
     background-size: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+    .list-with-arrows li {
+        padding-left: 29px !important;
+    }
+
+    .grid {
+        padding-left: 35px;
+        padding-right: 35px;
+    }
 }

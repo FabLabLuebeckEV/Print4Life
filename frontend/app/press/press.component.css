@@ -1,11 +1,21 @@
 /** gutter 80px ? */
 
 .press .row {
-    margin-right: -40px;
+    margin-right: -40px !important;
     margin-left: -40px;
 }
 
 .press .col-sm-4, .press .col-sm-3, .press .col-sm-6,.press .col-sm-9 {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.press .col-md-4, .press .col-md-3, .press .col-md-6,.press .col-md-9 {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.press .col-lg-4, .press .col-lg-3, .press .col-lg-6,.press .col-lg-9 {
     padding-left: 40px;
     padding-right: 40px;
 }
