@@ -117,7 +117,7 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.orders.create, component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent },
-            { path: routes.paths.frontend.orders.shipping, component: ShippingDetailsComponent },
+            { path: routes.paths.frontend.orders.shipping + '/:id', component: ShippingDetailsComponent },
             { path: routes.paths.frontend.orders.complete, component: CompleteOrderComponent }
             /*{
                 path:

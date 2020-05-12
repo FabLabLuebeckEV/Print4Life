@@ -5,7 +5,7 @@
         <p class="overline mb-20">Schritt 1</p>
         <h1 class="mb-80">Packen</h1>
 
-        <p class="max-250 mb-50">Lege unseren <strong>Beipackzettel</strong> zu deinen 400 Stück Prusa Faceshield V3 ins Paket.</p>
+        <p class="max-250 mb-50">Lege unseren <strong>Beipackzettel</strong> zu deinen {{order?.batch.number}} Stück {{order?.blueprint.name}} ins Paket.</p>
         <p class="max-250 text-left mb-70 pxy-50"><a  class="link-with-arrow" href="#">Beipackzettel ausdrucken</a></p>
 
         <img src="assets/img/shipping/print4life-Maker-packen.png" width="108">
@@ -16,10 +16,9 @@
         <h1 class="mb-80">Beschriften</h1>
 <p class="max-250 mb-70">Die Adresse lautet:<br><br>
 
-    <b>Klinik Asklepios Hamburg mit langem Namen und so</b><br>
-    Abteilung Fachbereich Intensivmedizin und Inneres<br>
-    Lange Reihe 29<br>
-    20099 Hamburg </p>
+    <b>{{hospital?.name}}</b><br>
+    {{hospital?.address.street}}<br>
+    {{hospital?.address.zipCode}} {{hospital?.address.city}}
 
 <p class="max-250 text-left mb-20 pxy-50">Optional:</p>
 
@@ -50,6 +49,6 @@
     <img src="assets/img/shipping/print4life-Maker-fertig.png" width="124" ></div>
 
 
-        <button mat-raised-button color="primary"  class="finish-button">Zurück zur Übersicht</button>    
+        <button mat-raised-button color="primary" class="finish-button" [routerLink]="[myOrdersRoute]">Zurück zur Übersicht</button>    
 
 </div>
