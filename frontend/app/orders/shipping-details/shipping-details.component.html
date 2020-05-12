@@ -2,53 +2,94 @@
 
 
     <div class="text-center">
-        <p class="overline mb-20">Schritt 1</p>
-        <h1 class="mb-80">Packen</h1>
+        <p class="overline mb-20">
+            Schritt 1
+        </p>
+        <h1 class="mb-80">
+            Packen
+        </h1>
 
-        <p class="max-250 mb-50">Lege unseren <strong>Beipackzettel</strong> zu deinen {{order?.batch.number}} Stück {{order?.blueprint.name}} ins Paket.</p>
-        <p class="max-250 text-left mb-70 pxy-50"><a  class="link-with-arrow" href="#">Beipackzettel ausdrucken</a></p>
+        <p class="max-250 mb-50">
+            Lege unseren 
+            <strong>
+                Beipackzettel
+            </strong>
+            zu deinen {{order?.batch.number}} Stück {{order?.blueprint.name}} ins Paket.</p>
+        <p class="max-250 text-left mb-70 pxy-50">
+            <a  class="link-with-arrow" href="#">
+                Beipackzettel ausdrucken
+            </a>
+        </p>
 
         <img src="assets/img/shipping/print4life-Maker-packen.png" width="108">
     </div>
 
     <div class="text-center">
-        <p class="overline mb-20">Schritt 2</p>
-        <h1 class="mb-80">Beschriften</h1>
-<p class="max-250 mb-70">Die Adresse lautet:<br><br>
+        <p class="overline mb-20">
+            Schritt 2
+        </p>
+        <h1 class="mb-80">
+            Beschriften
+        </h1>
+        <p class="max-250 mb-70">
+            Die Adresse lautet:
+            <br>
+            <br>
 
-    <b>{{hospital?.name}}</b><br>
-    {{hospital?.address.street}}<br>
-    {{hospital?.address.zipCode}} {{hospital?.address.city}}
+            <b>{{hospital?.name}}</b><br>
+            {{hospital?.address.street}}<br>
+            {{hospital?.address.zipCode}} {{hospital?.address.city}}
+        </p>
+        <!--
+        <p class="max-250 text-left mb-20 pxy-50">
+            Optional:
+        </p>
 
-<p class="max-250 text-left mb-20 pxy-50">Optional:</p>
+        <p class="max-250 text-left  mb-20 pxy-50">
+            <a class="link-with-arrow" href="#">
+                Adresse ausdrucken
+            </a>
+        </p>
+        <p class="max-250 text-left mb-70 pxy-50">
+            <a  class="link-with-arrow" href="#">
+                <span>
+                    Hinweis-Label „Nicht aufschneiden“ ausdrucken
+                </span>
+            </a>
+        </p>
+        -->
 
-<p class="max-250 text-left  mb-20 pxy-50"><a class="link-with-arrow" href="#">Adresse ausdrucken</a></p>
-<p class="max-250 text-left mb-70 pxy-50"><a  class="link-with-arrow" href="#"><span>Hinweis-Label „Nicht aufschneiden“ ausdrucken</span></a></p>
-
-
-<img src="assets/img/shipping/print4life-Maker-beschriften.png" width="146">
+        <img src="assets/img/shipping/print4life-Maker-beschriften.png" width="146">
     </div>
 
     <div class="text-center">
-        <p class="overline mb-20">Schritt 3</p>
-        <h1 class="mb-80">Versenden</h1>
-<p class="max-250 mb-70">Bringe das Paket zur Post und setze deinen Auftrag auf <strong>„Erledigt“</strong>, wenn dies noch aussteht.
-</p>
+        <p class="overline mb-20">
+            Schritt 3
+        </p>
+        <h1 class="mb-80">
+            Versenden
+        </h1>
+        <p class="max-250 mb-70">
+            Bringe das Paket zur Post und setze deinen Auftrag auf 
+            <strong>
+                „Erledigt“
+            </strong>
+            , wenn dies noch aussteht.
+        </p>
 
 
-<img src="assets/img/shipping/print4life-Maker-versenden.png" width="130">
+        <img src="assets/img/shipping/print4life-Maker-versenden.png" width="130">
 
     </div>
 </div>
-
-
 <div class="text-center mb-200">
     <p class="text-big mb-70">Fertig!<br>
-        Vielen Dank für deinen Beitrag und die großartige Unterstützung!</p>
-<div class="mb-70">
-    <img src="assets/img/shipping/print4life-Maker-fertig.png" width="124" ></div>
-
-
-        <button mat-raised-button color="primary" class="finish-button" [routerLink]="[myOrdersRoute]">Zurück zur Übersicht</button>    
-
+        Vielen Dank für deinen Beitrag und die großartige Unterstützung!
+    </p>
+    <div class="mb-70">
+        <img src="assets/img/shipping/print4life-Maker-fertig.png" width="124" >
+    </div>
+    <button mat-raised-button color="primary" class="finish-button" [routerLink]="[myOrdersRoute]">
+        Zurück zur Übersicht
+    </button>    
 </div>
