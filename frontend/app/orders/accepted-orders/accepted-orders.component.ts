@@ -28,6 +28,10 @@ export class AcceptedOrdersComponent implements OnInit {
 
     private async init() {
         this.loggedInUser = await this.userService.getUser();
+        this.loadOrders();
+    }
+
+    public async loadOrders() {
         const query = {
             $and: [
                 {
