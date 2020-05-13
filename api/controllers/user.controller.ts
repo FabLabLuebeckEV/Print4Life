@@ -1210,7 +1210,7 @@ function resetPassword (req, res) {
       } else {
         logger.info({ msg: `Password reset for user with e-mail address ${req.body.email}` });
       }
-      res.status(200).send({ msg: 'Password reset' });
+      res.status(200).send({ msg: 'Passwort zurückgesetzt' });
     }).catch((err) => {
       const msg = { error: 'Fehler beim zurücksetzen ihres Passwortes', stack: err };
       logger.error(msg);
