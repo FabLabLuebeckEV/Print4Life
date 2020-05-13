@@ -84,14 +84,12 @@ export class NavigationComponent implements OnInit {
   private async _init() {
     this.userIsLoggedIn = this.userService.isLoggedIn();
     if (this.userIsLoggedIn) {
-      console.log("_init findown:");
       this.user = await this.userService.findOwn();
       console.log('user is ', this.user);
 
       if (this.user.role.role === 'user') {
         this.myOrdersLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`;
         this.userType = 'klinik';
-        console.log("find hospital: ");
         this.hospital = await this.hospitalService.findOwn();
 
         console.log(this.hospital);
