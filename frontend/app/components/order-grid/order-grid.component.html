@@ -98,7 +98,7 @@
                     -->
                 </div>
                 <div class="buttons text-mid">
-                    <div class="iconbutton" *ngIf="order.myAcceptedBatch > 0">
+                    <div class="iconbutton " *ngIf="order.myAcceptedBatch > 0">
                         <fa-icon class="arrowIcon" [icon]="arrowIcon" ></fa-icon>
                         <a class="button primary" (click)="finishOwnBatch(order)">
                             Auftrag auf "Erledigt" setzen
@@ -110,7 +110,7 @@
                             Versanddaten anzeigen
                         </a>
                     </div>
-                    <div class="iconbutton" *ngIf="false">
+                    <div class="iconbutton iconbutton--small" *ngIf="false">
                         <fa-icon class="arrowIcon" [icon]="arrowIcon" ></fa-icon>
                         <a class="button primary" >
                             Auftrag zurückziehen
