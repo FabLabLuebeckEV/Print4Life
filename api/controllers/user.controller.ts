@@ -59,11 +59,11 @@ async function create (req, res) {
   let user;
   let reject = false;
   try {
-    user = await userService.getUserByUsername(req.body.username);
+    user = await userService.getUserByEmail(req.body.email);
     if (user) {
       const msg = {
-        type: ErrorType.USERNAME_EXISTS,
-        error: 'Malformed user. Username already exists!',
+        type: ErrorType.EMAIL_EXISTS,
+        error: 'Ein Account mit dieser E-Mail-Adresse existiert schon!',
         stack: undefined
       };
       logger.error(msg);
@@ -72,39 +72,24 @@ async function create (req, res) {
     }
   } catch (error) {
     const msg = {
-      error: `Error while getting the user by its username (${req.body.username})`,
+      error: `Fehler beim aufrufen des Kontos über diese E-Mail-Adresse (${req.body.email})`,
       stack: error
     };
     logger.error(msg);
   }
 
-  if (!reject) {
-    try {
-      user = await userService.search({ email: req.body.email });
-      if (user && user.length > 0) {
-        const msg = {
-          type: ErrorType.EMAIL_EXISTS,
-          error: 'Malformed user. Email Address already exists!',
-          stack: undefined
-        };
-        logger.error(msg);
-        reject = true;
-        res.status(400).send(msg);
-      }
-    } catch (error) {
-      const msg = { error: `Error while getting the user by its email address (${req.body.email})`, stack: error };
-      logger.error(msg);
-    }
-  }
-
   req.body.activated = false;
 
   if (!reject) {
-    userService.create(req.body).then((user) => {
-      userService.selfActivateUser(user, true);
+    if (req.body.role && req.body.role.role !== 'user' && req.body.role.role !== 'editor') {
+      req.body.role.role = 'user';
+    }
+
+    userService.create(req.body).then(async (user) => {
+      await userService.selfActivateUser(user, true);
       res.status(200).send({ user });
     }).catch((err) => {
-      const msg = { error: 'Malformed user, one or more parameters wrong or missing', stack: err };
+      const msg = { error: 'Bitte überprüfen sie ihre Eingabe, Felder wurden nicht ausgefüllt.', stack: err };
       logger.error(msg);
       res.status(400).send(msg);
     });
@@ -262,7 +247,7 @@ async function update (req, res) {
 async function deleteById (req: Request, res: Response) {
   const error: IError = {
     name: 'SERVER_ERROR',
-    message: 'Error while trying to delete the user!',
+    message: 'Fehler beim löschen des Kontos!',
     type: ErrorType.SERVER_ERROR
   };
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
@@ -539,11 +524,11 @@ function search (req, res) {
     }
   }).catch((err) => {
     logger.error({
-      error: `Error while trying to search for a specific user with query: ${JSON.stringify(req.body.query)}`,
+      error: `Fehler bei der Suche des Kontos mit der Query: ${JSON.stringify(req.body.query)}`,
       stack: err
     });
     res.status(500).send({
-      error: `Error while trying to search for a specific user with query: ${JSON.stringify(req.body.query)}`,
+      error: `Fehler bei der Suche des Kontos mit der Query: ${JSON.stringify(req.body.query)}`,
       stack: err
     });
   });
@@ -591,8 +576,8 @@ function count (req, res) {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
     res.status(200).send({ count });
   }).catch((err) => {
-    logger.error({ error: 'Error while counting users!', err });
-    res.status(500).send({ error: 'Error while counting users!', err });
+    logger.error({ error: 'Fehler beim zählen der Konten!', err });
+    res.status(500).send({ error: 'Fehler beim zählen der Konten!', err });
   });
 }
 
@@ -636,7 +621,7 @@ function getRoles (req, res) {
       res.status(200).send({ roles });
     }
   }).catch((err) => {
-    const msg = { error: 'Error while trying to get all valid roles!', stack: err };
+    const msg = { error: 'Fehler beim anfragen von allen Rollen!', stack: err };
     logger.error(msg);
     res.status(500).send(msg);
   });
@@ -681,7 +666,7 @@ function getLanguages (req, res) {
       res.status(200).send({ languages });
     }
   }).catch((err) => {
-    const msg = { error: 'Error while trying to get all valid languages!', stack: err };
+    const msg = { error: 'Fehler beim anfragen aller Sprachen!', stack: err };
     logger.error(msg);
     res.status(500).send(msg);
   });
@@ -717,15 +702,15 @@ function getLanguages (req, res) {
 async function login (req, res) {
   let user;
   try {
-    user = await userService.getUserByUsername(req.body.username);
+    user = await userService.getUserByEmail(req.body.email);
   } catch (err) {
-    const msg = { error: 'User not found.', stack: err };
+    const msg = { error: 'Konto nicht gefunden.', stack: err };
     logger.error(msg);
     res.status(401).send(msg);
     return;
   }
   if (typeof user === 'undefined' || user === null) {
-    const msg = { error: 'User not found.' };
+    const msg = { error: 'Konto nicht gefunden.' };
     res.status(401).send(msg);
     return;
   }
@@ -753,7 +738,7 @@ async function login (req, res) {
   }
 
   const msg = {
-    error: 'User does not exist',
+    error: 'Konto nicht gefunden.',
     login: { success: false }
   };
   res.status(401).send(msg);
@@ -801,7 +786,7 @@ async function login (req, res) {
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Server Error
   {
-      "error": "Error while retrieving the user.",
+      "error": "Fehler beim empfangen des Kontos.",
       "stack": {
           ...
       }
@@ -816,12 +801,12 @@ function findown (req, res) {
         logger.info(`GET User by token with result ${user}`);
         res.status(200).send({ user });
       } else {
-        const msg = { error: 'GET User by token with no result.' };
+        const msg = { error: 'Suche des Kontos über einen Token ergab keine Übereinstimmung' };
         logger.error(msg);
         res.status(404).send(msg);
       }
     }).catch((err) => {
-      const msg = { error: 'Error while retrieving the user.', stack: err };
+      const msg = { error: 'Fehler beim empfangen des Kontos.', stack: err };
       logger.error(msg);
       res.status(500).send(msg);
     });
@@ -868,7 +853,7 @@ function findown (req, res) {
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
   {
-      "error": "'GET User by id with no result.'",
+      "error": "'Suche des Kontos über eine ID ergab keine Übereinstimmung'",
   }
 
  * @apiErrorExample {json} Error-Response:
@@ -894,7 +879,7 @@ function findown (req, res) {
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Server Error
   {
-      "error": "Error while retrieving the user.",
+      "error": "Fehler beim empfangen des Kontos.",
       "stack": {
           ...
       }
@@ -929,11 +914,11 @@ async function get (req, res) {
 
       return res.status(200).send({ user });
     }
-    const msg = { error: 'GET User by id with no result.' };
+    const msg = { error: 'Suche des Kontos über eine ID ergab keine Übereinstimmung' };
     logger.error(msg);
     return res.status(404).send(msg);
   } catch (err) {
-    const msg = { error: 'Error while retrieving the user.', stack: err };
+    const msg = { error: 'Fehler beim empfangen des Kontos.', stack: err };
     logger.error(msg);
     return res.status(500).send(msg);
   }
@@ -960,7 +945,7 @@ async function get (req, res) {
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
   {
-      "error": "'GET User by id with no result.'",
+      "error": "'Suche des Kontos über eine ID ergab keine Übereinstimmung'",
   }
 
  * @apiErrorExample {json} Error-Response:
@@ -986,7 +971,7 @@ async function get (req, res) {
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Server Error
   {
-      "error": "Error while retrieving the user.",
+      "error": "Fehler beim empfangen des Kontos.",
       "stack": {
           ...
       }
@@ -1019,11 +1004,11 @@ async function getNames (req, res) {
         }
       });
     }
-    const msg = { error: 'GET User by id with no result.' };
+    const msg = { error: 'Suche des Kontos über eine ID ergab keine Übereinstimmung' };
     logger.error(msg);
     return res.status(404).send(msg);
   } catch (err) {
-    const msg = { error: 'Error while retrieving the user.', stack: err };
+    const msg = { error: 'Fehler beim empfangen des Kontos.', stack: err };
     logger.error(msg);
     return res.status(500).send(msg);
   }
@@ -1046,13 +1031,13 @@ async function getNames (req, res) {
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
   {
-      "error": "'GET User by id with no result.'",
+      "error": "'Suche des Kontos über eine ID ergab keine Übereinstimmung'",
   }
 
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Server Error
   {
-      "error": "Error while retrieving the user.",
+      "error": "Fehler beim empfangen des Kontos.",
       "stack": {
           ...
       }
@@ -1087,14 +1072,18 @@ async function sendActivationRequest (req, res) {
   try {
     const user = await userService.get(req.params.id);
     if (user) {
-      userService.selfActivateUser(user, false);
-      return res.status(200).send({ msg: 'Confirmation email sent' });
+      const activationStatus = await userService.selfActivateUser(user, false);
+      if (!activationStatus) {
+        const msg = { error: 'Dieses Konto muss nicht aktiviert werden.' };
+        return res.status(404).send(msg);
+      }
+      return res.status(200).send({ msg: 'Bestätigungsmail wurde versendet' });
     }
-    const msg = { error: 'GET User by id with no result.' };
+    const msg = { error: 'Suche des Kontos über eine ID ergab keine Übereinstimmung' };
     logger.error(msg);
     return res.status(404).send(msg);
   } catch (err) {
-    const msg = { error: 'Error while retrieving the user.', stack: err };
+    const msg = { error: 'Fehler beim empfangen des Kontos.', stack: err };
     logger.error(msg);
     return res.status(500).send(msg);
   }
@@ -1117,13 +1106,13 @@ async function sendActivationRequest (req, res) {
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Not Found
   {
-      "error": "'GET User by id with no result.'",
+      "error": "'Suche des Kontos über eine ID ergab keine Übereinstimmung'",
   }
 
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Server Error
   {
-      "error": "Error while retrieving the user.",
+      "error": "Fehler beim empfangen des Kontos.",
       "stack": {
           ...
       }
@@ -1160,13 +1149,19 @@ async function activateUser (req, res) {
     if (user) {
       user.activated = true;
       user.save();
-      return res.status(200).send({ msg: 'Account activated' });
+
+      if (user.role.role === 'user') {
+        logger.info('hospital requested activation, informing admins');
+        await userService.informAdmins(user, false);
+      }
+
+      return res.status(200).send({ msg: 'Account aktiviert' });
     }
-    const msg = { error: 'GET User by id with no result.' };
+    const msg = { error: 'Suche des Kontos über eine ID ergab keine Übereinstimmung' };
     logger.error(msg);
     return res.status(404).send(msg);
   } catch (err) {
-    const msg = { error: 'Error while activating the user.', stack: err };
+    const msg = { error: 'Fehler beim aktivieren ihres Kontos!', stack: err };
     logger.error(msg);
     return res.status(500).send(msg);
   }
@@ -1204,20 +1199,20 @@ async function activateUser (req, res) {
  */
 function resetPassword (req, res) {
   if (!req.body.email) {
-    res.status(400).send({ error: 'Malformed Request! No Email given.' });
+    res.status(400).send({ error: 'Fehler! Keine Email angegeben.' });
   } else {
     userService.resetPassword(req.body.email).then((success) => {
       if (!success) {
         const msg = {
-          error: `Error while resetting the password or there is no user with e-mail address ${req.body.email}`
+          error: `Fehler mein zurücksetzen des Passwortes oder es existier kein Konto mit der Email ${req.body.email}`
         };
         logger.error(msg);
       } else {
         logger.info({ msg: `Password reset for user with e-mail address ${req.body.email}` });
       }
-      res.status(200).send({ msg: 'Password reset' });
+      res.status(200).send({ msg: 'Passwort zurückgesetzt' });
     }).catch((err) => {
-      const msg = { error: 'Error while resetting the password.', stack: err };
+      const msg = { error: 'Fehler beim zurücksetzen ihres Passwortes', stack: err };
       logger.error(msg);
       res.status(500).send(msg);
     });
@@ -1261,7 +1256,7 @@ function resetPassword (req, res) {
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 404 Server Error
   {
-      "error": "GET User by id with no result.",
+      "error": "Suche des Kontos über eine ID ergab keine Übereinstimmung",
       "stack": {
           ...
       }
@@ -1269,7 +1264,7 @@ function resetPassword (req, res) {
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 500 Server Error
   {
-      "error": "Error while retrieving the user.",
+      "error": "Fehler beim empfangen des Kontos.",
       "stack": {
           ...
       }
@@ -1306,26 +1301,26 @@ async function changePassword (req, res) {
     if (user) {
       return user.comparePassword(req.body.oldPassword, (err, isMatch) => {
         if (err) {
-          const msg = { error: 'The current user password is not correct.' };
+          const msg = { error: 'Das aktuelle Passwort ist nicht richtig.' };
           logger.error(msg);
           return res.status(401).send(msg);
         }
         if (isMatch) {
-          const msg = { msg: `User ${user._id} successfully changed his password.` };
+          const msg = { msg: `Das Passwort für das Konto ${user._id} wurde erfolgreich geändert .` };
           logger.error(msg);
           userService.changePassword(user, req.body.newPassword);
           return res.status(200).send(msg);
         }
-        const msg = { error: 'Something bad happened' };
+        const msg = { error: 'Es ist ein Fehler aufgetreten' };
         logger.error(msg);
         return res.status(500).send(msg);
       });
     }
-    const msg = { error: 'GET User by id with no result.' };
+    const msg = { error: 'Suche des Kontos über eine ID ergab keine Übereinstimmung' };
     logger.error(msg);
     return res.status(404).send(msg);
   } catch (err) {
-    const msg = { error: 'Error while retrieving the user.', stack: err };
+    const msg = { error: 'Fehler beim empfangen des Kontos.', stack: err };
     logger.error(msg);
     return res.status(500).send(msg);
   }

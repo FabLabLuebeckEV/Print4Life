@@ -3,6 +3,9 @@ import validatorService from '../services/validator.service';
 import { OrderService } from '../services/order.service';
 import FileService from '../services/file.service';
 import config from '../config/config';
+
+import ServiceController from '../controllers/service.controller';
+
 /* eslint-disable no-unused-vars */
 import { IError, ErrorType } from '../services/router.service';
 import ScheduleService from '../services/schedule.service';
@@ -197,9 +200,35 @@ function getAll (req, res) {
   }
 * @apiPermission none
 */
-function search (req, res) {
+async function search (req, res) {
+  let user;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    user = await userService.getUserByToken(token);
+  }
+
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
-  orderService.getAll(req.body.query, req.body.limit, req.body.skip).then((orders) => {
+  orderService.getAll(req.body.query, req.body.limit, req.body.skip).lean().then((orders) => {
+    for (let i = 0; i < orders.length; i += 1) {
+      if (user && user.address && orders[i].shippingAddress) {
+        orders[i].distance = ServiceController.calculateDistance(orders[i].shippingAddress.zipCode,
+          user.address.zipCode);
+      } else {
+        orders[i].distance = -1;
+      }
+    }
+
+    orders.sort((a, b) => {
+      if (a.distance === -1) {
+        return 1;
+      }
+      if (b.distance === -1) {
+        return -1;
+      }
+
+      return Math.sign(a.distance - b.distance);
+    });
+
     if (orders.length === 0) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);

@@ -58,6 +58,11 @@ export const routes = {
                 root: 'fablabs',
                 getById: ':id'
             },
+            hospitals: {
+                root: 'hospitals',
+                activate: 'activate',
+                getById: ':id'
+            },
             octoprint: {
                 root: 'octoprint',
                 uploadFile: 'uploadFile',
@@ -66,11 +71,21 @@ export const routes = {
             service: {
                 root: 'service',
                 contact: 'contact'
+            },
+            blueprints: {
+                root: 'blueprints'
             }
         },
         frontend: {
             aboutus: {
                 root: 'about-us'
+            },
+            press: {
+                root: 'press'
+            },
+            blueprints: {
+                root: 'blueprints',
+                list: 'list'
             },
             faq: {
                 root: 'faq',
@@ -85,10 +100,15 @@ export const routes = {
             users: {
                 root: 'users',
                 signup: 'signup',
+                thankyou: 'thankyou',
                 login: 'login',
                 update: 'edit',
                 list: 'list',
                 profile: 'profile',
+                activate: 'activate'
+            },
+            hospitals: {
+                root: 'hospitals',
                 activate: 'activate'
             },
             orders: {
@@ -101,6 +121,8 @@ export const routes = {
                 getAllOrders: '',
                 getStatus: 'status',
                 getOrder: 'getOrder',
+                accept: 'accept',
+                shipping: 'shipping',
                 shared: {
                     root: 'shared',
                     create: 'create',
@@ -110,7 +132,9 @@ export const routes = {
                 },
                 outstandingOrders: 'outstanding',
                 unfinishedOrders: 'unfinished',
-                myOrders: 'myOrders'
+                myOrders: 'myOrders',
+                acceptedOrders: 'acceptedOrders',
+                complete: 'complete'
             },
             iotDevices: {
                 root: 'iotDevices',

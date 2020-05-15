@@ -14,6 +14,11 @@ import { ModalService } from '../../services/modal.service';
 import { ModalButton } from '../../helper/modal.button';
 
 import { TranslationModel } from '../../models/translation.model';
+import { ErrorStateMatcher } from '@angular/material';
+import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
+import { Hospital } from 'frontend/app/models/hospital.model';
+
+import { HospitalService } from '../../services/hospital.service';
 
 interface Dropdown {
   name: String;
@@ -40,13 +45,20 @@ export class UserFormComponent implements OnInit {
   fablabs: Array<any>;
   loggedInUser: User;
 
+  type: String;
+
+  passwordErrorStateMatcher = new PasswordErrorStateMatcher(this);
+
   address: Address = new Address(undefined, undefined, undefined, undefined);
   role: Role = new Role('user'); // default on register is user
-  preferredLanguage = new Language('en'); // default en/english
+  preferredLanguage = new Language('de'); // default de/german
   user: User = new User(
     undefined, undefined, undefined, undefined,
     undefined, undefined, undefined, this.address,
     this.role, this.preferredLanguage, false, undefined, undefined);
+  hospital: Hospital = new Hospital(
+    undefined, undefined, this.address, false, undefined, undefined
+  );
 
   translationFields: TranslationModel.UserForm & TranslationModel.Roles &
     TranslationModel.Languages & TranslationModel.Address &
@@ -73,7 +85,8 @@ export class UserFormComponent implements OnInit {
     private genericService: GenericService,
     private route: ActivatedRoute,
     private fablabService: FablabService,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private hospitalService: HospitalService
   ) {
     this.router.events.subscribe(async () => {
       const route = this.location.path();
@@ -84,6 +97,28 @@ export class UserFormComponent implements OnInit {
       if (params.id) {
         this.userId = params.id;
       }
+      if (params.type) {
+        this.type = params.type;
+        if (this.user && this.type === 'maker') {
+          this.user.role.role = 'editor';
+        }
+      }
+    });
+  }
+
+  public register() {
+    if (this.type === 'klinik') {
+      this.hospital.address.country = 'N/A';
+      this.user.address = this.hospital.address;
+    }
+
+    this.userService.createUser(this.user).then(event => {
+      if (this.type === 'klinik') {
+        console.log(event);
+        this.hospital.owner = event.user._id;
+        this.hospitalService.createHospital(this.hospital);
+      }
+      this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}/${this.type}/${routes.paths.frontend.users.thankyou}`]);
     });
   }
 
@@ -92,7 +127,11 @@ export class UserFormComponent implements OnInit {
     await this._loadRoles();
     await this._loadLanguages();
     this.loggedInUser = await this.userService.getUser();
+    if (this.userService.isLoggedIn && this.loggedInUser !== undefined) {
+      this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`]);
+    }
     if (this.profileView) {
+      console.log('profile view');
       this.user = this.loggedInUser;
       if (!this.user.hasOwnProperty('address')) {
         this.user.address = new Address('', '', '', '');
@@ -106,6 +145,8 @@ export class UserFormComponent implements OnInit {
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
     });
+
+    console.log('user is: ', this.user);
   }
 
   onSubmit() {
@@ -165,6 +206,10 @@ export class UserFormComponent implements OnInit {
               this.translationFields.modals.errorHeader, 'modal-header header-danger', [errorMsg], okButton, undefined);
           });
       } else {
+        if (this.type === 'Klinik') {
+          // TODO: Addresse & Kliniknummer in Klinikum auslagern
+        }
+
         this.userService.createUser(userCopy)
           .then(res => {
             if (res) {
@@ -216,11 +261,24 @@ export class UserFormComponent implements OnInit {
         this.user.address = this.user.hasOwnProperty('address') ? this.user.address : this.address;
         this.user.role = this.user.hasOwnProperty('role') ? this.user.role : this.role;
         this.user.preferredLanguage = this.user.hasOwnProperty('preferredLanguage') ? this.user.preferredLanguage : this.preferredLanguage;
+        console.log('found user ', this.user);
       } catch (err) {
+
+      }
+    } else {
+      if (this.type === 'maker') {
+        console.log('initializing maker');
+        this.address = new Address('NA', '', '', 'NA');
         this.user = new User(
           undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, this.address,
-          this.role, this.preferredLanguage, false, undefined, undefined);
+          {role: 'editor'}, this.preferredLanguage, false, undefined, undefined);
+      } else {
+        console.log('initializing klinik');
+        this.user = new User(
+          undefined, undefined, undefined, undefined,
+          undefined, undefined, undefined, this.address,
+          {role: 'user'}, this.preferredLanguage, false, undefined, undefined);
       }
     }
   }
@@ -340,9 +398,6 @@ export class UserFormComponent implements OnInit {
       this.translationFields = TranslationModel.translationUnroll(
         translations,
         {zw: {
-          title: !this.editView && !this.profileView
-          ? translations['userForm'].createTitle
-          : translations['userForm'].editTitle,
           shownRoles: shownRoles,
           shownLanguages: shownLanguages,
           modals: {
@@ -363,7 +418,22 @@ export class UserFormComponent implements OnInit {
           }
         }}
       );
-      this.translationFields.title = translations['languages'].title;
+      if (!this.editView && !this.profileView) {
+        this.translationFields.title = translations['userForm'].createTitle;
+      } else {
+        this.translationFields.title = translations['userForm'].editTitle;
+      }
     }));
+  }
+}
+
+export class PasswordErrorStateMatcher implements ErrorStateMatcher {
+  constructor(private userFormComponent: UserFormComponent) {
+
+  }
+  isErrorState(control: FormControl | null,
+      form: FormGroupDirective | NgForm | null): boolean {
+
+    return control.touched && this.userFormComponent.user.password !== this.userFormComponent.user.passwordValidation;
   }
 }

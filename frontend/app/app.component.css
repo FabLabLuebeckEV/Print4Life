@@ -52,6 +52,10 @@ footer.major {
     border: 0;
 }
 
+.footer a:hover {
+    color: #5286A4 !important;
+}
+
 .icons {
     text-align: center;
 }

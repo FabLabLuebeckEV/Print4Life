@@ -5,12 +5,6 @@
     /* green */
 }
 
-.ng-invalid:not(form),
-.ng-invalid:not(form).ng-valid {
-    border-left: 10px solid #a94442;
-    /* red */
-}
-
 .right {
     text-align: right;
 }
@@ -147,7 +141,7 @@ body a {
 }
 body .mat-button-base {
     font-family: "Roboto Condensed", "Helvetica Neue", sans-serif;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 20px;
     line-height: 32px;
 }
@@ -160,6 +154,7 @@ body .mat-button-base {
 body .mat-button-base {
     padding-top: 10px;
     padding-bottom: 10px;
+    min-width: 46%;
 }
 .button-bar .mat-secondary {
     float:right;
@@ -199,6 +194,58 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
     padding-right: 29px;
 }
 
+mat-checkbox.wrap .mat-checkbox-label {
+    white-space: normal;
+}
+
+mat-checkbox.wrap .mat-checkbox-inner-container {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+mat-checkbox .mat-checkbox-frame {
+    border-width: 1px;
+    border-radius: 3px;
+}
+
+mat-checkbox .mat-checkbox-inner-container {
+    width: 24px;
+    height: 24px;
+}
+
+mat-checkbox .mat-checkbox-layout {
+    display: inline-flex;
+}
+
+mat-checkbox .mat-checkbox-layout .mat-checkbox-label {
+    line-height: 32px;
+}
+
+body .mat-form-field:not(.mat-focused) mat-label {
+    color: #c0cacf;
+}
+
+.mat-form-field .mat-form-field-wrapper {
+    padding-bottom: 0px;
+}
+
+.mat-form-field.mat-form-field-invalid .mat-form-field-outline > div {
+    border-color: #DF5A49;
+}
+
+.mat-form-field {
+    margin-top:7px;
+}
+
+.inputButtonCombi .mat-form-field {
+    margin-top: 0px;
+}
+
+.mat-form-field mat-label {
+    background-color:white;
+    padding-right: 3px;
+}
+
 @media only screen and (max-width: 1150px) {
     .grid .large-indent-left {
         padding-left: 0px !important;
@@ -216,6 +263,21 @@ body .col, body .col-1, body .col-10, body .col-11, body .col-12, body .col-2, b
     padding-right: 316px;
 }
 
+.grid-3 {
+    width: 1148px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+}
+
+.grid-3 .indent-left {
+    padding-left: 50px;
+}
+
+.grid-3 .indent-right {
+    padding-right: 50px;
+}
+
 .mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
     background-color: #45B29D;
 }
@@ -230,6 +292,10 @@ button.mat-primary:hover {
 
 button.mat-accent:hover {
     background-color: #F5705F;
+}
+
+button.mat-secondary {
+    color: white;
 }
 
 .mat-button-base.neutral:hover {
@@ -356,8 +422,185 @@ body .modal-content {
     box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.4);
 }
 
+.ng-select input[type="text"] {
+	caret-color: transparent;
+}
+
+.ng-select .ng-select-container {
+    height: 50px !important;
+}
 body .modal-body {
     width: 100%;
     text-align: center;
     margin-bottom: 0px;
+}
+.text-mid {
+    font-size: 17px;
+    line-height: 24px;
+}
+
+.text-small {
+    font-size: 16px;
+    line-height: 26px;
+}
+.inputButtonCombi {
+    position: relative;
+    border-radius: 4px;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+.inputButtonCombi mat-form-field{
+    position: absolute;
+    z-index: 1;
+    width: 60%;
+    height: 100%;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 4px;
+    border-color: #45B29D;
+    background-color: white;
+    box-shadow: none;
+}
+
+body mat-form-field .mat-form-field-outline > div {
+    border-width: 2px !important;
+}
+
+.inputButtonCombi mat-form-field .mat-form-field-underline {
+    display: none;
+}
+
+.inputButtonCombi .mat-button-base{
+    text-align:center;
+    width: 40% !important;
+    height: 100%;
+    float:right;
+    box-shadow: none;
+}
+
+.inputButtonCombi .mat-form-field-infix{
+    padding-bottom: 0px;
+    padding-top: 0px;
+    padding-left: 10px;
+}
+
+body .mat-form-field-infix {
+    font-family: "Roboto Condensed", "Helvetica Neue", sans-serif; 
+    font-size: 20px; 
+    border-top: 0.55em solid transparent;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: 30.4878% 30.4878% 30.4878%;
+    column-gap: 50px;
+    row-gap: 50px;
+
+    margin-bottom: 100px;
+}
+
+@media only screen and (max-width: 1200px) {
+    .grid-3 {
+        grid-template-columns: 47% 47%;
+        width: 840px;
+    }
+
+    .grid-3 .order, .grid-3 .blueprint {
+        width: 360px !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    .grid-3 {
+        grid-template-columns: 100%;
+        width: inherit;
+    }
+
+    .grid-3 .order, .grid-3 .blueprint {
+        width: 360px !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+
+body .mat-form-field-type-mat-select .mat-form-field-wrapper{
+    margin: 0px;
+}
+
+body .mat-form-field-type-mat-select .mat-form-field-outline div{
+    border-width: 0px !important;
+}
+
+body .mat-form-field-type-mat-select {
+    box-shadow: 0px 2px 4px #9E9E9E;
+    border-radius: 5px;
+}
+
+body .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label,
+body .mat-form-field-appearance-outline.mat-form-field-can-float .mat-input-server:focus + .mat-form-field-label-wrapper .mat-form-field-label {
+    transform: translateY(-1.59375em) scale(0.95);
+}
+
+
+/* Hannah Utils */
+.mt-128 {
+    margin-top: 128px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+.mb-80 {
+    margin-bottom: 80px;
+}
+.mb-50 {
+    margin-bottom: 50px;
+}
+.mb-70 {
+    margin-bottom: 70px !important;
+}
+
+.mb-90 {
+    margin-bottom: 90px !important;
+}
+.mb-130 {
+    margin-bottom: 130px;
+}
+.mb-200 {
+    margin-bottom: 200px;
+}
+
+.list-with-arrows li {
+    position: relative;
+    padding-left: 58px !important;   
+}
+
+.list-with-arrows li:before {
+    content: "";
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMWw4IDEwLjcyTDEuNzE2IDIzIiBzdHJva2Utd2lkdGg9IjEuOTIiIHN0cm9rZT0iIzUyODZBNCIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBvcGFjaXR5PSIuODAyIi8+PC9zdmc+');
+    width: 11px;
+    height: 24px;
+    position: absolute;
+    left:0;
+    top:5px;
+    background-size: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+    .list-with-arrows li {
+        padding-left: 29px !important;
+    }
+
+    .grid {
+        padding-left: 35px;
+        padding-right: 35px;
+    }
+}
+
+
+body #checkbox-small .mat-checkbox-label {
+    line-height: 24px !important;
+    white-space: initial;
 }

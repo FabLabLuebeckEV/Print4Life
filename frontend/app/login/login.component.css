@@ -24,6 +24,14 @@ h1 {
     width: 100%;
 }
 
+.email {
+    margin-bottom: 20px;
+}
+
+.row h1 {
+    width: 100%;
+}
+
 @media only screen and (max-width: 770px) { 
     .forgot-row {
         margin-top: -10px;
@@ -34,4 +42,14 @@ h1 {
     .myMatInput input{
         text-align: center;
     }
+}
+
+.register {
+    text-align: center;
+    margin-top: 150px;
+    margin-bottom: 0px !important;
+}
+
+.row {
+    margin-bottom: 30px;
 }

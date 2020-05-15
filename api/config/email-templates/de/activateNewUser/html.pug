@@ -1,11 +1,10 @@
 p Hallo #{adminName},
 if newUser
-    p ein neuer Benutzer hat sich registriert: #{userName} (#{userEmail})
+    p eine neue Klinik hat sich auf print4life registriert: #{userName} (#{userEmail}, #{hospitalName})
 else 
-    p der folgende Benutzer möchte aktiviert werden: #{userName} (#{userEmail})
+    p die folgende Klinik möchte für print4life aktiviert werden: #{userName} (#{userEmail}, #{hospitalName})
 
-p Der Benutzer ist deaktiviert und kann sich nicht einloggen. Du kannst den Benutzer auf seiner Profilseite #[a(href=url) aktivieren] !
+p Der Benutzer ist deaktiviert und kann sich nicht einloggen. Du kannst ihn hier #[a(href=url) aktivieren] !
 
 p Viele Grüße,
 p Das System
-

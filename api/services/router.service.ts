@@ -38,11 +38,11 @@ async function jwtValid (req, res, next) {
   let ret;
   let error: IError;
   const tc = await validatorService.checkToken(req);
-  let msg = 'Unauthorized! Please login with a user who is allowed to use this route';
+  let msg = 'Zugriff verweigert! Bitte loggen sie sich erneut ein!';
   if (_isPublicRoute(req.originalUrl, req.method) || (tc && tc.tokenOk)) {
     ret = next();
   } else if (tc && !tc.tokenOk) {
-    msg = 'Token expired. Please login again!';
+    msg = 'Ihre Sitzung ist abgelaufen. Bitte loggen sie sich erneut ein!';
     logger.error(`${tc.error.name}: ${msg}`);
     error = {
       name: 'TOKEN_EXPIRED', message: msg, stack: '', type: ErrorType.TOKEN_EXPIRED

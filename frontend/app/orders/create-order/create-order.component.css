@@ -25,3 +25,131 @@ input[type="checkbox"]:required:valid+label {
 .form-check-label {
     margin-left: 5px;
 }
+
+.grid {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    margin-top:75px;
+    margin-bottom: 75px;
+}
+
+.legals a {
+    text-decoration: underline;
+}
+
+.inputs {
+    padding-right: 200px;
+}
+
+@media only screen and (max-width: 750px) { 
+    .inputs {
+        padding-right: 50px;
+    }
+}
+
+.inputs .message{
+    width: 100%;
+}
+
+.necessary {
+    margin-top: 20px;
+}
+
+.legals {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.order {
+    width: 100%;
+    text-align: right;
+}
+
+.legals .company, .legals .agb {
+    margin-bottom: 30px;
+}
+
+.legals .mat-checkbox-inner-container, .legals .mat-checkbox-label {
+    margin-top: inherit;
+    margin-bottom: inherit;
+    white-space: inherit;
+}
+
+h1 {
+    margin-bottom:40px;
+}
+
+.message-label {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.blueprint {
+    width: 350px;
+    min-height: 250px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #E9E9E9;
+    padding: 30px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.blueprint .name {
+    font-weight: 600;
+    text-align: center;
+}
+
+.blueprint .dauer {
+    text-align: center;
+}
+
+.blueprint img {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.receipt {
+    text-align: right;
+    margin-top: 75px;
+    width: 350px;
+}
+
+.receipt > div {
+    padding-bottom: 30px;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+    border-bottom-width: 1px;
+}
+
+.receipt .price {
+    margin-bottom: 5px;
+}
+
+.sum {
+    width: 350px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.sum h1 {
+    margin-bottom: 0px;
+}
+
+.sumlabel {
+    position: absolute;
+    bottom: 0px;
+    line-height: 32px;
+}
+
+.sumlabel > div {
+    vertical-align: text-bottom;
+    display: inline-block;
+    line-height: inherit;
+}
+
+.sum div:nth-child(2) {
+    float: right;
+}

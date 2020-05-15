@@ -51,7 +51,7 @@ export class ErrorService {
         err.type as ErrorType === ErrorType.UNAUTHORIZED as ErrorType)) {
         this.userService.logout();
         this.router.navigate(['/']);
-        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header', [err.stack],
+        modalRef = this.modalService.openMsgModal(``, 'modal-header', [err.stack],
           okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then(() => {
@@ -61,16 +61,16 @@ export class ErrorService {
         const activateRequestResult = 'Send Activate Request';
         if (err.hasOwnProperty('type') && err.type as ErrorType === ErrorType.USER_DEACTIVATED as ErrorType) {
           secondButton = new ModalButton(activateRequestResult, 'btn btn-success', activateRequestResult);
-          err.stack = err.stack ? err.stack : 'The User is deactivated. Please request an Activation!';
+          err.stack = err.stack ? err.stack : 'Dein Konto ist deaktiviert, bitte Aktiviere es.';
         }
-        modalRef = this.modalService.openMsgModal(`Error - ${err.status} - ${err.statusText}`, 'modal-header',
+        modalRef = this.modalService.openMsgModal(``, 'modal-header',
           [err.stack], okButton, secondButton);
         this.isOpen = true;
         modalRef.result.then((result) => {
           if (result === activateRequestResult) {
             this.userService.claimActivation(err.data.userId).then(() => {
-              this.modalService.openMsgModal(`Activation Request sent!`, 'modal-header',
-                ['An Admin was informed that you wish an activation of your user account!'], okButton, undefined);
+              this.modalService.openMsgModal(`Aktivirungsanfrage versendet!`, 'modal-header',
+                ['Ein Administrator wurde informiert, dass du freigeschaltet werden möchtest!'], okButton, undefined);
             });
           }
           this.isOpen = false;

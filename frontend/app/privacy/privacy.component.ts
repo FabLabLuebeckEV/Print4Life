@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationService } from '../services/navigation.service';
 
 
 @Component({
@@ -8,7 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PrivacyComponent implements OnInit {
 
-    async ngOnInit() {
+    constructor(
+        private navigationService: NavigationService
+    ) {
 
+    }
+
+    async ngOnInit() {
+        this.navigationService.setStatic(true);
     }
 }

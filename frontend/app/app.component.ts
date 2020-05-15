@@ -31,6 +31,8 @@ export class AppComponent {
     contactRoute = `/${routes.paths.frontend.faq.root}`;
     contactFragment = `${routes.paths.frontend.faq.contact}`;
     loginRoute = `/${routes.paths.frontend.users.root}/${routes.paths.frontend.users.login}`;
+    pressRoute = `/${routes.paths.frontend.press.root}`;
+
 
     dashboardRoute = `/`;
 

@@ -1,4 +1,9 @@
-<div class="gray-box faq">
+<div class="faq" [ngClass]="{'gray-box': !sideloaded}">
+    <div class="text-center">
+        <h1>
+            Häufig gestellte Fragen
+        </h1>
+    </div>
     <div class="grid">
         <div class="col-12 col-md-6 indent-left indent-right">
             <div class="question neutral">
@@ -14,7 +19,7 @@
                 Wie kann ich helfen, dieses Projekt bekannt zu machen?
             </div>
             <div class="answer">
-                Je größer die Community ist, desto mehr können wir schaffen. Uns hilft alles: Berichte in der Presse, in Newslettern, auf Social Media. Auf <a href="">Presse</a> findest du Material, das bei Bedarf verwendet, weitergegeben und veröffentlicht werden darf.
+                Je größer die Community ist, desto mehr können wir schaffen. Uns hilft alles: Berichte in der Presse, in Newslettern, auf Social Media. Auf <a [routerLink]="[pressRoute]">Presse</a> findest du Material, das bei Bedarf verwendet, weitergegeben und veröffentlicht werden darf.
             </div>
         </div>
 
@@ -37,7 +42,7 @@
         </div>
     </div>
 </div> 
-<div class="kontakt" id="kontakt">
+<div class="kontakt" id="kontakt" *ngIf="!sideloaded">
     <div class="grid">
         <div class="col-12 col-md-6 indent-right">
             <h1>
@@ -63,6 +68,9 @@
                 <mat-label>Deine Frage* </mat-label>
                 <textarea cdkTextareaAutosize cdkAutosizeMinRows="8" cdkAutosizeMaxRows="8" matInput placeholder="" [(ngModel)]="contactData.message"></textarea>
             </mat-form-field>
+            <mat-checkbox class="text-small" id="checkbox-small" [(ngModel)]="contactData.dsgvo">
+                Ich akzeptiere die Verarbeitung der eingegebenen Daten zum Zweck der Anfragebeantwortung.
+            </mat-checkbox>
             <div class="row">
                 <div class="col-12 col-md-6 anmerkung">
                     *Pflichtfeld

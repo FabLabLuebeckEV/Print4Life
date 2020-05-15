@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from '../services/modal.service';
 import { ModalButton } from '../helper/modal.button';
@@ -7,26 +7,31 @@ import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { TranslationModel } from '../models/translation.model';
-
 import { routes } from '../config/routes';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
   userIsLoggedIn: Boolean;
   user: User;
   translationFields: TranslationModel.Dashboard  = {};
   contactLink = routes.paths.frontend.faq.root;
   contactFragment = routes.paths.frontend.faq.contact;
+  pressRoute = `/${routes.paths.frontend.press.root}`;
+
+  registrationRoute = `/${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}`;
+  createOrderRoute = `/${routes.paths.frontend.blueprints.root}/${routes.paths.frontend.blueprints.list}`;
 
   constructor(
     private modalService: ModalService,
     private translateService: TranslateService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private navigationService: NavigationService
   ) {
     this._translate();
     this.translateService.onLangChange.subscribe(() => {
@@ -37,6 +42,12 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.userIsLoggedIn = this.userService.isLoggedIn();
   }
+
+  ngAfterViewInit() {
+
+    this.navigationService.setStatic(true);
+  }
+
 
   // Private Functions
 
@@ -69,6 +80,9 @@ export class DashboardComponent implements OnInit {
   }
 
   register(type: String) {
+
+    this.router.navigate([`${this.registrationRoute}/${type}`]);
+    /*
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     const newsletterButton = new ModalButton('Zum Newsletter', 'btn primary', 'newsletter');
 
@@ -83,6 +97,6 @@ export class DashboardComponent implements OnInit {
         window.location.href = '#newsletter';
       }
     }).catch((err) => {
-    });
+    });*/
   }
 }

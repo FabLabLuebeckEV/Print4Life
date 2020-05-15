@@ -9,6 +9,9 @@ import { ModalService } from '../../services/modal.service';
 import { HostListener } from '@angular/core';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { HospitalService } from 'frontend/app/services/hospital.service';
+import { Hospital } from 'frontend/app/models/hospital.model';
+import { NavigationService } from 'frontend/app/services/navigation.service';
 
 interface Dropdown {
   name: String;
@@ -44,12 +47,21 @@ export class NavigationComponent implements OnInit {
   contactLink = routes.paths.frontend.faq.root;
   contactFragment = routes.paths.frontend.faq.contact;
   loginLink = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
+  myOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.acceptedOrders;
+  openOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.unfinishedOrders;
+  createOrderLink = routes.paths.frontend.blueprints.root + '/' + routes.paths.frontend.blueprints.list;
+  userType: String;
+  hospital: Hospital;
+
+  static = false;
 
   constructor(
     private translateService: TranslateService,
     private userService: UserService,
     private modalService: ModalService,
-    private router: Router
+    private router: Router,
+    private hospitalService: HospitalService,
+    private navigationService: NavigationService
   ) {
     this.router.events.subscribe(async () => {
       this._init();
@@ -58,6 +70,9 @@ export class NavigationComponent implements OnInit {
 
   async ngOnInit() {
     this.userIsAdmin = await this.userService.isAdmin();
+    this.navigationService.getValue().subscribe(val => {
+      this.static = val;
+    });
     this._init();
   }
 
@@ -75,7 +90,21 @@ export class NavigationComponent implements OnInit {
 
   private async _init() {
     this.userIsLoggedIn = this.userService.isLoggedIn();
-    this.user = await this.userService.getUser();
+    if (this.userIsLoggedIn) {
+      this.user = await this.userService.findOwn();
+      console.log('user is ', this.user);
+
+      if (this.user.role.role === 'user') {
+        this.myOrdersLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`;
+        this.userType = 'klinik';
+        this.hospital = await this.hospitalService.findOwn();
+
+        console.log(this.hospital);
+      } else {
+        this.myOrdersLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`;
+        this.userType = 'maker';
+      }
+    }
     this._translate();
   }
 
@@ -243,7 +272,11 @@ export class NavigationComponent implements OnInit {
       this.userIsLoggedIn = this.userService.isLoggedIn();
       this.user = await this.userService.getUser();
       this.userIsAdmin = await this.userService.isAdmin();
-      this.router.navigate([this.router.url]);
+      if (this.user.role.role === 'editor') {
+        this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`]);
+      } else {
+        this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`]);
+      }
       this._translate();
     }).catch((err) => {
       this.userIsLoggedIn = this.userService.isLoggedIn();
@@ -252,13 +285,12 @@ export class NavigationComponent implements OnInit {
     });
   }
 
-  private _logout() {
-    this.userService.logout();
-    this.userIsLoggedIn = this.userService.isLoggedIn();
+  private async _logout() {
+    await this.userService.logout();
+    this.userIsLoggedIn = false;
     this.user = undefined;
     this.userIsAdmin = false;
     this.router.navigate(['/']);
-    this._translate();
   }
 
   private _register() {

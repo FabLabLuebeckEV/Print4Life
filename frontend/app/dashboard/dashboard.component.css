@@ -309,6 +309,23 @@ a {
 .text-faq {
     padding-top:24px;
 }
+
+
+
+.text-faq li a {
+    color: #5286A4;
+}
+
+.text-faq li:before {
+    content: "";
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSIxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMSAxbDYgNi44MjJMMS41MzcgMTUiIHN0cm9rZS13aWR0aD0iMS45MiIgc3Ryb2tlPSIjNTI4NkE0IiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIG9wYWNpdHk9Ii44MDIiLz48L3N2Zz4=);
+    width: 9px;
+    height: 16px;
+display: inline-block;
+margin-right: 20px;
+top: 2px;
+}
+
 .faq-button {
     padding-top: 68px;
     padding-bottom: 68px;
@@ -371,32 +388,14 @@ a {
 }
 .newsticker-date {
     text-align: right;
+    margin-top: 15px;
+    margin-bottom: 7px;
 }
 .newsticker-text {
-    padding-top: 24px;
+    padding-top: 20px;
 }
 
 
-.list-with-arrows {
-    
-}
-
-.list-with-arrows li {
-    position: relative;
-    padding-left: 58px !important;
-   
-}
-
-.list-with-arrows li:before {
-    content: "";
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgMWw4IDEwLjcyTDEuNzE2IDIzIiBzdHJva2Utd2lkdGg9IjEuOTIiIHN0cm9rZT0iIzUyODZBNCIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBvcGFjaXR5PSIuODAyIi8+PC9zdmc+');
-    width: 11px;
-    height: 24px;
-    position: absolute;
-    left:0;
-    top:5px;
-    background-size: 100%;
-}
 
 .list-with-arrows-small li {
     position: relative;
@@ -445,4 +444,37 @@ a {
 
 .list-with-checkmarks li.icon--blue:before {
     background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTciIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTEgOS40TDcgMTZsOS0xNSIgc3Ryb2tlLXdpZHRoPSIxLjkyIiBzdHJva2U9IiMzMzRENUMiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgb3BhY2l0eT0iLjgwMiIvPjwvc3ZnPg==');
+}
+
+.product-text {
+    text-align: left;
+}
+
+.product-image-container {
+    position: relative;
+    text-align: left;
+}
+.product-image {
+    width: 100%;
+    max-width: 358px;
+}
+
+.product-icon {
+    width: 200px;
+    height: auto;
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .product-icon{
+        width: 140px;
+    height: auto;
+    display: block;
+    position: absolute;
+    right: 10px;
+    bottom: 18px;
+    }
 }
