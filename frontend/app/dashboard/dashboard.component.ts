@@ -23,6 +23,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   contactFragment = routes.paths.frontend.faq.contact;
   pressRoute = `/${routes.paths.frontend.press.root}`;
 
+  registrationRoute = `/${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}`;
+  createOrderRoute = `/${routes.paths.frontend.blueprints.root}/${routes.paths.frontend.blueprints.list}`;
+
   constructor(
     private modalService: ModalService,
     private translateService: TranslateService,
@@ -78,7 +81,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   register(type: String) {
 
-    this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}/${type}`]);
+    this.router.navigate([`${this.registrationRoute}/${type}`]);
     /*
     const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
     const newsletterButton = new ModalButton('Zum Newsletter', 'btn primary', 'newsletter');

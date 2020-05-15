@@ -36,7 +36,7 @@
             <div class="howto-list center-text howto-basic">
                 <div class="maker-text">
                     <ul class="list-with-checkmarks">
-                        <li>Registriere dich</li>
+                        <li><a [routerLink]="[registrationRoute+'/maker']">Registriere dich</a></li>
                         <li>Bestätige deine E-Mail-Adresse</li>
                         <li class="normal-text no-icon">Los geht's!</li>
                     </ul>
@@ -46,7 +46,7 @@
                 Du siehst eine Übersicht von angeforderten Aufträgen.
                 <div class="maker-text">
                     <ul class="list-with-arrows-small">
-                        <li>Suche dir einen Auftrag aus</li>
+                        <li><a [routerLink]="[registrationRoute+'/maker']">Suche dir einen Auftrag aus</a></li>
                         <li>Lege fest, wie viele Hilfsgüter du innerhalb der <strong>nächsten 2 Tage</strong> zum Gesamtvolumen des Auftrags beisteuern kannst</li>
                     </ul>
                 </div>
@@ -84,7 +84,7 @@
                 Hast du noch freie Kapazitäten?
                  <div class="maker-text">
                      <ul>
-                         <li>Nimm gerne weitere Aufträge an.</li>
+                        <li><a [routerLink]="[registrationRoute+'/maker']">Nimm gerne weitere Aufträge an.</a></li>
                      </ul>
                  </div>
              </div>
@@ -98,7 +98,7 @@
             <div class="howto-list center-text howto-basic">
                 <div class="clinic-text">
                     <ul class="list-with-checkmarks">
-                        <li class="icon--red">Registriere dich</li>
+                        <li class="icon--red"><a [routerLink]="[registrationRoute+'/klinik']">Registriere dich</a></li>
                         <li class="icon--red">Bestätige deine E-Mail-Adresse</li>
                         <li class="normal-text icon--blue">Innerhalb von 24 Stunden wirst du von print4life <strong>verifiziert</strong> und für Aufträge <strong>freigeschaltet.</strong></li>
                         <li class="normal-text no-icon">  Los geht's! </li>
@@ -110,7 +110,7 @@
                 Du siehst eine Übersicht deiner Aufträge.
                 <div class="clinic-text">
                     <ul class="list-with-arrows-small list-with-arrows-small--red">
-                        <li>Lege einen Auftrag an.</li>
+                        <li><a [routerLink]="[createOrderRoute]">Lege einen Auftrag an.</a></li>
                      </ul>
                 </div>
                 <div class="center-text">
@@ -136,9 +136,9 @@
             <div class="howto-list center-text">
                Was fehlt noch?
                  <div class="clinic-text">
-                     <ul>
-                         <li>Lege gerne weitere Aufträge an.</li>
-                     </ul>
+                    <ul>
+                        <li><a [routerLink]="[createOrderRoute]">Lege gerne weitere Aufträge an.</a></li>
+                    </ul>
                  </div>
              </div>
         </div> <!--End of clinic howto-->
