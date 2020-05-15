@@ -362,12 +362,16 @@ div.navPanel-visible #navPanel {
     top: 100px;
     z-index: 200;
 
-    background-color: #F7F7F7;
+    background-color: white;
     padding-bottom: 20px;
     border-bottom-style:solid;
     border-bottom-color: #334d5c;
     border-bottom-width: 3px;
-    box-shadow: 0px 4px 4px -6px black;
+    box-shadow: 2px 2px 14px rgba(163, 169, 170, 0.75);
+}
+
+#header.static .dropdown:hover ul {
+    background-color: #f7f7f7 !important;
 }
 
 #header nav .dropdown:hover ul.maker {

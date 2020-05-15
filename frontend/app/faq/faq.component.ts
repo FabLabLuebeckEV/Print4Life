@@ -35,6 +35,7 @@ export class FaqComponent implements OnInit {
   ngOnInit() {
     console.log('sideloaded: ', this.sideloaded);
     if (this.sideloaded === undefined || !this.sideloaded) {
+      this.sideloaded = false;
       this.navigationService.setStatic(true);
     }
   }

@@ -8,13 +8,17 @@ import { Router, NavigationEnd } from "@angular/router";
 })
 export class NavigationService {
     private staticPage: BehaviorSubject<boolean>;
+    private lastRoute;
 
     constructor(
         private router: Router
     ) {
         this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd)  {
-                this.staticPage.next(false);
+                if (this.lastRoute === undefined || this.router.url !== this.lastRoute) {
+                    this.staticPage.next(false);
+                    this.lastRoute = this.router.url;
+                }
             }
         });
         this.staticPage = new BehaviorSubject<boolean>(false);

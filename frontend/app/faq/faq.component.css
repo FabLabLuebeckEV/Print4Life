@@ -3,6 +3,14 @@
     flex-wrap: wrap;
 }
 
+.faq {
+    padding-top: 50px;
+}
+
+.faq h1 {
+    margin-bottom: 50px;
+}
+
 .faq .grid .question {
     margin-bottom: 10px;
 }

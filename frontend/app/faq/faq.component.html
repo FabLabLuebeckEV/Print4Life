@@ -1,4 +1,9 @@
-<div class="gray-box faq">
+<div class="faq" [ngClass]="{'gray-box': !sideloaded}">
+    <div class="text-center">
+        <h1>
+            Häufig gestellte Fragen
+        </h1>
+    </div>
     <div class="grid">
         <div class="col-12 col-md-6 indent-left indent-right">
             <div class="question neutral">
@@ -37,7 +42,7 @@
         </div>
     </div>
 </div> 
-<div class="kontakt" id="kontakt">
+<div class="kontakt" id="kontakt" *ngIf="!sideloaded">
     <div class="grid">
         <div class="col-12 col-md-6 indent-right">
             <h1>
