@@ -4,6 +4,8 @@ import { BlueprintService } from '../services/blueprint.service';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { routes } from '../config/routes';
+import { UserService } from '../services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blueprints',
@@ -14,15 +16,22 @@ export class BlueprintsComponent implements OnInit {
 
   blueprints: Array<any>;
   createOrderLink = '/' + routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.create;
+  unfinishedOrdersLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`;
+
 
   constructor(
     private blueprintService: BlueprintService,
     public domSanitizer: DomSanitizer,
+    private userService: UserService,
+    private router: Router
   ) {
 
   }
 
   async ngOnInit() {
+    if (!this.userService.isLoggedIn || (await this.userService.findOwn()).role.role === 'editor') {
+      this.router.navigate([this.unfinishedOrdersLink]);
+    }
     this.blueprints = (await this.blueprintService.getBlueprints()).blueprints;
     this.blueprints.forEach(blueprint => {
       const objectURL = 'data:image/jpeg;base64,' + blueprint.image;
