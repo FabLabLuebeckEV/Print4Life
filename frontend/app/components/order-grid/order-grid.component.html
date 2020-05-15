@@ -97,7 +97,7 @@
                     </canvas>
                     -->
                 </div>
-                <ul class="list-with-arrows text-mid">
+                <ul class="list-with-arrows text-mid" *ngIf="!order.showInput">
                     <li *ngIf="order.myAcceptedBatch > 0">
                         <a (click)="finishOwnBatch(order)">
                             Auftrag auf "Erledigt" setzen
