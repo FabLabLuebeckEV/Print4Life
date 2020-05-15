@@ -388,9 +388,11 @@ top: 2px;
 }
 .newsticker-date {
     text-align: right;
+    margin-top: 15px;
+    margin-bottom: 7px;
 }
 .newsticker-text {
-    padding-top: 24px;
+    padding-top: 20px;
 }
 
 
