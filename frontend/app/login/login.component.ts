@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     password: ''
   };
 
-  registerRoute = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.signup + '/';
+  registerRoute = '/' + routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.signup + '/';
 
   constructor(
     public router: Router,
