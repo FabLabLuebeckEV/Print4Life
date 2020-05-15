@@ -63,7 +63,7 @@ async function create (req, res) {
     if (user) {
       const msg = {
         type: ErrorType.EMAIL_EXISTS,
-        error: 'Ein Konte mit dieser E-Mail-Adresse existiert schon!',
+        error: 'Ein Account mit dieser E-Mail-Adresse existiert schon!',
         stack: undefined
       };
       logger.error(msg);

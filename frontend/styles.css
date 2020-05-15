@@ -237,6 +237,10 @@ body .mat-form-field:not(.mat-focused) mat-label {
     margin-top:7px;
 }
 
+.inputButtonCombi .mat-form-field {
+    margin-top: 0px;
+}
+
 .mat-form-field mat-label {
     background-color:white;
     padding-right: 3px;
