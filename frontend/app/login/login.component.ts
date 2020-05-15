@@ -13,6 +13,7 @@ import { InputModalComponent } from '../components/input-modal/input-modal.compo
 import { TranslationModel } from '../models/translation.model';
 import { TranslateService } from '@ngx-translate/core';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -26,6 +27,8 @@ export class LoginComponent implements OnInit {
     email: '',
     password: ''
   };
+
+  registerRoute = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.signup + '/';
 
   constructor(
     public router: Router,
