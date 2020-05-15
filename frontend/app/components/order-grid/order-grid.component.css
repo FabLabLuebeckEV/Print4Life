@@ -181,3 +181,24 @@
 .order.participating .participatingBadge {
     display: inherit;
 }
+
+
+.list-with-arrows {
+    padding-left: 0px !important;
+}
+
+.list-with-arrows li::before {
+    width: 7px !important;
+    height: 15px !important;
+}
+
+.list-with-arrows li {
+    padding-left: 20px !important;
+    list-style: none;
+    text-align: left;
+    padding-bottom: 15px;
+}
+
+.list-with-arrows a:hover {
+    text-decoration: underline;
+}

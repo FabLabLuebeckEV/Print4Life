@@ -97,25 +97,19 @@
                     </canvas>
                     -->
                 </div>
-                <div class="buttons text-mid">
-                    <div class="iconbutton" *ngIf="order.myAcceptedBatch > 0">
-                        <fa-icon class="arrowIcon" [icon]="arrowIcon" ></fa-icon>
-                        <a class="button primary" (click)="finishOwnBatch(order)">
+                <ul class="list-with-arrows text-mid">
+                    <li *ngIf="order.myAcceptedBatch > 0">
+                        <a (click)="finishOwnBatch(order)">
                             Auftrag auf "Erledigt" setzen
                         </a>
-                    </div>
-                    <div class="iconbutton" *ngIf="order.myFinishedBatch > 0 || order.myAcceptedBatch > 0">
-                        <fa-icon class="arrowIcon" [icon]="arrowIcon" ></fa-icon>
-                        <a class="button primary" [routerLink]="[orderShippingRoute + '/' + order._id]" >
+                    </li>
+                    <li *ngIf="order.myFinishedBatch > 0 || order.myAcceptedBatch > 0">
+                        <a [routerLink]="[orderShippingRoute + '/' + order._id]">
                             Versanddaten anzeigen
                         </a>
-                    </div>
-                    <div class="iconbutton" *ngIf="false">
-                        <fa-icon class="arrowIcon" [icon]="arrowIcon" ></fa-icon>
-                        <a class="button primary" >
-                            Auftrag zurückziehen
-                        </a>
-                    </div>
+                    </li>
+                </ul>
+                <div class="buttons text-mid">
                     <div class="iconbutton text-center support" *ngIf="order.batch.remaining > 0 && order.myFinishedBatch !== 0 && order.myAcceptedBatch === 0 && !order.showInput">
                         <button mat-raised-button color="primary" class="text-mid" (click)="order.toggleInput()">Erneut unterstützen</button>
                     </div>
