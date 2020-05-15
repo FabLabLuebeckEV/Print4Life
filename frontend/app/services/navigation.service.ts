@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Router, NavigationEnd } from "@angular/router";
+import { Router, NavigationEnd } from '@angular/router';
 
 
 @Injectable({
@@ -15,9 +15,11 @@ export class NavigationService {
     ) {
         this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd)  {
-                if (this.lastRoute === undefined || this.router.url !== this.lastRoute) {
+                const url = this.router.url.split('#')[0];
+                console.log('current url: ', url);
+                if (this.lastRoute === undefined || url !== this.lastRoute) {
                     this.staticPage.next(false);
-                    this.lastRoute = this.router.url;
+                    this.lastRoute = url;
                 }
             }
         });

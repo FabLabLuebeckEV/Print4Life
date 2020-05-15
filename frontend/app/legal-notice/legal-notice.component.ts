@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
     selector: 'app-legal-notice',
@@ -6,7 +7,12 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./legal-notice.component.css']
 })
 export class LegalNoticeComponent implements OnInit {
-    async ngOnInit() {
+    constructor(
+        private navigationService: NavigationService
+    ) {
 
+    }
+    async ngOnInit() {
+        this.navigationService.setStatic(true);
     }
 }
