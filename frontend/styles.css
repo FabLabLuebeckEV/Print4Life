@@ -233,6 +233,15 @@ body .mat-form-field:not(.mat-focused) mat-label {
     border-color: #DF5A49;
 }
 
+.mat-form-field {
+    margin-top:7px;
+}
+
+.mat-form-field mat-label {
+    background-color:white;
+    padding-right: 3px;
+}
+
 @media only screen and (max-width: 1150px) {
     .grid .large-indent-left {
         padding-left: 0px !important;
