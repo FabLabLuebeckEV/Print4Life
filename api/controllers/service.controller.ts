@@ -25,7 +25,7 @@ function contact (req, res) {
   emailService.sendMail({
     preferredLanguage: 'de',
     template: 'contact',
-    to: 'print4life@fablab-luebeck.de',
+    to: 'info@print4.life',
     cc: contactValues.email,
     locals:
         {
