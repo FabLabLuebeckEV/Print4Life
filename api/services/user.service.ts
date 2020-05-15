@@ -91,7 +91,7 @@ export class UserService implements ModelService {
             error = {
               name: 'MALFORMED_ACCOUNT',
               data: { userId: user._id },
-              message: 'There is an issue with your account. Please contact our team for help',
+              message: 'Leider gibt es ein Problem mit deinem Konto. Bitte Kontaktiere das Team: info@print4.life',
               type: ErrorType.SERVER_ERROR
             };
             reject(error);
@@ -119,14 +119,14 @@ export class UserService implements ModelService {
           error = {
             name: 'USER_DEACTIVATED',
             data: { userId: user._id },
-            message: 'Your account is not activated.',
+            message: 'Dein Konto ist leider noch nicht aktiviert.',
             type: ErrorType.USER_DEACTIVATED
           };
           reject(error);
         } else {
           error = {
             name: 'AUTHENTIFICATION_FAILED',
-            message: 'Authentication failed. Wrong password.',
+            message: 'Login fehlgeschlagen. Falsches Passwort.',
             type: ErrorType.AUTHENTIFICATION_FAILED
           };
           reject(error);

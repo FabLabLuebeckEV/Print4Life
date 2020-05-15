@@ -152,10 +152,22 @@
 
 .order .buttons .iconbutton {
     margin-bottom: 15px;
+    font-size: 20px;
 }
+
+.order .buttons .iconbutton--small {
+    
+    font-size: 16px;
+}
+
 
 .order .buttons .iconbutton button{
     width: 100%;
+}
+
+
+.order .buttons .iconbutton button:hover {
+    color: #5286A4;
 }
 
 .order .buttons .iconbutton:nth-last-child(1) {
