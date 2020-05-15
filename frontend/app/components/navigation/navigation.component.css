@@ -405,9 +405,13 @@ div.navPanel-visible #navPanel {
     color: #c0cacf;
 }
 
-#header .account{
+#header .account {
     min-width: 140px;
     max-width: 140px;
+}
+
+#header .account .account-wrap {
+    width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

@@ -63,12 +63,16 @@
               <div class="hint text-mid">
                 Eingeloggt als
               </div>
-              <a class="underline klinik" *ngIf="userType === 'klinik'">
-                {{hospital?.name}}
-              </a>
-              <a class="underline maker" *ngIf="userType === 'maker'">
-                {{user.firstname}} {{user.lastname}}
-              </a>
+              <div class="account-wrap" *ngIf="userType === 'klinik'">
+                <a class="underline klinik">
+                  {{hospital?.name}}
+                </a>
+              </div>
+              <div class="account-wrap" *ngIf="userType === 'maker'">
+                <a class="underline maker">
+                  {{user.firstname}} {{user.lastname}}
+                </a>
+              </div>
               <ul
                 [ngClass]="{
                   maker: userType === 'maker',
