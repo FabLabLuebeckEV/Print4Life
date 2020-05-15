@@ -177,7 +177,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
     delete order.blueprint;
 
     await this.orderService.updateOrder(order);
-    this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.complete}`]);
+    this.reload.emit();
   }
 
   public async support(order) {
