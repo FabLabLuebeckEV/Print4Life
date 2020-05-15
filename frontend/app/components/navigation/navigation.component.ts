@@ -11,6 +11,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { HospitalService } from 'frontend/app/services/hospital.service';
 import { Hospital } from 'frontend/app/models/hospital.model';
+import { NavigationService } from 'frontend/app/services/navigation.service';
 
 interface Dropdown {
   name: String;
@@ -52,12 +53,15 @@ export class NavigationComponent implements OnInit {
   userType: String;
   hospital: Hospital;
 
+  static = false;
+
   constructor(
     private translateService: TranslateService,
     private userService: UserService,
     private modalService: ModalService,
     private router: Router,
-    private hospitalService: HospitalService
+    private hospitalService: HospitalService,
+    private navigationService: NavigationService
   ) {
     this.router.events.subscribe(async () => {
       this._init();
@@ -66,6 +70,9 @@ export class NavigationComponent implements OnInit {
 
   async ngOnInit() {
     this.userIsAdmin = await this.userService.isAdmin();
+    this.navigationService.getValue().subscribe(val => {
+      this.static = val;
+    });
     this._init();
   }
 

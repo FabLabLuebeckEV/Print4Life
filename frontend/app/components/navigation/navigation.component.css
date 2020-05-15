@@ -177,7 +177,11 @@ div.navPanel-visible #navPanel {
 }
 
 #header {
-    background-color: #F7F7F7;
+    background-color: white;
+}
+
+#header.static {
+    background-color: #f7f7f7;
 }
 
 #header nav ul li {

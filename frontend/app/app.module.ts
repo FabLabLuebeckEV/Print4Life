@@ -78,6 +78,7 @@ import { MyOrdersComponent } from './orders/my-orders/my-orders.component';
 import { ShippingDetailsComponent } from './orders/shipping-details/shipping-details.component';
 import { HospitalActivationComponent } from './hospitals/hospital-activation/hospital-activation.component';
 import { PressComponent } from './press/press.component';
+import { NavigationService } from './services/navigation.service';
 
 @NgModule({
     declarations: [
@@ -162,6 +163,7 @@ import { PressComponent } from './press/press.component';
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true }, // magic for cors
         MachineService, FablabService, ConfigService, ServiceService, AuthGuard, AdminGuard,
+        NavigationService,
         { provide: NgbDatepickerI18n, useClass: DatePickerTranslationService }
     ],
     bootstrap: [AppComponent],

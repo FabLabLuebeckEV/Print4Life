@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ModalService } from '../services/modal.service';
 import { ModalButton } from '../helper/modal.button';
@@ -8,13 +8,14 @@ import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { TranslationModel } from '../models/translation.model';
 import { routes } from '../config/routes';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
   userIsLoggedIn: Boolean;
   user: User;
   translationFields: TranslationModel.Dashboard  = {};
@@ -26,7 +27,8 @@ export class DashboardComponent implements OnInit {
     private modalService: ModalService,
     private translateService: TranslateService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private navigationService: NavigationService
   ) {
     this._translate();
     this.translateService.onLangChange.subscribe(() => {
@@ -37,6 +39,12 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.userIsLoggedIn = this.userService.isLoggedIn();
   }
+
+  ngAfterViewInit() {
+
+    this.navigationService.setStatic(true);
+  }
+
 
   // Private Functions
 

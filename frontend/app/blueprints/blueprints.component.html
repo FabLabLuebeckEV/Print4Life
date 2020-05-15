@@ -1,4 +1,4 @@
-<div class="gray-box">
+<div>
     <h1>
         Produktübersicht
     </h1>
@@ -6,7 +6,7 @@
         Wählen Sie Ihr gewünschtes Produkt aus:
     </div>
 </div>
-<div class="cont">
+<div class="cont gray-box">
     <div class="grid-3">
         <div class="" *ngFor="let blueprint of blueprints">
             <div class="blueprint">
@@ -37,3 +37,8 @@
         </div>
     </div>
 </div>
+<app-faq
+    [sideloaded]="true"
+    >
+
+</app-faq>

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ModalService } from '../services/modal.service';
 import { ModalButton } from '../helper/modal.button';
 import { MessageModalComponent } from '../components/message-modal/message-modal.component';
 import { ServiceService } from '../services/service.service';
 
 import { routes } from '../config/routes';
+import { NavigationService } from '../services/navigation.service';
 
 @Component({
     selector: 'app-faq',
@@ -14,6 +15,9 @@ import { routes } from '../config/routes';
 export class FaqComponent implements OnInit {
   pressRoute = `/${routes.paths.frontend.press.root}`;
 
+  @Input()
+  sideloaded: boolean;
+
   contactData = {
     name : '',
     email : '',
@@ -22,12 +26,17 @@ export class FaqComponent implements OnInit {
 
   constructor(
     private serviceService: ServiceService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private navigationService: NavigationService
   ) {
 
   }
 
   ngOnInit() {
+    console.log('sideloaded: ', this.sideloaded);
+    if (this.sideloaded === undefined || !this.sideloaded) {
+      this.navigationService.setStatic(true);
+    }
   }
 
 

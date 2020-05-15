@@ -1,5 +1,9 @@
 <div *ngFor="let i of [1, 2]" [ngClass]="sideMenu ? 'navPanel-visible':''">
-  <header id="{{(i == 1)?'header':'navPanel'}}" [ngClass]="menuExtra ? 'reveal':'alt'">
+  <header id="{{(i == 1)?'header':'navPanel'}}" [ngClass]="{
+    reveal: menuExtra,
+    alt: !menuExtra,
+    static: static
+  }">
     <div class="closeMenu" *ngIf="i == 2">
       <a (click)="toggleSideMenu()">
         <fa-icon class="closeicon" [icon]="closeIcon"></fa-icon>
