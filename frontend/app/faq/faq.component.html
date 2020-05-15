@@ -68,6 +68,9 @@
                 <mat-label>Deine Frage* </mat-label>
                 <textarea cdkTextareaAutosize cdkAutosizeMinRows="8" cdkAutosizeMaxRows="8" matInput placeholder="" [(ngModel)]="contactData.message"></textarea>
             </mat-form-field>
+            <mat-checkbox class="text-small" id="checkbox-small" [(ngModel)]="contactData.dsgvo">
+                Ich akzeptiere die Verarbeitung der eingegebenen Daten zum Zweck der Anfragebeantwortung.
+            </mat-checkbox>
             <div class="row">
                 <div class="col-12 col-md-6 anmerkung">
                     *Pflichtfeld

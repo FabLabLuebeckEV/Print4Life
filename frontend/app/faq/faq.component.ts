@@ -21,7 +21,8 @@ export class FaqComponent implements OnInit {
   contactData = {
     name : '',
     email : '',
-    message: ''
+    message: '',
+    dsgvo: false
   };
 
   constructor(
@@ -42,18 +43,30 @@ export class FaqComponent implements OnInit {
 
 
   async sendContactMessage() {
-    const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+    if (this.contactData.dsgvo && this.contactData.email !== '' && this.contactData.message !== '' && this.contactData.name !== '') {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
 
-    console.log(this.contactData);
-    this.serviceService.sendContactForm({contact: this.contactData}).catch();
-    this.modalService.openMsgModal(
-      'Erfolgreich verschickt',
-      'modal-header header-success',
-      ['Du erhältst eine Kopie deiner Nachricht per Email', 'Unser Team wird sich bald bei dir melden'],
-      okButton,
-      undefined
-    ).result.then(async (login) => {
-    }).catch((err) => {
-    });
+      console.log(this.contactData);
+      this.serviceService.sendContactForm({contact: this.contactData}).catch();
+      this.modalService.openMsgModal(
+        'Erfolgreich verschickt',
+        'modal-header',
+        ['Du erhältst eine Kopie deiner Nachricht per Email', 'Unser Team wird sich bald bei dir melden'],
+        okButton,
+        undefined
+      ).result.then(async (login) => {
+      }).catch((err) => {
+      });
+    } else {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+
+      this.modalService.openMsgModal(
+        'Fehlende Eingabe',
+        'modal-header',
+        ['Bitte akzeptiere die Verarbeitung deiner Daten und fülle die benötigten Felder aus'],
+        okButton,
+        undefined
+      );
+    }
   }
 }
