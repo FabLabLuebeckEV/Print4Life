@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BlueprintService } from '../../services/blueprint.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from 'frontend/app/services/user.service';
@@ -8,6 +8,8 @@ import { Address } from 'frontend/app/models/address.model';
 import { OrderService } from 'frontend/app/services/order.service';
 import { ModalService } from 'frontend/app/services/modal.service';
 import { ModalButton } from 'frontend/app/helper/modal.button';
+
+import { routes } from '../../config/routes';
 
 
 @Component({
@@ -57,7 +59,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
     private domSanitizer: DomSanitizer,
     private userService: UserService,
     private orderService: OrderService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private router: Router
   ) {
 
   }
@@ -93,6 +96,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         ], okButton, undefined);
 
         modalRef.result.then(() => {
+          this.router.navigate([routes.paths.frontend.orders.root+'/'+routes.paths.frontend.orders.myOrders]);
         });
       });
     } else {
