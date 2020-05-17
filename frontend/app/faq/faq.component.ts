@@ -8,9 +8,9 @@ import { routes } from '../config/routes';
 import { NavigationService } from '../services/navigation.service';
 
 @Component({
-    selector: 'app-faq',
-    templateUrl: './faq.component.html',
-    styleUrls: ['./faq.component.css']
+  selector: 'app-faq',
+  templateUrl: './faq.component.html',
+  styleUrls: ['./faq.component.css']
 })
 export class FaqComponent implements OnInit {
   pressRoute = `/${routes.paths.frontend.press.root}`;
@@ -19,8 +19,8 @@ export class FaqComponent implements OnInit {
   sideloaded: boolean;
 
   contactData = {
-    name : '',
-    email : '',
+    name: '',
+    email: '',
     message: '',
     dsgvo: false
   };
@@ -43,11 +43,51 @@ export class FaqComponent implements OnInit {
 
 
   async sendContactMessage() {
-    if (this.contactData.dsgvo && this.contactData.email !== '' && this.contactData.email.includes('@') && this.contactData.message !== '' && this.contactData.name !== '') {
+    if (!this.contactData.dsgvo) {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+
+      this.modalService.openMsgModal(
+        'DSGVO akzeptieren',
+        'modal-header',
+        ['Bitte akzeptiere die Verarbeitung deiner Daten'],
+        okButton,
+        undefined
+      );
+    } else if (!this.contactData.email.includes('@') || this.contactData.email === '') {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+
+      this.modalService.openMsgModal(
+        'Email überprüfen',
+        'modal-header',
+        ['Bitte überprüfe die eingabe deiner E-Mail-Adresse'],
+        okButton,
+        undefined
+      );
+    } else if (this.contactData.message === '') {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+
+      this.modalService.openMsgModal(
+        'Nachricht überprüfen',
+        'modal-header',
+        ['Bitte überprüfe die eingabe deiner Nachricht'],
+        okButton,
+        undefined
+      );
+    } else if (this.contactData.name === '') {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+
+      this.modalService.openMsgModal(
+        'Namen überprüfen',
+        'modal-header',
+        ['Bitte überprüfe die eingabe deines Namens'],
+        okButton,
+        undefined
+      );
+    } else {
       const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
 
       console.log(this.contactData);
-      this.serviceService.sendContactForm({contact: this.contactData}).catch();
+      this.serviceService.sendContactForm({ contact: this.contactData }).catch();
       this.modalService.openMsgModal(
         'Erfolgreich verschickt',
         'modal-header',
@@ -57,16 +97,6 @@ export class FaqComponent implements OnInit {
       ).result.then(async (login) => {
       }).catch((err) => {
       });
-    } else {
-      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
-
-      this.modalService.openMsgModal(
-        'Fehlende Eingabe',
-        'modal-header',
-        ['Bitte akzeptiere die Verarbeitung deiner Daten und fülle die benötigten Felder aus'],
-        okButton,
-        undefined
-      );
     }
   }
 }
