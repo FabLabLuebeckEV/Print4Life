@@ -43,7 +43,7 @@ export class FaqComponent implements OnInit {
 
 
   async sendContactMessage() {
-    if (this.contactData.dsgvo && this.contactData.email !== '' && this.contactData.message !== '' && this.contactData.name !== '') {
+    if (this.contactData.dsgvo && this.contactData.email !== '' && this.contactData.email.includes('@') && this.contactData.message !== '' && this.contactData.name !== '') {
       const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
 
       console.log(this.contactData);
