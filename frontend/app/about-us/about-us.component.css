@@ -37,11 +37,17 @@
     text-align: center;
 }
 
+.member img {
+    margin-bottom: 20px;
+}
 .member h1 {
     margin-top: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
+.member .maker {
+    margin-bottom: 45px;
+}
 .member .content {
     margin-top: 15px; 
 }
