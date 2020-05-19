@@ -94,6 +94,7 @@ export class UserListComponent implements OnInit {
       if (!this.userIsAdmin) {
         const user = await this.userService.findOwn();
         this.router.navigate([`${routes.paths.frontend.users.root}/${user._id}`]);
+        return;
       }
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
