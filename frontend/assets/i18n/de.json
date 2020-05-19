@@ -538,7 +538,7 @@
     "labels": {
       "username": "Benutzername",
       "firstname": "Vorname",
-      "lastname": "Nachnahme",
+      "lastname": "Nachname",
       "email": "Emailadresse",
       "address": {
         "title": "Adresse",

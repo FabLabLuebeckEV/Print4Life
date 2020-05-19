@@ -57,7 +57,8 @@
             </li>
             -->
             <li *ngIf="!userIsLoggedIn">
-              <a [routerLink]="[loginLink]" [ngClass]="(i == 1)?'button primary':''" class="underline" (click)="toggleSideMenu()">Anmelden</a>
+              <a [routerLink]="[loginLink]" [ngClass]="(i == 1)?'button primary':''" class="underline"
+                (click)="toggleSideMenu()">Anmelden</a>
             </li>
             <li class="dropdown account" *ngIf="userIsLoggedIn">
               <div class="hint text-mid">
@@ -73,12 +74,15 @@
                   {{user.firstname}} {{user.lastname}}
                 </a>
               </div>
-              <ul
-                [ngClass]="{
+              <ul [ngClass]="{
                   maker: userType === 'maker',
                   klinik: userType === 'klinik'
-                }"
-              >
+                }">
+                <li>
+                  <a (click)="toggleSideMenu()" (click)="_profile()">
+                    Profile
+                  </a>
+                </li>
                 <li>
                   <a (click)="toggleSideMenu()" (click)="_logout()">
                     Abmelden
@@ -94,5 +98,7 @@
 </div>
 
 <div id="navButton">
-  <a class="toggle" (click)="toggleSideMenu()"><fa-icon class="menuicon" [icon]="menuIcon"></fa-icon></a>
+  <a class="toggle" (click)="toggleSideMenu()">
+    <fa-icon class="menuicon" [icon]="menuIcon"></fa-icon>
+  </a>
 </div>
