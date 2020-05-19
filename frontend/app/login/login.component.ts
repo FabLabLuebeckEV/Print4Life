@@ -42,6 +42,10 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit() {
+    if (this.userService.isLoggedIn()) {
+      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`]);
+      return;
+    }
     this.translateService.onLangChange.subscribe(() => {
       this._translate();
     });

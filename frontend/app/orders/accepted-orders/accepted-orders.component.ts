@@ -12,7 +12,7 @@ import { UserService } from 'frontend/app/services/user.service';
 })
 export class AcceptedOrdersComponent implements OnInit {
 
-    orders: Array<any>;
+    orders: Array<any> = [];
     loggedInUser: User;
 
     constructor(
