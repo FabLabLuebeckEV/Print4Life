@@ -51,6 +51,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
 
   userType = '';
   filterStatus: String = '';
+  isEmpty = false;
 
   constructor(
     private router: Router,
@@ -75,7 +76,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
 
   async ngOnChanges() {
     await this.loadOrders();
-
+    this.isEmpty = !this.orders;
     console.log('orders: ', this.orders);
   }
 
@@ -86,7 +87,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
   }
 
   async loadOrders() {
-    console.log('load orders called');
+    console.log('load orders called', this.orders);
     const loggedInUser = await this.userService.findOwn();
     if (this.orders) {
       this.orders.forEach(async order => {

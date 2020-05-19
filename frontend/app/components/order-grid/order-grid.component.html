@@ -18,6 +18,8 @@
     </div>
 </div>
 -->
+
+<h1 *ngIf="isEmpty" class="text-center">Leider keine Aufträge gefunden</h1>
 <div class="grid-3">
     <div class="" *ngFor="let order of orders">
         <div class="order"  [ngClass]="{

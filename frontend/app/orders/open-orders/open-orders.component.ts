@@ -12,7 +12,7 @@ import { User } from 'frontend/app/models/user.model';
 })
 export class OpenOrdersComponent implements OnInit {
 
-    orders: Array<any>;
+    orders: Array<any> = [];
     loggedInUser: User;
 
     constructor(
@@ -60,7 +60,10 @@ export class OpenOrdersComponent implements OnInit {
                 return order.batch.number > finished;
             });
         }
-
+        if (!ret) {
+            this.orders = undefined;
+            return;
+        }
         this.orders = ret.orders;
     }
 }

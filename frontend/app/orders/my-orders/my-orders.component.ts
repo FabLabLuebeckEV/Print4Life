@@ -11,7 +11,7 @@ import { UserService } from 'frontend/app/services/user.service';
   styleUrls: ['./my-orders.component.css']
 })
 export class MyOrdersComponent implements OnInit {
-  orders: Array<any>;
+  orders: Array<any> = [];
   loggedInUser: User;
 
   constructor(
@@ -44,6 +44,11 @@ export class MyOrdersComponent implements OnInit {
     if (ret) {
       for (let i = 0; i < ret.orders.length; i++) {
         ret.orders[i].blueprint = (await this.blueprintService.getBlueprint(ret.orders[i].blueprintId)).blueprint;
+      }
+
+      if (!ret) {
+        this.orders = undefined;
+        return;
       }
       this.orders = ret.orders;
 
