@@ -11,15 +11,15 @@
     </div>
     <nav id="nav" class="grid">
       <div class="landscape-logo">
-        <a [routerLink]="['']"><img src="/assets/img/print4life_Logo-landscape.svg" alt="logo" /></a>
+        <img src="/assets/img/print4life_Logo-landscape.svg" alt="logo" (click)="_startPage()"/>
       </div>
       <div class="row">
         <div class="col-3 col-lg-4">
-          <h1><a [routerLink]="['']"><img id="logo" src="/assets/img/print4life_Logo.svg" alt="logo" /></a></h1>
+          <h1><img id="logo" src="/assets/img/print4life_Logo.svg" alt="logo" (click)="_startPage()"/></h1>
         </div>
         <div class="links col-9 col-lg-8">
           <ul>
-            <li class="current"><a [routerLink]="['']" (click)="toggleSideMenu()">Startseite</a></li>
+            <li *ngIf="!userIsLoggedIn" class="current"><a [routerLink]="['']" (click)="toggleSideMenu()">Startseite</a></li>
             <li class="dropdown" *ngIf="userIsLoggedIn">
               <a class="underline">
                 Aufträge

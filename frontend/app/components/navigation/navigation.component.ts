@@ -301,6 +301,18 @@ export class NavigationComponent implements OnInit {
     this.router.navigate([`${routes.paths.frontend.users.root}/${this.user._id}`]);
   }
 
+  private _startPage() {
+    if (this.userIsLoggedIn) {
+      if (this.userType === 'maker') {
+        this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`]);
+      } else {
+        this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`]);
+      }
+    } else {
+      this.router.navigate([``]);
+    }
+  }
+
   toggleSideMenu() {
     this.sideMenu = !this.sideMenu;
   }
