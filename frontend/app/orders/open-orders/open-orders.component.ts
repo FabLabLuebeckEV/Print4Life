@@ -12,7 +12,7 @@ import { User } from 'frontend/app/models/user.model';
 })
 export class OpenOrdersComponent implements OnInit {
 
-    orders: Array<any>;
+    orders: Array<any> = [];
     loggedInUser: User;
 
     constructor(
@@ -47,7 +47,10 @@ export class OpenOrdersComponent implements OnInit {
 
 
         const ret = await this.orderService.getAllOrders(query);
-
+        if (!ret || ret === null) {
+            this.orders = undefined;
+            return;
+        }
         for (let i = 0; i < ret.orders.length; i++) {
             ret.orders[i].blueprint = (await this.blueprintService.getBlueprint(ret.orders[i].blueprintId)).blueprint;
         }

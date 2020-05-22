@@ -58,6 +58,7 @@ const ibmWatsonService = new IBMWatsonService();
 async function create (req, res) {
   let user;
   let reject = false;
+
   try {
     user = await userService.getUserByEmail(req.body.email);
     if (user) {

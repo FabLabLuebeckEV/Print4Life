@@ -90,6 +90,12 @@ export class UserListComponent implements OnInit {
 
   async ngOnInit() {
     if (this.listView && !this.loadingUsers) {
+      this.userIsAdmin = await this.userService.isAdmin();
+      if (!this.userIsAdmin) {
+        const user = await this.userService.findOwn();
+        this.router.navigate([`${routes.paths.frontend.users.root}/${user._id}`]);
+        return;
+      }
       this.translateService.onLangChange.subscribe(() => {
         this._translate();
         this.paginationObj.page = 1;
@@ -100,7 +106,6 @@ export class UserListComponent implements OnInit {
       this.users = [];
       await this._loadRoles();
       await this._loadFablabs();
-      this.userIsAdmin = await this.userService.isAdmin();
       this._translate();
       this.init();
     }

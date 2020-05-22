@@ -1,18 +1,19 @@
 <router-outlet></router-outlet>
 <div class="grid" >
-  <h1>Dein Account ist jetzt aktiviert!</h1>
+  <h1 *ngIf="type === 'maker'">Dein Account ist jetzt aktiviert!</h1>
   <div *ngIf="type === 'maker'" class="large-indent-left large-indent-right">
     <img src="/assets/img/register_illustrations/maker-fertig.png" />
   </div>
+  <h1 *ngIf="type === 'klinik'">Fast geschafft!</h1>
   <div *ngIf="type==='klinik'" class="large-indent-left large-indent-right">
     <p>
-      Danke für Deine Registrierung.
+      Danke für Deine Registrierung, Deine E-Mail-Adresse ist bestätigt.
       <br>
       Unser Team <b>verifiziert</b> Deine Angaben so schnell wie
       möglich.
     </p>
     <p>
-      Du wirst per Email benachrichtigt, sobald dein Account für Bestellungen <b>freigeschaltet</b> wird. 
+      Du wirst per Email benachrichtigt, sobald Dein Account für Bestellungen <b>freigeschaltet</b> wird. 
     </p>
     <img src="/assets/img/register_illustrations/klinik-verifizieren.png" />
   </div>

@@ -420,3 +420,7 @@ div.navPanel-visible #navPanel {
 a:not([href]) {
     color: #334D5C;
 }
+
+a {
+    cursor: pointer;
+}

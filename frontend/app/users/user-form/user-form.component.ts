@@ -62,19 +62,19 @@ export class UserFormComponent implements OnInit {
 
   translationFields: TranslationModel.UserForm & TranslationModel.Roles &
     TranslationModel.Languages & TranslationModel.Address &
-    {
-      title?: String,
-      shownRoles?: Array<String>,
-      shownLanguages?: Array<String>,
-      modals?: {
-        successHeader?: String,
-        successMessage?: String,
-        errorMessage?: String,
-      },
-      labels?: {
-        submit?: String
-      }
-    };
+  {
+    title?: String,
+    shownRoles?: Array<String>,
+    shownLanguages?: Array<String>,
+    modals?: {
+      successHeader?: String,
+      successMessage?: String,
+      errorMessage?: String,
+    },
+    labels?: {
+      submit?: String
+    }
+  };
 
   constructor(
     private userService: UserService,
@@ -107,19 +107,77 @@ export class UserFormComponent implements OnInit {
   }
 
   public register() {
-    if (this.type === 'klinik') {
-      this.hospital.address.country = 'N/A';
-      this.user.address = this.hospital.address;
-    }
-
-    this.userService.createUser(this.user).then(event => {
+    // Eingabe überprüfen
+    console.log(this.user);
+    if (this.user.password !== this.user.passwordValidation || !this.user.password) {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+      this.modalService.openMsgModal(
+        'Passwörter prüfen',
+        'modal-header',
+        ['Die Passwörter stimmen nicht überein.'],
+        okButton,
+        undefined
+      );
+    } else if (!this.user.firstname) {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+      this.modalService.openMsgModal(
+        'Vornamen prüfen',
+        'modal-header',
+        ['Bitte geben sie einen Vornamen ein.'],
+        okButton,
+        undefined
+      );
+    } else if (!this.user.lastname) {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+      this.modalService.openMsgModal(
+        'Nachname prüfen',
+        'modal-header',
+        ['Bitte geben sie einen Nachname ein.'],
+        okButton,
+        undefined
+      );
+    } else if (!this.user.address.city) {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+      this.modalService.openMsgModal(
+        'Stadt prüfen',
+        'modal-header',
+        ['Bitte geben sie eine Stadt ein.'],
+        okButton,
+        undefined
+      );
+    } else if (!this.user.address.zipCode) {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+      this.modalService.openMsgModal(
+        'PLZ prüfen',
+        'modal-header',
+        ['Bitte geben sie eine PLZ ein.'],
+        okButton,
+        undefined
+      );
+    } else if (!this.user.email || !this.user.email.includes('@')) {
+      const okButton = new ModalButton('Ok', 'btn btn-primary', 'Ok');
+      this.modalService.openMsgModal(
+        'E-Mail-Adresse prüfen',
+        'modal-header',
+        ['Bitte geben sie eine gültige E-Mail-Adresse ein.'],
+        okButton,
+        undefined
+      );
+    } else {
       if (this.type === 'klinik') {
-        console.log(event);
-        this.hospital.owner = event.user._id;
-        this.hospitalService.createHospital(this.hospital);
+        this.hospital.address.country = 'N/A';
+        this.user.address = this.hospital.address;
       }
-      this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}/${this.type}/${routes.paths.frontend.users.thankyou}`]);
-    });
+
+      this.userService.createUser(this.user).then(event => {
+        if (this.type === 'klinik') {
+          console.log(event);
+          this.hospital.owner = event.user._id;
+          this.hospitalService.createHospital(this.hospital);
+        }
+        this.router.navigate([`${routes.paths.frontend.users.root}/${routes.paths.frontend.users.signup}/${this.type}/${routes.paths.frontend.users.thankyou}`]);
+      });
+    }
   }
 
   async ngOnInit() {
@@ -272,13 +330,13 @@ export class UserFormComponent implements OnInit {
         this.user = new User(
           undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, this.address,
-          {role: 'editor'}, this.preferredLanguage, false, undefined, undefined);
+          { role: 'editor' }, this.preferredLanguage, false, undefined, undefined);
       } else {
         console.log('initializing klinik');
         this.user = new User(
           undefined, undefined, undefined, undefined,
           undefined, undefined, undefined, this.address,
-          {role: 'user'}, this.preferredLanguage, false, undefined, undefined);
+          { role: 'user' }, this.preferredLanguage, false, undefined, undefined);
       }
     }
   }
@@ -397,26 +455,28 @@ export class UserFormComponent implements OnInit {
 
       this.translationFields = TranslationModel.translationUnroll(
         translations,
-        {zw: {
-          shownRoles: shownRoles,
-          shownLanguages: shownLanguages,
-          modals: {
-            successHeader: this.editView || this.profileView
-              ? translations['userForm'].modals.updateSuccessHeader
-              : translations['userForm'].modals.createSuccessHeader,
-            successMessage: this.editView || this.profileView
-              ? translations['userForm'].modals.updateSuccess
-              : translations['userForm'].modals.createSuccess,
-            errorMessage: this.editView || this.profileView
-              ? translations['userForm'].modals.updateError
-              : translations['userForm'].modals.createError,
-          },
-          labels: {
-            submit: !this.editView && !this.profileView
-              ? translations['userForm'].labels.createSubmit
-              : translations['userForm'].labels.editSubmit,
+        {
+          zw: {
+            shownRoles: shownRoles,
+            shownLanguages: shownLanguages,
+            modals: {
+              successHeader: this.editView || this.profileView
+                ? translations['userForm'].modals.updateSuccessHeader
+                : translations['userForm'].modals.createSuccessHeader,
+              successMessage: this.editView || this.profileView
+                ? translations['userForm'].modals.updateSuccess
+                : translations['userForm'].modals.createSuccess,
+              errorMessage: this.editView || this.profileView
+                ? translations['userForm'].modals.updateError
+                : translations['userForm'].modals.createError,
+            },
+            labels: {
+              submit: !this.editView && !this.profileView
+                ? translations['userForm'].labels.createSubmit
+                : translations['userForm'].labels.editSubmit,
+            }
           }
-        }}
+        }
       );
       if (!this.editView && !this.profileView) {
         this.translationFields.title = translations['userForm'].createTitle;
@@ -432,7 +492,7 @@ export class PasswordErrorStateMatcher implements ErrorStateMatcher {
 
   }
   isErrorState(control: FormControl | null,
-      form: FormGroupDirective | NgForm | null): boolean {
+    form: FormGroupDirective | NgForm | null): boolean {
 
     return control.touched && this.userFormComponent.user.password !== this.userFormComponent.user.passwordValidation;
   }

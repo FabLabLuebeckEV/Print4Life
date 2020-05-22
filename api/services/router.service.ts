@@ -38,7 +38,7 @@ async function jwtValid (req, res, next) {
   let ret;
   let error: IError;
   const tc = await validatorService.checkToken(req);
-  let msg = 'Zugriff verweigert! Bitte loggen sie sich erneut ein!';
+  let msg = 'Zugriff verweigert! Bitte loggen sie sich erneut ein';
   if (_isPublicRoute(req.originalUrl, req.method) || (tc && tc.tokenOk)) {
     ret = next();
   } else if (tc && !tc.tokenOk) {

@@ -51,6 +51,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
 
   userType = '';
   filterStatus: String = '';
+  isEmpty = false;
 
   constructor(
     private router: Router,
@@ -75,7 +76,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
 
   async ngOnChanges() {
     await this.loadOrders();
-
+    this.isEmpty = !this.orders;
     console.log('orders: ', this.orders);
   }
 
@@ -86,7 +87,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
   }
 
   async loadOrders() {
-    console.log('load orders called');
+    console.log('load orders called', this.orders);
     const loggedInUser = await this.userService.findOwn();
     if (this.orders) {
       this.orders.forEach(async order => {
@@ -96,7 +97,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
         order.myAcceptedBatch = 0;
         order.showInput = false;
 
-        order.toggleInput = function() {
+        order.toggleInput = function () {
           order.showInput = !order.showInput;
         };
 
@@ -185,8 +186,12 @@ export class OrderGridComponent implements OnInit, OnChanges {
     console.log('orderCopy ', orderCopy);
     const loggedInUser = await this.userService.findOwn();
 
-    const newBatch = parseInt(orderCopy.myNewAcceptedBatch, 10);
+    let newBatch = parseInt(orderCopy.myNewAcceptedBatch, 10);
 
+    console.log(orderCopy.batch.remaining);
+    if (orderCopy.batch.remaining < newBatch) {
+      newBatch = orderCopy.batch.remaining;
+    }
     if (newBatch && newBatch > 0) {
       let found = false;
       orderCopy.batch.accepted.forEach(batch => {
