@@ -158,8 +158,8 @@
   },
   "roles": {
     "guest": "Gast",
-    "user": "Benutzer",
-    "editor": "Bearbeiter",
+    "user": "Suchender",
+    "editor": "Maker",
     "admin": "Administrator"
   },
   "iotDeviceList": {
