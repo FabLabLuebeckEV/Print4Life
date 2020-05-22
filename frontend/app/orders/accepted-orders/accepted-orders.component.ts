@@ -60,6 +60,10 @@ export class AcceptedOrdersComponent implements OnInit {
             ]
         };
         const ret = await this.orderService.getAllOrders(query);
+        if (!ret || ret === null) {
+            this.orders = undefined;
+            return;
+        }
         for (let i = 0; i < ret.orders.length; i++) {
             ret.orders[i].blueprint = (await this.blueprintService.getBlueprint(ret.orders[i].blueprintId)).blueprint;
         }
