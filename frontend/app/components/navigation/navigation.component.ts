@@ -78,7 +78,6 @@ export class NavigationComponent implements OnInit {
     this.userIsAdmin = await this.userService.isAdmin();
     this.navigationService.getValue().subscribe(val => {
       this.static = val;
-      console.log('static', this.static)
     });
     this._init();
   }
