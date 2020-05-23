@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="213px" height="107px" viewBox="0 0 213 107" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Page 2</title>
+    <defs>
+        <path d="M108.292401,97.3638594 L89.7014722,21.3944986 L77.0008178,71.6213019 C76.5335643,73.4671457 74.8725741,74.7622781 72.9667558,74.7622781 L2.84217094e-14,74.7622781 L2.84217094e-14,66.4375705 L69.727985,66.4375705 L85.7362182,3.14097623 C86.2034717,1.29353149 87.8660621,-3.05533376e-13 89.7686799,-3.05533376e-13 C91.6969007,0.00800452657 93.3562908,1.31594417 93.8107428,3.17299433 L112.598494,79.9588168 L115.52683,69.4792906 C116.029287,67.6814739 117.667875,66.4375705 119.533688,66.4375705 L206.582057,66.4375705 L206.582057,74.7622781 L122.69085,74.7622781 L116.339723,97.4951336 C115.835665,99.2961521 114.197077,100.536854 112.332864,100.536854 C110.37424,100.504836 108.742053,99.2032996 108.292401,97.3638594 Z" id="path-1"></path>
+        <filter x="-2.7%" y="-3.5%" width="105.3%" height="110.9%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.68970557   0 0 0 0 0.68970557   0 0 0 0 0.68970557  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Print4Life---Landingpage-Copy-8" transform="translate(-868.000000, -266.000000)">
+            <g id="Group-25" transform="translate(-10.000000, 0.000000)">
+                <g id="Page-2" transform="translate(881.000000, 267.000000)">
+                    <g id="Page-1">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

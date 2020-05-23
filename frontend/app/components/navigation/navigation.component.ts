@@ -3,7 +3,7 @@ import { routes } from '../../config/routes';
 import { UserService } from '../../services/user.service';
 import { TranslateService } from '@ngx-translate/core';
 import { LoginModalComponent } from '../../users/login-modal/login-modal.component';
-import { Router } from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import { User } from '../../models/user.model';
 import { ModalService } from '../../services/modal.service';
 import { HostListener } from '@angular/core';
@@ -54,6 +54,7 @@ export class NavigationComponent implements OnInit {
   hospital: Hospital;
 
   static = false;
+  startpage = true;
 
   constructor(
     private translateService: TranslateService,
@@ -63,8 +64,13 @@ export class NavigationComponent implements OnInit {
     private hospitalService: HospitalService,
     private navigationService: NavigationService
   ) {
-    this.router.events.subscribe(async () => {
+    this.router.events.subscribe(async (ev) => {
       this._init();
+
+      if (ev instanceof NavigationEnd) {
+        const url = this.router.url.split('#')[0];
+        this.startpage = url === '/';
+      }
     });
   }
 
@@ -72,6 +78,7 @@ export class NavigationComponent implements OnInit {
     this.userIsAdmin = await this.userService.isAdmin();
     this.navigationService.getValue().subscribe(val => {
       this.static = val;
+      console.log('static', this.static)
     });
     this._init();
   }
