@@ -195,13 +195,13 @@ a {
 }
 
 .portfolio {
-    padding-top: 68px;
+    padding-top: 100px;
     padding-bottom: 86px;
 }
 
 .portfolio .grid > .subtitle {
     margin-top: 36px;
-    margin-bottom: 68px;
+    margin-bottom: 100px;
 }
 
 
@@ -253,7 +253,7 @@ a {
     background-color:#ffffff;
     width:100%;
     text-align:center;
-    margin-top: 68px;
+    margin-top: 100px;
 }
 
 #product h1 {
@@ -294,8 +294,8 @@ a {
 }
 
 #FAQ {
-    padding-top: 68px;
-    padding-bottom: 68px;
+    padding-top: 100px;
+    padding-bottom: 86px;
     width:100%;
 
 }
@@ -354,8 +354,8 @@ top: 2px;
 
 #newsletter {
     width:100%;
-    padding-top: 68px;
-    padding-bottom: 68px;
+    padding-top: 100px;
+    padding-bottom: 125px;
     text-align: center;
     -moz-box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);;
     -webkit-box-shadow: 0 2px 14px -14px rgba(209, 209, 209, 0.5);
@@ -964,7 +964,7 @@ top: 2px;
     align-items: center;
     justify-content: center;
 
-    margin-left: calc((3px + (15 - 3) * ((100vw - 768px) / (1590 - 768))));
+    margin-left: calc((3px + (18 - 3) * ((100vw - 768px) / (1590 - 768))));
     margin-top: calc(-1 * (140px + (350 - 140) * ((100vw - 768px) / (1920 - 768))));
 
     position: relative;
@@ -973,7 +973,7 @@ top: 2px;
 
 @media (min-width: 1591px) {
     .pw-logo {
-        margin-left: 15px;
+        margin-left: 18px;
     }
 }
 
@@ -1008,7 +1008,7 @@ top: 2px;
 @media (min-width: 1591px) {
     .pw-logo-subline {
         font-size: 35px;
-        margin-tip: 20px;
+        margin-top: 20px;
     }
 }
 

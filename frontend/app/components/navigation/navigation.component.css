@@ -433,5 +433,8 @@ a:not([href]) {
 
 #header.startpage a {
     color: white;
-    font-size: 18px;
+}
+
+.current a {
+    font-weight: 700;
 }
