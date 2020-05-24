@@ -881,7 +881,7 @@ top: 2px;
 .pw-welle {
     z-index: 2000;
 
-    margin-top: calc(-1 * (168px + (350 - 170) * ((100vw - 768px) / (1590 - 768))));
+    margin-top: calc(-1 * (165px + (350 - 165) * ((100vw - 768px) / (1590 - 768))));
 
     position: relative;
 }
@@ -895,37 +895,65 @@ top: 2px;
 .pw-welle svg {
     width: 100%;
     height: auto;
+
+    transform: translate3d(0,0,0);
 }
 
+#line1w, #line2w {
+    will-change: transform;
+    animation: scale 5s linear infinite alternate-reverse;
+    transform-origin: center center;
+    backface-visibility: hidden;
+    perspective: 1000;
+}
+#line2w {
+    animation-duration: 7s;
+}
 #line1 {
     will-change: transform;
     animation: dash1 280s linear infinite;
     transform-origin: center center;
+    backface-visibility: hidden;
+    perspective: 1000;
 }
 #line2 {
     will-change: transform;
     animation: dash2 240s linear infinite;
     transform-origin: left;
+    backface-visibility: hidden;
+    perspective: 1000;
 }
 
 
 
 @keyframes dash1 {
     0% {
-        transform: translateX(0);
+        transform: translate3d(0,0,0);
     }
 
     100% {
-        transform:  translateX(9922px);
+        transform:  translate3d(9922px,0,0);
     }
 }
 
+
+@keyframes scale {
+    0% {
+        transform: scaleY(1);
+    }
+
+    100% {
+        transform:  scaleY(0.6);
+    }
+}
+
+
 @keyframes dash2 {
     0% {
-        transform: translateX(0);
+        transform: translate3d(0,0,0);
     }
     100% {
-        transform:  translateX(12857px);
+        transform:  translate3d(12857px,0,0);
     }
 }
 
