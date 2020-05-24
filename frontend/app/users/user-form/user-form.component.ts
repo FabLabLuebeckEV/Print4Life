@@ -123,7 +123,7 @@ export class UserFormComponent implements OnInit {
       this.modalService.openMsgModal(
         'Vornamen prüfen',
         'modal-header',
-        ['Bitte geben sie einen Vornamen ein.'],
+        ['Bitte geben Sie einen Vornamen ein.'],
         okButton,
         undefined
       );
@@ -132,7 +132,7 @@ export class UserFormComponent implements OnInit {
       this.modalService.openMsgModal(
         'Nachname prüfen',
         'modal-header',
-        ['Bitte geben sie einen Nachname ein.'],
+        ['Bitte geben Sie einen Nachnamen ein.'],
         okButton,
         undefined
       );
@@ -141,7 +141,7 @@ export class UserFormComponent implements OnInit {
       this.modalService.openMsgModal(
         'Stadt prüfen',
         'modal-header',
-        ['Bitte geben sie eine Stadt ein.'],
+        ['Bitte geben Sie eine Stadt ein.'],
         okButton,
         undefined
       );
@@ -150,7 +150,7 @@ export class UserFormComponent implements OnInit {
       this.modalService.openMsgModal(
         'PLZ prüfen',
         'modal-header',
-        ['Bitte geben sie eine PLZ ein.'],
+        ['Bitte geben Sie eine PLZ ein.'],
         okButton,
         undefined
       );
@@ -159,7 +159,7 @@ export class UserFormComponent implements OnInit {
       this.modalService.openMsgModal(
         'E-Mail-Adresse prüfen',
         'modal-header',
-        ['Bitte geben sie eine gültige E-Mail-Adresse ein.'],
+        ['Bitte geben Sie eine gültige E-Mail-Adresse ein.'],
         okButton,
         undefined
       );
