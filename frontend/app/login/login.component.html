@@ -9,7 +9,7 @@
             <div class="email">
                 <mat-form-field appearance="outline" color="warn" >
                     <mat-label>Email* </mat-label>
-                    <input matInput placeholder="" (keyup.enter)="login()" [(ngModel)]="loginData.email"/>
+                    <input matInput placeholder="" name="username" (keyup.enter)="login()" [(ngModel)]="loginData.email"/>
                 </mat-form-field>
                 <!--
                     <input type="text" placeholder="Email*" [(ngModel)]="loginData.username" (keyup.enter)="login()">
@@ -19,7 +19,7 @@
             <div class="password">
                 <mat-form-field appearance="outline" color="warn" >
                     <mat-label>Passwort* </mat-label>
-                    <input type="password" matInput placeholder="" (keyup.enter)="login()" [(ngModel)]="loginData.password"/>
+                    <input type="password" matInput name="password" placeholder="" (keyup.enter)="login()" [(ngModel)]="loginData.password"/>
                 </mat-form-field>
             </div>
         </div>
