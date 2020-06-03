@@ -1013,7 +1013,7 @@ top: 2px;
 }
 
 .pw-top-container {
-    max-width: 520px;
+    max-width: 555px;
     width: 100%;
     margin: 0 auto 50px auto;
 }
@@ -1100,3 +1100,47 @@ top: 2px;
     }
 }
 
+
+.pw-logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    margin: 100px 0;
+}
+
+.pw-logo-wrap {
+    width: auto;
+    max-width: 90%;
+
+    margin-bottom: 70px;
+}
+
+
+.pw-logo-headline{
+    text-align: center;
+    margin-bottom: 70px;
+    font-size: 20px;
+}
+
+.pw-logo-wrap:not(:last-child) {
+   margin-right: 120px;
+}
+
+
+@media (max-width: 768px) {
+    .pw-logo-wrap:not(:last-child) {
+        margin-right: 0;
+     }
+
+     .pw-logo-wrap {
+         width: 100%;
+         padding: 0 20px;
+     }
+
+
+.pw-logo-wrap img {
+    max-width: 100%;
+}
+
+}

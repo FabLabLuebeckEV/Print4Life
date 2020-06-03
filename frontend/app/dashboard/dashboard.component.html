@@ -8,7 +8,7 @@
 
         <div class="pw-cloud-wrapper-left">
 
-            <h3 class="pw-cloud-headline">Erstellung von Hilfsgütern</h3>
+            <h3 class="pw-cloud-headline">Herstellung von Hilfsgütern</h3>
 
             <ul class="pw-cloud pw-cloud-left">
                 <li class="pw-cloud-font-1 pw-cloud-line pw-cloud-line-1"><span>Vereine</span></li>
@@ -54,23 +54,44 @@
 
 <div class="pw-top-container">
     <p class="mb-50">
-        print4life führt Maker und Suchende zusammen, um <strong>Lücken in der Versorgung</strong> zu schließen, welche durch <strong>3D-gedruckte oder genähte Teile</strong> überbrückt werden können.
+        print4life ist eine Verwaltungsplattform, die deutschlandweit die Herstellung von Hilfsgütern und den Bedarf an diesen zusammenführt. 
+        Mit print4life schließen wir die Lücken in der Versorgung durch <strong>3D-gedruckte und genähte Teile</strong>. 
+        Die Herstellung wird von unseren Mitgliedern <strong>ehrenamtlich</strong> geleistet. Der Auftraggeber mit Bedarf an Hilfsgütern trägt lediglich den <strong>Materialpreis und die Versandkosten</strong>. 
     </p>
     <ul class="mb-50 list-with-arrows">
-        <li><strong>Du bist ein Maker </strong>mit Zugriff auf einen 3D-Drucker oder eine Nähmaschine?</li>
-        <li><strong>Du arbeitest im Gesundheitswesen oder systemrelevanten Beruf </strong>und benötigst dringend Versorgungsgüter?</li>
+        <li style="margin-bottom: 40px;"><strong>Du möchtest bei der Herstellung unterstützen</strong> und hast Zugriff auf einen 3D-Drucker oder eine Nähmaschine?</li>
+        <li><strong>Du arbeitest im Gesundheitswesen, Schulwesen oder systemrelevanten Beruf</strong> und benötigst dringend Versorgungsgüter?</li>
     </ul>
     <p class="text-center">
-        Melde dich unverbindlich an.
+        Melde Dich unverbindlich an.
     </p>
 
 </div>
 
-<div class="pw-top-buttons">
-    <button mat-raised-button color="primary" (click)="register('maker')">Als Maker registrieren</button>
-    <button mat-raised-button color="accent" (click)="register('klinik')">Als Suchender registrieren</button>
+<div class="pw-top-buttons " style="margin-bottom: 150px;">
+    <button mat-raised-button color="primary" (click)="register('maker')">Ich möchte helfen</button>
+    <button mat-raised-button color="accent" (click)="register('klinik')">Ich habe Bedarf</button>
 </div>
 
+
+<div class="pw-logos">
+
+<div class="pw-logo-wrap">
+    <h4 class="pw-logo-headline">Top 20 Projekt des</h4>
+    <img src="/assets/img/startseite/neu/logo_hackathon.png" width="280">
+</div>
+
+<div class="pw-logo-wrap">
+    <h4 class="pw-logo-headline">Gefördert vom</h4>
+    <img src="/assets/img/startseite/neu/logo_bmfbf.png" width="228">
+</div>
+
+<div class="pw-logo-wrap">
+    <h4 class="pw-logo-headline">Ein Projekt des</h4>
+    <img src="/assets/img/startseite/neu/logo_fablab.png" width="244">
+</div>
+
+</div>
 <hr class="pw-divider">
 
 <div id="howto" style="margin-bottom: 50px;">
@@ -83,8 +104,8 @@
             <div class="howto-list center-text howto-basic">
                 <div class="maker-text">
                     <ul class="list-with-checkmarks">
-                        <li><a [routerLink]="[registrationRoute+'/maker']">Registriere dich</a></li>
-                        <li>Bestätige deine E-Mail-Adresse</li>
+                        <li><a [routerLink]="[registrationRoute+'/maker']">Registriere Dich</a></li>
+                        <li>Bestätige Deine E-Mail-Adresse</li>
                         <li class="normal-text no-icon">Los geht's!</li>
                     </ul>
                 </div>
@@ -93,8 +114,8 @@
                 Du siehst eine Übersicht von angeforderten Aufträgen.
                 <div class="maker-text">
                     <ul class="list-with-arrows-small">
-                        <li><a [routerLink]="[registrationRoute+'/maker']">Suche dir einen Auftrag aus</a></li>
-                        <li>Lege fest, wie viele Hilfsgüter du innerhalb der <strong>nächsten 2 Tage</strong> zum Gesamtvolumen des Auftrags beisteuern kannst</li>
+                        <li><a [routerLink]="[registrationRoute+'/maker']">Suche Dir einen Auftrag aus</a></li>
+                        <li>Lege fest, wie viele Hilfsgüter Du innerhalb der <strong>nächsten 2 Tage</strong> zum Gesamtvolumen des Auftrags beisteuern kannst</li>
                     </ul>
                 </div>
                 <div class="center-text">
@@ -103,7 +124,7 @@
             </div>
 
             <div class="howto-list">
-                In deiner Übersicht kannst du einsehen, an welchen Aufträgen du beteiligt bist.
+                In Deiner Übersicht kannst Du einsehen, an welchen Aufträgen Du beteiligt bist.
                 <div class="maker-text">
                     <ul class="list-with-arrows-small">
                         <li>Fertige die angegebenen Hilfsgüter an</li>
@@ -119,7 +140,7 @@
                 <div class="maker-text">
                     <ul class="list-with-arrows-small">
                         <li>Schicke sie <strong>mit der Post </strong>zur angegebenen Adresse</li>
-                        <li>Setze deinen Auftrag auf "<strong>erledigt</strong>"</li>
+                        <li>Setze Deinen Auftrag auf "<strong>Erledigt</strong>"</li>
                     </ul>
                 </div>
                 <div class="center-text">
@@ -128,7 +149,7 @@
             </div>
             <h1>Fertig!</h1>
             <div class="howto-list center-text">
-                Hast du noch freie Kapazitäten?
+                Hast Du noch freie Kapazitäten?
                  <div class="maker-text">
                      <ul>
                         <li><a [routerLink]="[registrationRoute+'/maker']">Nimm gerne weitere Aufträge an.</a></li>
@@ -145,27 +166,28 @@
             <div class="howto-list center-text howto-basic">
                 <div class="clinic-text">
                     <ul class="list-with-checkmarks">
-                        <li class="icon--red"><a [routerLink]="[registrationRoute+'/klinik']">Registriere dich</a></li>
-                        <li class="icon--red">Bestätige deine E-Mail-Adresse</li>
-                        <li class="normal-text icon--blue">Innerhalb von 24 Stunden wirst du von print4life <strong>verifiziert</strong> und für Aufträge <strong>freigeschaltet.</strong></li>
+                        <li class="icon--red"><a [routerLink]="[registrationRoute+'/klinik']">Registriere Dich</a></li>
+                        <li class="icon--red">Bestätige Deine E-Mail-Adresse</li>
                         <li class="normal-text no-icon">  Los geht's! </li>
                     </ul>
                 </div>
 
             </div>
             <div class="howto-list">
-                Du siehst eine Übersicht deiner Aufträge.
+                Du siehst eine Übersicht von Produkten.
                 <div class="clinic-text">
                     <ul class="list-with-arrows-small list-with-arrows-small--red">
-                        <li><a [routerLink]="[registrationRoute+'/klinik']">Lege einen Auftrag an.</a></li>
+                        <li><a [routerLink]="[registrationRoute+'/klinik']">Wähle Dein Produkt aus</a></li>
+                        <li>Gib an, wie viele Hilfsgüter dieser Art Du benötigst und schicke Deinen Auftrag ab</li>
                      </ul>
                 </div>
+                Innerhalb von 24 Stunden wirst Du <strong>verifiziert</strong> und Dein Auftrag <strong>freigeschaltet</strong>.
                 <div class="center-text">
                     <img id="howto-image-order" src="/assets/img/howtoIllustrationen/print4life-Klinik-Druckauftrag.png" alt="Druckauftrag">
                 </div>
             </div>
             <div class="howto-list">
-                Du kannst jederzeit einsehen, wie viele Maker an deinem Auftrag arbeiten und wie viele Hilfsgüter-Pakete bereits fertig gestellt wurden.
+                Du kannst jederzeit einsehen, wie viele Maker an Deinem Auftrag arbeiten und wie viele Hilfsgüter-Pakete bereits fertig gestellt wurden.
 
                 <div class="center-text">
                     <img id="howto-image-wait" src="/assets/img/howtoIllustrationen/print4life-Klinik-mitverfolgen.png" alt="Bestellverlauf verfolgen">
@@ -173,7 +195,7 @@
             </div>
 
             <div class="howto-list">
-               Die Hilfsgüter bekommst du direkt von den Makern per Post an deine angegebene Lieferadresse geschickt.
+               Die Hilfsgüter bekommst Du direkt von den Makern per Post an Deine angegebene Lieferadresse geschickt.
                 <div class="center-text">
                     <img id="howto-image-receive" src="/assets/img/howtoIllustrationen/print4life-Klinik-Post.png" alt="Sendung empfangen">
                 </div>
@@ -207,7 +229,7 @@
                 <div class="part col-12 col-md-6 col-lg-3">
                     <h1 class="maker">Maker</h1>
                     <div>
-                        Dein <b>Know-How</b> und deine Maschine(n) für Aufträge zur Verfügung stellen
+                        Dein <b>Know-How</b> und Deine Maschine(n) für Aufträge zur Verfügung stellen
                     </div>
                 </div>
                 <div class="part col-12 col-md-6 col-lg-3">
@@ -219,13 +241,13 @@
                 <div class="part col-12 col-md-6 col-lg-3">
                     <h1 class="klinik">Arztpraxis</h1>
                     <div>
-                        Schutzkleidung und Hilfsgüter für dein <b>medizinisches Personal</b>
+                        Schutzkleidung und Hilfsgüter für Dein <b>medizinisches Personal</b>
                     </div>
                 </div>
                 <div class="part col-12 col-md-6 col-lg-3">
                     <h1 class="klinik">Apotheke</h1>
                     <div>
-                        Schutzkleidung und Hilfsgüter für dein <b>pharmazeutisches Personal</b>
+                        Schutzkleidung und Hilfsgüter für Dein <b>pharmazeutisches Personal</b>
                     </div>
                 </div>
             </div>
@@ -233,7 +255,7 @@
                 <div class="part col-12 col-md-6 col-lg-3">
                     <h1 class="maker">Näher*in</h1>
                     <div>
-                        Dein <b>Know-How</b> und deine Maschine(n) für Aufträge zur Verfügung stellen
+                        Dein <b>Know-How</b> und Deine Maschine(n) für Aufträge zur Verfügung stellen
                     </div>
                 </div>
                 <div class="part col-12 col-md-6 col-lg-3">
@@ -245,13 +267,13 @@
                 <div class="part col-12 col-md-6 col-lg-3">
                     <h1 class="klinik">Klinik</h1>
                     <div>
-                        Schutzkleidung und Hilfsgüter für dein <b>medizinisches Personal</b>
+                        Schutzkleidung und Hilfsgüter für Dein <b>medizinisches Personal</b>
                     </div>
                 </div>
                 <div class="part col-12 col-md-6 col-lg-3">
                     <h1 class="klinik">Altenpflege</h1>
                     <div>
-                        Schutzkleidung und Hilfsgüter für dein <b>medizinisches Personal</b>
+                        Schutzkleidung und Hilfsgüter für Dein <b>medizinisches Personal</b>
                     </div>
                 </div>
             </div>
@@ -272,23 +294,23 @@
                 <div class="part col-12 col-md-6 col-lg-3">
                     <h1 class="klinik">Supermarkt</h1>
                     <div>
-                        Schutzkleidung und Hilfsgüter für dein <b>systemrelevantes Personal</b>
+                        Schutzkleidung und Hilfsgüter für Dein <b>systemrelevantes Personal</b>
                     </div>
                 </div>
                 <div class="part col-12 col-md-6 col-lg-3">
                     <h1 class="klinik">Notbetreuung</h1>
                     <div>
-                        Schutzkleidung und Hilfsgüter für dein*e <b>Erzieher*innen von Kindergärten & Schulen</b>
+                        Schutzkleidung und Hilfsgüter für Dein*e <b>Erzieher*innen von Kindergärten & Schulen</b>
                     </div>
                 </div>
             </div>
         </div>
         <div class="signup_buttons indent-left indent-right">
             <div class="col-12 col-md-6">
-                <button mat-raised-button color="primary" (click)="register('maker')">Als Maker registrieren</button>
+                <button mat-raised-button color="primary" (click)="register('maker')">Ich möchte helfen</button>
             </div>
             <div class="col-12 col-md-6">
-                <button mat-raised-button color="accent" (click)="register('klinik')">Als Suchender registrieren</button>
+                <button mat-raised-button color="accent" (click)="register('klinik')">Ich habe Bedarf</button>
             </div>
         </div>
     </div>
@@ -356,7 +378,7 @@
         <div class="large-indent-right large-indent-left">
             <h1>Und es wird laufend mehr</h1>
             <div class="community-text">
-                Hast du STL-Dateien, Anleitungen oder Schnittmuster? Teile sie mit der Community und stelle sie zum Nachmachen zur Verfügung!
+                Hast Du STL-Dateien, Anleitungen oder Schnittmuster? Teile sie mit der Community und stelle sie zum Nachmachen zur Verfügung!
             </div>
             <div class="community-button">
                 <button mat-raised-button color="primary" [routerLink]="[contactLink]" fragment="{{contactFragment}}">Kontaktiere uns</button>
@@ -372,7 +394,8 @@
             <h1 class="neutral">Wie setzen sich die Kosten für Suchende zusammen?</h1>
             <div class="text-faq">
                 <ul>
-                    <li>Die Suchenden zahlen den Makern die Materialkosten, Versandkosten und einen geringen Prozentsatz für die Abnutzung der Maschinen aus. Dies wird im Vorhinein berechnet und ist als Aufwandsentschädigung bei verfügbaren Teilen anzusehen.</li>
+                    <li>Die Suchenden zahlen den Makern die Materialkosten, Versandkosten und einen geringen Prozentsatz für die Abnutzung der Maschinen aus. 
+                        Dies wird im Vorhinein berechnet und ist als Aufwandsentschädigung bei verfügbaren Teilen anzusehen.</li>
                 </ul>
             </div>
         </div>
@@ -380,7 +403,8 @@
             <h1 class="neutral">Wie kann ich helfen dieses Projekt bekannt zu machen?</h1>
             <div class="text-faq">
                 <ul>
-                    <li>Je größer die Community ist, desto mehr können wir schaffen. Uns hilft alles: Berichte in der Presse, in Newslettern, auf Social Media. Auf <a [routerLink]="[pressRoute]">Presse</a> findest du Material, das bei Bedarf verwendet, weitergegeben und veröffentlicht werden darf. </li>
+                    <li>Je größer die Community ist, desto mehr können wir schaffen. Uns hilft alles: Berichte in der Presse, in Newslettern, auf Social Media. 
+                        Auf <a [routerLink]="[pressRoute]">Presse</a> findest Du Material, das bei Bedarf verwendet, weitergegeben und veröffentlicht werden darf. </li>
                 </ul>
             </div>
 
