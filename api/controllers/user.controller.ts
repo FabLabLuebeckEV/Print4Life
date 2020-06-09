@@ -159,6 +159,18 @@ async function create (req, res) {
  */
 async function update (req, res) {
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+
+    authorized = ownUser && (ownUser.role.role === 'admin' || ownUser.id === req.params.id);
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   if (checkId) {
     logger.error(checkId.error);
     return res.status(checkId.status).send(checkId.error);
@@ -246,6 +258,18 @@ async function update (req, res) {
  *
  */
 async function deleteById (req: Request, res: Response) {
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+
+    authorized = ownUser && (ownUser.role.role === 'admin' || ownUser.id === req.params.id);
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   const error: IError = {
     name: 'SERVER_ERROR',
     message: 'Fehler beim löschen des Kontos!',
@@ -505,34 +529,46 @@ async function deleteById (req: Request, res: Response) {
       ]
     }
 */
-function search (req, res) {
+async function search (req, res) {
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+    // TODO: AwaitFehler
+    authorized = ownUser && (ownUser.role.role === 'admin');
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   userService.search(req.body.query, req.body.limit, req.body.skip).then((users) => {
     if (users.length === 0) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
-      res.status(204).send();
-    } else if (req.body.limit && req.body.skip) {
+      return res.status(204).send();
+    } if (req.body.limit && req.body.skip) {
       logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} `
         + `holds partial results ${JSON.stringify(users)}`);
-      res.status(206).send({ users });
-    } else {
-      logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
+      return res.status(206).send({ users });
+    }
+    logger.info(`POST search for users with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} `
         + `holds results ${JSON.stringify(users)}`);
-      res.status(200).send({ users });
-    }
+    return res.status(200).send({ users });
   }).catch((err) => {
     logger.error({
       error: `Fehler bei der Suche des Kontos mit der Query: ${JSON.stringify(req.body.query)}`,
       stack: err
     });
-    res.status(500).send({
+    return res.status(500).send({
       error: `Fehler bei der Suche des Kontos mit der Query: ${JSON.stringify(req.body.query)}`,
       stack: err
     });
   });
+  return undefined;
 }
 
 /**
@@ -571,15 +607,28 @@ function search (req, res) {
       }
   }
  */
-function count (req, res) {
+async function count (req, res) {
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+
+    authorized = ownUser && (ownUser.role.role === 'admin');
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   userService.count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
-    res.status(200).send({ count });
+    return res.status(200).send({ count });
   }).catch((err) => {
     logger.error({ error: 'Fehler beim zählen der Konten!', err });
-    res.status(500).send({ error: 'Fehler beim zählen der Konten!', err });
+    return res.status(500).send({ error: 'Fehler beim zählen der Konten!', err });
   });
+  return undefined;
 }
 
 /**
@@ -904,13 +953,17 @@ async function get (req, res) {
       if (req.headers.authorization) {
         const token = req.headers.authorization.split('JWT')[1].trim();
         const ownUser = await userService.getUserByToken(token);
-
-        authorized = ownUser && (ownUser.role.role === 'admin' || ownUser.role.role === 'editor');
+        logger.error('++++++++++++++++++++++++++++');
+        logger.error(ownUser.id);
+        logger.error(user.id);
+        logger.error(`${ownUser.id === user.id} .`);
+        authorized = ownUser && (ownUser.role.role === 'admin' || ownUser.id === user.id);
       }
 
       if (!authorized) {
-        delete user.address;
-        user.address = undefined;
+        const msg = { error: '401 Unauthorizeddd' };
+        logger.error(msg);
+        return res.status(401).send(msg);
       }
 
       return res.status(200).send({ user });
@@ -982,6 +1035,18 @@ async function get (req, res) {
 async function getNames (req, res) {
   const fablabService = new FablabService();
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+
+    authorized = ownUser && (ownUser.role.role === 'admin' || ownUser.id === req.params.id);
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   if (checkId) {
     logger.error(checkId.error);
     return res.status(checkId.status).send(checkId.error);
@@ -1296,6 +1361,18 @@ async function changePassword (req, res) {
   if (checkId) {
     logger.error(checkId.error);
     return res.status(checkId.status).send(checkId.error);
+  }
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+
+    authorized = ownUser && (ownUser.role.role === 'admin' || ownUser.id === req.params.id);
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
   }
   try {
     const user = await userService.get(req.params.id);

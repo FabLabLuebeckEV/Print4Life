@@ -30,6 +30,18 @@ async function get (req, res) {
     logger.error(checkId.error);
     return res.status(checkId.status).send(checkId.error);
   }
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+
+    authorized = ownUser;
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   try {
     const hospital = await hospitalService.get(req.params.id);
     if (!hospital) {
@@ -53,7 +65,7 @@ async function create (req, res) {
   // TODO check wether user already is part of a hospital
   hospitalService.create(req.body)
     .then((hospital) => {
-      logger.info(`POST Hablab with result ${JSON.stringify(hospital)}`);
+      logger.info(`POST Hospital with result ${JSON.stringify(hospital)}`);
       res.status(201).send({ hospital });
     })
     .catch((err) => {
@@ -65,23 +77,34 @@ async function create (req, res) {
 
 async function search (req, res) {
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+    authorized = ownUser;
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   hospitalService.getAll(req.body.query, req.body.limit, req.body.skip).lean().then((hospitals) => {
     if (hospitals.length === 0) {
       logger.info(`POST search for hospitals with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
-      res.status(204).send({ hospitals });
-    } else if (req.body.limit && req.body.skip) {
+      return res.status(204).send({ hospitals });
+    } if (req.body.limit && req.body.skip) {
       logger.info(`POST search for hospitals with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} `
         + `holds partial results ${JSON.stringify(hospitals)}`);
-      res.status(206).send({ hospitals });
-    } else {
-      logger.info(`POST search for hospitals with query ${JSON.stringify(req.body.query)}, `
+      return res.status(206).send({ hospitals });
+    }
+    logger.info(`POST search for hospitals with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} `
         + `holds results ${JSON.stringify(hospitals)}`);
-      res.status(200).send({ hospitals });
-    }
+    return res.status(200).send({ hospitals });
   });
+  return undefined;
 }
 
 
@@ -89,8 +112,6 @@ async function update (req, res) {
   // check admin permissions, see #178
   const token = req.headers.authorization.split('JWT')[1].trim();
   const user = await userService.getUserByToken(token);
-
-
   const checkId = validatorService.checkId(
     req.params && req.params.id ? req.params.id : undefined
   );
@@ -128,12 +149,6 @@ async function update (req, res) {
 async function deleteById (req, res) {
   const token = req.headers.authorization.split('JWT')[1].trim();
   const user = await userService.getUserByToken(token);
-
-  if (user.role.role !== 'admin') {
-    const msg = { err: 'FORBIDDEN', message: 'User can not update Hospitals!' };
-
-    return res.status(403).send(msg);
-  }
   const checkId = validatorService.checkId(
     req.params && req.params.id ? req.params.id : undefined
   );
@@ -142,7 +157,17 @@ async function deleteById (req, res) {
     return res.status(checkId.status).send(checkId.error);
   }
   try {
-    const hospital = await hospitalService.deleteById(req.params.id);
+    let hospital = await hospitalService.get(req.params.id);
+    if (!hospital) {
+      const msg = { error: `Hospital by id '${req.params.id}' not found` };
+      logger.error(msg);
+      return res.status(404).send(msg);
+    }
+    if (hospital.owner !== user._id && (user.role.role !== 'admin')) {
+      const msg = { err: 'FORBIDDEN', message: 'User doesn\'t own this hospital!' };
+      return res.status(403).send(msg);
+    }
+    hospital = await hospitalService.deleteById(req.params.id);
     logger.info(`DELETE Hospital with result ${JSON.stringify(hospital)}`);
     return res.status(200).send({ hospital });
   } catch (err) {
@@ -152,6 +177,17 @@ async function deleteById (req, res) {
 }
 
 async function activate (req, res) {
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+    authorized = ownUser && (ownUser.role.role === 'admin');
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);

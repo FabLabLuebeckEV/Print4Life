@@ -127,23 +127,34 @@ const userService = new UserService();
     }
 * @apiPermission none
 */
-function getAll (req, res) {
+async function getAll (req, res) {
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+    authorized = ownUser;
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   req.query = validatorService.checkQuery(req.query, searchableTextFields);
   orderService.getAll(undefined, req.query.limit, req.query.skip).then((orders) => {
     if (orders.length === 0) {
       logger.info('GET Orders without result');
-      res.status(204).send();
-    } else if (req.query.limit && req.query.skip) {
+      return res.status(204).send();
+    } if (req.query.limit && req.query.skip) {
       logger.info(`GET Orders with partial result ${JSON.stringify(orders)}`);
-      res.status(206).send({ orders });
-    } else {
-      logger.info(`GET Orders with results ${JSON.stringify(orders)}`);
-      res.status(200).send({ orders });
+      return res.status(206).send({ orders });
     }
+    logger.info(`GET Orders with results ${JSON.stringify(orders)}`);
+    return res.status(200).send({ orders });
   }).catch((err) => {
     logger.error({ error: 'Error while trying to get all orders!', stack: err });
-    res.status(500).send({ error: 'Error while trying to get all orders!', stack: err });
+    return res.status(500).send({ error: 'Error while trying to get all orders!', stack: err });
   });
+  return undefined;
 }
 
 /**
@@ -202,9 +213,16 @@ function getAll (req, res) {
 */
 async function search (req, res) {
   let user;
+  let authorized = false;
   if (req.headers.authorization) {
     const token = req.headers.authorization.split('JWT')[1].trim();
     user = await userService.getUserByToken(token);
+    authorized = user;
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
   }
 
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
@@ -232,28 +250,28 @@ async function search (req, res) {
     if (orders.length === 0) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} holds no results`);
-      res.status(204).send({ orders });
-    } else if (req.body.limit && req.body.skip) {
+      return res.status(204).send({ orders });
+    } if (req.body.limit && req.body.skip) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} `
         + `holds partial results ${JSON.stringify(orders)}`);
-      res.status(206).send({ orders });
-    } else {
-      logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
+      return res.status(206).send({ orders });
+    }
+    logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
         + `limit ${req.body.limit} skip ${req.body.skip} `
         + `holds results ${JSON.stringify(orders)}`);
-      res.status(200).send({ orders });
-    }
+    return res.status(200).send({ orders });
   }).catch((err) => {
     logger.error({
       error: `Error while trying to search for a specific order with query: ${JSON.stringify(req.body.query)}`,
       stack: err
     });
-    res.status(500).send({
+    return res.status(500).send({
       error: `Error while trying to search for a specific order with query: ${JSON.stringify(req.body.query)}`,
       stack: err
     });
   });
+  return undefined;
 }
 
 /**
@@ -294,15 +312,27 @@ async function search (req, res) {
   }
 * @apiPermission none
 */
-function count (req, res) {
+async function count (req, res) {
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+    authorized = ownUser;
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   req.body.query = validatorService.checkQuery(req.body.query, searchableTextFields);
   orderService.count(req.body.query).then((count) => {
     logger.info(`POST count with result ${JSON.stringify(count)}`);
-    res.status(200).send({ count });
+    return res.status(200).send({ count });
   }).catch((err) => {
     logger.error({ error: 'Error while counting orders!', err });
-    res.status(500).send({ error: 'Error while counting orders!', err });
+    return res.status(500).send({ error: 'Error while counting orders!', err });
   });
+  return undefined;
 }
 
 /**
@@ -378,14 +408,26 @@ function count (req, res) {
   }
  * @apiPermission none
  */
-function create (req, res) {
+async function create (req, res) {
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+    authorized = ownUser.role.role === 'user';
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   orderService.create(req.body).then((order) => {
     logger.info(`POST Order with result ${JSON.stringify(order)}`);
-    res.status(201).send({ order });
+    return res.status(201).send({ order });
   }).catch((err) => {
     logger.error({ error: 'Malformed order, one or more parameters wrong or missing', stack: err });
-    res.status(400).send({ error: 'Malformed order, one or more parameters wrong or missing', stack: err });
+    return res.status(400).send({ error: 'Malformed order, one or more parameters wrong or missing', stack: err });
   });
+  return undefined;
 }
 
 /**
@@ -586,8 +628,9 @@ async function update (req, res) {
 async function deleteById (req, res) {
   const token = req.headers.authorization.split('JWT')[1].trim();
   const user = await userService.getUserByToken(token);
+  const order = await orderService.get(req.params.id);
 
-  if (user.role.role !== 'editor' && user.role.role !== 'admin') {
+  if (user.role.role !== 'editor' && user.role.role !== 'admin' && user.id !== order.owner) {
     const msg = {
       err: 'FORBIDDEN',
       message: 'User can not delete orders!'
@@ -647,19 +690,30 @@ async function deleteById (req, res) {
   }
  * @apiPermission none
  */
-function getStatus (req, res) {
+async function getStatus (req, res) {
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+    authorized = ownUser;
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   orderService.getStatus().then((status) => {
     if (!status) {
       logger.info('GET status without result');
-      res.status(204).send();
-    } else {
-      logger.info(`GET status with result ${JSON.stringify(status)}`);
-      res.status(200).send({ status });
+      return res.status(204).send();
     }
+    logger.info(`GET status with result ${JSON.stringify(status)}`);
+    return res.status(200).send({ status });
   }).catch((err) => {
     logger.error({ error: 'Error while trying to get all valid status!', stack: err });
-    res.status(500).send({ error: 'Error while trying to get all valid status!', stack: err });
+    return res.status(500).send({ error: 'Error while trying to get all valid status!', stack: err });
   });
+  return undefined;
 }
 
 /**
@@ -783,6 +837,17 @@ function getOutstandingStatus (req, res) {
  * @apiPermission loggedIn
  */
 async function createComment (req, res) {
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+    authorized = ownUser;
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
@@ -880,6 +945,17 @@ async function createComment (req, res) {
  * @apiPermission none (owner for address)
  */
 async function get (req, res) {
+  let authorized = false;
+  if (req.headers.authorization) {
+    const token = req.headers.authorization.split('JWT')[1].trim();
+    const ownUser = await userService.getUserByToken(token);
+    authorized = ownUser;
+  }
+  if (!authorized) {
+    const msg = { error: '401 Unauthorized' };
+    logger.error(msg);
+    return res.status(401).send(msg);
+  }
   const checkId = validatorService.checkId(req.params && req.params.id ? req.params.id : undefined);
   if (checkId) {
     logger.error(checkId.error);
