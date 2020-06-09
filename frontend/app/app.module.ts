@@ -79,6 +79,7 @@ import { ShippingDetailsComponent } from './orders/shipping-details/shipping-det
 import { HospitalActivationComponent } from './hospitals/hospital-activation/hospital-activation.component';
 import { PressComponent } from './press/press.component';
 import { NavigationService } from './services/navigation.service';
+import { AllOrdersComponent } from './orders/all-orders/all-orders.component';
 
 @NgModule({
     declarations: [
@@ -98,6 +99,7 @@ import { NavigationService } from './services/navigation.service';
         CompleteOrderComponent,
         OpenOrdersComponent,
         AcceptedOrdersComponent,
+        AllOrdersComponent,
         OrderGridComponent,
         UserFormComponent,
         BackButtonComponent,

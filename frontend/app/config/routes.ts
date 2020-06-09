@@ -112,6 +112,7 @@ export const routes = {
                 activate: 'activate'
             },
             orders: {
+                all: 'all',
                 root: 'orders',
                 create: 'create',
                 update: 'update',

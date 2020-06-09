@@ -26,6 +26,8 @@ export class OrderGridComponent implements OnInit, OnChanges {
   orders: Array<any>;
   @Output()
   reload: EventEmitter<any> = new EventEmitter();
+  @Output()
+  filterChanged: EventEmitter<any> = new EventEmitter();
 
   doughnutChartLabels: Label[] = [
     'Offen',
@@ -82,7 +84,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
 
   filter() {
     if (this.filterStatus) {
-
+      this.filterChanged.emit(this.filterStatus);
     }
   }
 
