@@ -25,9 +25,9 @@ const attributes = {
   },
   files: [fileSchema],
   status: {
-    enum: ['new', 'assigned', 'production', 'shipment', 'archived', 'completed', 'representive', 'deleted'],
+    enum: ['open', 'in progress', 'closed'],
     type: String,
-    default: 'new',
+    default: 'open',
     required: true
   },
   token: {
