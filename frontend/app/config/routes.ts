@@ -112,7 +112,14 @@ export const routes = {
                 activate: 'activate'
             },
             orders: {
-                all: 'all',
+                all: {
+                    root: 'all',
+                    my: 'my',
+                    open: 'open',
+                    in_progress: 'in_progress',
+                    closed: 'closed',
+                    all: 'all'
+                },
                 root: 'orders',
                 create: 'create',
                 update: 'update',

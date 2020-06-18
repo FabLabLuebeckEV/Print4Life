@@ -24,6 +24,8 @@ import { HospitalService } from 'frontend/app/services/hospital.service';
 export class OrderGridComponent implements OnInit, OnChanges {
   @Input()
   orders: Array<any>;
+  @Input()
+  filterStatus: String = '';
   @Output()
   reload: EventEmitter<any> = new EventEmitter();
   @Output()
@@ -52,7 +54,6 @@ export class OrderGridComponent implements OnInit, OnChanges {
   ownUser: User;
 
   userType = '';
-  filterStatus: String = '';
   isEmpty = false;
 
   constructor(
@@ -83,9 +84,7 @@ export class OrderGridComponent implements OnInit, OnChanges {
   }
 
   filter() {
-    console.log("filter");
     if (this.filterStatus) {
-      console.log("emit");
       this.filterChanged.emit(this.filterStatus);
     }
   }

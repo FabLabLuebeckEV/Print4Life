@@ -4,6 +4,7 @@ import { OrderService } from 'frontend/app/services/order.service';
 import { BlueprintService } from 'frontend/app/services/blueprint.service';
 import { UserService } from 'frontend/app/services/user.service';
 import { HospitalService } from 'frontend/app/services/hospital.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -20,17 +21,25 @@ export class AllOrdersComponent implements OnInit {
         public orderService: OrderService,
         public blueprintService: BlueprintService,
         public userService: UserService,
-        public hospitalService: HospitalService
+        public hospitalService: HospitalService,
+        public route: ActivatedRoute
     ) {
 
     }
 
     async ngOnInit() {
         this.loadOrders();
+
+
+        this.route.params.subscribe(async params => {
+            if (params.filter) {
+                this.filterValue = params.filter;
+                this.loadOrders();
+            }
+        });
     }
 
     private async loadOrders() {
-        console.log("loadOrders")
         this.loggedInUser = await this.userService.getUser();
         const query = {
             $and: [
@@ -39,12 +48,40 @@ export class AllOrdersComponent implements OnInit {
         const statusQuery = [{
             status: this.filterValue
         }];
+        if (this.filterValue === 'all' || this.filterValue === 'my') {
+            statusQuery.pop();
+        }
+
+        if (this.filterValue === 'my') {
+            if (this.loggedInUser.role.role === 'editor') {
+                query.$and.push(
+                    {
+                        $or: [
+                            {
+                                'batch.accepted': {
+                                    $elemMatch: {
+                                        user: this.loggedInUser._id
+                                    }
+                                }
+                            },
+                            {
+                                'batch.finished': {
+                                    $elemMatch: {
+                                        user: this.loggedInUser._id
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                );
+            }
+        }
+
         query.$and.push({
             blueprintId: {
                 $exists: true
             },
             $or: statusQuery
-            
         });
 
         if (this.loggedInUser.role.role === 'editor') {
@@ -103,7 +140,6 @@ export class AllOrdersComponent implements OnInit {
     }
 
     private filter(filterStatus) {
-        console.log("filter called");
         this.filterValue = filterStatus;
         this.loadOrders();
     }

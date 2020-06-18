@@ -4,6 +4,9 @@
         <mat-form-field appearance="outline" class="large-label">
             <mat-label>Filter nach Status</mat-label>
             <mat-select [(ngModel)]="filterStatus" (selectionChange)="filter()">
+                <mat-option value="all">
+                    Alle
+                </mat-option>
                 <mat-option value="open">
                     Offen
                 </mat-option>
@@ -12,6 +15,9 @@
                 </mat-option>
                 <mat-option value="closed">
                     Abgeschlossen
+                </mat-option>
+                <mat-option value="my">
+                    Meine Aufträge
                 </mat-option>
             </mat-select>
         </mat-form-field>

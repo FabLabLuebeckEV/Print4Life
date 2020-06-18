@@ -102,9 +102,9 @@ export class LoginComponent implements OnInit {
         };
         const myOrders = await this.orderService.search(query);
         if (myOrders) {
-          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`]);
+          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.my}`]);
         } else {
-          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`]);
+          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.all}`]);
         }
       } else {
         // Suchender
