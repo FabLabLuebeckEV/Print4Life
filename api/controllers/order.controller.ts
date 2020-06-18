@@ -129,9 +129,10 @@ const userService = new UserService();
 */
 async function getAll (req, res) {
   let authorized = false;
+  let ownUser;
   if (req.headers.authorization) {
     const token = req.headers.authorization.split('JWT')[1].trim();
-    const ownUser = await userService.getUserByToken(token);
+    ownUser = await userService.getUserByToken(token);
     authorized = ownUser;
   }
   if (!authorized) {
@@ -141,6 +142,10 @@ async function getAll (req, res) {
   }
   req.query = validatorService.checkQuery(req.query, searchableTextFields);
   orderService.getAll(undefined, req.query.limit, req.query.skip).then((orders) => {
+    if (ownUser.role.role === 'user') {
+      orders.filter((order) => order.owner === ownUser._id);
+    }
+
     if (orders.length === 0) {
       logger.info('GET Orders without result');
       return res.status(204).send();
@@ -246,6 +251,10 @@ async function search (req, res) {
 
       return Math.sign(a.distance - b.distance);
     });
+
+    if (user.role.role === 'user') {
+      orders.filter((order) => order.owner === user._id);
+    }
 
     if (orders.length === 0) {
       logger.info(`POST search for orders with query ${JSON.stringify(req.body.query)}, `
