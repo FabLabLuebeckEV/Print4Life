@@ -88,28 +88,6 @@ export class AllOrdersComponent implements OnInit {
 
 
         if (ret && ret !== null) {
-            /*if (this.loggedInUser.role.role === 'editor') {
-                if (this.filterValue !== '') {
-                    if (this.filterValue === 'open') {
-                        ret.orders = ret.orders.filter(function (order) {
-                            const finished = order.batch.finished.reduce((total, batch) => {
-                                return total + batch.number;
-                            }, 0);
-                            return order.batch.number > finished;
-                        });
-                    } else if (this.filterValue === 'in progress') {
-    
-                    } else if (this.filterValue === 'closed') {
-                        ret.orders = ret.orders.filter(function (order) {
-                            const finished = order.batch.finished.reduce((total, batch) => {
-                                return total + batch.number;
-                            }, 0);
-                            return order.batch.number ===  finished;
-                        });
-                    }
-                }
-            }*/
-
             for (let i = 0; i < ret.orders.length; i++) {
                 ret.orders[i].blueprint = (await this.blueprintService.getBlueprint(ret.orders[i].blueprintId)).blueprint;
 
