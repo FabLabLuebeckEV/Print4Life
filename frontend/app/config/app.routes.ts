@@ -120,7 +120,8 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent },
             { path: routes.paths.frontend.orders.shipping + '/:id', component: ShippingDetailsComponent },
             { path: routes.paths.frontend.orders.complete, component: CompleteOrderComponent },
-            { path: routes.paths.frontend.orders.all.root + '/:filter', component: AllOrdersComponent}
+            { path: routes.paths.frontend.orders.all.root + '/:filter', component: AllOrdersComponent},
+            { path: routes.paths.frontend.orders.all.root, component: AllOrdersComponent}
             /*{
                 path:
                     routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.create,
@@ -168,6 +169,7 @@ export const appRoutes: Routes = [
         component: LegalNoticeComponent,
         runGuardsAndResolvers: 'always'
     },
+    /*
     {
         path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}`,
         component: OrderListComponent,
@@ -187,7 +189,7 @@ export const appRoutes: Routes = [
         path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`,
         component: MyOrdersComponent,
         runGuardsAndResolvers: 'always'
-    },
+    },*/
     {
         path: routes.paths.frontend.users.root,
         component: UserListComponent,

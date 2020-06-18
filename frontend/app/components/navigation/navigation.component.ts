@@ -47,8 +47,8 @@ export class NavigationComponent implements OnInit {
   contactLink = routes.paths.frontend.faq.root;
   contactFragment = routes.paths.frontend.faq.contact;
   loginLink = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
-  myOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.acceptedOrders;
-  openOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.unfinishedOrders;
+  myOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.all.root + '/' + routes.paths.frontend.orders.all.my;
+  openOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.all.root + '/' + routes.paths.frontend.orders.all.open;
   createOrderLink = routes.paths.frontend.blueprints.root + '/' + routes.paths.frontend.blueprints.list;
   userType: String;
   hospital: Hospital;
@@ -101,13 +101,11 @@ export class NavigationComponent implements OnInit {
       console.log('user is ', this.user);
 
       if (this.user.role.role === 'user') {
-        this.myOrdersLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`;
         this.userType = 'klinik';
         this.hospital = await this.hospitalService.findOwn();
 
         console.log(this.hospital);
       } else {
-        this.myOrdersLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.acceptedOrders}`;
         this.userType = 'maker';
       }
     }

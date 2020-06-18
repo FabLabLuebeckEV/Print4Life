@@ -16,7 +16,7 @@ export class BlueprintsComponent implements OnInit {
 
   blueprints: Array<any>;
   createOrderLink = '/' + routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.create;
-  unfinishedOrdersLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`;
+  unfinishedOrdersLink = `/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.my}`;
 
 
   constructor(
