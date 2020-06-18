@@ -544,7 +544,6 @@ async function update (req, res) {
     return res.status(403).send(msg);
   }
 
-  
 
   try {
     const order = await orderService.update(req.body);

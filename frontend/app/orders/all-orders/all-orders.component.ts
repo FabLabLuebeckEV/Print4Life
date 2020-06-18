@@ -29,7 +29,7 @@ export class AllOrdersComponent implements OnInit {
 
     private async loadOrders() {
         this.loggedInUser = await this.userService.getUser();
-        let query = {
+        const query = {
             $and: [
             ]
         };
@@ -55,11 +55,10 @@ export class AllOrdersComponent implements OnInit {
         }
 
         const ret = await this.orderService.getAllOrders(query);
-        
+
         if (this.loggedInUser.role.role === 'editor') {
             if (this.filterValue !== '') {
                 if (this.filterValue === 'open') {
-                    console.log("filtering open for makers");
                     ret.orders = ret.orders.filter(function (order) {
                         const finished = order.batch.finished.reduce((total, batch) => {
                             return total + batch.number;
