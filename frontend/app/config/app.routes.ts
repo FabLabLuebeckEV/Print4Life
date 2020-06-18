@@ -33,7 +33,7 @@ import { MyOrdersComponent } from '../orders/my-orders/my-orders.component';
 import { ShippingDetailsComponent } from '../orders/shipping-details/shipping-details.component';
 
 import { AcceptedOrdersComponent } from '../orders/accepted-orders/accepted-orders.component';
-// import { BlueprintsComponent } from '../blueprints/blueprints.component';
+import { BlueprintsComponent } from '../blueprints/blueprints.component';
 
 import { UserSignupConfirmationComponent } from '../users/user-signup-confirmation/user-signup-confirmation.component';
 import { HospitalActivationComponent } from '../hospitals/hospital-activation/hospital-activation.component';
@@ -90,11 +90,11 @@ export const appRoutes: Routes = [
             { path: `${routes.paths.frontend.machines.getById}`, component: MachineDetailComponent }
         ]
     },*/
-    /* {
+    {
         path: `${routes.paths.frontend.blueprints.root}/${routes.paths.frontend.blueprints.list}`,
         component: BlueprintsComponent,
         runGuardsAndResolvers: 'always',
-    },*/
+    },
     /* {
         path: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}`,
         component: MachineListComponent,
