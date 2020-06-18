@@ -7,10 +7,10 @@
                 <mat-option value="open">
                     Offen
                 </mat-option>
-                <mat-option value="started">
+                <mat-option value="in progress">
                     In Arbeit
                 </mat-option>
-                <mat-option value="finished">
+                <mat-option value="closed">
                     Abgeschlossen
                 </mat-option>
             </mat-select>
@@ -57,7 +57,7 @@
                     <br>
                 </p>
                 <div class="klinikname">
-                    {{order.hospital.name}}
+                    {{order?.hospital?.name}}
                 </div>
                 <div class="chart" *ngIf="order.batchData">
                     <div class="row">

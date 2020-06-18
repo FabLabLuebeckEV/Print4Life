@@ -87,8 +87,11 @@ export class OrderService implements ModelService {
     if (isDone) {
       // order.status = "in progress";
       order.status = 'closed';
-    } else {
+    } else if (order.batch.finished.length > 0 || order.batch.accepted.length > 0) {
       order.status = 'in progress';
+    } else {
+      // update here to enable canceling an order
+      order.status = 'open';
     }
     // delete deprecated files if order is done (archived, representive, completed, deleted)
     /* if (isDone && order.files) {

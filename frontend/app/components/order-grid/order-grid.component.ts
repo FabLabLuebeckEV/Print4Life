@@ -83,7 +83,9 @@ export class OrderGridComponent implements OnInit, OnChanges {
   }
 
   filter() {
+    console.log("filter");
     if (this.filterStatus) {
+      console.log("emit");
       this.filterChanged.emit(this.filterStatus);
     }
   }

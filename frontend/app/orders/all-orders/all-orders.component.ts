@@ -3,6 +3,7 @@ import { User } from 'frontend/app/models/user.model';
 import { OrderService } from 'frontend/app/services/order.service';
 import { BlueprintService } from 'frontend/app/services/blueprint.service';
 import { UserService } from 'frontend/app/services/user.service';
+import { HospitalService } from 'frontend/app/services/hospital.service';
 
 
 @Component({
@@ -18,7 +19,8 @@ export class AllOrdersComponent implements OnInit {
     constructor(
         public orderService: OrderService,
         public blueprintService: BlueprintService,
-        public userService: UserService
+        public userService: UserService,
+        public hospitalService: HospitalService
     ) {
 
     }
@@ -28,58 +30,90 @@ export class AllOrdersComponent implements OnInit {
     }
 
     private async loadOrders() {
+        console.log("loadOrders")
         this.loggedInUser = await this.userService.getUser();
         const query = {
             $and: [
             ]
         };
+        const statusQuery = [{
+            status: this.filterValue
+        }];
         query.$and.push({
             blueprintId: {
                 $exists: true
-            }
+            },
+            $or: statusQuery
+            
         });
+
         if (this.loggedInUser.role.role === 'editor') {
-            if (this.filterValue === 'started') {
-                query.$and.push({
-                    $or: [
-                        {
-                            'batch.accepted': {
+            if (this.filterValue === 'in progress') {
+                query.$and.push(
+                    {
+                        'batch.accepted': {
+                            $elemMatch: {
+                                user: this.loggedInUser._id
+                            }
+                        }
+                    }
+                );
+            }
+            if (this.filterValue === 'closed') {
+                query.$and.push(
+                    {
+                        'batch.finished': {
+                            $elemMatch: {
+                                user: this.loggedInUser._id
+                            }
+                        }
+                    },
+                    {
+                        'batch.accepted': {
+                            $not: {
                                 $elemMatch: {
                                     user: this.loggedInUser._id
                                 }
                             }
                         }
-                    ]
+                    }
+                );
+                statusQuery.push({
+                    status: 'in progress'
                 });
             }
         }
 
         const ret = await this.orderService.getAllOrders(query);
 
-        if (this.loggedInUser.role.role === 'editor') {
-            if (this.filterValue !== '') {
-                if (this.filterValue === 'open') {
-                    ret.orders = ret.orders.filter(function (order) {
-                        const finished = order.batch.finished.reduce((total, batch) => {
-                            return total + batch.number;
-                        }, 0);
-                        return order.batch.number > finished;
-                    });
-                } else if (this.filterValue === 'started') {
 
-                } else if (this.filterValue === 'finished') {
-                    ret.orders = ret.orders.filter(function (order) {
-                        const finished = order.batch.finished.reduce((total, batch) => {
-                            return total + batch.number;
-                        }, 0);
-                        return order.batch.number ===  finished;
-                    });
-                }
-            }
-        }
         if (ret && ret !== null) {
+            /*if (this.loggedInUser.role.role === 'editor') {
+                if (this.filterValue !== '') {
+                    if (this.filterValue === 'open') {
+                        ret.orders = ret.orders.filter(function (order) {
+                            const finished = order.batch.finished.reduce((total, batch) => {
+                                return total + batch.number;
+                            }, 0);
+                            return order.batch.number > finished;
+                        });
+                    } else if (this.filterValue === 'in progress') {
+    
+                    } else if (this.filterValue === 'closed') {
+                        ret.orders = ret.orders.filter(function (order) {
+                            const finished = order.batch.finished.reduce((total, batch) => {
+                                return total + batch.number;
+                            }, 0);
+                            return order.batch.number ===  finished;
+                        });
+                    }
+                }
+            }*/
+
             for (let i = 0; i < ret.orders.length; i++) {
                 ret.orders[i].blueprint = (await this.blueprintService.getBlueprint(ret.orders[i].blueprintId)).blueprint;
+
+                ret.orders[i].hospital = await this.hospitalService.findByOwner(ret.orders[i].owner);
             }
             this.orders = ret.orders;
 
@@ -91,6 +125,7 @@ export class AllOrdersComponent implements OnInit {
     }
 
     private filter(filterStatus) {
+        console.log("filter called");
         this.filterValue = filterStatus;
         this.loadOrders();
     }
