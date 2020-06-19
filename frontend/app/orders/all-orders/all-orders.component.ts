@@ -39,7 +39,7 @@ export class AllOrdersComponent implements OnInit {
         });
     }
 
-    private async loadOrders() {
+    async loadOrders() {
         this.loggedInUser = await this.userService.getUser();
         const query = {
             $and: [
@@ -139,7 +139,7 @@ export class AllOrdersComponent implements OnInit {
         }
     }
 
-    private filter(filterStatus) {
+    filter(filterStatus) {
         this.filterValue = filterStatus;
         this.loadOrders();
     }
