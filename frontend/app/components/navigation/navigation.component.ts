@@ -12,6 +12,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { HospitalService } from 'frontend/app/services/hospital.service';
 import { Hospital } from 'frontend/app/models/hospital.model';
 import { NavigationService } from 'frontend/app/services/navigation.service';
+// Comment
 
 interface Dropdown {
   name: String;
