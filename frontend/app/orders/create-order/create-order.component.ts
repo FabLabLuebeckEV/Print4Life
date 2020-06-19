@@ -96,7 +96,8 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         ], okButton, undefined);
 
         modalRef.result.then(() => {
-          this.router.navigate([routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.all.root + '/' + routes.paths.frontend.orders.all.my]);
+          this.router.navigate([routes.paths.frontend.orders.root + '/'
+          + routes.paths.frontend.orders.all.root + '/' + routes.paths.frontend.orders.all.my]);
         });
       });
     } else {
