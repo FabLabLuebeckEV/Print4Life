@@ -24,13 +24,18 @@
           <ul>
             <li *ngIf="!userIsLoggedIn" class="current"><a [routerLink]="['']" (click)="toggleSideMenu()">Startseite</a></li>
             <li class="dropdown" *ngIf="userIsLoggedIn">
-              <a class="underline">
+              <a class="underline" [routerLink]="[allOrdersLink]">
                 Aufträge
               </a>
-              <ul>
+              <!--<ul>
                 <li>
+                  <a (click)="toggleSideMenu()" [routerLink]="[allOrdersLink]">
+                    Alle Aufträge
+                  </a>
+                </li>
+                <li *ngIf="userType==='maker'">
                   <a (click)="toggleSideMenu()" [routerLink]="[myOrdersLink]">
-                    Meine Aufträge
+                    Angenommene Aufträge
                   </a>
                 </li>
                 <li>
@@ -38,12 +43,17 @@
                     Offene Aufträge
                   </a>
                 </li>
+                <li>
+                  <a (click)="toggleSideMenu()" [routerLink]="[closedOrdersLink]">
+                    Erledigte Aufträge
+                  </a>
+                </li>
                 <li *ngIf="userType==='klinik'">
                   <a (click)="toggleSideMenu()" [routerLink]="[createOrderLink]">
                     Neuen Auftrag anlegen
                   </a>
                 </li>
-              </ul>
+              </ul>-->
             </li>
             <li *ngIf="!userIsLoggedIn">
               <a [routerLink]="[aboutUsLink]" (click)="toggleSideMenu()">Über print4life</a>

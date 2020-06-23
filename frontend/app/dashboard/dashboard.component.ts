@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.userIsLoggedIn = this.userService.isLoggedIn();
     if (this.userIsLoggedIn) {
-      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.my}`]);
+      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.all}`]);
       return;
     }
   }

@@ -12,7 +12,6 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { HospitalService } from 'frontend/app/services/hospital.service';
 import { Hospital } from 'frontend/app/models/hospital.model';
 import { NavigationService } from 'frontend/app/services/navigation.service';
-// Comment
 
 interface Dropdown {
   name: String;
@@ -49,11 +48,16 @@ export class NavigationComponent implements OnInit {
   contactLink = routes.paths.frontend.faq.root;
   contactFragment = routes.paths.frontend.faq.contact;
   loginLink = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
+  allOrdersLink = routes.paths.frontend.orders.root + '/'
+  + routes.paths.frontend.orders.all.root + '/'
+  + routes.paths.frontend.orders.all.all;
   myOrdersLink = routes.paths.frontend.orders.root + '/'
   + routes.paths.frontend.orders.all.root + '/'
   + routes.paths.frontend.orders.all.my;
   openOrdersLink = routes.paths.frontend.orders.root + '/'
   + routes.paths.frontend.orders.all.root + '/' + routes.paths.frontend.orders.all.open;
+  closedOrdersLink = routes.paths.frontend.orders.root + '/'
+  + routes.paths.frontend.orders.all.root + '/' + routes.paths.frontend.orders.all.closed;
   createOrderLink = routes.paths.frontend.blueprints.root + '/'
   + routes.paths.frontend.blueprints.list;
   userType: String;
