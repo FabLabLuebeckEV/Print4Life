@@ -26,7 +26,7 @@
     <div class="" *ngFor="let order of orders">
         <div class="order"  [ngClass]="{
             'finished': order.myFinishedBatch > 0 && order.myAcceptedBatch === 0 || userType === 'klinik' && order.batch.remaining === 0 && order.batch.acceptedCount === 0,
-            'participating': order.participating || userType === 'klinik' && order.batch.acceptedCount > 0 && order.own
+            'participating': order.participating || userType === 'klinik' && order.own && order.batch.remaining > 0
         }">
             <div class="inner indent-left indent-right">
                 <div class="statusBadge participatingBadge">

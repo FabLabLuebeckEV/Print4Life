@@ -91,7 +91,7 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         const okButton = new ModalButton('Ok', 'neutral', 'Ok');
         const modalRef = this.modalService.openMsgModal('Bestellung erfolgreich angelegt', 'modal-header', [
           'Vielen Dank für Deine Bestellung',
-          'Überprüfe den Status gern unter \'Meine Aufträge\''
+          'Überprüfe den Status gern unter \'Aufträge\''
         ], okButton, undefined);
 
         modalRef.result.then(() => {
