@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationService } from '../services/navigation.service';
 
 @Component({
-    selector: 'demo-notice',
+    selector: 'app-demo-notice',
     templateUrl: './demo.component.html',
     styleUrls: ['./demo.component.css']
 })
