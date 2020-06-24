@@ -1,10 +1,10 @@
-import { MachineListComponent } from '../machines/machine-list/machine-list.component';
+// import { MachineListComponent } from '../machines/machine-list/machine-list.component';
 import { OrderListComponent } from '../orders/order-list/order-list.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
-import { MachineFormComponent } from '../machines/machine-form/machine-form.component';
+// import { MachineFormComponent } from '../machines/machine-form/machine-form.component';
 import { Routes, CanActivate } from '@angular/router';
 import { CreateOrderComponent } from '../orders/create-order/create-order.component';
-import { MachineDetailComponent } from '../machines/machine-detail/machine-detail.component';
+// import { MachineDetailComponent } from '../machines/machine-detail/machine-detail.component';
 import { routes } from './routes';
 import { OrderDetailComponent } from '../orders/order-detail/order-detail.component';
 import { CompleteOrderComponent } from '../orders/complete-order/complete-order.component';
@@ -15,12 +15,12 @@ import { Observable } from 'rxjs';
 import { ErrorService, ErrorType } from '../services/error.service';
 import { UserListComponent } from '../users/user-list/user-list.component';
 import { UserDetailComponent } from '../users/user-detail/user-detail.component';
-/*import { IotDeviceListComponent } from '../iot-devices/iot-device-list/iot-device-list.component';
+/* import { IotDeviceListComponent } from '../iot-devices/iot-device-list/iot-device-list.component';
 import { IotDeviceFormComponent } from '../iot-devices/iot-device-form/iot-device-form.component';
 import { IotDeviceDetailComponent } from '../iot-devices/iot-device-detail/iot-device-detail.component';*/
 import { UserActivationComponent } from '../users/user-activation/user-activation.component';
-import { FablabFormComponent } from '../fablabs/fablab-form/fablab-form.component';
-import { FablabListComponent } from '../fablabs/fablab-list/fablab-list.component';
+// import { FablabFormComponent } from '../fablabs/fablab-form/fablab-form.component';
+// import { FablabListComponent } from '../fablabs/fablab-list/fablab-list.component';
 import { OpenOrdersComponent } from '../orders/open-orders/open-orders.component';
 
 import { AboutUsComponent } from '../about-us/about-us.component';
@@ -79,7 +79,7 @@ export class AdminGuard implements CanActivate {
 }
 
 export const appRoutes: Routes = [
-    {
+    /* {
         path: routes.paths.frontend.machines.root,
         component: MachineListComponent,
         runGuardsAndResolvers: 'always',
@@ -89,18 +89,18 @@ export const appRoutes: Routes = [
             { path: `${routes.paths.frontend.machines.update}/:type/:id`, component: MachineFormComponent, canActivate: [AuthGuard], },
             { path: `${routes.paths.frontend.machines.getById}`, component: MachineDetailComponent }
         ]
-    },
+    },*/
     {
         path: `${routes.paths.frontend.blueprints.root}/${routes.paths.frontend.blueprints.list}`,
         component: BlueprintsComponent,
         runGuardsAndResolvers: 'always',
     },
-    {
+    /* {
         path: `${routes.paths.frontend.machines.root}/${routes.paths.frontend.machines.successfulOrders}`,
         component: MachineListComponent,
         runGuardsAndResolvers: 'always',
-    },
-    /*{
+    },*/
+    /* {
         path: routes.paths.frontend.iotDevices.root,
         component: IotDeviceListComponent,
         runGuardsAndResolvers: 'always',
@@ -206,7 +206,7 @@ export const appRoutes: Routes = [
             { path: ':id', component: UserDetailComponent }
         ]
     },
-    {
+    /*{
         path: routes.paths.frontend.fablabs.root,
         component: FablabListComponent,
         runGuardsAndResolvers: 'always',
@@ -215,7 +215,7 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.fablabs.profile, component: FablabFormComponent, canActivate: [AuthGuard]},
             { path: routes.paths.frontend.fablabs.register, component: FablabFormComponent, canActivate: [AuthGuard]}
         ]
-    },
+    },*/
     {
         path: '',
         component: DashboardComponent,

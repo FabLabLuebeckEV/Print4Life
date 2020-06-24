@@ -46,6 +46,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
 
     this.navigationService.setStatic(true);
+/*
+    const words = document.querySelectorAll('.pw-cloud li');
+    setInterval(function () {
+      words.forEach(li => {
+
+        const x = Math.random() * 3 - 3;
+        const y = Math.random() * 3 - 3;
+
+        li.setAttribute('style', `transform: translate(${x}px, ${y}px);`);
+      });
+    }, 500)
+*/
+
+
   }
 
 

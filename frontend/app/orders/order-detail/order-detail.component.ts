@@ -301,7 +301,7 @@ export class OrderDetailComponent implements OnInit {
           legend: {
             labels: {
               fontSize: 20,
-              fontFamily: 'Roboto'
+              fontFamily: 'Roboto Condensed'
             }
           }
         }
