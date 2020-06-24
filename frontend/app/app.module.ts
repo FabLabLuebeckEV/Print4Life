@@ -79,6 +79,7 @@ import { ShippingDetailsComponent } from './orders/shipping-details/shipping-det
 import { HospitalActivationComponent } from './hospitals/hospital-activation/hospital-activation.component';
 import { PressComponent } from './press/press.component';
 import { NavigationService } from './services/navigation.service';
+import { DemoComponent } from './demo/demo.component';
 
 @NgModule({
     declarations: [
@@ -126,7 +127,8 @@ import { NavigationService } from './services/navigation.service';
         ShippingDetailsComponent,
         HospitalActivationComponent,
         MyOrdersComponent,
-        PressComponent
+        PressComponent,
+        DemoComponent
     ],
     imports: [
         MatFormFieldModule,

@@ -160,6 +160,9 @@ export const routes = {
                 update: 'edit',
                 profile: 'profile',
                 register: 'register'
+            },
+            demo: {
+                root: 'demo'
             }
         },
     }

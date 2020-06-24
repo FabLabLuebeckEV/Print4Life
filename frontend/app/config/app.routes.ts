@@ -38,6 +38,7 @@ import { BlueprintsComponent } from '../blueprints/blueprints.component';
 import { UserSignupConfirmationComponent } from '../users/user-signup-confirmation/user-signup-confirmation.component';
 import { HospitalActivationComponent } from '../hospitals/hospital-activation/hospital-activation.component';
 import { PressComponent } from '../press/press.component';
+import { DemoComponent } from '../demo/demo.component';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -164,6 +165,11 @@ export const appRoutes: Routes = [
     {
         path: `${routes.paths.frontend.legal_notice.root}`,
         component: LegalNoticeComponent,
+        runGuardsAndResolvers: 'always'
+    },
+    {
+        path: `${routes.paths.frontend.demo.root}`,
+        component: DemoComponent,
         runGuardsAndResolvers: 'always'
     },
     {
