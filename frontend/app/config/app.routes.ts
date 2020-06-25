@@ -38,11 +38,8 @@ import { BlueprintsComponent } from '../blueprints/blueprints.component';
 import { UserSignupConfirmationComponent } from '../users/user-signup-confirmation/user-signup-confirmation.component';
 import { HospitalActivationComponent } from '../hospitals/hospital-activation/hospital-activation.component';
 import { PressComponent } from '../press/press.component';
-<<<<<<< HEAD
 import { DemoComponent } from '../demo/demo.component';
-=======
 import { AllOrdersComponent } from '../orders/all-orders/all-orders.component';
->>>>>>> develop
 
 @Injectable()
 export class AuthGuard implements CanActivate {
