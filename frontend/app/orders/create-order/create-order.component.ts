@@ -8,9 +8,8 @@ import { Address } from 'frontend/app/models/address.model';
 import { OrderService } from 'frontend/app/services/order.service';
 import { ModalService } from 'frontend/app/services/modal.service';
 import { ModalButton } from 'frontend/app/helper/modal.button';
-
 import { routes } from '../../config/routes';
-
+// comment
 
 @Component({
   selector: 'app-create-order',
@@ -92,11 +91,12 @@ export class CreateOrderComponent implements OnInit, OnDestroy {
         const okButton = new ModalButton('Ok', 'neutral', 'Ok');
         const modalRef = this.modalService.openMsgModal('Bestellung erfolgreich angelegt', 'modal-header', [
           'Vielen Dank für Deine Bestellung',
-          'Überprüfe den Status gern unter \'Meine Aufträge\''
+          'Überprüfe den Status gern unter \'Aufträge\''
         ], okButton, undefined);
 
         modalRef.result.then(() => {
-          this.router.navigate([routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.myOrders]);
+          this.router.navigate([routes.paths.frontend.orders.root + '/'
+          + routes.paths.frontend.orders.all.root + '/' + routes.paths.frontend.orders.all.in_progress]);
         });
       });
     } else {

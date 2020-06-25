@@ -16,7 +16,7 @@
             </strong>
             zu deinen {{order?.batch.number}} Stück {{order?.blueprint.name}} ins Paket.</p>
         <p class="max-250 text-left mb-70 pxy-50">
-            <a  class="link-with-arrow" href="#">
+            <a  class="link-with-arrow" [href]="order?.blueprint.manual" target="_blank">
                 Beipackzettel ausdrucken
             </a>
         </p>

@@ -38,7 +38,11 @@ import { BlueprintsComponent } from '../blueprints/blueprints.component';
 import { UserSignupConfirmationComponent } from '../users/user-signup-confirmation/user-signup-confirmation.component';
 import { HospitalActivationComponent } from '../hospitals/hospital-activation/hospital-activation.component';
 import { PressComponent } from '../press/press.component';
+<<<<<<< HEAD
 import { DemoComponent } from '../demo/demo.component';
+=======
+import { AllOrdersComponent } from '../orders/all-orders/all-orders.component';
+>>>>>>> develop
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -119,7 +123,9 @@ export const appRoutes: Routes = [
             { path: routes.paths.frontend.orders.update + '/:id', component: CreateOrderComponent, canActivate: [AuthGuard], },
             { path: routes.paths.frontend.orders.detail + '/:id', component: OrderDetailComponent },
             { path: routes.paths.frontend.orders.shipping + '/:id', component: ShippingDetailsComponent },
-            { path: routes.paths.frontend.orders.complete, component: CompleteOrderComponent }
+            { path: routes.paths.frontend.orders.complete, component: CompleteOrderComponent },
+            { path: routes.paths.frontend.orders.all.root + '/:filter', component: AllOrdersComponent},
+            { path: routes.paths.frontend.orders.all.root, component: AllOrdersComponent}
             /*{
                 path:
                     routes.paths.frontend.orders.shared.root + '/' + routes.paths.frontend.orders.shared.create,
@@ -167,6 +173,7 @@ export const appRoutes: Routes = [
         component: LegalNoticeComponent,
         runGuardsAndResolvers: 'always'
     },
+    /*
     {
         path: `${routes.paths.frontend.demo.root}`,
         component: DemoComponent,
@@ -191,7 +198,7 @@ export const appRoutes: Routes = [
         path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.myOrders}`,
         component: MyOrdersComponent,
         runGuardsAndResolvers: 'always'
-    },
+    },*/
     {
         path: routes.paths.frontend.users.root,
         component: UserListComponent,

@@ -17,7 +17,8 @@ export class ShippingDetailsComponent implements OnInit {
   order: any;
   hospital: any;
 
-  myOrdersRoute = '/' + routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.acceptedOrders;
+  myOrdersRoute = '/' + routes.paths.frontend.orders.root + '/'
+  + routes.paths.frontend.orders.all.root + '/' + routes.paths.frontend.orders.all.my;
 
   constructor(
     private router: Router,

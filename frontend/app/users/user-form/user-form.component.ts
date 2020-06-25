@@ -186,7 +186,7 @@ export class UserFormComponent implements OnInit {
     await this._loadLanguages();
     this.loggedInUser = await this.userService.getUser();
     if (this.userService.isLoggedIn && this.loggedInUser !== undefined) {
-      this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.unfinishedOrders}`]);
+      this.router.navigate([`${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.all}`]);
     }
     if (this.profileView) {
       console.log('profile view');

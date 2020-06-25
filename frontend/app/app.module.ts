@@ -80,6 +80,7 @@ import { HospitalActivationComponent } from './hospitals/hospital-activation/hos
 import { PressComponent } from './press/press.component';
 import { NavigationService } from './services/navigation.service';
 import { DemoComponent } from './demo/demo.component';
+import { AllOrdersComponent } from './orders/all-orders/all-orders.component';
 
 @NgModule({
     declarations: [
@@ -99,6 +100,7 @@ import { DemoComponent } from './demo/demo.component';
         CompleteOrderComponent,
         OpenOrdersComponent,
         AcceptedOrdersComponent,
+        AllOrdersComponent,
         OrderGridComponent,
         UserFormComponent,
         BackButtonComponent,
