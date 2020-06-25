@@ -158,6 +158,28 @@ export class OrderGridComponent implements OnInit, OnChanges {
           ];
         }
       });
+      this.orders.sort((n1, n2) => {
+        return this.compare(n1, n2);
+      });
+    }
+  }
+
+  private compare(a, b) {
+    // Vergleich Status
+    console.log(a);
+    if (a.status !== 'closed' && b.status === 'closed') {
+      return -1;
+    }
+    if (a.status === 'closed' && b.status !== 'closed') {
+      return 1;
+    }
+    // Vergleich Datum
+    if (a.createdAt > b.createdAt) {
+      return -1;
+    } else if (b.createdAt > a.createdAt) {
+      return 1;
+    } else {
+      return 0;
     }
   }
 
