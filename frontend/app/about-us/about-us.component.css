@@ -61,6 +61,37 @@
     height: auto;
 }
 
+.team-header-logo {
+    position: relative; left: 30px; top: 135px
+}
+
+@media only screen and (max-width: 575px) {
+    .team-header-logo {
+        
+        position: relative; left: 0; top: 0;
+    }
+}
+
 .team b {
     font-weight: bold;
+}
+
+
+.member img {
+    width: 316px;
+    max-width: 100%;
+    height: auto;
+}
+
+.member .content {
+    max-width: 230px;
+    margin: auto;
+}
+
+@media only screen and (max-width: 600px) {
+.milestone-img {
+    max-width: 50%;
+    display: block;
+    margin: auto;
+}
 }
