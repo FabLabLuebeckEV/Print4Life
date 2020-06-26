@@ -2,6 +2,12 @@
     margin-left: 0px;
 }
 
+#newOrderButton {
+    float:right;
+    width: 350px;
+    min-width: inherit;
+} 
+
 .order {
     min-height: 300px;
     text-align: center;

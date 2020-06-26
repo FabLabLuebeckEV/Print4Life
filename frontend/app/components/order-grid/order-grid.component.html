@@ -18,7 +18,7 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <button *ngIf="this.userType === 'klinik'" mat-raised-button color="accent" [routerLink]="[createOrderLink]">Neuen Auftrag anlegen</button>
+        <button id="newOrderButton" *ngIf="this.userType === 'klinik'" mat-raised-button color="accent" [routerLink]="[createOrderLink]">Neuen Auftrag anlegen</button>
     </div>
 </div>
 <p *ngIf="isEmpty" class="text-center">Leider keine Aufträge gefunden</p>
