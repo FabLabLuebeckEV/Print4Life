@@ -25,6 +25,7 @@
 <div class="grid-3">
     <div class="" *ngFor="let order of orders">
         <div class="order"  [ngClass]="{
+            'open': order.batch.remaining !== 0 && order.batch.acceptedCount === 0,
             'finished': order.myFinishedBatch > 0 && order.myAcceptedBatch === 0 || userType === 'klinik' && order.batch.remaining === 0 && order.batch.acceptedCount === 0,
             'participating': order.participating || userType === 'klinik' && order.own && order.batch.remaining > 0
         }">
