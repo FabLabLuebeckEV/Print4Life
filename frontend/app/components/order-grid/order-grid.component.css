@@ -14,6 +14,10 @@
     margin-top: 40px;
 }
 
+.order .statusBadge {
+    color: #df5A49;
+}
+
 .order.participating .inner {
     border-width: 2px;
     border-color: #EFC94C;
@@ -22,7 +26,7 @@
 .order .statusBadge {
     position: absolute;
     color: white;
-    background-color: #EFC94C;
+    background-color: #df5A49;
     top: -22px;
     padding-left: 15px;
     padding-right: 15px;
