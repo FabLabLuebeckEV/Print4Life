@@ -1,3 +1,8 @@
+.create-button {
+    position: relative;
+    float: right;
+}
+
 .row {
     margin-left: 0px;
 }
@@ -15,6 +20,11 @@
     margin-top: 40px;
 }
 
+.order.open .statusBadge {
+    color: white;
+    background-color: #df5A49;
+}
+
 .order.participating .inner {
     border-width: 2px;
     border-color: #EFC94C;
@@ -23,7 +33,6 @@
 .order .statusBadge {
     position: absolute;
     color: white;
-    background-color: #EFC94C;
     top: -22px;
     padding-left: 15px;
     padding-right: 15px;

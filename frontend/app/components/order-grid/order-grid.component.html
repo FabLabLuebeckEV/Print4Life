@@ -18,17 +18,21 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <button id="newOrderButton" *ngIf="this.userType === 'klinik'" mat-raised-button color="accent" [routerLink]="[createOrderLink]">Neuen Auftrag anlegen</button>
+        <button id="newOrderButton"*ngIf="this.userType === 'klinik'" class="create-button" mat-raised-button color="accent" [routerLink]="[createOrderLink]">Neuen Auftrag anlegen</button>
     </div>
 </div>
 <p *ngIf="isEmpty" class="text-center">Leider keine Aufträge gefunden</p>
 <div class="grid-3">
     <div class="" *ngFor="let order of orders">
         <div class="order"  [ngClass]="{
+            'open': userType === 'maker' && order.batch.remaining !== 0,
             'finished': order.myFinishedBatch > 0 && order.myAcceptedBatch === 0 || userType === 'klinik' && order.batch.remaining === 0 && order.batch.acceptedCount === 0,
             'participating': order.participating || userType === 'klinik' && order.own && order.batch.remaining > 0
         }">
             <div class="inner indent-left indent-right">
+                <div class="statusBadge open">
+                    Offen
+                </div>
                 <div class="statusBadge participatingBadge">
                     In Arbeit
                 </div>

@@ -166,7 +166,6 @@ export class OrderGridComponent implements OnInit, OnChanges {
 
   private compare(a, b) {
     // Vergleich Status
-    console.log(a);
     if (a.status !== 'closed' && b.status === 'closed') {
       return -1;
     }

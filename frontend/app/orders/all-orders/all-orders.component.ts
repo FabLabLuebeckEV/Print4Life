@@ -88,6 +88,37 @@ export class AllOrdersComponent implements OnInit {
             }
         }
 
+        if (this.filterValue === 'all') {
+            if (this.loggedInUser.role.role === 'editor') {
+                query.$and.push(
+                    {
+                        $or: [
+                            {
+                                'batch.accepted': {
+                                    $elemMatch: {
+                                        user: this.loggedInUser._id
+                                    }
+                                }
+                            },
+                            {
+                                'batch.finished': {
+                                    $elemMatch: {
+                                        user: this.loggedInUser._id
+                                    }
+                                }
+                            },
+                            {
+                                status: 'open'
+                            },
+                            {
+                                status: 'in progress' // Alle Filtern, die keine mehr offen haben
+                            }
+                        ]
+                    }
+                );
+            }
+        }
+
         query.$and.push({
             blueprintId: {
                 $exists: true
@@ -107,6 +138,7 @@ export class AllOrdersComponent implements OnInit {
                     }
                 );
             }
+
             if (this.filterValue === 'closed') {
                 query.$and.push(
                     {
