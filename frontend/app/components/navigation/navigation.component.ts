@@ -23,6 +23,7 @@ interface Dropdown {
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css']
 })
+
 export class NavigationComponent implements OnInit {
   title: String = 'Order Management';
   login: String = 'Login';
@@ -47,11 +48,18 @@ export class NavigationComponent implements OnInit {
   contactLink = routes.paths.frontend.faq.root;
   contactFragment = routes.paths.frontend.faq.contact;
   loginLink = routes.paths.frontend.users.root + '/' + routes.paths.frontend.users.login;
-  myOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.all.root + '/'
-      + routes.paths.frontend.orders.all.my;
-  openOrdersLink = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.all.root
-      + '/' + routes.paths.frontend.orders.all.open;
-  createOrderLink = routes.paths.frontend.blueprints.root + '/' + routes.paths.frontend.blueprints.list;
+  allOrdersLink = routes.paths.frontend.orders.root + '/'
+  + routes.paths.frontend.orders.all.root + '/'
+  + routes.paths.frontend.orders.all.all;
+  myOrdersLink = routes.paths.frontend.orders.root + '/'
+  + routes.paths.frontend.orders.all.root + '/'
+  + routes.paths.frontend.orders.all.my;
+  openOrdersLink = routes.paths.frontend.orders.root + '/'
+  + routes.paths.frontend.orders.all.root + '/' + routes.paths.frontend.orders.all.open;
+  closedOrdersLink = routes.paths.frontend.orders.root + '/'
+  + routes.paths.frontend.orders.all.root + '/' + routes.paths.frontend.orders.all.closed;
+  createOrderLink = routes.paths.frontend.blueprints.root + '/'
+  + routes.paths.frontend.blueprints.list;
   userType: String;
   hospital: Hospital;
 
@@ -175,16 +183,6 @@ export class NavigationComponent implements OnInit {
           },
         ]
       };
-/*
-// Gast Orders entfernt
-      if (!this.userIsLoggedIn) {
-        this.orderDropdown.elements.push({
-          name: translations['dropdown.orders'].createShared,
-          routerHref: routes.paths.frontend.orders.root +
-            '/' + routes.paths.frontend.orders.shared.root +
-            '/' + routes.paths.frontend.orders.shared.create
-        });
-      }*/
       this.languageDropdown = {
         name: translations['languages'].title,
         elements: [

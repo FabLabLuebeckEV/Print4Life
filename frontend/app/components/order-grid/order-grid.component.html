@@ -5,31 +5,28 @@
             <mat-label>Filter nach Status</mat-label>
             <mat-select [(ngModel)]="filterStatus" (selectionChange)="filter()">
                 <mat-option value="all">
-                    Alle
-                </mat-option>
-                <mat-option value="open">
-                    Offen
+                    Alle Aufträge
                 </mat-option>
                 <mat-option value="in progress">
-                    In Arbeit
+                    Aufträge in Arbeit
+                </mat-option>
+                <mat-option *ngIf="this.userType === 'maker'" value="open">
+                    Offene Aufträge
                 </mat-option>
                 <mat-option value="closed">
-                    Abgeschlossen
-                </mat-option>
-                <mat-option value="my">
-                    Meine Aufträge
+                    Erledigte Aufträge
                 </mat-option>
             </mat-select>
         </mat-form-field>
+        <button *ngIf="this.userType === 'klinik'" mat-raised-button color="accent" [routerLink]="[createOrderLink]">Neuen Auftrag anlegen</button>
     </div>
 </div>
-
 <p *ngIf="isEmpty" class="text-center">Leider keine Aufträge gefunden</p>
 <div class="grid-3">
     <div class="" *ngFor="let order of orders">
         <div class="order"  [ngClass]="{
             'finished': order.myFinishedBatch > 0 && order.myAcceptedBatch === 0 || userType === 'klinik' && order.batch.remaining === 0 && order.batch.acceptedCount === 0,
-            'participating': order.participating || userType === 'klinik' && order.batch.acceptedCount > 0 && order.own
+            'participating': order.participating || userType === 'klinik' && order.own && order.batch.remaining > 0
         }">
             <div class="inner indent-left indent-right">
                 <div class="statusBadge participatingBadge">

@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.userService.isLoggedIn()) {
-      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.my}`]);
+      this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.all}`]);
       return;
     }
     this.translateService.onLangChange.subscribe(() => {
@@ -102,7 +102,7 @@ export class LoginComponent implements OnInit {
         };
         const myOrders = await this.orderService.search(query);
         if (myOrders) {
-          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.my}`]);
+          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.all}`]);
         } else {
           this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.all}`]);
         }
@@ -111,7 +111,7 @@ export class LoginComponent implements OnInit {
         const query = {owner: user._id};
         const myOrders = await this.orderService.search(query);
         if (myOrders) {
-          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.my}`]);
+          this.router.navigate([`/${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.all.root}/${routes.paths.frontend.orders.all.all}`]);
         } else {
           this.router.navigate([`/${routes.paths.frontend.blueprints.root}/${routes.paths.frontend.blueprints.list}`]);
         }

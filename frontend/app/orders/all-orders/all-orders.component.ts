@@ -39,7 +39,7 @@ export class AllOrdersComponent implements OnInit {
         });
     }
 
-    private async loadOrders() {
+    async loadOrders() {
         this.loggedInUser = await this.userService.getUser();
         const query = {
             $and: [
@@ -48,10 +48,21 @@ export class AllOrdersComponent implements OnInit {
         const statusQuery = [{
             status: this.filterValue
         }];
+        // Wenn man auf einen unzulässigen Filter weitergelietet wird wird der Filter neu gesetzt
+        if (this.loggedInUser.role.role === 'user') {
+            if (this.filterValue !== 'in progress' && this.filterValue !== 'closed' && this.filterValue !== 'all') {
+                this.filterValue = 'in progress';
+            }
+        }
         if (this.filterValue === 'all' || this.filterValue === 'my') {
             statusQuery.pop();
         }
-
+        // Für Kliniken ist Offen und in Arbeit, das selbe, da ihr Auftrag noch nicht abgeschlossen ist
+        if (this.filterValue === 'in progress' && this.loggedInUser.role.role === 'user') {
+            statusQuery.push({
+                status: 'open'
+            });
+        }
         if (this.filterValue === 'my') {
             if (this.loggedInUser.role.role === 'editor') {
                 query.$and.push(
@@ -139,7 +150,7 @@ export class AllOrdersComponent implements OnInit {
         }
     }
 
-    private filter(filterStatus) {
+    filter(filterStatus) {
         this.filterValue = filterStatus;
         this.loadOrders();
     }

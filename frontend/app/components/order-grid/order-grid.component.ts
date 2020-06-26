@@ -47,6 +47,8 @@ export class OrderGridComponent implements OnInit, OnChanges {
   arrowIcon = faChevronRight;
   orderAcceptRoute = routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.accept;
   orderShippingRoute = '/' + routes.paths.frontend.orders.root + '/' + routes.paths.frontend.orders.shipping;
+  createOrderLink = '/' + routes.paths.frontend.blueprints.root + '/'
+  + routes.paths.frontend.blueprints.list;
 
   myBatch = 0;
   deepcopy = new Deepcopy();
@@ -156,6 +158,28 @@ export class OrderGridComponent implements OnInit, OnChanges {
           ];
         }
       });
+      this.orders.sort((n1, n2) => {
+        return this.compare(n1, n2);
+      });
+    }
+  }
+
+  private compare(a, b) {
+    // Vergleich Status
+    console.log(a);
+    if (a.status !== 'closed' && b.status === 'closed') {
+      return -1;
+    }
+    if (a.status === 'closed' && b.status !== 'closed') {
+      return 1;
+    }
+    // Vergleich Datum
+    if (a.createdAt > b.createdAt) {
+      return -1;
+    } else if (b.createdAt > a.createdAt) {
+      return 1;
+    } else {
+      return 0;
     }
   }
 

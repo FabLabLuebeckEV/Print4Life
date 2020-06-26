@@ -38,6 +38,7 @@ import { BlueprintsComponent } from '../blueprints/blueprints.component';
 import { UserSignupConfirmationComponent } from '../users/user-signup-confirmation/user-signup-confirmation.component';
 import { HospitalActivationComponent } from '../hospitals/hospital-activation/hospital-activation.component';
 import { PressComponent } from '../press/press.component';
+import { DemoComponent } from '../demo/demo.component';
 import { AllOrdersComponent } from '../orders/all-orders/all-orders.component';
 
 @Injectable()
@@ -170,6 +171,11 @@ export const appRoutes: Routes = [
         runGuardsAndResolvers: 'always'
     },
     /*
+    {
+        path: `${routes.paths.frontend.demo.root}`,
+        component: DemoComponent,
+        runGuardsAndResolvers: 'always'
+    },
     {
         path: `${routes.paths.frontend.orders.root}/${routes.paths.frontend.orders.outstandingOrders}`,
         component: OrderListComponent,
